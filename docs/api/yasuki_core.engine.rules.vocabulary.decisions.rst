@@ -13,6 +13,7 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseAmount
     ChooseBattlefield
     ChooseCards
+    ChooseDiscard
     ChooseDistribution
     ChooseEquipTarget
     ChooseFortificationProvince
@@ -27,7 +28,6 @@ yasuki_core.engine.rules.vocabulary.decisions
     Confirm
     DecisionRequest
     DecisionResponse
-    DiscardToHandSize
     FocusOrStrike
     LeaveBowed
 

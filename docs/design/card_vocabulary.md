@@ -64,6 +64,7 @@ deferred through `Then` instead.
    DestroyProvince
    Discard
    DiscardFavor
+   DiscardFromHand
    Dishonor
    DrawCard
    Evaluate
@@ -161,6 +162,7 @@ Legality with respect to game state is checked separately.
    ChooseAbilityTarget
    ChooseAmount
    ChooseCards
+   ChooseDiscard
    ChooseDistribution
    ChooseEquipTarget
    ChooseFortificationProvince
@@ -175,7 +177,6 @@ Legality with respect to game state is checked separately.
    Confirm
    DecisionRequest
    DecisionResponse
-   DiscardToHandSize
 ```
 
 ## Deferred work

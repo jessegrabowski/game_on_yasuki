@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseBattlefield,
     FocusOrStrike,
     ChooseCards,
+    ChooseDiscard,
     ChooseDistribution,
     ChooseEquipTarget,
     ChooseFortificationProvince,
@@ -50,7 +51,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
     Confirm,
     DecisionResponse,
-    DiscardToHandSize,
     LeaveBowed,
 )
 from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, equip
@@ -73,11 +73,10 @@ from yasuki_core.engine.rules.interrupts import (
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
 from yasuki_core.engine.rules.rulebook.legacy import legacy
 from yasuki_core.engine.rules.rulebook.lobby import apply_lobby_target, lobby
-from yasuki_core.engine.rules.effects import PayGold
+from yasuki_core.engine.rules.board.seats import cards_in_hand
+from yasuki_core.engine.rules.effects import DiscardFromHand, PayGold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.sequence import (
-    BeginNextTurn,
-    apply_discard,
     open_turn,
     run_stack,
     yield_after_action,
@@ -202,13 +201,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         raise ValueError("malformed answer to the pending decision")
     acted_in = game.round
     outside_action = game.asked_outside_action
-    if isinstance(request, DiscardToHandSize) and game.stack:
-        raise RuntimeError("the turn is ending with work still queued")
     game.pending = None
     match request:
-        case DiscardToHandSize():
-            game.stack.append(BeginNextTurn())
-            apply_discard(game, request.seat, response.choices)
+        case ChooseDiscard():
+            _apply_discard_choice(game, request, response)
         case LeaveBowed():
             open_turn(game, frozenset(response.choices))
         case ChoosePayment():
@@ -331,6 +327,25 @@ def _apply_amount_choice(
     payment = [PayGold(request.seat, charged, source.name)] if charged else []
     produced = resolver(game, request.source_id, response.choices, request.seat)
     triggers.resume_paused_cascade(game, [*payment, *produced])
+    run_stack(game)
+
+
+def _apply_discard_choice(
+    game: GameState, request: ChooseDiscard, response: DecisionResponse
+) -> None:
+    """Resume the paused discard with its candidates narrowed to the cards chosen.
+
+    Raise ``ValueError``, before anything moves, if a chosen card has left the holder's hand since
+    it was offered: the discard would come up short of the count the seat was asked for.
+    """
+    held = {card.id for card in cards_in_hand(game, request.holder)}
+    missing = [card_id for card_id in response.choices if card_id not in held]
+    if missing:
+        raise ValueError(f"discard names cards not in {request.holder.name}'s hand: {missing}")
+    chosen = DiscardFromHand(
+        request.holder, request.count, request.cause, request.seat, candidates=response.choices
+    )
+    triggers.resume_paused_cascade(game, [chosen])
     run_stack(game)
 
 

@@ -8,8 +8,8 @@ from yasuki_core.engine.rules.turn.structure import END_OF_TURN, ActionRound, Ro
 from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     ChooseCards,
+    ChooseDiscard,
     DecisionResponse,
-    DiscardToHandSize,
 )
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -31,6 +31,7 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     Destroy,
     Discard,
+    DiscardFromHand,
     GainHonor,
     Bow,
     IgnoreHonorRequirements,
@@ -126,9 +127,11 @@ def _resolve_a_held_effect(game):
 )
 def test_driving_a_cascade_mid_decision_raises_naming_driver_and_request(driver, drive):
     game = two_seat_game()
-    game.pending = DiscardToHandSize(PlayerId.P1, ("c1",), count=1)
+    game.pending = ChooseDiscard(
+        PlayerId.P1, ("c1",), count=1, holder=PlayerId.P1, cause=Rulebook.MAXIMUM_HAND_SIZE
+    )
 
-    with pytest.raises(RuntimeError, match=f"{driver} drove a cascade while DiscardToHandSize"):
+    with pytest.raises(RuntimeError, match=f"{driver} drove a cascade while ChooseDiscard"):
         drive(game)
 
 
@@ -248,7 +251,8 @@ def _caravansary(game, seat=PlayerId.P1, card_id="P1-caravansary"):
 
 
 def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
-    # The wiring test: apply_discard moves a hand card to the discard and must fire CardDiscarded.
+    # The wiring test: the maximum hand size's discard moves a hand card to the discard and must
+    # fire CardDiscarded.
     game = two_seat_game()
     probe = holding("P1-probe", printed_id="test_discard_probe", owner=PlayerId.P1)
     put_in_play(game, probe)
@@ -256,7 +260,14 @@ def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
     game.table.cards_by_id[fate.id] = fate
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(fate)
 
-    sequence.apply_discard(game, PlayerId.P1, ("P1-f",))
+    resolve_effects(
+        game,
+        [
+            DiscardFromHand(
+                PlayerId.P1, 1, Rulebook.MAXIMUM_HAND_SIZE, PlayerId.P1, candidates=("P1-f",)
+            )
+        ],
+    )
 
     assert probe.counters == {"wealth": 1}
 

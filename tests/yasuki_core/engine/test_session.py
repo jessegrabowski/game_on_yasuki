@@ -8,9 +8,9 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseDiscard,
     ChooseEquipTarget,
     ChoosePayment,
-    DiscardToHandSize,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.turn import sequence
@@ -542,11 +542,11 @@ def test_cancel_rejects_a_seat_that_is_not_being_asked():
 def test_cancel_of_a_forced_end_of_turn_discard_is_rejected():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
     _to_pending_discard(session)
-    assert isinstance(session.game.pending, DiscardToHandSize)
+    assert isinstance(session.game.pending, ChooseDiscard)
 
     with pytest.raises(ValueError):
         session.cancel(PlayerId.P1)
-    assert isinstance(session.game.pending, DiscardToHandSize)  # still owed
+    assert isinstance(session.game.pending, ChooseDiscard)  # still owed
 
 
 def test_act_pass_moves_the_phase_and_rejects_an_actor_without_the_opportunity():
@@ -566,7 +566,7 @@ def test_pending_decision_blocks_actions_and_reaches_its_answerer():
     assert session.legal_actions(PlayerId.P1) == []
     # Only the answerer sees the request.
     pending = session.project(PlayerId.P1).pending
-    assert isinstance(pending, DiscardToHandSize) and pending.seat is PlayerId.P1
+    assert isinstance(pending, ChooseDiscard) and pending.seat is PlayerId.P1
     assert pending.count == 1
     assert session.project(PlayerId.P2).pending is None
     # Only the answerer may answer it.
@@ -578,7 +578,7 @@ def test_submit_resolves_the_decision_and_passes_the_turn():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
     _to_pending_discard(session)
     victim = session.project(PlayerId.P1).pending
-    assert isinstance(victim, DiscardToHandSize)
+    assert isinstance(victim, ChooseDiscard)
 
     discard = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
     session.submit(PlayerId.P1, DecisionResponse((discard,)))
@@ -592,6 +592,7 @@ def test_a_rejected_answer_leaves_the_question_pending():
     left the hand."""
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
     _to_pending_discard(session)
+    queued = list(session.game.stack)
     table = session.game.table
     stale = session.game.pending.candidates[0]
     ops.move_card(table, table.cards_by_id[stale], ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD))
@@ -599,9 +600,9 @@ def test_a_rejected_answer_leaves_the_question_pending():
     with pytest.raises(ValueError):
         session.submit(PlayerId.P1, DecisionResponse((stale,)))
 
-    assert isinstance(session.game.pending, DiscardToHandSize)
+    assert isinstance(session.game.pending, ChooseDiscard)
     assert stale in session.game.pending.candidates
-    assert not session.game.stack
+    assert session.game.stack == queued
     assert not isinstance(session.log.entries[-1], Answer)
 
 
@@ -644,14 +645,15 @@ def test_an_action_that_raises_is_unwound_from_the_tape():
 def test_an_end_of_turn_discard_over_queued_work_is_refused_and_unwound():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
     _to_pending_discard(session)
+    queued = list(session.game.stack)
     session.game.stack.append(FightNextBattle())
     victim = session.game.pending.candidates[0]
 
-    with pytest.raises(RuntimeError, match="work still queued"):
+    with pytest.raises(RuntimeError, match="stashed cascade"):
         session.submit(PlayerId.P1, DecisionResponse((victim,)))
 
-    assert isinstance(session.game.pending, DiscardToHandSize)
-    assert not session.game.stack
+    assert isinstance(session.game.pending, ChooseDiscard)
+    assert session.game.stack == queued
 
 
 def test_submit_without_a_pending_decision_raises():

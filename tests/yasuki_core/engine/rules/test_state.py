@@ -1,11 +1,11 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.duel.records import DuelRecord
 from yasuki_core.engine.rules.state import GameState, rules_at_start
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseDiscard
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 
 from tests.yasuki_core.engine.builders import province_card
@@ -57,7 +57,9 @@ def test_spend_gold_deducts_only_when_the_pool_covers_it():
 
 def test_awaiting_decision_tracks_the_pending_request():
     game = _game()
-    game.pending = DiscardToHandSize(PlayerId.P1, ("c1",), count=1)
+    game.pending = ChooseDiscard(
+        PlayerId.P1, ("c1",), count=1, holder=PlayerId.P1, cause=Rulebook.MAXIMUM_HAND_SIZE
+    )
     assert game.awaiting_decision is True
 
 

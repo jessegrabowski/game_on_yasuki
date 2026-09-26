@@ -1,23 +1,27 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.bots.agents import AGENTS, AutoAgent, make_agent
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
+    ChooseDiscard,
     ChooseDistribution,
-    DiscardToHandSize,
 )
 
 
 def test_auto_agent_answers_with_the_shortest_accepting_prefix():
-    request = DiscardToHandSize(PlayerId.P1, ("a", "b", "c"), count=2)
+    request = ChooseDiscard(
+        PlayerId.P1, ("a", "b", "c"), count=2, holder=PlayerId.P1, cause=Rulebook.MAXIMUM_HAND_SIZE
+    )
     response = AutoAgent().decide(request, view=None)
     assert request.accepts(response)
     assert response.choices == ("a", "b")
 
 
 def test_auto_agent_handles_a_zero_count():
-    request = DiscardToHandSize(PlayerId.P1, ("a", "b"), count=0)
+    request = ChooseDiscard(
+        PlayerId.P1, ("a", "b"), count=0, holder=PlayerId.P1, cause=Rulebook.MAXIMUM_HAND_SIZE
+    )
     response = AutoAgent().decide(request, view=None)
     assert response.choices == ()
     assert request.accepts(response)
@@ -47,7 +51,9 @@ def test_the_registry_covers_the_agents_that_ship():
 
 
 def test_an_agent_built_by_name_answers():
-    request = DiscardToHandSize(PlayerId.P1, ("a", "b", "c"), count=2)
+    request = ChooseDiscard(
+        PlayerId.P1, ("a", "b", "c"), count=2, holder=PlayerId.P1, cause=Rulebook.MAXIMUM_HAND_SIZE
+    )
 
     response = make_agent("paying").decide(request, view=None)
 

@@ -1,8 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.turn import sequence
+from yasuki_core.engine.rules import legality, triggers
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.rulebook.favor_payment import DISCARD_THE_FAVOR, favor_payment_options
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
@@ -21,7 +20,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
-from yasuki_core.engine.rules.effects import Bow, Discard, DiscardFavor, TakeFavor
+from yasuki_core.engine.rules.effects import Bow, Discard, DiscardFavor, DiscardFromHand, TakeFavor
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.state import GameState
@@ -213,7 +212,10 @@ def test_a_discard_no_player_made_offers_nothing():
     session = _caravansary_game()
     game = session.game
 
-    sequence.apply_discard(game, P1, ("spare-fate-0",))
+    triggers.resolve_effects(
+        game,
+        [DiscardFromHand(P1, 1, Rulebook.MAXIMUM_HAND_SIZE, P1, candidates=("spare-fate-0",))],
+    )
 
     assert game.action_events[-1] == CardDiscarded(
         "spare-fate-0", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True

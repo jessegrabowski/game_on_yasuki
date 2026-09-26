@@ -20,7 +20,6 @@ yasuki_core.engine.rules.turn.sequence
 .. autosummary::
 
     advance
-    apply_discard
     begin_game
     begin_next_turn
     close_interrupt_window

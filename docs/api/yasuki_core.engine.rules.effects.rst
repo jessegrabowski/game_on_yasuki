@@ -29,6 +29,7 @@ yasuki_core.engine.rules.effects
     DestroyProvince
     Discard
     DiscardFavor
+    DiscardFromHand
     Dishonor
     DrawCard
     Effect

@@ -1,6 +1,6 @@
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.bots.agents import AutoAgent, PayingAgent
-from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseDiscard, ChoosePayment
 from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.bots.policies import EconomicPolicy
 from yasuki_core.engine.driver import Controls, play_game
@@ -38,7 +38,9 @@ def test_it_bows_the_smallest_producer_first():
 def test_it_answers_a_non_payment_decision_exactly_as_the_placeholder_does():
     """Only payments need the special handling. Delegating anything else keeps one answer for a
     decision type rather than two that can drift apart."""
-    request = DiscardToHandSize(P1, ("a", "b", "c"), count=2)
+    request = ChooseDiscard(
+        P1, ("a", "b", "c"), count=2, holder=P1, cause=Rulebook.MAXIMUM_HAND_SIZE
+    )
 
     assert PayingAgent().decide(request, view=None) == AutoAgent().decide(request, view=None)
 

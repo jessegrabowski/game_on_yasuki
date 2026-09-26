@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.effects import (
     Evaluate,
     Arrange,
     BanishTopFate,
+    DiscardFromHand,
     EndLook,
     LookAtTop,
     Bow,
@@ -272,6 +273,14 @@ EFFECTS = [
     (
         Choose(PlayerId.P1, ("a", "b", "c"), 0, 2, "wheat_farm", "wheat_1"),
         "P1 chooses 0-2 of 3 for wheat_farm",
+    ),
+    (
+        DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, PlayerId.P2),
+        "P2 discards 1 from hand, chosen by P2",
+    ),
+    (
+        DiscardFromHand(PlayerId.P2, 2, PlayerId.P1, None),
+        "P2 discards 2 from hand, at random",
     ),
     (
         Ask(PlayerId.P1, "Destroy Rice Farm to straighten Kobune?", "rice_farm", ("rice_1",)),

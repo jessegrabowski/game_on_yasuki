@@ -62,9 +62,9 @@ from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
+    ChooseDiscard,
     ChooseInvestAmount,
     DecisionResponse,
-    DiscardToHandSize,
 )
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
@@ -364,7 +364,7 @@ def _hand_the_spearmen(state, card_id):
 
 def _trim_the_spearmen(session, card_ids=("spearmen",)):
     end_turn(session)
-    assert isinstance(session.game.pending, DiscardToHandSize)
+    assert isinstance(session.game.pending, ChooseDiscard)
     session.submit(P1, DecisionResponse(card_ids))
 
 
