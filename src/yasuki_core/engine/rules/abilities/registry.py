@@ -209,8 +209,14 @@ def register_ability(printed_id: str, value: Ability) -> None:
     A card printing several needs a ``Ability.key`` on each, since an action names the ability
     it takes by key and an unkeyed one could not be told from its sibling. Raise ValueError if a
     second ability arrives unkeyed, or if it repeats a key already registered for the card. Two
-    abilities naming different rulesets are never read together, so they do not collide.
+    abilities naming different rulesets are never read together, so they do not collide. Raise
+    ValueError as well for a printed ability under a key the rulebook uses, or a rulebook ability
+    under a key a printed card holds, since a rulebook action is recognized by its key alone.
     """
+    if value.from_rulebook:
+        _refuse_printed_key(value.key)
+    elif value.key in _RULEBOOK_KEYS:
+        raise ValueError(f"{printed_id} keys an ability {value.key!r}, which the rulebook reserves")
     registered = _ABILITIES.get(printed_id, ())
     beside = [held for held in registered if _read_together(held, value)]
     if beside:
@@ -219,6 +225,30 @@ def register_ability(printed_id: str, value: Ability) -> None:
         if any(held.key == value.key for held in beside):
             raise ValueError(f"{printed_id} already has an ability keyed {value.key!r}")
     _ABILITIES[printed_id] = (*registered, value)
+    if value.from_rulebook and value.key is not None:
+        _RULEBOOK_KEYS.add(value.key)
+
+
+# The keys the rulebook's own abilities are registered under, wherever they sit. A printed card
+# may not take one, which is what lets a rulebook action be recognized by its key alone.
+_RULEBOOK_KEYS: set[str] = set()
+
+
+def _refuse_printed_key(key: str | None) -> None:
+    """Raise ValueError if a printed card already holds an ability keyed ``key``."""
+    if key is None:
+        return
+    holder = next(
+        (
+            printed_id
+            for printed_id, registered in _ABILITIES.items()
+            for held in registered
+            if held.key == key and not held.from_rulebook
+        ),
+        None,
+    )
+    if holder is not None:
+        raise ValueError(f"{holder} already keys an ability {key!r}, which the rulebook uses")
 
 
 def register_keyword_ability(value: Ability) -> None:
@@ -232,11 +262,13 @@ def register_keyword_ability(value: Ability) -> None:
         raise ValueError("a keyword ability names the keyword that confers it")
     if value.key is None:
         raise ValueError(f"the {value.from_keyword} ability needs a key")
+    _refuse_printed_key(value.key)
     keyword = value.from_keyword.lower()
     registered = KEYWORD_ABILITIES.get(keyword, ())
     if any(held.key == value.key and _read_together(held, value) for held in registered):
         raise ValueError(f"{value.from_keyword} already confers an ability keyed {value.key!r}")
     KEYWORD_ABILITIES[keyword] = (*registered, value)
+    _RULEBOOK_KEYS.add(value.key)
 
 
 def register_location_ability(value: Ability) -> None:
@@ -250,11 +282,13 @@ def register_location_ability(value: Ability) -> None:
         raise ValueError("a location ability is marked from_rulebook")
     if value.key is None:
         raise ValueError("a location ability needs a key")
+    _refuse_printed_key(value.key)
     for location in value.located_at:
         registered = LOCATION_ABILITIES.get(location, ())
         if any(held.key == value.key and _read_together(held, value) for held in registered):
             raise ValueError(f"{location.value} already confers an ability keyed {value.key!r}")
         LOCATION_ABILITIES[location] = (*registered, value)
+    _RULEBOOK_KEYS.add(value.key)
 
 
 def may_attack(card: L5RCard) -> bool:
