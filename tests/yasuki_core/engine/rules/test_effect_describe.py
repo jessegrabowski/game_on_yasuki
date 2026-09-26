@@ -66,6 +66,7 @@ from yasuki_core.engine.rules.effects import (
     StartDuel,
     EndDuel,
     SpendSeatOncePerTurn,
+    SpendSeatOncePerGame,
     PayGold,
     IgnoreHonorRequirements,
     MoveToDeck,
@@ -180,6 +181,10 @@ EFFECTS = [
     (
         SpendSeatOncePerTurn(PlayerId.P1, "flashy_technique"),
         "P1 spends flashy_technique for the turn",
+    ),
+    (
+        SpendSeatOncePerGame(PlayerId.P2, "inheritance"),
+        "P2 spends inheritance for the game",
     ),
     (TurnOver("P2-SH"), "turn P2-SH over"),
     (

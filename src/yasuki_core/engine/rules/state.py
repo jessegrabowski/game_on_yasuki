@@ -415,6 +415,17 @@ def seat_once_key(seat: PlayerId, tag: str, turn: int) -> str:
     return f"{tag}:{seat.name}:t{turn}"
 
 
+def seat_game_key(seat: PlayerId, tag: str) -> str:
+    """The usage key for ``seat``'s ``tag`` for the whole game, for a limit that rests on the player
+    and never resets ("once per game")."""
+    return f"{tag}:{seat.name}"
+
+
+def seat_used_this_game(game: GameState, seat: PlayerId, tag: str) -> bool:
+    """Whether ``seat`` has spent its once-per-game use of ``tag``, without spending it."""
+    return game.has_used(seat_game_key(seat, tag))
+
+
 def claim_once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
     """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then
     False."""

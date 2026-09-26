@@ -35,6 +35,7 @@ from yasuki_core.engine.rules.effects import (
     Rehonor,
     ReshuffleFromHand,
     RevokeGrants,
+    SpendSeatOncePerGame,
     TurnOver,
     seppuku,
     TakeFavor,
@@ -50,7 +51,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     HonorChanged,
     Rehonored,
 )
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, seat_used_this_game
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
     Duration,
@@ -296,6 +297,17 @@ def test_only_a_card_with_a_back_face_can_pay_to_turn_over():
     assert TurnOver(two_faced.id).is_payable(game) is True
     assert TurnOver(one_faced.id).is_payable(game) is False
     assert TurnOver("gone").is_payable(game) is False
+
+
+def test_a_once_per_game_spend_outlasts_the_turn_and_binds_only_its_seat():
+    game = two_seat_game()
+
+    resolve_effects(game, [SpendSeatOncePerGame(PlayerId.P2, "probe")])
+    game.turn += 5
+
+    assert seat_used_this_game(game, PlayerId.P2, "probe") is True
+    assert seat_used_this_game(game, PlayerId.P1, "probe") is False
+    assert seat_used_this_game(game, PlayerId.P2, "other") is False
 
 
 def test_banishing_needs_a_fate_card_to_banish():

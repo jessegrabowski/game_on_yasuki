@@ -56,6 +56,7 @@ from yasuki_core.engine.rules.state import (
     GameState,
     StraightenDelay,
     claim_once_per_turn,
+    seat_game_key,
     seat_once_key,
 )
 from yasuki_core.engine.rules.turn.structure import (
@@ -811,6 +812,22 @@ class SpendSeatOncePerTurn(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.use_once(seat_once_key(self.seat, self.tag, game.turn))
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class SpendSeatOncePerGame(Effect):
+    """Claim ``seat``'s once-per-game use of ``tag``: the :class:`~.SpendSeatOncePerTurn` of a limit
+    that never resets. :func:`~.seat_used_this_game` reads it."""
+
+    seat: PlayerId
+    tag: str
+
+    def describe(self) -> str:
+        return f"{self.seat.name} spends {self.tag} for the game"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.use_once(seat_game_key(self.seat, self.tag))
         return []
 
 

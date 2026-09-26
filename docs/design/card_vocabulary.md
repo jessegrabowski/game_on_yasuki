@@ -110,6 +110,7 @@ deferred through `Then` instead.
    Show
    ShuffleDeck
    SpendOncePerTurn
+   SpendSeatOncePerGame
    SpendSeatOncePerTurn
    Straighten
    TakeFavor
