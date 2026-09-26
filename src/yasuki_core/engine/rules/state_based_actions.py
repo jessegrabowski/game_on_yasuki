@@ -5,7 +5,15 @@ from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.rules.board.queries import rings_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_chi
-from yasuki_core.engine.rules.effects import Destroy, Discard, Effect, LoseGame, WinGame
+from yasuki_core.engine.rules.duel.records import DuelStep
+from yasuki_core.engine.rules.effects import (
+    Destroy,
+    Discard,
+    Effect,
+    EndDuel,
+    LoseGame,
+    WinGame,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Element
 from yasuki_core.engine.rules.state import GameState
@@ -84,6 +92,21 @@ def orphaned_attachments(game: GameState) -> list[Effect]:
     ]
 
 
+def duelist_left_play(game: GameState) -> list[Effect]:
+    """End a duel one of its Personalities has left, without resolution (CR, Duel).
+
+    A condition rather than a reaction to the leaving, so a Personality destroyed, discarded, moved
+    out of play or taken by any other route ends the duel the same way.
+    """
+    duel = game.duel
+    if duel is None or duel.step is DuelStep.ENDED:
+        return []
+    in_play = {card.id for card in game.table.battlefield.cards}
+    if duel.challenger_duelist in in_play and duel.challenged_duelist in in_play:
+        return []
+    return [EndDuel()]
+
+
 def lost_last_province(game: GameState) -> list[Effect]:
     """Lose the game for a seat with no Provinces remaining (CR, Military Loss/Victory).
 
@@ -135,6 +158,7 @@ def enlightenment(game: GameState) -> list[Effect]:
 STATE_BASED_ACTIONS: tuple[StateBasedAction, ...] = (
     chi_death,
     orphaned_attachments,
+    duelist_left_play,
     lost_last_province,
     enlightenment,
 )

@@ -10,6 +10,7 @@ yasuki_core.engine.rules.state_based_actions
     chi_death
     demanded
     dishonor_loss
+    duelist_left_play
     enlightenment
     honor_victory
     lost_last_province

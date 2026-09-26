@@ -980,6 +980,28 @@ class StartDuel(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class EndDuel(Effect):
+    """End the duel being fought without resolution, which is what a duelist leaving play does to it
+    (CR, Duel). Nothing the duel would have done happens: there is no winner, no loser, and no
+    totals. A no-op where no duel is being fought, so the state-based rule that raises it may raise
+    it more than once."""
+
+    def describe(self) -> str:
+        return "end the duel without resolution"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        # As in StartDuel: the duel's own modules import this one.
+        from yasuki_core.engine.rules.duel.procedure import current_duel
+        from yasuki_core.engine.rules.duel.records import DuelStep
+        from yasuki_core.engine.rules.duel.resolution import end_without_resolution
+
+        duel = current_duel(game)
+        if duel is None or duel.step is DuelStep.ENDED:
+            return []
+        return end_without_resolution(game)
+
+
+@dataclass(frozen=True, slots=True)
 class GrantPriority(Effect):
     """Hand ``seat`` the opportunity to act in the round now open, overriding the seat that round
     started on. A card naming the first actor in a round still to open delays this to that round's

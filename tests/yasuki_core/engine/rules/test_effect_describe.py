@@ -58,6 +58,7 @@ from yasuki_core.engine.rules.effects import (
     PutIntoPlay,
     SpendOncePerTurn,
     StartDuel,
+    EndDuel,
     SpendSeatOncePerTurn,
     PayGold,
     IgnoreHonorRequirements,
@@ -89,6 +90,7 @@ EFFECTS = [
         "the resolution at battlefield 0 does not bow P1",
     ),
     (Straighten("farm_1"), "straighten farm_1"),
+    (EndDuel(), "end the duel without resolution"),
     (
         StartDuel("kakita", "bayushi", "sanctioned_duel"),
         "duel: kakita challenges bayushi",

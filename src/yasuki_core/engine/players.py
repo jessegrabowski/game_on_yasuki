@@ -12,11 +12,12 @@ class PlayerId(Enum):
 class Rulebook(Enum):
     """A cause that is the rules, not a player: stands in for the effects no one chose to take. One
     member per rulebook procedure that acts, so a card can react to the specific one and not just to
-    "not a player at all". Duel resolution joins when duels exist."""
+    "not a player at all"."""
 
     AFTER_RESOLUTION = "after_resolution"
     BATTLE_RESOLUTION = "battle_resolution"
     CHI_DEATH = "chi_death"
+    DUEL_RESOLUTION = "duel_resolution"
     MAXIMUM_HAND_SIZE = "maximum_hand_size"
     ORPHANED_ATTACHMENT = "orphaned_attachment"
 

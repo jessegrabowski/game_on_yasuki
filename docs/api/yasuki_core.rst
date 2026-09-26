@@ -66,6 +66,7 @@ yasuki_core
     yasuki_core.engine.rules.board.seats <yasuki_core.engine.rules.board.seats>
     yasuki_core.engine.rules.duel.procedure <yasuki_core.engine.rules.duel.procedure>
     yasuki_core.engine.rules.duel.records <yasuki_core.engine.rules.duel.records>
+    yasuki_core.engine.rules.duel.resolution <yasuki_core.engine.rules.duel.resolution>
     yasuki_core.engine.rules.effects <yasuki_core.engine.rules.effects>
     yasuki_core.engine.rules.gold.cost <yasuki_core.engine.rules.gold.cost>
     yasuki_core.engine.rules.gold.discounts <yasuki_core.engine.rules.gold.discounts>
