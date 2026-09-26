@@ -94,7 +94,6 @@ def declare_duel(
     game.begin_duel(duel)
     ops.create_focus_area(game.table, challenger)
     ops.create_focus_area(game.table, challenged)
-    duel.step = DuelStep.FOCUSING
     challenger_stat = duel_stat(game, game.table.cards_by_id[challenger_duelist])
     challenged_stat = duel_stat(game, game.table.cards_by_id[challenged_duelist])
     # The option is queued before the setup runs and before the window is announced, so that work
@@ -161,7 +160,6 @@ def offer_focus_or_strike(game: GameState, seat: PlayerId) -> None:
     if not sources:
         strike(game, seat)
         return
-    duel.option = seat
     game.pending = FocusOrStrike(seat=seat, candidates=sources + (STRIKE,))
 
 
@@ -212,9 +210,7 @@ def strike(game: GameState, seat: PlayerId) -> None:
         RevealFocusedCards,
     )
 
-    duel = duel_in_progress(game)
-    duel.struck = seat
-    duel.option = None
+    duel_in_progress(game)
     # Pushed in reverse, so they run in the CR's order: the reveal, the Focus Effects it queues, the
     # outcome and the duel's end with the consequences that wait for it, then the discard.
     game.stack.extend((DiscardFocusedCards(), DecideTheDuel(), RevealFocusedCards()))

@@ -30,10 +30,6 @@ class ZoneRole(str, Enum):
     PROVINCE = "province"
     RULEBOOK = "rulebook"
     FOCUS = "focus"
-    # Reserved: the pool a Lotus-era duel deals focusable cards into, which the shipped focus
-    # procedure has no use for. Named here so adding that procedure is not a change to the state
-    # layer.
-    FOCUS_POOL = "focus_pool"
 
 
 # Per-seat zones present from table construction; provinces and focusing areas are created on

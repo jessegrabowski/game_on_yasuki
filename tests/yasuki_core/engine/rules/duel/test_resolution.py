@@ -151,7 +151,6 @@ def test_the_higher_total_wins_the_duel():
         _strike_out(session)
 
         outcome = session.game.duel.outcome
-        assert outcome.resolved
         assert outcome.totals == {P1: 3, P2: 6}
         assert outcome.winners == (P2,)
         assert outcome.losers == (P1,)
@@ -255,7 +254,7 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     _resume_next(game, resolution.DecideTheDuel)
 
     outcome = game.duel.outcome
-    assert outcome.resolved and outcome.winners == (P2,)
+    assert outcome.winners == (P2,)
     assert [held.id for held in focusing.focused_cards(game, P2)] == ["P2-fv1"]
     # The duel has ended the moment its resolution step closed, before the discard (CR, Duel).
     assert game.duel.step is DuelStep.ENDED
@@ -324,7 +323,7 @@ def test_a_duelist_off_the_board_ends_the_duel_without_resolution():
 
     duel = game.duel
     assert duel.step is DuelStep.ENDED
-    assert duel.outcome == ((), (), {}, False)
+    assert duel.outcome == ((), (), {})
     # The focusing loop does not pick up again on a duel that has ended.
     assert game.stack == []
     assert not [key for key in game.table.zones if key.role is ZoneRole.FOCUS]

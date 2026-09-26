@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.duel.focusing import TWENTY_FESTIVALS_FOCUSING
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine.rules.effects import Effect, GainHonor, StartDuel
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.vocabulary.game_events import StrikeDeclared
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DECK_TOP,
     STRIKE,
@@ -133,9 +134,11 @@ def test_a_strike_reveals_both_stacks_and_ends_the_duel(either_procedure):
         session.submit(P2, DecisionResponse((STRIKE,)))
 
         duel = session.game.duel
-        assert duel.struck is P2
+        assert [
+            event.seat for event in session.game.turn_events if isinstance(event, StrikeDeclared)
+        ] == [P2]
         assert duel.step is DuelStep.ENDED
-        assert duel.outcome.resolved
+        assert duel.outcome.totals
         for card_id in ("P2-h0", "P1-h0"):
             card = session.game.table.cards_by_id[card_id]
             assert card.face_up

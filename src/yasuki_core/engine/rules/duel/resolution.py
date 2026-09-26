@@ -73,7 +73,7 @@ class DecideTheDuel(DuelWork):
             ),
         )
         duel.step = DuelStep.ENDED
-        triggers.fire(game, DuelEnded(resolved=outcome.resolved, source_card_id=duel.source))
+        triggers.fire(game, DuelEnded(resolved=True, source_card_id=duel.source))
         triggers.resolve_delayed(game, DUEL_CONSEQUENCES)
 
 
@@ -121,7 +121,6 @@ def end_duel(game: GameState) -> list[GameEvent]:
     duel = game.duel
     if duel is None or duel.outcome is None:
         raise RuntimeError("the duel's focused cards are being discarded before it was decided")
-    duel.option = None
     events: list[GameEvent] = []
     # While the focused cards are still in their areas, since a procedure's cleanup may read them.
     for effect in ruleset.ACTIVE.focus_procedure.cleanup(game, duel):
@@ -154,7 +153,7 @@ def end_without_resolution(game: GameState) -> list[GameEvent]:
     # The duel reached no outcome, so the consequences that waited for its end have nothing to
     # apply to, and one left held would resolve off the next duel's end (CR, Duel).
     triggers.discard_delayed(game, DUEL_CONSEQUENCES)
-    duel.outcome = DuelOutcome(winners=(), losers=(), totals={}, resolved=False)
+    duel.outcome = DuelOutcome(winners=(), losers=(), totals={})
     return [DuelEnded(resolved=False, source_card_id=duel.source), *end_duel(game)]
 
 
@@ -171,12 +170,12 @@ def _outcome_on_totals(game: GameState, duel: DuelRecord) -> DuelOutcome:
     totals = {seat: duel_total(game, duel, seat) for seat in (challenger, challenged)}
     if totals[challenger] != totals[challenged]:
         winner = max(totals, key=lambda seat: totals[seat])
-        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals, resolved=True)
+        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals)
     duelists = {
         seat: _is_duelist(game, game.table.cards_by_id[duel.duelist_of(seat)])
         for seat in (challenger, challenged)
     }
     if duelists[challenger] != duelists[challenged]:
         winner = challenger if duelists[challenger] else challenged
-        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals, resolved=True)
-    return DuelOutcome((), (challenger, challenged), totals, resolved=True)
+        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals)
+    return DuelOutcome((), (challenger, challenged), totals)

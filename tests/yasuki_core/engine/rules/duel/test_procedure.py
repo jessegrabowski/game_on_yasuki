@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     FocusOrStrike,
     focus_token,
 )
+from yasuki_core.engine.rules.vocabulary.game_events import StrikeDeclared
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
@@ -86,6 +87,11 @@ def _focused_ids(session: EngineSession, seat: PlayerId) -> list[str]:
     return [card.id for card in focusing.focused_cards(session.game, seat)]
 
 
+def _strikes(session: EngineSession) -> list[PlayerId]:
+    """The seats that struck, which is what the duel records of a strike."""
+    return [event.seat for event in session.game.turn_events if isinstance(event, StrikeDeclared)]
+
+
 def test_a_declared_duel_records_both_duelists_and_opens_the_focusing():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         session = _duel_game()
@@ -146,7 +152,6 @@ def test_the_option_alternates_after_each_focus():
 
         session.submit(P2, DecisionResponse((focus_token("P2-h0"),)))
         assert session.game.pending.seat is P1
-        assert session.game.duel.option is P1
 
         session.submit(P1, DecisionResponse((focus_token("P1-h0"),)))
         assert session.game.pending.seat is P2
@@ -160,7 +165,7 @@ def test_a_seat_with_nothing_to_focus_strikes_without_being_asked():
         _challenge(session)
 
         duel = session.game.duel
-        assert duel.struck is P2
+        assert _strikes(session) == [P2]
         assert duel.step is DuelStep.ENDED
         assert session.game.pending is None
 
@@ -173,8 +178,7 @@ def test_striking_ends_the_focusing_where_the_seat_chooses_to():
         session.submit(P2, DecisionResponse((STRIKE,)))
 
         duel = session.game.duel
-        assert duel.struck is P2
-        assert duel.option is None
+        assert _strikes(session) == [P2]
         # The strike carries the duel through the reveal to its outcome without another answer.
         assert duel.step is DuelStep.ENDED
         assert _focused_ids(session, P2) == []
@@ -194,7 +198,7 @@ def test_a_seat_may_focus_four_times_and_then_only_strike():
         duel = session.game.duel
         assert (duel.focuses(P1), duel.focuses(P2)) == (4, 4)
         # Neither seat may focus a fifth time, so the loop strikes for whoever's option it was.
-        assert duel.struck is P2
+        assert _strikes(session) == [P2]
         assert session.game.pending is None
 
 

@@ -33,15 +33,11 @@ class DuelOutcome(NamedTuple):
         What each seat's Personality totalled: its duel stat plus the Focus Values of its focused
         cards. Empty for a duel that never reached the reveal, which is what tells that duel's
         outcome from a tie.
-    resolved : bool
-        Whether the duel resolved at all. False for a refused challenge and for a duel a duelist
-        left play in the middle of, whose Focus Effects do not resolve either.
     """
 
     winners: tuple[PlayerId, ...]
     losers: tuple[PlayerId, ...]
     totals: dict[PlayerId, int]
-    resolved: bool
 
 
 @dataclass(slots=True)
@@ -68,14 +64,9 @@ class DuelRecord:
     step : DuelStep
         Which step of the procedure is open. Default ``DuelStep.FOCUSING``, the step a declared
         duel opens in.
-    option : PlayerId or None
-        The seat whose option it is to focus or strike, or None outside the focusing loop.
-        Default None.
     focused : dict mapping PlayerId to int
         How many times each seat has focused, which is what a focus limit counts. A seat that has
         not focused is absent, so read it through :meth:`focuses`. Default empty.
-    struck : PlayerId or None
-        The seat that struck, ending the focusing, or None until one has. Default None.
     outcome : DuelOutcome or None
         What the duel did, or None until it has ended. Default None.
     """
@@ -86,9 +77,7 @@ class DuelRecord:
     challenged_duelist: str
     source: str
     step: DuelStep = DuelStep.FOCUSING
-    option: PlayerId | None = None
     focused: dict[PlayerId, int] = field(default_factory=dict)
-    struck: PlayerId | None = None
     outcome: DuelOutcome | None = None
 
     def duelist_of(self, seat: PlayerId) -> str:
