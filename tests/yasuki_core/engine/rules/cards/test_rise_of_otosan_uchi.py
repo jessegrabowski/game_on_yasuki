@@ -1384,14 +1384,14 @@ def test_master_your_thoughts_on_a_bowed_target_looks_at_nothing():
 # --- Dark Ring of the Void (Experienced) ---
 
 
-def _ring_card(card_id: str, printed_id: str, element: Element) -> L5RCard:
+def _ring_card(card_id: str, printed_id: str, element: Element, *, owner: PlayerId = P1) -> L5RCard:
     return L5RCard.of(
         RingPrint,
         id=card_id,
         name=printed_id,
         printed_id=printed_id,
         side=Side.FATE,
-        owner=P1,
+        owner=owner,
         element=element,
     )
 
@@ -1561,6 +1561,113 @@ def _ring_session_with_four_elements() -> EngineSession:
 def test_only_a_counting_ring_completes_an_enlightenment(printed_id, wins):
     session = _ring_session_with_four_elements()
     put_in_play(session.game, _ring_card("fifth", printed_id, Element.VOID))
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.game_over is wins
+
+
+# --- Dark Ring of Earth (Experienced) ---
+
+
+def _dark_earth_battle(*, attacker_chi: int = 3, ring_owner: PlayerId = P2) -> EngineSession:
+    """The Combat Segment of P1's attack on P2's Province, with the Dark Ring of Earth in
+    ``ring_owner``'s play and P2 holding the opportunity."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P2, province_strength=4))
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("front", owner=P1, chi=attacker_chi))
+    attached(state, attachment("pikes", attachment_type=AttachmentType.FOLLOWER), "front")
+    put_in_play(state, personality("guard", owner=P2))
+    put_in_play(
+        state,
+        register(
+            state,
+            _ring_card("earth", "dark_ring_of_earth_experienced", Element.EARTH, owner=ring_owner),
+        ),
+    )
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("front@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    session.act(P2, Pass())
+    session.act(P1, Pass())  # into the Combat Segment
+    return session
+
+
+def test_the_dark_earth_sends_the_attacking_army_home_bowed_and_zeroes_the_province():
+    session = _dark_earth_battle()
+    province = session.game.attack.current_province
+
+    session.act(P2, ActivateAbility("earth", "earth"))
+    while session.game.pending is not None:
+        session.submit(session.game.pending.seat, DecisionResponse())
+
+    cards = session.game.table.cards_by_id
+    assert location_of(session.game.table, cards["front"]).is_home
+    assert cards["front"].bowed and cards["pikes"].bowed and cards["earth"].bowed
+    assert effective_province_strength(session.game, province) == 0
+
+
+def test_the_dark_earth_is_withheld_from_the_attacker():
+    session = _dark_earth_battle(ring_owner=P1)
+    session.act(P2, Pass())
+
+    assert session.game.round.priority is P1
+    assert ActivateAbility("earth", "earth") not in session.legal_actions(P1)
+
+
+def test_the_dark_earth_is_withheld_against_an_army_of_more_than_nine_chi():
+    session = _dark_earth_battle(attacker_chi=10)
+
+    assert ActivateAbility("earth", "earth") not in session.legal_actions(P2)
+
+
+def _dark_earth_in_hand(provinces: int) -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    for index in range(provinces):
+        province_card(state, f"prov{index}", seat=P1, index=index)
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(state, _ring_card("earth", "dark_ring_of_earth_experienced", Element.EARTH))
+    )
+    return EngineSession.start(state, P1)
+
+
+def test_the_dark_earth_enters_among_six_provinces_and_costs_three_honor():
+    session = _dark_earth_in_hand(provinces=6)
+    before = _honor(session, P1)
+
+    session.act(P1, PlayStrategy("earth", "enter"))
+    pay(session, P1)
+
+    assert session.game.table.cards_by_id["earth"] in session.game.table.battlefield.cards
+    assert _honor(session, P1) == before - 3
+
+
+def test_the_dark_earth_is_withheld_among_seven_provinces():
+    session = _dark_earth_in_hand(provinces=7)
+
+    assert PlayStrategy("earth", "enter") not in session.legal_actions(P1)
+
+
+@pytest.mark.parametrize(
+    "printed_id, wins", [("generic_ring", True), ("dark_ring_of_earth_experienced", False)]
+)
+def test_only_a_counting_earth_ring_completes_an_enlightenment(printed_id, wins):
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    for element in (Element.AIR, Element.FIRE, Element.WATER, Element.VOID):
+        put_in_play(
+            state,
+            register(state, _ring_card(element.name, "generic", element)),
+        )
+    put_in_play(state, register(state, _ring_card("earth", printed_id, Element.EARTH)))
+    session = EngineSession.start(state, P1)
 
     enforce_state_based_actions(session.game)
 

@@ -30,7 +30,9 @@ from yasuki_core.engine.rules.board.queries import (
     has_keyword,
     owned_holdings,
     owned_personalities,
+    province_zones,
     top_of_deck,
+    units_at,
 )
 from yasuki_core.engine.rules.board.seats import (
     cards_in_hand,
@@ -68,6 +70,7 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
     SpendOncePerTurn,
     Then,
+    Unpayable,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
@@ -77,13 +80,14 @@ from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
-from yasuki_core.engine.rules.units.membership import attached_to
+from yasuki_core.engine.rules.units.membership import attached_to, unit_of
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
+from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint, RingPrint
@@ -372,6 +376,93 @@ register_ability(
         effects=_culling_grounds_effects,
         hits_every_target=True,
     ),
+)
+
+
+# --- Dark Ring of Earth (Experienced) ---
+
+DARK_EARTH_HONOR_LOSS = 3
+DARK_EARTH_PROVINCES = 6
+DARK_EARTH_CHI = 9
+
+
+def _dark_ring_of_earth_experienced_condition(game: GameState, source: L5RCard) -> bool:
+    """ "If there are 6 or fewer total Provinces among all players." """
+    standing = sum(1 for seat in game.table.seats for _ in province_zones(game, seat))
+    return standing <= DARK_EARTH_PROVINCES
+
+
+def _dark_ring_of_earth_experienced_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:
+    return [GainHonor(source.owner, -DARK_EARTH_HONOR_LOSS, source_id=source.id)]
+
+
+register_entry(
+    "dark_ring_of_earth_experienced",
+    condition=_dark_ring_of_earth_experienced_condition,
+    extra_effects=_dark_ring_of_earth_experienced_entry_effects,
+    key="enter",
+)
+register_no_enlightenment("dark_ring_of_earth_experienced")
+
+
+def _dark_ring_of_earth_experienced_army(game: GameState, source: L5RCard) -> list[L5RCard]:
+    """The attacking army's Personalities at the current battlefield, while the Ring's owner is the
+    Defender there."""
+    attack = game.attack
+    if attack is None or attack.current is None or attack.defender is not source.owner:
+        return []
+    return units_at(game, attack.current, attack.attacker)
+
+
+def _dark_ring_of_earth_experienced_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Bow the Ring and lower the current Province's strength to 0 until the end of the turn, by a
+    penalty of its present strength (CR, Setting Stats to Values). The lowering is written as "X to
+    Y" after the colon, which this engine reads as part of the cost."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return [Unpayable("no battle is being fought")]
+    province = attack.current_province
+    strength = effective_province_strength(game, province)
+    lowered = GrantProvinceStrength(source.id, province, -strength, Duration.UNTIL_END_OF_TURN)
+    return [*bow_cost(game, source), lowered]
+
+
+def _dark_ring_of_earth_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The Ring itself, while you defend against an army of 9 or less total Chi."""
+    army = _dark_ring_of_earth_experienced_army(game, source)
+    if not army or sum(effective_chi(game, card) for card in army) > DARK_EARTH_CHI:
+        return []
+    return [source.id]
+
+
+def _dark_ring_of_earth_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Move home every unit in the attacking army, bowing every card in it as it moves (CR,
+    Unit)."""
+    return [
+        effect
+        for personality in _dark_ring_of_earth_experienced_army(game, source)
+        for effect in (
+            Move(personality.id, Location.home(personality.owner)),
+            *(Bow(card.id) for card in unit_of(game, personality)),
+        )
+    ]
+
+
+register_ring(
+    "dark_ring_of_earth_experienced",
+    ability=Ability(
+        printed_index=1,
+        timings=(ActionTiming.BATTLE,),
+        cost=_dark_ring_of_earth_experienced_cost,
+        targets=_dark_ring_of_earth_experienced_targets,
+        effects=_dark_ring_of_earth_experienced_effects,
+        hits_every_target=True,
+        key="earth",
+        keywords=frozenset({keywords.EARTH}),
+    ),
+    pitch=None,
 )
 
 
