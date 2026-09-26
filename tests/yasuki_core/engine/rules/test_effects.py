@@ -41,6 +41,7 @@ from yasuki_core.engine.rules.effects import (
     Unpayable,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    Bowed,
     CardDiscarded,
     Dishonored,
     FavorDiscarded,
@@ -132,6 +133,14 @@ def test_bow_is_not_payable_for_an_already_bowed_card():
 
 def test_bow_is_not_payable_for_a_card_that_is_not_there():
     assert Bow("nonexistent").is_payable(two_seat_game()) is False
+
+
+def test_a_bow_announces_the_change_and_a_second_bow_announces_nothing():
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h"))
+
+    assert Bow(card.id).perform(game) == [Bowed(card.id)]
+    assert Bow(card.id).perform(game) == []
 
 
 def test_dishonor_turns_a_personality_once_and_announces_it():

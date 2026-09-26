@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import (
+    Bow,
     Destroy,
     DestroyProvince,
     Discard,
@@ -282,16 +283,17 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     resolution does not bow its player's units. Once the Attack Phase's last
     battle is over, defending units return home without bowing. Every one of them, at every
     battlefield, holds the ground they defended until then. Last, every Terrain at this battlefield
-    is discarded, announced like any discard.
+    is discarded. The bows and the discards resolve as one instant once the units are home, so each
+    is announced like any other bow or discard.
     """
     attack = _declared_attack(game)
     exempt = attack.battlefields[battlefield].bow_exempt
+    bows: list[Effect] = []
     for personality in units_at(game, battlefield, attack.attacker):
         conqueror = keywords.CONQUEROR in effective_keywords(game, personality)
         if personality.owner not in exempt and not conqueror:
-            personality.bow()
-            for attached in attachments_of(game, personality):
-                attached.bow()
+            bows.append(Bow(personality.id))
+            bows.extend(Bow(attached.id) for attached in attachments_of(game, personality))
         ops.return_home(game.table, personality)
     if last_battle:
         # Not scoped to this battlefield, unlike the attackers above: the CR qualifies 0.1 with "at
@@ -300,11 +302,11 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
         for index in range(len(attack.battlefields)):
             for personality in units_at(game, index, attack.defender):
                 ops.return_home(game.table, personality)
-    discards: list[Effect] = [
+    discards = [
         Discard(terrain.id, Rulebook.AFTER_RESOLUTION) for terrain in terrains_at(game, battlefield)
     ]
-    if discards:
-        triggers.resolve_effects(game, discards)
+    if bows or discards:
+        triggers.resolve_effects(game, bows + discards)
 
 
 @dataclass(frozen=True, slots=True)

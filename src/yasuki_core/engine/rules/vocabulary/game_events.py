@@ -157,6 +157,15 @@ class Straightened:
 
 
 @dataclass(frozen=True, slots=True)
+class Bowed:
+    """An unbowed card was bowed, by an effect, as a cost, by producing Gold, or by a battle's
+    resolution. The event names the change, so a card already bowed raises nothing, and neither
+    does a card entering play bowed (CR, Bowed and Unbowed)."""
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class Dishonored:
     """A Personality went from honorable to dishonorable (CR, Honorable and Dishonorable). The event
     names the change, so one already dishonorable raises nothing. ``cause`` names who or what
@@ -510,6 +519,7 @@ GameEvent = (
     ActionResolved
     | Assigned
     | BattleResolved
+    | Bowed
     | CardFocused
     | ConditionFulfilled
     | TurnStarted

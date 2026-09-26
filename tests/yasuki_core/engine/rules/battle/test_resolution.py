@@ -30,7 +30,7 @@ from yasuki_core.engine.rules.effects import Ask, DelayedEffect, DestroyProvince
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.triggers import apply_effect, resolve_effects
-from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved, CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved, Bowed, CardDiscarded
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -842,6 +842,19 @@ def test_a_unit_without_conqueror_bows_every_card_in_it():
     _fight_one_battle(session)
 
     assert cards["hero"].bowed and cards["retainer"].bowed
+
+
+def test_the_resolution_announces_each_card_it_bows():
+    session = _attacker_with_keywords()
+
+    _fight_one_battle(session)
+
+    events = session.game.turn_events
+    resolved = next(
+        index for index, event in enumerate(events) if isinstance(event, BattleResolved)
+    )
+    bowed = {event.card_id for event in events[resolved:] if isinstance(event, Bowed)}
+    assert bowed == {"hero", "retainer"}
 
 
 def test_an_attack_can_name_an_attacker_other_than_the_active_seat():

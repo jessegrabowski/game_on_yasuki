@@ -4,7 +4,7 @@ from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.vocabulary.game_events import ProducedGold, ProducingGold
+from yasuki_core.engine.rules.vocabulary.game_events import Bowed, ProducedGold, ProducingGold
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
@@ -110,4 +110,4 @@ def complete_production(game: GameState, card_id: str, target_ids: tuple[str, ..
     amount = effective_gold_production(game, card, targets=targets)
     card.bow()
     game.add_gold(card.owner, amount)
-    triggers.fire(game, ProducedGold(card_id, card.owner, amount))
+    triggers.fire_all(game, [Bowed(card_id), ProducedGold(card_id, card.owner, amount)])

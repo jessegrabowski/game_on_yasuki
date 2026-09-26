@@ -10,6 +10,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     ActionResolved
     Assigned
     BattleResolved
+    Bowed
     CardDiscarded
     CardFocused
     ConditionFulfilled
