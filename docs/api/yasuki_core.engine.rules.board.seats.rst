@@ -10,6 +10,7 @@ yasuki_core.engine.rules.board.seats
     cards_in_hand
     cards_in_play
     cards_named
+    fate_cards_in_play
     opposing_seats
     seat_controls_printed
     seat_stronghold

@@ -34,6 +34,36 @@ def reacting():
             by_card.pop(printed_id, None)
 
 
+@pytest.fixture
+def watching():
+    """Register condition watches for one test and clear them afterwards, for the reason
+    ``reacting`` gives."""
+    registered: list[str] = []
+
+    def _register(
+        printed_id: str,
+        condition,
+        reaction,
+        *,
+        key: str = "probe",
+        where: tuple[CardLocation, ...] = (CardLocation.HAND,),
+        ruleset: str | None = None,
+    ):
+        triggers.watch(
+            printed_id,
+            key=key,
+            condition=condition,
+            reaction=reaction,
+            where=where,
+            ruleset=ruleset,
+        )
+        registered.append(printed_id)
+
+    yield _register
+    for printed_id in registered:
+        triggers._WATCHES.pop(printed_id, None)
+
+
 @contextmanager
 def probe_ability(printed_id: str, ability: Ability):
     """Register ``ability`` under ``printed_id`` for the body of a ``with`` and remove it after.

@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     DeclareAttack,
+    Equip,
     Lobby,
     Pass,
     Recruit,
@@ -24,12 +25,13 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
-from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.effects import Destroy, Discard
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
 from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
+from yasuki_core.engine.rules.vocabulary.game_events import ConditionFulfilled
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
@@ -51,7 +53,7 @@ from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, AttachmentType,
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
 from yasuki_core.engine.rules.turn.action_sequence import submit
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, Confirm
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, ChoosePayment, Confirm
 from yasuki_core.engine.rules.vocabulary.actions import PlayInterrupt
 from yasuki_core.engine.rules.effects import Move
 from yasuki_core.engine.table import Location, location_of
@@ -1247,3 +1249,173 @@ def test_ring_of_water_is_not_offered_otherwise(raider_force, terrain_owner):
     session = _water_battle(raider_force=raider_force, terrain_owner=terrain_owner)
 
     assert not isinstance(session.game.pending, Confirm)
+
+
+def _void_equip_game(*also_held: L5RCard, holds_favor: bool = False) -> EngineSession:
+    """P1's "bearer" in play and Ring of the Void and a Follower in P1's hand beside ``also_held``,
+    with the Imperial Favor's proxy in hand too when ``holds_favor``. Left after P1 equips the
+    Follower to "bearer", which puts one Fate card in play and takes one out of hand."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(state, personality("bearer", owner=P1))
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    hand = state.zones[ZoneKey(P1, ZoneRole.HAND)]
+    hand.add(register(state, _ring("void", "ring_of_the_void")))
+    hand.add(register(state, attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER)))
+    for card in also_held:
+        hand.add(register(state, card))
+    session = EngineSession.start(state, P1)
+    if holds_favor:
+        resolve_effects(session.game, [TakeFavor(P1)])
+    session.act(P1, Equip("ashigaru"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("bearer",)))
+    return session
+
+
+def _void_offered(session: EngineSession, ring_id: str = "void") -> bool:
+    pending = session.game.pending
+    return isinstance(pending, Confirm) and pending.seat is P1 and ring_id in pending.candidates
+
+
+def _void_game(*held: L5RCard, in_play: int) -> EngineSession:
+    """P1's "bearer" carrying ``in_play`` Followers, "follower0" upward, and Ring of the Void in
+    P1's hand beside ``held``, started with no action taken."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(state, personality("bearer", owner=P1))
+    for index in range(in_play):
+        follower = attachment(f"follower{index}", attachment_type=AttachmentType.FOLLOWER)
+        attached(state, register(state, follower), "bearer")
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    hand = state.zones[ZoneKey(P1, ZoneRole.HAND)]
+    for card in (_ring("void", "ring_of_the_void"), *held):
+        hand.add(register(state, card))
+    return EngineSession.start(state, P1)
+
+
+def test_ring_of_the_void_is_offered_when_fate_cards_in_play_come_to_match_the_hand():
+    session = _void_equip_game(fate_card("spare", P1))
+
+    assert _void_offered(session)
+    session.submit(P1, DecisionResponse(("void",)))
+    assert "void" in _in_play(session)
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["spare"]
+
+
+def test_declining_ring_of_the_void_is_not_offered_again_while_the_count_still_matches():
+    session = _void_equip_game(fate_card("spare", P1))
+
+    session.submit(P1, DecisionResponse(()))
+    resolve_effects(session.game, [GainHonor(P1, 1)])
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert any(card.id == "void" for card in hand)
+    assert "void" not in _in_play(session)
+    assert not _void_offered(session)
+
+
+_GAIN_HONOR = Ability(
+    timings=(ActionTiming.OPEN,),
+    label="Open: gain 1 Honor",
+    cost=no_cost,
+    targets=itself,
+    effects=lambda game, source, target: [GainHonor(source.owner, 1)],
+    hits_every_target=True,
+    located_at=(CardLocation.HAND,),
+)
+
+
+@pytest.mark.parametrize(
+    ("announced", "action"),
+    [
+        (attachment("played", attachment_type=AttachmentType.FOLLOWER), Equip("played")),
+        (
+            L5RCard.of(
+                ActionPrint,
+                id="played",
+                name="Played",
+                printed_id="probe_gain_honor",
+                side=Side.FATE,
+                owner=P1,
+            ),
+            PlayStrategy("played"),
+        ),
+    ],
+    ids=["equip", "strategy"],
+)
+def test_ring_of_the_void_is_offered_when_an_announcement_takes_the_hand_down_to_match(
+    announced, action
+):
+    # The card leaves the hand for its entering-play or resolution area when it is announced, so
+    # none in play and none in hand match before anything is paid (CR, Resolution Area).
+    session = _void_game(announced, in_play=0)
+
+    with probe_ability("probe_gain_honor", _GAIN_HONOR):
+        session.act(P1, action)
+
+        assert _void_offered(session)
+        session.submit(P1, DecisionResponse(()))
+        assert isinstance(session.game.pending, ChoosePayment)
+
+
+@pytest.mark.parametrize(
+    ("in_play", "held", "effect"),
+    [
+        (1, 2, Discard("held1", P2)),
+        (2, 1, Destroy("follower1", P2)),
+    ],
+    ids=["discarded-from-hand", "destroyed-in-play"],
+)
+def test_ring_of_the_void_is_offered_whoever_brings_the_counts_together(in_play, held, effect):
+    session = _void_game(*(fate_card(f"held{index}", P1) for index in range(held)), in_play=in_play)
+
+    resolve_effects(session.game, [effect])
+
+    assert _void_offered(session)
+
+
+def test_each_ring_of_the_void_in_hand_is_offered():
+    session = _void_game(_ring("void2", "ring_of_the_void"), fate_card("held", P1), in_play=1)
+
+    resolve_effects(session.game, [Discard("held", P1)])
+    offered = session.game.pending.candidates
+    session.submit(P1, DecisionResponse(()))
+
+    assert {*offered, *session.game.pending.candidates} == {"void", "void2"}
+
+
+def test_ring_of_the_void_does_not_count_itself_in_hand():
+    # One Fate card in hand beside the Ring and two in play: equal only if the Ring were counted.
+    session = _void_game(fate_card("held", P1), in_play=2)
+
+    resolve_effects(session.game, [GainHonor(P1, 1)])
+
+    assert not _void_offered(session)
+
+
+def test_ring_of_the_void_does_not_count_the_imperial_favor_in_hand():
+    # Equal only if the Favor's proxy, which waits in the holder's hand, were counted.
+    session = _void_game(fate_card("held", P1), in_play=2)
+
+    resolve_effects(session.game, [TakeFavor(P1)])
+
+    assert any(
+        card.printed_id == IMPERIAL_FAVOR_ID
+        for card in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    )
+    assert not _void_offered(session)
+
+
+def test_ring_of_the_void_watches_only_under_the_shattered_empire_rules(monkeypatch):
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.ONYX)
+
+    session = _void_equip_game(fate_card("spare", P1))
+
+    assert not _void_offered(session)
+    assert not any(isinstance(event, ConditionFulfilled) for event in session.game.turn_events)

@@ -933,3 +933,56 @@ def test_the_turn_history_is_dropped_as_the_next_turn_begins():
 
     assert _resolutions(session.game) == []
     assert any(isinstance(event, TurnStarted) for event in session.game.turn_events)
+
+
+def _watching_the_hand_reach(game: GameState, size: int, watching) -> list[int]:
+    """Put a watcher in P1's hand whose condition is a hand of ``size`` cards, and return the turns
+    in which it is told the condition was fulfilled."""
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(
+        register(
+            game.table,
+            L5RCard.of(
+                FatePrint,
+                id="watcher",
+                name="W",
+                printed_id="watch_probe",
+                side=Side.FATE,
+                owner=PlayerId.P1,
+            ),
+        )
+    )
+    told: list[int] = []
+
+    def record(ctx):
+        told.append(ctx.game.turn)
+        return []
+
+    watching(
+        "watch_probe",
+        lambda game, card: len(game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards) == size,
+        record,
+    )
+    return told
+
+
+def test_a_condition_the_end_of_turn_draw_fulfills_is_announced_before_the_next_turn(watching):
+    game = _game(hand=2, fate_deck=1)
+    told = _watching_the_hand_reach(game, 4, watching)
+
+    _advance_to_end_of_turn(game)
+
+    assert told == [1]
+    assert game.turn == 2
+
+
+def test_a_condition_the_end_of_turn_draw_fulfills_is_announced_before_the_hand_size_discard(
+    watching,
+):
+    # Nine cards in hand holds only between the draw and the discard back down to eight.
+    game = _game(hand=sequence.MAX_HAND_SIZE - 1, fate_deck=1)
+    told = _watching_the_hand_reach(game, sequence.MAX_HAND_SIZE + 1, watching)
+
+    _advance_to_end_of_turn(game)
+
+    assert told == [1]
+    assert isinstance(game.pending, DiscardToHandSize)

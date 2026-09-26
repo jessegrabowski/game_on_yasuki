@@ -3,12 +3,17 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS
-from yasuki_core.game_pieces.prints import StrongholdPrint
+from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
 
 
 def cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
     """The cards ``seat`` controls on the battlefield."""
     return tuple(card for card in game.table.battlefield.cards if card.owner is seat)
+
+
+def fate_cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
+    """The Fate cards ``seat`` controls on the battlefield."""
+    return tuple(card for card in cards_in_play(game, seat) if isinstance(card.printed, FatePrint))
 
 
 def cards_in_hand(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:

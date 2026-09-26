@@ -1,6 +1,6 @@
 import collections
 from typing import NamedTuple
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass, replace
 
 from yasuki_core.engine.players import PlayerId
@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     WINDOWS,
     ActionResolved,
     CardDiscarded,
+    ConditionFulfilled,
     Destroyed,
     GameEvent,
 )
@@ -99,6 +100,9 @@ def on(
         between arcs. Default None, for a text every arc reads.
     """
 
+    if event_type is ConditionFulfilled:
+        raise ValueError("a watched condition is answered by its own watch; register one instead")
+
     def register(trigger: Trigger) -> Trigger:
         by_zone = _TRIGGERS.setdefault(event_type, {})
         registered = Registration(trigger, ruleset)
@@ -107,6 +111,74 @@ def on(
         return trigger
 
     return register
+
+
+# What a card watches the board for: "If X ever happens" and "Play if X" name a state, not an
+# event.
+WatchedCondition = Callable[[GameState, L5RCard], bool]
+
+
+class Watch(NamedTuple):
+    """A condition a card watches the board for, as registered.
+
+    Attributes
+    ----------
+    key : str
+        Names the watch among the card's others, so each is remembered and announced apart.
+    condition : callable
+        Maps ``(game, card)`` to whether the condition holds for that copy right now.
+    reaction : callable
+        The trigger run when the condition becomes true.
+    where : tuple of :class:`~yasuki_core.engine.rules.vocabulary.locations.CardLocation`
+        Where the card must be for the watch to be read.
+    ruleset : str or None
+        The one ruleset the watch is read under, or None for every arc.
+    """
+
+    key: str
+    condition: WatchedCondition
+    reaction: Trigger
+    where: tuple[CardLocation, ...]
+    ruleset: str | None
+
+
+# printed id -> the conditions a copy of it watches. Read each time the board settles.
+_WATCHES: dict[str, list[Watch]] = {}
+
+
+def watch(
+    printed_id: str,
+    *,
+    key: str,
+    condition: WatchedCondition,
+    reaction: Trigger,
+    where: tuple[CardLocation, ...] = (CardLocation.HAND,),
+    ruleset: str | None = None,
+) -> None:
+    """Run ``reaction`` for a copy of ``printed_id`` each time ``condition`` becomes true while the
+    copy is where ``where`` names, the way a triggered trait answers an event (CR, "If" Triggers).
+
+    The condition becoming true is announced as :class:`~.ConditionFulfilled` in the cascade that
+    made it so, so the reaction runs where any other triggered trait would. A copy arriving where
+    the watch looks while the condition already holds is a new occurrence and is announced too.
+
+    Parameters
+    ----------
+    printed_id : str
+        The card's printed id.
+    key : str
+        Names the watch among the card's others.
+    condition : callable
+        Maps ``(game, card)`` to whether the condition holds for that copy right now.
+    reaction : callable
+        The trigger run when the condition becomes true, handed the announcement as its event.
+    where : tuple of :class:`~yasuki_core.engine.rules.vocabulary.locations.CardLocation`, optional
+        Where the copy must be for the watch to be read. Default the hand alone.
+    ruleset : str, optional
+        The name of the one ruleset the watch is in force under, for a card whose text differs
+        between arcs. Default None, for a text every arc reads.
+    """
+    _WATCHES.setdefault(printed_id, []).append(Watch(key, condition, reaction, where, ruleset))
 
 
 # event type -> triggers the rulebook itself takes, after every card's. A rulebook effect that
@@ -201,7 +273,10 @@ def _departed_subject(game: GameState, event: GameEvent) -> L5RCard | None:
 
 def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
     """The ``(card, trigger)`` pairs ``event`` fires: the cards' in canonical order, then the
-    rulebook's, each on the card the event names."""
+    rulebook's, each on the card the event names. A watched condition is answered by its own
+    watch alone."""
+    if isinstance(event, ConditionFulfilled):
+        return _watch_reactions(game, event)
     firing = _card_triggers(game, event)
     firing.sort(key=_canonical_order)
     rulebook = _RULEBOOK_TRIGGERS.get(type(event))
@@ -339,7 +414,7 @@ def _advance(
         # Interrupt or a Response does inside its own round is its doing, not the action's, and
         # the announcement that the action resolved is about it rather than by it.
         inside_a_step = game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE)
-        if not inside_a_step and not isinstance(event, ActionResolved):
+        if not inside_a_step and not isinstance(event, ActionResolved | ConditionFulfilled):
             game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
@@ -434,6 +509,7 @@ def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None
         _forget_ongoing_on_cards_off_the_table(game)
         demanded = state_based_actions.demanded(game)
         if not demanded:
+            queue.extend(_newly_fulfilled(game))
             return
         for effect in demanded:
             _trace.append(f"    {effect.describe()} (state-based action)")
@@ -441,6 +517,57 @@ def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None
     raise RuntimeError(
         f"state-based actions did not settle after {_MAX_CASCADE} rounds:\n{_render_trace()}"
     )
+
+
+def _watched_cards(game: GameState) -> Iterator[tuple[CardLocation, L5RCard]]:
+    """Each card in a hand, on the battlefield or in a Province, with where it is."""
+    for seat in game.table.seats:
+        for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards:
+            yield CardLocation.HAND, card
+    for card in game.table.battlefield.cards:
+        yield CardLocation.BATTLEFIELD, card
+    for key, zone in game.table.zones.items():
+        if key.role is ZoneRole.PROVINCE:
+            for card in zone.cards:
+                yield CardLocation.PROVINCE, card
+
+
+def _reading(watches: Sequence[Watch], location: CardLocation) -> Iterator[Watch]:
+    return (each for each in watches if location in each.where and in_force(each))
+
+
+def _newly_fulfilled(game: GameState) -> list[ConditionFulfilled]:
+    """Record which watched conditions hold on the settled board, and announce each that did not
+    hold when the board last settled (CR, "If" Triggers)."""
+    if not _WATCHES and not game.conditions_holding:
+        return []
+    holding = [
+        (card.id, each.key)
+        for location, card in _watched_cards(game)
+        if card.printed_id in _WATCHES
+        for each in _reading(_WATCHES[card.printed_id], location)
+        if each.condition(game, card)
+    ]
+    fulfilled = [
+        ConditionFulfilled(card_id, key)
+        for card_id, key in holding
+        if (card_id, key) not in game.conditions_holding
+    ]
+    game.conditions_holding = frozenset(holding)
+    return fulfilled
+
+
+def _watch_reactions(game: GameState, event: ConditionFulfilled) -> list[tuple[L5RCard, Trigger]]:
+    """The reaction of the watch ``event`` announces, while its card is still where it looks."""
+    card = game.table.cards_by_id.get(event.card_id)
+    location = next((where for where, each in _watched_cards(game) if each is card), None)
+    if card is None or location is None:
+        return []
+    return [
+        (card, each.reaction)
+        for each in _reading(_WATCHES.get(card.printed_id, ()), location)
+        if each.key == event.key
+    ]
 
 
 def _render_trace() -> str:

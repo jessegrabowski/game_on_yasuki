@@ -14,9 +14,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import Answer, Debug, game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm, DecisionResponse
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint, RingPrint
 
 from tests.yasuki_core.engine.builders import dealt_table, province_card, two_seat_game
 
@@ -176,3 +176,17 @@ def test_debug_steps_are_taped_replay_and_round_trip():
     assert session.log.replay() == session.game
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
     assert restored.replay() == session.game
+
+
+def test_a_debug_ring_spawned_into_a_hand_that_fulfills_its_condition_is_offered_outside_any_action():
+    # Ring of the Void watches for as many Fate cards in play as in hand: none and none here.
+    session = EngineSession.start(TableState.empty_two_seat(), P1)
+    void = RingPrint(name="Ring of the Void", side=Side.FATE, printed_id="ring_of_the_void")
+
+    session.debug(DebugCard(P1, "void", void))
+
+    pending = session.game.pending
+    assert isinstance(pending, Confirm) and pending.seat is P1 and "void" in pending.candidates
+    session.submit(P1, DecisionResponse(()))
+    assert session.game.round.priority is P1
+    assert session.log.replay() == session.game

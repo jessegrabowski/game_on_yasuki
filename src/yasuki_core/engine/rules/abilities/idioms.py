@@ -26,7 +26,13 @@ from yasuki_core.engine.rules.gold.discounts import unspent_action_discount
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.triggers import (
+    TriggerContext,
+    WatchedCondition,
+    choice_resolver,
+    on,
+    watch,
+)
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, BattleResolved
 from yasuki_core.ruleset import RingEntry, ring_entry
 from yasuki_core.game_pieces.cards import L5RCard
@@ -173,8 +179,11 @@ def register_ring(
         )
 
 
-# The key of the answer that puts a "Play after X" Ring into play.
+# The key of the answer that puts a Ring into play from hand, whether "Play after X" or "Play if X"
+# offered it.
 TRAIT_ENTRY = "trait_entry"
+# The watch a "Play if X" Ring registers for its condition.
+CONDITION_ENTRY = "condition_entry"
 
 
 @choice_resolver(TRAIT_ENTRY)
@@ -182,6 +191,18 @@ def _resolve_trait_entry(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [PutIntoPlay(card_id) for card_id in chosen]
+
+
+def _offer_entry(ctx: TriggerContext) -> list[Effect]:
+    """Ask the card's owner whether to put it into play from hand, as a Ring whose condition has
+    just been fulfilled may enter (CR, Ring)."""
+    if ring_entry() is not RingEntry.IMMEDIATE:
+        raise NotImplementedError(f"{ring_entry().name} Ring entry is not implemented")
+    card = ctx.card
+    if not copy_may_enter(ctx.game, card.owner, card):
+        return []
+    question = f"Put {card.name} into play?"
+    return [Ask(card.owner, question, TRAIT_ENTRY, subjects=(card.id,), source_id=card.id)]
 
 
 def register_trait_entry(
@@ -213,15 +234,39 @@ def register_trait_entry(
     """
 
     def entry(ctx: TriggerContext) -> list[Effect]:
-        if ring_entry() is not RingEntry.IMMEDIATE:
-            raise NotImplementedError(f"{ring_entry().name} Ring entry is not implemented")
-        card = ctx.card
-        if not guard(ctx) or not copy_may_enter(ctx.game, card.owner, card):
-            return []
-        question = f"Put {card.name} into play?"
-        return [Ask(card.owner, question, TRAIT_ENTRY, subjects=(card.id,), source_id=card.id)]
+        return _offer_entry(ctx) if guard(ctx) else []
 
     on(event_type, printed_id, where=(CardLocation.HAND,), ruleset=ruleset)(entry)
+
+
+def register_condition_entry(
+    printed_id: str, condition: WatchedCondition, *, ruleset: str | None = None
+) -> None:
+    """Register ``printed_id``'s "Play if X" trait: from hand, each time ``condition`` becomes true,
+    its owner is asked whether to put it into play.
+
+    The CR's Ring rule, as for :func:`~.register_trait_entry`: the card may enter immediately after
+    the condition is fulfilled, and the condition is fulfilled again by each new occurrence. A
+    condition that already holds as the card arrives in hand is fulfilled by the arrival.
+
+    Parameters
+    ----------
+    printed_id : str
+        The card's printed id.
+    condition : callable
+        Maps ``(game, card)`` to whether the condition holds for that copy right now.
+    ruleset : str, optional
+        The name of the one ruleset the trait is in force under, for a card whose text differs
+        between arcs. Default None, for a text every arc reads.
+    """
+    watch(
+        printed_id,
+        key=CONDITION_ENTRY,
+        condition=condition,
+        reaction=_offer_entry,
+        where=(CardLocation.HAND,),
+        ruleset=ruleset,
+    )
 
 
 def resolved_favor_actions(at_least: int) -> Callable[[TriggerContext], bool]:
