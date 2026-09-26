@@ -151,7 +151,7 @@ def favor_actions_this_turn(game: GameState, seat: PlayerId) -> int:
 
 
 def phase_history(game: GameState) -> tuple[GameEvent, ...]:
-    """The :class:`~.GameEvent` records of what has happened since the current phase began, which is
+    """The ``GameEvent`` records of what has happened since the current phase began, which is
     what a card reading "this phase" counts. The whole turn so far before its first phase has
     begun."""
     events = game.turn_events
