@@ -96,8 +96,8 @@ def declare_duel(
     ops.create_focus_area(game.table, challenged)
     duel.step = DuelStep.FOCUSING
     duel.entry_stats = {
-        seat: duel_stat(game, game.table.cards_by_id[duel.duelist_of(seat)])
-        for seat in (challenger, challenged)
+        challenger: duel_stat(game, game.table.cards_by_id[challenger_duelist]),
+        challenged: duel_stat(game, game.table.cards_by_id[challenged_duelist]),
     }
     # The option is queued before the setup runs and before the window is announced, so that work
     # either of them pushes sits above it and resolves before the first seat is asked.
@@ -105,21 +105,13 @@ def declare_duel(
     events: list[GameEvent] = []
     for effect in ruleset.ACTIVE.focus_procedure.begin(game, duel):
         events.extend(triggers.apply_effect(game, effect))
-    return [*events, _declaring(duel), _declared(duel)]
+    return [*events, _naming(duel, DeclaringDuel), _naming(duel, DuelDeclared)]
 
 
-def _declaring(duel: DuelRecord) -> DeclaringDuel:
-    return DeclaringDuel(
-        challenger=duel.challenger,
-        challenged=duel.challenged,
-        challenger_duelist=duel.challenger_duelist,
-        challenged_duelist=duel.challenged_duelist,
-        source_card_id=duel.source,
-    )
-
-
-def _declared(duel: DuelRecord) -> DuelDeclared:
-    return DuelDeclared(
+def _naming[EventT: DeclaringDuel | DuelDeclared](duel: DuelRecord, kind: type[EventT]) -> EventT:
+    """``kind`` built from ``duel``. The two declaration events carry the same five fields, since
+    one opens the window the other closes."""
+    return kind(
         challenger=duel.challenger,
         challenged=duel.challenged,
         challenger_duelist=duel.challenger_duelist,
