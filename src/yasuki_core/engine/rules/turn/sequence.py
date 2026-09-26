@@ -175,6 +175,7 @@ def forget_action(game: GameState) -> None:
     game.interrupts_taken.clear()
     game.interrupts_offered = False
     game.modifications.clear()
+    game.hidden_card_shown = False
 
 
 def open_round(game: GameState) -> None:
@@ -468,6 +469,8 @@ def _announce_resolution(game: GameState) -> None:
     if game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
         return
     game.action_resolved = True
+    # A resolved action is past unwinding, so what it showed cannot bar a Response's own cancel.
+    game.hidden_card_shown = False
     ability = resolving_ability(game)
     resolved = ActionResolved(
         seat=game.action_seat,

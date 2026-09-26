@@ -142,6 +142,7 @@ def perform(game: GameState, action: Action) -> None:
         game.interrupts_taken.clear()
         game.interrupts_offered = False
         game.modifications.clear()
+        game.hidden_card_shown = False
     match action:
         case Pass():
             yield_priority(game, passed=True)

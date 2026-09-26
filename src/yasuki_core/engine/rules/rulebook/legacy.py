@@ -39,7 +39,7 @@ def _reveal_search_pool(game: GameState, seat: PlayerId) -> None:
     """Let ``seat`` identify every card its Legacy search looked through. A face-down Province card
     is searched, so the seat has seen it by the time it chooses which Province to displace."""
     for card in legacy_search_pool(game, seat):
-        card.add_peeker(seat)
+        game.show_to(card, seat)
 
 
 @triggers.choice_resolver(

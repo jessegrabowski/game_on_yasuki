@@ -100,6 +100,26 @@ def test_use_once_is_claimed_exactly_once():
     assert game.use_once("proclaim") is True
 
 
+def test_showing_a_seat_an_unseen_card_marks_the_action():
+    game = _game()
+    card = province_card(game, "hidden", face_up=False)
+
+    game.show_to(card, PlayerId.P1)
+
+    assert PlayerId.P1 in card.peekers
+    assert game.hidden_card_shown
+
+
+def test_showing_a_seat_a_card_it_has_seen_marks_nothing():
+    game = _game()
+    card = province_card(game, "hidden", face_up=False)
+    card.add_peeker(PlayerId.P1)
+
+    game.show_to(card, PlayerId.P1)
+
+    assert not game.hidden_card_shown
+
+
 def test_a_seat_dealt_provinces_can_lose_them_all():
     state = TableState.empty_two_seat()
     province_card(state, "prov", seat=PlayerId.P1, index=0)

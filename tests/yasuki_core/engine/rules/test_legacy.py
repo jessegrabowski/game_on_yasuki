@@ -1,3 +1,4 @@
+import pytest
 from yasuki_core.engine import ops
 from numpy.random import default_rng
 
@@ -362,6 +363,41 @@ def test_the_search_shows_the_seat_its_face_down_province_cards():
     session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
 
     assert buried.peekers == frozenset({PlayerId.P1})
+
+
+def test_the_banish_pick_can_be_cancelled():
+    session = _dynasty_session(legacy_in="deck")
+    session.act(PlayerId.P1, Legacy())
+
+    assert session.can_cancel(PlayerId.P1)
+    session.cancel(PlayerId.P1)
+    assert session.game.pending is None
+
+
+def test_no_pick_after_the_search_can_be_cancelled():
+    session = _dynasty_session(legacy_in="deck")
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
+    assert session.game.pending.resolver == legacy.FIND_RESOLVER
+
+    assert not session.can_cancel(PlayerId.P1)
+    with pytest.raises(ValueError, match="looked at"):
+        session.cancel(PlayerId.P1)
+
+    session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
+    assert session.game.pending.resolver == legacy.PLACE_RESOLVER
+    assert not session.can_cancel(PlayerId.P1)
+
+
+def test_a_resolved_legacy_no_longer_bars_backing_out():
+    session = _dynasty_session(legacy_in="deck")
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
+
+    assert session.game.action_resolved
+    assert not session.game.hidden_card_shown
 
 
 def test_the_search_does_not_show_the_pool_to_the_opponent():

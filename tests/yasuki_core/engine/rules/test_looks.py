@@ -163,6 +163,45 @@ def test_a_look_cannot_be_backed_out_of_once_the_cards_are_seen():
     assert session.game.pending is pending
 
 
+@choice_resolver("test_look_close_then_ask", prompt="Choose a card to keep looking at")
+def _close_then_ask(game, source_id, chosen, seat):
+    return [EndLook(), Choose(P1, top_of_deck(game, FATE, 1), 1, 1, "test_after_look", source_id)]
+
+
+@choice_resolver("test_after_look", prompt="Choose a card")
+def _after_look(game, source_id, chosen, seat):
+    return []
+
+
+register_ability(
+    "test_look_asker",
+    Ability(
+        timings=(ActionTiming.LIMITED,),
+        label="look, then ask",
+        cost=lambda game, source: [],
+        targets=itself,
+        effects=lambda game, source, target: [
+            LookAtTop(P1, FATE, 2),
+            Choose(P1, top_of_deck(game, FATE, 2), 0, 1, "test_look_close_then_ask", source.id),
+        ],
+    ),
+)
+
+
+def test_a_question_after_the_look_closes_still_cannot_be_backed_out_of():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("asker", printed_id="test_look_asker"))
+    _stack_fate(state, "top", "second", "third")
+    session = EngineSession.start(state, P1)
+    session.act(P1, ActivateAbility("asker"))
+    session.submit(P1, DecisionResponse(("asker",)))
+    session.submit(P1, DecisionResponse(()))
+
+    assert session.game.look is None
+    assert session.game.pending.resolver == "test_after_look"
+    assert not session.can_cancel(P1)
+
+
 def test_taking_a_looked_at_card_closes_the_look_and_replays_equal():
     session = _looking_session()
 

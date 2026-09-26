@@ -34,6 +34,12 @@ def _backs_out(pending: DecisionRequest) -> bool:
     return pending.cancellable and not pending.triggered
 
 
+def _has_shown_cards(game: GameState) -> bool:
+    """Whether a seat is looking at cards or the action has already shown one a hidden card.
+    Unwinding would not make it forget either."""
+    return game.look is not None or game.hidden_card_shown
+
+
 def _inside_the_interrupt_step(entry: object) -> bool:
     return isinstance(entry, Act) and isinstance(
         entry.action, Pass | PlayInterrupt | DiscardToInterrupt
@@ -193,14 +199,15 @@ class EngineSession:
 
     def can_cancel(self, seat: PlayerId) -> bool:
         """Whether :meth:`cancel` would take ``seat``'s request right now: a decision of its own is
-        pending, the request allows backing out, and no cards are being looked at. A client offers
-        Cancel on this and nothing else, so it never offers a way out the engine then refuses."""
+        pending, the request allows backing out, and the action has shown nobody a card it cannot
+        take back. A client offers Cancel on this and nothing else, so it never offers a way out the
+        engine then refuses."""
         pending = self.game.pending
         return (
             pending is not None
             and pending.seat is seat
             and _backs_out(pending)
-            and self.game.look is None
+            and not _has_shown_cards(self.game)
         )
 
     def cancel(self, seat: PlayerId) -> None:
@@ -220,7 +227,7 @@ class EngineSession:
             raise ValueError("a trigger asked the question, and what it reacts to has happened")
         if not pending.cancellable:
             raise ValueError(f"{type(pending).__name__} cannot be canceled")
-        if self.game.look is not None:
+        if _has_shown_cards(self.game):
             raise ValueError("cards have been looked at, which cannot be taken back")
         if not self.abort(seat):
             raise ValueError("the opportunity has passed; there is nothing left to unwind")
@@ -240,16 +247,16 @@ class EngineSession:
         Refuse once the action has moved anything another seat holds. Taking back a card an opponent
         has already drawn does not take back their having seen it, so an action that reached across
         the table is committed the moment it did. Refuse likewise while the seat is looking at cards
-        in a deck, which it cannot unread, for a decision the rules force, for a question a trigger
-        asked, since the event it reacts to has already happened, for an action already complete,
-        once another seat has resolved a step of its own, and while another seat is the one being
-        asked. An action that has handed the question on is past the point where its announcer may
+        in a deck, which it cannot unread, once the action has shown a seat a hidden card, which it
+        cannot unsee, for a decision the rules force, for a question a trigger asked, since the
+        event it reacts to has already happened, for an action already complete, once another seat
+        has resolved a step of its own, and while another seat is the one being asked. An action that has handed the question on is past the point where its announcer may
         take it back.
 
         Return whether anything was unwound.
         """
         pending = self.game.pending
-        if pending is None or not _backs_out(pending) or self.game.look is not None:
+        if pending is None or not _backs_out(pending) or _has_shown_cards(self.game):
             return False  # nothing in flight, or a decision the seat is not allowed to back out of
         if pending.seat is not seat:
             return False  # another seat is mid-decision; the question is not this seat's to erase

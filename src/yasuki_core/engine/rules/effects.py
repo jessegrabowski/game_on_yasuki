@@ -1572,7 +1572,7 @@ class LookAtTop(Effect):
             raise RuntimeError("a look is already open")
         seen = list(reversed(game.table.decks[self.deck].peek(self.count)))
         for card in seen:
-            card.add_peeker(self.seat)
+            game.show_to(card, self.seat)
         game.look = Look(self.seat, self.deck, tuple(card.id for card in seen))
         return []
 
