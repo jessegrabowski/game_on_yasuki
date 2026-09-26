@@ -78,18 +78,20 @@ when an `effective_*` function exists for it.
 
 ## What you can react to
 
-Fifteen events:
+Seventeen events:
 
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.EnteredPlay`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Assigned`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Destroyed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Straightened`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.Bowed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Dishonored`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Rehonored`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.CardDiscarded`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.CounterGained`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Revealed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.TurnStarted`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.PhaseStarted`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.HonorChanged`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducingGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducedGold`

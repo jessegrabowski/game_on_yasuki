@@ -385,7 +385,7 @@ and returns with `pending` clear. Now `submit`'s drain has work: it pops `BeginN
 begins the next turn. The two `EnteredPlay` lines are the Naga Followers the two answers created,
 whose entry was queued behind the second answer's effects. P2's turn then opens through the same
 stack, each of its instants a walk of its own: nothing to straighten here, the Province reveal,
-the announcement. The active seat is P2 and the round is P2's, so the yield at the end of
+the turn's start, and the Action Phase's start. The active seat is P2 and the round is P2's, so the yield at the end of
 `submit` sees a round it was not asked in and hands nothing on.
 
 ```python
@@ -402,6 +402,7 @@ assert list(triggers._trace) == [
     "EnteredPlay",
     "    reveal P2's provinces",
     "TurnStarted",
+    "PhaseStarted",
 ]
 banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)]
 assert sorted(card.id for card in banished.cards) == ["spearmen", "spearmen2"]

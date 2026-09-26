@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    Bowed,
     ProducedGold,
     ProducingGold,
 )
@@ -390,6 +391,21 @@ def test_production_raises_its_events_once_per_producer():
     finally:
         triggers._TRIGGERS.get(ProducingGold, {}).pop("counting_probe", None)
         triggers._TRIGGERS.get(ProducedGold, {}).pop("counting_probe", None)
+
+
+def test_a_producer_announces_its_bow_alongside_its_yield():
+    session = _dynasty_phase([holding("a", owner=PlayerId.P1, gold_production=5)], cost=5)
+    session.act(PlayerId.P1, Recruit("tgt"))
+    session.submit(PlayerId.P1, DecisionResponse(("a",)))
+
+    announced = [
+        event for event in session.game.turn_events if getattr(event, "card_id", None) == "a"
+    ]
+    assert announced == [
+        ProducingGold("a", PlayerId.P1),
+        Bowed("a"),
+        ProducedGold("a", PlayerId.P1, 5),
+    ]
 
 
 def test_a_single_producer_that_covers_the_cost_pays_in_one_step():

@@ -745,7 +745,7 @@ def test_a_rulebook_discard_rejoins_the_cascade_where_the_fear_stood():
     _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_UP)
 
     assert _guard_bowed(session)
-    assert _event_names(session) == ["HonorChanged"]
+    assert _event_names(session) == ["Bowed", "HonorChanged"]
 
 
 def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
@@ -763,7 +763,7 @@ def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
     # The replacement resolves where the Fear stood, so the ability's next effect applies before
     # a reaction to what the replacement did fires, the same as after a rulebook discard. Okura's
     # own discard happened inside the step and is not among the action's events.
-    assert _event_names(session) == ["Destroyed", "HonorChanged"]
+    assert _event_names(session) == ["Bowed", "Destroyed", "HonorChanged"]
     assert honor_seen == [1]
 
 
@@ -782,7 +782,7 @@ def test_a_played_interrupts_own_effects_resolve_inside_the_step_and_are_not_the
     assert [card.id for card in discard] == ["probe"]
     assert [
         (type(event).__name__, getattr(event, "seat", None)) for event in session.game.action_events
-    ] == [("HonorChanged", ATTACKER)]
+    ] == [("Bowed", None), ("HonorChanged", ATTACKER)]
 
 
 # --- when the step does not open ---

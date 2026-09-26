@@ -10,6 +10,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     ActionResolved
     Assigned
     BattleResolved
+    Bowed
     CardDiscarded
     CardFocused
     ConditionFulfilled
@@ -24,6 +25,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     FavorDiscarded
     FocusedCardsRevealed
     HonorChanged
+    PhaseStarted
     ProducedGold
     ProducingGold
     Rehonored

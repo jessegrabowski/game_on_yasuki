@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    Bowed,
     CardDiscarded,
     CounterGained,
     Destroyed,
@@ -1401,7 +1402,7 @@ class ExemptFromResolutionBow(Effect):
 
 @dataclass(frozen=True, slots=True)
 class Bow(Effect):
-    """Bow a card."""
+    """Bow a card, announcing the change. One already bowed announces nothing."""
 
     card_id: str
 
@@ -1415,9 +1416,10 @@ class Bow(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is not None:
-            card.bow()
-        return []
+        if card is None or card.bowed:
+            return []
+        card.bow()
+        return [Bowed(self.card_id)]
 
 
 @dataclass(frozen=True, slots=True)
