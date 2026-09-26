@@ -11,13 +11,16 @@ from yasuki_core.engine.rules.action_record import resolving_ability
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize, LeaveBowed
-from yasuki_core.engine.rules.effects import AdjustCounter, ApplyEffects, RevealProvinces
+from yasuki_core.engine.rules.vocabulary.decisions import LeaveBowed
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    ApplyEffects,
+    DiscardFromHand,
+    RevealProvinces,
+)
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
-    CardDiscarded,
     EnteredPlay,
-    GameEvent,
     Straightened,
     TurnStarted,
 )
@@ -37,7 +40,7 @@ from yasuki_core.engine.rules.turn.structure import (
     TURN_PHASES,
 )
 from yasuki_core.engine.rules.board.seats import cards_in_hand
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint, WindPrint
@@ -263,11 +266,14 @@ class DrawAtEndOfTurn:
 
 @dataclass(frozen=True, slots=True)
 class EnforceMaximumHandSize:
-    """Ask the seat ending its turn to discard down to the maximum hand size, or begin the next
-    turn when it holds no more than that.
+    """Have the seat ending its turn discard down to the maximum hand size, then begin the next
+    turn.
 
-    A work item, so what the end-of-turn draw fulfilled is offered first. The discard is asked with
-    nothing left beneath it, since answering it begins the next turn.
+    A work item, so what the end-of-turn draw fulfilled is offered first. The next turn is queued
+    beneath the discard, so it waits for the seat's choice and for whatever the discard triggers.
+
+    The CR makes the discard a step of the turn (Drawing and Discarding Fate Cards). It names the
+    rulebook as its cause, so a card reacting to "if the action was yours" has no action to claim.
 
     Attributes
     ----------
@@ -278,13 +284,12 @@ class EnforceMaximumHandSize:
     seat: PlayerId
 
     def resume(self, game: GameState) -> None:
-        held = cards_in_hand(game, self.seat)
-        excess = len(held) - MAX_HAND_SIZE
-        if excess > 0:
-            candidates = tuple(card.id for card in held)
-            game.pending = DiscardToHandSize(self.seat, candidates, count=excess)
-            return
         game.stack.append(BeginNextTurn())
+        excess = len(cards_in_hand(game, self.seat)) - MAX_HAND_SIZE
+        if excess > 0:
+            triggers.resolve_effects(
+                game, [DiscardFromHand(self.seat, excess, Rulebook.MAXIMUM_HAND_SIZE, self.seat)]
+            )
 
 
 def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
@@ -397,32 +402,6 @@ class OpenRound:
 
     def resume(self, game: GameState) -> None:
         open_round(game)
-
-
-def apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:
-    """Discard down to the maximum hand size at the end of the turn.
-
-    A step of the turn rather than an action (CR, Drawing and Discarding Fate Cards): the discard
-    names no seat as its cause, so a card reacting to "if the action was yours" has no action to
-    claim.
-
-    Every card named reaches the discard before any of them is announced, and the announcements are
-    one cascade: the cards go at once, so a trait reading the board sees the whole discard rather
-    than the part of it that happened to precede its own card.
-    """
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    by_id = {card.id: card for card in hand.cards}
-    missing = [card_id for card_id in card_ids if card_id not in by_id]
-    if missing:
-        raise ValueError(f"discard names cards not in {seat.name}'s hand: {missing}")
-    discarded: list[GameEvent] = []
-    for card_id in card_ids:
-        card = by_id[card_id]
-        ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.FATE_DISCARD))
-        discarded.append(
-            CardDiscarded(card_id, card.side, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True)
-        )
-    triggers.fire_all(game, discarded)
 
 
 def _other(seat: PlayerId) -> PlayerId:

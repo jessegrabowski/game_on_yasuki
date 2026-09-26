@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import Cause, PlayerId
 
 
 @dataclass(frozen=True, slots=True)
@@ -179,20 +179,30 @@ class ChoosePayment(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
-class DiscardToHandSize(DecisionRequest):
-    """The seat must discard ``count`` cards from hand to reach the maximum hand size, taken at the
-    end of its turn. The candidates are the seat's current hand.
+class ChooseDiscard(DecisionRequest):
+    """The seat must choose exactly ``count`` of the candidates, cards in ``holder``'s hand, for
+    ``holder`` to discard. The seat is the holder when a card reads "must discard a card" and when
+    the hand is over the maximum hand size, and another seat when a card has that seat choose.
 
     Attributes
     ----------
     count : int
-        How many cards the seat must discard.
+        How many cards are discarded.
+    holder : PlayerId
+        The seat whose hand the candidates are in.
+    cause : PlayerId, Rulebook or Trait
+        Who or what the discard belongs to, carried onto each ``CardDiscarded``.
     """
 
     count: int
+    holder: PlayerId
+    cause: Cause
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return f"discard {self.count} card(s)"
+        cards = "card" if self.count == 1 else "cards"
+        if self.holder is self.seat:
+            return f"Discard {self.count} {cards}"
+        return f"Choose {self.count} {cards} for {self.holder.name} to discard"
 
     @property
     def confirm_label(self) -> str:

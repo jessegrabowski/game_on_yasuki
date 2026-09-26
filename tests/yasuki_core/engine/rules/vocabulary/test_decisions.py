@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -10,40 +10,46 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     DecisionRequest,
     ChooseCards,
+    ChooseDiscard,
     ChooseDistribution,
     ChoosePayment,
     DecisionResponse,
-    DiscardToHandSize,
 )
 from yasuki_core.engine.rules.triggers import choice_resolver
 
 _HAND = ("a", "b", "c")
 
 
+def _discard(count: int, *, seat: PlayerId = PlayerId.P1) -> ChooseDiscard:
+    return ChooseDiscard(
+        seat, _HAND, count=count, holder=PlayerId.P1, cause=Rulebook.MAXIMUM_HAND_SIZE
+    )
+
+
 def test_discard_accepts_exactly_count_distinct_candidates():
-    request = DiscardToHandSize(PlayerId.P1, _HAND, count=2)
+    request = _discard(2)
     assert request.accepts(DecisionResponse(("a", "b"))) is True
 
 
 def test_discard_rejects_wrong_number_of_choices():
-    request = DiscardToHandSize(PlayerId.P1, _HAND, count=2)
+    request = _discard(2)
     assert request.accepts(DecisionResponse(("a",))) is False
     assert request.accepts(DecisionResponse(("a", "b", "c"))) is False
 
 
 def test_discard_rejects_duplicate_choices():
-    request = DiscardToHandSize(PlayerId.P1, _HAND, count=2)
+    request = _discard(2)
     # Two slots filled by the same card is not two discards.
     assert request.accepts(DecisionResponse(("a", "a"))) is False
 
 
 def test_discard_rejects_choices_outside_the_candidates():
-    request = DiscardToHandSize(PlayerId.P1, _HAND, count=2)
+    request = _discard(2)
     assert request.accepts(DecisionResponse(("a", "z"))) is False  # z is not a candidate
 
 
 def test_discard_of_zero_accepts_only_an_empty_answer():
-    request = DiscardToHandSize(PlayerId.P1, _HAND, count=0)
+    request = _discard(0)
     assert request.accepts(DecisionResponse(())) is True
     assert request.accepts(DecisionResponse(("a",))) is False
 
@@ -104,7 +110,7 @@ def test_payment_rejects_non_candidate_or_duplicate_sources():
 
 def test_only_a_payment_is_cancellable():
     assert _payment(amount=5, available=0, produced=[("sh", 8)]).cancellable is True
-    assert DiscardToHandSize(PlayerId.P1, _HAND, count=2).cancellable is False
+    assert _discard(2).cancellable is False
 
 
 def _choose(minimum: int, maximum: int) -> ChooseCards:
@@ -279,9 +285,13 @@ def test_the_payment_prompt_quotes_what_a_producer_makes_now_not_what_it_could()
 
 
 def test_discard_prompt_names_the_count():
-    request = DiscardToHandSize(PlayerId.P1, ("a", "b"), count=1)
-    assert request.prompt() == "discard 1 card(s)"
-    assert request.confirm_label == "Discard"
+    assert _discard(1).prompt() == "Discard 1 card"
+    assert _discard(2).prompt() == "Discard 2 cards"
+    assert _discard(1).confirm_label == "Discard"
+
+
+def test_discard_prompt_names_the_holder_when_another_seat_chooses():
+    assert _discard(1, seat=PlayerId.P2).prompt() == "Choose 1 card for P1 to discard"
 
 
 def test_a_confirm_takes_yes_as_its_subjects_and_no_as_none():

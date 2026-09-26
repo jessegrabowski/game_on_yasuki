@@ -6,7 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.vocabulary.actions import Action, Legacy
 from yasuki_core.bots.agents import AutoAgent
-from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse, DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.bots.policies import PassPolicy, RandomPolicy
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.replay.game_log import Act, Answer
@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine import driver
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
-from yasuki_core.engine.rules.effects import Choose
+from yasuki_core.engine.rules.effects import Choose, DiscardFromHand
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.vocabulary.game_events import Straightened
 from yasuki_core.engine.driver import Controls, play_game, run_game
@@ -113,9 +113,6 @@ def test_the_driver_stops_when_the_game_ends():
 
 
 def test_a_decision_goes_to_the_seat_that_owes_it():
-    """Every implemented card raises decisions for the active seat, so nothing yet distinguishes
-    "the seat that owes this" from "the seat whose turn it is". Cards where the opponent decides
-    are common in the card pool, and routing to the wrong seat would ask the wrong player."""
     session = _session()
     asked: list[tuple[PlayerId, PlayerId]] = []
 
@@ -124,9 +121,12 @@ def test_a_decision_goes_to_the_seat_that_owes_it():
 
         def decide(self, request, view: GameView) -> DecisionResponse:
             asked.append((view.viewer, session.game.active))
-            return DecisionResponse(())
+            return DecisionResponse(request.candidates[:1])
 
-    session.game.pending = DiscardToHandSize(PlayerId.P2, (), count=0)
+    # P2 chooses which of P1's cards P1 discards.
+    triggers.resolve_effects(
+        session.game, [DiscardFromHand(PlayerId.P1, 1, PlayerId.P2, PlayerId.P2)]
+    )
     controls = {seat: Controls(PassPolicy(), Recording()) for seat in PlayerId}
 
     play_game(session, controls, turn_limit=1)

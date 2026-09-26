@@ -2,7 +2,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.engine.rules.effects import DiscardFavor, TakeFavor
-from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseDiscard
 from yasuki_core.engine.rules.turn.sequence import _end_turn, MAX_HAND_SIZE
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -92,7 +92,7 @@ def test_a_full_hand_plus_the_favor_discards_nothing():
 
     _end_turn(game)
 
-    assert not isinstance(game.pending, DiscardToHandSize), "counting the proxy would ask for one"
+    assert not isinstance(game.pending, ChooseDiscard), "counting the proxy would ask for one"
 
 
 def test_the_favor_is_never_offered_as_a_discard_to_hand_size():
@@ -103,7 +103,7 @@ def test_the_favor_is_never_offered_as_a_discard_to_hand_size():
 
     _end_turn(game)
 
-    assert isinstance(game.pending, DiscardToHandSize)
+    assert isinstance(game.pending, ChooseDiscard)
     proxy = _proxies(game)[0]
     assert proxy not in game.pending.candidates
     # One real card over the limit. Counting the proxy would make it two.

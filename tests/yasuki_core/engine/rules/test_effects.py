@@ -5,7 +5,12 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import effects
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
+from yasuki_core.engine.redaction import HiddenCard, redact
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseCards,
+    ChooseDiscard,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
@@ -21,6 +26,7 @@ from yasuki_core.engine.rules.effects import (
     Fear,
     Discard,
     DiscardFavor,
+    DiscardFromHand,
     Dishonor,
     Evaluate,
     GainHonor,
@@ -31,6 +37,7 @@ from yasuki_core.engine.rules.effects import (
     seppuku,
     TakeFavor,
     InterruptingEffect,
+    LookAtHand,
     Unpayable,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -657,3 +664,111 @@ def test_revoking_grants_takes_one_sources_ability_grants_and_nothing_else():
     RevokeGrants("ground").perform(game)
 
     assert game.ongoing == kept
+
+
+def _p2_holding(size: int) -> GameState:
+    game = two_seat_game()
+    hand = game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
+    for index in range(size):
+        card = fate_card(f"P2-h{index}", PlayerId.P2)
+        game.table.cards_by_id[card.id] = card
+        hand.add(card)
+    return game
+
+
+def _p2_hand(game: GameState) -> list[str]:
+    return [card.id for card in game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards]
+
+
+def test_a_discard_the_holder_chooses_asks_the_holder_to_pick_from_the_whole_hand():
+    game = _p2_holding(3)
+
+    resolve_effects(game, [DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, PlayerId.P2)])
+
+    assert game.pending == ChooseDiscard(
+        PlayerId.P2, tuple(_p2_hand(game)), count=1, holder=PlayerId.P2, cause=PlayerId.P1
+    )
+
+
+def test_the_chosen_cards_leave_the_hand_as_one_discard_from_hand(reacting):
+    game = _p2_holding(3)
+    discarded: list[CardDiscarded] = []
+    reacting(CardDiscarded, "discard_probe", lambda ctx: discarded.append(ctx.event) or [])
+    put_in_play(game, holding("probe", printed_id="discard_probe"))
+    resolve_effects(game, [DiscardFromHand(PlayerId.P2, 2, PlayerId.P1, PlayerId.P2)])
+
+    submit(game, DecisionResponse(("P2-h0", "P2-h2")))
+
+    assert _p2_hand(game) == ["P2-h1"]
+    assert discarded == [
+        CardDiscarded("P2-h0", Side.FATE, PlayerId.P1, from_hand_or_deck=True),
+        CardDiscarded("P2-h2", Side.FATE, PlayerId.P1, from_hand_or_deck=True),
+    ]
+
+
+def test_a_hand_no_larger_than_the_count_is_discarded_without_a_question():
+    game = _p2_holding(1)
+
+    resolve_effects(game, [DiscardFromHand(PlayerId.P2, 2, PlayerId.P1, PlayerId.P2)])
+
+    assert game.pending is None
+    assert _p2_hand(game) == []
+
+
+def test_a_random_discard_asks_no_one_and_is_fixed_by_the_seed():
+    def discard_at_random() -> list[str]:
+        game = _p2_holding(5)
+        resolve_effects(game, [DiscardFromHand(PlayerId.P2, 2, PlayerId.P1, None)])
+        assert game.pending is None
+        return _p2_hand(game)
+
+    kept = discard_at_random()
+
+    assert len(kept) == 3
+    assert discard_at_random() == kept
+
+
+def test_another_seat_choosing_reads_the_hand_it_chooses_from():
+    game = _p2_holding(3)
+
+    resolve_effects(
+        game,
+        [
+            LookAtHand(PlayerId.P1, PlayerId.P2),
+            DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, PlayerId.P1),
+        ],
+    )
+
+    assert game.pending.seat is PlayerId.P1
+    hand = redact(game.table, PlayerId.P1).zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
+    assert not any(isinstance(card, HiddenCard) for card in hand.cards)
+
+
+def test_only_the_named_candidates_are_offered():
+    game = _p2_holding(3)
+
+    resolve_effects(
+        game,
+        [DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, PlayerId.P2, candidates=("P2-h0", "P2-h1"))],
+    )
+
+    assert game.pending.candidates == ("P2-h0", "P2-h1")
+
+
+def test_a_named_candidate_that_left_the_hand_is_not_discarded():
+    game = _p2_holding(2)
+
+    resolve_effects(
+        game,
+        [DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, PlayerId.P2, candidates=("P2-h0", "gone"))],
+    )
+
+    assert game.pending is None
+    assert _p2_hand(game) == ["P2-h1"]
+
+
+def test_discarding_cards_as_a_cost_needs_enough_of_them_in_hand():
+    game = _p2_holding(1)
+
+    assert DiscardFromHand(PlayerId.P2, 1, PlayerId.P2, PlayerId.P2).is_payable(game)
+    assert not DiscardFromHand(PlayerId.P2, 2, PlayerId.P2, PlayerId.P2).is_payable(game)

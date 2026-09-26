@@ -43,10 +43,9 @@ from yasuki_core.engine.rules.turn.structure import (
     Turn,
 )
 from yasuki_core.engine.rules.battle import resolution
-from yasuki_core.engine.rules.battle.resolution import FightNextBattle
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseDiscard,
     Confirm,
-    DiscardToHandSize,
     DecisionResponse,
     LeaveBowed,
 )
@@ -197,7 +196,7 @@ def test_overfull_hand_pauses_for_discard_then_resumes():
     _advance_to_end_of_turn(game)
 
     assert game.awaiting_decision
-    assert isinstance(game.pending, DiscardToHandSize) and game.pending.count == 1
+    assert isinstance(game.pending, ChooseDiscard) and game.pending.count == 1
     # The request offers the whole hand as candidates.
     hand_cards = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     assert set(game.pending.candidates) == {card.id for card in hand_cards}
@@ -221,21 +220,7 @@ def test_a_refused_cancel_leaves_the_question_pending():
     with pytest.raises(ValueError, match="cannot be canceled"):
         action_sequence.cancel(game)
 
-    assert isinstance(game.pending, DiscardToHandSize)
-
-
-def test_the_end_of_turn_discard_refuses_to_run_over_queued_work():
-    """Beginning the next turn is queued under the discard's own cascade, which only holds if the
-    stack is empty when the turn ends."""
-    game = _game(hand=sequence.MAX_HAND_SIZE, fate_deck=1)
-    _advance_to_end_of_turn(game)
-    game.stack.append(FightNextBattle())
-    victim = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
-
-    with pytest.raises(RuntimeError, match="work still queued"):
-        action_sequence.submit(game, DecisionResponse((victim,)))
-
-    assert isinstance(game.pending, DiscardToHandSize)
+    assert isinstance(game.pending, ChooseDiscard)
 
 
 def test_cannot_advance_while_a_decision_is_pending():
@@ -986,4 +971,4 @@ def test_a_condition_the_end_of_turn_draw_fulfills_is_announced_before_the_hand_
     _advance_to_end_of_turn(game)
 
     assert told == [1]
-    assert isinstance(game.pending, DiscardToHandSize)
+    assert isinstance(game.pending, ChooseDiscard)

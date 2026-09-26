@@ -26,9 +26,9 @@ from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
+    ChooseDiscard,
     Confirm,
     DecisionResponse,
-    DiscardToHandSize,
 )
 from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn import sequence
@@ -170,7 +170,7 @@ def test_human_discard_is_left_pending_then_resolved():
     runner.act(PASS)
 
     pending = runner.pending
-    assert isinstance(pending, DiscardToHandSize) and pending.count == 1
+    assert isinstance(pending, ChooseDiscard) and pending.count == 1
     assert not runner.opponent_holds_priority  # still the human's while the discard is owed
     assert runner.legal_actions() == []  # no free action offered until it is answered
 

@@ -234,8 +234,8 @@ from yasuki_core.engine.rules.cards.onyx_edition import NAGA_FOLLOWER
 from yasuki_core.engine.rules.vocabulary.actions import Pass
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
+    ChooseDiscard,
     DecisionResponse,
-    DiscardToHandSize,
 )
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -314,8 +314,10 @@ game = session.game
 **The turn ends.** Four passes play P1's turn out. A round closes once every seat entitled to
 act in it has passed in a row, and only the Action Phase admits the other seat, so it takes two
 passes where the Battle and Dynasty Phases take one. The last pass ends the turn: `_end_turn`
-draws, finds the hand two over, sets `DiscardToHandSize` on `pending` and returns. The stack is
-empty, and the round is still P1's.
+draws, and `EnforceMaximumHandSize` finds the hand two over. It queues `BeginNextTurn`, then
+resolves a `DiscardFromHand` for two cards that P1 picks. That is an interrupting effect, so the
+walk stashes a `ResumeCascade` above the next turn and puts a `ChooseDiscard` on `pending`. The
+round is still P1's.
 
 ```python
 session.act(P1, Pass())  # Action Phase: P1 declines to act
@@ -323,30 +325,32 @@ session.act(P2, Pass())  # Action Phase: P2 may take Open actions here and decli
 session.act(P1, Pass())  # Battle Phase: only the active seat may declare an attack
 session.act(P1, Pass())  # Dynasty Phase: only the active seat acts, and the pass ends the turn
 
-assert isinstance(game.pending, DiscardToHandSize) and game.pending.count == 2
-assert game.stack == []
+assert isinstance(game.pending, ChooseDiscard) and game.pending.count == 2
+# The next turn, then the stash on top of it: LIFO, so the stash resumes first.
+assert [type(item).__name__ for item in game.stack] == ["BeginNextTurn", "ResumeCascade"]
 triggers._trace.clear()
 ```
 
-**P1 answers, naming both Spearmen.** `submit` clears `pending`, pushes `BeginNextTurn` so the
-next turn waits behind whatever the discard raises, and calls `apply_discard`. That moves both
-cards to the discard and announces them as one instant: `fire_all` with two `CardDiscarded`
-events. The walk pops the first event, collects both Spearmen's triggers, and fires the first. It
-returns a `Choose`, an interrupting effect, so `_stash` pushes a `ResumeCascade` holding the
-second trigger and the second event, and the effect's request goes on `pending`. Back in `submit`,
-the drain stops at once because a question is open, and the yield hands nothing on because the
-round has not changed. The next turn has not begun.
+**P1 answers, naming both Spearmen.** `submit` clears `pending`, and `resume_paused_cascade`
+pops the stash and continues the walk with the same `DiscardFromHand`, narrowed to the two cards
+named. Nothing is left to choose, so it applies: both cards reach the discard before either is
+announced, and the two `CardDiscarded` events join the queue as one instant. The walk pops the
+first event, collects both Spearmen's triggers, and fires the first. It returns a `Choose`, an
+interrupting effect, so `_stash` pushes a `ResumeCascade` holding the second trigger and the
+second event, and the effect's request goes on `pending`. Back in `submit`, the drain stops at
+once because a question is open, and the yield hands nothing on because the round has not
+changed. The next turn has not begun.
 
 ```python
 session.submit(P1, DecisionResponse(("spearmen", "spearmen2")))
 
 assert isinstance(game.pending, ChooseCards)
 assert game.pending.candidates == ("shahai", "shahai2")
-# The next turn, then the stash on top of it: LIFO, so the stash resumes first.
 assert [type(item).__name__ for item in game.stack] == ["BeginNextTurn", "ResumeCascade"]
 assert game.active is P1 and game.round.priority is P1
-# The event, then the one trigger that ran before the pause.
+# The discard, the event, then the one trigger that ran before the pause.
 assert list(triggers._trace) == [
+    "    P1 discards 2 from hand, chosen by P1",
     "CardDiscarded",
     "  spearmen_of_the_akasha (spearmen) reacts",
 ]

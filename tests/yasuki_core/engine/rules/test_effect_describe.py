@@ -17,7 +17,9 @@ from yasuki_core.engine.rules.effects import (
     Evaluate,
     Arrange,
     BanishTopFate,
+    DiscardFromHand,
     EndLook,
+    LookAtHand,
     LookAtTop,
     Bow,
     ExemptFromResolutionBow,
@@ -105,6 +107,7 @@ EFFECTS = [
         "P1 looks at the top 4 of P1's fate deck",
     ),
     (EndLook(), "the look ends"),
+    (LookAtHand(PlayerId.P1, PlayerId.P2), "P1 looks at P2's hand"),
     (
         PlaceOnDeck(("a", "b"), DeckKey(PlayerId.P1, Side.FATE), to_bottom=True),
         "put 2 on the bottom of P1's fate deck",
@@ -272,6 +275,14 @@ EFFECTS = [
     (
         Choose(PlayerId.P1, ("a", "b", "c"), 0, 2, "wheat_farm", "wheat_1"),
         "P1 chooses 0-2 of 3 for wheat_farm",
+    ),
+    (
+        DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, PlayerId.P2),
+        "P2 discards 1 from hand, chosen by P2",
+    ),
+    (
+        DiscardFromHand(PlayerId.P2, 2, PlayerId.P1, None),
+        "P2 discards 2 from hand, at random",
     ),
     (
         Ask(PlayerId.P1, "Destroy Rice Farm to straighten Kobune?", "rice_farm", ("rice_1",)),

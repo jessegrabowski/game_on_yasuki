@@ -5,6 +5,7 @@ from typing import ClassVar
 from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.rules.battle.presence import place_unit, record_terrain_destroyed
+from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.players import Cause, PlayerId, Trait
@@ -16,6 +17,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseAmount,
     ChooseCards,
+    ChooseDiscard,
     ChooseDistribution,
     ChooseOption,
     Confirm,
@@ -1577,6 +1579,33 @@ class LookAtTop(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class LookAtHand(Effect):
+    """Let ``seat`` read every card in ``holder``'s hand, as "look at the player's hand" has it.
+
+    The cards keep the seat as a peeker once the reading is done, as a deck's do after a
+    :class:`~.LookAtTop`: a seat cannot unsee a card. Shuffling one into a deck scrubs it.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat looking.
+    holder : PlayerId
+        The seat whose hand is read.
+    """
+
+    seat: PlayerId
+    holder: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} looks at {self.holder.name}'s hand"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        for card in game.table.zones[ZoneKey(self.holder, ZoneRole.HAND)].cards:
+            game.show_to(card, self.seat)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class EndLook(Effect):
     """Close the open :class:`~.Look`, once the last question about its cards is answered.
 
@@ -2168,6 +2197,84 @@ class Choose(InterruptingEffect):
             resolver=self.resolver,
             source_id=self.source_id,
         )
+
+
+@dataclass(frozen=True, slots=True)
+class DiscardFromHand(InterruptingEffect):
+    """``holder`` discards ``count`` cards from hand, chosen by ``picker`` or at random.
+
+    "Must discard a card" and the maximum hand size make the holder the picker. A card that has its
+    own seat choose from another player's hand names that seat, after a :class:`~.LookAtHand` so the
+    seat can read the cards. "Discards a card at random" names no picker. The answer comes back as
+    this effect with ``candidates`` narrowed to the cards chosen, which then discards them.
+
+    Every card goes to the discard before any is announced, as one instant. Nothing is asked when
+    there is nothing to choose: a random discard, or a hand no larger than ``count``, which is
+    discarded whole.
+
+    Attributes
+    ----------
+    holder : PlayerId
+        The seat whose hand the cards leave.
+    count : int
+        How many cards are discarded.
+    cause : PlayerId, Rulebook or Trait
+        Who or what the discard belongs to, carried onto each ``CardDiscarded``.
+    picker : PlayerId or None
+        The seat that chooses the cards, or None for a discard at random.
+    candidates : tuple of str, optional
+        The cards eligible, for a card that limits them ("a copy of the named card"). Default
+        None, for the whole hand as it stands when the discard resolves.
+    """
+
+    holder: PlayerId
+    count: int
+    cause: Cause
+    picker: PlayerId | None
+    candidates: tuple[str, ...] | None = None
+
+    def describe(self) -> str:
+        how = "at random" if self.picker is None else f"chosen by {self.picker.name}"
+        return f"{self.holder.name} discards {self.count} from hand, {how}"
+
+    def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
+        """A cost of discarding cards cannot be met with too few to discard."""
+        return len(self._eligible(game)) >= self.count
+
+    def pauses(self, game: GameState) -> bool:
+        return self.picker is not None and len(self._eligible(game)) > self.count
+
+    def request(self, game: GameState) -> DecisionRequest:
+        if self.picker is None:
+            raise RuntimeError("a random discard asks no one")
+        return ChooseDiscard(
+            seat=self.picker,
+            candidates=self._eligible(game),
+            count=self.count,
+            holder=self.holder,
+            cause=self.cause,
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        eligible = self._eligible(game)
+        if len(eligible) > self.count:
+            picked = game.rng.choice(len(eligible), size=self.count, replace=False)
+            eligible = tuple(eligible[index] for index in sorted(picked))
+        by_id = game.table.cards_by_id
+        discarded = [by_id[card_id] for card_id in eligible]
+        for card in discarded:
+            ops.move_card(game.table, card, _pile(card))
+        return [
+            CardDiscarded(card.id, card.side, self.cause, from_hand_or_deck=True)
+            for card in discarded
+        ]
+
+    def _eligible(self, game: GameState) -> tuple[str, ...]:
+        """The candidates still in the holder's hand, or the whole hand when none are named."""
+        hand = tuple(card.id for card in cards_in_hand(game, self.holder))
+        if self.candidates is None:
+            return hand
+        return tuple(card_id for card_id in self.candidates if card_id in hand)
 
 
 @dataclass(frozen=True, slots=True)

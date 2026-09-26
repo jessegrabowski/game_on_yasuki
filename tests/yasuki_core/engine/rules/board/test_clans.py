@@ -2,9 +2,17 @@ import pytest
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.board.clans import is_clan
+from yasuki_core.engine.rules.board.clans import controlled_alignments, is_clan
+from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
 
-from tests.yasuki_core.engine.builders import put_in_play, stronghold, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    personality,
+    put_in_play,
+    register,
+    stronghold,
+    two_seat_game,
+)
 
 
 @pytest.mark.parametrize(
@@ -51,3 +59,15 @@ def test_a_stronghold_printing_several_clans_plays_them_all():
     assert is_clan(game, PlayerId.P1, "Lion")
     assert is_clan(game, PlayerId.P1, "Crane")
     assert not is_clan(game, PlayerId.P1, "Scorpion")
+
+
+def test_a_seat_controls_the_alignment_of_every_card_it_has_in_play():
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, clan="Crab"))
+    put_in_play(game, personality("crane", clans=("Crane",)))
+    put_in_play(game, personality("theirs", owner=PlayerId.P2, clans=("Lion",)))
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(register(game.table, personality("waiting", clans=("Scorpion",))))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+
+    assert controlled_alignments(game, PlayerId.P1) == {ruleset.CRAB, ruleset.CRANE}

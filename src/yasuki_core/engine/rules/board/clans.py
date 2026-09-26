@@ -1,6 +1,6 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.board.seats import seat_stronghold
+from yasuki_core.engine.rules.board.seats import cards_in_play, seat_stronghold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 
@@ -14,6 +14,13 @@ def seat_alignments(game: GameState, seat: PlayerId | None) -> set[str]:
     """
     stronghold = seat_stronghold(game, seat)
     return card_alignments(stronghold) if stronghold is not None else set()
+
+
+def controlled_alignments(game: GameState, seat: PlayerId) -> set[str]:
+    """Every Clan Alignment slug ``seat`` controls. To control a Clan Alignment is to control a
+    card with that Clan Alignment (CR, Control), so this reads every card the seat has in play, its
+    Stronghold among them."""
+    return set().union(*(card_alignments(card) for card in cards_in_play(game, seat)))
 
 
 def card_alignments(card: L5RCard) -> set[str]:

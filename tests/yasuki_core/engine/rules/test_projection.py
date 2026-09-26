@@ -1,6 +1,6 @@
 from dataclasses import fields, is_dataclass
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo, BattleOutcome
 from yasuki_core.engine.rules.turn.structure import RESPONSE_TIMINGS, ActionRound, Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
-from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseDiscard
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.battle import resolution
@@ -55,7 +55,9 @@ def test_rules_fields_are_public_to_both_seats():
 
 def test_pending_decision_reaches_only_the_answerer():
     game = _game()
-    request = DiscardToHandSize(PlayerId.P1, ("a", "b", "c"), count=2)
+    request = ChooseDiscard(
+        PlayerId.P1, ("a", "b", "c"), count=2, holder=PlayerId.P1, cause=Rulebook.MAXIMUM_HAND_SIZE
+    )
     game.pending = request
 
     assert project(game, PlayerId.P1).pending == request

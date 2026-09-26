@@ -8,6 +8,7 @@ yasuki_core.engine.rules.board.clans
 .. autosummary::
 
     card_alignments
+    controlled_alignments
     is_clan
     seat_alignment_name
     seat_alignments

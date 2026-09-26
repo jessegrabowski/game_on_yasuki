@@ -64,6 +64,7 @@ deferred through `Then` instead.
    DestroyProvince
    Discard
    DiscardFavor
+   DiscardFromHand
    Dishonor
    DrawCard
    Evaluate
@@ -71,6 +72,7 @@ deferred through `Then` instead.
    Fear
    GainGold
    GainHonor
+   LookAtHand
    LookAtTop
    EndLook
    LoseGame
@@ -161,6 +163,7 @@ Legality with respect to game state is checked separately.
    ChooseAbilityTarget
    ChooseAmount
    ChooseCards
+   ChooseDiscard
    ChooseDistribution
    ChooseEquipTarget
    ChooseFortificationProvince
@@ -175,7 +178,6 @@ Legality with respect to game state is checked separately.
    Confirm
    DecisionRequest
    DecisionResponse
-   DiscardToHandSize
 ```
 
 ## Deferred work
