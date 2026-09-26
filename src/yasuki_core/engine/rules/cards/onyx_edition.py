@@ -86,12 +86,12 @@ from yasuki_core.engine.rules.board.queries import (
     sincerity_seed_targets,
     units_at,
 )
-from yasuki_core.engine.rules.board.seats import cards_in_play
+from yasuki_core.engine.rules.board.seats import cards_in_hand, cards_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_force, effective_personal_honor
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, SeatAbilityGrant, Stat
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import Location, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, StrongholdPrint
 from yasuki_core.game_pieces.counters import SINCERITY
@@ -334,8 +334,11 @@ def _ring_of_the_void_condition(game: GameState, source: L5RCard) -> bool:
 def _ring_of_the_void_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:
     """ "Discard your hand." The Ring itself has entered play by the time these resolve, so it is
     left out of what was in hand."""
-    hand = game.table.zones[ZoneKey(source.owner, ZoneRole.HAND)].cards
-    return [Discard(card.id, source.owner) for card in hand if card.id != source.id]
+    return [
+        Discard(card.id, source.owner)
+        for card in cards_in_hand(game, source.owner)
+        if card.id != source.id
+    ]
 
 
 register_entry(
@@ -358,8 +361,7 @@ def _resolve_ring_of_the_void(
 ) -> list[Effect]:
     """After the draw, discard a card if the hand is now larger than every other player's."""
     hands = {
-        each: tuple(card.id for card in game.table.zones[ZoneKey(each, ZoneRole.HAND)].cards)
-        for each in game.table.seats
+        each: tuple(card.id for card in cards_in_hand(game, each)) for each in game.table.seats
     }
     mine = hands.pop(seat)
     if len(mine) <= max((len(theirs) for theirs in hands.values()), default=0):

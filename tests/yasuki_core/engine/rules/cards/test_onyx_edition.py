@@ -1144,6 +1144,30 @@ def test_ring_of_the_void_enters_from_hand_and_discards_the_rest_of_the_hand():
     assert session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards == []
 
 
+def _hold_the_favor(session: EngineSession, seat: PlayerId) -> None:
+    session.game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    resolve_effects(session.game, [TakeFavor(seat)])
+
+
+def _favor_in_hand(session: EngineSession, seat: PlayerId) -> bool:
+    hand = session.game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
+    return any(card.printed_id == IMPERIAL_FAVOR_ID for card in hand)
+
+
+def test_ring_of_the_void_entering_keeps_the_imperial_favor():
+    held = (_ring("void", "ring_of_the_void"), fate_card("one", P1))
+    session = _ring_game(held=held)
+    _hold_the_favor(session, P1)
+
+    session.act(P1, PlayStrategy("void", "enter"))
+    _answer_until_settled(session)
+
+    assert _fate_discard(session, P1) == {"one"}
+    assert _favor_in_hand(session, P1)
+
+
 def test_ring_of_the_void_is_withheld_with_three_rings_in_play():
     rings = [_ring(f"r{index}", "ring_of_air") for index in range(3)]
     session = _ring_game(*rings, held=(_ring("void", "ring_of_the_void"),))
@@ -1187,6 +1211,17 @@ def test_ring_of_the_void_discards_a_card_once_the_hand_is_the_largest():
     assert session.game.pending.candidates == ("top",)
     session.submit(P1, DecisionResponse(("top",)))
     assert "top" in _fate_discard(session, P1)
+
+
+@pytest.mark.parametrize("favor_holder", [P1, P2], ids=["own-favor", "opponents-favor"])
+def test_ring_of_the_void_does_not_count_or_discard_the_imperial_favor(favor_holder):
+    session = _void_draw_game(opponent_holds=0)
+    _hold_the_favor(session, favor_holder)
+
+    session.act(P1, ActivateAbility("void", "void"))
+
+    assert isinstance(session.game.pending, ChooseCards)
+    assert session.game.pending.candidates == ("top",)
 
 
 def _enemy_personalities(game, source):
