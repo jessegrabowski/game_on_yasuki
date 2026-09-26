@@ -37,6 +37,11 @@ when legal, decisions that pause the game and resume where they left off. The ma
 imposes no legality at all, which is what the web sandbox and the desktop sandbox drive. Both mutate
 through the same `ops` and both write the same log.
 
+A rulebook procedure is built the way a card is, from the effects, decisions, events and moments
+that exist. A procedure with its own decision classes, its own consequence list or its own hook is
+usually restating one of those, as Legacy and the duel both once did.
+`docs/design/build_from_the_vocabulary.md` is the check to run before adding one.
+
 A handler is handed a `GameState` and nothing else. Reaching into `game.table` and filtering by hand
 is nearly always rewriting a function in `rules/board/queries.py`, which is the layer that exists so
 that card code does not have to know the board's shape.

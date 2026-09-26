@@ -32,8 +32,14 @@ description: >
 
 A handler never mutates the board. It returns effects, and the applier commits them. That is what
 makes the replay log a complete account of the game, and undo possible at all. Anything a card can
-express is a dataclass in this vocabulary, so adding a genuinely new capability means adding to the
-vocabulary, teaching the applier to perform it, and teaching projection to describe it.
+express is a dataclass in this vocabulary.
+
+The vocabulary grows by composition. Decompose the text into rule-level verbs and find the existing
+term for each before adding one. A new term is warranted only for a primitive nothing composes to.
+Name it for the rule's verb, never for a card or mechanic, and in the same change replace every
+bespoke path that did its job. `docs/design/build_from_the_vocabulary.md` is the procedure, with the
+Legacy, Edict and duel-consequence cases worked through. Read it before adding an effect, decision,
+event, moment or registry.
 
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and
 modifiers layer over it. Gold is the same shape on the economy side. A card that appears to have the

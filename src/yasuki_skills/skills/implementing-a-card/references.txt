@@ -1,3 +1,4 @@
+docs/design/build_from_the_vocabulary.md
 # The reading order for a first card.
 docs/contributing/what_a_card_is.md
 docs/contributing/the_card_data.md

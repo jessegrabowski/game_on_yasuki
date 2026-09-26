@@ -26,6 +26,17 @@ shipped GUI). Both front-ends mutate through the same `ops`, and neither ever sh
 `docs/design/package_boundaries.md` states the boundaries. Nothing enforces them, so they are yours
 to hold.
 
+## Compose, then add
+
+The engine grows by composing the terms it already has: effects, decisions, events, moments, board
+queries and registries. Before adding any of those, decompose the card or rule text into its
+rule-level verbs and find the existing term for each. Add a term only when the CR names a primitive
+nothing composes to. Name it for the rule's verb, never for a card, keyword or mechanic. In the same
+change, migrate every bespoke path it replaces and delete them. Review here sends back a new term
+with one caller, or a second way of saying something the vocabulary already says.
+`docs/design/build_from_the_vocabulary.md` is the procedure, with worked examples. Read it before
+adding to the engine.
+
 ## The skills
 
 This project ships agent skills, one per kind of task, which `yasuki-install-skills` places where

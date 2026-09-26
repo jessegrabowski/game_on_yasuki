@@ -40,6 +40,12 @@ Start there; grepping for a registry that looks close is how cards end up on the
 
 A handler never mutates the board. It returns effects, and the trigger machinery commits them.
 
+A card is a composition of terms that already exist. When no hook or effect seems to fit, break the
+text into rule-level verbs and find each one before adding anything: a card that needs a new
+effect, decision or registry is rare, and one named for the card is always wrong.
+`docs/design/build_from_the_vocabulary.md` is the procedure. A single-card registry already in the
+hook table is not precedent for another.
+
 A number printed on the card belongs in its YAML, and a handler reads it rather than repeating it:
 a gold handler owns the whole amount the card produces, so it adds to `card.gold_production` instead
 of restating it. Where the stat is missing from the data, the fix is the set file, which the
