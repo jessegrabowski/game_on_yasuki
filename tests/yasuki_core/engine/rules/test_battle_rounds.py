@@ -28,11 +28,10 @@ from yasuki_core.engine.rules.turn.structure import (
     BATTLE_SEGMENT_TIMINGS,
     BEGINNING_OF_COMBAT,
     END_OF_BATTLE,
-    Boundary,
     Moment,
     RoundKind,
 )
-from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Boundary
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 

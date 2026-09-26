@@ -5,12 +5,13 @@ from dataclasses import dataclass, replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.game_events import (
-    WINDOWS,
     ActionResolved,
     CardDiscarded,
     ConditionFulfilled,
     Destroyed,
     GameEvent,
+    names_both_edges,
+    opens_a_window,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
@@ -29,6 +30,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     SeatAbilityGrant,
 )
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.ruleset import in_force
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -62,11 +64,22 @@ Trigger = Callable[[TriggerContext], list[Effect]]
 
 
 class Registration(NamedTuple):
-    """A trigger as registered: the function, and the one ruleset it is read under, or None for
-    every arc."""
+    """A trigger as registered.
+
+    Attributes
+    ----------
+    trigger : callable
+        What runs when the event fires.
+    ruleset : str or None
+        The one ruleset the trigger is read under, or None for every arc.
+    boundary : Boundary or None
+        The edge of its own step the trigger answers, for an event announced at each of them. None
+        for an event with one firing.
+    """
 
     trigger: Trigger
     ruleset: str | None
+    boundary: Boundary | None = None
 
 
 # event type -> where the card must be -> printed id -> its registrations. Populated by the @on
@@ -82,6 +95,7 @@ def on(
     *,
     where: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,),
     ruleset: str | None = None,
+    boundary: Boundary | None = None,
 ) -> Callable[[Trigger], Trigger]:
     """Register the decorated function as ``printed_id``'s trigger for ``event_type``.
 
@@ -98,14 +112,27 @@ def on(
     ruleset : str, optional
         The name of the one ruleset the trigger is in force under, for a card whose text differs
         between arcs. Default None, for a text every arc reads.
+    boundary : :class:`~yasuki_core.engine.rules.vocabulary.segments.Boundary`, optional
+        Which edge of its own step the trigger answers. Required for an event announced at both
+        edges, and refused for an event announced once.
+
+    Raises
+    ------
+    ValueError
+        If ``event_type`` is announced at both edges of its step and no ``boundary`` names which one
+        the trigger answers, or if it is announced once and a ``boundary`` is given anyway.
     """
 
     if event_type is ConditionFulfilled:
         raise ValueError("a watched condition is answered by its own watch; register one instead")
+    if names_both_edges(event_type) and boundary is None:
+        raise ValueError(f"{event_type.__name__} fires at both edges; name the boundary answered")
+    if boundary is not None and not names_both_edges(event_type):
+        raise ValueError(f"{event_type.__name__} fires once and has no boundary to answer")
 
     def register(trigger: Trigger) -> Trigger:
         by_zone = _TRIGGERS.setdefault(event_type, {})
-        registered = Registration(trigger, ruleset)
+        registered = Registration(trigger, ruleset, boundary)
         for location in where:
             by_zone.setdefault(location, {}).setdefault(printed_id, []).append(registered)
         return trigger
@@ -295,26 +322,38 @@ def _card_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Tri
     firing = [
         (card, trigger)
         for card in game.table.battlefield.cards
-        for trigger in _read_triggers(in_play, card)
+        for trigger in _read_triggers(in_play, card, event)
     ]
     # A departed card answers only for its own leaving, and for nothing that happens after.
     departed = _departed_subject(game, event)
     if departed is not None:
-        firing.extend((departed, trigger) for trigger in _read_triggers(in_play, departed))
+        firing.extend((departed, trigger) for trigger in _read_triggers(in_play, departed, event))
     in_hand = by_zone.get(CardLocation.HAND)
     if in_hand:
         firing.extend(
             (card, trigger)
             for seat in game.table.seats
             for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
-            for trigger in _read_triggers(in_hand, card)
+            for trigger in _read_triggers(in_hand, card, event)
         )
     return firing
 
 
-def _read_triggers(by_card: dict[str, list[Registration]], card: L5RCard) -> list[Trigger]:
-    """``card``'s registered triggers that the active ruleset reads."""
-    return [held.trigger for held in by_card.get(card.printed_id, ()) if in_force(held)]
+def _read_triggers(
+    by_card: dict[str, list[Registration]], card: L5RCard, event: GameEvent
+) -> list[Trigger]:
+    """``card``'s registered triggers that the active ruleset reads and that answer this firing."""
+    return [
+        held.trigger
+        for held in by_card.get(card.printed_id, ())
+        if in_force(held) and _answers_this_edge(held, event)
+    ]
+
+
+def _answers_this_edge(held: Registration, event: GameEvent) -> bool:
+    """Whether ``held`` answers this firing of an event announced at both edges of its own step. A
+    registration for one edge is silent at the other."""
+    return held.boundary is None or held.boundary is getattr(event, "boundary", None)
 
 
 def _named_subject(game: GameState, event: GameEvent) -> L5RCard | None:
@@ -359,8 +398,8 @@ def _advance(
     ``triggered`` says the effects in hand are a trigger's, so a decision among them is marked as
     the trigger's question, one that cannot be backed out of. The machine sets it itself once it
     fires a trigger for an event that has happened, and a stash or a ``Then`` carries it on to the
-    effects that follow. A trigger firing in one of the ``WINDOWS`` a step opens before committing
-    asks on the step's behalf, and its question stays the step's own."""
+    effects that follow. A trigger firing in a window a step opens before committing asks on the step's
+    behalf, and its question stays the step's own."""
     resolved = 0
     firing = list(firing)
     while True:
@@ -395,7 +434,7 @@ def _advance(
             card, trigger = firing.pop(0)
             _trace.append(f"  {card.printed_id} ({card.id}) reacts")
             effects = tuple(trigger(TriggerContext(game, card, event)))
-            triggered = type(event) not in WINDOWS
+            triggered = not opens_a_window(event)
             continue
         if not queue:
             # The walk can be entered on a board something else already made illegal, and with
@@ -794,5 +833,14 @@ def resolve_delayed(game: GameState, moment: Moment) -> None:
     held = [effect for held_until, effect in game.delayed if held_until == moment]
     if not held:
         return
-    game.delayed = [entry for entry in game.delayed if entry[0] != moment]
+    discard_delayed(game, moment)
     resolve_effects(game, held)
+
+
+def discard_delayed(game: GameState, moment: Moment) -> None:
+    """Forget the effects held until ``moment`` without resolving them.
+
+    What a stretch of play owes when it ends before reaching ``moment``. An effect left held would
+    resolve off the next stretch of play to reach that edge instead.
+    """
+    game.delayed = [entry for entry in game.delayed if entry[0] != moment]

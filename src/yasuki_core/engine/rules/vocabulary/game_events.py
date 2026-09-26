@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.table import Location, ZoneKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
@@ -356,46 +357,20 @@ class BattleResolved:
 
 
 @dataclass(frozen=True, slots=True)
-class DeclaringDuel:
-    """A duel has been created and is about to put the first focus-or-strike option.
-
-    The window a card acts in to change the duel before it is focused, which is what Hidden Strength
-    reads when it compares the two duel stats "at that time". Both Personalities and the focusing
-    areas already exist here, and nothing has been focused.
-
-    Attributes
-    ----------
-    challenger : PlayerId
-        The seat whose card created the duel.
-    challenged : PlayerId
-        The seat challenged, which has the first option.
-    challenger_duelist : str
-        The id of the challenger's Personality.
-    challenged_duelist : str
-        The id of the challenged seat's Personality.
-    source_card_id : str
-        The id of the card that created the duel.
-    challenger_stat : int
-        The challenger's Personality's duel stat as the duel is declared.
-    challenged_stat : int
-        The challenged Personality's duel stat as the duel is declared.
-    """
-
-    challenger: PlayerId
-    challenged: PlayerId
-    challenger_duelist: str
-    challenged_duelist: str
-    source_card_id: str
-    challenger_stat: int
-    challenged_stat: int
-
-
-@dataclass(frozen=True, slots=True)
 class DuelDeclared:
-    """A duel has been created, read after the window :class:`~.DeclaringDuel` opened has closed.
+    """A duel has been created, announced at each edge of its declaration (CR, Duel).
+
+    Both Personalities and the focusing areas exist by the time this is raised and nothing has been
+    focused. At ``Boundary.BEGINNING`` the duel is about to put the first focus-or-strike option, and
+    a card acting then changes the duel before it is focused, which is what Hidden Strength reads
+    when it compares the two duel stats "at that time". At ``Boundary.END`` that window has closed. A
+    trigger that means one of them guards on ``boundary``, as one reading "after you gain Honor"
+    guards on the sign of :class:`~.HonorChanged`.
 
     Attributes
     ----------
+    boundary : Boundary
+        Which edge of the declaration this is: the window opening, or the duel declared.
     challenger : PlayerId
         The seat whose card created the duel.
     challenged : PlayerId
@@ -412,6 +387,7 @@ class DuelDeclared:
         The challenged Personality's duel stat as the duel is declared.
     """
 
+    boundary: Boundary
     challenger: PlayerId
     challenged: PlayerId
     challenger_duelist: str
@@ -467,6 +443,21 @@ class FocusedCardsRevealed:
 
 
 @dataclass(frozen=True, slots=True)
+class FocusEffectsResolved:
+    """Every revealed Focus Effect has resolved, before the duel is decided (CR, Duel).
+
+    Announced whether or not any card carried one, since the CR's step happens either way.
+
+    Attributes
+    ----------
+    source_card_id : str
+        The id of the card that created the duel.
+    """
+
+    source_card_id: str
+
+
+@dataclass(frozen=True, slots=True)
 class DuelResolved:
     """A duel has been decided, before the focused cards are discarded and the duel ends.
 
@@ -475,8 +466,9 @@ class DuelResolved:
 
     Attributes
     ----------
-    winner : PlayerId or None
-        The seat whose Personality won, or None where nobody did.
+    winners : frozenset of PlayerId
+        The seats whose Personalities won, which is empty on a tie. A set rather than one seat
+        because the CR lets both Personalities win a duel.
     losers : frozenset of PlayerId
         The seats whose Personalities lost.
     totals : frozenset of (PlayerId, int)
@@ -485,7 +477,7 @@ class DuelResolved:
         The id of the card that created the duel.
     """
 
-    winner: PlayerId | None
+    winners: frozenset[PlayerId]
     losers: frozenset[PlayerId]
     totals: frozenset[tuple[PlayerId, int]]
     source_card_id: str
@@ -509,11 +501,9 @@ class DuelEnded:
     source_card_id: str
 
 
-# Events a step fires before it commits anything, to open a window for the cards it concerns. A
-# question a trigger asks in one belongs to the step that opened it, so backing out unwinds the
-# step's action as it would from any other question of the action's own. Every other event has
-# happened by the time a trigger reads it.
-WINDOWS: frozenset[type] = frozenset({DeclaringDuel, ProducingGold})
+# Event types every firing of which is a step announcing itself before it commits. An event that
+# names both edges of its own step carries a boundary instead, which opens_a_window reads.
+WINDOWS: frozenset[type] = frozenset({ProducingGold})
 
 GameEvent = (
     ActionResolved
@@ -525,7 +515,6 @@ GameEvent = (
     | TurnStarted
     | CardDiscarded
     | CounterGained
-    | DeclaringDuel
     | Destroyed
     | Dishonored
     | DuelDeclared
@@ -533,6 +522,7 @@ GameEvent = (
     | DuelResolved
     | EnteredPlay
     | FocusedCardsRevealed
+    | FocusEffectsResolved
     | StrikeDeclared
     | FavorDiscarded
     | HonorChanged
@@ -543,3 +533,25 @@ GameEvent = (
     | Revealed
     | Straightened
 )
+
+
+def opens_a_window(event: GameEvent) -> bool:
+    """Whether ``event`` is a step announcing itself before it commits anything, to open a window for
+    the cards it concerns.
+
+    A question a trigger asks in a window belongs to the step that opened it, so backing out unwinds
+    that step's action as any other question of the action's own would. Every other event has
+    happened by the time a trigger reads it.
+    """
+    if isinstance(event, DuelDeclared):
+        return event.boundary is Boundary.BEGINNING
+    return type(event) in WINDOWS
+
+
+def names_both_edges(event_type: type) -> bool:
+    """Whether ``event_type`` is announced at each edge of its own step, and so carries a boundary.
+
+    What :func:`~yasuki_core.engine.rules.triggers.on` asks to know whether a registration has to
+    name the edge it answers.
+    """
+    return "boundary" in getattr(event_type, "__annotations__", {})

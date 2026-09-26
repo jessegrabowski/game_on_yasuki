@@ -7,7 +7,8 @@ from yasuki_core.engine.table import TableState, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.battle.records import AttackPhase
-from yasuki_core.engine.rules.duel.records import DuelRecord, DuelStep
+from yasuki_core.engine.rules.duel.records import DuelRecord
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.looks import Look

@@ -3,12 +3,11 @@ import pytest
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.duel.procedure import declare_duel
-from yasuki_core.engine.rules.triggers import enforce_state_based_actions
-from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import StartDuel
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
+from yasuki_core.engine.rules.effects import DelayedEffect, GainHonor
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
     DecisionResponse,
@@ -16,11 +15,12 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardFocused,
-    DeclaringDuel,
     DuelDeclared,
     DuelEnded,
     DuelResolved,
     FocusedCardsRevealed,
+    FocusEffectsResolved,
+    HonorChanged,
     StrikeDeclared,
 )
 from yasuki_core.engine.session import EngineSession
@@ -34,27 +34,17 @@ from tests.yasuki_core.engine.builders import (
     two_seat_game,
 )
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.duel.conftest import CHALLENGE_ABILITY, CHALLENGE_PROBE
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
-HOOK_PROBE = "probe_challenge_for_the_duel_events"
-
-
-def _enemy_personalities(game, source):
-    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
-
-
-DUEL_ABILITY = Ability(
-    timings=(ActionTiming.OPEN,),
-    label="Open: challenge a target enemy Personality to a duel",
-    cost=no_cost,
-    targets=_enemy_personalities,
-    effects=lambda game, source, target: [StartDuel(source.id, target.id, source.id)],
-)
+HOOK_PROBE = CHALLENGE_PROBE
+DUEL_ABILITY = CHALLENGE_ABILITY
 
 
 def _duel_game(*, chi: dict[PlayerId, int] | None = None) -> EngineSession:
-    """P1's challenger and P2's rival in play with ``chi`` each, holding one card of Focus Value 1."""
+    """P1's challenger and P2's rival in play with ``chi`` each, each seat holding two cards of
+    Focus Value 1."""
     chi = {P1: 3, P2: 3} if chi is None else chi
     state = TableState.empty_two_seat()
     put_in_play(state, personality("challenger", owner=P1, printed_id=HOOK_PROBE, chi=chi[P1]))
@@ -88,14 +78,12 @@ def test_declaring_a_duel_announces_the_window_and_then_the_duel():
         session = _duel_game()
         _challenge(session)
 
-        window = _events(session, DeclaringDuel)
         declared = _events(session, DuelDeclared)
-        assert [(event.challenger, event.challenged) for event in window] == [(P1, P2)]
-        assert [event.challenger_duelist for event in declared] == ["challenger"]
+        assert [(event.challenger, event.challenged) for event in declared] == [(P1, P2), (P1, P2)]
+        assert [event.challenger_duelist for event in declared] == ["challenger"] * 2
         assert declared[0].source_card_id == "challenger"
         # The window is announced first, so a card acting in it acts before the duel is declared.
-        events = list(session.game.turn_events)
-        assert events.index(window[0]) < events.index(declared[0])
+        assert [event.boundary for event in declared] == [Boundary.BEGINNING, Boundary.END]
 
 
 def test_each_focus_and_the_strike_are_announced():
@@ -132,7 +120,7 @@ def test_the_resolution_carries_the_totals():
         _fought(session)
 
         resolved = _events(session, DuelResolved)[0]
-        assert resolved.winner is P2
+        assert resolved.winners == frozenset({P2})
         assert resolved.losers == frozenset({P1})
         # One focused card worth 1 on top of each Chi.
         assert resolved.totals == frozenset({(P1, 3), (P2, 6)})
@@ -176,11 +164,12 @@ def test_the_declaration_window_opens_before_the_first_option_is_put(reacting):
     # The duel queues the first option and then announces the window, so that whatever a card does
     # in the window resolves before either seat is asked to focus.
     pending_when_the_window_fired: list = []
-    reacting(
-        DeclaringDuel,
-        HOOK_PROBE,
-        lambda ctx: pending_when_the_window_fired.append(ctx.game.pending) or [],
-    )
+
+    def _read_the_pending_request(ctx) -> list:
+        pending_when_the_window_fired.append(ctx.game.pending)
+        return []
+
+    reacting(DuelDeclared, HOOK_PROBE, _read_the_pending_request, boundary=Boundary.BEGINNING)
 
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
@@ -190,7 +179,7 @@ def test_the_declaration_window_opens_before_the_first_option_is_put(reacting):
         assert session.game.pending.seat is P2
 
 
-def test_a_resolved_duel_announces_its_end_after_its_outcome():
+def test_a_resolved_duel_announces_its_steps_in_the_crs_order():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()
         _challenge(session)
@@ -199,7 +188,11 @@ def test_a_resolved_duel_announces_its_end_after_its_outcome():
         ended = _events(session, DuelEnded)
         assert [event.resolved for event in ended] == [True]
         events = list(session.game.turn_events)
-        assert events.index(_events(session, DuelResolved)[0]) < events.index(ended[0])
+        order = [
+            events.index(_events(session, kind)[0])
+            for kind in (FocusedCardsRevealed, FocusEffectsResolved, DuelResolved, DuelEnded)
+        ]
+        assert order == sorted(order)
 
 
 def test_a_duel_that_ends_without_resolving_says_so_in_its_end():
@@ -223,23 +216,72 @@ def test_a_duel_that_ends_without_resolving_says_so_in_its_end():
     assert not [event for event in game.turn_events if isinstance(event, DuelResolved)]
 
 
-@pytest.mark.parametrize(
-    "event_type",
-    [
-        DeclaringDuel,
+def test_an_effect_delayed_to_the_duels_end_resolves_as_a_consequence(reacting):
+    # How a card gives a duel a consequence: it delays an ordinary effect to the moment the duel
+    # ends, which the CR puts after the outcome and before the focused cards are discarded.
+    reacting(
         DuelDeclared,
-        CardFocused,
-        StrikeDeclared,
-        FocusedCardsRevealed,
-        DuelResolved,
-        DuelEnded,
+        HOOK_PROBE,
+        lambda ctx: [DelayedEffect(GainHonor(P1, 5), DUEL_CONSEQUENCES)],
+        boundary=Boundary.END,
+    )
+
+    with probe_ability(HOOK_PROBE, DUEL_ABILITY):
+        session = _duel_game()
+        _challenge(session)
+
+        assert session.game.delayed == [(DUEL_CONSEQUENCES, GainHonor(P1, 5))]
+
+        _fought(session)
+
+    assert session.game.table.seats[P1].honor == 5
+    assert session.game.delayed == []
+    events = list(session.game.turn_events)
+    gained = next(event for event in events if isinstance(event, HonorChanged))
+    # The duel is over before its consequence resolves, and its outcome is there to be read.
+    assert events.index(_events(session, DuelEnded)[0]) < events.index(gained)
+    assert session.game.duel.outcome.totals
+
+
+def test_a_duel_that_ends_without_resolving_drops_the_consequences_that_waited_for_it():
+    # Driven without a session for the same reason as the test above. The consequence has no outcome
+    # to act on, and one left held would resolve off the next duel's end.
+    game = two_seat_game()
+    put_in_play(game, personality("challenger", owner=P1))
+    put_in_play(game, personality("rival", owner=P2))
+    declare_duel(
+        game,
+        challenger_duelist="challenger",
+        challenged_duelist="rival",
+        source="challenger",
+    )
+    apply_effect(game, DelayedEffect(GainHonor(P1, 5), DUEL_CONSEQUENCES))
+    ops.remove_card(game.table, game.table.cards_by_id["rival"])
+
+    enforce_state_based_actions(game)
+
+    assert game.delayed == []
+    assert game.table.seats[P1].honor == 0
+
+
+@pytest.mark.parametrize(
+    "event_type, boundary",
+    [
+        (DuelDeclared, Boundary.BEGINNING),
+        (DuelDeclared, Boundary.END),
+        (CardFocused, None),
+        (StrikeDeclared, None),
+        (FocusedCardsRevealed, None),
+        (FocusEffectsResolved, None),
+        (DuelResolved, None),
+        (DuelEnded, None),
     ],
 )
-def test_a_card_can_react_to_each_duel_event(reacting, event_type):
+def test_a_card_can_react_to_each_duel_event(reacting, event_type, boundary):
     # Every duel event has to be reachable by an ordinary @on registration, which is the only way a
     # printed card will ever read one.
     seen: list = []
-    reacting(event_type, HOOK_PROBE, lambda ctx: seen.append(ctx.event) or [])
+    reacting(event_type, HOOK_PROBE, lambda ctx: seen.append(ctx.event) or [], boundary=boundary)
 
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game()

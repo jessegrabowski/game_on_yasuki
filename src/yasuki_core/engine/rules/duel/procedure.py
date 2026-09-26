@@ -5,12 +5,12 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.focusing import focused_cards
-from yasuki_core.engine.rules.duel.records import DuelRecord, DuelStep, DuelWork
+from yasuki_core.engine.rules.duel.records import DuelRecord, DuelWork
+from yasuki_core.engine.rules.vocabulary.segments import Boundary, DuelStep
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardFocused,
-    DeclaringDuel,
     DuelDeclared,
     GameEvent,
     StrikeDeclared,
@@ -44,11 +44,13 @@ def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duel
     """Whether a challenge between these two cards happens at all (CR, Challenge): it does not where
     one player controls both, nor where either card is not a Personality.
 
-    An id naming no card on the table is refused too, which is what a Personality that left play
-    between being targeted and the duel being declared amounts to.
+    Both duelists are read off the battlefield, so a Personality that left play between being
+    targeted and the duel being declared refuses the challenge, wherever it went and whether or not
+    the table still holds the card.
     """
-    challenger = game.table.cards_by_id.get(challenger_duelist)
-    challenged = game.table.cards_by_id.get(challenged_duelist)
+    in_play = {card.id: card for card in game.table.battlefield.cards}
+    challenger = in_play.get(challenger_duelist)
+    challenged = in_play.get(challenged_duelist)
     if challenger is None or challenged is None:
         return False
     if not all(isinstance(card.printed, PersonalityPrint) for card in (challenger, challenged)):
@@ -67,8 +69,8 @@ def declare_duel(
     belongs to the challenged seat (CR, Duel).
 
     The two seats are the duelists' own controllers, read from the cards, so they cannot disagree
-    with the Personalities they belong to. Return the events the focus procedure's setup raises, for
-    the caller's cascade to drain.
+    with the Personalities they belong to. Return the two declaration events, for the caller's
+    cascade to drain.
 
     Do nothing where :func:`~.challenge_is_legal` refuses the challenge, which is the CR's own
     wording: such a challenge does not happen, rather than happening and failing.
@@ -94,28 +96,23 @@ def declare_duel(
     game.begin_duel(duel)
     ops.create_focus_area(game.table, challenger)
     ops.create_focus_area(game.table, challenged)
-    duel.step = DuelStep.FOCUSING
     challenger_stat = duel_stat(game, game.table.cards_by_id[challenger_duelist])
     challenged_stat = duel_stat(game, game.table.cards_by_id[challenged_duelist])
-    # The option is queued before the setup runs and before the window is announced, so that work
-    # either of them pushes sits above it and resolves before the first seat is asked.
+    # The option is queued before the window is announced, so that work a card does in the window
+    # sits above it and resolves before the first seat is asked.
     game.stack.append(OfferFocusOrStrike(challenged))
-    events: list[GameEvent] = []
-    for effect in ruleset.ACTIVE.focus_procedure.begin(game, duel):
-        events.extend(triggers.apply_effect(game, effect))
     return [
-        *events,
-        _declaration(duel, DeclaringDuel, challenger_stat, challenged_stat),
-        _declaration(duel, DuelDeclared, challenger_stat, challenged_stat),
+        _declaration(duel, Boundary.BEGINNING, challenger_stat, challenged_stat),
+        _declaration(duel, Boundary.END, challenger_stat, challenged_stat),
     ]
 
 
-def _declaration[EventT: DeclaringDuel | DuelDeclared](
-    duel: DuelRecord, kind: type[EventT], challenger_stat: int, challenged_stat: int
-) -> EventT:
-    """``kind`` built from ``duel`` and the duel stats it begins on. The two declaration events carry
-    the same fields, since one opens the window the other closes."""
-    return kind(
+def _declaration(
+    duel: DuelRecord, boundary: Boundary, challenger_stat: int, challenged_stat: int
+) -> DuelDeclared:
+    """The declaration at one of its edges, built from ``duel`` and the duel stats it begins on."""
+    return DuelDeclared(
+        boundary=boundary,
         challenger=duel.challenger,
         challenged=duel.challenged,
         challenger_duelist=duel.challenger_duelist,
@@ -146,22 +143,15 @@ def duel_stat(game: GameState, card: L5RCard) -> int:
     return effective_stat(game, card, ruleset.ACTIVE.duel_stat_default)
 
 
-def focus_sources(game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
-    """What ``seat`` may focus with right now, as this arc's focus procedure offers it. Empty for a
-    seat the procedure permits no focus, which leaves it nothing to do but strike."""
-    return ruleset.ACTIVE.focus_procedure.sources(game, duel, seat)
-
-
 def offer_focus_or_strike(game: GameState, seat: PlayerId) -> None:
     """Ask ``seat`` to focus a card or to strike, or strike for it where it has nothing to focus
     with. A seat that cannot focus is not asked: the CR gives it no other option, and a question
     with one answer is not a decision."""
     duel = duel_in_progress(game)
-    sources = focus_sources(game, duel, seat)
+    sources = ruleset.ACTIVE.focus_procedure.sources(game, duel, seat)
     if not sources:
         strike(game, seat)
         return
-    duel.option = seat
     game.pending = FocusOrStrike(seat=seat, candidates=sources + (STRIKE,))
 
 
@@ -208,13 +198,12 @@ def strike(game: GameState, seat: PlayerId) -> None:
     # close that cycle.
     from yasuki_core.engine.rules.duel.resolution import (
         DecideTheDuel,
-        EndTheDuel,
+        DiscardFocusedCards,
         RevealFocusedCards,
     )
 
-    duel = duel_in_progress(game)
-    duel.struck = seat
-    duel.option = None
-    # Pushed in reverse, so they run in the CR's order: reveal, then the outcome, then the end.
-    game.stack.extend((EndTheDuel(), DecideTheDuel(), RevealFocusedCards()))
+    duel_in_progress(game)
+    # Pushed in reverse, so they run in the CR's order: the reveal, the Focus Effects it queues, the
+    # outcome and the duel's end with the consequences that wait for it, then the discard.
+    game.stack.extend((DiscardFocusedCards(), DecideTheDuel(), RevealFocusedCards()))
     triggers.fire(game, StrikeDeclared(seat=seat))

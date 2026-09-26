@@ -1008,8 +1008,8 @@ class StartDuel(Effect):
     challenged : str
         The id of the Personality challenged, whose seat has the first option to focus or strike.
     source_card_id : str
-        The id of the card creating the duel, which the duel records so a consequence can name what
-        set it.
+        The id of the card creating the duel, which the duel records so what resolves after it can
+        name the source.
     """
 
     challenger: str

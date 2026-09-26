@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
-from enum import Enum
 from typing import NamedTuple
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 
 
 class DuelWork:
@@ -16,46 +16,28 @@ class DuelWork:
     __slots__ = ()
 
 
-class DuelStep(Enum):
-    """Which step of the duel procedure is open.
-
-    The CR's own sequence, minus the steps nothing reaches yet: a challenge that may be refused,
-    the focusing loop the duelists alternate in, the reveal a strike causes, and the resolution
-    that reads the totals. A duel that has ended sits at :attr:`ENDED` whether it resolved or not,
-    since a card asking whether the duel is over should not have to know which way it finished.
-    """
-
-    CHALLENGE = "challenge"
-    FOCUSING = "focusing"
-    REVEAL = "reveal"
-    RESOLUTION = "resolution"
-    ENDED = "ended"
-
-
 class DuelOutcome(NamedTuple):
     """What resolving a duel did, recorded as it happened.
 
     Attributes
     ----------
-    winner : PlayerId or None
-        The seat whose Personality won, or None where nobody won: a tie between two duelists the
-        Duelist tiebreak cannot separate, and any duel that ended without resolution.
+    winners : tuple of PlayerId
+        The seats whose Personalities won. Empty on a tie the Duelist tiebreak cannot separate and on
+        any duel that ended without resolution. A tuple rather than one seat because both
+        Personalities can win a duel (CR, Duel).
     losers : tuple of PlayerId
         The seats whose Personalities lost, which is both of them on a tie and neither on a duel
-        that ended without resolution. Recorded rather than derived from ``winner``, because an
+        that ended without resolution. Recorded rather than derived from ``winners``, because an
         effect may alter one Personality's outcome without altering the other's (CR, Duel).
     totals : dict mapping PlayerId to int
         What each seat's Personality totalled: its duel stat plus the Focus Values of its focused
-        cards. Empty for a duel that never reached the reveal.
-    resolved : bool
-        Whether the duel resolved at all. False for a refused challenge and for a duel a duelist
-        left play in the middle of, whose Focus Effects do not resolve either.
+        cards. Empty for a duel that never reached the reveal, which is what tells that duel's
+        outcome from a tie.
     """
 
-    winner: PlayerId | None
+    winners: tuple[PlayerId, ...]
     losers: tuple[PlayerId, ...]
     totals: dict[PlayerId, int]
-    resolved: bool
 
 
 @dataclass(slots=True)
@@ -78,17 +60,13 @@ class DuelRecord:
     challenged_duelist : str
         The id of the challenged seat's Personality in the duel.
     source : str
-        The id of the card that created the duel, so a consequence can name what set it.
+        The id of the card that created the duel, so what resolves after it can name the source.
     step : DuelStep
-        Which step of the procedure is open. Default ``DuelStep.CHALLENGE``.
-    option : PlayerId or None
-        The seat whose option it is to focus or strike, or None outside the focusing loop.
-        Default None.
+        Which step of the procedure is open. Default ``DuelStep.FOCUSING``, the step a declared
+        duel opens in.
     focused : dict mapping PlayerId to int
         How many times each seat has focused, which is what a focus limit counts. A seat that has
         not focused is absent, so read it through :meth:`focuses`. Default empty.
-    struck : PlayerId or None
-        The seat that struck, ending the focusing, or None until one has. Default None.
     outcome : DuelOutcome or None
         What the duel did, or None until it has ended. Default None.
     """
@@ -98,10 +76,8 @@ class DuelRecord:
     challenger_duelist: str
     challenged_duelist: str
     source: str
-    step: DuelStep = DuelStep.CHALLENGE
-    option: PlayerId | None = None
+    step: DuelStep = DuelStep.FOCUSING
     focused: dict[PlayerId, int] = field(default_factory=dict)
-    struck: PlayerId | None = None
     outcome: DuelOutcome | None = None
 
     def duelist_of(self, seat: PlayerId) -> str:

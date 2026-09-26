@@ -9,7 +9,6 @@ yasuki_core.engine.rules.duel.records
 
     DuelOutcome
     DuelRecord
-    DuelStep
     DuelWork
 
 .. automodule:: yasuki_core.engine.rules.duel.records

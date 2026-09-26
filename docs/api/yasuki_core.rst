@@ -64,6 +64,7 @@ yasuki_core
     yasuki_core.engine.rules.board.clans <yasuki_core.engine.rules.board.clans>
     yasuki_core.engine.rules.board.queries <yasuki_core.engine.rules.board.queries>
     yasuki_core.engine.rules.board.seats <yasuki_core.engine.rules.board.seats>
+    yasuki_core.engine.rules.duel.focus_effects <yasuki_core.engine.rules.duel.focus_effects>
     yasuki_core.engine.rules.duel.focusing <yasuki_core.engine.rules.duel.focusing>
     yasuki_core.engine.rules.duel.procedure <yasuki_core.engine.rules.duel.procedure>
     yasuki_core.engine.rules.duel.records <yasuki_core.engine.rules.duel.records>

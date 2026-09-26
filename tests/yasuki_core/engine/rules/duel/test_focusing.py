@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 import pytest
 
 from yasuki_core import ruleset
@@ -11,9 +9,10 @@ from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focusing as focusing_rules
 from yasuki_core.engine.rules.duel import resolution
 from yasuki_core.engine.rules.duel.focusing import TWENTY_FESTIVALS_FOCUSING
-from yasuki_core.engine.rules.duel.records import DuelStep
-from yasuki_core.engine.rules.effects import Effect, GainHonor, StartDuel
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
+from yasuki_core.engine.rules.effects import StartDuel
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.vocabulary.game_events import StrikeDeclared
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DECK_TOP,
     STRIKE,
@@ -29,7 +28,6 @@ from tests.yasuki_core.engine.builders import focus_card, personality, put_in_pl
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.rules.duel.conftest import (
     PRE_GOLD_FOCUSING,
-    PreGoldFocusing,
     focusing,
 )
 
@@ -133,9 +131,11 @@ def test_a_strike_reveals_both_stacks_and_ends_the_duel(either_procedure):
         session.submit(P2, DecisionResponse((STRIKE,)))
 
         duel = session.game.duel
-        assert duel.struck is P2
+        assert [
+            event.seat for event in session.game.turn_events if isinstance(event, StrikeDeclared)
+        ] == [P2]
         assert duel.step is DuelStep.ENDED
-        assert duel.outcome.resolved
+        assert duel.outcome.totals
         for card_id in ("P2-h0", "P1-h0"):
             card = session.game.table.cards_by_id[card_id]
             assert card.face_up
@@ -154,7 +154,7 @@ def test_the_focused_cards_count_toward_the_totals_either_way(either_procedure):
         # Two Focus Values of 1 against one, on 3 Chi each, whether they were added as each card was
         # focused or totaled at the reveal.
         assert session.game.duel.outcome.totals == {P1: 4, P2: 5}
-        assert session.game.duel.outcome.winner is P2
+        assert session.game.duel.outcome.winners == (P2,)
 
 
 def test_a_duel_replays_from_its_tape_either_way(either_procedure):
@@ -166,27 +166,6 @@ def test_a_duel_replays_from_its_tape_either_way(either_procedure):
 
         assert session.game.duel.step is DuelStep.ENDED
         assert replay(session.log) == session.game
-
-
-@dataclass(frozen=True, slots=True)
-class _DealingFocusing(PreGoldFocusing):
-    """A procedure whose setup acts, which neither shipped procedure's does: the Lotus rules deal
-    three cards into a pool before the first option, and this stands in for that step."""
-
-    def begin(self, game, duel) -> list[Effect]:
-        return [GainHonor(duel.challenged, 2)]
-
-
-def test_the_procedures_setup_runs_before_the_first_option_is_put():
-    with probe_ability(FOCUS_PROBE, DUEL_ABILITY):
-        with focusing(_DealingFocusing()):
-            session = _duel_game(held={P1: 1, P2: 1})
-            _challenge(session)
-
-            # Honor moved as the duel was declared, and the challenged seat still has its option.
-            assert session.game.table.seats[P2].honor == 2
-            assert isinstance(session.game.pending, FocusOrStrike)
-            assert session.game.pending.seat is P2
 
 
 def test_only_the_shipped_procedure_offers_the_top_of_the_deck():

@@ -8,6 +8,8 @@ yasuki_core.engine.rules.vocabulary.segments
 .. autosummary::
 
     BattleSegment
+    Boundary
+    DuelStep
     Segment
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.segments

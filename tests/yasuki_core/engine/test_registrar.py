@@ -6,6 +6,16 @@ from yasuki_core.engine.registrar import CARD_REGISTRIES, FlagRegistry, HandlerR
 from yasuki_core.engine.rules import cards  # noqa: F401
 
 
+def _forget(built: FlagRegistry | HandlerRegistry[object]) -> None:
+    """Drop ``built`` from the catalogue by identity.
+
+    ``list.remove`` compares by value, and a registry is a ``Mapping``, so an empty one equals every
+    other empty one. Removing by value takes whichever empty registry comes first and leaves the
+    probe behind, where the emptiness guard in the registration audit then reports it.
+    """
+    CARD_REGISTRIES[:] = [held for held in CARD_REGISTRIES if held is not built]
+
+
 @pytest.mark.parametrize("built", CARD_REGISTRIES, ids=lambda built: built.label)
 def test_every_registry_refuses_a_second_registration_for_one_card(built):
     """The guard that makes a duplicate loud. A card registered from two set modules is a real
@@ -37,7 +47,26 @@ def test_a_registry_joins_the_catalogue_when_it_is_built():
     try:
         assert CARD_REGISTRIES[before:] == [probe]
     finally:
-        CARD_REGISTRIES.remove(probe)
+        _forget(probe)
+
+
+def test_the_catalogue_forgets_a_registry_by_identity():
+    # Two registries with no cards in them compare equal, since a registry is a Mapping. Removing
+    # one from the catalogue by value takes whichever empty registry comes first, which is a real
+    # one for as long as any rule is waiting for its first card.
+    waiting: HandlerRegistry[object] = HandlerRegistry(
+        "waiting for its first card", "already there"
+    )
+    probe: HandlerRegistry[object] = HandlerRegistry("probe", "already probed")
+
+    try:
+        _forget(probe)
+
+        assert [held for held in CARD_REGISTRIES if held is waiting] == [waiting]
+        assert not [held for held in CARD_REGISTRIES if held is probe]
+    finally:
+        _forget(waiting)
+        _forget(probe)
 
 
 def test_the_decorator_hands_back_the_function_it_recorded():
@@ -50,4 +79,4 @@ def test_the_decorator_hands_back_the_function_it_recorded():
         assert registry.make_decorator()("probe_card")(handler) is handler
         assert registry["probe_card"] is handler
     finally:
-        CARD_REGISTRIES.remove(registry)
+        _forget(registry)

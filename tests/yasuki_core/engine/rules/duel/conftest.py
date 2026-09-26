@@ -5,9 +5,13 @@ from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.duel.focusing import FocusProcedure, focus_value
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel.records import DuelRecord
-from yasuki_core.engine.rules.effects import Destroy, Effect, GrantModifier
+from yasuki_core.engine.rules.effects import Destroy, Effect, GrantModifier, StartDuel
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import focus_source, focus_token
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -27,9 +31,6 @@ class PreGoldFocusing:
     """
 
     focus_limit: int | None = None
-
-    def begin(self, game: GameState, duel: DuelRecord) -> list[Effect]:
-        return []
 
     def sources(self, game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
         hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
@@ -80,3 +81,19 @@ def focusing(procedure: FocusProcedure):
         yield
     finally:
         ruleset.ACTIVE = live
+
+
+def enemy_personalities(game, source):
+    """Every Personality another seat controls, which is what a duel-creating probe targets."""
+    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
+
+
+CHALLENGE_PROBE = "probe_challenge_to_a_duel_for_the_hooks"
+
+CHALLENGE_ABILITY = Ability(
+    timings=(ActionTiming.OPEN,),
+    label="Open: challenge a target enemy Personality to a duel",
+    cost=no_cost,
+    targets=enemy_personalities,
+    effects=lambda game, source, target: [StartDuel(source.id, target.id, source.id)],
+)
