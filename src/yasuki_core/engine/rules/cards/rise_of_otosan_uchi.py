@@ -63,6 +63,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
+    GrantNegation,
     GrantProvinceStrength,
     LookAtTop,
     MeleeAttack,
@@ -80,8 +81,8 @@ from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
-from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_ACTION_PHASE
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
+from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_ACTION_PHASE, Boundary, Moment
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
@@ -90,6 +91,7 @@ from yasuki_core.engine.rules.state_based_actions import register_no_enlightenme
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    BattleEnded,
     Bowed,
     CardDiscarded,
     Destroyed,
@@ -100,7 +102,7 @@ from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import PersonalityPrint, RingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint, RingPrint
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 
@@ -701,6 +703,62 @@ register_ring(
         hits_every_target=True,
         key="void",
         keywords=frozenset({keywords.VOID}),
+    ),
+    pitch=None,
+)
+
+
+# --- Dark Ring of Water (Experienced) ---
+
+DARK_WATER_HONOR_LOSS = 3
+
+
+def _dark_ring_of_water_experienced_condition(game: GameState, source: L5RCard) -> bool:
+    """ "If you won a battle this turn during which you resolved no printed actions from your cards
+    and the Province was destroyed." """
+    return any(
+        isinstance(event, BattleEnded)
+        and event.resolved.winner is source.owner
+        and event.resolved.province_destroyed
+        and source.owner not in event.printed_actions
+        for event in game.turn_events
+    )
+
+
+def _dark_ring_of_water_experienced_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:
+    return [GainHonor(source.owner, -DARK_WATER_HONOR_LOSS, source_id=source.id)]
+
+
+register_entry(
+    "dark_ring_of_water_experienced",
+    timing=ActionTiming.DYNASTY,
+    condition=_dark_ring_of_water_experienced_condition,
+    extra_effects=_dark_ring_of_water_experienced_entry_effects,
+    key="enter",
+)
+register_no_enlightenment("dark_ring_of_water_experienced")
+
+
+def _dark_ring_of_water_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Negate the effects of actions from Strategies, which are Action cards, until the end of the
+    current phase."""
+    until = Moment(game.phase, Boundary.END)
+    return [GrantNegation(Negation(source.id, until, source_kind=ActionPrint))]
+
+
+register_ring(
+    "dark_ring_of_water_experienced",
+    ability=Ability(
+        printed_index=1,
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        cost=bow_cost,
+        targets=itself,
+        effects=_dark_ring_of_water_experienced_effects,
+        hits_every_target=True,
+        key="water",
+        keywords=frozenset({keywords.WATER}),
     ),
     pitch=None,
 )

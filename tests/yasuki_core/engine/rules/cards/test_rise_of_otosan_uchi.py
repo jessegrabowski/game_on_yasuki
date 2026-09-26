@@ -53,15 +53,15 @@ from yasuki_core.game_pieces.prints import FatePrint, RingPrint
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Negation, Stat
 from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, PlayStrategy
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.prints import ActionPrint
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.turn.structure import Boundary, Moment, Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from yasuki_core.engine.rules.units.composition import followers_of
@@ -1548,6 +1548,7 @@ def _ring_session_with_four_elements() -> EngineSession:
     [
         ("generic_ring", True),
         ("dark_ring_of_the_void_experienced", False),
+        ("dark_ring_of_water_experienced", False),
         ("dark_ring_of_air_experienced", False),
         ("dark_ring_of_fire_experienced", False),
         ("legacy_of_fudo", False),
@@ -1820,3 +1821,97 @@ def test_the_dark_fire_answers_a_bow_at_the_battlefield_by_destroying_a_bare_car
     cards = session.game.table.cards_by_id
     assert cards["spear"] not in session.game.table.battlefield.cards
     assert cards["fire"].bowed
+
+
+# --- Dark Ring of Water (Experienced) ---
+
+
+RAIDER_PROBE = "probe_battle_or_response_action"
+RAIDER_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE, ActionTiming.RESPONSE),
+    label="Repeatable Battle or Response: do nothing",
+    cost=no_cost,
+    targets=itself,
+    effects=lambda game, source, target: [],
+    repeatable=True,
+)
+
+
+def _water_after_a_battle(*, act_in: BattleSegment | None = None) -> EngineSession:
+    """P1's Dynasty Phase after P1's raider won a battle at P2's Province and destroyed it, with
+    the Dark Ring of Water in P1's hand. With ``act_in``, the raider took its printed action the
+    first time P1 could while the battle read that segment."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P2, province_strength=1))
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    province_card(state, "def-prov1", seat=P2, index=1)  # so its fall is no Military Victory
+    put_in_play(state, personality("raider", owner=P1, printed_id=RAIDER_PROBE, force=9))
+    put_in_play(state, personality("guard", owner=P2, force=1))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(state, _ring_card("water", "dark_ring_of_water_experienced", Element.WATER))
+    )
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    acted = False
+    for _ in range(60):
+        if session.game.phase is Phase.DYNASTY:
+            return session
+        asked = session.game.pending
+        if asked is not None:  # the second battlefield, which has no units to fight
+            session.submit(asked.seat, DecisionResponse(asked.candidates[:1]))
+            continue
+        attack = session.game.attack
+        seat = session.game.round.priority
+        in_segment = attack is not None and attack.battle_segment is act_in
+        if act_in is not None and not acted and in_segment and seat is P1:
+            session.act(P1, ActivateAbility("raider"))
+            acted = True
+            continue
+        session.act(seat, Pass())
+    raise AssertionError("the turn never reached its Dynasty Phase")
+
+
+def test_the_dark_water_enters_after_a_battle_won_without_a_printed_action():
+    with probe_ability(RAIDER_PROBE, RAIDER_ABILITY):
+        session = _water_after_a_battle()
+        before = _honor(session, P1)
+
+        session.act(P1, PlayStrategy("water", "enter"))
+
+    assert session.game.table.cards_by_id["water"] in session.game.table.battlefield.cards
+    assert _honor(session, P1) == before - 3
+
+
+@pytest.mark.parametrize(
+    "act_in",
+    [BattleSegment.COMBAT, BattleSegment.RESOLUTION],
+    ids=["a battle action", "a response after the battle resolved"],
+)
+def test_the_dark_water_is_withheld_after_a_battle_with_a_printed_action(act_in):
+    with probe_ability(RAIDER_PROBE, RAIDER_ABILITY):
+        session = _water_after_a_battle(act_in=act_in)
+
+        assert PlayStrategy("water", "enter") not in session.legal_actions(P1)
+
+
+def test_the_dark_water_starts_negating_strategies_for_the_current_phase():
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(
+        state,
+        register(state, _ring_card("water", "dark_ring_of_water_experienced", Element.WATER)),
+    )
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, ActivateAbility("water", "water"))
+
+    assert session.game.ongoing == [
+        Negation("water", Moment(Phase.ACTION, Boundary.END), source_kind=ActionPrint)
+    ]
+    assert session.game.table.cards_by_id["water"].bowed
