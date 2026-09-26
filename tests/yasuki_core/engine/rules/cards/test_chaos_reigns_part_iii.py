@@ -25,9 +25,11 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseCards,
+    ChooseDiscard,
     ChooseOption,
     DecisionResponse,
 )
+from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
@@ -362,6 +364,82 @@ def test_the_traders_are_withheld_while_bowed():
 def test_the_traders_replay_to_the_same_board():
     session = _traders_game()
     session.act(P1, ActivateAbility("traders"))
+
+    assert replay(session.log).table == session.game.table
+
+
+# --- Tanuki Band ---
+
+
+def _band_game(*, mine=1, theirs=3):
+    """The Band in play, with ``mine`` cards in P1's hand and ``theirs`` in P2's."""
+    game = two_seat_game()
+    put_in_play(game, holding("band", printed_id="tanuki_band", gold_production=1))
+    for seat, count in ((P1, mine), (P2, theirs)):
+        hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
+        for index in range(count):
+            hand.add(register(game.table, fate_card(f"{seat.name}-h{index}", seat)))
+    return EngineSession.start(game.table, P1)
+
+
+def _hand(session, seat):
+    return [card.id for card in session.game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards]
+
+
+def test_the_band_makes_a_player_holding_more_cards_discard_one_they_choose():
+    session = _band_game()
+    session.act(P1, ActivateAbility("band"))
+    named = session.game.pending
+    assert isinstance(named, ChooseOption) and len(named.candidates) == 1
+
+    session.submit(P1, DecisionResponse(named.candidates))
+    discard = session.game.pending
+    assert isinstance(discard, ChooseDiscard) and discard.seat is P2
+    session.submit(P2, DecisionResponse(("P2-h1",)))
+
+    assert _hand(session, P2) == ["P2-h0", "P2-h2"]
+    assert [
+        card.id for card in session.game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards
+    ] == ["P2-h1"]
+
+
+def test_the_band_is_withheld_while_no_player_holds_more_cards_than_you():
+    session = _band_game(mine=3, theirs=3)
+
+    assert ActivateAbility("band") not in session.legal_actions(P1)
+
+
+def test_the_band_asks_nothing_once_no_player_still_holds_more_cards_than_you():
+    # The hands can even out between announcement and resolution.
+    session = _band_game(mine=3, theirs=3)
+    band = session.game.table.cards_by_id["band"]
+
+    resolve_effects(session.game, ability_for(session.game, band).effects(session.game, band, band))
+
+    assert session.game.pending is None
+    assert len(_hand(session, P2)) == 3
+
+
+@pytest.mark.parametrize(
+    "clans, produced",
+    [((), 1), (("Crane",), 2), (("Crane", "Lion"), 3), (("Crane", "Lion", "Phoenix"), 3)],
+    ids=["one", "two", "three", "four"],
+)
+def test_the_band_produces_more_for_each_clan_alignment_you_control(clans, produced):
+    game = two_seat_game()
+    put_in_play(game, stronghold(P1, clan="Crab"))
+    band = put_in_play(game, holding("band", printed_id="tanuki_band", gold_production=1))
+    for clan in clans:
+        put_in_play(game, personality(f"{clan}-p", clans=(clan,)))
+
+    assert effective_gold_production(game, band) == produced
+
+
+def test_the_band_replays_to_the_same_board():
+    session = _band_game()
+    session.act(P1, ActivateAbility("band"))
+    session.submit(P1, DecisionResponse(session.game.pending.candidates))
+    session.submit(P2, DecisionResponse(("P2-h0",)))
 
     assert replay(session.log).table == session.game.table
 

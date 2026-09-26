@@ -18,14 +18,18 @@ from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_discount
-from yasuki_core.engine.rules.board.seats import cards_in_play, seat_controls_printed
+from yasuki_core.engine.rules.gold.production import gold_handler
+from yasuki_core.engine.rules.board.clans import controlled_alignments
+from yasuki_core.engine.rules.board.seats import cards_in_hand, cards_in_play, seat_controls_printed
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Arrange,
     Ask,
+    AskOption,
     Choose,
     CreateToken,
     Discard,
+    DiscardFromHand,
     Dishonor,
     DrawCard,
     Effect,
@@ -536,6 +540,64 @@ register_ability(
         cost=bow_cost,
         targets=itself,
         effects=_moto_traders_effects,
+        hits_every_target=True,
+    ),
+)
+
+
+# --- Tanuki Band ---
+
+
+@gold_handler("tanuki_band")
+def _tanuki_band_gold(
+    card: L5RCard, game: GameState, seat: PlayerId, targets: tuple[L5RCard, ...]
+) -> int:
+    """+1GP while you control two Clan Alignments, or +2GP while you control three or more."""
+    controlled = len(controlled_alignments(game, seat))
+    bonus = 2 if controlled >= 3 else 1 if controlled == 2 else 0
+    return card.gold_production + bonus
+
+
+def _tanuki_band_players(game: GameState, seat: PlayerId) -> tuple[PlayerId, ...]:
+    """The players with more cards in their hand than ``seat``."""
+    held = len(cards_in_hand(game, seat))
+    return tuple(player for player in game.table.seats if len(cards_in_hand(game, player)) > held)
+
+
+def _tanuki_band_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The Band itself, while some player could be its target: an action with no legal target
+    cannot be announced."""
+    return [source.id] if _tanuki_band_players(game, source.owner) else []
+
+
+def _tanuki_band_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Name the target player, a player with more cards in their hand than you. Nothing happens
+    when no player still qualifies, since the hands can change between announcement and
+    resolution."""
+    names = tuple(
+        game.table.seats[player].name for player in _tanuki_band_players(game, source.owner)
+    )
+    if not names:
+        return []
+    return [AskOption(source.owner, names, "Who must discard a card?", "tanuki_band", source.id)]
+
+
+@choice_resolver("tanuki_band")
+def _resolve_tanuki_band(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The named player must discard a card, which they choose."""
+    named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
+    return [DiscardFromHand(named, 1, seat, named)]
+
+
+register_ability(
+    "tanuki_band",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        targets=_tanuki_band_targets,
+        effects=_tanuki_band_effects,
         hits_every_target=True,
     ),
 )
