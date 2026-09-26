@@ -4,6 +4,12 @@ import sys
 
 
 from yasuki_core.engine.rules import cards
+
+# The audit reads the registries that exist, and one whose module nothing imported is absent
+# rather than empty. Importing the action sequence reaches the rulebook procedures and the
+# duel, so the catalogue this file asserts about is the whole of it however the tests are
+# selected.
+from yasuki_core.engine.rules.turn import action_sequence  # noqa: F401
 from yasuki_core.install import registration_audit
 from yasuki_core.install.card_index import read_index
 from yasuki_core.install.registration_audit import (
