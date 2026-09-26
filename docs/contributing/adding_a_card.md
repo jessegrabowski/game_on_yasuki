@@ -60,6 +60,12 @@ These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straight
 `ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose moment is not one of them needs a new event,
 which is a core change.
 
+A card that fits no row is almost always several rows at once. Break its text into the rule-level
+verbs it prints and find each in this table and in [the card vocabulary](../design/card_vocabulary.md)
+before adding a hook, an effect or a decision. Some rows above have one user. They are not a
+precedent for adding another, and [Build from the vocabulary](../design/build_from_the_vocabulary.md)
+is the check a new one has to pass.
+
 ## Three cards, complete
 
 The table names the hook. It does not show the hook's signature, the helpers a predicate calls, or

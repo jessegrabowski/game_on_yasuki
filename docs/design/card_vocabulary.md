@@ -3,7 +3,8 @@
 A card's behavior is expressed entirely in a closed set of data types. Cards do not mutate the
 board. They return *effects*, and a single boundary applies them. The listings below name every
 member of each category, so a type missing from one of them is a gap in this page and not a type
-you may not use.
+you may not use. [Build from the vocabulary](build_from_the_vocabulary.md) states when a new
+member is warranted and what adding one owes.
 
 This page is the index. The pages that explain how these types behave at runtime are
 [Effects](systems/effects.md), [Triggers and the cascade](systems/triggers-and-the-cascade.md),

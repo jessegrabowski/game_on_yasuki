@@ -1,3 +1,4 @@
+docs/design/build_from_the_vocabulary.md
 docs/design/engine.md
 docs/design/systems/turn-flow.md
 docs/design/systems/actions-and-legality.md
