@@ -3,12 +3,15 @@ from dataclasses import replace
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import Legacy, Recruit
 from yasuki_core.bots.agents import LegacyAgent, PayingAgent
+from yasuki_core.engine.rules.rulebook.legacy import (
+    BANISH_RESOLVER,
+    FIND_RESOLVER,
+    PLACE_RESOLVER,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    BanishForLegacy,
-    ChooseLegacyCard,
+    ChooseCards,
     ChoosePayment,
     DecisionResponse,
-    PlaceLegacy,
 )
 from yasuki_core.bots.policies import EconomicLegacyPolicy
 from yasuki_core.engine.driver import Controls, run_game
@@ -40,6 +43,12 @@ def _dynasty_phase(production: int = 6) -> EngineSession:
 
 def _legacy_card(card_id: str, production: int):
     return holding(card_id, owner=P1, keywords=("Legacy",), gold_production=production, gold_cost=3)
+
+
+def _legacy_pick(resolver: str, candidates: tuple[str, ...], source_id: str | None = None):
+    return ChooseCards(
+        seat=P1, candidates=candidates, minimum=1, maximum=1, resolver=resolver, source_id=source_id
+    )
 
 
 def _choose(session: EngineSession, pool):
@@ -96,7 +105,7 @@ def test_the_agent_searches_out_the_biggest_producer():
     # Ids deliberately sort against production, so picking the first candidate cannot pass.
     pool = [_legacy_card("a-weak", 1), _legacy_card("b-strong", 5), _legacy_card("c-mid", 3)]
     view = replace(session.project(P1), legacy_pool=tuple(pool))
-    request = ChooseLegacyCard(seat=P1, candidates=("a-weak", "b-strong", "c-mid"))
+    request = _legacy_pick(FIND_RESOLVER, ("a-weak", "b-strong", "c-mid"))
 
     assert LegacyAgent().decide(request, view) == DecisionResponse(("b-strong",))
 
@@ -106,33 +115,38 @@ def test_the_agent_displaces_the_least_valuable_province_card():
     province_card(session.game, "keep", seat=P1, gold_cost=3, gold_production=4)
     province_card(session.game, "spend", seat=P1, gold_cost=3, gold_production=0)
     view = session.project(P1)
-    request = PlaceLegacy(seat=P1, candidates=("keep", "spend"), legacy_card_id="buried")
+    request = _legacy_pick(PLACE_RESOLVER, ("keep", "spend"), source_id="buried")
 
     assert LegacyAgent().decide(request, view) == DecisionResponse(("spend",))
 
 
 def test_the_agent_banishes_deterministically():
-    """The hand card's value is not modelled, so the choice only has to be reproducible."""
     session = _dynasty_phase()
     view = session.project(P1)
-    request = BanishForLegacy(seat=P1, candidates=("h-c", "h-a", "h-b"))
+    request = _legacy_pick(BANISH_RESOLVER, ("h-c", "h-a", "h-b"))
 
     answers = {LegacyAgent().decide(request, view).choices for _ in range(3)}
     assert answers == {("h-a",)}
 
 
 def test_the_agent_breaks_a_production_tie_toward_the_cheaper_card():
-    """The fetched card still has to be paid for, so between equal producers the cheaper one is
-    likelier to reach play the turn it is placed."""
     session = _dynasty_phase()
     pool = [
         holding("a-dear", owner=P1, keywords=("Legacy",), gold_production=3, gold_cost=6),
         holding("b-cheap", owner=P1, keywords=("Legacy",), gold_production=3, gold_cost=2),
     ]
     view = replace(session.project(P1), legacy_pool=tuple(pool))
-    request = ChooseLegacyCard(seat=P1, candidates=("a-dear", "b-cheap"))
+    request = _legacy_pick(FIND_RESOLVER, ("a-dear", "b-cheap"))
 
     assert LegacyAgent().decide(request, view) == DecisionResponse(("b-cheap",))
+
+
+def test_the_agent_answers_another_resolvers_card_choice_like_the_paying_agent():
+    session = _dynasty_phase()
+    view = session.project(P1)
+    request = _legacy_pick("cycle", ("h-c", "h-a"))
+
+    assert LegacyAgent().decide(request, view) == PayingAgent().decide(request, view)
 
 
 def test_the_agent_hands_everything_else_to_the_paying_agent():

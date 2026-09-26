@@ -1,3 +1,4 @@
+import pytest
 from yasuki_core.engine import ops
 from numpy.random import default_rng
 
@@ -7,11 +8,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint
 from yasuki_core.engine.rules.vocabulary.actions import Legacy
-from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseLegacyCard,
-    PlaceLegacy,
-    DecisionResponse,
-)
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
@@ -186,10 +183,17 @@ def test_legacy_finds_a_deck_card_and_places_it_face_up_over_a_province():
     session = _dynasty_session(legacy_in="deck")
     session.act(PlayerId.P1, Legacy())
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
-    assert isinstance(session.game.pending, ChooseLegacyCard)
+    assert session.game.pending == ChooseCards(
+        seat=PlayerId.P1,
+        candidates=("P1-leg",),
+        minimum=1,
+        maximum=1,
+        resolver=legacy.FIND_RESOLVER,
+    )
 
     session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
-    assert isinstance(session.game.pending, PlaceLegacy)
+    assert session.game.pending.resolver == legacy.PLACE_RESOLVER
+    assert session.game.pending.source_id == "P1-leg"  # the province pick carries the found card
 
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
     table = session.game.table
@@ -214,6 +218,18 @@ def test_legacy_places_a_face_down_province_card_and_refills_its_old_province():
     action_sequence.submit(game, DecisionResponse(("P1-pv1",)))
     source = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)]
     assert len(source.cards) == 1 and source.cards[0].id != "P1-leg"  # refilled from the deck
+
+
+def test_a_found_card_with_no_province_to_displace_is_revealed_where_it_sits():
+    session = _dynasty_session(provinces=0, legacy_in="deck")
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
+
+    found = session.game.table.cards_by_id["P1-leg"]
+    assert session.game.pending is None
+    assert found.face_up
+    assert found in session.game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards
 
 
 def test_legacy_is_once_per_turn():
@@ -347,6 +363,41 @@ def test_the_search_shows_the_seat_its_face_down_province_cards():
     session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
 
     assert buried.peekers == frozenset({PlayerId.P1})
+
+
+def test_the_banish_pick_can_be_cancelled():
+    session = _dynasty_session(legacy_in="deck")
+    session.act(PlayerId.P1, Legacy())
+
+    assert session.can_cancel(PlayerId.P1)
+    session.cancel(PlayerId.P1)
+    assert session.game.pending is None
+
+
+def test_no_pick_after_the_search_can_be_cancelled():
+    session = _dynasty_session(legacy_in="deck")
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
+    assert session.game.pending.resolver == legacy.FIND_RESOLVER
+
+    assert not session.can_cancel(PlayerId.P1)
+    with pytest.raises(ValueError, match="looked at"):
+        session.cancel(PlayerId.P1)
+
+    session.submit(PlayerId.P1, DecisionResponse((session.game.pending.candidates[0],)))
+    assert session.game.pending.resolver == legacy.PLACE_RESOLVER
+    assert not session.can_cancel(PlayerId.P1)
+
+
+def test_a_resolved_legacy_no_longer_bars_backing_out():
+    session = _dynasty_session(legacy_in="deck")
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
+
+    assert session.game.action_resolved
+    assert not session.game.hidden_card_shown
 
 
 def test_the_search_does_not_show_the_pool_to_the_opponent():

@@ -197,6 +197,11 @@ class GameState:
         What the Interrupts taken against the action now resolving make of its effects, each
         bound to the effect it answers and applied as that effect comes up to resolve. Cleared as
         the next action begins. Ephemeral and rebuilt by replay. Default empty.
+    hidden_card_shown : bool
+        Whether the action now resolving has shown a seat a hidden card, as a search does. No
+        decision it raises may be backed out of after that, since a seat cannot unsee what it was
+        shown. Cleared once the action resolves and as the next one begins. Ephemeral and rebuilt
+        by replay. Default False.
     """
 
     table: TableState
@@ -244,6 +249,7 @@ class GameState:
     additional_action: PlayerId | None = None
     interrupts_offered: bool = False
     modifications: list[Modification] = field(default_factory=list)
+    hidden_card_shown: bool = False
 
     @property
     def awaiting_decision(self) -> bool:
@@ -371,6 +377,14 @@ class GameState:
     def has_used(self, key: str) -> bool:
         """Return whether the one-time use named ``key`` has already been claimed."""
         return key in self.once_per
+
+    def show_to(self, card: L5RCard, seat: PlayerId) -> None:
+        """Let ``seat`` identify ``card``. Showing it a card it had not yet seen sets
+        ``hidden_card_shown``."""
+        if seat in card.peekers:
+            return
+        card.add_peeker(seat)
+        self.hidden_card_shown = True
 
 
 def once_key(card: L5RCard, tag: str, turn: int) -> str:

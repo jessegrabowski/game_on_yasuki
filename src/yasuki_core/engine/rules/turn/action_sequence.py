@@ -32,7 +32,6 @@ from yasuki_core.engine.rules.duel import procedure as duel_procedure
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     AssignUnits,
-    BanishForLegacy,
     ChooseAbilityTarget,
     ChooseAmount,
     ChooseBattlefield,
@@ -46,7 +45,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInterruptEffect,
     ChooseInterruptTarget,
     ChooseInvestAmount,
-    ChooseLegacyCard,
     ChooseLobbyTarget,
     ChooseOption,
     ChoosePayment,
@@ -54,7 +52,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     DiscardToHandSize,
     LeaveBowed,
-    PlaceLegacy,
 )
 from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, equip
 from yasuki_core.engine.rules.gold.production import produce_gold
@@ -74,12 +71,7 @@ from yasuki_core.engine.rules.interrupts import (
     play_interrupt,
 )
 from yasuki_core.engine.rules.rulebook.inheritance import apply_inheritance_target, inheritance
-from yasuki_core.engine.rules.rulebook.legacy import (
-    apply_legacy_banish,
-    apply_legacy_choice,
-    apply_legacy_placement,
-    legacy,
-)
+from yasuki_core.engine.rules.rulebook.legacy import legacy
 from yasuki_core.engine.rules.rulebook.lobby import apply_lobby_target, lobby
 from yasuki_core.engine.rules.effects import PayGold
 from yasuki_core.engine.rules.state import GameState
@@ -150,6 +142,7 @@ def perform(game: GameState, action: Action) -> None:
         game.interrupts_taken.clear()
         game.interrupts_offered = False
         game.modifications.clear()
+        game.hidden_card_shown = False
     match action:
         case Pass():
             yield_priority(game, passed=True)
@@ -221,12 +214,6 @@ def submit(game: GameState, response: DecisionResponse) -> None:
         case ChoosePayment():
             _apply_payment(game, request, response)
             run_stack(game)
-        case BanishForLegacy():
-            apply_legacy_banish(game, request, response)
-        case ChooseLegacyCard():
-            apply_legacy_choice(game, request, response)
-        case PlaceLegacy():
-            apply_legacy_placement(game, request, response)
         case PlaceDebugCard():
             apply_debug_placement(game, request, response)
         case ChooseDebugSeat():

@@ -1,15 +1,14 @@
 from typing import Protocol, runtime_checkable
 
+from yasuki_core.engine.rules.rulebook import legacy
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    BanishForLegacy,
     ArrangeCards,
+    ChooseCards,
     ChooseDistribution,
-    ChooseLegacyCard,
     ChoosePayment,
     Confirm,
     DecisionRequest,
     DecisionResponse,
-    PlaceLegacy,
 )
 from yasuki_core.engine.rules.gold.self_grants import is_production_window
 from yasuki_core.engine.redaction import CardView, HiddenCard
@@ -122,11 +121,11 @@ class LegacyAgent:
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
         match request:
-            case ChooseLegacyCard():
+            case ChooseCards(resolver=legacy.FIND_RESOLVER):
                 return DecisionResponse((_richest(request.candidates, view),))
-            case PlaceLegacy():
+            case ChooseCards(resolver=legacy.PLACE_RESOLVER):
                 return DecisionResponse((_poorest(request.candidates, view),))
-            case BanishForLegacy():
+            case ChooseCards(resolver=legacy.BANISH_RESOLVER):
                 return DecisionResponse((min(request.candidates),))
         return self._fallback.decide(request, view)
 
