@@ -28,7 +28,12 @@ from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.abilities.registry import may_attack
-from yasuki_core.engine.rules.vocabulary.game_events import Assigned, BattleResolved, Destroyed
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    Assigned,
+    BattleEnded,
+    BattleResolved,
+    Destroyed,
+)
 from yasuki_core.engine.rules.battle.records import (
     AttackPhase,
     BattleOutcome,
@@ -525,14 +530,24 @@ class AfterResolution:
 
 @dataclass(frozen=True, slots=True)
 class EndBattle:
-    """End the battle After Resolution closes: lapse what lasted for it and resolve what was
-    delayed to its end, then move on to the next battlefield."""
+    """End the battle After Resolution closes: lapse what lasted for it, resolve what was delayed to
+    its end and announce :class:`~.BattleEnded`, then move on to the next battlefield."""
 
     def resume(self, game: GameState) -> None:
+        attack = _declared_attack(game)
+        battlefield = attack.current
+        if battlefield is None:
+            raise RuntimeError("a battle ended with no battlefield being fought at")
+        resolved = next(
+            event
+            for event in reversed(game.turn_events)
+            if isinstance(event, BattleResolved) and event.battlefield == battlefield
+        )
+        ended = BattleEnded(resolved, attack.battlefields[battlefield].printed_actions)
         # Queued first, so a question the end of the battle asks stashes its cascade above it and
         # is answered while the battle is still the one being fought.
         game.stack.append(LeaveBattle())
-        triggers.reach_moment(game, END_OF_BATTLE)
+        triggers.reach_moment(game, END_OF_BATTLE, ended)
 
 
 @dataclass(frozen=True, slots=True)

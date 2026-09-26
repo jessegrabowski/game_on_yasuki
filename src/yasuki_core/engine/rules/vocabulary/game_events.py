@@ -358,6 +358,24 @@ class BattleResolved:
 
 
 @dataclass(frozen=True, slots=True)
+class BattleEnded:
+    """A battle has ended, once After Resolution is done (CR, Battle Sequence): the
+    ``END_OF_BATTLE`` moment.
+
+    Attributes
+    ----------
+    resolved : BattleResolved
+        How the battle resolved.
+    printed_actions : frozenset of PlayerId
+        The seats that took a printed action from one of their cards while the battle was being
+        fought, the Response Step after its resolution included.
+    """
+
+    resolved: BattleResolved
+    printed_actions: frozenset[PlayerId]
+
+
+@dataclass(frozen=True, slots=True)
 class DuelDeclared:
     """A duel has been created, announced at each edge of its declaration (CR, Duel).
 
@@ -510,6 +528,7 @@ GameEvent = (
     ActionResolved
     | Assigned
     | BattleResolved
+    | BattleEnded
     | Bowed
     | CardFocused
     | ConditionFulfilled

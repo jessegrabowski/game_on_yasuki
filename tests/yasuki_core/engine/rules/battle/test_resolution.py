@@ -30,7 +30,12 @@ from yasuki_core.engine.rules.effects import Ask, DelayedEffect, DestroyProvince
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.triggers import apply_effect, resolve_effects
-from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved, Bowed, CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    BattleEnded,
+    BattleResolved,
+    Bowed,
+    CardDiscarded,
+)
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -1054,6 +1059,15 @@ def test_a_fought_battle_announces_battle_resolved_once_with_its_outcome():
             terrains_destroyed=frozenset(),
         )
     ]
+
+
+def test_a_battle_announces_its_end_with_how_it_resolved():
+    session = _one_battlefield({"a": 9}, {"d": 2}, province_strength=3)
+
+    _fight_one_battle(session)
+
+    ended = [event for event in session.game.turn_events if isinstance(event, BattleEnded)]
+    assert ended == [BattleEnded(_battles_resolved(session)[0], frozenset())]
 
 
 def test_a_passed_attack_phase_announces_no_battle():

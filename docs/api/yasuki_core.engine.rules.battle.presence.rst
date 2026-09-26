@@ -8,6 +8,7 @@ yasuki_core.engine.rules.battle.presence
 .. autosummary::
 
     place_unit
+    record_printed_action
     record_terrain_destroyed
     record_terrain_played
 

@@ -26,6 +26,16 @@ def place_unit(game: GameState, card: L5RCard, location: Location) -> bool:
     return moved
 
 
+def record_printed_action(game: GameState, seat: PlayerId) -> None:
+    """Record that ``seat`` took a printed action from one of its cards during the battle being
+    fought. Nothing is recorded between battles."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return
+    taken = attack.battlefields[attack.current].printed_actions
+    attack.amend(attack.current, printed_actions=taken | {seat})
+
+
 def record_terrain_played(game: GameState, card: L5RCard, battlefield: int) -> None:
     """Record that ``card``'s owner played it, a Terrain, from hand at ``battlefield``."""
     attack = game.attack
