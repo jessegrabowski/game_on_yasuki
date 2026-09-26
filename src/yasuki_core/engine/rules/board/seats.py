@@ -33,6 +33,11 @@ def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
     return None
 
 
+def seat_named(game: GameState, name: str) -> PlayerId:
+    """The seat whose name is ``name``, as a question that names players is answered."""
+    return next(seat for seat, info in game.table.seats.items() if info.name == name)
+
+
 def opposing_seats(game: GameState, seat: PlayerId) -> tuple[PlayerId, ...]:
     """Every seat but ``seat``, in table order."""
     return tuple(other for other in game.table.seats if other is not seat)

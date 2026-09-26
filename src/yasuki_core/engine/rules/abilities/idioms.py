@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.abilities.registry import ability_for, register_ab
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.board.queries import favor_actions_this_turn, terrains_at
+from yasuki_core.engine.rules.board.seats import seat_named
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
@@ -479,7 +480,7 @@ def _resolve_honor_loss_player(
     seat: PlayerId,
     resolver_context: tuple[str, ...] = (),
 ) -> list[Effect]:
-    named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
+    named = seat_named(game, chosen[0])
     return [GainHonor(named, -int(resolver_context[0]), source_id=source_id)]
 
 
@@ -519,7 +520,7 @@ def _resolve_honor_swing_player(
     resolver_context: tuple[str, ...] = (),
 ) -> list[Effect]:
     named = chosen[0]
-    picked = next(player for player, info in game.table.seats.items() if info.name == named)
+    picked = seat_named(game, named)
     amount = int(resolver_context[0])
     return [
         AskOption(

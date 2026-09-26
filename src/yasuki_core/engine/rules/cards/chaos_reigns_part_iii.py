@@ -20,7 +20,12 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_discount
 from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.clans import controlled_alignments
-from yasuki_core.engine.rules.board.seats import cards_in_hand, cards_in_play, seat_controls_printed
+from yasuki_core.engine.rules.board.seats import (
+    cards_in_hand,
+    cards_in_play,
+    seat_controls_printed,
+    seat_named,
+)
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Arrange,
@@ -587,7 +592,7 @@ def _resolve_tanuki_band(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """The named player must discard a card, which they choose."""
-    named = next(player for player, info in game.table.seats.items() if info.name == chosen[0])
+    named = seat_named(game, chosen[0])
     return [DiscardFromHand(named, 1, seat, named)]
 
 
