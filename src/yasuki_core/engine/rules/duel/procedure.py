@@ -54,14 +54,15 @@ def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duel
 def declare_duel(
     game: GameState,
     *,
-    challenger: PlayerId,
-    challenged: PlayerId,
     challenger_duelist: str,
     challenged_duelist: str,
     source: str,
 ) -> None:
     """Begin a duel between the two named Personalities and open the focusing, whose first option
     belongs to the challenged seat (CR, Duel).
+
+    The two seats are the duelists' own controllers, read from the cards rather than passed in, so
+    they cannot disagree with the Personalities they belong to.
 
     Do nothing where :func:`~.challenge_is_legal` refuses the challenge, which is the CR's own
     wording: such a challenge does not happen, rather than happening and failing.
@@ -75,6 +76,8 @@ def declare_duel(
     """
     if not challenge_is_legal(game, challenger_duelist, challenged_duelist):
         return
+    challenger = game.table.cards_by_id[challenger_duelist].owner
+    challenged = game.table.cards_by_id[challenged_duelist].owner
     duel = DuelRecord(
         challenger=challenger,
         challenged=challenged,

@@ -940,8 +940,8 @@ class Fear(AttackEffect):
 class StartDuel(Effect):
     """Have ``challenger`` challenge ``challenged`` to a duel, and open its focusing.
 
-    The seats are the two Personalities' own, so a card creating a duel names the duelists and
-    nothing else.
+    A card creating a duel names the two Personalities and nothing else. No duel happens where the
+    challenge is illegal or either card has left play (CR, Challenge).
 
     Attributes
     ----------
@@ -966,14 +966,10 @@ class StartDuel(Effect):
         # would close that cycle.
         from yasuki_core.engine.rules.duel.procedure import declare_duel
 
-        challenger = game.table.cards_by_id[self.challenger]
-        challenged = game.table.cards_by_id[self.challenged]
         declare_duel(
             game,
-            challenger=challenger.owner,
-            challenged=challenged.owner,
-            challenger_duelist=challenger.id,
-            challenged_duelist=challenged.id,
+            challenger_duelist=self.challenger,
+            challenged_duelist=self.challenged,
             source=self.source_card_id,
         )
         return []

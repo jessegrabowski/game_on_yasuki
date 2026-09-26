@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import procedure
 from yasuki_core.engine.rules.duel.records import DuelStep
 from yasuki_core.engine.rules.effects import StartDuel
+from yasuki_core.engine.rules.triggers import apply_effect
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DECK_TOP,
@@ -254,8 +255,6 @@ def test_a_challenge_between_one_players_own_personalities_never_happens():
 
         procedure.declare_duel(
             session.game,
-            challenger=P1,
-            challenged=P1,
             challenger_duelist="challenger",
             challenged_duelist="ally",
             source="challenger",
@@ -272,8 +271,6 @@ def test_a_challenge_to_a_card_that_is_not_a_personality_never_happens():
 
         procedure.declare_duel(
             session.game,
-            challenger=P1,
-            challenged=P2,
             challenger_duelist="challenger",
             challenged_duelist="market",
             source="challenger",
@@ -288,14 +285,25 @@ def test_a_challenge_to_a_card_that_has_left_play_never_happens():
 
         procedure.declare_duel(
             session.game,
-            challenger=P1,
-            challenged=P2,
             challenger_duelist="challenger",
             challenged_duelist="gone",
             source="challenger",
         )
 
         assert session.game.duel is None
+
+
+def test_a_duel_whose_target_left_play_starts_no_duel_from_the_effect():
+    # The route a card takes. The effect reads no card off the table itself, so a Personality
+    # destroyed between being targeted and the duel resolving refuses the challenge rather than
+    # raising out of the engine.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game()
+
+        apply_effect(session.game, StartDuel("challenger", "gone", "challenger"))
+
+        assert session.game.duel is None
+        assert not [key for key in session.game.table.zones if key.role is ZoneRole.FOCUS]
 
 
 def test_the_duel_replays_from_its_tape():

@@ -271,8 +271,6 @@ def _duel_on_a_bare_game():
     put_in_play(game, personality("rival", owner=P2))
     procedure.declare_duel(
         game,
-        challenger=P1,
-        challenged=P2,
         challenger_duelist="challenger",
         challenged_duelist="rival",
         source="challenger",
