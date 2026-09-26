@@ -199,7 +199,6 @@ numpydoc_xref_aliases = {
     "Zone": "yasuki_core.engine.zones.Zone",
     "ZoneKey": "yasuki_core.engine.table.ZoneKey",
     "effective_gold_production": "yasuki_core.engine.rules.gold.production.effective_gold_production",
-    "legacy_key": "yasuki_core.engine.rules.legality.legacy_key",
     "recruit_cost": "yasuki_core.engine.rules.legality.recruit_cost",
     "submit": "yasuki_core.engine.rules.turn.action_sequence.submit",
 }

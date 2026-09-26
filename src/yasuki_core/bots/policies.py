@@ -7,13 +7,13 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
     Equip,
-    Legacy,
     Pass,
     Recruit,
 )
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE, is_cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
+from yasuki_core.engine.rules.rulebook.legacy import is_legacy
 from yasuki_core.bots.agents import PayingAgent
 from yasuki_core.bots.hints import ABILITY_HINTS, optional_cost_answer
 from yasuki_core.bots.queries import (
@@ -140,7 +140,7 @@ class EconomicLegacyPolicy:
         self._buying = EconomicPolicy()
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
-        legacy = next((action for action in actions if isinstance(action, Legacy)), None)
+        legacy = next((action for action in actions if is_legacy(action)), None)
         if legacy is not None and _legacy_worth_taking(view):
             return legacy
         return self._buying.choose(view, actions)
@@ -250,7 +250,7 @@ class GoldRushPolicy:
         cycle = next((action for action in actions if is_cycle(action)), None)
         if cycle is not None and _barren_province_cards(view):
             return cycle
-        legacy = next((action for action in actions if isinstance(action, Legacy)), None)
+        legacy = next((action for action in actions if is_legacy(action)), None)
         if legacy is not None and _legacy_worth_taking(view):
             return legacy
         ability = _worthwhile_ability(view, actions)

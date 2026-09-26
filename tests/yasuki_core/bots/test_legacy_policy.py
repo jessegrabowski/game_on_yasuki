@@ -1,12 +1,13 @@
 from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Legacy, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.bots.agents import LegacyAgent, PayingAgent
 from yasuki_core.engine.rules.rulebook.legacy import (
     BANISH_RESOLVER,
     FIND_RESOLVER,
     PLACE_RESOLVER,
+    is_legacy,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
@@ -64,7 +65,7 @@ def test_it_takes_legacy_when_the_pool_beats_the_board():
     session = _dynasty_phase()
     province_card(session.game, "onboard", seat=P1, gold_cost=3, gold_production=2)
 
-    assert _choose(session, [_legacy_card("buried", production=5)]) == Legacy()
+    assert is_legacy(_choose(session, [_legacy_card("buried", production=5)]))
 
 
 def test_it_declines_when_the_board_already_matches_the_pool():
@@ -72,14 +73,14 @@ def test_it_declines_when_the_board_already_matches_the_pool():
     session = _dynasty_phase()
     province_card(session.game, "onboard", seat=P1, gold_cost=3, gold_production=3)
 
-    assert _choose(session, [_legacy_card("buried", production=3)]) != Legacy()
+    assert not is_legacy(_choose(session, [_legacy_card("buried", production=3)]))
 
 
 def test_it_declines_when_the_board_beats_the_pool():
     session = _dynasty_phase()
     province_card(session.game, "onboard", seat=P1, gold_cost=3, gold_production=5)
 
-    assert _choose(session, [_legacy_card("buried", production=2)]) != Legacy()
+    assert not is_legacy(_choose(session, [_legacy_card("buried", production=2)]))
 
 
 def test_an_empty_pool_vetoes_legacy_however_bare_the_board():
@@ -87,7 +88,7 @@ def test_an_empty_pool_vetoes_legacy_however_bare_the_board():
     even with no producer in sight the seat must not reach for it."""
     session = _dynasty_phase()
 
-    assert _choose(session, []) != Legacy()
+    assert not is_legacy(_choose(session, []))
 
 
 def test_it_buys_like_the_economic_policy_when_it_does_not_take_legacy():
@@ -174,5 +175,5 @@ def test_a_driven_game_takes_legacy_and_runs_to_the_turn_limit():
     for step in run_game(session, controls, turn_limit=4):
         log.append(step)
 
-    assert any(isinstance(getattr(step, "action", None), Legacy) for step in log)
+    assert any(is_legacy(getattr(step, "action", None)) for step in log)
     assert not session.game.game_over  # no whiff: the search always had something to find

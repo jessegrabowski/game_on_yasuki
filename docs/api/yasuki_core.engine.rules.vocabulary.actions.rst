@@ -14,7 +14,6 @@ yasuki_core.engine.rules.vocabulary.actions
     DiscardToInterrupt
     Equip
     Inheritance
-    Legacy
     Lobby
     Pass
     PlayInterrupt

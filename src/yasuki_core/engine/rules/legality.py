@@ -25,7 +25,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DiscardToInterrupt,
     Equip,
     Inheritance,
-    Legacy,
     Lobby,
     Pass,
     PlayInterrupt,
@@ -41,7 +40,7 @@ from yasuki_core.engine.rules.board.queries import (
     province_cards,
     units_at,
 )
-from yasuki_core.engine.rules.board.seats import cards_in_hand, seat_stronghold
+from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.rulebook.equip import equip_targets
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -175,7 +174,6 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_recruits(game, seat),
         *_equips(game, seat),
         *_strategies(game, seat),
-        *_legacy(game, seat),
         *_inheritance(game, seat),
         *_lobby(game, seat),
         *_favor_abilities(game, seat),
@@ -195,8 +193,6 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
     match action:
         case Pass():
             return True
-        case Legacy():
-            return bool(_legacy(game, seat))
         case Inheritance():
             return bool(_inheritance(game, seat))
         case ActivateAbility(card_id=card_id):
@@ -315,20 +311,9 @@ def _favor_abilities(game: GameState, seat: PlayerId) -> list[Action]:
     return actions
 
 
-def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
-    """The Legacy ability when the seat can take it: once per turn, and only with a card in hand to
-    pay the banish cost. Offered even when no Legacy card can be found. The rules make the whiff a
-    loss instead of hiding the option, which would leak face-down province contents."""
-    if not permits(game, seat, ACTION_TIMINGS[Legacy]):
-        return []
-    if game.has_used(legacy_key(seat, game.turn)):
-        return []
-    return [Legacy()] if cards_in_hand(game, seat) else []
-
-
 def inheritance_key(seat: PlayerId) -> str:
     """The once-per-*game* usage key for a seat's Inheritance ability. Unscoped by turn, unlike
-    :func:`~.legacy_key`, because the ability is spent for the whole game."""
+    :func:`~.seat_once_key`, because the ability is spent for the whole game."""
     return f"inheritance:{seat.name}"
 
 
@@ -490,12 +475,6 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
     if seat_alignments(game, seat).isdisjoint(card_alignments(card)):
         return False
     return not game.has_used(proclaim_key(seat, game.turn))
-
-
-def legacy_key(seat: PlayerId, turn: int) -> str:
-    """The once-per-turn usage key for a seat's Legacy ability, scoped to the turn so it resets each
-    turn without clearing ``GameState.once_per``."""
-    return f"legacy:{seat.name}:{turn}"
 
 
 def is_legacy_card(game: GameState, card: L5RCard) -> bool:

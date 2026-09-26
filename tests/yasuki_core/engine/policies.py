@@ -1,7 +1,7 @@
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
-    Legacy,
+    ActivateAbility,
     Pass,
     Recruit,
 )
@@ -39,9 +39,11 @@ class RecruitElseDiscard:
 
 
 class Cheater:
-    """Chooses an action it was never offered, so a driver's refusal can be tested."""
+    """Chooses an action it was never offered, so a driver's refusal can be tested: an ability on a
+    card no table holds."""
 
     name = "cheater"
+    action = ActivateAbility("never-dealt")
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
-        return Legacy() if Legacy() not in actions else Pass()
+        return self.action

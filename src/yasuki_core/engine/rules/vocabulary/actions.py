@@ -77,14 +77,6 @@ class Recruit:
 
 
 @dataclass(frozen=True, slots=True)
-class Legacy:
-    """Take the Legacy rulebook ability (Dynasty, once per turn): banish a card from hand to search
-    your dynasty deck and provinces for a Legacy card and place it face-up in a province. Failing
-    to find one loses the game. The banished card and the placement province are chosen through the
-    decisions the action raises, so the action itself carries no target."""
-
-
-@dataclass(frozen=True, slots=True)
 class Inheritance:
     """Take the Inheritance rulebook ability (Dynasty, once per game, only if you did not go first):
     turn your Stronghold over to give a Holding you control +3 Gold Production for the turn. The
@@ -223,7 +215,6 @@ Action = (
     | Recruit
     | PlayStrategy
     | Equip
-    | Legacy
     | ActivateAbility
     | Inheritance
     | Lobby
@@ -243,7 +234,6 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     Recruit: ActionTiming.DYNASTY,
     # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.
     Equip: ActionTiming.OPEN,
-    Legacy: ActionTiming.DYNASTY,
     Inheritance: ActionTiming.DYNASTY,
     DeclareAttack: ActionTiming.ATTACK,
     PlayInterrupt: ActionTiming.INTERRUPT,

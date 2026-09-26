@@ -16,7 +16,6 @@ yasuki_core.engine.rules.legality
     is_legacy_card
     is_legal
     legacy_candidates
-    legacy_key
     legacy_search_pool
     legal_actions
     legal_targets

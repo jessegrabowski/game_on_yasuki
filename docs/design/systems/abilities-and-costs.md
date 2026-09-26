@@ -126,9 +126,9 @@ every face-up Province card. {func}`~.register_location_ability` files it under 
 `key` for the same reason a keyword ability does.
 
 Every rulebook ability sets `Ability.from_rulebook`, whether a keyword confers it, a location
-does, or it sits on a proxy in a seat's rulebook zone as Cycle does. Each is a player ability, so
-it plays no card, takes no keyword from the card it sits on, and is not announced as printed. A
-keyword ability that leaves `from_rulebook` unset is refused when it is built.
+does, or it sits on a proxy in a seat's rulebook zone as Cycle and Legacy do. Each is a player
+ability, so it plays no card, takes no keyword from the card it sits on, and is not announced as
+printed. A keyword ability that leaves `from_rulebook` unset is refused when it is built.
 
 ## What narrows a target list
 
