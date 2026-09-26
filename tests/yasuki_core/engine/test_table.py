@@ -10,7 +10,7 @@ from yasuki_core.engine.table import (
     Location,
     unit_members,
 )
-from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.engine.zones import FocusZone, ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
@@ -131,6 +131,16 @@ def test_validate_rejects_deck_with_non_play_side():
 
     with pytest.raises(ValueError, match="FATE or DYNASTY"):
         table.validate()
+
+
+def test_focus_zone_validates_without_an_idx():
+    table = TableState.empty_two_seat()
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.FOCUS)] = FocusZone(owner=PlayerId.P1)
+    card = L5RCard.of(CardPrint, id="f1", name="F", side=Side.FATE, owner=PlayerId.P1)
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.FOCUS)].add(card)
+    table.cards_by_id["f1"] = card
+
+    table.validate()
 
 
 def test_province_zone_keyed_by_idx_validates():

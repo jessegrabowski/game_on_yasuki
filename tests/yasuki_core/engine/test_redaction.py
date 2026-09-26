@@ -4,7 +4,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos, Location
-from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.engine.zones import FocusZone, ProvinceZone
 from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -37,6 +37,8 @@ def _view_in_zone(role, card, viewer, owner=P1):
     key = ZoneKey(owner, role, 0) if role is ZoneRole.PROVINCE else ZoneKey(owner, role)
     if role is ZoneRole.PROVINCE:
         table.zones[key] = ProvinceZone(owner=owner)
+    elif role is ZoneRole.FOCUS:
+        table.zones[key] = FocusZone(owner=owner)
     table.zones[key].cards.append(card)
     table.cards_by_id[card.id] = card
     return redact(table, viewer).zones[key].cards[0]
@@ -145,6 +147,39 @@ def test_face_down_province_is_a_back_to_everyone_including_owner(viewer):
 def test_face_up_province_is_visible_to_everyone(viewer):
     card = _card("d1", side=Side.DYNASTY, owner=P1, face_up=True)
     assert not _hidden(_view_in_zone(ZoneRole.PROVINCE, card, viewer))
+
+
+@pytest.mark.parametrize("viewer", [P1, P2])
+def test_a_face_down_focused_card_is_a_back_to_a_viewer_not_peeking_it(viewer):
+    # The focusing area grants no visibility of its own: every read of a focused card is a peek.
+    card = _card("f1", owner=P1, face_up=False)
+    assert _hidden(_view_in_zone(ZoneRole.FOCUS, card, viewer))
+
+
+def test_a_focused_card_is_readable_by_its_owner_alone():
+    card = _card("f1", owner=P1, face_up=False, peekers=frozenset({P1}))
+
+    assert not _hidden(_view_in_zone(ZoneRole.FOCUS, card, P1))
+    assert _hidden(_view_in_zone(ZoneRole.FOCUS, card, P2))
+
+
+def test_a_card_focused_from_hand_is_flagged_as_its_owners_peek():
+    card = _card("f1", owner=P1, face_up=False, peekers=frozenset({P1}))
+    table = TableState.empty_two_seat()
+    key = ZoneKey(P1, ZoneRole.FOCUS)
+    table.zones[key] = FocusZone(owner=P1)
+    table.zones[key].cards.append(card)
+    table.cards_by_id[card.id] = card
+
+    assert redact(table, P1).peeked_ids == frozenset({"f1"})
+    assert redact(table, P2).peeked_ids == frozenset()
+
+
+@pytest.mark.parametrize("viewer", [P1, P2])
+def test_a_revealed_focused_card_is_visible_to_everyone(viewer):
+    # What a strike leaves behind: face up, and no longer a private read.
+    card = _card("f1", owner=P1, face_up=True)
+    assert not _hidden(_view_in_zone(ZoneRole.FOCUS, card, viewer))
 
 
 @pytest.mark.parametrize(

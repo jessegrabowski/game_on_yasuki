@@ -101,6 +101,21 @@ class RulebookZone(Zone):
 
 
 @dataclass(slots=True)
+class FocusZone(Zone):
+    """A seat's focusing area in a duel: the cards it has focused, face down while the duel is
+    still being focused and turned face up by the strike.
+
+    Any side is allowed. Every card focused under the current rules is a Fate card, but a zone that
+    refuses a card would lose it silently, since a move reports its refusal nowhere the caller
+    reads.
+    """
+
+    name: str = "Focus"
+    allowed_side: Side | None = None
+    max_capacity: float = math.inf
+
+
+@dataclass(slots=True)
 class DynastyBanishZone(Zone):
     name: str = "Dynasty Banish"
     allowed_side: Side | None = Side.DYNASTY

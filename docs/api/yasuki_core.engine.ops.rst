@@ -12,6 +12,7 @@ yasuki_core.engine.ops
     attach_to_personality
     attach_to_province
     bring_to_top
+    create_focus_area
     create_province
     destroy_province
     detach
@@ -21,6 +22,7 @@ yasuki_core.engine.ops
     move_card
     move_unit
     remove_card
+    remove_focus_area
     remove_from_location
     reorder_in_hand
     reorder_in_pile

@@ -1,5 +1,8 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
+from yasuki_core.engine.rules.duel.records import DuelRecord
 from yasuki_core.engine.rules.state import GameState, rules_at_start
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.vocabulary.decisions import DiscardToHandSize
@@ -56,6 +59,34 @@ def test_awaiting_decision_tracks_the_pending_request():
     game = _game()
     game.pending = DiscardToHandSize(PlayerId.P1, ("c1",), count=1)
     assert game.awaiting_decision is True
+
+
+def _duel() -> DuelRecord:
+    return DuelRecord(
+        challenger=PlayerId.P1,
+        challenged=PlayerId.P2,
+        challenger_duelist="kakita",
+        challenged_duelist="bayushi",
+        source="sanctioned-duel",
+    )
+
+
+def test_a_game_carries_one_duel_at_a_time():
+    game = _game()
+    assert game.duel is None
+
+    duel = _duel()
+    game.begin_duel(duel)
+
+    assert game.duel is duel
+
+
+def test_a_second_duel_inside_the_first_is_refused():
+    game = _game()
+    game.begin_duel(_duel())
+
+    with pytest.raises(RuntimeError, match="already being fought"):
+        game.begin_duel(_duel())
 
 
 def test_use_once_is_claimed_exactly_once():
