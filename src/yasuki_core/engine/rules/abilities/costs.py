@@ -97,6 +97,8 @@ def priced_cost(game: GameState, purchase: Purchase, effects: list[Effect]) -> l
     A variable amount carries what remains, and keeps on offer only the amounts the seat can still
     pay once the fixed Gold is paid.
     """
+    if not any(isinstance(effect, PayGold | AskAmount) for effect in effects):
+        return list(effects)
     discount = unspent_action_discount(game, purchase)
     priced: list[Effect] = []
     for effect in effects:
@@ -107,6 +109,8 @@ def priced_cost(game: GameState, purchase: Purchase, effects: list[Effect]) -> l
                 continue
             effect = replace(effect, amount=effect.amount - taken)
         priced.append(effect)
+    if not any(isinstance(effect, AskAmount) for effect in priced):
+        return priced
     fixed = sum(effect.amount for effect in priced if isinstance(effect, PayGold))
     budget = reachable_gold(game, purchase.seat) - fixed
     return [
