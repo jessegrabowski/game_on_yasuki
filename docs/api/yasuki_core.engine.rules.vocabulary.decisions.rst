@@ -9,7 +9,6 @@ yasuki_core.engine.rules.vocabulary.decisions
 
     ArrangeCards
     AssignUnits
-    BanishForLegacy
     ChooseAbilityTarget
     ChooseAmount
     ChooseBattlefield
@@ -22,7 +21,6 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseInterruptEffect
     ChooseInterruptTarget
     ChooseInvestAmount
-    ChooseLegacyCard
     ChooseLobbyTarget
     ChooseOption
     ChoosePayment
@@ -32,7 +30,6 @@ yasuki_core.engine.rules.vocabulary.decisions
     DiscardToHandSize
     FocusOrStrike
     LeaveBowed
-    PlaceLegacy
 
 .. rubric:: Functions
 

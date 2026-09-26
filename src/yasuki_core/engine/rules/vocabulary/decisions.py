@@ -239,35 +239,6 @@ def _chooses_exactly_one(request: "DecisionRequest", response: DecisionResponse)
 
 
 @dataclass(frozen=True, slots=True)
-class BanishForLegacy(DecisionRequest):
-    """The seat must banish one card from hand to pay for the Legacy ability. The candidates are the
-    seat's hand. The chosen card is removed from the game. Not cancellable: announcing Legacy
-    commits to the cost."""
-
-    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return "Banish a card from hand to search for a Legacy card"
-
-    @property
-    def confirm_label(self) -> str:
-        return "Banish"
-
-    def accepts(self, response: DecisionResponse) -> bool:
-        return _chooses_exactly_one(self, response)
-
-
-@dataclass(frozen=True, slots=True)
-class ChooseLegacyCard(DecisionRequest):
-    """The seat must choose which Legacy card its search found. The candidates are the Legacy cards
-    in its dynasty deck and provinces. The chosen card is placed into a province next."""
-
-    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return "Search your deck for a Legacy card"
-
-    def accepts(self, response: DecisionResponse) -> bool:
-        return _chooses_exactly_one(self, response)
-
-
-@dataclass(frozen=True, slots=True)
 class ChooseInvestAmount(DecisionRequest):
     """The seat must choose how much to Invest while recruiting a variable-Invest holding. The
     candidates are the affordable amounts rendered as strings. The chosen amount is added to the
@@ -847,30 +818,6 @@ class ChooseDistribution(DecisionRequest):
     def cancellable(self) -> bool:
         """Backing out unwinds the whole action that raised it, cost included."""
         return True
-
-
-@dataclass(frozen=True, slots=True)
-class PlaceLegacy(DecisionRequest):
-    """The seat must choose which province to place the found Legacy card into, discarding the card
-    already there. The candidates are the province cards eligible to be displaced.
-
-    Attributes
-    ----------
-    legacy_card_id : str
-        The Legacy card that will be placed face-up into the chosen province.
-    """
-
-    legacy_card_id: str
-
-    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return "Choose a province to place the Legacy card, discarding the card there"
-
-    @property
-    def confirm_label(self) -> str:
-        return "Place"
-
-    def accepts(self, response: DecisionResponse) -> bool:
-        return _chooses_exactly_one(self, response)
 
 
 @dataclass(frozen=True, slots=True)

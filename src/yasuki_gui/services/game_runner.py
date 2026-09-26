@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.rulebook import favor_abilities, favor_proxy
+from yasuki_core.engine.rules.rulebook.legacy import FIND_RESOLVER
 from yasuki_core.engine.rules.rulebook.recruit import PROCLAIM_GAINS
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
@@ -40,7 +41,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseLegacyCard,
+    ChooseCards,
     Confirm,
     DecisionRequest,
     DecisionResponse,
@@ -279,7 +280,7 @@ class GameRunner:
         table = self.session.game.table
         if any(card_id not in table.cards_by_id for card_id in pending.candidates):
             return None  # not cards at all. An Invest amount is answered by buttons
-        legacy = isinstance(pending, ChooseLegacyCard)
+        legacy = isinstance(pending, ChooseCards) and pending.resolver == FIND_RESOLVER
         if not legacy:
             reachable = self._on_the_board()
             if all(card_id in reachable for card_id in pending.candidates):

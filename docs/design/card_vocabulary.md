@@ -158,7 +158,6 @@ Legality with respect to game state is checked separately.
 
    AssignUnits
    ChooseBattlefield
-   BanishForLegacy
    ChooseAbilityTarget
    ChooseAmount
    ChooseCards
@@ -171,14 +170,12 @@ Legality with respect to game state is checked separately.
    ChooseInvestAmount
    ChooseOption
    LeaveBowed
-   ChooseLegacyCard
    ChooseLobbyTarget
    ChoosePayment
    Confirm
    DecisionRequest
    DecisionResponse
    DiscardToHandSize
-   PlaceLegacy
 ```
 
 ## Deferred work
