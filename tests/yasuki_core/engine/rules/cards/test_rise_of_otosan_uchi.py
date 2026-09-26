@@ -1555,6 +1555,7 @@ def _ring_session_with_four_elements() -> EngineSession:
     [
         ("generic_ring", True),
         ("dark_ring_of_the_void_experienced", False),
+        ("dark_ring_of_air_experienced", False),
         ("legacy_of_fudo", False),
     ],
 )
@@ -1672,3 +1673,76 @@ def test_only_a_counting_earth_ring_completes_an_enlightenment(printed_id, wins)
     enforce_state_based_actions(session.game)
 
     assert session.game.game_over is wins
+
+
+# --- Dark Ring of Air (Experienced) ---
+
+
+def _air_game(*, in_play: bool, bowed_each: int = 3, first: PlayerId = P1) -> EngineSession:
+    """The Dark Ring of Air in P1's play or hand, with ``bowed_each`` bowed Personalities on each
+    side and one unbowed P2 Personality to target."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    ring = register(state, _ring_card("air", "dark_ring_of_air_experienced", Element.AIR))
+    if in_play:
+        put_in_play(state, ring)
+    else:
+        state.zones[ZoneKey(P1, ZoneRole.HAND)].add(ring)
+    bowed = [
+        put_in_play(state, personality(f"{seat.name}-bowed{index}", owner=seat))
+        for seat in (P1, P2)
+        for index in range(bowed_each)
+    ]
+    put_in_play(state, personality("target", owner=P2))
+    session = EngineSession.start(state, first)
+    for card in bowed:  # after the start, which straightens the active seat's board
+        session.game.table.cards_by_id[card.id].bow()
+    return session
+
+
+def test_the_dark_air_enters_among_three_bowed_personalities_a_side_and_costs_three_honor():
+    session = _air_game(in_play=False)
+    before = _honor(session, P1)
+
+    session.act(P1, PlayStrategy("air", "enter"))
+    pay(session, P1)
+
+    assert session.game.table.cards_by_id["air"] in session.game.table.battlefield.cards
+    assert _honor(session, P1) == before - 3
+
+
+def test_the_dark_air_is_withheld_while_a_side_has_fewer_than_three_bowed():
+    session = _air_game(in_play=False, bowed_each=2)
+
+    assert PlayStrategy("air", "enter") not in session.legal_actions(P1)
+
+
+def test_the_dark_air_keeps_its_target_bowed_until_their_action_phase_begins():
+    session = _air_game(in_play=True, bowed_each=0)
+
+    session.act(P1, ActivateAbility("air", "air"))
+    session.submit(P1, DecisionResponse(("target",)))
+    end_turn(session)
+
+    target = session.game.table.cards_by_id["target"]
+    assert session.game.active is P2 and target.bowed
+    assert "target" not in session.game.straighten_delayed
+    resolve_effects(session.game, [Straighten("target")])
+    assert not target.bowed
+
+
+def test_the_dark_air_holds_a_target_that_was_already_bowed():
+    session = _air_game(in_play=True, bowed_each=1)
+
+    session.act(P1, ActivateAbility("air", "air"))
+    session.submit(P1, DecisionResponse(("P2-bowed0",)))
+
+    assert "P2-bowed0" in session.game.straighten_delayed
+
+
+def test_the_dark_air_is_withheld_on_another_players_turn():
+    session = _air_game(in_play=True, bowed_each=0, first=P2)
+    session.act(P2, Pass())
+
+    assert session.game.round.priority is P1
+    assert ActivateAbility("air", "air") not in session.legal_actions(P1)

@@ -33,7 +33,10 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
+    BEGINNING_OF_ACTION_PHASE,
+    END_OF_ACTION_PHASE,
     END_OF_TURN,
+    Moment,
     Phase,
     PHASE_TIMINGS,
     RESPONSE_TIMINGS,
@@ -136,7 +139,7 @@ def advance(game: GameState) -> None:
         raise RuntimeError("cannot advance while a decision is pending")
     game.clear_gold()
     if game.phase is Phase.ACTION:
-        _lift_straighten_delays(game)
+        _lift_straighten_delays(game, END_OF_ACTION_PHASE)
     elif game.phase is Phase.BATTLE:
         resolution.end_attack_phase(game)
     following = next_phase(game.phase)
@@ -155,8 +158,9 @@ def _announce_phase(game: GameState) -> None:
     game.stack.append(triggers.AnnounceEvent(PhaseStarted(game.phase)))
 
 
-def _lift_straighten_delays(game: GameState) -> None:
-    """Free the active seat's cards that were forbidden to straighten, now its Action Phase is over.
+def _lift_straighten_delays(game: GameState, moment: Moment) -> None:
+    """Free the active seat's cards whose prohibition on straightening lifts at ``moment``, an edge
+    of its Action Phase.
 
     Only a *later* Action Phase than the one the delay began on counts: a card bowed to pay for an
     Action is forbidden until the seat's next Action Phase, not the rest of this one. A card that
@@ -164,11 +168,28 @@ def _lift_straighten_delays(game: GameState) -> None:
     """
     by_id = game.table.cards_by_id
     game.straighten_delayed = {
-        card_id: imposed
-        for card_id, imposed in game.straighten_delayed.items()
+        card_id: delay
+        for card_id, delay in game.straighten_delayed.items()
         if (card := by_id.get(card_id)) is not None
-        and not (card.owner is game.active and game.turn > imposed)
+        and not (delay.until == moment and card.owner is game.active and game.turn > delay.imposed)
     }
+
+
+@dataclass(frozen=True, slots=True)
+class LiftStraightenDelays:
+    """Free the cards whose prohibition on straightening lifts at ``moment``, queued so it runs at
+    that moment.
+
+    Attributes
+    ----------
+    moment : Moment
+        The edge of the Action Phase being reached.
+    """
+
+    moment: Moment
+
+    def resume(self, game: GameState) -> None:
+        _lift_straighten_delays(game, self.moment)
 
 
 def forget_action(game: GameState) -> None:
@@ -384,10 +405,11 @@ def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
     The announcements are separate instants (CR), so each is its own cascade: the Province reveal,
     the turn's start, then the Action Phase's start. The round opens last, so a question asked while
     opening is answered in the previous round and hands no opportunity on. The straighten
-    prohibition outlives this step: it lifts when the Action Phase this straighten precedes has
-    ended.
+    prohibition outlives this step: it lifts as the Action Phase this straighten precedes begins, or
+    once it has ended, whichever the delay names.
     """
     _announce_phase(game)
+    game.stack.append(LiftStraightenDelays(BEGINNING_OF_ACTION_PHASE))
     game.stack.append(AnnounceTurnStart())
     game.stack.append(ApplyEffects((RevealProvinces(game.active),)))
     straightened = ops.straighten(

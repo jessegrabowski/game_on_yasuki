@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     BATTLE_SEGMENT_TIMINGS,
     Boundary,
+    BEGINNING_OF_ACTION_PHASE,
     END_OF_TURN,
     FIRED_MOMENTS,
     Moment,
@@ -737,6 +738,30 @@ def test_a_straighten_delay_lifts_after_its_own_controller_s_action_phase():
 
     _advance_turns(session, 2)
     assert not session.game.table.cards_by_id["mine"].bowed
+
+
+def test_a_delay_until_the_action_phase_begins_outlives_the_straighten_and_lifts_at_the_phase():
+    session = EngineSession.start(dealt_table(hand=0), PlayerId.P2)
+    mine = put_in_play(session.game, holding("mine", owner=PlayerId.P2))
+    mine.bow()
+    delay = DelayStraighten("mine", until=BEGINNING_OF_ACTION_PHASE)
+    triggers.resolve_effects(session.game, [delay])
+
+    _advance_turns(session, 1)  # P1's turn: not the delayed card's controller's
+    assert "mine" in session.game.straighten_delayed
+
+    _advance_turns(session, 1)  # P2's turn opens: the straighten is blocked, then the phase begins
+    assert session.game.phase is Phase.ACTION
+    assert session.game.table.cards_by_id["mine"].bowed
+    assert "mine" not in session.game.straighten_delayed
+
+
+def test_a_straighten_delay_lifts_only_at_the_action_phase_edges():
+    session = EngineSession.start(dealt_table(hand=0), PlayerId.P1)
+    put_in_play(session.game, holding("mine", owner=PlayerId.P1))
+
+    with pytest.raises(ValueError, match="cannot lift"):
+        triggers.resolve_effects(session.game, [DelayStraighten("mine", until=END_OF_TURN)])
 
 
 def test_a_card_forbidden_to_straighten_is_not_straightened_by_an_effect():

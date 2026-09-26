@@ -52,8 +52,20 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     SeatAbilityGrant,
     Stat,
 )
-from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, seat_once_key
-from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, RoundKind, flow_resolves
+from yasuki_core.engine.rules.state import (
+    GameState,
+    StraightenDelay,
+    claim_once_per_turn,
+    seat_once_key,
+)
+from yasuki_core.engine.rules.turn.structure import (
+    BEGINNING_OF_ACTION_PHASE,
+    END_OF_ACTION_PHASE,
+    END_OF_TURN,
+    Moment,
+    RoundKind,
+    flow_resolves,
+)
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     UNPLACED_BOARD_POS,
@@ -1889,18 +1901,34 @@ def adjusted_honor_change(amount: int, adjustment: int) -> int:
 
 @dataclass(frozen=True, slots=True)
 class DelayStraighten(Effect):
-    """Forbid ``card_id`` from straightening until its controller's next Action Phase has ended.
+    """Forbid ``card_id`` from straightening until ``until`` in its controller's next Action Phase.
 
     Blocks any attempt to straighten the card while it holds, not just the turn-start straighten.
-    Imposed, unlike the printed "May remain bowed" its controller chooses each turn."""
+    Imposed, unlike the printed "May remain bowed" its controller chooses each turn.
+
+    Attributes
+    ----------
+    card_id : str
+        The card forbidden to straighten.
+    until : Moment, optional
+        The edge of that Action Phase that lifts the prohibition, its beginning or its end. Default
+        its end, as "until after their next Action Phase" reads.
+    """
 
     card_id: str
+    until: Moment = END_OF_ACTION_PHASE
 
     def describe(self) -> str:
+        if self.until == BEGINNING_OF_ACTION_PHASE:
+            return f"{self.card_id} may not straighten until its next Action Phase begins"
         return f"{self.card_id} may not straighten until after its next Action Phase"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.straighten_delayed[self.card_id] = game.turn
+        """Raise ValueError for a moment other than the Action Phase's two edges, which is all the
+        turn lifts delays at."""
+        if self.until not in (BEGINNING_OF_ACTION_PHASE, END_OF_ACTION_PHASE):
+            raise ValueError(f"a straighten delay cannot lift at {self.until}")
+        game.straighten_delayed[self.card_id] = StraightenDelay(game.turn, self.until)
         return []
 
 
