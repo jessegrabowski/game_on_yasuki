@@ -29,7 +29,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
-from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
+from yasuki_core.engine.rules.effects import GainHonor, GrantNegation, TakeFavor
 from yasuki_core.engine.rules.vocabulary.game_events import ConditionFulfilled
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -38,7 +38,8 @@ from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, FavorDiscarded
-from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, RoundKind
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.players import Trait
 from yasuki_core.engine.rules.rulebook import proxies
@@ -391,6 +392,17 @@ def test_way_of_the_crane_draws_then_discards_as_a_trait(reacting):
     discard = game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
     assert "top" in {card.id for card in discard.cards}
     assert causes == [Trait("crane")]
+
+
+def test_way_of_the_crane_is_a_trait_and_escapes_a_negation_of_actions_from_strategies():
+    game = _crane_edict_in_play()
+    negation = Negation("ring", END_OF_TURN, source_kind=ActionPrint)
+    resolve_effects(game, [GrantNegation(negation)])
+    sequence.open_response_window(game)
+
+    action_sequence.perform(game, CRANE_DRAW)
+
+    assert _hand_ids(game) == ["held", "top"]
 
 
 def test_way_of_the_crane_does_not_offer_the_imperial_favor_as_its_discard():

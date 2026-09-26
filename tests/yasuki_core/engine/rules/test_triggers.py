@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Duration,
     LobbyModifier,
     Modifier,
+    Negation,
     Stat,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -63,6 +64,7 @@ from yasuki_core.engine.rules.triggers import (
     fire_all,
     lapse_ongoing,
     on,
+    reach_moment,
     resolve_delayed,
     resolve_effects,
     resume_paused_cascade,
@@ -1135,3 +1137,15 @@ def test_resolving_the_effects_held_for_the_turns_end_leaves_ongoing_records_in_
     resolve_delayed(game, END_OF_TURN)
 
     assert game.ongoing == [penalty]
+
+
+def test_reaching_a_moment_lapses_what_lasted_until_it_before_resolving_what_waited_for_it():
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm"))
+    game.ongoing.append(Negation("ring", END_OF_BATTLE, effect_kind=Bow, subject_id="farm"))
+    game.delayed = [(END_OF_BATTLE, Bow("farm"))]
+
+    reach_moment(game, END_OF_BATTLE)
+
+    assert game.ongoing == []
+    assert farm.bowed

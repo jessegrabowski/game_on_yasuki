@@ -4,6 +4,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.model import Ability, once_tag
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.effects import Effect
+from yasuki_core.engine.rules.negation import negate_from
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
@@ -95,6 +96,8 @@ class ApplyAbilityEffects:
             for target_id in self.target_ids
             for effect in ability.effects(game, source, game.table.cards_by_id[target_id])
         ]
+        if ability is not None and ability.acts_from_its_card:
+            effects = negate_from(game, source, effects)
         _resolve(game, effects, trait=ability is not None and ability.trait)
 
 
@@ -112,7 +115,7 @@ def defer_ability(game: GameState, card: L5RCard, ability: Ability, *, plays_car
         if ability.hits_every_target
         else SelectAbilityTarget(card.id, targets, ability.key)
     )
-    triggers.resolve_effects(game, ability.discounted_cost(game, card, plays_card=plays_card))
+    triggers.pay_costs(game, ability.discounted_cost(game, card, plays_card=plays_card))
 
 
 @dataclass(frozen=True, slots=True)
@@ -167,7 +170,10 @@ class ResolveAbility(Effect):
     def _build(self, game: GameState) -> tuple[Effect, ...]:
         source = game.table.cards_by_id[self.card_id]
         ability = ability_for(game, source, self.ability_key)
-        return tuple(ability.effects(game, source, game.table.cards_by_id[self.target_id]))
+        effects = ability.effects(game, source, game.table.cards_by_id[self.target_id])
+        if ability.acts_from_its_card:
+            effects = negate_from(game, source, effects)
+        return tuple(effects)
 
 
 def apply_ability_target(

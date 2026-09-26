@@ -290,12 +290,67 @@ class LobbyModifier:
     duration: Lifetime
 
 
+@dataclass(frozen=True, slots=True)
+class Negation:
+    """A continuous effect that negates the effects matching it while active (CR, Prevention), as
+    "negate the effects of actions from Strategies until the end of the phase" or "negate its
+    bowing (this turn)" has it. A criterion left None matches anything.
+
+    One naming a source negates the effects of actions from matching cards, and is read where such
+    an action hands over its effects, since only there is it known whose action they are. One
+    naming none negates every matching effect as it commits, whatever produced it. Neither reads a
+    cost, which is no effect (CR, Effects).
+
+    Attributes
+    ----------
+    source_id : str
+        The card the negation comes from, used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it
+        leaves play and to attribute the effect.
+    duration : Duration or Moment
+        When the negation stops applying.
+    source_kind : type, optional
+        The print class, such as ``ActionPrint`` for a Strategy, of the card whose actions' effects
+        are negated. Default None.
+    source_title : str, optional
+        The title of that card. Default None.
+    effect_kind : type, optional
+        The effect class negated, such as ``Bow`` for "bowing". Default None.
+    subject_id : str, optional
+        The card the negated effects act on, read off their ``card_id``. A negation naming one is
+        forgotten when that card leaves the table (CR, Card Memory Rule). Default None.
+    once : bool, optional
+        Whether the negation is spent by the first effect it negates, as "his next straightening"
+        is. Only one naming no source may be spent this way. Default False.
+    """
+
+    source_id: str
+    duration: Lifetime
+    source_kind: type | None = None
+    source_title: str | None = None
+    effect_kind: type | None = None
+    subject_id: str | None = None
+    once: bool = False
+
+    def __post_init__(self) -> None:
+        """Raise ValueError for a negation naming nothing it negates, or one naming a source that
+        is spent by its first use."""
+        if not self.names_a_source and self.effect_kind is None and self.subject_id is None:
+            raise ValueError("a negation names what it negates")
+        if self.names_a_source and self.once:
+            raise ValueError("only a negation naming no source is spent by its first use")
+
+    @property
+    def names_a_source(self) -> bool:
+        """Whether the negation is about whose action an effect comes from."""
+        return self.source_kind is not None or self.source_title is not None
+
+
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
 # Province's strength beside a stat change. Each is ongoing and lasts to the end of the turn
 # unless the card says otherwise. So they are recorded in one list and expire together (CR,
 # Duration of Effects). The four that name a card are forgotten when it leaves the table; the
-# four that name a condition, a Province slot or a player are not, because none of those is a
-# card that can leave it.
+# five that name a condition, a Province slot, a player or what an effect matches are not, because
+# none of those is a card that can leave it.
 Ongoing = (
     Modifier
     | ConditionalModifier
@@ -305,4 +360,5 @@ Ongoing = (
     | Minimum
     | ProvinceModifier
     | LobbyModifier
+    | Negation
 )

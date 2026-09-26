@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules import state_based_actions
+from yasuki_core.engine.rules.negation import negate_committed
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, RoundKind
 from yasuki_core.engine.rules.vocabulary.modifiers import (
@@ -28,6 +29,8 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Duration,
     Lifetime,
     LobbyModifier,
+    Negation,
+    Ongoing,
     ProvinceModifier,
     SeatAbilityGrant,
 )
@@ -378,6 +381,7 @@ def _advance(
     *,
     interruptible: bool,
     triggered: bool = False,
+    paying: bool = False,
 ) -> None:
     """Run the effect-and-trigger cascade to a fixpoint from an arbitrary resume point.
 
@@ -397,6 +401,11 @@ def _advance(
     is applied as returned, and a ``Then`` among the action's effects carries the flag to the
     deferred step.
 
+    Every other effect is checked against the negations in force as it commits, whatever produced
+    it, since a negation makes an effect fail to happen whenever it would occur (CR, Prevention).
+    ``paying`` says the effects in hand are a cost's payments instead, which are no effects (CR,
+    Effects), so no negation reaches them. What reacts to them is effects again.
+
     ``triggered`` says the effects in hand are a trigger's, so a decision among them is marked as
     the trigger's question, one that cannot be backed out of. The machine sets it itself once it
     fires a trigger for an event that has happened, and a stash or a ``Then`` carries it on to the
@@ -414,13 +423,16 @@ def _advance(
                     ApplyEffects(effect.effects, interruptible=interruptible, triggered=triggered)
                 )
                 continue
-            if interruptible and not isinstance(effect, InterruptingEffect):
-                effect = _modified(game, effect)
+            if not isinstance(effect, InterruptingEffect):
+                if interruptible:
+                    effect = _modified(game, effect)
+                if not paying:
+                    effect = negate_committed(game, effect)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
-                _stash(game, tuple(pending), firing, event, queue, interruptible, triggered)
+                _stash(game, tuple(pending), firing, event, queue, interruptible, triggered, paying)
                 request = effect.request(game)
                 game.pending = replace(request, triggered=True) if triggered else request
                 return
@@ -432,6 +444,7 @@ def _advance(
             _settle_state_based_actions(game, queue)
         effects = ()
         interruptible = False
+        paying = False
         if firing:
             card, trigger = firing.pop(0)
             _trace.append(f"  {card.printed_id} ({card.id}) reacts")
@@ -561,7 +574,8 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     Forgotten rather than skipped when read: a card can return to a Province, and a record merely
     filtered out would come back attached to the card that replaced it. One laid on a condition, a
     Province slot or a player is kept whatever happens: none of those is a card that can leave the
-    table.
+    table. A negation is forgotten with the card it names, and kept when it names none (CR, Card
+    Memory Rule).
     """
     if not game.ongoing:
         return
@@ -569,14 +583,18 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     for key, zone in game.table.zones.items():
         if key.role is ZoneRole.PROVINCE:
             on_table.update(card.id for card in zone.cards)
-    game.ongoing[:] = [
-        record
-        for record in game.ongoing
-        if isinstance(
-            record, ConditionalModifier | ProvinceModifier | LobbyModifier | SeatAbilityGrant
-        )
-        or record.target_id in on_table
-    ]
+    game.ongoing[:] = [record for record in game.ongoing if _names_no_card_off(record, on_table)]
+
+
+def _names_no_card_off(record: Ongoing, on_table: set[str]) -> bool:
+    """Whether ``record`` names no card that is off the table."""
+    match record:
+        case ConditionalModifier() | ProvinceModifier() | LobbyModifier() | SeatAbilityGrant():
+            return True
+        case Negation(subject_id=subject_id):
+            return subject_id is None or subject_id in on_table
+        case _:
+            return record.target_id in on_table
 
 
 def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None:
@@ -704,6 +722,9 @@ class ResumeCascade:
     triggered : bool, optional
         Whether the effects still to apply are a trigger's, so a decision among them is the
         trigger's question. Default False.
+    paying : bool, optional
+        Whether the effects still to apply are a cost's payments, which no negation reaches.
+        Default False.
     """
 
     effects: tuple[Effect, ...]
@@ -712,6 +733,7 @@ class ResumeCascade:
     queue: tuple[GameEvent, ...]
     interruptible: bool = False
     triggered: bool = False
+    paying: bool = False
 
     def resume(self, game: GameState) -> None:
         # An interrupting effect whose answer produces no effects of its own, a payment, say, leaves
@@ -728,10 +750,11 @@ def _stash(
     queue: list[GameEvent],
     interruptible: bool,
     triggered: bool,
+    paying: bool,
 ) -> None:
     remaining = tuple((card.id, trigger) for card, trigger in firing)
     game.stack.append(
-        ResumeCascade(effects, remaining, event, tuple(queue), interruptible, triggered)
+        ResumeCascade(effects, remaining, event, tuple(queue), interruptible, triggered, paying)
     )
 
 
@@ -752,6 +775,7 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
         list(item.queue),
         interruptible=item.interruptible,
         triggered=item.triggered,
+        paying=item.paying,
     )
 
 
@@ -831,14 +855,26 @@ def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
 def resolve_effects(game: GameState, effects: list[Effect], *, triggered: bool = False) -> None:
     """Apply ``effects`` and run the derived-event cascade the same way :func:`~.fire` does, so a
     triggered reaction to those effects still resolves. The effects are not an action's own, so
-    none is held at the Interrupt step: a cost, a rulebook procedure's effects, a trait's, and an
-    Interrupt's own effects all come through here. ``triggered`` says they are a trigger's, deferred
-    by a ``Then``, so a decision among them is the trigger's question.
+    none is held at the Interrupt step: a rulebook procedure's effects, a trait's, and an
+    Interrupt's own effects all come through here, and a cost through :func:`~.pay_costs`.
+    ``triggered`` says they are a trigger's, deferred by a ``Then``, so a decision among them is the
+    trigger's question.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "resolve_effects")
     _advance(game, tuple(effects), [], None, [], interruptible=False, triggered=triggered)
+
+
+def pay_costs(game: GameState, costs: list[Effect]) -> None:
+    """Pay ``costs`` and run the cascade their payment raises, as :func:`~.resolve_effects` does.
+    A cost is no effect (CR, Effects), so no negation reaches it, and a decision it pauses on keeps
+    the rest of it a cost when answered.
+
+    Raise ``RuntimeError`` if a decision is pending.
+    """
+    _refuse_mid_decision(game, "pay_costs")
+    _advance(game, tuple(costs), [], None, [], interruptible=False, paying=True)
 
 
 def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:

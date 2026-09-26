@@ -63,9 +63,9 @@ takes a target or a condition and a fixed value. A derived handler runs on every
 card while its card is in play, so it rejects the cards outside its scope before doing any other
 work and keeps nothing between calls.
 
-## The seven kinds of ongoing effect
+## The kinds of ongoing effect
 
-A recorded change is one of seven things, and which one a card needs is decided by what it rests
+A recorded change is one of the kinds below, and which one a card needs is decided by what it rests
 on.
 
 {class}`~.Modifier` adjusts one stat on one card. It is the common case and everything else is a
@@ -103,6 +103,17 @@ so a `Modifier` cannot name one at all.
 {class}`~.LobbyModifier` rests on a player. A Lobby Bonus is not a property of any card, and the
 datasheet adds that an adjustment to Family Honor through one is neither an Honor gain nor an
 Honor loss.
+
+{class}`~.Negation` changes no stat. It negates the effects that match it (CR, Prevention): those
+of actions from a kind or title of card, or those of an effect class or acting on one card. One
+naming a source is read where an action from a card hands over its effects, since only there is it
+known whose action they are, and a trait or a rulebook ability is no action from its card. One
+naming none is read as every effect commits, a trait's, a rulebook procedure's and a delayed one's
+as much as an action's. Neither reaches a cost, which is no effect (CR, Effects). One naming a card
+is forgotten when the card leaves the table (CR, Card Memory Rule). A `once` negation is spent by
+the first effect it negates, as "his next straightening" is, and only one naming no source may be.
+{card}`Dark Ring of Water` names Strategies as a source and {card}`Way of the Crab` names its
+Fortification's bowing.
 
 ## Adding a condition
 

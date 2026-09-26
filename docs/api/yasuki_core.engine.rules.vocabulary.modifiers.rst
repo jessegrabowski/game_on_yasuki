@@ -15,6 +15,7 @@ yasuki_core.engine.rules.vocabulary.modifiers
     LobbyModifier
     Minimum
     Modifier
+    Negation
     ProvinceModifier
     SeatAbilityGrant
     Stat

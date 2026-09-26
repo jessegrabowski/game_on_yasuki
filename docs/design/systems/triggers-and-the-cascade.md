@@ -198,8 +198,11 @@ an order the rules do not give, and once a trigger on the first one pauses, the 
 be a walk driven mid-decision.
 
 {func}`~yasuki_core.engine.rules.triggers.resolve_effects` is the walk entered with effects in
-hand and an empty queue, which is how a cost, a rulebook procedure's effects or a resolver's output
-gets its derived reactions. {func}`~yasuki_core.engine.rules.triggers.resolve_action_effects` is
+hand and an empty queue, which is how a rulebook procedure's effects or a resolver's output gets
+its derived reactions. {func}`~yasuki_core.engine.rules.triggers.pay_costs` is the same walk for a
+cost. A cost is no effect (CR, Effects), so the walk checks every other effect against the
+{class}`~.Negation` records in force as it commits and passes a cost's payments through, and a
+payment that pauses on a question stays a cost once answered. {func}`~yasuki_core.engine.rules.triggers.resolve_action_effects` is
 the same walk for an action's own effects, the ones step E of the Action Sequence hands over. The
 first effects an action hands over are held on the stack as a `HeldAction` beneath an Interrupt
 round before any resolves, once per action and only when some seat holds an Interrupt, and every

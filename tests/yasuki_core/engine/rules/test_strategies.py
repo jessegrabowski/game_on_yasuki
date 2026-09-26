@@ -12,7 +12,10 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter, Effect
+from yasuki_core.engine.rules.effects import AdjustCounter, Effect, GrantNegation
+from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.turn.structure import Boundary, Moment, Phase
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -108,6 +111,29 @@ def test_a_strategy_in_hand_is_offered_when_it_is_affordable():
     session, card = _session(gold_cost=1, production=2)
 
     assert PlayStrategy(card.id) in session.legal_actions(SEAT)
+
+
+def test_a_strategy_whose_actions_are_negated_is_paid_and_discarded_but_does_nothing():
+    session, card = _session()
+    negation = Negation("ring", Moment(Phase.ACTION, Boundary.END), source_kind=ActionPrint)
+    resolve_effects(session.game, [GrantNegation(negation)])
+    session.act(SEAT, PlayStrategy(card.id))
+    while session.game.pending is not None:
+        asked = session.game.pending
+        session.submit(asked.seat, DecisionResponse(asked.candidates[:1]))
+
+    assert session.game.table.cards_by_id["farm"].counters.get(WEALTH.key) is None
+    assert _discard(session) == [card.id]
+
+
+def test_a_negation_lapses_as_its_phase_ends():
+    session, _ = _session()
+    negation = Negation("ring", Moment(Phase.ACTION, Boundary.END), source_kind=ActionPrint)
+    resolve_effects(session.game, [GrantNegation(negation)])
+
+    end_phase(session)
+
+    assert negation not in session.game.ongoing
 
 
 def test_a_strategy_beyond_the_seats_gold_is_not_offered():

@@ -28,10 +28,10 @@ walker leaves them on the stack as a `HeldAction` while an Interrupt round is op
 that round only when a seat holds an Interrupt answering something in the forecast, and resumes
 the action once every seat has passed, so an action nothing answers costs a lookup and nothing
 more. Which effects are the action's own is decided at the entry point: step E of the
-Action Sequence hands them to `resolve_action_effects`, and everything else, a cost, a trait's
-return, a rulebook procedure's effects, goes through `resolve_effects` and is never held there. An
-effect opts out through `is_interruptible` only when there is nothing to interrupt, such as an
-Honor change of zero or an Honor loss a card prevents.
+Action Sequence hands them to `resolve_action_effects`, a cost goes through `pay_costs`, and
+everything else, a trait's return, a rulebook procedure's effects, goes through `resolve_effects`,
+and neither is held there. An effect opts out through `is_interruptible` only when there is nothing
+to interrupt, such as an Honor change of zero or an Honor loss a card prevents.
 
 `seppuku` is the one builder in the module: the CR defines seppuku as two effects, a rehonoring and
 then a destruction, and a handler returns that pair so each passes the Interrupt step on its own.
@@ -79,6 +79,7 @@ deferred through `Then` instead.
    LoseGame
    WinGame
    MeleeAttack
+   GrantNegation
    Negated
    AdditionalAction
    GrantPriority

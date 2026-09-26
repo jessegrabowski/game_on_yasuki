@@ -78,6 +78,7 @@ yasuki_core
     yasuki_core.engine.rules.gold.self_grants <yasuki_core.engine.rules.gold.self_grants>
     yasuki_core.engine.rules.interrupts <yasuki_core.engine.rules.interrupts>
     yasuki_core.engine.rules.legality <yasuki_core.engine.rules.legality>
+    yasuki_core.engine.rules.negation <yasuki_core.engine.rules.negation>
     yasuki_core.engine.rules.projection <yasuki_core.engine.rules.projection>
     yasuki_core.engine.rules.rulebook.copies <yasuki_core.engine.rules.rulebook.copies>
     yasuki_core.engine.rules.rulebook.cycle <yasuki_core.engine.rules.rulebook.cycle>

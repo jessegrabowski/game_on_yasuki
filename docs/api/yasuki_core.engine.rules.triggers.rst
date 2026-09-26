@@ -29,6 +29,7 @@ yasuki_core.engine.rules.triggers
     fire_all
     lapse_ongoing
     on
+    pay_costs
     reach_moment
     resolve_action_effects
     resolve_delayed

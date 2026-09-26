@@ -9,7 +9,13 @@ from yasuki_core.engine.rules.abilities.activation import ResolveAbility
 from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt, InterruptLimit
 from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for, interrupts_for
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
-from yasuki_core.engine.rules.effects import AttackEffect, Effect, SpendOncePerTurn, Then
+from yasuki_core.engine.rules.effects import (
+    ApplyEffects,
+    AttackEffect,
+    Effect,
+    SpendOncePerTurn,
+    Then,
+)
 from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.legality import (
@@ -18,6 +24,7 @@ from yasuki_core.engine.rules.legality import (
     permitted_timings_in,
     seat_cards,
 )
+from yasuki_core.engine.rules.negation import negate_from, negates_from
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_is_unstoppable
 from yasuki_core.engine.rules.turn.structure import (
@@ -384,29 +391,35 @@ def _play(
             raise RuntimeError(f"{target_id} is no longer a target {card_id} can be taken against")
         target = game.table.cards_by_id[target_id]
         interruption = interrupt.interrupt(game, card, effect, target)
-    if interrupt.answers_every:
-        bound = answered_by(game, card, interrupt, foreseen)
-        game.modifications.extend(
-            Replacement(bound=each, card_id=card.id, target_id=target_id, interrupt_key=key)
-            for each in bound
-        )
-    elif interruption.replacement != effect:
-        game.modifications.append(
-            Replacement(
-                bound=effect,
-                card_id=card.id,
-                target_id=target_id,
-                replacement=_settled(game, interruption.replacement),
-                interrupt_key=key,
+    # A negated Interrupt is still taken, paid for and, from hand, discarded. It binds nothing,
+    # since a bound replacement is asked of the card again as its effect resolves.
+    if not negates_from(game, card, interruption.replacement):
+        if interrupt.answers_every:
+            bound = answered_by(game, card, interrupt, foreseen)
+            game.modifications.extend(
+                Replacement(bound=each, card_id=card.id, target_id=target_id, interrupt_key=key)
+                for each in bound
             )
-        )
+        elif interruption.replacement != effect:
+            game.modifications.append(
+                Replacement(
+                    bound=effect,
+                    card_id=card.id,
+                    target_id=target_id,
+                    replacement=_settled(game, interruption.replacement),
+                    interrupt_key=key,
+                )
+            )
+    own_effects = negate_from(game, card, interruption.effects)
     if _plays_card(interrupt, location):
-        play_strategy_with(game, card, interruption.effects)
+        play_strategy_with(game, card, tuple(own_effects))
         return
     purchase = interrupt.purchase(game, card, plays_card=False)
     paid = priced_cost(game, purchase, interrupt.cost(game, card))
     claimed = _claim(game, seat, card, interrupt)
-    triggers.resolve_effects(game, [*claimed, *paid, *interruption.effects])
+    # Queued beneath the payment, so the cost is paid, and what reacts to it resolves, first.
+    game.stack.append(ApplyEffects(tuple(own_effects)))
+    triggers.pay_costs(game, [*claimed, *paid])
 
 
 def _claim(game: GameState, seat: PlayerId, card: L5RCard, interrupt: Interrupt) -> list[Effect]:

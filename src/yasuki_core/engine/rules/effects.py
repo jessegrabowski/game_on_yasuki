@@ -48,6 +48,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     LobbyModifier,
     Minimum,
     Modifier,
+    Negation,
     ProvinceModifier,
     SeatAbilityGrant,
     Stat,
@@ -201,6 +202,27 @@ class Negated(Effect):
 
     def narrate(self, game: GameState) -> str:
         return f"negated: {self.effect.narrate(game)}"
+
+
+@dataclass(frozen=True, slots=True)
+class GrantNegation(Effect):
+    """Record a continuous negation: the effects ``negation`` matches are negated while it lasts.
+
+    Attributes
+    ----------
+    negation : Negation
+        The record, naming its source, what it negates and how long it lasts.
+    """
+
+    negation: Negation
+
+    def describe(self) -> str:
+        lifetime = describe_lifetime(self.negation.duration)
+        return f"{self.negation.source_id} negates effects ({lifetime})"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(self.negation)
+        return []
 
 
 @dataclass(frozen=True, slots=True)
@@ -1571,7 +1593,7 @@ def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     Seppuku). Two effects rather than one, so each passes through the Interrupt step on its own,
     and the destruction is deferred through ``Then`` so the Personality's own reaction to his
     rehonoring fires while he is still in play. The CR adds that neither can be negated, which
-    nothing here models because negation is not modeled.
+    nothing here enforces.
 
     Parameters
     ----------
