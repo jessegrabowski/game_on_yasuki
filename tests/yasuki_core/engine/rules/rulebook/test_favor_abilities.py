@@ -9,19 +9,23 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.costs import payable
 from yasuki_core.engine.rules.abilities.registry import abilities_for, ability_for
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
-from yasuki_core.engine.rules.effects import TakeFavor
+from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
 from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn import action_sequence
 from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.triggers import resolve_action_effects
 from yasuki_core.engine.rules.turn.sequence import run_stack
+from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
+    DeclareAttack,
     Lobby,
     Pass,
+    PlayInterrupt,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.table import (
@@ -42,6 +46,7 @@ from yasuki_core.game_pieces.constants import (
 from yasuki_core.game_pieces.prints import RulebookPrint
 
 from tests.yasuki_core.engine.builders import (
+    combat_segment,
     fate_card,
     personality,
     put_in_play,
@@ -158,17 +163,18 @@ def test_the_shared_draw_ability_is_designated_differently_by_arc(game, key, des
 
 
 @pytest.mark.parametrize(
-    ("arc", "political"),
-    [(ruleset.ONYX, True), (ruleset.SHATTERED_EMPIRE, True), (ruleset.IMPERIAL, False)],
+    "arc",
+    [ruleset.ONYX, ruleset.SHATTERED_EMPIRE, ruleset.IMPERIAL],
     ids=["onyx", "shattered_empire", "imperial"],
 )
-def test_only_the_datasheet_prints_its_favor_abilities_political(game, political):
+def test_every_favor_ability_is_political(game):
     # ShE datasheet: "Political Open, (Favor)" and "Political Battle, (Favor)". The pre-Gold
-    # rulebook's summary prints no keyword on its abilities.
+    # glossary makes "using the Imperial Favor" a Political action.
     proxy = _proxy(game)
-    expected = frozenset({keywords.POLITICAL}) if political else frozenset()
 
-    assert {ability.keywords for ability in abilities_for(game, proxy)} == {expected}
+    assert {ability.keywords for ability in abilities_for(game, proxy)} == {
+        frozenset({keywords.POLITICAL})
+    }
 
 
 @pytest.mark.parametrize(
@@ -185,14 +191,14 @@ def test_swapping_the_arc_swaps_which_abilities_are_offered(game, key):
 
 
 @pre_gold_arc
-def test_restore_honor_is_offered_only_with_a_dishonorable_personality_to_restore(game):
+def test_restore_honor_is_offered_with_any_players_dishonorable_personality(game):
     TakeFavor(P1).perform(game)
-    hero = put_in_play(game, personality("P1-p"))
-    put_in_play(game, personality("P2-p", owner=P2)).dishonor()
+    put_in_play(game, personality("P1-p"))
+    rival = put_in_play(game, personality("P2-p", owner=P2))
 
     assert "restore_honor" not in _offered(game)
 
-    hero.dishonor()
+    rival.dishonor()
     assert "restore_honor" in _offered(game)
 
 
@@ -421,3 +427,52 @@ def test_the_pre_gold_arc_lets_a_favor_ability_repeat(game):
     TakeFavor(P1).perform(game)
 
     assert "draw" in _offered(game)
+
+
+def test_the_imperial_battle_ability_is_offered_to_a_seat_with_no_units_there(monkeypatch):
+    # Pre-Gold: "You can do this in a battle in which you have no units."
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.IMPERIAL)
+    session = combat_segment([personality("raider")], attackers={"raider": 0}, defenders={})
+    game = session.game
+    TakeFavor(P2).perform(game)
+    game.round = replace(game.round, priority=P2)
+
+    assert "send_unit_home" in _offered(game, P2)
+
+
+@pre_gold_arc
+def test_the_imperial_favor_prevents_another_players_honor_loss(game):
+    # Pre-Gold: "Political Reaction: Prevent a Family Honor loss." Any player's loss, not only the
+    # holder's (Accumulated Rulings, Imperial Favor).
+    TakeFavor(P1).perform(game)
+    honor = game.table.seats[P2].honor
+    game.action = DeclareAttack()
+    resolve_action_effects(game, [GainHonor(P2, -3)])
+    game.round = replace(game.round, priority=P1)
+    prevent = PlayInterrupt(_proxy(game).id)
+    assert prevent in legality.legal_actions(game, P1)
+
+    action_sequence.perform(game, prevent)
+    while game.round.kind is RoundKind.INTERRUPT:
+        action_sequence.perform(game, Pass())
+    run_stack(game)
+
+    assert game.table.seats[P2].honor == honor
+    assert game.favor_holder is None
+
+
+@pre_gold_arc
+def test_the_imperial_favor_does_not_answer_an_honor_gain(game):
+    TakeFavor(P1).perform(game)
+    game.action = DeclareAttack()
+    resolve_action_effects(game, [GainHonor(P2, 3)])
+
+    assert game.round.kind is not RoundKind.INTERRUPT
+
+
+@pre_gold_arc
+def test_no_seat_can_prevent_a_loss_while_nobody_holds_the_favor(game):
+    game.action = DeclareAttack()
+    resolve_action_effects(game, [GainHonor(P2, -3)])
+
+    assert game.round.kind is not RoundKind.INTERRUPT

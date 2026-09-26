@@ -40,9 +40,10 @@ as the rulebook prints them, and the printed text as its label.
 
 The proxy an arc deals decides which abilities exist. `ONYX` names the Onyx Favor proxy in
 `rulebook_proxies`, carrying the datasheet's two Political abilities, and `SHATTERED_EMPIRE`
-inherits it. `IMPERIAL` names the pre-Gold proxy, carrying the three pre-Gold abilities the engine
-implements. The fourth, preventing a Family Honor loss, is not registered. No proxy ability names a
-`ruleset`.
+inherits it. `IMPERIAL` names the pre-Gold proxy, carrying Soul of the Empire's four uses, all
+Political. Three are abilities. The fourth, preventing a Family Honor loss, is an `Interrupt`
+registered on the same proxy, which answers any player's loss and costs the Favor. No proxy ability
+names a `ruleset`.
 
 An ability's whole price goes in its cost, the Favor and anything else it charges:
 

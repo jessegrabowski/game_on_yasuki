@@ -1098,7 +1098,7 @@ DATASHEET_DRAW = (
     [
         (ruleset.ONYX, DATASHEET_DRAW, "discard_to_draw"),
         (ruleset.SHATTERED_EMPIRE, DATASHEET_DRAW, "discard_to_draw"),
-        (ruleset.IMPERIAL, "Favor: Limited: Draw a Fate card.", "draw"),
+        (ruleset.IMPERIAL, "Favor: Political Limited: Draw a Fate card.", "draw"),
     ],
     ids=["onyx", "shattered_empire", "imperial"],
 )

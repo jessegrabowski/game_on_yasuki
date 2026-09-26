@@ -2,8 +2,14 @@ from collections.abc import Callable
 from typing import TypeGuard
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+    itself,
+)
+from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import (
     opposing_units_in_battle,
     personalities_in_play,
@@ -16,7 +22,9 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     DrawCard,
     Effect,
+    GainHonor,
     Move,
+    Negated,
     Rehonor,
     Unpayable,
 )
@@ -25,7 +33,12 @@ from yasuki_core.engine.rules.rulebook.favor_payment import favor_cost
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.actions import Action, ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import (
+    Action,
+    ActionTiming,
+    ActivateAbility,
+    BattleDesignator,
+)
 from yasuki_core.engine.table import Location
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import (
@@ -123,8 +136,10 @@ def _favor_ability(
     effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]],
     extra_cost: SeatCost | None = None,
     targets: Callable[[GameState, L5RCard], list[str]] = itself,
-    ability_keywords: frozenset[str] = frozenset(),
+    battle_designators: frozenset[BattleDesignator] = frozenset(),
 ) -> Ability:
+    """A rulebook use of the Favor on its proxy. Every arc makes each use Political: the datasheet
+    prints the keyword, and the pre-Gold glossary counts "using the Imperial Favor" as Political."""
     return Ability(
         timings=(timing,),
         label=label,
@@ -133,7 +148,8 @@ def _favor_ability(
         effects=effects,
         hits_every_target=True,
         key=key,
-        keywords=ability_keywords,
+        keywords=frozenset({keywords.POLITICAL}),
+        battle_designators=battle_designators,
         located_at=(CardLocation.RULEBOOK,),
         from_rulebook=True,
     )
@@ -206,9 +222,7 @@ def _resolve_send_home_bowed(
 
 
 def _choose_dishonorable(game: GameState, seat: PlayerId) -> list[Effect]:
-    candidates = tuple(
-        card.id for card in personalities_in_play(game) if card.owner is seat and card.dishonorable
-    )
+    candidates = tuple(card.id for card in personalities_in_play(game) if card.dishonorable)
     return [
         Choose(
             seat=seat, candidates=candidates, minimum=1, maximum=1, resolver=_RESTORE_HONOR_RESOLVER
@@ -236,7 +250,6 @@ register_ability(
         effects=_draw,
         extra_cost=_discard_a_fate_card,
         targets=_on_your_turn,
-        ability_keywords=frozenset({keywords.POLITICAL}),
     ),
 )
 register_ability(
@@ -247,21 +260,20 @@ register_ability(
         label="Political Battle, :favor:: Move a target attacking enemy Personality home.",
         effects=_nothing,
         extra_cost=_choose_attacker,
-        ability_keywords=frozenset({keywords.POLITICAL}),
     ),
 )
 
-# The pre-Gold rulebook's (Soul of the Empire). The draw asks for nothing alongside the Favor.
-# Naming the Personality is cost of the other two, which are withheld with nobody to name. Sending
-# home bows the unit, which the datasheet ability does not do. The fourth, "Reaction: Prevent a
-# Family Honor loss.", needs honor-loss prevention, which the engine does not model, so it is not
-# registered.
+# The pre-Gold rulebook's four, worded as Soul of the Empire prints them. The draw asks for nothing
+# alongside the Favor. Naming the Personality is cost of the restore and the send-home, which are
+# withheld with nobody to name. The restore reaches any player's Personality, and a Dishonorable
+# Dead one only once the dead state is modeled. Sending home bows the unit and may be taken in a
+# battle the seat has no units in.
 register_ability(
     PRE_GOLD_FAVOR_PROXY_ID,
     _favor_ability(
         key=DRAW,
         timing=ActionTiming.LIMITED,
-        label="Limited: Draw a Fate card.",
+        label="Political Limited: Draw a Fate card.",
         effects=_draw,
     ),
 )
@@ -270,7 +282,10 @@ register_ability(
     _favor_ability(
         key=RESTORE_HONOR,
         timing=ActionTiming.OPEN,
-        label="Open: Restore a Dishonored Personality to Honorable status.",
+        label=(
+            "Political Open: Restore a Dishonored or Dishonorable Dead Personality to Honorable "
+            "status."
+        ),
         effects=_nothing,
         extra_cost=_choose_dishonorable,
     ),
@@ -280,8 +295,34 @@ register_ability(
     _favor_ability(
         key=SEND_UNIT_HOME,
         timing=ActionTiming.BATTLE,
-        label="Battle: Send a unit home from a battle, bowed.",
+        label=(
+            "Political Battle: Send a unit in the battle home bowed. You can do this in a battle "
+            "in which you have no units."
+        ),
         effects=_nothing,
         extra_cost=_choose_unit,
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
+    ),
+)
+
+
+def _is_honor_loss(game: GameState, source: L5RCard, effect: GainHonor) -> bool:
+    return effect.adjusted < 0
+
+
+def _prevent_honor_loss(game: GameState, source: L5RCard, effect: GainHonor) -> Interruption:
+    return Interruption(Negated(effect))
+
+
+# Any player's loss, not only the holder's (Accumulated Rulings, Imperial Favor).
+register_interrupt(
+    PRE_GOLD_FAVOR_PROXY_ID,
+    Interrupt(
+        answers=GainHonor,
+        interrupt=_prevent_honor_loss,
+        label="Political Reaction: Prevent a Family Honor loss.",
+        applies=_is_honor_loss,
+        located_at=(CardLocation.RULEBOOK,),
+        cost=_favor_cost(None),
     ),
 )
