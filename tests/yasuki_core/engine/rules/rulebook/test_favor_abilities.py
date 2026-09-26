@@ -459,6 +459,7 @@ def test_the_imperial_favor_prevents_another_players_honor_loss(game):
 
     assert game.table.seats[P2].honor == honor
     assert game.favor_holder is None
+    assert not game.action_is_favor, "the Interrupt's Favor payment is not the attack's"
 
 
 @pre_gold_arc

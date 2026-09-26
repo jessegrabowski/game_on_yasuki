@@ -53,7 +53,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Stat,
 )
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, seat_once_key
-from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, flow_resolves
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, RoundKind, flow_resolves
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     UNPLACED_BOARD_POS,
@@ -808,14 +808,16 @@ class PayFavorCost(Effect):
 
     Carried by the cost itself rather than set when the action is announced, so an action offering
     the Favor as one of two ways to pay counts as a Favor action only on the branch that takes it
-    (ShE datasheet, The Favor Icon).
+    (ShE datasheet, The Favor Icon). An Interrupt or a Response paying one records nothing, because
+    the action record describes the action they answer, and a Favor payment is its payer's own.
     """
 
     def describe(self) -> str:
         return "the action pays a Favor cost"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.action_is_favor = True
+        if game.round.kind not in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+            game.action_is_favor = True
         return []
 
 
