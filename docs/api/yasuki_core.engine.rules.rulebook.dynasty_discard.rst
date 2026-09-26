@@ -7,7 +7,7 @@ yasuki_core.engine.rules.rulebook.dynasty_discard
 
 .. autosummary::
 
-    dynasty_discard
+    is_dynasty_discard
 
 .. automodule:: yasuki_core.engine.rules.rulebook.dynasty_discard
     :members:

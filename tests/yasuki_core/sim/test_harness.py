@@ -192,7 +192,7 @@ def test_a_run_records_the_metrics_it_was_given():
         turn_limit=3,
         seed=9,
         end_of_turn={"cleared": provinces_cleared},
-        actions={"bought": Recruit},
+        actions={"bought": lambda action: isinstance(action, Recruit)},
     )
 
     assert played

@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from yasuki_core.engine.players import PlayerId
@@ -5,6 +6,10 @@ from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.replay.game_log import Act, Cancel, GameLog
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.sim.metrics import Metric
+
+# Whether an action is of the kind being counted. A Dynasty Discard shares its class with every
+# ActivateAbility and is told apart by its ability key, so a kind is a predicate.
+ActionKind = Callable[[Action], bool]
 
 
 @dataclass(frozen=True, slots=True)
@@ -33,8 +38,8 @@ class TurnRecorder:
     end_of_turn : dict mapping str to callable, optional
         Sampled as the turn ends, when the board shows what the seat did with it (bowed producers
         and provinces cleared and refilled face-down). Default empty.
-    actions : dict mapping str to Action subclass, optional
-        Counted over the turn from the game log: how many actions of that class the seat took. What
+    actions : dict mapping str to callable, optional
+        Counted over the turn from the game log: how many actions of that kind the seat took. What
         the board cannot say, since a recruited card and a discarded one leave a province looking
         the same. Requires ``log``. Default empty.
     log : GameLog, optional
@@ -50,7 +55,7 @@ class TurnRecorder:
 
     metrics: dict[str, Metric]
     end_of_turn: dict[str, Metric] = field(default_factory=dict)
-    actions: dict[str, type[Action]] = field(default_factory=dict)
+    actions: dict[str, ActionKind] = field(default_factory=dict)
     log: GameLog | None = None
     samples: list[Sample] = field(default_factory=list)
     _open: Sample | None = field(default=None, init=False)
@@ -98,7 +103,7 @@ class TurnRecorder:
         for entry in self.log.entries[self._log_offset :]:
             if isinstance(entry, Act) and entry.seat is seat:
                 last_counted = next(
-                    (name for name, kind in self.actions.items() if isinstance(entry.action, kind)),
+                    (name for name, is_kind in self.actions.items() if is_kind(entry.action)),
                     None,
                 )
                 if last_counted is not None:

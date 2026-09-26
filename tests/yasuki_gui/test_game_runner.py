@@ -268,6 +268,7 @@ def test_province_menu_offers_recruit_with_cost_and_dynasty_discard():
 
     labels = [label for label, _ in runner.province_menu("P1-buy")]
     assert labels == ["Recruit: Pay 5 gold", "Discard from province"]
+    assert runner.ability_menu("P1-buy") == []
 
 
 def test_province_menu_offers_proclaim_for_an_own_clan_personality():

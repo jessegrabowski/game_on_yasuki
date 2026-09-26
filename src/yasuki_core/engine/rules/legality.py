@@ -24,7 +24,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Cycle,
     DeclareAttack,
     DiscardToInterrupt,
-    DynastyDiscard,
     Equip,
     Inheritance,
     Legacy,
@@ -178,7 +177,6 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_recruits(game, seat),
         *_equips(game, seat),
         *_strategies(game, seat),
-        *_dynasty_discards(game, seat),
         *_legacy(game, seat),
         *_inheritance(game, seat),
         *_lobby(game, seat),
@@ -213,8 +211,6 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return action in _equips(game, seat, only=card_id)
         case PlayStrategy(card_id=card_id):
             return action in _strategies(game, seat, only=card_id)
-        case DynastyDiscard(card_id=card_id):
-            return action in _dynasty_discards(game, seat, only=card_id)
         case Lobby():
             return bool(_lobby(game, seat))
         case UseFavorAbility():
@@ -380,18 +376,6 @@ def _declare_attack(game: GameState, seat: PlayerId) -> list[Action]:
     if game.attack is not None or not permits(game, seat, ActionTiming.ATTACK):
         return []
     return [DeclareAttack()]
-
-
-def _dynasty_discards(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """A DynastyDiscard for each face-up card in the seat's provinces. The rule allows discarding
-    any face-up province card, not only Holdings. ``only`` narrows to a single card."""
-    if not permits(game, seat, ACTION_TIMINGS[DynastyDiscard]):
-        return []
-    return [
-        DynastyDiscard(card.id)
-        for card in province_cards(game, seat)
-        if card.face_up and (only is None or card.id == only)
-    ]
 
 
 def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:

@@ -5,14 +5,13 @@ from pathlib import Path
 import numpy as np
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.bots.agents import Agent
 from yasuki_core.bots.policies import Policy
 from yasuki_core.engine.driver import Controls, play_game
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_setup import build_state_from_deck
 from yasuki_core.sim.metrics import Metric
-from yasuki_core.sim.recording import Sample, TurnRecorder
+from yasuki_core.sim.recording import ActionKind, Sample, TurnRecorder
 
 
 # One stream per consumer of randomness, spawned in this order. Positions are part of the
@@ -43,7 +42,7 @@ def run_games(
     seed: int = 0,
     metrics: dict[str, Metric] | None = None,
     end_of_turn: dict[str, Metric] | None = None,
-    actions: dict[str, type[Action]] | None = None,
+    actions: dict[str, ActionKind] | None = None,
 ) -> list[Game]:
     """
     Play ``deck_path`` against itself ``games`` times, varying only the shuffle.
@@ -76,8 +75,8 @@ def run_games(
         Sampled as each turn begins. Default none.
     end_of_turn : dict mapping str to callable, optional
         Sampled as each turn ends. Default none.
-    actions : dict mapping str to Action subclass, optional
-        Counted over each turn. Default none.
+    actions : dict mapping str to callable, optional
+        Counted over each turn, each by whether an action is of its kind. Default none.
 
     Returns
     -------

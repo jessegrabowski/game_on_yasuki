@@ -77,19 +77,6 @@ class Recruit:
 
 
 @dataclass(frozen=True, slots=True)
-class DynastyDiscard:
-    """Discard a face-up card from one of your provinces (Repeatable Dynasty), refilling it.
-
-    Attributes
-    ----------
-    card_id : str
-        The face-up province card to discard.
-    """
-
-    card_id: str
-
-
-@dataclass(frozen=True, slots=True)
 class Legacy:
     """Take the Legacy rulebook ability (Dynasty, once per turn): banish a card from hand to search
     your dynasty deck and provinces for a Legacy card and place it face-up in a province. Failing
@@ -243,7 +230,6 @@ Action = (
     | Recruit
     | PlayStrategy
     | Equip
-    | DynastyDiscard
     | Legacy
     | ActivateAbility
     | Cycle
@@ -266,7 +252,6 @@ ACTION_TIMINGS: dict[type, ActionTiming] = {
     Recruit: ActionTiming.DYNASTY,
     # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.
     Equip: ActionTiming.OPEN,
-    DynastyDiscard: ActionTiming.DYNASTY,
     Legacy: ActionTiming.DYNASTY,
     Inheritance: ActionTiming.DYNASTY,
     DeclareAttack: ActionTiming.ATTACK,

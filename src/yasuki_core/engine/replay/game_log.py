@@ -22,7 +22,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Cycle,
     DeclareAttack,
     DiscardToInterrupt,
-    DynastyDiscard,
     Equip,
     Inheritance,
     Legacy,
@@ -289,8 +288,6 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "recruit", "card_id": card_id, "invest": invest, "proclaim": proclaim}
         case Equip(card_id=card_id, invest=invest):
             return {"kind": "equip", "card_id": card_id, "invest": invest}
-        case DynastyDiscard(card_id=card_id):
-            return {"kind": "dynasty_discard", "card_id": card_id}
         case Legacy():
             return {"kind": "legacy"}
         case Inheritance():
@@ -326,8 +323,6 @@ def _decode_action(payload: dict) -> Action:
         )
     if kind == "equip":
         return Equip(payload["card_id"], invest=payload.get("invest", False))
-    if kind == "dynasty_discard":
-        return DynastyDiscard(payload["card_id"])
     if kind == "legacy":
         return Legacy()
     if kind == "inheritance":

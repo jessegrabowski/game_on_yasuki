@@ -7,13 +7,13 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Cycle,
     DeclareAttack,
-    DynastyDiscard,
     Equip,
     Legacy,
     Pass,
     Recruit,
 )
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.bots.agents import PayingAgent
 from yasuki_core.bots.hints import ABILITY_HINTS, optional_cost_answer
 from yasuki_core.bots.queries import (
@@ -586,12 +586,14 @@ def _fewest_reaching(unspent: set[str], needed: int, view: GameView) -> set[str]
 
 def _worthwhile_ability(view: GameView, actions: list[Action]) -> ActivateAbility | None:
     """The lowest-id activation among ``actions`` whose hint says it is worth taking now, or None
-    when none of them is modelled or any modelled one declines."""
+    when none of them is modelled or any modelled one declines. A hint speaks for the card's own
+    ability, so the Dynasty Discard every Province card carries is left to :func:`~._flushable`."""
     cards = identifiable(view)
     worthwhile = [
         action
         for action in actions
         if isinstance(action, ActivateAbility)
+        and not is_dynasty_discard(action)
         and (card := cards.get(action.card_id)) is not None
         and (hint := ABILITY_HINTS.get(card.printed_id)) is not None
         and hint.worth_activating(view, card)
@@ -629,7 +631,7 @@ def _barren_province_cards(view: GameView) -> tuple[str, ...]:
     )
 
 
-def _flushable(view: GameView, actions: list[Action]) -> DynastyDiscard | None:
+def _flushable(view: GameView, actions: list[Action]) -> ActivateAbility | None:
     """The lowest-id Dynasty Discard among ``actions`` that clears a Province card the seat has no
     use for, whether one producing no Gold or one costing more than it could raise, or None when
     every discard on offer would throw away a producer it can buy.
@@ -645,7 +647,7 @@ def _flushable(view: GameView, actions: list[Action]) -> DynastyDiscard | None:
     junk = [
         action
         for action in actions
-        if isinstance(action, DynastyDiscard)
+        if is_dynasty_discard(action)
         and action.card_id in cards
         and (
             production(view, cards[action.card_id]) == 0

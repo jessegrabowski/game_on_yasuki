@@ -10,12 +10,12 @@ from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     DiscardToInterrupt,
-    DynastyDiscard,
     Pass,
     PlayInterrupt,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules import legality, projection
+from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.replay.game_log import (
     Act,
@@ -299,7 +299,7 @@ class EngineSession:
         last = entries[-1]
         if not isinstance(last, Act) or last.seat is not seat:
             return False
-        if not isinstance(last.action, DynastyDiscard):
+        if not is_dynasty_discard(last.action):
             return False
         entries.pop()
         self.game = replay(self.log)

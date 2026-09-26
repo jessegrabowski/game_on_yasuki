@@ -4,7 +4,8 @@ from numpy.random import default_rng
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import DynastyDiscard, Legacy, Pass
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Legacy, Pass
 from yasuki_core.bots.policies import (
     POLICIES,
     PassPolicy,
@@ -15,7 +16,7 @@ from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import dealt_table
 
-ACTIONS = [Legacy(), Pass(), DynastyDiscard("card-1")]
+ACTIONS = [Legacy(), Pass(), ActivateAbility("card-1", DYNASTY_DISCARD)]
 
 
 def _draws(policy, view, count):
@@ -34,9 +35,9 @@ def test_pass_policy_passes_even_when_offered_more():
 def test_pass_policy_takes_what_it_can_when_passing_is_not_offered():
     # legal_actions withholds Pass in states where it is illegal; a policy that returned None or
     # raised there would stall the driver rather than the game.
-    only = [DynastyDiscard("card-1")]
+    only = [ActivateAbility("card-1", DYNASTY_DISCARD)]
 
-    assert PassPolicy().choose(_view(), only) == DynastyDiscard("card-1")
+    assert PassPolicy().choose(_view(), only) == ActivateAbility("card-1", DYNASTY_DISCARD)
 
 
 def test_random_policy_only_ever_returns_an_offered_action():

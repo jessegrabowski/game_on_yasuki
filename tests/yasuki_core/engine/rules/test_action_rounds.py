@@ -1,9 +1,9 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
-    DynastyDiscard,
     Pass,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
@@ -55,7 +55,7 @@ def test_taking_an_action_keeps_the_round_open():
     # asked; what matters is that the round did not close and the phase did not move.
     session = _to_dynasty(_session())
 
-    session.act(PlayerId.P1, DynastyDiscard("prov"))
+    session.act(PlayerId.P1, ActivateAbility("prov", DYNASTY_DISCARD))
 
     assert session.game.phase is Phase.DYNASTY
     assert session.game.round.priority is PlayerId.P1
@@ -109,7 +109,7 @@ def test_an_action_then_a_pass_still_closes_the_round():
     # can end. The round must still end rather than staying open behind the reset.
     session = _to_dynasty(_session())
 
-    session.act(PlayerId.P1, DynastyDiscard("prov"))
+    session.act(PlayerId.P1, ActivateAbility("prov", DYNASTY_DISCARD))
     session.act(PlayerId.P1, Pass())
 
     assert session.game.turn == 2

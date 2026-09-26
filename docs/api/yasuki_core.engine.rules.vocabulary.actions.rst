@@ -13,7 +13,6 @@ yasuki_core.engine.rules.vocabulary.actions
     Cycle
     DeclareAttack
     DiscardToInterrupt
-    DynastyDiscard
     Equip
     Inheritance
     Legacy

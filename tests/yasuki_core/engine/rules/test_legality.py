@@ -2,6 +2,7 @@ import dataclasses
 import pytest
 
 from yasuki_core import ruleset
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -62,10 +63,8 @@ from tests.yasuki_core.engine.builders import (
     attached,
     province_card,
 )
-from yasuki_core.engine.rules.vocabulary.actions import (
-    Cycle,
-    DynastyDiscard,
-)
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, is_dynasty_discard
+from yasuki_core.engine.rules.vocabulary.actions import Cycle
 from yasuki_core.bots.agents import make_agent
 from yasuki_core.bots.policies import make_policy
 from yasuki_core.engine.driver import Controls, run_game
@@ -102,8 +101,8 @@ def _dynasty(session):
 # Well-formed actions naming a card no board holds. Never legal anywhere.
 UNKNOWN_CARD = (
     Recruit("nonexistent"),
-    DynastyDiscard("nonexistent"),
     ActivateAbility("nonexistent"),
+    ActivateAbility("nonexistent", DYNASTY_DISCARD),
 )
 
 # Plus one that names a real card in a mode it does not offer. Tied to _board's ids, so it only
@@ -141,7 +140,9 @@ def test_is_legal_rejects_an_action_belonging_to_another_phase():
     dynasty = _dynasty(_board())
 
     assert not legality.is_legal(action_phase.game, PlayerId.P1, Recruit("cheap"))
-    assert not legality.is_legal(action_phase.game, PlayerId.P1, DynastyDiscard("cheap"))
+    assert not legality.is_legal(
+        action_phase.game, PlayerId.P1, ActivateAbility("cheap", DYNASTY_DISCARD)
+    )
     assert legality.is_legal(dynasty.game, PlayerId.P1, Recruit("cheap"))
     assert not legality.is_legal(dynasty.game, PlayerId.P1, Cycle())
 
@@ -992,3 +993,39 @@ def test_an_arc_without_the_rule_lets_every_ability_repeat(monkeypatch):
     _use(session, "once")
 
     assert ActivateAbility("once") in session.legal_actions(PlayerId.P1)
+
+
+def _dynasty_discards(session) -> set[str]:
+    return {
+        action.card_id
+        for action in session.legal_actions(PlayerId.P1)
+        if is_dynasty_discard(action)
+    }
+
+
+def test_dynasty_discard_is_offered_on_each_face_up_province_card_and_no_face_down_one():
+    state = TableState.empty_two_seat()
+    province_card(state, "shown", index=0)
+    province_card(state, "hidden", index=1)
+    session = EngineSession.start(state, PlayerId.P1)
+    # Turned down after the start, which reveals every Province.
+    session.game.table.cards_by_id["hidden"].turn_face_down()
+
+    assert _dynasty_discards(session) == set()
+
+    _dynasty(session)
+
+    assert _dynasty_discards(session) == {"shown"}
+
+
+def test_dynasty_discard_is_not_rationed_by_the_once_per_turn_rule():
+    assert ruleset.ACTIVE.abilities_once_per_turn
+    state = TableState.empty_two_seat()
+    province_card(state, "junk")
+    session = _dynasty(EngineSession.start(state, PlayerId.P1))
+    session.act(PlayerId.P1, ActivateAbility("junk", DYNASTY_DISCARD))
+    junk = session.game.table.cards_by_id["junk"]
+
+    ops.move_card(session.game.table, junk, ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0))
+
+    assert _dynasty_discards(session) == {"junk"}

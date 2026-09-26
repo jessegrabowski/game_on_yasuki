@@ -3,7 +3,8 @@ from numpy.random import default_rng
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Action, DynastyDiscard, Legacy
+from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
+from yasuki_core.engine.rules.vocabulary.actions import Action, Legacy
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse, DiscardToHandSize
 from yasuki_core.bots.policies import PassPolicy, RandomPolicy
@@ -340,7 +341,7 @@ class _AlwaysDiscards:
     name = "always-discards"
 
     def choose(self, view, actions):
-        return next((a for a in actions if isinstance(a, DynastyDiscard)), actions[0])
+        return next((a for a in actions if is_dynasty_discard(a)), actions[0])
 
 
 def test_a_round_that_never_closes_raises_instead_of_running_forever(monkeypatch):
