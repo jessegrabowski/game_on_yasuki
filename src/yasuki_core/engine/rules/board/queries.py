@@ -25,6 +25,11 @@ def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Z
             yield key, zone
 
 
+def rulebook_proxy_id(seat: PlayerId, printed_id: str) -> str:
+    """The card id of ``seat``'s proxy of ``printed_id``, fixed by seat and print."""
+    return f"{seat.name}-{printed_id}"
+
+
 def rulebook_proxy(game: GameState, seat: PlayerId, printed_id: str) -> L5RCard | None:
     """The proxy ``seat`` activates the rulebook abilities of ``printed_id`` from, or None before
     one is dealt."""

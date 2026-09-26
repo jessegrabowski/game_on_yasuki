@@ -15,7 +15,6 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
     Lobby,
-    UseFavorAbility,
     ActionTiming,
     ActivateAbility,
     Pass,
@@ -76,12 +75,14 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import favor_actions_this_turn
+from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
 
 from tests.yasuki_core.engine.builders import (
+    datasheet_favor_ability,
     dealt_table,
     end_phase,
     end_turn,
@@ -648,9 +649,10 @@ def test_an_action_is_worded_for_the_seat_that_must_answer_it():
         == "the ability on Caravansary"
     )
     assert action_sequence.describe_action(game, Lobby()) == "Lobby"
+    proxies.spawn_rulebook_proxies(game)
     assert (
-        action_sequence.describe_action(game, UseFavorAbility("discard_to_draw"))
-        == "the Imperial Favor's ability to discard a Fate card to draw a card"
+        action_sequence.describe_action(game, datasheet_favor_ability("discard_to_draw"))
+        == "the ability on Imperial Favor"
     )
 
 
@@ -924,12 +926,16 @@ def test_a_favor_action_that_paused_for_a_choice_is_announced_once_as_a_favor_ac
     hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     hand.add(register(game.table, fate_card("first", PlayerId.P1)))
     hand.add(register(game.table, fate_card("second", PlayerId.P1)))
+    proxies.spawn_rulebook_proxies(game)
+    favor = datasheet_favor_ability("discard_to_draw")
 
-    action_sequence.perform(game, UseFavorAbility("discard_to_draw"))
+    action_sequence.perform(game, favor)
     assert _resolutions(game) == []
     submit(game, DecisionResponse(choices=("first",)))
 
-    assert _resolutions(game) == [ActionResolved(PlayerId.P1, None, favor=True, printed=False)]
+    assert _resolutions(game) == [
+        ActionResolved(PlayerId.P1, favor.card_id, favor=True, printed=False)
+    ]
     assert favor_actions_this_turn(game, PlayerId.P1) == 1
     assert favor_actions_this_turn(game, PlayerId.P2) == 0
 

@@ -553,8 +553,6 @@ NOT_KEYED_BY_CARD = {
     "CHOICE_PROMPTS",  # likewise, and it lives in decisions
     "POLICIES",  # keyed by policy name
     "AGENTS",  # keyed by agent name
-    "FAVOR_ABILITY_COSTS",  # keyed by the arc's FavorAbility
-    "FAVOR_ABILITY_EFFECTS",
     "ACTION_TIMINGS",  # keyed by action type
     "PHASE_TIMINGS",  # keyed by phase
     "BATTLE_SEGMENT_TIMINGS",  # keyed by battle segment
@@ -568,6 +566,8 @@ NOT_KEYED_BY_CARD = {
     "LOCATION_ABILITIES",  # keyed by location: the abilities it confers on every card sitting there
     "_LOCATION_ZONE_ROLES",  # the zone role each location off the battlefield names
     "RULEBOOK_PROXY_PRINTS",  # keyed by an engine-owned proxy id, which names no catalog card
+    "FAVOR_ABILITY_KEYS",  # the keys of the abilities on the Favor proxies
+    "_FAVOR_PROXY_CARD_IDS",  # each seat's Favor proxy, by the card id it is dealt under
 }
 
 

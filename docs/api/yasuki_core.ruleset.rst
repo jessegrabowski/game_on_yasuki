@@ -7,7 +7,6 @@ yasuki_core.ruleset
 
 .. autosummary::
 
-    FavorAbility
     RingEntry
     Ruleset
     Scoped

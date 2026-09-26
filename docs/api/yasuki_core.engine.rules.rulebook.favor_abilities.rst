@@ -7,8 +7,7 @@ yasuki_core.engine.rules.rulebook.favor_abilities
 
 .. autosummary::
 
-    available_favor_abilities
-    favor_ability
+    is_favor_ability
 
 .. automodule:: yasuki_core.engine.rules.rulebook.favor_abilities
     :members:

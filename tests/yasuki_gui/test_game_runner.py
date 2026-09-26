@@ -1,7 +1,9 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core import ruleset
 from yasuki_core.engine.rules.rulebook.cycle import is_cycle
+from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
 from yasuki_core.engine.rules.rulebook.legacy import is_legacy
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
@@ -21,7 +23,7 @@ from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
 from yasuki_core.engine.driver import Controls
-from tests.yasuki_core.engine.builders import province_card
+from tests.yasuki_core.engine.builders import datasheet_favor_ability, province_card
 from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL
@@ -41,7 +43,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayInterrupt,
     PlayStrategy,
     Recruit,
-    UseFavorAbility,
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
@@ -1087,14 +1088,36 @@ def _favor_proxy_id(game_runner: GameRunner) -> str:
     return next(card.id for card in hand.cards if card.printed_id == IMPERIAL_FAVOR_ID)
 
 
-def test_the_favor_proxy_offers_the_arcs_favor_abilities():
-    # Label and action together: the proxy carries every arc's abilities through one menu, so a
-    # mismatched pairing would have the player read one ability and take another.
+DATASHEET_DRAW = (
+    "Favor: Political Open, :favor:: If it is your turn, discard a Fate card to draw a card."
+)
+
+
+@pytest.mark.parametrize(
+    ("arc", "label", "key"),
+    [
+        (ruleset.ONYX, DATASHEET_DRAW, "discard_to_draw"),
+        (ruleset.SHATTERED_EMPIRE, DATASHEET_DRAW, "discard_to_draw"),
+        (ruleset.IMPERIAL, "Favor: Political Limited: Draw a Fate card.", "draw"),
+    ],
+    ids=["onyx", "shattered_empire", "imperial"],
+)
+def test_the_favor_card_offers_the_arcs_favor_abilities(monkeypatch, arc, label, key):
+    # Label and action together: the Favor card carries every arc's abilities through one menu, so
+    # a mismatched pairing would have the player read one ability and take another.
+    monkeypatch.setattr(ruleset, "ACTIVE", arc)
     game_runner = _favor_runner(p1_hand=1)  # a Fate card to discard for the ShE ability
 
-    assert game_runner.favor_menu(_favor_proxy_id(game_runner)) == [
-        ("Favor: discard a Fate card to draw a card", UseFavorAbility("discard_to_draw"))
-    ]
+    [(offered_label, action)] = game_runner.favor_menu(_favor_proxy_id(game_runner))
+    assert offered_label == label
+    assert is_favor_ability(action) and action.ability_key == key
+
+
+def test_the_board_menu_leaves_the_favor_abilities_to_the_favor_card():
+    game_runner = _favor_runner(p1_hand=1)
+
+    assert datasheet_favor_ability("discard_to_draw") in game_runner.legal_actions()
+    assert not any(is_favor_ability(action) for _, action in game_runner.board_menu())
 
 
 def test_an_ordinary_hand_card_offers_no_favor_ability():
@@ -1166,7 +1189,7 @@ def test_a_rivals_favor_proxy_offers_the_human_nothing():
             if card.printed_id == IMPERIAL_FAVOR_ID
         )
 
-        assert UseFavorAbility("discard_to_draw") in game_runner.legal_actions(), (
+        assert datasheet_favor_ability("discard_to_draw") in game_runner.legal_actions(), (
             "the payer makes the ability legal for the human, which is what the menu is guarding"
         )
         assert game_runner.favor_menu(rivals_proxy) == []

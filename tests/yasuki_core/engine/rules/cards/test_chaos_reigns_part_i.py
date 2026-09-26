@@ -17,7 +17,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.effects import Bow, Discard, DiscardFavor, DiscardFromHand, TakeFavor
@@ -38,6 +37,7 @@ from yasuki_core.game_pieces.prints import ActionPrint, RulebookPrint, Stronghol
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.builders import (
+    datasheet_favor_ability,
     pay,
     attached,
     attachment,
@@ -563,7 +563,7 @@ def _bowed_estate_with_shrine(*, shrine_bowed: bool = False) -> EngineSession:
     if shrine_bowed:
         session.game.table.cards_by_id["shrine"].bow()
     TakeFavor(P1).perform(session.game)
-    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.act(P1, datasheet_favor_ability("discard_to_draw"))
     session.submit(P1, DecisionResponse(("spare",)))
     return session
 

@@ -38,7 +38,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayInterrupt,
     PlayStrategy,
     Recruit,
-    UseFavorAbility,
 )
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -85,6 +84,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 
 from tests.yasuki_core.engine.builders import (
+    datasheet_favor_ability,
     attachment,
     contentious_terrain,
     combat_segment,
@@ -600,7 +600,7 @@ def _estate_holding_the_favor() -> EngineSession:
 def test_the_estate_takes_the_favor_back_after_its_controller_pays_it():
     session = _estate_holding_the_favor()
 
-    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.act(P1, datasheet_favor_ability("discard_to_draw"))
     session.submit(P1, DecisionResponse(("fate",)))
     assert session.game.favor_holder is None
     session.act(P1, ActivateAbility("estate"))
@@ -967,7 +967,7 @@ def test_the_license_reaches_a_card_drawn_after_the_open():
     session = _sacred_ground()
     TakeFavor(P1).perform(session.game)
 
-    session.act(P1, UseFavorAbility("discard_to_draw"))
+    session.act(P1, datasheet_favor_ability("discard_to_draw"))
     session.submit(P1, DecisionResponse(("plain",)))
     session.act(P2, Pass())
 

@@ -26,6 +26,7 @@ yasuki_core.engine.rules.board.queries
     remaining_look
     rings_in_play
     rulebook_proxy
+    rulebook_proxy_id
     sincerity_seed_targets
     terrains_at
     top_of_deck

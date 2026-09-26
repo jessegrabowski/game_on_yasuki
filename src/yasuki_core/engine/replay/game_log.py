@@ -26,7 +26,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Lobby,
     Pass,
     PlayInterrupt,
-    UseFavorAbility,
     PlayStrategy,
     Recruit,
 )
@@ -290,8 +289,6 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "inheritance"}
         case Lobby():
             return {"kind": "lobby"}
-        case UseFavorAbility(key=key):
-            return {"kind": "use_favor_ability", "key": key}
         case ActivateAbility(card_id=card_id, ability_key=key):
             return {"kind": "activate_ability", "card_id": card_id, "key": key}
         case PlayStrategy(card_id=card_id):
@@ -321,8 +318,6 @@ def _decode_action(payload: dict) -> Action:
         return Inheritance()
     if kind == "lobby":
         return Lobby()
-    if kind == "use_favor_ability":
-        return UseFavorAbility(payload["key"])
     if kind == "activate_ability":
         return ActivateAbility(payload["card_id"], payload.get("key"))
     if kind == "play_strategy":

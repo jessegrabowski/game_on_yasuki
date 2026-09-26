@@ -1,10 +1,15 @@
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
-from yasuki_core.engine.rules.board.queries import rulebook_proxy
-from yasuki_core.engine.rules.rulebook import cycle, legacy
+from yasuki_core.engine.rules.board.queries import rulebook_proxy, rulebook_proxy_id
+from yasuki_core.engine.rules.rulebook import cycle, favor_abilities, legacy
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_core.game_pieces.constants import CYCLE_PROXY_ID, LEGACY_PROXY_ID
+from yasuki_core.game_pieces.constants import (
+    CYCLE_PROXY_ID,
+    LEGACY_PROXY_ID,
+    ONYX_FAVOR_PROXY_ID,
+    PRE_GOLD_FAVOR_PROXY_ID,
+)
 from yasuki_core.game_pieces.prints import CardPrint
 
 # The print each rulebook proxy presents, by id. The engine owns these prints, because a rulebook
@@ -14,6 +19,8 @@ from yasuki_core.game_pieces.prints import CardPrint
 RULEBOOK_PROXY_PRINTS: dict[str, CardPrint] = {
     CYCLE_PROXY_ID: cycle.CYCLE_PROXY,
     LEGACY_PROXY_ID: legacy.LEGACY_PROXY,
+    ONYX_FAVOR_PROXY_ID: favor_abilities.ONYX_FAVOR_PROXY,
+    PRE_GOLD_FAVOR_PROXY_ID: favor_abilities.PRE_GOLD_FAVOR_PROXY,
 }
 
 
@@ -26,7 +33,7 @@ def spawn_rulebook_proxies(game: GameState) -> None:
             if rulebook_proxy(game, seat, printed_id) is None:
                 ops.spawn_token(
                     game.table,
-                    f"{seat.name}-{printed_id}",
+                    rulebook_proxy_id(seat, printed_id),
                     printed,
                     seat,
                     dest=ZoneKey(seat, ZoneRole.RULEBOOK),

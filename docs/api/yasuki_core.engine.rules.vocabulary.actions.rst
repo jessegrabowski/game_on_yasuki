@@ -19,7 +19,6 @@ yasuki_core.engine.rules.vocabulary.actions
     PlayInterrupt
     PlayStrategy
     Recruit
-    UseFavorAbility
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.actions
     :members:

@@ -14,7 +14,6 @@ from yasuki_core.game_pieces.constants import CYCLE_PROXY_ID, LEGACY_PROXY_ID
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.vocabulary.actions import (
     Lobby,
-    UseFavorAbility,
     ACTION_TIMINGS,
     Action,
     ActionTiming,
@@ -87,9 +86,8 @@ def test_every_action_has_a_designator_or_a_stated_reason_not_to():
     # only surface when someone constructed one. Pass is exempt because it is the alternative to
     # acting rather than an action; ActivateAbility and PlayStrategy because they read their
     # designator off the card, which is why a Strategy can be a Battle action and an Open one; and
-    # Lobby and UseFavorAbility because they read their designators off the arc: the CR and the
-    # datasheet disagree on Lobby's, and which Favor abilities exist at all differs by arc.
-    timed_elsewhere = {Pass, ActivateAbility, PlayStrategy, Lobby, UseFavorAbility}
+    # Lobby because it reads its designator off the arc: the CR and the datasheet disagree on it.
+    timed_elsewhere = {Pass, ActivateAbility, PlayStrategy, Lobby}
 
     assert set(get_args(Action)) - timed_elsewhere == set(ACTION_TIMINGS)
 

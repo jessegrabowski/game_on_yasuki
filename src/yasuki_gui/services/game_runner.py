@@ -19,8 +19,8 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.rulebook import favor_abilities
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
+from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
 from yasuki_core.engine.rules.rulebook.legacy import FIND_RESOLVER
 from yasuki_core.engine.rules.rulebook.recruit import PROCLAIM_GAINS
 from yasuki_core.engine.rules.state import GameState
@@ -36,7 +36,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayInterrupt,
     PlayStrategy,
     Recruit,
-    UseFavorAbility,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
@@ -214,24 +213,20 @@ class GameRunner:
         ]
 
     def favor_menu(self, card_id: str) -> list[tuple[str, Action]]:
-        """The arc's rulebook Favor abilities, offered on the human's Favor proxy card. Empty for
-        any other card, and for abilities that are not legal now.
+        """The rulebook Favor abilities on the human's Favor ability proxy, offered on the Favor card
+        in its hand. Empty for any other card, and for abilities that are not legal now.
 
-        The Favor is not a card and its abilities sit on the player, but the proxy is where the
-        player looks for them, so it is what they are hung off.
+        The Favor is not a card and its abilities sit on the player, but the Favor card is where
+        the player looks for them, so it is what they are hung off.
         """
-        card = self.session.game.table.cards_by_id.get(card_id)
+        by_id = self.session.game.table.cards_by_id
+        card = by_id.get(card_id)
         if card is None or card.printed_id != IMPERIAL_FAVOR_ID or card.owner is not self.human:
             return []
-        offered = {
-            action.key: action
-            for action in self.legal_actions()
-            if isinstance(action, UseFavorAbility)
-        }
         return [
-            (f"Favor: {ability.label}", offered[ability.key])
-            for ability in favor_abilities.available_favor_abilities()
-            if ability.key in offered
+            (f"Favor: {self._ability_label(by_id[action.card_id], action)}", action)
+            for action in self.legal_actions()
+            if is_favor_ability(action)
         ]
 
     def interrupt_menu(self, card_id: str) -> list[tuple[str, Action]]:
@@ -256,7 +251,8 @@ class GameRunner:
     def board_menu(self) -> list[tuple[str, Action]]:
         """The labeled rulebook abilities, for a right-click on the empty board: those on the
         human's rulebook proxies, which are never drawn, and the rulebook actions that belong to no
-        card. The board is the only place either can be offered. Empty when none is legal now."""
+        card. The board is the only place either can be offered. The Favor abilities are left to
+        :meth:`favor_menu`. Empty when none is legal now."""
         game = self.session.game
         proxies = game.table.zones[ZoneKey(self.human, ZoneRole.RULEBOOK)].cards
         labels = {
@@ -264,7 +260,7 @@ class GameRunner:
         }
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
-            if isinstance(action, ActivateAbility):
+            if isinstance(action, ActivateAbility) and not is_favor_ability(action):
                 card = game.table.cards_by_id[action.card_id]
                 if card in proxies:
                     items.append((self._ability_label(card, action), action))
