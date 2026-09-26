@@ -7,7 +7,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.costs import payable
-from yasuki_core.engine.rules.abilities.registry import abilities_for, ability_for
+from yasuki_core.engine.rules.abilities.registry import abilities_for, ability_for, interrupt_for
 from yasuki_core.engine.rules.rulebook.lobby import is_lobby
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
@@ -460,6 +460,16 @@ def test_the_imperial_favor_prevents_another_players_honor_loss(game):
     assert game.table.seats[P2].honor == honor
     assert game.favor_holder is None
     assert not game.action_is_favor, "the Interrupt's Favor payment is not the attack's"
+
+
+@pre_gold_arc
+def test_the_imperial_favors_interrupt_is_political(game):
+    proxy = _proxy(game)
+
+    interrupt = interrupt_for(proxy)
+
+    assert interrupt is not None
+    assert interrupt.purchase(game, proxy, plays_card=False).has_keyword(keywords.POLITICAL)
 
 
 @pre_gold_arc
