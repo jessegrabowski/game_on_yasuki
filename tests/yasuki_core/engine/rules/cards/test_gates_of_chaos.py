@@ -238,7 +238,7 @@ def test_divination_bowl_looks_at_three_and_puts_them_back_in_the_order_given():
 def test_divination_bowl_draws_and_destroys_itself():
     session = _bowl_game()
 
-    session.act(P1, ActivateAbility("bowl", "draw"))
+    session.act(P1, ActivateAbility("bowl", "draw_and_destroy"))
 
     hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
     assert [card.id for card in hand] == ["a"]

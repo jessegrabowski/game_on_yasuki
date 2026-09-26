@@ -43,7 +43,7 @@ def _divination_bowl_look_effects(
     return [LookAtTop(seat, fate, len(seen)), Arrange(seat, seen, PUT_BACK_ON_TOP, source.id)]
 
 
-def _divination_bowl_draw_effects(
+def _divination_bowl_draw_and_destroy_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     return [DrawCard(source.owner), Destroy(source.id, source.owner)]
@@ -64,12 +64,12 @@ register_ability(
     "divination_bowl",
     Ability(
         printed_index=1,
-        key="draw",
+        key="draw_and_destroy",
         timings=(ActionTiming.LIMITED,),
         cost=bow_cost,
         targets=itself,
         hits_every_target=True,
-        effects=_divination_bowl_draw_effects,
+        effects=_divination_bowl_draw_and_destroy_effects,
     ),
 )
 
