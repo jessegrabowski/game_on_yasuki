@@ -32,9 +32,6 @@ class PreGoldFocusing:
 
     focus_limit: int | None = None
 
-    def begin(self, game: GameState, duel: DuelRecord) -> list[Effect]:
-        return []
-
     def sources(self, game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
         hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
         return tuple(focus_token(card.id) for card in hand.cards)

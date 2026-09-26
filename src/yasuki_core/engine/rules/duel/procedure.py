@@ -67,8 +67,8 @@ def declare_duel(
     belongs to the challenged seat (CR, Duel).
 
     The two seats are the duelists' own controllers, read from the cards, so they cannot disagree
-    with the Personalities they belong to. Return the events the focus procedure's setup raises, for
-    the caller's cascade to drain.
+    with the Personalities they belong to. Return the two declaration events, for the caller's
+    cascade to drain.
 
     Do nothing where :func:`~.challenge_is_legal` refuses the challenge, which is the CR's own
     wording: such a challenge does not happen, rather than happening and failing.
@@ -96,14 +96,10 @@ def declare_duel(
     ops.create_focus_area(game.table, challenged)
     challenger_stat = duel_stat(game, game.table.cards_by_id[challenger_duelist])
     challenged_stat = duel_stat(game, game.table.cards_by_id[challenged_duelist])
-    # The option is queued before the setup runs and before the window is announced, so that work
-    # either of them pushes sits above it and resolves before the first seat is asked.
+    # The option is queued before the window is announced, so that work a card does in the window
+    # sits above it and resolves before the first seat is asked.
     game.stack.append(OfferFocusOrStrike(challenged))
-    events: list[GameEvent] = []
-    for effect in ruleset.ACTIVE.focus_procedure.begin(game, duel):
-        events.extend(triggers.apply_effect(game, effect))
     return [
-        *events,
         _declaration(duel, DeclaringDuel, challenger_stat, challenged_stat),
         _declaration(duel, DuelDeclared, challenger_stat, challenged_stat),
     ]
@@ -145,18 +141,12 @@ def duel_stat(game: GameState, card: L5RCard) -> int:
     return effective_stat(game, card, ruleset.ACTIVE.duel_stat_default)
 
 
-def focus_sources(game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
-    """What ``seat`` may focus with right now, as this arc's focus procedure offers it. Empty for a
-    seat the procedure permits no focus, which leaves it nothing to do but strike."""
-    return ruleset.ACTIVE.focus_procedure.sources(game, duel, seat)
-
-
 def offer_focus_or_strike(game: GameState, seat: PlayerId) -> None:
     """Ask ``seat`` to focus a card or to strike, or strike for it where it has nothing to focus
     with. A seat that cannot focus is not asked: the CR gives it no other option, and a question
     with one answer is not a decision."""
     duel = duel_in_progress(game)
-    sources = focus_sources(game, duel, seat)
+    sources = ruleset.ACTIVE.focus_procedure.sources(game, duel, seat)
     if not sources:
         strike(game, seat)
         return

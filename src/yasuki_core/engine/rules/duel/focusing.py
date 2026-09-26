@@ -48,10 +48,6 @@ class FocusProcedure(Protocol):
         the seat has to focus with."""
         ...
 
-    def begin(self, game: GameState, duel: DuelRecord) -> list[Effect]:
-        """Set the duel's focusing up, before the first seat is asked to focus or strike."""
-        ...
-
     def sources(self, game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
         """The tokens ``seat`` may focus with right now, which is what :class:`~.FocusOrStrike`
         offers it. Empty for a seat that may not focus at all, which leaves it only the strike."""
@@ -74,12 +70,9 @@ class FocusProcedure(Protocol):
 @dataclass(frozen=True, slots=True)
 class TwentyFestivalsFocusing:
     """Focusing as the Twenty Festivals CR states it: from hand or unseen off the Fate deck, four
-    times per seat, with nothing to set up and nothing owed at the end (CR, Duel)."""
+    times per seat, with nothing owed at the end (CR, Duel)."""
 
     focus_limit: int | None = 4
-
-    def begin(self, game: GameState, duel: DuelRecord) -> list[Effect]:
-        return []
 
     def sources(self, game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
         if self.focus_limit is not None and duel.focuses(seat) >= self.focus_limit:

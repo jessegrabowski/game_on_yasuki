@@ -217,8 +217,9 @@ def test_the_focus_limit_is_counted_per_seat():
         duel = session.game.duel
 
         assert (duel.focuses(P2), duel.focuses(P1)) == (limit, limit - 1)
-        assert procedure.focus_sources(session.game, duel, P2) == ()
-        assert DECK_TOP in procedure.focus_sources(session.game, duel, P1)
+        sources = ruleset.ACTIVE.focus_procedure.sources
+        assert sources(session.game, duel, P2) == ()
+        assert DECK_TOP in sources(session.game, duel, P1)
 
 
 def test_the_focus_limit_comes_from_the_focus_procedure(monkeypatch):
