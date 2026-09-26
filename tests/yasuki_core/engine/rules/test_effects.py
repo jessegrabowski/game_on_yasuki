@@ -755,6 +755,18 @@ def test_only_the_named_candidates_are_offered():
     assert game.pending.candidates == ("P2-h0", "P2-h1")
 
 
+def test_a_named_candidate_that_left_the_hand_is_not_discarded():
+    game = _p2_holding(2)
+
+    resolve_effects(
+        game,
+        [DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, PlayerId.P2, candidates=("P2-h0", "gone"))],
+    )
+
+    assert game.pending is None
+    assert _p2_hand(game) == ["P2-h1"]
+
+
 def test_discarding_cards_as_a_cost_needs_enough_of_them_in_hand():
     game = _p2_holding(1)
 

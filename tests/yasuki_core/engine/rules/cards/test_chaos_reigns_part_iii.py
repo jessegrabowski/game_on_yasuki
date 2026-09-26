@@ -394,7 +394,7 @@ def test_the_band_makes_a_player_holding_more_cards_discard_one_they_choose():
 
     session.submit(P1, DecisionResponse(named.candidates))
     discard = session.game.pending
-    assert isinstance(discard, ChooseDiscard) and discard.seat is P2
+    assert isinstance(discard, ChooseDiscard) and discard.seat is P2 and discard.cause is P1
     session.submit(P2, DecisionResponse(("P2-h1",)))
 
     assert _hand(session, P2) == ["P2-h0", "P2-h2"]
