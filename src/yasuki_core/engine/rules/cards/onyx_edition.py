@@ -40,7 +40,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     DelayedEffect,
     Destroy,
-    Discard,
+    DiscardFromHand,
     DrawCard,
     Effect,
     Evaluate,
@@ -334,11 +334,8 @@ def _ring_of_the_void_condition(game: GameState, source: L5RCard) -> bool:
 def _ring_of_the_void_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:
     """ "Discard your hand." The Ring itself has entered play by the time these resolve, so it is
     left out of what was in hand."""
-    return [
-        Discard(card.id, source.owner)
-        for card in cards_in_hand(game, source.owner)
-        if card.id != source.id
-    ]
+    held = tuple(card.id for card in cards_in_hand(game, source.owner) if card.id != source.id)
+    return [DiscardFromHand(source.owner, len(held), source.owner, source.owner, candidates=held)]
 
 
 register_entry(
@@ -366,14 +363,7 @@ def _resolve_ring_of_the_void(
     mine = hands.pop(seat)
     if len(mine) <= max((len(theirs) for theirs in hands.values()), default=0):
         return []
-    return [Choose(seat, mine, 1, 1, "ring_of_the_void_discard", source_id)]
-
-
-@choice_resolver("ring_of_the_void_discard")
-def _resolve_ring_of_the_void_discard(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [Discard(chosen[0], seat)]
+    return [DiscardFromHand(seat, 1, seat, seat)]
 
 
 register_ring(

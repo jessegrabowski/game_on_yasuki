@@ -44,7 +44,6 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     province_zones,
-    top_of_deck,
     units_at,
 )
 from yasuki_core.engine.rules.effects import (
@@ -52,7 +51,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     DelayedEffect,
     Destroy,
-    Discard,
+    DiscardFromHand,
     Dishonor,
     DrawCard,
     Effect,
@@ -87,9 +86,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.table import DeckKey, Location, location_of
+from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint, PersonalityPrint, WindPrint
 
 
@@ -637,21 +635,10 @@ def _way_of_the_crane_experienced_targets(game: GameState, source: L5RCard) -> l
 def _way_of_the_crane_experienced_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """The card to discard is picked from the hand as it stands after the draw, so the one about
-    to be drawn is offered along with the rest."""
+    """The seat picks the discard from its hand after the draw, so the drawn card is among the
+    choices."""
     seat = source.owner
-    held = tuple(card.id for card in cards_in_hand(game, seat))
-    hand_after = held + top_of_deck(game, DeckKey(seat, Side.FATE), 1)
-    if not hand_after:
-        return [DrawCard(seat)]
-    return [DrawCard(seat), Choose(seat, hand_after, 1, 1, "way_of_the_crane_discard", source.id)]
-
-
-@choice_resolver("way_of_the_crane_discard", prompt="Discard a card")
-def _resolve_way_of_the_crane_discard(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [Discard(chosen[0], Trait(source_id))]
+    return [DrawCard(seat), DiscardFromHand(seat, 1, Trait(source.id), seat)]
 
 
 # Once per turn under the ruleset's rationing of abilities, which the printed "once per turn"

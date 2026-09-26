@@ -53,7 +53,11 @@ from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, AttachmentType,
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
 from yasuki_core.engine.rules.turn.action_sequence import submit
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, ChoosePayment, Confirm
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseDiscard,
+    ChoosePayment,
+    Confirm,
+)
 from yasuki_core.engine.rules.vocabulary.actions import PlayInterrupt
 from yasuki_core.engine.rules.effects import Move
 from yasuki_core.engine.table import Location, location_of
@@ -378,7 +382,7 @@ def test_way_of_the_crane_draws_then_discards_as_a_trait(reacting):
 
     action_sequence.perform(game, CRANE_DRAW)
 
-    assert isinstance(game.pending, ChooseCards)
+    assert isinstance(game.pending, ChooseDiscard)
     assert set(game.pending.candidates) == {"held", "top"}
     assert _hand_ids(game) == ["held", "top"]
     submit(game, DecisionResponse(("top",)))
@@ -977,7 +981,7 @@ def test_ring_of_the_void_has_no_action_entry_and_draws_as_an_open_action():
 
     hand = [card.id for card in state.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
     assert hand == ["held", "top"]
-    assert isinstance(session.game.pending, ChooseCards)
+    assert isinstance(session.game.pending, ChooseDiscard)
 
 
 def _enemy_personalities(game, source):

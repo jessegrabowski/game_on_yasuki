@@ -1213,9 +1213,7 @@ def test_ring_of_the_void_discards_a_card_once_the_hand_is_the_largest():
 
     session.act(P1, ActivateAbility("void", "void"))
 
-    assert isinstance(session.game.pending, ChooseCards)
-    assert session.game.pending.candidates == ("top",)
-    session.submit(P1, DecisionResponse(("top",)))
+    assert session.game.pending is None
     assert "top" in _fate_discard(session, P1)
 
 
@@ -1226,8 +1224,9 @@ def test_ring_of_the_void_does_not_count_or_discard_the_imperial_favor(favor_hol
 
     session.act(P1, ActivateAbility("void", "void"))
 
-    assert isinstance(session.game.pending, ChooseCards)
-    assert session.game.pending.candidates == ("top",)
+    assert session.game.pending is None
+    assert "top" in _fate_discard(session, P1)
+    assert session.game.favor_holder is favor_holder
 
 
 def _enemy_personalities(game, source):
