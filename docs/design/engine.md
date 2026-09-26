@@ -59,6 +59,9 @@ code. [Bots and policies](systems/bots-and-policies.md) is the tail a new card h
 
 ## The boundaries
 
+[Build from the vocabulary](build_from_the_vocabulary.md) is the first question an engine change
+answers. Compose what exists, and add a term only when nothing composes.
+
 [Package boundaries](package_boundaries.md) states the dependency rules this layer holds to and
 which of them anything enforces. [Card vocabulary](card_vocabulary.md) is the closed set of data
 types a card's behavior is expressed in.
