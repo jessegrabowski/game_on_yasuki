@@ -294,7 +294,8 @@ class ActionResolved:
         Whether it was a Favor action (ShE datasheet, The Favor Icon), read as it resolved, which
         is the last moment that is settled.
     printed : bool
-        Whether it was a card's printed ability, as against a rulebook action such as a Recruit.
+        Whether it was a printed action from a card, as against a rulebook action such as a
+        Recruit, a trait, or an ability another card grants.
     """
 
     seat: PlayerId

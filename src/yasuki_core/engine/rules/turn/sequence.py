@@ -7,7 +7,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import state_based_actions, triggers
 from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
-from yasuki_core.engine.rules.action_record import resolving_ability
+from yasuki_core.engine.rules.action_record import is_printed_action
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
@@ -482,12 +482,11 @@ def _announce_resolution(game: GameState) -> None:
     game.action_resolved = True
     # A resolved action is past unwinding, so what it showed cannot bar a Response's own cancel.
     game.hidden_card_shown = False
-    ability = resolving_ability(game)
     resolved = ActionResolved(
         seat=game.action_seat,
         card_id=getattr(game.action, "card_id", None),
         favor=is_favor_action(game),
-        printed=ability is not None and not ability.from_rulebook,
+        printed=is_printed_action(game, game.action),
     )
     triggers.fire(game, resolved)
 

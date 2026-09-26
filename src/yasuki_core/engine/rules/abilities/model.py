@@ -258,6 +258,13 @@ class Ability:
         if self.from_keyword is not None and not self.from_rulebook:
             raise ValueError(f"the {self.from_keyword} ability is a rulebook ability")
 
+    @property
+    def acts_from_its_card(self) -> bool:
+        """Whether using this ability is an action from the card it is on: neither a trait, which
+        is no action (CR, Traits), nor a rulebook ability, whose source is the rulebook (CR,
+        From)."""
+        return not self.trait and not self.from_rulebook
+
     def purchase(self, game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
         """What taking this ability on ``card`` pays for, when taking it plays the card or not.
 
