@@ -1,16 +1,45 @@
 from collections.abc import Callable
+from typing import TypeGuard
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board import queries
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseLobbyTarget, DecisionResponse
-from yasuki_core.engine.rules.effects import ApplyEffects, Bow, TakeFavor
+from yasuki_core.engine.rules.effects import (
+    Bow,
+    Choose,
+    Effect,
+    SpendOncePerTurn,
+    SpendSeatOncePerTurn,
+    TakeFavor,
+)
+from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.actions import Action, ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.modifiers import LobbyModifier
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
-from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
+from yasuki_core.engine.rules.state import GameState, seat_once_key
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import IMPERIAL_LOBBY_PROXY_ID, ONYX_LOBBY_PROXY_ID, Side
+from yasuki_core.game_pieces.prints import RulebookPrint
+
+LOBBY = "lobby"
+
+# The prints each seat's Lobby proxy presents, one per arc family, since the arcs word the ability
+# differently. ``rulebook/proxies.py`` deals whichever the active ruleset names.
+ONYX_LOBBY_PROXY = RulebookPrint(
+    name="Lobby", side=Side.FATE, printed_id=ONYX_LOBBY_PROXY_ID, card_type="Other"
+)
+IMPERIAL_LOBBY_PROXY = RulebookPrint(
+    name="Lobby", side=Side.FATE, printed_id=IMPERIAL_LOBBY_PROXY_ID, card_type="Other"
+)
+
+
+def is_lobby(action: Action) -> TypeGuard[ActivateAbility]:
+    """Whether ``action`` takes the Lobby ability on a seat's Lobby proxy."""
+    return isinstance(action, ActivateAbility) and action.ability_key == LOBBY
 
 
 # What a card in play gives its controller's Lobby amounts, beyond anything it prints. Shigekawa's
@@ -77,8 +106,8 @@ lobby_bar = LOBBY_BARS.make_decorator()
 def may_lobby(game: GameState, seat: PlayerId) -> bool:
     """Whether nothing in play stops ``seat`` taking a Lobby action.
 
-    Only what a card forbids. The datasheet's own conditions on Lobbying are checked where the
-    action's legality is decided.
+    Only what a card forbids. The rulebook's own conditions on Lobbying are checked by each arc's
+    Lobby ability.
     """
     return not any(
         bar(game, card, seat)
@@ -92,34 +121,6 @@ def may_lobby(game: GameState, seat: PlayerId) -> bool:
 # is the card-level half of the rule; :data:`LOBBY_BARS` is the half that stops a whole player.
 MAY_NOT_LOBBY = FlagRegistry("may not lobby", "already may not be bowed to Lobby")
 register_may_not_lobby = MAY_NOT_LOBBY.make_register()
-
-
-def lobby(game: GameState) -> None:
-    """Announce the Lobby ability by asking which Personality it bows. ``legal_actions`` has already
-    checked the turn, the honor comparison, and that a Personality is there to pay with."""
-    seat = game.active
-    game.pending = ChooseLobbyTarget(
-        seat=seat,
-        candidates=tuple(card.id for card in lobby_candidates(game, seat)),
-    )
-
-
-def apply_lobby_target(
-    game: GameState, request: ChooseLobbyTarget, response: DecisionResponse
-) -> None:
-    """Bow the chosen Personality and take the Imperial Favor.
-
-    ShE datasheet: bowing the Personality is the cost and taking the Favor the effect.
-
-    The Personality is marked as having Lobbied, for the cards that ask who did.
-    """
-    seat = request.seat
-    game.use_once(lobby_key(seat, game.turn))
-    lobbied = game.table.cards_by_id[response.choices[0]]
-    claim_once_per_turn(game, lobbied, LOBBIED_TAG)
-    # The bow is the cost and taking the Favor the effect, so only the latter is the action's own.
-    game.stack.append(ApplyEffects((TakeFavor(seat),), interruptible=True))
-    triggers.resolve_effects(game, [Bow(lobbied.id)])
 
 
 def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -136,10 +137,141 @@ def lobby_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
 
 
 def lobby_key(seat: PlayerId, turn: int) -> str:
-    """The once-per-turn usage key for a seat's Lobby, scoped to the turn the way
-    :func:`~.seat_once_key` is.
+    """The once-per-turn usage key for a seat's Lobby, the one :class:`~.SpendSeatOncePerTurn`
+    claims under the ``LOBBY`` tag.
 
     Named for the Lobby action rather than for the rulebook ability, because the ShE datasheet caps
-    a player at one Lobby action per turn whatever granted it, not at one use of this ability.
+    a player at one Lobby action per turn whatever granted it, not at one use of this ability. A
+    card's own Lobby spends the same tag.
     """
-    return f"lobby:{seat.name}:{turn}"
+    return seat_once_key(seat, LOBBY, turn)
+
+
+def has_highest_lobby_honor(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat``'s Family Honor is higher than each other player's, as a Lobby reads it.
+
+    Both sides of the comparison are read through :func:`~.lobby_amount`, since the datasheet
+    adjusts an amount by the Bonuses and Penalties on the player it is about rather than on the
+    player acting. A tie does not qualify.
+    """
+    seats = game.table.seats
+    honor = lobby_amount(game, seat, seats[seat].honor)
+    return all(
+        lobby_amount(game, other, info.honor) < honor
+        for other, info in seats.items()
+        if other is not seat
+    )
+
+
+def _may_take_lobby(game: GameState, seat: PlayerId) -> bool:
+    """What every arc's Lobby asks before anything it prints: nothing in play forbids the seat to
+    Lobby, and it has not taken a Lobby action this turn."""
+    return may_lobby(game, seat) and not game.has_used(lobby_key(seat, game.turn))
+
+
+def _lobby_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Spend the seat's Lobby for the turn and bow one of its Personalities. The pick is the cost,
+    so a seat with nobody to bow cannot pay and is not offered the action."""
+    seat = source.owner
+    candidates = tuple(card.id for card in lobby_candidates(game, seat))
+    return [
+        SpendSeatOncePerTurn(seat=seat, tag=LOBBY),
+        Choose(
+            seat=seat,
+            candidates=candidates,
+            minimum=1,
+            maximum=1,
+            resolver=LOBBY,
+            source_id=source.id,
+        ),
+    ]
+
+
+@triggers.choice_resolver(LOBBY, prompt="Bow a Personality to Lobby")
+def _lobby_bow(
+    game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Bow the chosen Personality, marking it as having Lobbied for the cards that ask who did."""
+    return [SpendOncePerTurn(card_id=chosen[0], tag=LOBBIED_TAG), Bow(chosen[0])]
+
+
+def _onyx_lobby_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The proxy itself on the seat's own turn, when the seat's Family Honor is higher than each
+    other player's. "If it is your turn" is printed because an Open designator would otherwise let
+    another seat's player Lobby."""
+    seat = source.owner
+    if seat is not game.active or not _may_take_lobby(game, seat):
+        return []
+    return itself(game, source) if has_highest_lobby_honor(game, seat) else []
+
+
+def _onyx_lobby_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [TakeFavor(source.owner)]
+
+
+register_ability(
+    ONYX_LOBBY_PROXY_ID,
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label=(
+            "Political Open: If it is your turn and you have higher Family Honor than each other "
+            "player, bow your target unbowed Personality with 1 or more Personal Honor to take the "
+            "Imperial Favor."
+        ),
+        cost=_lobby_cost,
+        targets=_onyx_lobby_targets,
+        effects=_onyx_lobby_effects,
+        hits_every_target=True,
+        key=LOBBY,
+        keywords=frozenset({keywords.POLITICAL}),
+        located_at=(CardLocation.RULEBOOK,),
+        from_rulebook=True,
+    ),
+)
+
+
+def _imperial_lobby_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The proxy itself unless the seat already holds the Favor. The pre-Gold rulebook sets no honor
+    condition on lobbying, only on its outcome, and there is nothing to lobby for while holding the
+    Favor (Official L5R FAQ 3.10)."""
+    seat = source.owner
+    if game.favor_holder is seat or not _may_take_lobby(game, seat):
+        return []
+    return itself(game, source)
+
+
+def _imperial_lobby_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Take the Favor with Family Honor higher than each other player's, and otherwise leave it
+    where it is.
+
+    The rulebook opens the lobby to the other players unless the Favor is uncontrolled and the
+    lobbying seat's Family Honor is highest, and lets every player bow Personalities and discard a
+    card to raise or lower that Family Honor until all pass. Neither contribution is modeled, so the
+    lobby resolves as though every player passed at once: the seat takes the Favor only with the
+    highest Family Honor.
+    """
+    seat = source.owner
+    return [TakeFavor(seat)] if has_highest_lobby_honor(game, seat) else []
+
+
+register_ability(
+    IMPERIAL_LOBBY_PROXY_ID,
+    Ability(
+        timings=(ActionTiming.LIMITED,),
+        label=(
+            "Once per turn, as a Political Limited action, you can lobby for the Imperial Favor. "
+            "To do so, bow one of your Personalities with over 0 Personal Honor and announce that "
+            "you are lobbying. If no player controls the Imperial Favor and you have more Family "
+            "Honor than each other player, you automatically gain the Imperial Favor. No other "
+            "players may interfere."
+        ),
+        cost=_lobby_cost,
+        targets=_imperial_lobby_targets,
+        effects=_imperial_lobby_effects,
+        hits_every_target=True,
+        key=LOBBY,
+        keywords=frozenset({keywords.POLITICAL}),
+        located_at=(CardLocation.RULEBOOK,),
+        from_rulebook=True,
+    ),
+)

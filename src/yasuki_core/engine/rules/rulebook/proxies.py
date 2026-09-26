@@ -1,14 +1,16 @@
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.board.queries import rulebook_proxy, rulebook_proxy_id
-from yasuki_core.engine.rules.rulebook import cycle, favor_abilities, inheritance, legacy
+from yasuki_core.engine.rules.rulebook import cycle, favor_abilities, inheritance, legacy, lobby
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import (
     CYCLE_PROXY_ID,
+    IMPERIAL_LOBBY_PROXY_ID,
     INHERITANCE_PROXY_ID,
     LEGACY_PROXY_ID,
     ONYX_FAVOR_PROXY_ID,
+    ONYX_LOBBY_PROXY_ID,
     PRE_GOLD_FAVOR_PROXY_ID,
 )
 from yasuki_core.game_pieces.prints import CardPrint
@@ -23,6 +25,8 @@ RULEBOOK_PROXY_PRINTS: dict[str, CardPrint] = {
     INHERITANCE_PROXY_ID: inheritance.INHERITANCE_PROXY,
     ONYX_FAVOR_PROXY_ID: favor_abilities.ONYX_FAVOR_PROXY,
     PRE_GOLD_FAVOR_PROXY_ID: favor_abilities.PRE_GOLD_FAVOR_PROXY,
+    ONYX_LOBBY_PROXY_ID: lobby.ONYX_LOBBY_PROXY,
+    IMPERIAL_LOBBY_PROXY_ID: lobby.IMPERIAL_LOBBY_PROXY,
 }
 
 

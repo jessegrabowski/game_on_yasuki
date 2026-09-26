@@ -7,8 +7,8 @@ yasuki_core.engine.rules.rulebook.lobby
 
 .. autosummary::
 
-    apply_lobby_target
-    lobby
+    has_highest_lobby_honor
+    is_lobby
     lobby_amount
     lobby_bonus
     lobby_candidates

@@ -111,14 +111,17 @@ its key. `legacy.py` registers Legacy on its own proxy the same way, and {func}`
 recognizes it. Its banish is the cost, so the seat can still back out at that pick. The search is an
 `Evaluate` effect, which looks through the deck and face-down Provinces only once the Interrupt step
 has closed. `inheritance.py` does the same for Inheritance, whose cost spends the seat's
-once-per-game use and turns its Stronghold over, and {func}`~.is_inheritance` recognizes it. The Tk
+once-per-game use and turns its Stronghold over, and {func}`~.is_inheritance` recognizes it. Lobby
+follows them, with one proxy per arc family because the arcs word it differently: Onyx Edition names
+a proxy carrying the Open Lobby, which Shattered Empire inherits, and the pre-Gold ruleset names one
+carrying its Limited Lobby. {func}`~.is_lobby` recognizes either by the key they share. The Tk
 client never draws the zone. It lists the proxies' abilities on the board menu, except Inheritance,
 which it offers on the Stronghold the ability turns over. The zone is not a card zone: nothing in
 play sees what it holds, and the sandbox refuses to move anything into or out of it.
 
-The Favor's rulebook abilities sit on a proxy of their own, one per arc family, which
-[The Imperial Favor](the-imperial-favor.md) describes. The Tk client lists them on the Favor card
-in the holder's hand instead of the board menu.
+The Favor's rulebook abilities sit on a proxy of their own, one per arc family, which [The Imperial
+Favor](the-imperial-favor.md) describes. The Tk client lists them on the Favor card in the holder's
+hand instead of the board menu.
 
 ## Where a card plugs in
 

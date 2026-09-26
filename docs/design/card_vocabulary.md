@@ -176,7 +176,6 @@ Legality with respect to game state is checked separately.
    ChooseInvestAmount
    ChooseOption
    LeaveBowed
-   ChooseLobbyTarget
    ChoosePayment
    Confirm
    DecisionRequest

@@ -8,6 +8,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.costs import payable
 from yasuki_core.engine.rules.abilities.registry import abilities_for, ability_for
+from yasuki_core.engine.rules.rulebook.lobby import is_lobby
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.effects import GainHonor, TakeFavor
 from yasuki_core.engine.rules.rulebook import proxies
@@ -23,7 +24,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     DeclareAttack,
-    Lobby,
     Pass,
     PlayInterrupt,
 )
@@ -403,7 +403,7 @@ def test_a_wind_does_not_bar_lobbying(game):
     put_in_play(game, personality("courtier", personal_honor=2))
     put_in_play(game, wind(P1))
 
-    assert Lobby() in legality.legal_actions(game, P1)
+    assert any(is_lobby(action) for action in legality.legal_actions(game, P1))
 
 
 @datasheet_arcs

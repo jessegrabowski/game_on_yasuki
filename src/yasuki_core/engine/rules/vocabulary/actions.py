@@ -137,13 +137,6 @@ class ActivateAbility:
 
 
 @dataclass(frozen=True, slots=True)
-class Lobby:
-    """Take the Lobby rulebook ability: on your turn, with higher Family Honor than each other
-    player, bow a Personality to take the Imperial Favor. Which Personality bows is chosen through
-    the decision the action raises, so the action itself carries no target. [ShE]"""
-
-
-@dataclass(frozen=True, slots=True)
 class PlayInterrupt:
     """Take the Interrupt a card prints against the action now held at the Interrupt step: a
     Strategy from hand, played and paid for, or a card in play, which pays the Interrupt's own
@@ -193,7 +186,6 @@ Action = (
     | PlayStrategy
     | Equip
     | ActivateAbility
-    | Lobby
     | DeclareAttack
     | PlayInterrupt
     | DiscardToInterrupt
@@ -201,9 +193,7 @@ Action = (
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
 # to taking an action rather than one, and ActivateAbility because it reads its designator off the
-# card. The same action is Open on one Holding and Dynasty on another. Lobby is absent because it
-# reads its designator off the arc's ruleset: the Twenty Festivals CR makes Lobby Limited where the
-# ShE datasheet makes it Open.
+# card. The same action is Open on one Holding and Dynasty on another.
 ACTION_TIMINGS: dict[type, ActionTiming] = {
     Recruit: ActionTiming.DYNASTY,
     # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.

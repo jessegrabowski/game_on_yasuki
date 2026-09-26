@@ -18,7 +18,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
     Equip,
-    Lobby,
     Pass,
     Recruit,
 )
@@ -42,7 +41,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Favor
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.players import Trait
-from yasuki_core.engine.rules.rulebook.lobby import lobby_bonus
+from yasuki_core.engine.rules.rulebook import proxies
+from yasuki_core.engine.rules.rulebook.lobby import is_lobby, lobby_bonus
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import DeckKey
@@ -599,25 +599,30 @@ def _p2_ready_to_lobby(
         put_in_play(game, _wind_named(PlayerId.P2, p2_wind))
     game.table.seats[PlayerId.P2].honor = 10
     put_in_play(game, personality("P2-courtier", owner=PlayerId.P2, personal_honor=2))
+    proxies.spawn_rulebook_proxies(game)
     return game
+
+
+def _p2_may_lobby(game: GameState) -> bool:
+    return any(is_lobby(action) for action in legality.legal_actions(game, PlayerId.P2))
 
 
 def test_an_unbowed_meiji_stops_a_seat_without_his_controllers_wind_lobbying():
     game = _p2_ready_to_lobby()
 
-    assert Lobby() not in legality.legal_actions(game, PlayerId.P2)
+    assert not _p2_may_lobby(game)
 
 
 def test_a_seat_sharing_meijis_controllers_wind_may_lobby():
     game = _p2_ready_to_lobby(p2_wind="kanos_alliance")
 
-    assert Lobby() in legality.legal_actions(game, PlayerId.P2)
+    assert _p2_may_lobby(game)
 
 
 def test_a_bowed_meiji_stops_nobody():
     game = _p2_ready_to_lobby(meiji_bowed=True)
 
-    assert Lobby() in legality.legal_actions(game, PlayerId.P2)
+    assert _p2_may_lobby(game)
 
 
 def test_meiji_stops_nobody_while_his_controller_has_no_wind():
@@ -625,7 +630,7 @@ def test_meiji_stops_nobody_while_his_controller_has_no_wind():
     # the ruling here is that it does nothing.
     game = _p2_ready_to_lobby(p1_wind=None)
 
-    assert Lobby() in legality.legal_actions(game, PlayerId.P2)
+    assert _p2_may_lobby(game)
 
 
 # --- Matsu Gonshiro, Soul of Matsu Shimei ---

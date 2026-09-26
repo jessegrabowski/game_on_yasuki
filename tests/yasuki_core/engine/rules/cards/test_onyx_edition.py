@@ -33,17 +33,17 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     DeclareAttack,
-    Lobby,
     Pass,
     PlayInterrupt,
     PlayStrategy,
     Recruit,
 )
-from yasuki_core.engine.rules.board.queries import has_keyword
+from yasuki_core.engine.rules.board.queries import has_keyword, rulebook_proxy
+from yasuki_core.engine.rules.rulebook.lobby import LOBBY
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, ONYX_LOBBY_PROXY_ID
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     FatePrint,
@@ -529,7 +529,8 @@ def _aoi_after_a_lobby() -> EngineSession:
     put_in_play(state, personality("aoi", printed_id="doji_aoi_soul_of_doji_chitose"))
     put_in_play(state, personality("courtier", personal_honor=2))
     session = EngineSession.start(state, P1)
-    session.act(P1, Lobby())
+    lobby = rulebook_proxy(session.game, P1, ONYX_LOBBY_PROXY_ID)
+    session.act(P1, ActivateAbility(lobby.id, LOBBY))
     session.submit(P1, DecisionResponse(("courtier",)))
     return session
 

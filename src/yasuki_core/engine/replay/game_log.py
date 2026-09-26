@@ -22,7 +22,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
-    Lobby,
     Pass,
     PlayInterrupt,
     PlayStrategy,
@@ -284,8 +283,6 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "recruit", "card_id": card_id, "invest": invest, "proclaim": proclaim}
         case Equip(card_id=card_id, invest=invest):
             return {"kind": "equip", "card_id": card_id, "invest": invest}
-        case Lobby():
-            return {"kind": "lobby"}
         case ActivateAbility(card_id=card_id, ability_key=key):
             return {"kind": "activate_ability", "card_id": card_id, "key": key}
         case PlayStrategy(card_id=card_id):
@@ -311,8 +308,6 @@ def _decode_action(payload: dict) -> Action:
         )
     if kind == "equip":
         return Equip(payload["card_id"], invest=payload.get("invest", False))
-    if kind == "lobby":
-        return Lobby()
     if kind == "activate_ability":
         return ActivateAbility(payload["card_id"], payload.get("key"))
     if kind == "play_strategy":

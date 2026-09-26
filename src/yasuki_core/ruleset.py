@@ -2,16 +2,16 @@ from dataclasses import dataclass, field, replace
 from enum import Enum
 from typing import Protocol
 
-from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.duel.focusing import TWENTY_FESTIVALS_FOCUSING, FocusProcedure
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.game_pieces.constants import (
     CYCLE_PROXY_ID,
+    IMPERIAL_LOBBY_PROXY_ID,
     INHERITANCE_PROXY_ID,
     LEGACY_PROXY_ID,
     ONYX_FAVOR_PROXY_ID,
+    ONYX_LOBBY_PROXY_ID,
     PRE_GOLD_FAVOR_PROXY_ID,
 )
 
@@ -83,10 +83,6 @@ class Ruleset:
         repeat. Default True, the CR's.
     ring_entry : RingEntry
         How a Ring's "Play after X" trait puts it into play. Default immediate, the CR's.
-    lobby_timing : ActionTiming
-        The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
-        Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
-        different players entitled to act. Default Limited, the CR's.
     focus_procedure : FocusProcedure
         How this arc's duels are focused: what may be focused, how many times, and what focusing one
         card does. Default the Twenty Festivals CR's.
@@ -111,8 +107,6 @@ class Ruleset:
     battle_segment_names: dict[BattleSegment, str] = field(default_factory=dict)
     abilities_once_per_turn: bool = True
     ring_entry: RingEntry = RingEntry.IMMEDIATE
-    lobby_timing: ActionTiming = ActionTiming.LIMITED
-    lobby_keywords: frozenset[str] = frozenset()
     focus_procedure: FocusProcedure = TWENTY_FESTIVALS_FOCUSING
     duel_stat_default: Stat = Stat.CHI
     rulebook_proxies: tuple[str, ...] = ()
@@ -200,9 +194,13 @@ ONYX = Ruleset(
         Segment.MANEUVERS: "Maneuvers Segment",
         Segment.FIGHT: "Fight Battles",
     },
-    lobby_timing=ActionTiming.OPEN,
-    lobby_keywords=frozenset({keywords.POLITICAL}),
-    rulebook_proxies=(CYCLE_PROXY_ID, LEGACY_PROXY_ID, INHERITANCE_PROXY_ID, ONYX_FAVOR_PROXY_ID),
+    rulebook_proxies=(
+        CYCLE_PROXY_ID,
+        LEGACY_PROXY_ID,
+        INHERITANCE_PROXY_ID,
+        ONYX_FAVOR_PROXY_ID,
+        ONYX_LOBBY_PROXY_ID,
+    ),
     battle_segments=_ONYX_BATTLE_SEGMENTS,
     battle_segment_names={
         BattleSegment.ENGAGE: "Engage Segment",
@@ -255,6 +253,5 @@ IMPERIAL = Ruleset(
     arcs=("Clan Wars", 'Hidden Emperor - "Jade"'),
     clan_alignments=SHATTERED_EMPIRE.clan_alignments,
     abilities_once_per_turn=False,
-    lobby_keywords=frozenset({keywords.POLITICAL}),
-    rulebook_proxies=(PRE_GOLD_FAVOR_PROXY_ID,),
+    rulebook_proxies=(PRE_GOLD_FAVOR_PROXY_ID, IMPERIAL_LOBBY_PROXY_ID),
 )

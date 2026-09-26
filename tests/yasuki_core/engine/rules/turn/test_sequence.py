@@ -14,7 +14,6 @@ from yasuki_core.game_pieces.prints import (
     RulebookPrint,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
-    Lobby,
     ActionTiming,
     ActivateAbility,
     Pass,
@@ -75,8 +74,10 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import favor_actions_this_turn
+from yasuki_core.engine.rules.board.queries import favor_actions_this_turn, rulebook_proxy
 from yasuki_core.engine.rules.rulebook import proxies
+from yasuki_core.engine.rules.rulebook.lobby import LOBBY
+from yasuki_core.game_pieces.constants import ONYX_LOBBY_PROXY_ID
 from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
@@ -649,8 +650,9 @@ def test_an_action_is_worded_for_the_seat_that_must_answer_it():
         action_sequence.describe_action(game, ActivateAbility("caravansary-P1"))
         == "the ability on Caravansary"
     )
-    assert action_sequence.describe_action(game, Lobby()) == "Lobby"
     proxies.spawn_rulebook_proxies(game)
+    lobby = ActivateAbility(rulebook_proxy(game, PlayerId.P1, ONYX_LOBBY_PROXY_ID).id, LOBBY)
+    assert action_sequence.describe_action(game, lobby) == "the ability on Lobby"
     assert (
         action_sequence.describe_action(game, datasheet_favor_ability("discard_to_draw"))
         == "the ability on Imperial Favor"

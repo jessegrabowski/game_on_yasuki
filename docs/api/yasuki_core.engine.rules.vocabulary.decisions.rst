@@ -21,7 +21,6 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseInterruptEffect
     ChooseInterruptTarget
     ChooseInvestAmount
-    ChooseLobbyTarget
     ChooseOption
     ChoosePayment
     Confirm
