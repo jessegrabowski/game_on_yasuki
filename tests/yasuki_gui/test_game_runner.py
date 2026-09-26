@@ -1,6 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.cycle import is_cycle
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
@@ -33,7 +34,6 @@ from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
-    Cycle,
     DiscardToInterrupt,
     Equip,
     Legacy,
@@ -441,9 +441,9 @@ def test_board_menu_offers_cycle_on_the_opening_turn():
     # than by which zone was clicked. Cycle is the Action phase's, Legacy the Dynasty phase's.
     runner = _runner_with_a_province()
 
-    assert runner.board_menu() == [
-        ("Cycle: put Province cards on the bottom of your deck", Cycle())
-    ]
+    [(label, action)] = runner.board_menu()
+    assert is_cycle(action)
+    assert label.startswith("Limited: If it is your first turn, choose one or more face-up cards")
 
 
 def test_board_menu_is_empty_when_no_rulebook_ability_is_legal():
@@ -505,6 +505,27 @@ def test_ability_menu_offers_millet_farm_activation_in_play():
     assert [label for label, _ in runner.ability_menu("millet")] == [
         "Open, :bow:: Give your target Farm Holding +2GP."
     ]
+
+
+def test_board_menu_lists_proxy_abilities_and_no_card_in_play():
+    millet = L5RCard.of(
+        HoldingPrint,
+        id="millet",
+        name="Millet Farm",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        printed_id="millet_farm",
+        keywords=("Farm",),
+        gold_production=1,
+        text="<b>Open, :bow::</b> Give your target Farm Holding +2GP.",
+    )
+    state = _dealt_table(0)
+    _face_up_holding_in_province(state, "P1-pv", gold_cost=1)
+    state.battlefield.add(_register(state, millet))
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+
+    assert runner.ability_menu("millet")
+    assert [is_cycle(action) for _, action in runner.board_menu()] == [True]
 
 
 def test_ability_menu_is_empty_for_a_card_with_no_ability():

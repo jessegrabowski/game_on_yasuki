@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.duel.focusing import TWENTY_FESTIVALS_FOCUSING, Fo
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
+from yasuki_core.game_pieces.constants import CYCLE_PROXY_ID
 
 
 def normalize_clan(name: str) -> str:
@@ -231,6 +232,7 @@ ONYX = Ruleset(
     },
     lobby_timing=ActionTiming.OPEN,
     lobby_keywords=frozenset({keywords.POLITICAL}),
+    rulebook_proxies=(CYCLE_PROXY_ID,),
     favor_abilities=(
         FavorAbility(
             "discard_to_draw",

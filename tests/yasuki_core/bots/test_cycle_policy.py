@@ -1,7 +1,8 @@
 from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Cycle, Pass, Recruit
+from yasuki_core.engine.rules.rulebook.cycle import is_cycle
+from yasuki_core.engine.rules.vocabulary.actions import Pass, Recruit
 from yasuki_core.bots.policies import EconomicCyclePolicy, cards_to_cycle
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
@@ -135,7 +136,7 @@ def test_a_face_down_card_the_seat_has_peeked_is_not_offered_up():
 def test_it_takes_cycle_when_something_is_worth_replacing():
     session = _opening(0, 1)
 
-    assert EconomicCyclePolicy().choose(_view(session, 4), session.legal_actions(P1)) == Cycle()
+    assert is_cycle(EconomicCyclePolicy().choose(_view(session, 4), session.legal_actions(P1)))
 
 
 def test_it_declines_cycle_when_the_opening_already_beats_the_deck():

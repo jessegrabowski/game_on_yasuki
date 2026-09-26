@@ -178,8 +178,8 @@ class Ability:
     from_rulebook : bool, optional
         Whether the rulebook confers this ability rather than the card printing it: through a
         keyword, on every card at a location as Dynasty Discard is, or on a proxy in a seat's
-        rulebook zone. It is a player ability, so it plays no card, carries only its own keywords,
-        and is not announced as printed. Default False.
+        rulebook zone as Cycle is. It is a player ability, so it plays no card, carries only its own
+        keywords, and is not announced as printed. Default False.
     """
 
     timings: tuple[ActionTiming, ...]

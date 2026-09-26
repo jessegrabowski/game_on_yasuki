@@ -57,7 +57,6 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "abilities": frozenset(registry._ABILITIES),
         "invest abilities": frozenset(registry._INVEST),
         "interrupts": frozenset(registry._INTERRUPTS),
-        "rulebook proxies": frozenset(proxies.RULEBOOK_PROXY_PRINTS),
         "condition watches": frozenset(triggers._WATCHES),
         "triggers": frozenset(
             card_id
@@ -187,7 +186,7 @@ def unregistered_card_ids(registries: dict[str, frozenset[str]] | None = None) -
     if registries is None:
         registries = registered_card_ids() | card_keyed_data()
 
-    known = read_index()
+    known = read_index() | frozenset(proxies.RULEBOOK_PROXY_PRINTS)
     problems: list[str] = []
     for label, card_ids in sorted(registries.items()):
         for card_id in sorted(card_ids - known):
@@ -541,7 +540,6 @@ VALIDATED_REGISTRIES = {
     "CHI_DEATH_EXEMPT",
     "_TRIGGERS",
     "_WATCHES",
-    "RULEBOOK_PROXY_PRINTS",
 }
 
 
@@ -569,6 +567,7 @@ NOT_KEYED_BY_CARD = {
     "KEYWORD_ABILITIES",  # keyed by keyword: the abilities one confers on every card carrying it
     "LOCATION_ABILITIES",  # keyed by location: the abilities it confers on every card sitting there
     "_LOCATION_ZONE_ROLES",  # the zone role each location off the battlefield names
+    "RULEBOOK_PROXY_PRINTS",  # keyed by an engine-owned proxy id, which names no catalog card
 }
 
 

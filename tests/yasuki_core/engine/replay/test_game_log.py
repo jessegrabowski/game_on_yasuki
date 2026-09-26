@@ -13,7 +13,6 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    Cycle,
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
@@ -380,7 +379,6 @@ ROUND_TRIPPED_ACTIONS = [
     Equip("card", invest=True),
     Legacy(),
     Inheritance(),
-    Cycle(),
     Lobby(),
     UseFavorAbility("draw"),
     ActivateAbility("card"),

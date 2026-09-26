@@ -21,7 +21,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     BattleDesignator,
-    Cycle,
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
@@ -173,7 +172,6 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
     return [
         Pass(),
         *_abilities(game, seat),
-        *_cycle(game, seat),
         *_recruits(game, seat),
         *_equips(game, seat),
         *_strategies(game, seat),
@@ -197,8 +195,6 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
     match action:
         case Pass():
             return True
-        case Cycle():
-            return bool(_cycle(game, seat))
         case Legacy():
             return bool(_legacy(game, seat))
         case Inheritance():
@@ -248,19 +244,6 @@ def _abilities(game: GameState, seat: PlayerId, *, only: str | None = None) -> l
         for card, ability in activatable(game, seat, permitted_timings(game, seat))
         if only is None or card.id == only
     ]
-
-
-def _cycle(game: GameState, seat: PlayerId) -> list[Action]:
-    """The Cycle ability when the seat can take it: its first turn, not already used, and with a
-    face-up Province card to put back. The rule is "one or more", so declining is not taking the
-    action at all rather than taking it and choosing nothing."""
-    if not permits(game, seat, ACTION_TIMINGS[Cycle]):
-        return []
-    if not is_first_turn(game, seat):
-        return []
-    if game.has_used(cycle_key(seat, game.turn)):
-        return []
-    return [Cycle()] if cycle_candidates(game, seat) else []
 
 
 def _lobby(game: GameState, seat: PlayerId) -> list[Action]:
@@ -345,8 +328,7 @@ def _legacy(game: GameState, seat: PlayerId) -> list[Action]:
 
 def inheritance_key(seat: PlayerId) -> str:
     """The once-per-*game* usage key for a seat's Inheritance ability. Unscoped by turn, unlike
-    :func:`~.legacy_key` and :func:`~.cycle_key`, because the ability is spent for the whole
-    game."""
+    :func:`~.legacy_key`, because the ability is spent for the whole game."""
     return f"inheritance:{seat.name}"
 
 
@@ -508,25 +490,6 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
     if seat_alignments(game, seat).isdisjoint(card_alignments(card)):
         return False
     return not game.has_used(proclaim_key(seat, game.turn))
-
-
-def cycle_key(seat: PlayerId, turn: int) -> str:
-    """The once-per-turn usage key for a seat's Cycle ability, scoped to the turn the way
-    :func:`~.legacy_key` is."""
-    return f"cycle:{seat.name}:{turn}"
-
-
-def is_first_turn(game: GameState, seat: PlayerId) -> bool:
-    """Whether the current turn is ``seat``'s first. The turn counter advances while the active seat
-    alternates, so the second player's first turn is turn 2."""
-    return game.turn == (1 if seat is game.first_player else 2)
-
-
-def cycle_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The cards ``seat`` may put on the bottom of its deck with Cycle: the face-up ones in its
-    Provinces. A face-down card is not eligible, so a Province nobody has revealed stays where it
-    is."""
-    return [card for card in province_cards(game, seat) if card.face_up]
 
 
 def legacy_key(seat: PlayerId, turn: int) -> str:

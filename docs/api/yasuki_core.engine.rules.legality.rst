@@ -9,13 +9,10 @@ yasuki_core.engine.rules.legality
 
     activatable
     can_proclaim
-    cycle_candidates
-    cycle_key
     has_absent_ability
     has_presence
     has_wind
     inheritance_key
-    is_first_turn
     is_legacy_card
     is_legal
     legacy_candidates

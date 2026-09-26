@@ -37,9 +37,9 @@ it reads, and they are what the Absent, Home and Remote designators on an abilit
 ## Rulebook actions
 
 Several rulebook actions carry their own legality, and `legality.py` holds the predicates rather
-than the actions: {func}`~.cycle_candidates` for Cycle, {func}`~.legacy_search_pool` and
-{func}`~.legacy_candidates` for Legacy, {func}`~.can_proclaim` for Proclaim, and
-{func}`~.recruit_cost` for what a Recruit will cost this seat.
+than the actions: {func}`~.legacy_search_pool` and {func}`~.legacy_candidates` for Legacy,
+{func}`~.can_proclaim` for Proclaim, and {func}`~.recruit_cost` for what a Recruit will cost this
+seat.
 
 {func}`~.activatable` is the ability version: whether a card's ability can be announced at all,
 cost included. {func}`~.playable` applies the same tests to a card played out of hand, which is

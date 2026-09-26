@@ -6,6 +6,8 @@ IMPERIAL_FAVOR_ID = "imperial_favor"
 # The proxies a held thing is represented by, which the sandbox may spawn and any seat may clear:
 # the Favor alone. A proxy the rules engine deals into a seat's rulebook zone is not among them.
 RULEBOOK_PROXY_IDS = (IMPERIAL_FAVOR_ID,)
+# The Cycle rulebook ability is activated from a proxy each seat holds in its rulebook zone.
+CYCLE_PROXY_ID = "cycle"
 
 
 class Side(str, Enum):

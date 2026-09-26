@@ -93,8 +93,8 @@ effect is how a card borrows the whole sequence.
 {func}`~.equip_targets` and {func}`~.creation_targets`, which judges a token template rather than
 a card because a created attachment has no card to ask about yet.
 
-One module per action covers the rest: `cycle.py`, `legacy.py`, `inheritance.py`, `lobby.py`
-and the three Favor modules. `kharmic.py` is different in kind: the two Kharmic abilities are
+One module per action covers the rest: `legacy.py`, `inheritance.py`, `lobby.py` and the three
+Favor modules. `kharmic.py` is different in kind: the two Kharmic abilities are
 registered through {func}`~.register_keyword_ability` as abilities the Kharmic keyword confers on
 every card carrying it, one activated from the hand and one from a Province, each spending the
 card it is used on. From there they are announced, paid and interrupted as any card's ability is,
@@ -106,8 +106,11 @@ reactions to the discard.
 A player ability with no card to sit on has a second home. `rulebook/proxies.py` deals a proxy
 card into each seat's rulebook zone as the game begins, for every proxy the active
 {class}`~yasuki_core.ruleset.Ruleset` names in `rulebook_proxies`, and abilities registered on
-the proxy are activated from there. No arc names one yet. The zone is not a card zone: nothing in
-play sees what it holds, and the sandbox refuses to move anything into or out of it.
+the proxy are activated from there. Cycle is the first: `cycle.py` registers it on the Cycle
+proxy with `from_rulebook` set, as every rulebook ability is, and {func}`~.is_cycle` recognizes
+the action by its key. The Tk client never draws the zone and lists the proxies' abilities on the
+board menu. The zone is not a card zone: nothing in play sees
+what it holds, and the sandbox refuses to move anything into or out of it.
 
 ## Where a card plugs in
 

@@ -2,7 +2,8 @@ import pytest
 from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Cycle, Pass
+from yasuki_core.engine.rules.rulebook.cycle import is_cycle
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass
 from yasuki_core.game_pieces.prints import StrongholdPrint
 
 import yasuki_gui.services.presenter as presenter_mod
@@ -130,12 +131,14 @@ def test_a_deck_that_fails_to_load_leaves_the_game_running(client):
     assert client.host.session.game is before
 
 
+def _cycle(client) -> ActivateAbility:
+    return next(action for action in client.host.runner.legal_actions() if is_cycle(action))
+
+
 def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
     """Cycle is the human's first-turn Limited action and it asks which Province cards to bury, so
     it is the cheapest way to reach a pending decision from a fresh game."""
-    assert Cycle() in client.host.runner.legal_actions()
-
-    client.act(Cycle())
+    client.act(_cycle(client))
 
     pending = client.host.runner.pending
     assert pending is not None
@@ -144,7 +147,7 @@ def test_an_action_that_raises_a_decision_puts_the_board_into_selection(client):
 
 
 def test_backing_out_of_a_decision_leaves_the_board_alone(client):
-    client.act(Cycle())
+    client.act(_cycle(client))
     assert client.host.runner.pending is not None
 
     client.cancel()
@@ -157,7 +160,7 @@ def test_backing_out_leaves_the_board_on_the_table_the_engine_kept(client):
     """Cancelling rewinds the tape and replays it onto a fresh table. A board still pointed at the
     old one renders a game nobody is playing. The honor readout freezes where it stood while the
     engine goes on without it."""
-    client.act(Cycle())
+    client.act(_cycle(client))
 
     client.cancel()
 
@@ -168,7 +171,7 @@ def test_the_honor_readout_follows_the_engine_after_a_cancel(client):
     """The readout reads whichever source is rendering, so it keeps up with the engine even when
     the board is left holding a table the engine has replaced."""
     seat = client.window.field.seat
-    client.act(Cycle())
+    client.act(_cycle(client))
     client.cancel()
 
     client.host.session.game.table.seats[seat].honor += 5
@@ -202,7 +205,7 @@ def test_the_honor_readout_is_not_offered_as_editable_during_a_rules_game(client
 
 
 def test_confirming_a_decision_resolves_it(client):
-    client.act(Cycle())
+    client.act(_cycle(client))
     pending = client.host.runner.pending
     client.window.field.toggle_selection(pending.candidates[0])
 

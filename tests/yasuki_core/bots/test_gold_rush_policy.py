@@ -1,11 +1,11 @@
 from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.cycle import is_cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, is_dynasty_discard
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
-    Cycle,
     Legacy,
     Pass,
     Recruit,
@@ -613,7 +613,7 @@ def test_it_cycles_when_a_province_card_produces_nothing():
     reshapes the opening every later choice is made against."""
     session = _opening(0, 2)
 
-    assert GoldRushPolicy().choose(_opening_view(session), session.legal_actions(P1)) == Cycle()
+    assert is_cycle(GoldRushPolicy().choose(_opening_view(session), session.legal_actions(P1)))
 
 
 def test_it_declines_cycle_when_every_province_card_produces():
@@ -621,7 +621,7 @@ def test_it_declines_cycle_when_every_province_card_produces():
 
     chosen = GoldRushPolicy().choose(_opening_view(session), session.legal_actions(P1))
 
-    assert chosen != Cycle()
+    assert not is_cycle(chosen)
 
 
 def test_it_declines_cycle_with_an_empty_dynasty_deck():
@@ -630,7 +630,7 @@ def test_it_declines_cycle_with_an_empty_dynasty_deck():
 
     chosen = GoldRushPolicy().choose(_opening_view(session, deck=0), session.legal_actions(P1))
 
-    assert chosen != Cycle()
+    assert not is_cycle(chosen)
 
 
 def test_it_bins_exactly_the_barren_cards_when_asked_what_to_cycle():
