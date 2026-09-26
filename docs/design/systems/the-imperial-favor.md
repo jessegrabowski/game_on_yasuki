@@ -81,6 +81,20 @@ the action in progress as a Favor action, which is what {class}`~.PayFavorCost` 
 `rulebook/lobby.py` is a separate module because Lobby is a separate rule. It shares the payment
 machinery and nothing else.
 
+Lobby is an ability on a proxy in each seat's rulebook zone, and the ruleset decides which proxy a
+seat is dealt. Onyx Edition's reads "Political Open: If it is your turn and you have higher Family
+Honor than each other player, bow your target unbowed Personality with 1 or more Personal Honor to
+take the Imperial Favor", and Shattered Empire inherits it. The pre-Gold rulebook's is a Political
+Limited action any seat not holding the Favor may take, whose outcome alone depends on Family
+Honor. Its contested lobby, in which every player may bow Personalities and discard a card to move
+that Family Honor, is not modeled, so the lobby resolves as though every player passed.
+
+In both, bowing the Personality is the cost, paid through a pick of {func}`~.lobby_candidates`
+that also marks the Personality as having Lobbied. The cost also spends the seat's one Lobby
+action for the turn, under the tag {func}`~.lobby_key` names. The datasheet allows one Lobby action
+per turn whatever granted it. {func}`~.has_highest_lobby_honor` makes the Family Honor comparison through
+{func}`~.lobby_amount`, so a Lobby Bonus or Penalty on either side counts.
+
 The registries hanging off it answer different questions. `@lobby_bonus_grant` adds to
 what a seat's Lobby is worth. `@lobby_bar` is a predicate saying a seat may not Lobby at all.
 `register_may_not_lobby` is a flag taking a card out of the Lobby pool. A card that changes Lobby
