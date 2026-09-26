@@ -47,6 +47,7 @@ from yasuki_core.engine.rules.board.queries import (
     units_at,
 )
 from yasuki_core.engine.rules.effects import (
+    Bow,
     Choose,
     CreateToken,
     DelayedEffect,
@@ -58,6 +59,7 @@ from yasuki_core.engine.rules.effects import (
     Evaluate,
     GainHonor,
     GrantModifier,
+    GrantNegation,
     MeleeAttack,
     Move,
     Negated,
@@ -73,19 +75,20 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
-from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver
-from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
+from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE, END_OF_TURN
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
     BattleResolved,
+    Bowed,
     FavorDiscarded,
     HonorChanged,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint, PersonalityPrint, WindPrint
@@ -587,7 +590,7 @@ register_ability(
 
 
 # Each prints the same entry. "Open: If you are an X Clan player, put this Edict into play."
-# What they grant while in play has no handler yet.
+# What they grant while in play has a handler only where a block below says so.
 
 
 # --- Way of the Akasha ---
@@ -600,6 +603,25 @@ register_entry("way_of_the_akasha", clears=keywords.EDICT, condition=plays_clan(
 register_entry(
     "way_of_the_crab_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.CRAB)
 )
+
+# The Focus Effect and "Your Personalities have Siege while opposed" have no handler: duels are not
+# modeled, and Siege has no rules behind it yet.
+WAY_OF_THE_CRAB_TAG = "way_of_the_crab_straighten"
+
+
+@on(Bowed, "way_of_the_crab_experienced")
+def _way_of_the_crab_experienced_bowed(ctx: TriggerContext) -> list[Effect]:
+    """After your Fortification bows, once per turn, straighten it. Negate its bowing (this
+    turn)."""
+    bowed = ctx.game.table.cards_by_id[ctx.event.card_id]
+    if bowed.owner is not ctx.card.owner or not has_keyword(
+        ctx.game, bowed, keywords.FORTIFICATION
+    ):
+        return []
+    if not claim_once_per_turn(ctx.game, ctx.card, WAY_OF_THE_CRAB_TAG):
+        return []
+    negation = Negation(ctx.card.id, END_OF_TURN, effect_kind=Bow, subject_id=bowed.id)
+    return [Straighten(bowed.id), GrantNegation(negation)]
 
 
 # --- Way of the Crane (Experienced) ---

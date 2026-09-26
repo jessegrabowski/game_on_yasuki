@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
-from yasuki_core.engine.rules.effects import Destroy, Discard
+from yasuki_core.engine.rules.effects import Bow, Destroy, Discard
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
@@ -32,7 +32,7 @@ from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_abi
 from yasuki_core.engine.rules.effects import GainHonor, GrantNegation, TakeFavor
 from yasuki_core.engine.rules.vocabulary.game_events import ConditionFulfilled
 from yasuki_core.engine.rules.legality import recruit_cost
-from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.triggers import pay_costs, resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
@@ -471,6 +471,62 @@ def test_the_rulebook_favor_ability_opens_way_of_the_cranes_window():
 
     assert session.game.round.kind is RoundKind.RESPONSE
     assert CRANE_DRAW in session.legal_actions(P1)
+
+
+# --- Way of the Crab (Experienced) ---
+
+
+def _crab_edict_in_play() -> GameState:
+    """Way of the Crab in play for P1, beside P1's Fortifications "wall" and "second_wall", P1's
+    plain Holding "farm" and P2's Fortification "keep"."""
+    game = two_seat_game()
+    put_in_play(game, _edict("crab", "way_of_the_crab_experienced"))
+    put_in_play(game, holding("wall", keywords=(keywords.FORTIFICATION,)))
+    put_in_play(game, holding("second_wall", keywords=(keywords.FORTIFICATION,)))
+    put_in_play(game, holding("farm"))
+    put_in_play(game, holding("keep", owner=P2, keywords=(keywords.FORTIFICATION,)))
+    return game
+
+
+def _bowed(game: GameState, card_id: str) -> bool:
+    return game.table.cards_by_id[card_id].bowed
+
+
+def test_way_of_the_crab_straightens_your_fortification_and_negates_its_bowing_this_turn():
+    game = _crab_edict_in_play()
+
+    resolve_effects(game, [Bow("wall")])
+    assert not _bowed(game, "wall")
+
+    resolve_effects(game, [Bow("wall")])
+    assert not _bowed(game, "wall")
+
+
+def test_way_of_the_crab_straightens_once_per_turn():
+    game = _crab_edict_in_play()
+    resolve_effects(game, [Bow("wall")])
+
+    resolve_effects(game, [Bow("second_wall")])
+
+    assert _bowed(game, "second_wall")
+
+
+@pytest.mark.parametrize("card_id", ["farm", "keep"])
+def test_way_of_the_crab_leaves_any_other_card_bowed(card_id):
+    game = _crab_edict_in_play()
+
+    resolve_effects(game, [Bow(card_id)])
+
+    assert _bowed(game, card_id)
+
+
+def test_a_fortification_whose_bowing_way_of_the_crab_negates_still_bows_to_pay_a_cost():
+    game = _crab_edict_in_play()
+    resolve_effects(game, [Bow("wall")])
+
+    pay_costs(game, [Bow("wall")])
+
+    assert _bowed(game, "wall")
 
 
 # --- Doji Yasuko, Soul of Doji Takeji ---
