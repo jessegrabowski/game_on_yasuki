@@ -25,11 +25,9 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
-from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import (
+    focus_card,
     personality,
     put_in_play,
     register,
@@ -63,17 +61,7 @@ def _duel_game(*, chi: dict[PlayerId, int] | None = None) -> EngineSession:
     put_in_play(state, personality("rival", owner=P2, chi=chi[P2]))
     for seat in PlayerId:
         for index in range(2):
-            card = register(
-                state,
-                L5RCard.of(
-                    FatePrint,
-                    id=f"{seat.name}-fv{index}",
-                    name=f"{seat.name}-fv{index}",
-                    side=Side.FATE,
-                    owner=seat,
-                    focus=1,
-                ),
-            )
+            card = register(state, focus_card(f"{seat.name}-fv{index}", seat, 1))
             state.zones[ZoneKey(seat, ZoneRole.HAND)].add(card)
     return EngineSession.start(state, P1)
 

@@ -23,11 +23,9 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import FatePrint
 
-from tests.yasuki_core.engine.builders import personality, put_in_play, register
+from tests.yasuki_core.engine.builders import focus_card, personality, put_in_play, register
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.rules.duel.conftest import (
     PRE_GOLD_FOCUSING,
@@ -56,10 +54,6 @@ DUEL_ABILITY = Ability(
 )
 
 
-def _focus_card(card_id: str, owner: PlayerId, focus: int) -> L5RCard:
-    return L5RCard.of(FatePrint, id=card_id, name=card_id, side=Side.FATE, owner=owner, focus=focus)
-
-
 def _duel_game(
     *,
     held: dict[PlayerId, int] | None = None,
@@ -75,11 +69,11 @@ def _duel_game(
     for seat in PlayerId:
         for i in range(held.get(seat, 0)):
             state.zones[ZoneKey(seat, ZoneRole.HAND)].add(
-                register(state, _focus_card(f"{seat.name}-h{i}", seat, 1))
+                register(state, focus_card(f"{seat.name}-h{i}", seat, 1))
             )
         for i in range(deck.get(seat, 0)):
             state.decks[DeckKey(seat, Side.FATE)].cards.append(
-                register(state, _focus_card(f"{seat.name}-d{i}", seat, 1))
+                register(state, focus_card(f"{seat.name}-d{i}", seat, 1))
             )
     return EngineSession.start(state, P1)
 

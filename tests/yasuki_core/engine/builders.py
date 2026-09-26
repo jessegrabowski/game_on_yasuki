@@ -306,6 +306,18 @@ def fate_card(card_id: str, owner: PlayerId, *, name: str = "F") -> L5RCard:
     return L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=owner)
 
 
+def focus_card(card_id: str, owner: PlayerId, focus: int, *, name: str | None = None) -> L5RCard:
+    """A Fate card with a printed Focus Value, which is what a duel totals."""
+    return L5RCard.of(
+        FatePrint,
+        id=card_id,
+        name=name or card_id,
+        side=Side.FATE,
+        owner=owner,
+        focus=focus,
+    )
+
+
 def terrain(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
     return L5RCard.of(
         ActionPrint, id=card_id, name="Terrain", side=Side.FATE, owner=owner, keywords=("Terrain",)

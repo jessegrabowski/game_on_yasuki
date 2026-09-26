@@ -27,9 +27,9 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import (
+    focus_card,
     fate_card,
     personality,
     put_in_play,
@@ -71,10 +71,6 @@ REFUSABLE_ABILITY = Ability(
         )
     ],
 )
-
-
-def _focus_card(card_id: str, owner: PlayerId, focus: int) -> L5RCard:
-    return L5RCard.of(FatePrint, id=card_id, name=card_id, side=Side.FATE, owner=owner, focus=focus)
 
 
 def _duel_game(
@@ -141,14 +137,14 @@ def _strike_out(session: EngineSession) -> None:
 def test_a_card_with_no_printed_focus_value_adds_nothing():
     # What may be focused is the procedure's business. A card that got into a focusing area another
     # way still has to total, and the CR lets cards other than Fate cards be there.
-    assert focusing.focus_value(_focus_card("fv3", P2, 3)) == 3
+    assert focusing.focus_value(focus_card("fv3", P2, 3)) == 3
     assert focusing.focus_value(fate_card("plain", P2)) == 0
     assert focusing.focus_value(personality("bushi", owner=P2)) == 0
 
 
 def test_the_higher_total_wins_the_duel():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
-        session = _duel_game(held=(_focus_card("P2-fv3", P2, 3),))
+        session = _duel_game(held=(focus_card("P2-fv3", P2, 3),))
         _challenge(session)
 
         session.submit(P2, DecisionResponse((focus_token("P2-fv3"),)))
@@ -202,7 +198,7 @@ def test_the_duel_stat_is_chi_as_it_stands_rather_than_as_printed():
         # totals reading the duel stat alone.
         session = _duel_game(
             chi={P1: 5, P2: 2},
-            held=(_focus_card("P2-fv0", P2, 0), _focus_card("P1-fv0", P1, 0)),
+            held=(focus_card("P2-fv0", P2, 0), focus_card("P1-fv0", P1, 0)),
         )
         _challenge(session)
         # A Chi bonus on the weaker duelist turns the duel around, so the totals read the stat as it
@@ -248,7 +244,7 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     # The CR discards the focused cards as the duel's last step, after its outcome and after the
     # consequences that may alter it, so a consequence reads a card that is still in the area.
     game = _duel_on_a_bare_game()
-    card = register(game.table, _focus_card("P2-fv1", P2, 1))
+    card = register(game.table, focus_card("P2-fv1", P2, 1))
     game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(card)
     procedure.focus(game, P2, focus_token("P2-fv1"))
     procedure.strike(game, P2)
@@ -271,7 +267,7 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
 def test_the_strike_reveals_both_stacks_before_they_are_discarded():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         session = _duel_game(
-            held=(_focus_card("P2-fv1", P2, 1),), deck=(_focus_card("P1-fv2", P1, 2),)
+            held=(focus_card("P2-fv1", P2, 1),), deck=(focus_card("P1-fv2", P1, 2),)
         )
         _challenge(session)
         session.submit(P2, DecisionResponse((focus_token("P2-fv1"),)))
@@ -289,7 +285,7 @@ def test_the_strike_reveals_both_stacks_before_they_are_discarded():
 
 def test_the_discard_names_the_duels_resolution_rather_than_a_seat():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
-        session = _duel_game(held=(_focus_card("P2-fv1", P2, 1),))
+        session = _duel_game(held=(focus_card("P2-fv1", P2, 1),))
         _challenge(session)
         session.submit(P2, DecisionResponse((focus_token("P2-fv1"),)))
         _strike_out(session)
@@ -347,7 +343,7 @@ def test_an_ended_duel_demands_nothing_further():
 
 def test_a_duel_that_ended_early_drops_its_own_steps_and_nothing_else():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
-        session = _duel_game(held=(_focus_card("P2-fv1", P2, 1),))
+        session = _duel_game(held=(focus_card("P2-fv1", P2, 1),))
         _challenge(session)
         # A step of the action that created the duel, stacked above the duel's own work.
         marker = object()
@@ -382,7 +378,7 @@ def test_an_accepted_challenge_opens_the_focusing():
         probe_resolver("probe_accept_challenge", _accept_the_challenge),
         probe_ability(REFUSABLE_PROBE, REFUSABLE_ABILITY),
     ):
-        session = _duel_game(probe=REFUSABLE_PROBE, held=(_focus_card("P2-fv1", P2, 1),))
+        session = _duel_game(probe=REFUSABLE_PROBE, held=(focus_card("P2-fv1", P2, 1),))
         _challenge(session)
 
         session.submit(P2, DecisionResponse(("rival",)))
