@@ -206,6 +206,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     if not request.accepts(response):
         raise ValueError("malformed answer to the pending decision")
     acted_in = game.round
+    outside_action = game.asked_outside_action
     if isinstance(request, DiscardToHandSize) and game.stack:
         raise RuntimeError("the turn is ending with work still queued")
     game.pending = None
@@ -268,7 +269,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     # question asked by turn structure resolves into a round it was not asked in, which is how
     # `yield_after_action` knows there is no opportunity to hand on.
     run_stack(game)
-    yield_after_action(game, acted_in)
+    if game.pending is None:
+        game.asked_outside_action = False
+    if not outside_action:
+        yield_after_action(game, acted_in)
 
 
 def cancel(game: GameState) -> None:
@@ -287,7 +291,8 @@ def cancel(game: GameState) -> None:
     if request is None:
         raise RuntimeError("no decision is pending")
     match request:
-        case ChoosePayment():
+        case ChoosePayment(target_id=target_id):
+            game.announced_from_hand -= {target_id}
             _cancel_payment(game)
         case ChooseInvestAmount():
             pass  # the recruit is not yet announced; nothing to undo

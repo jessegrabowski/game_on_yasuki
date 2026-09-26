@@ -7,10 +7,12 @@ yasuki_core.engine.rules.triggers
 
 .. autosummary::
 
+    AnnounceEvent
     HeldAction
     Registration
     ResumeCascade
     TriggerContext
+    Watch
 
 .. rubric:: Functions
 
@@ -31,6 +33,7 @@ yasuki_core.engine.rules.triggers
     resume_cascade
     resume_paused_cascade
     rulebook_trigger
+    watch
 
 .. automodule:: yasuki_core.engine.rules.triggers
     :members:

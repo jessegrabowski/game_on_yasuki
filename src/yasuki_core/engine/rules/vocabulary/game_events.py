@@ -230,6 +230,27 @@ class HonorChanged:
 
 
 @dataclass(frozen=True, slots=True)
+class ConditionFulfilled:
+    """A condition a card watches has become true (CR, "If" Triggers), as a "Play if" Ring's does.
+
+    Announced once each time the condition turns from false to true while the card is where the
+    watch looks, and once when the card arrives there while it already holds, since the arrival is
+    a new occurrence. Answered by the card's own watch alone, never by another card, and not a
+    thing any action did.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose condition was fulfilled.
+    key : str
+        The watch, among the card's others, whose condition it was.
+    """
+
+    card_id: str
+    key: str
+
+
+@dataclass(frozen=True, slots=True)
 class ActionResolved:
     """An action has fully resolved, before the Response Step it may open.
 
@@ -319,6 +340,7 @@ GameEvent = (
     ActionResolved
     | Assigned
     | BattleResolved
+    | ConditionFulfilled
     | TurnStarted
     | CardDiscarded
     | CounterGained

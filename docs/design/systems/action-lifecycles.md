@@ -43,21 +43,28 @@ What is on the stack, and what each continues:
 - `ResolveRecruit`, `EnterPlay` and `FinishRecruit` in `rulebook/recruit.py`: the three parts of
   a Recruit after its payment, the card's before-entry effects, its entry, and what follows the
   entry. `SelectEquipTarget` in `rulebook/equip.py` is an Equip's target choice, deferred behind
-  its payment.
+  its payment, and `FinishInvest` its Invest, deferred behind the announcement that it entered
+  play.
 - `ResolveStrategy` and `DiscardPlayed` in `abilities/strategy.py`: a played Strategy's ability,
   then its discard. `SelectAbilityTarget` and `ApplyAbilityEffects` in `abilities/activation.py`:
   an ability's targeting or its untargeted effects, deferred behind its cost.
-- `ContinuePayment` in `gold/payment.py` and `CompleteProduction` in `gold/production.py`: the
-  payment loop and the bow that follows a producer's window.
+- `RequestPayment`, `ContinuePayment` in `gold/payment.py` and `CompleteProduction` in
+  `gold/production.py`: the question a Strategy or an Equip asks for its cost once the board its
+  announcement left has settled, the payment loop, and the bow that follows a producer's window.
 - `FightNextBattle` in `battle/resolution.py`: the next battlefield, or the end of the Fight
   Segment.
 - `ResumeCascade` in `triggers.py`: the remainder of a walk an interrupting effect paused.
+  `AnnounceEvent` there is an event announced once the settling queued above it has run, as a
+  card's entry into play is.
 - `ApplyEffects` in `effects.py`: the generic deferral, which {class}`~.Then` and the rulebook
   costs push.
-- `BeginNextTurn`, `OpenFirstTurn`, `AnnounceTurnStart` and `OpenRound` in `turn/sequence.py`:
-  the turn boundary. The next turn waits behind the end-of-turn discard, and a turn's opening is
-  three instants queued in order, straighten, reveal and announcement, with the round opening
-  last so that a question asked while opening resolves into the previous round.
+- `DrawAtEndOfTurn`, `EnforceMaximumHandSize`, `BeginNextTurn`, `OpenNextTurn`, `OpenFirstTurn`,
+  `AnnounceTurnStart` and `OpenRound` in `turn/sequence.py`: the turn boundary. The draw waits
+  behind the delayed effects the end of the turn resolves, the hand-size check behind whatever the
+  draw fulfilled, the next turn behind the end-of-turn discard and what dropping the expiring
+  modifiers fulfilled, and a turn's
+  opening is three instants queued in order, straighten, reveal and announcement, with the round
+  opening last so that a question asked while opening resolves into the previous round.
 
 The stack is last in, first out. A procedure that needs two steps in order pushes the later one
 first. A cascade that pauses pushes its stash on top of whatever was already queued, which is why

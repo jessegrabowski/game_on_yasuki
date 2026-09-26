@@ -8,6 +8,7 @@ yasuki_core.engine.rules.gold.payment
 .. autosummary::
 
     ContinuePayment
+    RequestPayment
 
 .. rubric:: Functions
 

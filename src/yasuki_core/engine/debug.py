@@ -2,8 +2,10 @@ from dataclasses import dataclass
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.board.queries import province_cards, province_key_of
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -135,6 +137,8 @@ def apply_debug(game: GameState, step: DebugStep) -> None:
             _add_card(game, seat, card_id, printed)
         case DebugPersonality(seat=seat, card_id=card_id, printed=printed):
             _ask_who_gets(game, seat, card_id, printed)
+    # No seat acted, so answering what the step asks is no action to hand the opportunity on from.
+    game.asked_outside_action = game.pending is not None
 
 
 def apply_debug_placement(
@@ -180,6 +184,10 @@ def _add_card(game: GameState, seat: PlayerId, card_id: str, printed: CardPrint)
     if printed.side is Side.FATE:
         table.cards_by_id[card_id] = card
         ops.move_card(table, card, ZoneKey(seat, ZoneRole.HAND))
+        # A card arriving in hand can fulfill a condition a card in hand watches, as a "Play if"
+        # Ring's does, the debug card's own included.
+        triggers.enforce_state_based_actions(game)
+        run_stack(game)
         return
     candidates = tuple(occupant.id for occupant in province_cards(game, seat))
     if not candidates:

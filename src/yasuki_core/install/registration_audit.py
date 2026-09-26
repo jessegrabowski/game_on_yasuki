@@ -44,7 +44,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
     Every card id the engine keys a per-card handler on, grouped by the registry holding it.
 
     Every registry built through :mod:`~yasuki_core.engine.registrar` reports itself, so a new one
-    is validated without being listed here. The three below are not built that way: two keep
+    is validated without being listed here. The ones below are not built that way: they keep
     bespoke registration rules, and the triggers are keyed by event first.
 
     ``CHOICE_RESOLVERS`` is absent by design. It keys on the *kind* of a pending choice rather than
@@ -58,6 +58,7 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
         "invest abilities": frozenset(registry._INVEST),
         "interrupts": frozenset(registry._INTERRUPTS),
         "rulebook proxies": frozenset(proxies.RULEBOOK_PROXY_PRINTS),
+        "condition watches": frozenset(triggers._WATCHES),
         "triggers": frozenset(
             card_id
             for by_zone in triggers._TRIGGERS.values()
@@ -539,6 +540,7 @@ VALIDATED_REGISTRIES = {
     "_INTERRUPTS",
     "CHI_DEATH_EXEMPT",
     "_TRIGGERS",
+    "_WATCHES",
     "RULEBOOK_PROXY_PRINTS",
 }
 

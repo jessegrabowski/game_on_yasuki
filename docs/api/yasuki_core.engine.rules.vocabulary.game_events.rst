@@ -11,6 +11,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     Assigned
     BattleResolved
     CardDiscarded
+    ConditionFulfilled
     CounterGained
     Destroyed
     Dishonored

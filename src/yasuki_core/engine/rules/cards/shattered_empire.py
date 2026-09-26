@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     RING_PITCH,
     plays_clan,
+    register_condition_entry,
     register_entry,
     register_ring,
     enemy_units_ever_present,
@@ -27,7 +28,11 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator, PlayStrategy
 from yasuki_core.engine.rules.board.clans import card_alignments
-from yasuki_core.engine.rules.board.seats import cards_in_play
+from yasuki_core.engine.rules.board.seats import (
+    cards_in_hand,
+    cards_in_play,
+    fate_cards_in_play,
+)
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
@@ -85,7 +90,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, WindPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint, PersonalityPrint, WindPrint
 
 
 # --- Daidoji Tashiko ---
@@ -441,10 +446,21 @@ register_ring(
 
 # --- Ring of the Void ---
 
-# "Play if you ever have the same number of Fate cards in play as in your hand, not counting this
-# Ring." Nothing lets a card in hand answer the board changing yet, so the entry has no handler.
 # The draw's follow-up is the resolver the Onyx printing registers under "ring_of_the_void": the
 # two texts differ only in the designator.
+
+
+def _ring_of_the_void_condition(game: GameState, source: L5RCard) -> bool:
+    """ "Play if you ever have the same number of Fate cards in play as in your hand, not counting
+    this Ring." """
+    hand = cards_in_hand(game, source.owner)
+    in_hand = sum(1 for card in hand if card is not source and isinstance(card.printed, FatePrint))
+    return len(fate_cards_in_play(game, source.owner)) == in_hand
+
+
+register_condition_entry(
+    "ring_of_the_void", _ring_of_the_void_condition, ruleset=ruleset.SHATTERED_EMPIRE.name
+)
 
 
 def _ring_of_the_void_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

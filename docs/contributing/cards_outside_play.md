@@ -161,8 +161,19 @@ and "any enemy units were ever at its battlefield", the last through
 {func}`~.controls_terrain_at` about the battlefield, since a Terrain is discarded only after the
 event. Its Onyx text reads `terrains_played`, `terrains_destroyed` and `destroyed_controllers`,
 which record the Terrains each seat played and destroyed at the battlefield and the seats whose
-cards the resolution destroyed. The Rings whose "after X" names a duel, and the Void's "Play if",
-still have no handler, and the comment above each says what the clause waits on.
+cards the resolution destroyed. The Rings whose "after X" names a duel still have no handler, and
+the comment above each says what the clause waits on.
+
+A Ring printing "Play if X" names a state, not an event, and {func}`~.register_condition_entry`
+registers it through {func}`~.watch`. A watch names the zones it looks from and the reaction that
+answers it. Its condition is read each time the board settles, and when it turns from false to true
+the engine announces a `ConditionFulfilled` that only that watch's reaction hears, ahead of whatever
+else the effect that fulfilled it goes on to do. The owner is then asked, as for a "Play after X"
+Ring. A condition that already holds when the Ring arrives in hand counts as fulfilled then.
+{card}`Ring of the Void`'s ShE text compares {func}`~.fate_cards_in_play` with
+{func}`~.cards_in_hand`, leaving out the Ring itself. That query leaves out the Imperial Favor's
+proxy, and every card announced out of the hand that has not landed, since a Strategy being played
+or an attachment being Equipped waits in an area out of the hand (CR, Resolution Area).
 
 ## Terrain, which attaches to a battlefield
 

@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
+    ConditionFulfilled,
     Destroyed,
     EnteredPlay,
     HonorChanged,
@@ -22,6 +23,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.projection import project
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.effects import (
     Ask,
     AdjustCounter,
@@ -30,7 +32,10 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
     GainHonor,
+    Bow,
     IgnoreHonorRequirements,
+    MoveToHand,
+    PutIntoPlay,
     Then,
 )
 from yasuki_core.engine.rules.triggers import (
@@ -887,3 +892,135 @@ def test_a_trigger_registered_under_a_ruleset_fires_only_while_it_is_active(reac
     fire(game, TurnStarted(PlayerId.P1))
 
     assert seen == ["she", "onyx"]
+
+
+def _watcher_game(watching) -> tuple[GameState, list[str]]:
+    """P1 holding a watcher whose condition is "a marker is in play", with three markers in hand.
+    Returns the game and the ids the watch has reacted for."""
+    told: list[str] = []
+
+    def record(ctx):
+        told.append(ctx.card.id)
+        return []
+
+    watching(
+        "watch_probe",
+        lambda game, card: any(
+            held.printed_id == "marker_probe" for held in game.table.battlefield.cards
+        ),
+        record,
+    )
+    game = two_seat_game()
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    hand.add(register(game.table, _fate("watcher", printed_id="watch_probe")))
+    for index in range(3):
+        hand.add(register(game.table, _fate(f"marker{index}", printed_id="marker_probe")))
+    return game, told
+
+
+def _fate(card_id: str, *, printed_id: str) -> L5RCard:
+    return L5RCard.of(
+        FatePrint, id=card_id, name="F", printed_id=printed_id, side=Side.FATE, owner=PlayerId.P1
+    )
+
+
+def test_a_watched_condition_is_answered_each_time_it_becomes_true(watching):
+    game, told = _watcher_game(watching)
+
+    resolve_effects(game, [PutIntoPlay("marker0")])
+    assert told == ["watcher"]
+
+    resolve_effects(game, [PutIntoPlay("marker1")])
+    assert told == ["watcher"]
+
+    resolve_effects(game, [Destroy("marker0", PlayerId.P1), Destroy("marker1", PlayerId.P1)])
+    resolve_effects(game, [PutIntoPlay("marker2")])
+    assert told == ["watcher", "watcher"]
+
+
+def test_a_watched_card_arriving_where_it_watches_while_its_condition_holds_is_answered(watching):
+    game, told = _watcher_game(watching)
+    resolve_effects(game, [PutIntoPlay("marker0")])
+    resolve_effects(game, [Discard("watcher", PlayerId.P1)])
+    assert told == ["watcher"]
+
+    resolve_effects(game, [MoveToHand("watcher", PlayerId.P1)])
+
+    assert told == ["watcher", "watcher"]
+
+
+def test_a_watched_condition_is_answered_before_the_rest_of_the_text_that_fulfilled_it(watching):
+    # "Then" defers the discard behind the cascade, where the watch answers with the marker in play.
+    game, _ = _watcher_game(watching)
+    in_play_when_answered: list[bool] = []
+    watching(
+        "order_probe",
+        lambda game, card: any(held.id == "marker0" for held in game.table.battlefield.cards),
+        lambda ctx: in_play_when_answered.append(
+            any(held.id == "marker0" for held in ctx.game.table.battlefield.cards)
+        )
+        or [],
+    )
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(
+        register(game.table, _fate("second", printed_id="order_probe"))
+    )
+
+    resolve_effects(game, [PutIntoPlay("marker0"), Then((Discard("marker0", PlayerId.P1),))])
+    sequence.run_stack(game)
+
+    assert in_play_when_answered == [True]
+
+
+def test_a_watch_is_not_answered_once_its_card_has_left_where_it_watches(watching):
+    game, told = _watcher_game(watching)
+
+    resolve_effects(game, [PutIntoPlay("marker0"), Discard("watcher", PlayerId.P1)])
+
+    assert told == []
+
+
+def test_each_watch_on_a_card_is_remembered_apart(watching):
+    told: list[str] = []
+    watching(
+        "twin_probe",
+        lambda game, card: len(game.table.battlefield.cards) >= 1,
+        lambda ctx: told.append(ctx.event.key) or [],
+        key="one",
+    )
+    watching(
+        "twin_probe",
+        lambda game, card: len(game.table.battlefield.cards) >= 2,
+        lambda ctx: told.append(ctx.event.key) or [],
+        key="two",
+    )
+    game = two_seat_game()
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    hand.add(register(game.table, _fate("twin", printed_id="twin_probe")))
+    for index in range(2):
+        hand.add(register(game.table, _fate(f"m{index}", printed_id="plain")))
+
+    resolve_effects(game, [PutIntoPlay("m0")])
+    resolve_effects(game, [PutIntoPlay("m1")])
+
+    assert told == ["one", "two"]
+
+
+def test_a_watch_can_look_from_play(watching):
+    told: list[str] = []
+    watching(
+        "in_play_probe",
+        lambda game, card: card.bowed,
+        lambda ctx: told.append(ctx.card.id) or [],
+        where=(CardLocation.BATTLEFIELD,),
+    )
+    game = two_seat_game()
+    watcher = put_in_play(game, _fate("sentinel", printed_id="in_play_probe"))
+
+    resolve_effects(game, [Bow(watcher.id)])
+
+    assert told == ["sentinel"]
+
+
+def test_registering_a_trigger_on_a_watched_condition_is_refused():
+    with pytest.raises(ValueError, match="own watch"):
+        on(ConditionFulfilled, "anything")

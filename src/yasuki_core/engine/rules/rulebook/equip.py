@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import ChooseEquipTarget, Dec
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import discounted_gold, equip_purchase
-from yasuki_core.engine.rules.gold.payment import payment_request
+from yasuki_core.engine.rules.gold.payment import RequestPayment
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
@@ -137,9 +137,10 @@ def equip_targets(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
 
 
 def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
-    """Announce an Equip: defer the choice of which Personality the card joins, then pause for its
-    cost payment. Once paid, the stack raises the target choice, and answering that attaches the
-    card (CR, Action Sequence steps B and C).
+    """Announce an Equip: take the card out of the hand into its entering-play area, settle the
+    board that leaves, then ask for its cost with the choice of which Personality it joins queued
+    behind. Answering that choice attaches the card (CR, Action Sequence steps B and C; CR,
+    Entering-Play Areas).
 
     Equip is the rulebook action, with a cost and a target. An effect that merely *attaches* a card
     reaches the same board without paying (CR, Equip), so the two do not share a path.
@@ -151,10 +152,12 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
     card = game.table.cards_by_id[card_id]
     candidates = tuple(target.id for target in equip_targets(game, card))
     invest_amount = equip_invest_amount(game, card) if invest else None
-    game.stack.append(SelectEquipTarget(card_id, candidates, invest_amount))
     purchase = equip_purchase(card)
     amount = discounted_gold(game, purchase, effective_gold_cost(game, card) + (invest_amount or 0))
-    game.pending = payment_request(game, card.owner, amount, card.name, target=card)
+    game.announced_from_hand |= {card_id}
+    game.stack.append(SelectEquipTarget(card_id, candidates, invest_amount))
+    game.stack.append(RequestPayment(card.owner, amount, card.name, card_id))
+    triggers.enforce_state_based_actions(game)
 
 
 @dataclass(frozen=True, slots=True)
@@ -199,12 +202,34 @@ def resolve_equip(
 ) -> None:
     """Bring the paid-for attachment out of hand and onto its Personality."""
     card = game.table.cards_by_id[card_id]
+    game.announced_from_hand -= {card_id}
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
-    # Legal before anything is told it arrived, for the reason _put_into_play gives.
+    # Queued beneath the settling, which may stop to ask a question: the board is legal before
+    # anything is told the card arrived, for the reason _put_into_play gives, and the Invest runs
+    # after the arrival's own cascade.
+    game.stack.append(FinishInvest(card_id, invest_amount))
+    game.stack.append(triggers.AnnounceEvent(EnteredPlay(card_id, from_hand=True)))
     triggers.enforce_state_based_actions(game)
-    triggers.fire(game, EnteredPlay(card_id, from_hand=True))
-    finish_invest(game, card, invest_amount)
+
+
+@dataclass(frozen=True, slots=True)
+class FinishInvest:
+    """Run an Equipped card's Invest once its arrival has been announced.
+
+    Attributes
+    ----------
+    card_id : str
+        The card that entered play.
+    invest_amount : int or None
+        The Invest cost paid alongside the Gold Cost, or None when the Equip took no Invest.
+    """
+
+    card_id: str
+    invest_amount: int | None
+
+    def resume(self, game: GameState) -> None:
+        finish_invest(game, game.table.cards_by_id[self.card_id], self.invest_amount)
 
 
 def is_spell(card: L5RCard) -> bool:
