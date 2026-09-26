@@ -2,7 +2,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS
 from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
 
 
@@ -17,13 +16,12 @@ def fate_cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
 
 
 def cards_in_hand(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
-    """The cards in ``seat``'s hand, as the rules count them. A card announced out of it that has
-    not landed is in a resolution or entering-play area instead, and the Imperial Favor's proxy that
-    waits there is no card (CR, Resolution Area; CR, The Imperial Favor)."""
+    """The Fate cards in ``seat``'s hand, as the rules count them. A card announced out of it that
+    has not landed is in a resolution or entering-play area instead (CR, Resolution Area)."""
     return tuple(
         card
         for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
-        if card.id not in game.announced_from_hand and card.printed_id not in RULEBOOK_PROXY_IDS
+        if card.id not in game.announced_from_hand and isinstance(card.printed, FatePrint)
     )
 
 

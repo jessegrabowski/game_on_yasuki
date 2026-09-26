@@ -3,11 +3,11 @@ from collections.abc import Callable
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import Bow, Choose, Discard, DrawCard, Effect, Move, Rehonor
-from yasuki_core.engine.rules.rulebook.favor_proxy import is_rulebook_proxy
 from yasuki_core.engine.rules.board.queries import opposing_units_in_battle, personalities_in_play
+from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
-from yasuki_core.engine.table import Location, ZoneKey, ZoneRole
+from yasuki_core.engine.table import Location
 from yasuki_core.ruleset import FavorAbility
 
 DISCARD_TO_DRAW = "favor_discard_to_draw"
@@ -63,9 +63,7 @@ def available_favor_abilities() -> tuple[FavorAbility, ...]:
 
 
 def _discardable(game: GameState, seat: PlayerId) -> tuple[str, ...]:
-    """The Fate cards ``seat`` could discard. A rulebook proxy is not a card and cannot be spent."""
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-    return tuple(card.id for card in hand.cards if not is_rulebook_proxy(card))
+    return tuple(card.id for card in cards_in_hand(game, seat))
 
 
 def _discard_a_fate_card(game: GameState, seat: PlayerId) -> list[Effect]:

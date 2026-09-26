@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
-from yasuki_core.game_pieces.prints import FatePrint
+from yasuki_core.game_pieces.prints import RulebookPrint
 
 from tests.yasuki_core.engine.builders import personality, put_in_play
 
@@ -36,7 +36,7 @@ BOWING_PAYER = "bowing_payer"
 @pytest.fixture
 def game() -> GameState:
     game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
-    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     return game

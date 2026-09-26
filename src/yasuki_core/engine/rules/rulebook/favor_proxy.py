@@ -1,8 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, RULEBOOK_PROXY_IDS
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID
 
 
 def sync_proxy(game: GameState) -> None:
@@ -40,11 +39,3 @@ def _clear_proxy(game: GameState) -> None:
     ]
     for card in held:
         ops.remove_card(game.table, card)
-
-
-def is_rulebook_proxy(card: L5RCard) -> bool:
-    """Whether ``card`` is a rulebook proxy rather than a card a player drew.
-
-    Not counted toward the maximum hand size.
-    """
-    return card.printed_id in RULEBOOK_PROXY_IDS

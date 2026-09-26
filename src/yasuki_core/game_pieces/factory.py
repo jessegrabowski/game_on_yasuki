@@ -18,11 +18,12 @@ from yasuki_core.game_pieces.prints import (
     PersonalityPrint,
     RegionPrint,
     RingPrint,
+    RulebookPrint,
     SenseiPrint,
     StrongholdPrint,
     WindPrint,
 )
-from yasuki_core.game_pieces.constants import Element, Side, AttachmentType
+from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS, AttachmentType, Element, Side
 
 # The print each database card type resolves to, per deck section. A section the record's type is
 # unknown in falls back to that section's base print.
@@ -334,7 +335,10 @@ def _build_print(
         Token ids this card can create in play. Default empty.
     """
     card_type = (record.get("types") or [None])[0]
-    print_cls, side = _classify(section, card_type)
+    if record.get("card_id") in RULEBOOK_PROXY_IDS:
+        print_cls, side = RulebookPrint, Side.FATE
+    else:
+        print_cls, side = _classify(section, card_type)
     # image_front is the database-relative print path; the web client resolves it against the image
     # base URL. A print subclass' default art is for the desktop/PDF renderers, not the wire.
     image_path = print_info.get("image_path") if print_info else None

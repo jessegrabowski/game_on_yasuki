@@ -27,6 +27,7 @@ from yasuki_core.database import (
 from yasuki_core.search.compile_sql import build_search_filters
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import build_print
+from yasuki_core.game_pieces.prints import RulebookPrint
 from yasuki_core.paths import SETS_DIR, resolve_set_image_path
 from yasuki_core.search import parse_and_build_query
 
@@ -825,17 +826,14 @@ class TestApplySslmode:
 
 
 def test_rulebook_proxy_loads_and_builds_without_stats():
-    """Twenty Festivals CR: the Favor is not a card, though it may be represented by one -- so the
-    proxy carries no stats and the print builder still has to stamp it."""
     proxies = get_rulebook_proxies()
     assert set(proxies) == set(RULEBOOK_PROXY_IDS)
 
     printed = build_print(proxies["imperial_favor"])
+    assert type(printed) is RulebookPrint
     assert printed.name == "The Imperial Favor"
     # Side.FATE is what lets the Favor sit in a hand, which is where it is represented.
     assert printed.side is Side.FATE
-    assert printed.focus is None
-    assert printed.gold_cost is None
     # The record and the image manifest are separate files keyed by the same id; without art the
     # proxy renders blank, and nothing else would notice.
     assert printed.image_front is not None

@@ -4,12 +4,13 @@ from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint
+from yasuki_core.game_pieces.prints import DynastyPrint, FatePrint, HoldingPrint, RulebookPrint
 from yasuki_core.engine.rules.vocabulary.actions import Legacy
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
+from yasuki_core.engine.rules.effects import TakeFavor
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules import legality
@@ -147,6 +148,28 @@ def test_legacy_is_offered_in_the_dynasty_phase_with_a_card_to_banish():
 def test_legacy_is_not_offered_without_a_card_to_banish():
     session = _dynasty_session(hand=0)
     assert Legacy() not in session.legal_actions(PlayerId.P1)
+
+
+def _holding_the_favor(state: TableState) -> TableState:
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    return state
+
+
+def test_legacy_is_not_offered_with_only_the_imperial_favor_in_hand():
+    session = _dynasty_session_from(_holding_the_favor(_table(hand=0)))
+    TakeFavor(PlayerId.P1).perform(session.game)
+
+    assert Legacy() not in session.legal_actions(PlayerId.P1)
+
+
+def test_the_imperial_favor_is_not_a_legacy_banish_candidate():
+    session = _dynasty_session_from(_holding_the_favor(_table(hand=1)))
+    TakeFavor(PlayerId.P1).perform(session.game)
+    session.act(PlayerId.P1, Legacy())
+
+    assert session.game.pending.candidates == ("P1-h0",)
 
 
 def test_legacy_is_not_offered_outside_the_dynasty_phase():

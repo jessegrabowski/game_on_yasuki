@@ -80,6 +80,7 @@ from yasuki_core.game_pieces.prints import (
     HoldingPrint,
     PersonalityPrint,
     RingPrint,
+    RulebookPrint,
     StrongholdPrint,
 )
 
@@ -183,7 +184,16 @@ def test_card_print_and_typed_fields_survive_round_trip():
         owner=PlayerId.P1,
     )
 
-    for card in (personality, ring):
+    favor = L5RCard.of(
+        RulebookPrint,
+        id="favor",
+        name="The Imperial Favor",
+        side=Side.FATE,
+        printed_id="imperial_favor",
+        owner=PlayerId.P1,
+    )
+
+    for card in (personality, ring, favor):
         rebuilt = decode_card(json.loads(json.dumps(encode_card(card))))
         assert rebuilt == card
         assert type(rebuilt.printed) is type(card.printed)  # the print, not a bare CardPrint

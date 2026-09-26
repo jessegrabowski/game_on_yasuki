@@ -34,7 +34,7 @@ from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, lo
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import ActionPrint, RulebookPrint, StrongholdPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
@@ -248,7 +248,7 @@ def _oaths_game(*, holds_favor: bool = True, yojimbo: bool = False) -> GameState
     """A battle each side has a unit in, so the Rule of Presence is what lets P1 act at all, with
     an enemy Personality to send home."""
     game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
-    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     game.attack = AttackPhase(
@@ -539,7 +539,7 @@ def _bowed_estate_with_shrine(*, shrine_bowed: bool = False) -> EngineSession:
     """P1's Stronghold is the Palatial Estate, bowed, beside a Shrine to Inari. P1 has just paid
     the Favor for a rulebook Favor action, which is what the Estate's Response answers."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(

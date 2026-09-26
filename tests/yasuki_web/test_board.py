@@ -11,7 +11,7 @@ from yasuki_core.engine.intents import IntentOp
 from yasuki_core.engine.replay.intent_log import SessionEntry
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint, RulebookPrint
 
 from tests.yasuki_web._support import account
 
@@ -222,7 +222,7 @@ def _two_seat_room():
     room.state.seats[PlayerId.P2].name = "Kai"
     # The proxy reaches a real table from the rulebook pull; seed the template directly so the
     # handler resolves it without a database.
-    room.state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    room.state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     return room, first, second

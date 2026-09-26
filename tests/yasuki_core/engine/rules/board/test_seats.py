@@ -14,9 +14,13 @@ from yasuki_core.engine.rules.board.seats import (
 from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.prints import RulebookPrint
 
 from tests.yasuki_core.engine.builders import (
     attachment,
+    fate_card,
     holding,
     personality,
     put_in_play,
@@ -80,6 +84,24 @@ def test_cards_in_hand_leaves_out_a_card_announced_until_its_payment_is_canceled
 
     action_sequence.cancel(game)
     assert cards_in_hand(game, PlayerId.P1) == (blade,)
+
+
+def test_cards_in_hand_counts_only_fate_cards():
+    game = two_seat_game()
+    hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    held = register(game.table, fate_card("held", PlayerId.P1))
+    favor = L5RCard.of(
+        RulebookPrint,
+        id="favor",
+        name="The Imperial Favor",
+        side=Side.FATE,
+        owner=PlayerId.P1,
+        printed_id=IMPERIAL_FAVOR_ID,
+    )
+    hand.add(held)
+    hand.add(register(game.table, favor))
+
+    assert cards_in_hand(game, PlayerId.P1) == (held,)
 
 
 def test_cards_named_matches_the_print_and_not_the_instance():

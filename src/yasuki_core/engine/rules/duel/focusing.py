@@ -3,6 +3,7 @@ from typing import Protocol
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.duel.records import DuelRecord
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.state import GameState
@@ -83,8 +84,7 @@ class TwentyFestivalsFocusing:
     def sources(self, game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
         if self.focus_limit is not None and duel.focuses(seat) >= self.focus_limit:
             return ()
-        hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-        sources = [focus_token(card.id) for card in hand.cards]
+        sources = [focus_token(card.id) for card in cards_in_hand(game, seat)]
         if game.table.decks[DeckKey(seat, Side.FATE)].cards:
             sources.append(DECK_TOP)
         return tuple(sources)
@@ -119,8 +119,7 @@ class TwentyFestivalsFocusing:
                 raise ValueError(f"{seat.name} has no Fate card to focus off the deck")
             return deck.cards[-1]
         card_id = focus_source(token)
-        hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
-        for card in hand.cards:
+        for card in cards_in_hand(game, seat):
             if card.id == card_id:
                 return card
         raise ValueError(f"{card_id!r} is not in {seat.name}'s hand to focus")

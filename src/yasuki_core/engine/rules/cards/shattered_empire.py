@@ -87,7 +87,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint, PersonalityPrint, WindPrint
@@ -640,7 +640,7 @@ def _way_of_the_crane_experienced_effects(
     """The card to discard is picked from the hand as it stands after the draw, so the one about
     to be drawn is offered along with the rest."""
     seat = source.owner
-    held = tuple(card.id for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards)
+    held = tuple(card.id for card in cards_in_hand(game, seat))
     hand_after = held + top_of_deck(game, DeckKey(seat, Side.FATE), 1)
     if not hand_after:
         return [DrawCard(seat)]

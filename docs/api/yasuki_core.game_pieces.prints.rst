@@ -19,6 +19,7 @@ yasuki_core.game_pieces.prints
     PersonalityPrint
     RegionPrint
     RingPrint
+    RulebookPrint
     SenseiPrint
     StrongholdPrint
     WindPrint

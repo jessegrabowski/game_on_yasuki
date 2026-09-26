@@ -11,6 +11,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     DynastyPrint,
     FatePrint,
+    RulebookPrint,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
     Lobby,
@@ -908,7 +909,7 @@ def test_a_pass_announces_no_resolution():
 
 def test_a_favor_action_that_paused_for_a_choice_is_announced_once_as_a_favor_action():
     game = GameState.start(TableState.empty_two_seat(), PlayerId.P1, seed=0)
-    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     TakeFavor(PlayerId.P1).perform(game)

@@ -6,9 +6,9 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
-    FatePrint,
     PersonalityPrint,
     RingPrint,
+    RulebookPrint,
     WindPrint,
 )
 from yasuki_core.engine.players import PlayerId
@@ -318,7 +318,7 @@ def _crane_edict_in_play(
     """Way of the Crane in play for a Crane seat, with ``hand`` in hand and ``deck`` on top of the
     Fate deck, just after the seat's own action discarded the Favor."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(state, register(state, stronghold(P1, clan=ruleset.CRANE)))
@@ -389,6 +389,16 @@ def test_way_of_the_crane_draws_then_discards_as_a_trait(reacting):
     assert causes == [Trait("crane")]
 
 
+def test_way_of_the_crane_does_not_offer_the_imperial_favor_as_its_discard():
+    game = _crane_edict_in_play()
+    resolve_effects(game, [TakeFavor(P1)])
+    sequence.open_response_window(game)
+
+    action_sequence.perform(game, CRANE_DRAW)
+
+    assert set(game.pending.candidates) == {"held", "top"}
+
+
 def test_way_of_the_crane_draws_once_per_turn():
     game = _crane_edict_in_play(deck=("top", "second"))
     sequence.open_response_window(game)
@@ -429,10 +439,8 @@ def test_way_of_the_crane_ignores_a_favor_discarded_by_the_other_seats_action():
 
 
 def test_the_rulebook_favor_ability_opens_way_of_the_cranes_window():
-    """The whole road from the table: the Favor discarded as a cost, the action resolving, and the
-    Step opening with the trait offered."""
     state = TableState.empty_two_seat()
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     put_in_play(state, register(state, stronghold(P1, clan=ruleset.CRANE)))
@@ -1258,7 +1266,7 @@ def _void_equip_game(*also_held: L5RCard, holds_favor: bool = False) -> EngineSe
     state = TableState.empty_two_seat()
     put_in_play(state, register(state, stronghold(P1)))
     put_in_play(state, personality("bearer", owner=P1))
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     hand = state.zones[ZoneKey(P1, ZoneRole.HAND)]
@@ -1289,7 +1297,7 @@ def _void_game(*held: L5RCard, in_play: int) -> EngineSession:
     for index in range(in_play):
         follower = attachment(f"follower{index}", attachment_type=AttachmentType.FOLLOWER)
         attached(state, register(state, follower), "bearer")
-    state.creatable_tokens[IMPERIAL_FAVOR_ID] = FatePrint(
+    state.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
         name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
     )
     hand = state.zones[ZoneKey(P1, ZoneRole.HAND)]

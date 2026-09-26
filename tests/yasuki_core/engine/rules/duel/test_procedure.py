@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focusing, procedure
 from yasuki_core.engine.rules.duel.records import DuelStep
-from yasuki_core.engine.rules.effects import StartDuel
+from yasuki_core.engine.rules.effects import StartDuel, TakeFavor
 from yasuki_core.engine.rules.triggers import apply_effect
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -22,7 +22,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.prints import RulebookPrint
 
 from tests.yasuki_core.engine.builders import (
     fate_card,
@@ -377,3 +378,31 @@ def test_focusing_a_card_the_seat_does_not_hold_is_refused():
 
         with pytest.raises(ValueError):
             procedure.focus(session.game, P2, focus_token("P1-h0"))
+
+
+def _favor_proxy_of(session: EngineSession, seat: PlayerId) -> str:
+    session.game.table.creatable_tokens[IMPERIAL_FAVOR_ID] = RulebookPrint(
+        name="The Imperial Favor", side=Side.FATE, printed_id=IMPERIAL_FAVOR_ID
+    )
+    TakeFavor(seat).perform(session.game)
+    hand = session.game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
+    return next(card.id for card in hand.cards if card.printed_id == IMPERIAL_FAVOR_ID)
+
+
+def test_the_imperial_favor_is_not_offered_as_a_focus():
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game()
+        _favor_proxy_of(session, P2)
+        _challenge(session)
+
+        assert set(session.game.pending.candidates) == {focus_token("P2-h0"), DECK_TOP, STRIKE}
+
+
+def test_focusing_the_imperial_favor_is_refused():
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game()
+        favor = _favor_proxy_of(session, P2)
+        _challenge(session)
+
+        with pytest.raises(ValueError):
+            procedure.focus(session.game, P2, focus_token(favor))
