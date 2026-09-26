@@ -202,11 +202,11 @@ UNICORN = "unicorn"
 # :class:`~yasuki_core.engine.rules.vocabulary.segments.Segment`, a place in that arc's
 # ``attack_segments``, and a name in its ``segment_names``. Nothing reads the enum's declaration
 # order, so no arc inherits another's sequence.
-_SHATTERED_EMPIRE_SEGMENTS = (Segment.DECLARATION, Segment.MANEUVERS, Segment.FIGHT)
+_ONYX_SEGMENTS = (Segment.DECLARATION, Segment.MANEUVERS, Segment.FIGHT)
 
 # The Battle Sequence this arc walks inside Fight Battles, named apart from the enum's order for
 # the same reason the Attack Phase's sequence is.
-_SHATTERED_EMPIRE_BATTLE_SEGMENTS = (
+_ONYX_BATTLE_SEGMENTS = (
     BattleSegment.ENGAGE,
     BattleSegment.COMBAT,
     BattleSegment.RESOLUTION,
@@ -216,14 +216,14 @@ _SHATTERED_EMPIRE_BATTLE_SEGMENTS = (
 # Onyx Edition / Shattered Empire: the ten legal Clan Alignments the rulebook enumerates. Naga is
 # the same alignment as Akasha and resolves to it. Every other clan name a card carries -- minor
 # clans, Ninja, Shadowlands, Toturi's Army, "Unaligned", "Imperial" -- is not an alignment here.
-SHATTERED_EMPIRE = Ruleset(
-    name="shattered_empire",
-    arcs=("Shattered Empire",),
+ONYX = Ruleset(
+    name="onyx",
+    arcs=("Onyx Edition",),
     clan_alignments=frozenset(
         {AKASHA, CRAB, CRANE, DRAGON, LION, MANTIS, PHOENIX, SCORPION, SPIDER, UNICORN}
     ),
     clan_aliases={NAGA: AKASHA},
-    attack_segments=_SHATTERED_EMPIRE_SEGMENTS,
+    attack_segments=_ONYX_SEGMENTS,
     segment_names={
         Segment.DECLARATION: "Declaration Segment",
         Segment.MANEUVERS: "Maneuvers Segment",
@@ -246,7 +246,7 @@ SHATTERED_EMPIRE = Ruleset(
             keywords=frozenset({keywords.POLITICAL}),
         ),
     ),
-    battle_segments=_SHATTERED_EMPIRE_BATTLE_SEGMENTS,
+    battle_segments=_ONYX_BATTLE_SEGMENTS,
     battle_segment_names={
         BattleSegment.ENGAGE: "Engage Segment",
         BattleSegment.COMBAT: "Combat Segment",
@@ -255,10 +255,10 @@ SHATTERED_EMPIRE = Ruleset(
     },
 )
 
-# Onyx Edition's rules differ from Shattered Empire's in ways the engine does not model yet, so it
-# starts as a copy. What it holds apart today is its printings: a card whose text Shattered Empire
-# rewrote registers its Onyx text under this name.
-ONYX = replace(SHATTERED_EMPIRE, name="onyx", arcs=("Onyx Edition",))
+# Shattered Empire follows Onyx Edition. The engine models none of the rules differences between
+# them yet, so it starts as a copy of Onyx. The two differ only in printings: a card whose text
+# Shattered Empire rewrote registers its Onyx text under ``ONYX``'s name.
+SHATTERED_EMPIRE = replace(ONYX, name="shattered_empire", arcs=("Shattered Empire",))
 
 # The ruleset the engine plays under. Named once so no module decides for itself which arc is live.
 ACTIVE = SHATTERED_EMPIRE
