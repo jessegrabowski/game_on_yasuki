@@ -5,11 +5,10 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.focusing import focused_cards
-from yasuki_core.engine.rules.duel.procedure import duel_in_progress
+from yasuki_core.engine.rules.duel.procedure import duel_in_progress, duel_stat
 from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelStep, DuelWork
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
@@ -62,12 +61,6 @@ def duel_total(game: GameState, duel: DuelRecord, seat: PlayerId) -> int:
     Focus Value as its card was focused."""
     duelist = game.table.cards_by_id[duel.duelist_of(seat)]
     return duel_stat(game, duelist) + ruleset.ACTIVE.focus_procedure.focus_total(game, duel, seat)
-
-
-def duel_stat(game: GameState, card: L5RCard) -> int:
-    """The stat this duel compares for ``card``, which is the ruleset's ``duel_stat_default`` until a
-    card overrides it per duel or per Personality (CR, Duel Stat)."""
-    return effective_stat(game, card, ruleset.ACTIVE.duel_stat_default)
 
 
 def end_duel(game: GameState) -> list[GameEvent]:

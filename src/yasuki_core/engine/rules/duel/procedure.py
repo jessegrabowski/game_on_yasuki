@@ -6,12 +6,14 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.records import DuelRecord, DuelStep, DuelWork
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
     DecisionResponse,
     FocusOrStrike,
 )
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
 
@@ -107,6 +109,12 @@ class OfferFocusOrStrike(DuelWork):
 
     def resume(self, game: GameState) -> None:
         offer_focus_or_strike(game, self.seat)
+
+
+def duel_stat(game: GameState, card: L5RCard) -> int:
+    """The stat this duel compares for ``card``, which is the ruleset's ``duel_stat_default`` until a
+    card overrides it per duel or per Personality (CR, Duel Stat)."""
+    return effective_stat(game, card, ruleset.ACTIVE.duel_stat_default)
 
 
 def focus_sources(game: GameState, duel: DuelRecord, seat: PlayerId) -> tuple[str, ...]:
