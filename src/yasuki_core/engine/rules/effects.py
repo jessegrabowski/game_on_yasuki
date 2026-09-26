@@ -986,13 +986,12 @@ class StartDuel(Effect):
         # would close that cycle.
         from yasuki_core.engine.rules.duel.procedure import declare_duel
 
-        declare_duel(
+        return declare_duel(
             game,
             challenger_duelist=self.challenger,
             challenged_duelist=self.challenged,
             source=self.source_card_id,
         )
-        return []
 
 
 @dataclass(frozen=True, slots=True)

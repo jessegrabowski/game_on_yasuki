@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Protocol
 
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.duel.focusing import TWENTY_FESTIVALS_FOCUSING, FocusProcedure
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
@@ -114,9 +115,9 @@ class Ruleset:
         The designator the rulebook Lobby ability is taken under. The Twenty Festivals CR makes it
         Limited and the Onyx/ShE datasheet makes it Open, which are different Action Rounds with
         different players entitled to act. Default Limited, the CR's.
-    focus_limit : int or None
-        How many times one seat may focus in a duel, or None where the arc caps it only by what the
-        seat has to focus with. Default 4, the CR's.
+    focus_procedure : FocusProcedure
+        How this arc's duels are focused: what may be focused, how many times, and what focusing one
+        card does. Default the Twenty Festivals CR's.
     duel_stat_default : Stat
         The stat a duel compares where nothing overrides it. Default Chi, the CR's.
     rulebook_proxies : tuple of str
@@ -141,7 +142,7 @@ class Ruleset:
     lobby_timing: ActionTiming = ActionTiming.LIMITED
     lobby_keywords: frozenset[str] = frozenset()
     favor_abilities: tuple[FavorAbility, ...] = ()
-    focus_limit: int | None = 4
+    focus_procedure: FocusProcedure = TWENTY_FESTIVALS_FOCUSING
     duel_stat_default: Stat = Stat.CHI
     rulebook_proxies: tuple[str, ...] = ()
 

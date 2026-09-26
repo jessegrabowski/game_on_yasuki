@@ -2,7 +2,8 @@ import pytest
 
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core import DATABASE_DIR
-from yasuki_core.ruleset import IMPERIAL, Ruleset, SHATTERED_EMPIRE, normalize_clan
+from yasuki_core.engine.rules.duel.focusing import TWENTY_FESTIVALS_FOCUSING
+from yasuki_core.ruleset import IMPERIAL, ONYX, Ruleset, SHATTERED_EMPIRE, normalize_clan
 from yasuki_core.yaml_io import read_yaml
 
 
@@ -43,6 +44,12 @@ def test_the_live_ruleset_walks_the_crs_whole_battle_sequence():
         BattleSegment.RESOLUTION,
         BattleSegment.AFTER_RESOLUTION,
     )
+
+
+def test_the_live_ruleset_focuses_by_the_crs_own_procedure():
+    assert SHATTERED_EMPIRE.focus_procedure is TWENTY_FESTIVALS_FOCUSING
+    assert ONYX.focus_procedure is TWENTY_FESTIVALS_FOCUSING
+    assert SHATTERED_EMPIRE.focus_procedure.focus_limit == 4
 
 
 def test_an_arc_names_its_own_battle_segments():

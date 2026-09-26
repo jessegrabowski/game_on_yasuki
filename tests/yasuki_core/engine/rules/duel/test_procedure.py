@@ -8,7 +8,7 @@ from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.duel import procedure
+from yasuki_core.engine.rules.duel import focusing, procedure
 from yasuki_core.engine.rules.duel.records import DuelStep
 from yasuki_core.engine.rules.effects import StartDuel
 from yasuki_core.engine.rules.triggers import apply_effect
@@ -82,7 +82,7 @@ def _challenge(session: EngineSession) -> None:
 
 
 def _focused_ids(session: EngineSession, seat: PlayerId) -> list[str]:
-    return [card.id for card in procedure.focused_cards(session.game, seat)]
+    return [card.id for card in focusing.focused_cards(session.game, seat)]
 
 
 def test_a_declared_duel_records_both_duelists_and_opens_the_focusing():
@@ -185,7 +185,7 @@ def test_a_seat_may_focus_four_times_and_then_only_strike():
         session = _duel_game(hand={}, deck={P1: 6, P2: 6})
         _challenge(session)
 
-        for _ in range(ruleset.ACTIVE.focus_limit):
+        for _ in range(ruleset.ACTIVE.focus_procedure.focus_limit):
             for seat in (P2, P1):
                 assert session.game.pending.seat is seat
                 session.submit(seat, DecisionResponse((DECK_TOP,)))
@@ -201,7 +201,7 @@ def test_the_focus_limit_is_counted_per_seat():
     # The alternating loop can only drive both seats to the cap together, so what the cap is counted
     # against is read off the sources each seat is offered at the same moment.
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
-        limit = ruleset.ACTIVE.focus_limit
+        limit = ruleset.ACTIVE.focus_procedure.focus_limit
         session = _duel_game(hand={}, deck={P1: 6, P2: 6})
         _challenge(session)
 
@@ -216,8 +216,15 @@ def test_the_focus_limit_is_counted_per_seat():
         assert DECK_TOP in procedure.focus_sources(session.game, duel, P1)
 
 
-def test_the_focus_limit_comes_from_the_ruleset(monkeypatch):
-    monkeypatch.setattr(ruleset, "ACTIVE", replace(ruleset.ACTIVE, focus_limit=1))
+def test_the_focus_limit_comes_from_the_focus_procedure(monkeypatch):
+    monkeypatch.setattr(
+        ruleset,
+        "ACTIVE",
+        replace(
+            ruleset.ACTIVE,
+            focus_procedure=replace(ruleset.ACTIVE.focus_procedure, focus_limit=1),
+        ),
+    )
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         session = _duel_game(hand={}, deck={P1: 6, P2: 6})
         _challenge(session)
@@ -232,7 +239,14 @@ def test_the_focus_limit_comes_from_the_ruleset(monkeypatch):
 
 
 def test_an_arc_with_no_focus_limit_is_capped_only_by_what_a_seat_holds(monkeypatch):
-    monkeypatch.setattr(ruleset, "ACTIVE", replace(ruleset.ACTIVE, focus_limit=None))
+    monkeypatch.setattr(
+        ruleset,
+        "ACTIVE",
+        replace(
+            ruleset.ACTIVE,
+            focus_procedure=replace(ruleset.ACTIVE.focus_procedure, focus_limit=None),
+        ),
+    )
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         session = _duel_game(hand={}, deck={P1: 6, P2: 6})
         _challenge(session)

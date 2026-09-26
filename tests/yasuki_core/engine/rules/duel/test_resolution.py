@@ -7,7 +7,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.duel import procedure, resolution
+from yasuki_core.engine.rules.duel import focusing, procedure, resolution
 from yasuki_core.engine.rules.duel.records import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
@@ -141,9 +141,9 @@ def _strike_out(session: EngineSession) -> None:
 def test_a_card_with_no_printed_focus_value_adds_nothing():
     # What may be focused is the procedure's business. A card that got into a focusing area another
     # way still has to total, and the CR lets cards other than Fate cards be there.
-    assert resolution.focus_value(_focus_card("fv3", P2, 3)) == 3
-    assert resolution.focus_value(fate_card("plain", P2)) == 0
-    assert resolution.focus_value(personality("bushi", owner=P2)) == 0
+    assert focusing.focus_value(_focus_card("fv3", P2, 3)) == 3
+    assert focusing.focus_value(fate_card("plain", P2)) == 0
+    assert focusing.focus_value(personality("bushi", owner=P2)) == 0
 
 
 def test_the_higher_total_wins_the_duel():
@@ -258,14 +258,14 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
 
     outcome = game.duel.outcome
     assert outcome.resolved and outcome.winner is P2
-    assert [held.id for held in procedure.focused_cards(game, P2)] == ["P2-fv1"]
+    assert [held.id for held in focusing.focused_cards(game, P2)] == ["P2-fv1"]
     assert game.duel.step is DuelStep.RESOLUTION
 
     _resume_next(game, resolution.EndTheDuel)
 
     assert game.duel.step is DuelStep.ENDED
     assert game.duel.outcome == outcome
-    assert procedure.focused_cards(game, P2) == ()
+    assert focusing.focused_cards(game, P2) == ()
 
 
 def test_the_strike_reveals_both_stacks_before_they_are_discarded():
