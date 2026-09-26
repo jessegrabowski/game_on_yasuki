@@ -3,7 +3,7 @@ from collections.abc import Iterator
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved
+from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, GameEvent, PhaseStarted
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole, location_of, province_holding
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -148,6 +148,15 @@ def favor_actions_this_turn(game: GameState, seat: PlayerId) -> int:
         for event in game.turn_events
         if isinstance(event, ActionResolved) and event.seat is seat and event.favor
     )
+
+
+def phase_history(game: GameState) -> tuple[GameEvent, ...]:
+    """The :class:`~.GameEvent` records of what has happened since the current phase began, which is
+    what a card reading "this phase" counts. The whole turn so far before its first phase has
+    begun."""
+    events = game.turn_events
+    starts = [index for index, event in enumerate(events) if isinstance(event, PhaseStarted)]
+    return events[starts[-1] + 1 :] if starts else events
 
 
 def rings_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
