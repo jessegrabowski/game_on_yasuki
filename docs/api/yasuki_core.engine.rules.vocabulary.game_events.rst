@@ -24,6 +24,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     FavorDiscarded
     FocusedCardsRevealed
     HonorChanged
+    PhaseStarted
     ProducedGold
     ProducingGold
     Rehonored

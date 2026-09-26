@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.turn.structure import (
     END_OF_TURN,
     FIRED_MOMENTS,
     Moment,
+    PHASE_TIMINGS,
     Phase,
     RESPONSE_TIMINGS,
     RoundKind,
@@ -64,6 +65,7 @@ from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     EnteredPlay,
+    PhaseStarted,
     Revealed,
     Straightened,
     TurnStarted,
@@ -395,6 +397,29 @@ def test_a_pause_on_the_turn_starting_leaves_a_clean_record_for_the_first_action
 
     assert game.action_events == [] and game.action_taken == ""
     assert not game.stack and game.round.priority is game.active
+
+
+def test_a_pause_as_a_phase_starts_is_answered_before_its_round_opens(reacting):
+    state = dealt_table(hand=0)
+    put_in_play(state, holding("P1-eyes", printed_id="pause_probe"))
+    reacting(
+        PhaseStarted,
+        "pause_probe",
+        lambda ctx: (
+            [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)]
+            if ctx.event.phase is Phase.BATTLE
+            else []
+        ),
+    )
+    session = EngineSession.start(state, PlayerId.P1)
+    end_phase(session)
+
+    assert session.game.phase is Phase.BATTLE and session.game.pending is not None
+    assert [type(item).__name__ for item in session.game.stack] == ["OpenRound", "ResumeCascade"]
+    session.submit(PlayerId.P1, DecisionResponse(()))
+
+    assert session.game.round.timings == PHASE_TIMINGS[Phase.BATTLE]
+    assert not session.game.stack
 
 
 def test_a_new_game_refills_a_short_province_before_the_first_action():
@@ -909,6 +934,22 @@ def test_a_favor_action_that_paused_for_a_choice_is_announced_once_as_a_favor_ac
     assert _resolutions(game) == [ActionResolved(PlayerId.P1, None, favor=True, printed=False)]
     assert favor_actions_this_turn(game, PlayerId.P1) == 1
     assert favor_actions_this_turn(game, PlayerId.P2) == 0
+
+
+def test_each_phase_announces_its_start_and_the_action_phase_follows_the_turn():
+    session = EngineSession.start(dealt_table(hand=0), PlayerId.P1)
+    end_phase(session)
+    end_phase(session)
+
+    opening = [
+        event for event in session.game.turn_events if isinstance(event, TurnStarted | PhaseStarted)
+    ]
+    assert opening == [
+        TurnStarted(PlayerId.P1),
+        PhaseStarted(Phase.ACTION),
+        PhaseStarted(Phase.BATTLE),
+        PhaseStarted(Phase.DYNASTY),
+    ]
 
 
 def test_the_turn_history_is_dropped_as_the_next_turn_begins():

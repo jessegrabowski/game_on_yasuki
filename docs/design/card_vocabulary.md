@@ -138,6 +138,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    EnteredPlay
    FavorDiscarded
    HonorChanged
+   PhaseStarted
    ProducedGold
    ProducingGold
    Rehonored

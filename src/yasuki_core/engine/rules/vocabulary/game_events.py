@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import Cause, PlayerId
+from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.table import Location, ZoneKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
@@ -11,6 +12,21 @@ class TurnStarted:
     """A seat's turn has begun (after straighten and province reveal)."""
 
     seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
+class PhaseStarted:
+    """A phase of the active seat's turn has begun, before its first Action Round opens. The Action
+    Phase starts after :class:`~.TurnStarted`. A card reading "this phase" counts the turn's events
+    since the last of these.
+
+    Attributes
+    ----------
+    phase : Phase
+        The phase that began.
+    """
+
+    phase: Phase
 
 
 @dataclass(frozen=True, slots=True)
@@ -510,6 +526,7 @@ GameEvent = (
     | StrikeDeclared
     | FavorDiscarded
     | HonorChanged
+    | PhaseStarted
     | ProducedGold
     | ProducingGold
     | Rehonored

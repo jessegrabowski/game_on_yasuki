@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
     EnteredPlay,
+    PhaseStarted,
     Straightened,
     TurnStarted,
 )
@@ -141,9 +142,17 @@ def advance(game: GameState) -> None:
     following = next_phase(game.phase)
     if following is not None:
         game.phase = following
-        open_round(game)
+        _announce_phase(game)
+        run_stack(game)
         return
     _end_turn(game)
+
+
+def _announce_phase(game: GameState) -> None:
+    """Queue the announcement that the current phase has begun, with its first round opening behind
+    it, for the caller to drain."""
+    game.stack.append(OpenRound())
+    game.stack.append(triggers.AnnounceEvent(PhaseStarted(game.phase)))
 
 
 def _lift_straighten_delays(game: GameState) -> None:
@@ -372,12 +381,13 @@ def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
     the Province reveal, the turn's start, and the opening of its first round behind it for the
     caller to drain.
 
-    The three announcements are separate instants (CR), so each is its own cascade. The round
-    opens last, so a question asked while opening is answered in the previous round and hands no
-    opportunity on. The straighten prohibition outlives this step: it lifts when the Action Phase
-    this straighten precedes has ended.
+    The announcements are separate instants (CR), so each is its own cascade: the Province reveal,
+    the turn's start, then the Action Phase's start. The round opens last, so a question asked while
+    opening is answered in the previous round and hands no opportunity on. The straighten
+    prohibition outlives this step: it lifts when the Action Phase this straighten precedes has
+    ended.
     """
-    game.stack.append(OpenRound())
+    _announce_phase(game)
     game.stack.append(AnnounceTurnStart())
     game.stack.append(ApplyEffects((RevealProvinces(game.active),)))
     straightened = ops.straighten(
@@ -397,7 +407,7 @@ class AnnounceTurnStart:
 
 @dataclass(frozen=True, slots=True)
 class OpenRound:
-    """Open the turn's first Action Round once the opening has fully resolved, forgetting what the
+    """Open the phase's first Action Round once its opening has fully resolved, forgetting what the
     opening raised: it is not an action, so it is nobody's to respond to."""
 
     def resume(self, game: GameState) -> None:
