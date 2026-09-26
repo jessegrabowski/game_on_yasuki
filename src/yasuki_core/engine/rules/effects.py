@@ -2199,6 +2199,15 @@ class Choose(InterruptingEffect):
         )
 
 
+def _at_random(game: GameState, card_ids: tuple[str, ...], count: int) -> tuple[str, ...]:
+    """``count`` of ``card_ids`` picked from the game's own stream, in their given order, or all of
+    them when there are no more than ``count``."""
+    if len(card_ids) <= count:
+        return card_ids
+    picked = game.rng.choice(len(card_ids), size=count, replace=False)
+    return tuple(card_ids[index] for index in sorted(picked))
+
+
 @dataclass(frozen=True, slots=True)
 class DiscardFromHand(InterruptingEffect):
     """``holder`` discards ``count`` cards from hand, chosen by ``picker`` or at random.
@@ -2256,12 +2265,10 @@ class DiscardFromHand(InterruptingEffect):
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        eligible = self._eligible(game)
-        if len(eligible) > self.count:
-            picked = game.rng.choice(len(eligible), size=self.count, replace=False)
-            eligible = tuple(eligible[index] for index in sorted(picked))
         by_id = game.table.cards_by_id
-        discarded = [by_id[card_id] for card_id in eligible]
+        discarded = [
+            by_id[card_id] for card_id in _at_random(game, self._eligible(game), self.count)
+        ]
         for card in discarded:
             ops.move_card(game.table, card, _pile(card))
         return [
@@ -2275,6 +2282,34 @@ class DiscardFromHand(InterruptingEffect):
         if self.candidates is None:
             return hand
         return tuple(card_id for card_id in self.candidates if card_id in hand)
+
+
+@dataclass(frozen=True, slots=True)
+class ReshuffleFromHand(Effect):
+    """``holder`` shuffles ``count`` cards picked at random from their hand into their Fate deck,
+    or their whole hand when it holds no more than ``count``.
+
+    Attributes
+    ----------
+    holder : PlayerId
+        The seat whose hand and Fate deck they are.
+    count : int
+        How many cards are reshuffled.
+    """
+
+    holder: PlayerId
+    count: int
+
+    def describe(self) -> str:
+        return f"{self.holder.name} reshuffles {self.count} from hand at random"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        deck = DeckKey(self.holder, Side.FATE)
+        hand = tuple(card.id for card in cards_in_hand(game, self.holder))
+        for card_id in _at_random(game, hand, self.count):
+            ops.move_card(game.table, game.table.cards_by_id[card_id], deck)
+        game.table.decks[deck].shuffle(game.rng)
+        return []
 
 
 @dataclass(frozen=True, slots=True)
