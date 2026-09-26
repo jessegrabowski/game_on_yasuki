@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.board.queries import (
     has_keyword,
     owned_holdings,
     owned_personalities,
+    personalities_in_play,
     province_zones,
     top_of_deck,
     units_at,
@@ -53,6 +54,7 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     CreateToken,
+    DelayStraighten,
     Destroy,
     Discard,
     DiscardFromHand,
@@ -78,6 +80,7 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_ACTION_PHASE
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.units.membership import attached_to, unit_of
@@ -376,6 +379,68 @@ register_ability(
         effects=_culling_grounds_effects,
         hits_every_target=True,
     ),
+)
+
+
+# --- Dark Ring of Air (Experienced) ---
+
+DARK_AIR_HONOR_LOSS = 3
+DARK_AIR_BOWED = 3
+
+
+def _dark_ring_of_air_experienced_condition(game: GameState, source: L5RCard) -> bool:
+    """ "If each player controls three or more bowed Personalities." """
+    return all(
+        sum(
+            1
+            for card in cards_in_play(game, seat)
+            if card.bowed and isinstance(card.printed, PersonalityPrint)
+        )
+        >= DARK_AIR_BOWED
+        for seat in game.table.seats
+    )
+
+
+def _dark_ring_of_air_experienced_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:
+    return [GainHonor(source.owner, -DARK_AIR_HONOR_LOSS, source_id=source.id)]
+
+
+register_entry(
+    "dark_ring_of_air_experienced",
+    condition=_dark_ring_of_air_experienced_condition,
+    extra_effects=_dark_ring_of_air_experienced_entry_effects,
+    key="enter",
+)
+register_no_enlightenment("dark_ring_of_air_experienced")
+
+
+def _dark_ring_of_air_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Every Personality in play, on your turn. The card does not ask for an unbowed one."""
+    if game.active is not source.owner:
+        return []
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _dark_ring_of_air_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Bow the target, who will not straighten until their controller's next Action Phase
+    begins."""
+    return [Bow(target.id), DelayStraighten(target.id, until=BEGINNING_OF_ACTION_PHASE)]
+
+
+register_ring(
+    "dark_ring_of_air_experienced",
+    ability=Ability(
+        printed_index=1,
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        targets=_dark_ring_of_air_experienced_targets,
+        effects=_dark_ring_of_air_experienced_effects,
+        key="air",
+        keywords=frozenset({keywords.AIR}),
+    ),
+    pitch=None,
 )
 
 
