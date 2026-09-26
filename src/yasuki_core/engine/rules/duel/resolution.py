@@ -52,7 +52,6 @@ class DecideTheDuel(DuelWork):
                 winner=outcome.winner,
                 losers=frozenset(outcome.losers),
                 totals=frozenset(outcome.totals.items()),
-                entry_stats=frozenset(duel.entry_stats.items()),
                 source_card_id=duel.source,
             ),
         )

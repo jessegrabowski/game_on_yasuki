@@ -87,9 +87,6 @@ class DuelRecord:
     focused : dict mapping PlayerId to int
         How many times each seat has focused, which is what a focus limit counts. A seat that has
         not focused is absent, so read it through :meth:`focuses`. Default empty.
-    entry_stats : dict mapping PlayerId to int
-        Each seat's Personality's duel stat as the duel was declared, which a card comparing the two
-        at that moment cannot read off the board once the duel has moved on. Default empty.
     struck : PlayerId or None
         The seat that struck, ending the focusing, or None until one has. Default None.
     outcome : DuelOutcome or None
@@ -104,7 +101,6 @@ class DuelRecord:
     step: DuelStep = DuelStep.CHALLENGE
     option: PlayerId | None = None
     focused: dict[PlayerId, int] = field(default_factory=dict)
-    entry_stats: dict[PlayerId, int] = field(default_factory=dict)
     struck: PlayerId | None = None
     outcome: DuelOutcome | None = None
 

@@ -95,28 +95,34 @@ def declare_duel(
     ops.create_focus_area(game.table, challenger)
     ops.create_focus_area(game.table, challenged)
     duel.step = DuelStep.FOCUSING
-    duel.entry_stats = {
-        challenger: duel_stat(game, game.table.cards_by_id[challenger_duelist]),
-        challenged: duel_stat(game, game.table.cards_by_id[challenged_duelist]),
-    }
+    challenger_stat = duel_stat(game, game.table.cards_by_id[challenger_duelist])
+    challenged_stat = duel_stat(game, game.table.cards_by_id[challenged_duelist])
     # The option is queued before the setup runs and before the window is announced, so that work
     # either of them pushes sits above it and resolves before the first seat is asked.
     game.stack.append(OfferFocusOrStrike(challenged))
     events: list[GameEvent] = []
     for effect in ruleset.ACTIVE.focus_procedure.begin(game, duel):
         events.extend(triggers.apply_effect(game, effect))
-    return [*events, _naming(duel, DeclaringDuel), _naming(duel, DuelDeclared)]
+    return [
+        *events,
+        _declaration(duel, DeclaringDuel, challenger_stat, challenged_stat),
+        _declaration(duel, DuelDeclared, challenger_stat, challenged_stat),
+    ]
 
 
-def _naming[EventT: DeclaringDuel | DuelDeclared](duel: DuelRecord, kind: type[EventT]) -> EventT:
-    """``kind`` built from ``duel``. The two declaration events carry the same five fields, since
-    one opens the window the other closes."""
+def _declaration[EventT: DeclaringDuel | DuelDeclared](
+    duel: DuelRecord, kind: type[EventT], challenger_stat: int, challenged_stat: int
+) -> EventT:
+    """``kind`` built from ``duel`` and the duel stats it begins on. The two declaration events carry
+    the same fields, since one opens the window the other closes."""
     return kind(
         challenger=duel.challenger,
         challenged=duel.challenged,
         challenger_duelist=duel.challenger_duelist,
         challenged_duelist=duel.challenged_duelist,
         source_card_id=duel.source,
+        challenger_stat=challenger_stat,
+        challenged_stat=challenged_stat,
     )
 
 

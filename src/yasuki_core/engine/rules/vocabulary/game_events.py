@@ -350,6 +350,10 @@ class DeclaringDuel:
         The id of the challenged seat's Personality.
     source_card_id : str
         The id of the card that created the duel.
+    challenger_stat : int
+        The challenger's Personality's duel stat as the duel is declared.
+    challenged_stat : int
+        The challenged Personality's duel stat as the duel is declared.
     """
 
     challenger: PlayerId
@@ -357,6 +361,8 @@ class DeclaringDuel:
     challenger_duelist: str
     challenged_duelist: str
     source_card_id: str
+    challenger_stat: int
+    challenged_stat: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -375,6 +381,10 @@ class DuelDeclared:
         The id of the challenged seat's Personality.
     source_card_id : str
         The id of the card that created the duel.
+    challenger_stat : int
+        The challenger's Personality's duel stat as the duel is declared.
+    challenged_stat : int
+        The challenged Personality's duel stat as the duel is declared.
     """
 
     challenger: PlayerId
@@ -382,6 +392,8 @@ class DuelDeclared:
     challenger_duelist: str
     challenged_duelist: str
     source_card_id: str
+    challenger_stat: int
+    challenged_stat: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -433,8 +445,8 @@ class FocusedCardsRevealed:
 class DuelResolved:
     """A duel has been decided, before the focused cards are discarded and the duel ends.
 
-    The entry stats are what each Personality's duel stat was when the duel was declared, which a
-    card comparing the two as the duel began cannot read off the board afterwards.
+    A card asking what the Personalities entered the duel on reads the duel's
+    :class:`~.DuelDeclared` out of ``turn_events``, which carries the stats it was declared with.
 
     Attributes
     ----------
@@ -444,8 +456,6 @@ class DuelResolved:
         The seats whose Personalities lost.
     totals : frozenset of (PlayerId, int)
         Each seat and what its Personality totalled.
-    entry_stats : frozenset of (PlayerId, int)
-        Each seat and its Personality's duel stat as the duel was declared.
     source_card_id : str
         The id of the card that created the duel.
     """
@@ -453,7 +463,6 @@ class DuelResolved:
     winner: PlayerId | None
     losers: frozenset[PlayerId]
     totals: frozenset[tuple[PlayerId, int]]
-    entry_stats: frozenset[tuple[PlayerId, int]]
     source_card_id: str
 
 

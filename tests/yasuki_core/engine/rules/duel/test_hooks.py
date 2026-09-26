@@ -125,7 +125,7 @@ def test_the_reveal_names_both_seats_cards():
         ]
 
 
-def test_the_resolution_carries_the_totals_and_the_stats_the_duel_began_on():
+def test_the_resolution_carries_the_totals():
     with probe_ability(HOOK_PROBE, DUEL_ABILITY):
         session = _duel_game(chi={P1: 2, P2: 5})
         _challenge(session)
@@ -134,9 +134,42 @@ def test_the_resolution_carries_the_totals_and_the_stats_the_duel_began_on():
         resolved = _events(session, DuelResolved)[0]
         assert resolved.winner is P2
         assert resolved.losers == frozenset({P1})
+        # One focused card worth 1 on top of each Chi.
         assert resolved.totals == frozenset({(P1, 3), (P2, 6)})
-        # The focused card is worth 1 to each seat, so the entry stats are the Chi alone.
-        assert resolved.entry_stats == frozenset({(P1, 2), (P2, 5)})
+
+
+def test_the_declaration_carries_the_stats_the_duelists_entered_on():
+    with probe_ability(HOOK_PROBE, DUEL_ABILITY):
+        session = _duel_game(chi={P1: 2, P2: 5})
+        _challenge(session)
+
+        declared = _events(session, DuelDeclared)[0]
+        assert (declared.challenger_stat, declared.challenged_stat) == (2, 5)
+
+
+def test_a_reaction_to_the_resolution_reads_the_stats_off_the_declaration(reacting):
+    # What Ring of Fire does: it reacts to winning a duel and asks whether its Personality entered
+    # with the lower duel stat. The record keeps no such field, so the reaction reads the duel's
+    # declaration back out of the turn's own history while it resolves.
+    entered: list[tuple[int, int]] = []
+
+    def _read_the_declaration(ctx) -> list:
+        declared = next(
+            past for past in reversed(ctx.game.turn_events) if isinstance(past, DuelDeclared)
+        )
+        entered.append((declared.challenger_stat, declared.challenged_stat))
+        return []
+
+    reacting(DuelResolved, HOOK_PROBE, _read_the_declaration)
+
+    with probe_ability(HOOK_PROBE, DUEL_ABILITY):
+        session = _duel_game(chi={P1: 2, P2: 5})
+        _challenge(session)
+        # The focused cards move the totals without touching what either Personality entered on.
+        _fought(session)
+
+    assert entered == [(2, 5)]
+    assert session.game.duel.outcome.totals == {P1: 3, P2: 6}
 
 
 def test_a_resolved_duel_announces_its_end_after_its_outcome():
