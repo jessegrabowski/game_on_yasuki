@@ -1,10 +1,13 @@
 from dataclasses import replace
 
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, Inheritance
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseInheritanceTarget, DecisionResponse
+from yasuki_core.engine.rules.board.queries import rulebook_proxy
+from yasuki_core.engine.rules.rulebook.inheritance import INHERITANCE, is_inheritance
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_gui.services.game_runner import GameRunner
@@ -12,7 +15,7 @@ from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import INHERITANCE_PROXY_ID, Side
 from yasuki_core.game_pieces.prints import StrongholdPrint
 
 from tests.yasuki_core.engine.builders import end_phase, end_turn, holding, put_in_play
@@ -60,8 +63,12 @@ def _second_players_turn(
     return session
 
 
+def _inheritance(session: EngineSession) -> ActivateAbility:
+    return ActivateAbility(rulebook_proxy(session.game, P2, INHERITANCE_PROXY_ID).id, INHERITANCE)
+
+
 def _offered(session: EngineSession, seat: PlayerId) -> bool:
-    return any(isinstance(action, Inheritance) for action in session.legal_actions(seat))
+    return any(is_inheritance(action) for action in session.legal_actions(seat))
 
 
 def test_the_second_player_is_offered_inheritance():
@@ -81,7 +88,7 @@ def test_the_first_player_is_never_offered_inheritance():
 
 
 def test_a_flipped_stronghold_does_not_grant_inheritance_to_the_first_player():
-    """Shrine of Courtesy can turn a Stronghold over, so the flipped state occurs in real play."""
+    # Shrine of Courtesy can turn a Stronghold over, so the flipped state occurs in real play.
     table = TableState.empty_two_seat()
     for seat in (P1, P2):
         put_in_play(table, _stronghold(seat))
@@ -99,7 +106,7 @@ def test_it_turns_the_stronghold_over_and_raises_the_chosen_holding():
     live = session.game.table.cards_by_id
     assert live["P2-SH"].active_face.name == "Moon"
 
-    session.act(P2, Inheritance())
+    session.act(P2, _inheritance(session))
     session.submit(P2, DecisionResponse(("P2-farm",)))
 
     assert live["P2-SH"].active_face.name == "Sun"
@@ -114,7 +121,7 @@ def test_turning_the_stronghold_over_returns_its_dispatch_to_the_front():
         live = session.game.table.cards_by_id
         assert ability_for(session.game, live["P2-SH"]).label == "Open: Moon"
 
-        session.act(P2, Inheritance())
+        session.act(P2, _inheritance(session))
         session.submit(P2, DecisionResponse(("P2-farm",)))
 
         assert ability_for(session.game, live["P2-SH"]) is None
@@ -125,17 +132,18 @@ def test_turning_the_stronghold_over_returns_its_dispatch_to_the_front():
 def test_the_target_choice_offers_the_seats_own_holdings():
     session = _second_players_turn()
 
-    session.act(P2, Inheritance())
+    session.act(P2, _inheritance(session))
 
     pending = session.game.pending
-    assert isinstance(pending, ChooseInheritanceTarget)
+    assert isinstance(pending, ChooseAbilityTarget)
     assert pending.seat is P2
     assert pending.candidates == ("P2-farm",)  # not the opponent's
+    assert pending.prompt() == "Target your Holding for The Inheritance Rule"
 
 
 def test_it_is_offered_only_once_per_game():
     session = _second_players_turn()
-    session.act(P2, Inheritance())
+    session.act(P2, _inheritance(session))
     session.submit(P2, DecisionResponse(("P2-farm",)))
 
     assert not _offered(session, P2)
@@ -148,7 +156,7 @@ def test_it_is_offered_only_once_per_game():
 def test_the_grant_lasts_until_the_turn_ends():
     session = _second_players_turn()
     live = session.game.table.cards_by_id
-    session.act(P2, Inheritance())
+    session.act(P2, _inheritance(session))
     session.submit(P2, DecisionResponse(("P2-farm",)))
     assert effective_gold_production(session.game, live["P2-farm"]) == 4
 
@@ -158,8 +166,7 @@ def test_the_grant_lasts_until_the_turn_ends():
 
 
 def test_a_single_faced_stronghold_cannot_be_turned_over():
-    """Turning the Stronghold over is what pays for the grant, so a Stronghold with no back face
-    cannot take the ability rather than taking it for free."""
+    # Turning the Stronghold over pays for the grant, so a Stronghold with no back face cannot pay.
     assert not _offered(_second_players_turn(two_faced=False), P2)
 
 
@@ -169,7 +176,7 @@ def test_it_is_not_offered_with_no_holding_to_raise():
 
 def test_the_action_and_its_answer_survive_a_replay():
     session = _second_players_turn()
-    session.act(P2, Inheritance())
+    session.act(P2, _inheritance(session))
     session.submit(P2, DecisionResponse(("P2-farm",)))
 
     rebuilt = replay(session.log)
@@ -181,16 +188,18 @@ def test_the_action_and_its_answer_survive_a_replay():
 def test_inheritance_is_taken_under_the_dynasty_designator():
     session = _second_players_turn()
 
-    assert legality.timings_of(session.game, Inheritance()) == {ActionTiming.DYNASTY}
+    assert legality.timings_of(session.game, _inheritance(session)) == {ActionTiming.DYNASTY}
 
 
 def test_the_menu_offers_inheritance_on_the_seats_own_stronghold():
-    """What the desktop client hangs off the Stronghold's context menu."""
     session = _second_players_turn()
 
     labels = [label for label, _ in GameRunner(session, P2).inheritance_menu("P2-SH")]
 
-    assert labels == ["Inheritance: turn over for +3GP"]
+    assert labels == [
+        "Dynasty: Turn your Stronghold over to give your target Holding +3GP. This may not be "
+        "prevented."
+    ]
 
 
 def test_the_menu_offers_nothing_on_another_card():
@@ -207,26 +216,53 @@ def test_the_menu_offers_nothing_on_the_opponents_stronghold():
 
 def test_the_menu_closes_once_the_ability_is_spent():
     session = _second_players_turn()
-    session.act(P2, Inheritance())
+    session.act(P2, _inheritance(session))
     session.submit(P2, DecisionResponse(("P2-farm",)))
 
     assert GameRunner(session, P2).inheritance_menu("P2-SH") == []
 
 
 def test_it_is_not_offered_outside_the_dynasty_phase():
-    """A Dynasty designator, so the seat cannot spend it in its Action phase."""
     session = _second_players_turn(phase=Phase.ACTION)
 
     assert not _offered(session, P2)
 
 
-def test_backing_out_leaves_the_ability_unspent():
-    """Backing out of the target picker unwinds the whole action, so a misclick does not burn a
-    once-per-game ability."""
+def test_backing_out_of_the_holding_pick_unwinds_the_turn_over_and_the_spend():
+    # The cost is paid before the target is chosen (CR, Action Sequence B then C), so by the time
+    # the Holding is asked for, the Stronghold has turned and the use is claimed. Backing out has
+    # to restore both, or a misclick burns a once-per-game ability.
     session = _second_players_turn()
-    session.act(P2, Inheritance())
+    session.act(P2, _inheritance(session))
+    assert session.game.table.cards_by_id["P2-SH"].showing_back is False
 
     session.cancel(P2)
 
     assert session.game.pending is None
+    assert session.game.table.cards_by_id["P2-SH"].showing_back is True
     assert _offered(session, P2)
+
+
+def test_a_stronghold_a_card_already_turned_to_its_front_turns_back():
+    session = _second_players_turn()
+    live = session.game.table.cards_by_id
+    live["P2-SH"].flip_face()  # as Shrine of Courtesy would, onto the Sun side
+
+    session.act(P2, _inheritance(session))
+    session.submit(P2, DecisionResponse(("P2-farm",)))
+
+    assert live["P2-SH"].active_face.name == "Moon"
+
+
+def test_an_arc_without_the_inheritance_rule_deals_no_proxy(monkeypatch):
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.IMPERIAL)
+    session = _second_players_turn()
+
+    assert rulebook_proxy(session.game, P2, INHERITANCE_PROXY_ID) is None
+    assert not _offered(session, P2)
+
+
+def test_the_board_menu_leaves_inheritance_to_the_stronghold():
+    session = _second_players_turn()
+
+    assert not any(is_inheritance(action) for _, action in GameRunner(session, P2).board_menu())

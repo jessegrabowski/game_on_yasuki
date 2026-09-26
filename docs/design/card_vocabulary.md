@@ -110,7 +110,6 @@ deferred through `Then` instead.
    Show
    ShuffleDeck
    SpendOncePerTurn
-   SpendSeatOncePerGame
    SpendSeatOncePerTurn
    Straighten
    TakeFavor
@@ -172,7 +171,6 @@ Legality with respect to game state is checked separately.
    ChooseDistribution
    ChooseEquipTarget
    ChooseFortificationProvince
-   ChooseInheritanceTarget
    ChooseInterruptEffect
    ChooseInterruptTarget
    ChooseInvestAmount

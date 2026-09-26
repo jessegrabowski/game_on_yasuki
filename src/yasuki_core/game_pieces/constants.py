@@ -14,6 +14,8 @@ LEGACY_PROXY_ID = "legacy"
 # per arc family. Neither is the Favor card a holder's hand shows, which is ``IMPERIAL_FAVOR_ID``.
 ONYX_FAVOR_PROXY_ID = "onyx_favor"
 PRE_GOLD_FAVOR_PROXY_ID = "pre_gold_favor"
+# The Inheritance rulebook ability has one too. Its id is not "inheritance", a printed Event's id.
+INHERITANCE_PROXY_ID = "the_inheritance_rule"
 
 
 class Side(str, Enum):

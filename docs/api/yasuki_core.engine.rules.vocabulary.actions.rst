@@ -13,7 +13,6 @@ yasuki_core.engine.rules.vocabulary.actions
     DeclareAttack
     DiscardToInterrupt
     Equip
-    Inheritance
     Lobby
     Pass
     PlayInterrupt

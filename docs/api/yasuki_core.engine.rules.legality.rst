@@ -12,7 +12,6 @@ yasuki_core.engine.rules.legality
     has_absent_ability
     has_presence
     has_wind
-    inheritance_key
     is_legacy_card
     is_legal
     legacy_candidates

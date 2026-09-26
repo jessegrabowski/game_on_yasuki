@@ -22,7 +22,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     DiscardToInterrupt,
     Equip,
-    Inheritance,
     Lobby,
     Pass,
     PlayInterrupt,
@@ -33,11 +32,9 @@ from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignment
 from yasuki_core.engine.rules.units.composition import in_a_unit
 from yasuki_core.engine.rules.board.queries import (
     has_keyword,
-    owned_holdings,
     province_cards,
     units_at,
 )
-from yasuki_core.engine.rules.board.seats import seat_stronghold
 from yasuki_core.engine.rules.rulebook.equip import equip_targets
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -65,10 +62,6 @@ from yasuki_core.game_pieces.prints import (
     PersonalityPrint,
     WindPrint,
 )
-
-
-# The Gold Production the Inheritance ability grants the Holding it targets (ShE).
-INHERITANCE_PRODUCTION = 3
 
 
 # The active ruleset: legal Clan Alignments and the off-clan surcharge.
@@ -166,7 +159,6 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
         *_recruits(game, seat),
         *_equips(game, seat),
         *_strategies(game, seat),
-        *_inheritance(game, seat),
         *_lobby(game, seat),
         *_declare_attack(game, seat),
         *_interrupts(game, seat),
@@ -184,8 +176,6 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
     match action:
         case Pass():
             return True
-        case Inheritance():
-            return bool(_inheritance(game, seat))
         case ActivateAbility(card_id=card_id):
             return action in _abilities(game, seat, only=card_id)
         case Recruit(card_id=card_id):
@@ -269,29 +259,6 @@ def has_wind(game: GameState, seat: PlayerId) -> bool:
         for card in game.table.battlefield.cards
         if card.owner is seat
     )
-
-
-def inheritance_key(seat: PlayerId) -> str:
-    """The once-per-*game* usage key for a seat's Inheritance ability. Unscoped by turn, unlike
-    :func:`~.seat_once_key`, because the ability is spent for the whole game."""
-    return f"inheritance:{seat.name}"
-
-
-def _inheritance(game: GameState, seat: PlayerId) -> list[Action]:
-    """The Inheritance ability when the seat can take it (ShE): only for the seat that did not go
-    first, once per game, and only with a Stronghold to turn over and a Holding to raise."""
-    if not permits(game, seat, ACTION_TIMINGS[Inheritance]):
-        return []
-    if seat is game.first_player or game.has_used(inheritance_key(seat)):
-        return []
-    stronghold = seat_stronghold(game, seat)
-    # Turning the Stronghold over is what pays for the grant, and flip_face is a no-op without a
-    # back face.
-    if stronghold is None or stronghold.printed.back_card_id is None:
-        return []
-    if not owned_holdings(game, seat):
-        return []
-    return [Inheritance()]
 
 
 def _declare_attack(game: GameState, seat: PlayerId) -> list[Action]:

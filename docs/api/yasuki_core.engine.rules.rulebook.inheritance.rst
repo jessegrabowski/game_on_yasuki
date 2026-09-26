@@ -7,8 +7,7 @@ yasuki_core.engine.rules.rulebook.inheritance
 
 .. autosummary::
 
-    apply_inheritance_target
-    inheritance
+    is_inheritance
 
 .. automodule:: yasuki_core.engine.rules.rulebook.inheritance
     :members:
