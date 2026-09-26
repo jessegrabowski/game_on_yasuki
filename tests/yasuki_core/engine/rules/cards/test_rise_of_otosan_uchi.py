@@ -31,6 +31,7 @@ from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_option
 from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.effects import (
     Bow,
+    Destroy,
     DiscardFromHand,
     Fear,
     Move,
@@ -1556,6 +1557,7 @@ def _ring_session_with_four_elements() -> EngineSession:
         ("generic_ring", True),
         ("dark_ring_of_the_void_experienced", False),
         ("dark_ring_of_air_experienced", False),
+        ("dark_ring_of_fire_experienced", False),
         ("legacy_of_fudo", False),
     ],
 )
@@ -1746,3 +1748,86 @@ def test_the_dark_air_is_withheld_on_another_players_turn():
 
     assert session.game.round.priority is P1
     assert ActivateAbility("air", "air") not in session.legal_actions(P1)
+
+
+# --- Dark Ring of Fire (Experienced) ---
+
+
+def _fire_in_hand(*, sacrificed_by: PlayerId) -> EngineSession:
+    """The Dark Ring of Fire in P1's hand, after two of P1's Personalities were destroyed this phase
+    by ``sacrificed_by``'s actions."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    for card_id in ("first", "second"):
+        put_in_play(state, personality(card_id, owner=P1))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
+        register(state, _ring_card("fire", "dark_ring_of_fire_experienced", Element.FIRE))
+    )
+    session = EngineSession.start(state, P1)
+    resolve_effects(
+        session.game,
+        [Destroy("first", sacrificed_by), Destroy("second", sacrificed_by)],
+    )
+    return session
+
+
+def test_the_dark_fire_enters_after_two_personalities_fall_to_their_controllers_actions():
+    session = _fire_in_hand(sacrificed_by=P1)
+    before = _honor(session, P1)
+
+    session.act(P1, PlayStrategy("fire", "enter"))
+    pay(session, P1)
+
+    assert session.game.table.cards_by_id["fire"] in session.game.table.battlefield.cards
+    assert _honor(session, P1) == before - 3
+
+
+def test_the_dark_fire_is_withheld_when_another_player_destroyed_them():
+    session = _fire_in_hand(sacrificed_by=P2)
+
+    assert PlayStrategy("fire", "enter") not in session.legal_actions(P1)
+
+
+def _fire_defending() -> EngineSession:
+    """The Combat Segment of P1's attack, the raider holding a Battle action that bows an enemy
+    Personality, and P2 defending with a guard carrying a Follower and the Dark Ring of Fire in
+    play."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, personality("raider", owner=P1, printed_id=BOW_PROBE, force=3))
+    put_in_play(state, personality("guard", owner=P2, force=2))
+    attached(state, attachment("spear", attachment_type=AttachmentType.FOLLOWER), "guard")
+    put_in_play(
+        state,
+        register(
+            state, _ring_card("fire", "dark_ring_of_fire_experienced", Element.FIRE, owner=P2)
+        ),
+    )
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    choice = session.game.pending
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    while session.game.attack.battle_segment is not BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+    session.act(P2, Pass())
+    return session
+
+
+def test_the_dark_fire_answers_a_bow_at_the_battlefield_by_destroying_a_bare_card_in_the_unit():
+    with probe_ability(BOW_PROBE, BOW_ABILITY):
+        session = _fire_defending()
+        _raider_targets_the_guard(session)
+        assert session.game.round.kind is RoundKind.RESPONSE
+
+        session.act(P2, ActivateAbility("fire", "fire"))
+        asked = session.game.pending
+        assert asked.candidates == ("spear",)
+        session.submit(P2, DecisionResponse(("spear",)))
+
+    cards = session.game.table.cards_by_id
+    assert cards["spear"] not in session.game.table.battlefield.cards
+    assert cards["fire"].bowed
