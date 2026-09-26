@@ -24,6 +24,7 @@ yasuki_core.engine.rules.abilities.registry
     granted_tireless
     interrupt_for
     interrupt_label
+    interrupts_for
     invest_amounts
     invest_for
     may_attack
@@ -34,6 +35,7 @@ yasuki_core.engine.rules.abilities.registry
     register_interrupt
     register_invest
     register_keyword_ability
+    register_keyword_interrupt
     register_location_ability
 
 .. automodule:: yasuki_core.engine.rules.abilities.registry

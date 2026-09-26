@@ -51,6 +51,8 @@ KEYWORD_ABILITIES: dict[str, tuple[Ability, ...]] = {}
 LOCATION_ABILITIES: dict[CardLocation, tuple[Ability, ...]] = {}
 _INVEST: dict[str, InvestAbility] = {}
 _INTERRUPTS: dict[str, tuple[Interrupt, ...]] = {}
+# The Interrupts a keyword confers on every card carrying it, by the keyword's lowercase form.
+KEYWORD_INTERRUPTS: dict[str, tuple[Interrupt, ...]] = {}
 
 
 @dataclass(frozen=True, slots=True)
@@ -277,9 +279,57 @@ def register_interrupt(printed_id: str, value: Interrupt) -> None:
     _INTERRUPTS[printed_id] = (*registered, value)
 
 
-def interrupt_for(card: L5RCard) -> Interrupt | None:
-    """The Interrupt registered for ``card``'s printed id and in force under the active ruleset,
-    or None."""
+def register_keyword_interrupt(value: Interrupt) -> None:
+    """Register ``value`` as an Interrupt its ``from_keyword`` confers on every card carrying that
+    keyword.
+
+    Raise ValueError for an Interrupt naming no keyword or no key, for the reason
+    :func:`~.register_keyword_ability` gives, or repeating a key the keyword already confers.
+    """
+    if value.from_keyword is None:
+        raise ValueError("a keyword Interrupt names the keyword that confers it")
+    if value.key is None:
+        raise ValueError(f"the {value.from_keyword} Interrupt needs a key")
+    keyword = value.from_keyword.lower()
+    registered = KEYWORD_INTERRUPTS.get(keyword, ())
+    if any(held.key == value.key and _read_together(held, value) for held in registered):
+        raise ValueError(f"{value.from_keyword} already confers an Interrupt keyed {value.key!r}")
+    KEYWORD_INTERRUPTS[keyword] = (*registered, value)
+
+
+def interrupts_for(game: GameState, card: L5RCard) -> tuple[Interrupt, ...]:
+    """Every Interrupt ``card`` offers right now: the one it prints, in force under the active
+    ruleset, then those every keyword it carries confers."""
+    printed = _printed_interrupt(card)
+    conferred = _by_keyword(game, card, KEYWORD_INTERRUPTS)
+    return conferred if printed is None else (printed, *conferred)
+
+
+def interrupt_for(card: L5RCard, key: str | None = None) -> Interrupt | None:
+    """The Interrupt keyed ``key`` that ``card`` was taken with, or None.
+
+    The card's own Interrupt answers to its key, None for one registered without. Any other key is
+    looked up among the keyword Interrupts whether or not the card still carries the keyword, since
+    an Interrupt taken against an effect applies when the effect comes up even if the card lost the
+    keyword in between.
+    """
+    printed = _printed_interrupt(card)
+    if printed is not None and printed.key == key:
+        return printed
+    if key is None:
+        return None
+    return next(
+        (
+            held
+            for registered in KEYWORD_INTERRUPTS.values()
+            for held in registered
+            if held.key == key and in_force(held)
+        ),
+        None,
+    )
+
+
+def _printed_interrupt(card: L5RCard) -> Interrupt | None:
     return next((held for held in _INTERRUPTS.get(card.printed_id, ()) if in_force(held)), None)
 
 
@@ -340,16 +390,19 @@ def _grants_to(recorded: Ongoing, card: L5RCard) -> TypeGuard[AbilityGrant | Sea
 
 
 def _conferred(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
-    return (*_by_keyword(game, card), *_by_location(game, card))
+    return (*_by_keyword(game, card, KEYWORD_ABILITIES), *_by_location(game, card))
 
 
-def _by_keyword(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
-    if not KEYWORD_ABILITIES:
+def _by_keyword[T: Ability | Interrupt](
+    game: GameState, card: L5RCard, registry: dict[str, tuple[T, ...]]
+) -> tuple[T, ...]:
+    """What ``registry`` confers on ``card`` through the keywords it carries, in force now."""
+    if not registry:
         return ()
     carried = {keyword.lower() for keyword in effective_keywords(game, card)}
     return tuple(
         held
-        for keyword, conferred in KEYWORD_ABILITIES.items()
+        for keyword, conferred in registry.items()
         if keyword in carried
         for held in conferred
         if in_force(held)

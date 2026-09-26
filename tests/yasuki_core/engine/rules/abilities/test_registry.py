@@ -22,12 +22,14 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
     register_invest,
     register_keyword_ability,
+    register_keyword_interrupt,
     register_location_ability,
 )
 
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
 from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt, Interruption
+from yasuki_core.engine.rules.effects import Fear
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
@@ -492,3 +494,28 @@ def test_a_location_ability_must_be_marked_and_keyed_and_unique_where_it_sits():
 
     with pytest.raises(ValueError, match="hand already confers an ability keyed 'probe'"):
         register_location_ability(replace(plain, key="probe", from_rulebook=True))
+
+
+def _fear_interrupt(**fields) -> Interrupt:
+    return Interrupt(
+        answers=Fear,
+        interrupt=lambda game, source, effect: Interruption(effect),
+        from_rulebook=True,
+        **fields,
+    )
+
+
+def test_a_keyword_interrupt_must_name_its_keyword_and_a_key():
+    with pytest.raises(ValueError, match="names the keyword"):
+        register_keyword_interrupt(_fear_interrupt(key="probe"))
+    with pytest.raises(ValueError, match="needs a key"):
+        register_keyword_interrupt(_fear_interrupt(from_keyword="Probe"))
+
+
+def test_a_keyword_interrupt_is_a_rulebook_interrupt():
+    with pytest.raises(ValueError, match="rulebook Interrupt"):
+        Interrupt(
+            answers=Fear,
+            interrupt=lambda game, source, effect: Interruption(effect),
+            from_keyword="Probe",
+        )
