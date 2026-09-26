@@ -270,6 +270,7 @@ def test_an_equip_offers_every_grant_its_legality_counted():
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(register(game.table, blade))
 
     equip.equip(game, blade.id)
+    sequence.run_stack(game)
     payment = game.pending
 
     # The cost is 4 and the Farm makes 2, so the payment is answerable only because it quotes the

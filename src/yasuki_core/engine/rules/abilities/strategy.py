@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.battle.presence import record_terrain_played
 from yasuki_core.engine.rules.effects import ApplyEffects, Discard, Effect
 from yasuki_core.engine.rules.gold.discounts import card_purchase, discounted_gold_cost
-from yasuki_core.engine.rules.gold.payment import payment_request
+from yasuki_core.engine.rules.gold.payment import RequestPayment, payment_request
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -38,18 +38,20 @@ class ResolveStrategy:
 
 
 def play_strategy(game: GameState, card_id: str, ability_key: str | None = None) -> None:
-    """Announce a Strategy: defer its resolution, then pause for its Gold Cost.
+    """Announce a Strategy: take it out of the hand into its resolution area, settle the board that
+    leaves, then ask for its Gold Cost with its resolution queued behind (CR, Resolution Area).
 
-    The card stays in hand until the payment is answered, so backing out of the payment leaves it
+    The card stays in the hand zone until it resolves, so backing out of the payment leaves it
     there. The unwind truncates the tape to before the announcement and replays, and a card that
     never moved needs nothing put back.
     """
     card = game.table.cards_by_id[card_id]
-    seat = card.owner
+    game.announced_from_hand |= {card_id}
     game.stack.append(ResolveStrategy(card_id, ability_key))
-    game.pending = payment_request(
-        game, seat, strategy_cost(game, card, ability_key), card.name, target=card
+    game.stack.append(
+        RequestPayment(card.owner, strategy_cost(game, card, ability_key), card.name, card_id)
     )
+    triggers.enforce_state_based_actions(game)
 
 
 def strategy_cost(game: GameState, card: L5RCard, ability_key: str | None = None) -> int:
@@ -66,6 +68,7 @@ def play_strategy_with(game: GameState, card: L5RCard, effects: tuple[Effect, ..
     Cost with its discard and those effects queued behind. How an Interrupt plays a Strategy,
     since what it does is decided against the effect it interrupts rather than against a target.
     """
+    game.announced_from_hand |= {card.id}
     game.stack.append(DiscardPlayed(card.id))
     game.stack.append(ApplyEffects(effects))
     cost = discounted_gold_cost(game, card_purchase(game, card, plays_card=True))
@@ -124,6 +127,7 @@ def discard_played(game: GameState, card_id: str) -> None:
     has left by another road, and discarding it would drag it back out of the pile it chose, so the
     test is whether it is still in hand rather than whether it reached the board.
     """
+    game.announced_from_hand -= {card_id}
     card = game.table.cards_by_id[card_id]
     if card not in game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards:
         return

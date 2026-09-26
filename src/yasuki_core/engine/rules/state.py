@@ -159,7 +159,12 @@ class GameState:
         Response steps did. What a card folds over to count what happened this turn, as "after
         you resolve two or more Favor actions in one turn" does. Reset as the next turn begins.
         Ephemeral and rebuilt by replay. Default empty.
-        Default empty.
+    announced_from_hand : frozenset of str
+        The cards announced out of a hand that have not yet landed: a Strategy in its resolution
+        area and an attachment in its entering-play area, both out of play and out of the hand (CR,
+        Resolution Area; CR, Entering-Play Areas). The engine keeps them in the hand zone until
+        they land, and a count of a hand leaves them out. Ephemeral and rebuilt by replay. Default
+        empty.
     interrupts_taken : set of (str, PlayerId)
         The once-per-action rulebook Interrupts taken against the action now resolving, as the
         Interrupt's key and the seat that took it. Cleared as the next action begins. Ephemeral
@@ -216,6 +221,7 @@ class GameState:
     action_events: list[GameEvent] = field(default_factory=list)
     action_resolved: bool = False
     turn_events: tuple[GameEvent, ...] = ()
+    announced_from_hand: frozenset[str] = frozenset()
     interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)
     additional_action: PlayerId | None = None
     interrupts_offered: bool = False

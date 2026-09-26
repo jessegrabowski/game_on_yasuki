@@ -2,6 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.stats.keyword_grants import KEYWORD_GRANTS, keyword_grant
 from yasuki_core.engine.rules.board.seats import (
+    cards_in_hand,
     cards_in_play,
     cards_named,
     opposing_seats,
@@ -10,7 +11,19 @@ from yasuki_core.engine.rules.board.seats import (
     went_second,
 )
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, stronghold, two_seat_game
+from yasuki_core.engine.rules.rulebook import equip
+from yasuki_core.engine.rules.turn import action_sequence, sequence
+from yasuki_core.engine.table import ZoneKey, ZoneRole
+
+from tests.yasuki_core.engine.builders import (
+    attachment,
+    holding,
+    personality,
+    put_in_play,
+    register,
+    stronghold,
+    two_seat_game,
+)
 
 
 def test_went_second_is_true_only_for_the_non_first_player():
@@ -53,6 +66,20 @@ def test_cards_in_play_is_only_the_seats_own():
     put_in_play(game, holding("P2-h", owner=PlayerId.P2))
 
     assert cards_in_play(game, PlayerId.P1) == (mine,)
+
+
+def test_cards_in_hand_leaves_out_a_card_announced_until_its_payment_is_canceled():
+    game = two_seat_game()
+    put_in_play(game, personality("bearer", owner=PlayerId.P1))
+    blade = register(game.table, attachment("blade", owner=PlayerId.P1))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(blade)
+
+    equip.equip(game, blade.id)
+    sequence.run_stack(game)
+    assert cards_in_hand(game, PlayerId.P1) == ()
+
+    action_sequence.cancel(game)
+    assert cards_in_hand(game, PlayerId.P1) == (blade,)
 
 
 def test_cards_named_matches_the_print_and_not_the_instance():

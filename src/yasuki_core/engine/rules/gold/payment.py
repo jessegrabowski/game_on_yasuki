@@ -59,6 +59,33 @@ class ContinuePayment:
         game.pending = payment_request(game, self.seat, self.amount, self.label, target=target)
 
 
+@dataclass(frozen=True, slots=True)
+class RequestPayment:
+    """Ask ``seat`` to pay ``amount`` once the work queued above it has run, for an action whose
+    announcement settles the board first and may stop there to ask something else.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat being charged.
+    amount : int
+        The cost to cover, fixed when the action was announced.
+    label : str
+        What the payment is for, shown in the prompt.
+    target_id : str
+        The card being paid for.
+    """
+
+    seat: PlayerId
+    amount: int
+    label: str
+    target_id: str
+
+    def resume(self, game: GameState) -> None:
+        target = game.table.cards_by_id.get(self.target_id)
+        game.pending = payment_request(game, self.seat, self.amount, self.label, target=target)
+
+
 def payment_request(
     game: GameState,
     seat: PlayerId,

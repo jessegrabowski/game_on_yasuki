@@ -5,7 +5,7 @@ from dataclasses import replace
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import state_based_actions, triggers
-from yasuki_core.engine.rules.rulebook import favor_proxy, proxies
+from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
 from yasuki_core.engine.rules.action_record import resolving_ability
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.turn.structure import (
     RoundKind,
     TURN_PHASES,
 )
+from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.counters import SINCERITY
@@ -276,10 +277,7 @@ class EnforceMaximumHandSize:
     seat: PlayerId
 
     def resume(self, game: GameState) -> None:
-        hand = game.table.zones[ZoneKey(self.seat, ZoneRole.HAND)]
-        # A rulebook proxy is not a card, so it neither counts toward the limit nor can be
-        # discarded to meet it.
-        held = [card for card in hand.cards if not favor_proxy.is_rulebook_proxy(card)]
+        held = cards_in_hand(game, self.seat)
         excess = len(held) - MAX_HAND_SIZE
         if excess > 0:
             candidates = tuple(card.id for card in held)

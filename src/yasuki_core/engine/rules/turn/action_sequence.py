@@ -287,7 +287,8 @@ def cancel(game: GameState) -> None:
     if request is None:
         raise RuntimeError("no decision is pending")
     match request:
-        case ChoosePayment():
+        case ChoosePayment(target_id=target_id):
+            game.announced_from_hand -= {target_id}
             _cancel_payment(game)
         case ChooseInvestAmount():
             pass  # the recruit is not yet announced; nothing to undo
