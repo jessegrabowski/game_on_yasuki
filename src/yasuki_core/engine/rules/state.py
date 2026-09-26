@@ -30,6 +30,23 @@ def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:
     return frozenset(rules)
 
 
+@dataclass(frozen=True, slots=True)
+class StraightenDelay:
+    """When a card's prohibition on straightening lifts: at ``until`` in its controller's first
+    Action Phase on a turn later than ``imposed``.
+
+    Attributes
+    ----------
+    imposed : int
+        The turn the prohibition began on.
+    until : Moment
+        The edge of the Action Phase that lifts it, its beginning or its end.
+    """
+
+    imposed: int
+    until: Moment
+
+
 @dataclass(slots=True)
 class GameState:
     """The mutable state of one rules-driven game.
@@ -87,12 +104,11 @@ class GameState:
     once_per : set of str
         Usage flags for once-per-turn and once-per-game abilities (the Inheritance Rule, Proclaim,
         ...), keyed by a caller-chosen string. Default empty.
-    straighten_delayed : dict mapping str to int
-        Cards that may not straighten, each with the turn its delay was imposed on. A prohibition
-        the card imposes for a stretch of time, where "may remain bowed" is a choice offered each
-        turn. It blocks an effect that would straighten the card as surely as it blocks the
-        straighten step. Lifted once its controller's next Action Phase has ended, which is why the
-        turn it began on is recorded. Default empty.
+    straighten_delayed : dict mapping str to StraightenDelay
+        Cards that may not straighten, each with the :class:`~.StraightenDelay` that says when the
+        prohibition lifts. A prohibition the card imposes for a stretch of time, where "may remain
+        bowed" is a choice offered each turn. It blocks an effect that would straighten the card as
+        surely as it blocks the straighten step. Default empty.
     seed : int
         The seed recorded for deterministic replay, from which ``rng`` is rebuilt. Default 0.
     rng : numpy.random.Generator
@@ -220,7 +236,7 @@ class GameState:
     attack: AttackPhase | None = None
     duel: DuelRecord | None = None
     once_per: set[str] = field(default_factory=set)
-    straighten_delayed: dict[str, int] = field(default_factory=dict)
+    straighten_delayed: dict[str, StraightenDelay] = field(default_factory=dict)
     seed: int = 0
     # Excluded from equality: two Generator objects compare by identity, so a replayed game would
     # never equal the one it replayed even with an identically seeded stream.

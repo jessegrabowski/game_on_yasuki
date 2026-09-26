@@ -8,6 +8,7 @@ yasuki_core.engine.rules.state
 .. autosummary::
 
     GameState
+    StraightenDelay
 
 .. rubric:: Functions
 
