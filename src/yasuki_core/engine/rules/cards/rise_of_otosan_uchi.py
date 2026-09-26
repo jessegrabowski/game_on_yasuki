@@ -35,6 +35,7 @@ from yasuki_core.engine.rules.board.queries import (
 from yasuki_core.engine.rules.board.seats import (
     cards_in_hand,
     cards_in_play,
+    opposing_seats,
     seat_named,
 )
 from yasuki_core.engine.rules.rulebook.looks import TAKE_ONE_AND_SHUFFLE
@@ -63,6 +64,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
     MoveToDeck,
     Negated,
+    ReshuffleFromHand,
     ShuffleDeck,
     SpendOncePerTurn,
     Then,
@@ -79,7 +81,7 @@ from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, Straightened
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -560,6 +562,91 @@ register_ability(
         targeting_message="your Holding",
         effects=_kitsu_watanabe_experienced_effects,
     ),
+)
+
+
+# --- Legacy of Fudo ---
+
+FUDO_HONOR_LOSS = 1
+FUDO_RESHUFFLED = 1
+FUDO_DRAWN = 2
+FUDO_PITCH = (
+    "Discard this Ring from your hand to target a player with at least one card in their hand."
+)
+
+
+def _legacy_of_fudo_condition(game: GameState, source: L5RCard) -> bool:
+    """ "If your opponent has no cards in their hand." """
+    return not any(cards_in_hand(game, seat) for seat in opposing_seats(game, source.owner))
+
+
+def _legacy_of_fudo_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:
+    """The Honor lost when its own action puts it into play."""
+    return [GainHonor(source.owner, -FUDO_HONOR_LOSS, source_id=source.id)]
+
+
+register_entry(
+    "legacy_of_fudo",
+    timing=(ActionTiming.OPEN, ActionTiming.DYNASTY),
+    condition=_legacy_of_fudo_condition,
+    extra_effects=_legacy_of_fudo_entry_effects,
+    key="enter",
+)
+register_no_enlightenment("legacy_of_fudo")
+
+
+@on(CardDiscarded, "legacy_of_fudo")
+def _legacy_of_fudo_card_discarded(ctx: TriggerContext) -> list[Effect]:
+    """After an action discards this Ring, lose 1 Honor. A discard the rulebook or a trait causes is
+    no action's."""
+    if ctx.event.card_id != ctx.card.id or not isinstance(ctx.event.cause, PlayerId):
+        return []
+    return [GainHonor(ctx.card.owner, -FUDO_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+def _legacy_of_fudo_players(game: GameState) -> tuple[PlayerId, ...]:
+    """The players with at least one card in their hand."""
+    return tuple(seat for seat in game.table.seats if cards_in_hand(game, seat))
+
+
+def _legacy_of_fudo_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [source.id] if _legacy_of_fudo_players(game) else []
+
+
+def _legacy_of_fudo_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Name the target player, one with at least one card in their hand."""
+    names = tuple(game.table.seats[seat].name for seat in _legacy_of_fudo_players(game))
+    if not names:
+        return []
+    return [
+        AskOption(
+            source.owner, names, "Who reshuffles a card and draws two?", "legacy_of_fudo", source.id
+        )
+    ]
+
+
+@choice_resolver("legacy_of_fudo")
+def _resolve_legacy_of_fudo(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    named = seat_named(game, chosen[0])
+    return [
+        ReshuffleFromHand(named, FUDO_RESHUFFLED),
+        *(DrawCard(named) for _ in range(FUDO_DRAWN)),
+    ]
+
+
+register_ring(
+    "legacy_of_fudo",
+    ability=Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        targets=_legacy_of_fudo_targets,
+        effects=_legacy_of_fudo_effects,
+        hits_every_target=True,
+        key="fudo",
+    ),
+    pitch=FUDO_PITCH,
 )
 
 
