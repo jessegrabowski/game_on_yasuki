@@ -66,7 +66,8 @@ choice uses it. Anything else makes the tape a lie.
 [Cards that create cards](../../contributing/creating_cards.md) covers it.
 
 `once_per` carries usage flags for once-per-turn and once-per-game abilities, keyed by a string the
-caller picks.
+caller picks. A turn-scoped key carries the turn, so it lapses without being cleared. A seat's
+once-per-game key, {func}`~.seat_game_key`, carries none.
 
 `straighten_delayed` holds cards that may not straighten, each with a `StraightenDelay` recording
 the turn the delay began and the edge of its controller's next Action Phase that lifts it, the

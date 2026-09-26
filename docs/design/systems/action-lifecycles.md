@@ -93,27 +93,28 @@ effect is how a card borrows the whole sequence.
 {func}`~.equip_targets` and {func}`~.creation_targets`, which judges a token template rather than
 a card because a created attachment has no card to ask about yet.
 
-One module per action covers the rest: `inheritance.py`, `lobby.py` and the three Favor
-modules. `kharmic.py` is different in kind: the two Kharmic abilities are
-registered through {func}`~.register_keyword_ability` as abilities the Kharmic keyword confers on
-every card carrying it, one activated from the hand and one from a Province, each spending the
-card it is used on. From there they are announced, paid and interrupted as any card's ability is,
-and a card that grants Kharmic grants the abilities with it. `dynasty_discard.py` has the same
-shape without a keyword: {func}`~.register_location_ability` confers Dynasty Discard on every card
-in a Province, and the ability discards the card it sits on and refills the Province behind the
-reactions to the discard.
+One module per action covers the rest: `lobby.py` and the three Favor modules. `kharmic.py` is
+different in kind: the two Kharmic abilities are registered through
+{func}`~.register_keyword_ability` as abilities the Kharmic keyword confers on every card carrying
+it, one activated from the hand and one from a Province, each spending the card it is used on. From
+there they are announced, paid and interrupted as any card's ability is, and a card that grants
+Kharmic grants the abilities with it. `dynasty_discard.py` has the same shape without a keyword:
+{func}`~.register_location_ability` confers Dynasty Discard on every card in a Province, and the
+ability discards the card it sits on and refills the Province behind the reactions to the discard.
 
-A player ability with no card to sit on has a second home. `rulebook/proxies.py` deals a proxy
-card into each seat's rulebook zone as the game begins, for every proxy the active
-{class}`~yasuki_core.ruleset.Ruleset` names in `rulebook_proxies`, and abilities registered on
-the proxy are activated from there. Cycle is the first: `cycle.py` registers it on the Cycle
-proxy with `from_rulebook` set, as every rulebook ability is, and {func}`~.is_cycle` recognizes
-the action by its key. `legacy.py` registers Legacy on its own proxy the same way, and
-{func}`~.is_legacy` recognizes it. Its banish is the cost, so the seat can still back out at that
-pick. The search is an `Evaluate` effect, which looks through the deck and face-down Provinces only
-once the Interrupt step has closed. The Tk client never draws the zone and lists the proxies'
-abilities on the board menu. The zone is not a card zone: nothing in play sees
-what it holds, and the sandbox refuses to move anything into or out of it.
+A player ability with no card to sit on has a second home. `rulebook/proxies.py` deals a proxy card
+into each seat's rulebook zone as the game begins, for every proxy the active
+{class}`~yasuki_core.ruleset.Ruleset` names in `rulebook_proxies`, and abilities registered on the
+proxy are activated from there. Cycle is the first: `cycle.py` registers it on the Cycle proxy with
+`from_rulebook` set, as every rulebook ability is, and {func}`~.is_cycle` recognizes the action by
+its key. `legacy.py` registers Legacy on its own proxy the same way, and {func}`~.is_legacy`
+recognizes it. Its banish is the cost, so the seat can still back out at that pick. The search is an
+`Evaluate` effect, which looks through the deck and face-down Provinces only once the Interrupt step
+has closed. `inheritance.py` does the same for Inheritance, whose cost spends the seat's
+once-per-game use and turns its Stronghold over, and {func}`~.is_inheritance` recognizes it. The Tk
+client never draws the zone. It lists the proxies' abilities on the board menu, except Inheritance,
+which it offers on the Stronghold the ability turns over. The zone is not a card zone: nothing in
+play sees what it holds, and the sandbox refuses to move anything into or out of it.
 
 The Favor's rulebook abilities sit on a proxy of their own, one per arc family, which
 [The Imperial Favor](the-imperial-favor.md) describes. The Tk client lists them on the Favor card
