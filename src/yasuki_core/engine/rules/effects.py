@@ -1579,6 +1579,33 @@ class LookAtTop(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class LookAtHand(Effect):
+    """Let ``seat`` read every card in ``holder``'s hand, as "look at the player's hand" has it.
+
+    The cards keep the seat as a peeker once the reading is done, as a deck's do after a
+    :class:`~.LookAtTop`: a seat cannot unsee a card. Shuffling one into a deck scrubs it.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat looking.
+    holder : PlayerId
+        The seat whose hand is read.
+    """
+
+    seat: PlayerId
+    holder: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} looks at {self.holder.name}'s hand"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        for card in game.table.zones[ZoneKey(self.holder, ZoneRole.HAND)].cards:
+            game.show_to(card, self.seat)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class EndLook(Effect):
     """Close the open :class:`~.Look`, once the last question about its cards is answered.
 

@@ -51,6 +51,7 @@ yasuki_core.engine.rules.effects
     GrantSeatAbility
     IgnoreHonorRequirements
     InterruptingEffect
+    LookAtHand
     LookAtTop
     LoseGame
     MeleeAttack

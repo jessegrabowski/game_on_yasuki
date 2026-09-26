@@ -72,6 +72,7 @@ deferred through `Then` instead.
    Fear
    GainGold
    GainHonor
+   LookAtHand
    LookAtTop
    EndLook
    LoseGame

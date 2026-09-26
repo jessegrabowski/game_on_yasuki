@@ -5,6 +5,7 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import effects
+from yasuki_core.engine.redaction import HiddenCard, redact
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     ChooseDiscard,
@@ -36,6 +37,7 @@ from yasuki_core.engine.rules.effects import (
     seppuku,
     TakeFavor,
     InterruptingEffect,
+    LookAtHand,
     Unpayable,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -724,6 +726,22 @@ def test_a_random_discard_asks_no_one_and_is_fixed_by_the_seed():
 
     assert len(kept) == 3
     assert discard_at_random() == kept
+
+
+def test_another_seat_choosing_reads_the_hand_it_chooses_from():
+    game = _p2_holding(3)
+
+    resolve_effects(
+        game,
+        [
+            LookAtHand(PlayerId.P1, PlayerId.P2),
+            DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, PlayerId.P1),
+        ],
+    )
+
+    assert game.pending.seat is PlayerId.P1
+    hand = redact(game.table, PlayerId.P1).zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
+    assert not any(isinstance(card, HiddenCard) for card in hand.cards)
 
 
 def test_only_the_named_candidates_are_offered():

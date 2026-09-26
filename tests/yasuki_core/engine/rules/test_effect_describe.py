@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.effects import (
     BanishTopFate,
     DiscardFromHand,
     EndLook,
+    LookAtHand,
     LookAtTop,
     Bow,
     ExemptFromResolutionBow,
@@ -106,6 +107,7 @@ EFFECTS = [
         "P1 looks at the top 4 of P1's fate deck",
     ),
     (EndLook(), "the look ends"),
+    (LookAtHand(PlayerId.P1, PlayerId.P2), "P1 looks at P2's hand"),
     (
         PlaceOnDeck(("a", "b"), DeckKey(PlayerId.P1, Side.FATE), to_bottom=True),
         "put 2 on the bottom of P1's fate deck",
