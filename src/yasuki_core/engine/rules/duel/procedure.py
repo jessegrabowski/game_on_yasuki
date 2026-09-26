@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.records import DuelRecord, DuelStep, DuelWork
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
     DecisionResponse,
@@ -16,7 +17,7 @@ from yasuki_core.game_pieces.prints import PersonalityPrint
 
 def duel_being_fought(game: GameState) -> DuelRecord | None:
     """The duel being fought, or None where none is. A duel that has ended is not one being fought,
-    however long its record stays on the game for what resolves after it to read."""
+    though its record stays on the game for whatever resolves afterwards to read."""
     duel = game.duel
     return None if duel is None or duel.step is DuelStep.ENDED else duel
 
@@ -52,12 +53,13 @@ def declare_duel(
     challenger_duelist: str,
     challenged_duelist: str,
     source: str,
-) -> None:
+) -> list[GameEvent]:
     """Begin a duel between the two named Personalities and open the focusing, whose first option
     belongs to the challenged seat (CR, Duel).
 
-    The two seats are the duelists' own controllers, read from the cards rather than passed in, so
-    they cannot disagree with the Personalities they belong to.
+    The two seats are the duelists' own controllers, read from the cards, so they cannot disagree
+    with the Personalities they belong to. Return the events the focus procedure's setup raises, for
+    the caller's cascade to drain.
 
     Do nothing where :func:`~.challenge_is_legal` refuses the challenge, which is the CR's own
     wording: such a challenge does not happen, rather than happening and failing.
@@ -70,7 +72,7 @@ def declare_duel(
     sequence from one effect is unbuilt.
     """
     if not challenge_is_legal(game, challenger_duelist, challenged_duelist):
-        return
+        return []
     challenger = game.table.cards_by_id[challenger_duelist].owner
     challenged = game.table.cards_by_id[challenged_duelist].owner
     duel = DuelRecord(
@@ -84,10 +86,13 @@ def declare_duel(
     ops.create_focus_area(game.table, challenger)
     ops.create_focus_area(game.table, challenged)
     duel.step = DuelStep.FOCUSING
+    # The option is queued before the setup runs, so that work the setup pushes sits above it and
+    # a procedure that deals cards before the first option finishes doing so first.
     game.stack.append(OfferFocusOrStrike(challenged))
-    opening = ruleset.ACTIVE.focus_procedure.begin(game, duel)
-    if opening:
-        triggers.resolve_effects(game, opening)
+    events: list[GameEvent] = []
+    for effect in ruleset.ACTIVE.focus_procedure.begin(game, duel):
+        events.extend(triggers.apply_effect(game, effect))
+    return events
 
 
 @dataclass(frozen=True, slots=True)

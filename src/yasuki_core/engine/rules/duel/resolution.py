@@ -73,7 +73,8 @@ def duel_stat(game: GameState, card: L5RCard) -> int:
 def end_duel(game: GameState) -> list[GameEvent]:
     """End the duel on the outcome already recorded for it, discarding what was focused and taking
     the focusing areas off the table (CR, Duel: the focused cards are discarded as the duel ends).
-    Return the events the discards raise, for the caller's cascade to drain.
+    Return the events that and the focus procedure's own cleanup raise, for the caller's cascade to
+    drain.
 
     The record stays on the game with its outcome, so what resolves after a duel can still read how
     it went. The next duel declared replaces it.
@@ -85,11 +86,12 @@ def end_duel(game: GameState) -> list[GameEvent]:
     if duel.outcome is None:
         raise RuntimeError("the duel is ending with no outcome recorded")
     duel.option = None
-    duel.step = DuelStep.ENDED
     events: list[GameEvent] = []
-    owed = ruleset.ACTIVE.focus_procedure.cleanup(game, duel)
-    if owed:
-        triggers.resolve_effects(game, owed)
+    # Before the step says ENDED, so the procedure's cleanup still reads a duel in progress, and
+    # while the focused cards are still in their areas for it to read.
+    for effect in ruleset.ACTIVE.focus_procedure.cleanup(game, duel):
+        events.extend(triggers.apply_effect(game, effect))
+    duel.step = DuelStep.ENDED
     for seat in (duel.challenger, duel.challenged):
         for card in focused_cards(game, seat):
             events.extend(triggers.apply_effect(game, Discard(card.id, Rulebook.DUEL_RESOLUTION)))
