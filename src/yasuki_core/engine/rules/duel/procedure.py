@@ -44,11 +44,13 @@ def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duel
     """Whether a challenge between these two cards happens at all (CR, Challenge): it does not where
     one player controls both, nor where either card is not a Personality.
 
-    An id naming no card on the table is refused too, which is what a Personality that left play
-    between being targeted and the duel being declared amounts to.
+    Both duelists are read off the battlefield, so a Personality that left play between being
+    targeted and the duel being declared refuses the challenge, wherever it went and whether or not
+    the table still holds the card.
     """
-    challenger = game.table.cards_by_id.get(challenger_duelist)
-    challenged = game.table.cards_by_id.get(challenged_duelist)
+    in_play = {card.id: card for card in game.table.battlefield.cards}
+    challenger = in_play.get(challenger_duelist)
+    challenged = in_play.get(challenged_duelist)
     if challenger is None or challenged is None:
         return False
     if not all(isinstance(card.printed, PersonalityPrint) for card in (challenger, challenged)):

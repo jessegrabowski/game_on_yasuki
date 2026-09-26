@@ -3,14 +3,14 @@ from dataclasses import replace
 import pytest
 
 from yasuki_core import ruleset
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focusing, procedure
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
-from yasuki_core.engine.rules.effects import StartDuel, TakeFavor
+from yasuki_core.engine.rules.effects import Destroy, StartDuel, TakeFavor
 from yasuki_core.engine.rules.triggers import apply_effect
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -300,16 +300,27 @@ def test_a_challenge_to_a_card_that_is_not_a_personality_never_happens():
 
 
 def test_a_duel_whose_target_left_play_starts_no_duel_from_the_effect():
-    # The route a card takes. The effect reads no card off the table itself, so a Personality
-    # destroyed between being targeted and the duel resolving refuses the challenge rather than
-    # raising out of the engine.
+    # The route a card takes. A Personality destroyed between being targeted and the duel resolving
+    # is still a card the table knows, sitting in its owner's discard pile, so the challenge is
+    # refused on where the card is rather than on whether it exists.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game()
+        apply_effect(session.game, Destroy("rival", Rulebook.DUEL_RESOLUTION))
+        assert "rival" in session.game.table.cards_by_id
+
+        apply_effect(session.game, StartDuel("challenger", "rival", "challenger"))
+
+        assert session.game.duel is None
+        assert not [key for key in session.game.table.zones if key.role is ZoneRole.FOCUS]
+
+
+def test_a_duel_naming_a_card_the_table_never_had_starts_no_duel():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         session = _duel_game()
 
         apply_effect(session.game, StartDuel("challenger", "gone", "challenger"))
 
         assert session.game.duel is None
-        assert not [key for key in session.game.table.zones if key.role is ZoneRole.FOCUS]
 
 
 def test_a_duel_paused_mid_focusing_replays_from_its_tape():
