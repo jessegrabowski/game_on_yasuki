@@ -2,7 +2,14 @@ import pytest
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import DynastyDiscard, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, is_dynasty_discard
+from yasuki_core.engine.rules.vocabulary.actions import (
+    Action,
+    ActivateAbility,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.replay.game_log import Act, Cancel
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
@@ -175,18 +182,20 @@ def test_recording_no_end_of_turn_metrics_leaves_the_samples_alone():
     assert [s.values for s in recorder.samples] == [{"gold": 3}, {"gold": 0}]
 
 
+def _is_recruit(action: Action) -> bool:
+    return isinstance(action, Recruit)
+
+
 def _counting(session: EngineSession) -> TurnRecorder:
     return TurnRecorder(
         {},
         end_of_turn={"cleared": provinces_cleared},
-        actions={"bought": Recruit, "flushed": DynastyDiscard},
+        actions={"bought": _is_recruit, "flushed": is_dynasty_discard},
         log=session.log,
     )
 
 
 def test_a_recruit_and_a_discard_leave_the_same_board_and_are_told_apart_anyway():
-    """The whole point of counting actions. Both seats clear one province and end the turn looking
-    identical. Only what they did says one bought a card and the other threw one away."""
     # One province each, so both policies clear exactly it: a Dynasty Discard is free and
     # repeatable, and given more it would empty every face-up province while the buyer paid for one.
     buying, flushing = _buyable(provinces=1), _buyable(provinces=1)
@@ -232,9 +241,8 @@ def test_flushing_every_province_is_not_reported_as_buying_them_out():
 
 
 def test_the_actions_a_seat_took_account_for_every_province_it_cleared():
-    """Recruit and DynastyDiscard both draw only from provinces, so across a plain game the split
-    adds back up to the board's own count. A shortfall would mean a card cleared a province by
-    itself, through a Legacy search or an ability-driven recruit."""
+    """Recruit and Dynasty Discard are the only actions that draw from provinces, so a shortfall
+    would mean a card cleared one by itself."""
     session = _buyable()
     recorder = _counting(session)
 
@@ -281,7 +289,7 @@ def test_a_counted_action_that_never_happens_still_reports_zero():
 def test_counting_actions_without_the_log_they_live_on_is_refused():
     # Silently recording zeros would look like a seat that never bought anything.
     with pytest.raises(ValueError, match="needs the log"):
-        TurnRecorder({}, actions={"bought": Recruit})
+        TurnRecorder({}, actions={"bought": _is_recruit})
 
 
 def test_a_cancelled_recruit_is_not_counted_as_a_purchase():
@@ -306,7 +314,7 @@ def test_an_undone_discard_is_not_counted_as_a_flush():
     recorder.turn_began(session.game)
     end_phase(session)
     end_phase(session)
-    session.act(P1, DynastyDiscard("prov0"))
+    session.act(P1, ActivateAbility("prov0", DYNASTY_DISCARD))
     assert session.undo_last(P1)
     recorder.turn_ended(session.game, P1)
 

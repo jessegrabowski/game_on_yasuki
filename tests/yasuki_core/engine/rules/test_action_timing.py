@@ -6,6 +6,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.vocabulary.actions import (
     Lobby,
     UseFavorAbility,
@@ -14,7 +15,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     Cycle,
-    DynastyDiscard,
     Legacy,
     Pass,
     PlayStrategy,
@@ -65,10 +65,13 @@ def test_each_rulebook_action_reports_the_designator_the_cr_prints():
     # Asserted against the action rather than through the phase it is offered in: the phase check
     # was already true before designators existed, so only this can catch a misclassification.
     game = two_seat_game()
+    province_card(game, "x")
 
     assert legality.timings_of(game, Cycle()) == {ActionTiming.LIMITED}
     assert legality.timings_of(game, Recruit("x")) == {ActionTiming.DYNASTY}
-    assert legality.timings_of(game, DynastyDiscard("x")) == {ActionTiming.DYNASTY}
+    assert legality.timings_of(game, ActivateAbility("x", DYNASTY_DISCARD)) == {
+        ActionTiming.DYNASTY
+    }
     assert legality.timings_of(game, Legacy()) == {ActionTiming.DYNASTY}
 
 

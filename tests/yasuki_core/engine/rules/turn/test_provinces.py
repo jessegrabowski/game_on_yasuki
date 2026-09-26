@@ -4,7 +4,8 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.effects import DestroyProvince, Discard, RefillProvince
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.turn.action_sequence import run_stack, submit
-from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
+from yasuki_core.engine.rules.abilities.activation import activate
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.rulebook.recruit import recruit
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -32,6 +33,21 @@ def _game(spares: int = 1):
     return game
 
 
+def _dynasty_discard(game, card_id: str) -> None:
+    activate(game, card_id, DYNASTY_DISCARD)
+    run_stack(game)
+
+
+def test_a_dynasty_discard_announces_the_discard_once(reacting):
+    heard = []
+    reacting(CardDiscarded, "refill_probe", lambda ctx: heard.append(ctx.event) or [])
+    game = _game()
+
+    _dynasty_discard(game, "P1-victim")
+
+    assert heard == [CardDiscarded("P1-victim", Side.DYNASTY, P1)]
+
+
 def test_a_reaction_to_a_discard_sees_the_province_still_empty(reacting):
     """The rules resolve what the card leaving triggered before refilling, so a reaction that reads
     the Province must not already see its replacement."""
@@ -39,8 +55,7 @@ def test_a_reaction_to_a_discard_sees_the_province_still_empty(reacting):
     reacting(CardDiscarded, "refill_probe", lambda ctx: seen.append(_held(ctx)) or [])
     game = _game()
 
-    dynasty_discard(game, "P1-victim")
-    run_stack(game)
+    _dynasty_discard(game, "P1-victim")
 
     assert seen == [0]
 
@@ -62,8 +77,7 @@ def test_a_reaction_to_entering_play_sees_the_province_still_empty(reacting):
 def test_the_province_refills_once_the_reactions_are_done():
     game = _game()
 
-    dynasty_discard(game, "P1-victim")
-    run_stack(game)
+    _dynasty_discard(game, "P1-victim")
 
     assert [card.id for card in game.table.zones[PROVINCE].cards] == ["P1-spare0"]
     assert game.table.decks[DYNASTY].cards == []
@@ -75,8 +89,7 @@ def test_a_reaction_that_refills_first_leaves_nothing_to_refill(reacting):
     reacting(CardDiscarded, "refill_probe", lambda ctx: [RefillProvince(PROVINCE)])
     game = _game(spares=2)
 
-    dynasty_discard(game, "P1-victim")
-    run_stack(game)
+    _dynasty_discard(game, "P1-victim")
 
     assert len(game.table.zones[PROVINCE].cards) == 1  # not two
     assert len(game.table.decks[DYNASTY].cards) == 1  # only one card was drawn

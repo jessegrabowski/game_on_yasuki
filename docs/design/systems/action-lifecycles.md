@@ -93,12 +93,15 @@ effect is how a card borrows the whole sequence.
 {func}`~.equip_targets` and {func}`~.creation_targets`, which judges a token template rather than
 a card because a created attachment has no card to ask about yet.
 
-One module per action covers the rest: `cycle.py`, `legacy.py`, `inheritance.py`, `lobby.py`,
-`dynasty_discard.py`, and the three Favor modules. `kharmic.py` is different in kind: the two
-Kharmic abilities are registered through {func}`~.register_keyword_ability` as abilities the
-Kharmic keyword confers on every card carrying it, one activated from the hand and one from a
-Province, each spending the card it is used on. From there they are announced, paid and
-interrupted as any card's ability is, and a card that grants Kharmic grants the abilities with it.
+One module per action covers the rest: `cycle.py`, `legacy.py`, `inheritance.py`, `lobby.py`
+and the three Favor modules. `kharmic.py` is different in kind: the two Kharmic abilities are
+registered through {func}`~.register_keyword_ability` as abilities the Kharmic keyword confers on
+every card carrying it, one activated from the hand and one from a Province, each spending the
+card it is used on. From there they are announced, paid and interrupted as any card's ability is,
+and a card that grants Kharmic grants the abilities with it. `dynasty_discard.py` has the same
+shape without a keyword: {func}`~.register_location_ability` confers Dynasty Discard on every card
+in a Province, and the ability discards the card it sits on and refills the Province behind the
+reactions to the discard.
 
 A player ability with no card to sit on has a second home. `rulebook/proxies.py` deals a proxy
 card into each seat's rulebook zone as the game begins, for every proxy the active

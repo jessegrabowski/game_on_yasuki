@@ -1,11 +1,11 @@
 from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, is_dynasty_discard
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Cycle,
-    DynastyDiscard,
     Legacy,
     Pass,
     Recruit,
@@ -54,12 +54,11 @@ def test_it_buys_when_it_can_afford_to():
 
 
 def test_it_flushes_a_card_that_produces_nothing_when_it_cannot_buy():
-    """The whole point of the policy: without a discard the Province stays clogged for the rest of
-    the game and the seat plays on with fewer slots than it has."""
+    """Without a discard the Province stays clogged for the rest of the game."""
     session = _dynasty_phase(production=1)
     province_card(session.game, "barren", seat=P1, gold_cost=9)
 
-    assert _choice(session) == DynastyDiscard("barren")
+    assert _choice(session) == ActivateAbility("barren", DYNASTY_DISCARD)
 
 
 def test_it_flushes_a_producer_priced_beyond_what_it_can_raise():
@@ -69,7 +68,7 @@ def test_it_flushes_a_producer_priced_beyond_what_it_can_raise():
     session = _dynasty_phase(production=1)
     province_card(session.game, "dear-farm", seat=P1, gold_cost=9, gold_production=4)
 
-    assert _choice(session) == DynastyDiscard("dear-farm")
+    assert _choice(session) == ActivateAbility("dear-farm", DYNASTY_DISCARD)
 
 
 def test_it_buys_before_it_flushes():
@@ -90,7 +89,7 @@ def test_it_flushes_the_lowest_id_when_several_are_barren():
     province_card(session.game, "alpha", seat=P1, gold_cost=9, index=1)
     province_card(session.game, "zeta", seat=P1, gold_cost=9, index=2)
 
-    assert _choice(session) == DynastyDiscard("alpha")
+    assert _choice(session) == ActivateAbility("alpha", DYNASTY_DISCARD)
 
 
 def test_it_takes_legacy_ahead_of_a_purchase_when_the_pool_beats_the_board():
@@ -175,7 +174,7 @@ def test_it_flushes_every_barren_card_it_could_not_buy():
         choice = policy.choose(session.project(P1), session.legal_actions(P1))
         if isinstance(choice, Pass):
             break
-        assert isinstance(choice, DynastyDiscard)
+        assert is_dynasty_discard(choice)
         flushed.append(choice.card_id)
         session.act(P1, choice)
 

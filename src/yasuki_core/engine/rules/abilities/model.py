@@ -174,6 +174,10 @@ class Ability:
         variant of one that another card grants. Such an ability is activated wherever its card
         sits, the hand included, where a card's own ability would instead be played. Default None,
         for a card's own ability.
+    from_location : bool, optional
+        Whether this is a rulebook ability conferred on every card sitting where ``located_at``
+        names, as Dynasty Discard is on every face-up Province card. It is a player ability, as a
+        keyword's is. Default False.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -195,14 +199,21 @@ class Ability:
     targeting_message: str | None = None
     ruleset: str | None = None
     from_keyword: str | None = None
+    from_location: bool = False
+
+    @property
+    def from_rulebook(self) -> bool:
+        """Whether the rulebook confers this ability, through a keyword or a location, rather than
+        the card printing it."""
+        return self.from_keyword is not None or self.from_location
 
     def purchase(self, game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
         """What taking this ability on ``card`` pays for, when taking it plays the card or not.
 
-        An ability a keyword confers is a player ability the rulebook grants, so it is no action of
-        the card's, carries only its own keywords, and plays nothing (CR, Kharmic).
+        An ability the rulebook confers is a player ability, so it is no action of the card's,
+        carries only its own keywords, and plays nothing (CR, Kharmic).
         """
-        if self.from_keyword is not None:
+        if self.from_rulebook:
             return Purchase(seat=card.owner, card=None, keywords=self.keywords, plays_card=False)
         return Purchase(
             seat=card.owner,

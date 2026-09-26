@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.interrupts import rulebook_interrupt
 from yasuki_core.engine.rules.legality import INHERITANCE_PRODUCTION
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.rulebook import favor_abilities
+from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.rulebook.legacy import FIND_RESOLVER
 from yasuki_core.engine.rules.rulebook.recruit import PROCLAIM_GAINS
 from yasuki_core.engine.rules.state import GameState
@@ -30,7 +31,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Cycle,
     DiscardToInterrupt,
-    DynastyDiscard,
     Equip,
     Inheritance,
     Legacy,
@@ -115,6 +115,7 @@ class GameRunner:
         # activated ability (e.g. a stronghold) must not reach it.
         base: int | None = None
         items: list[tuple[str, Action]] = []
+        discards: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if getattr(action, "card_id", None) != card_id:
                 continue
@@ -127,9 +128,9 @@ class GameRunner:
                     items.append((self._proclaim_label(game, card, base), action))
                 else:
                     items.append((f"Recruit: Pay {base} gold", action))
-            elif isinstance(action, DynastyDiscard):
-                items.append(("Discard from province", action))
-        return items
+            elif is_dynasty_discard(action):
+                discards.append(("Discard from province", action))
+        return items + discards
 
     def _proclaim_label(self, game: GameState, card: L5RCard, base: int) -> str:
         """The Proclaim entry names the Honor it gains, unless the card offers an alternative
@@ -186,11 +187,15 @@ class GameRunner:
     def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """Every activated-ability action offered for an in-play card the human controls, each
         labelled with its own ability's description, when it is legal to use now. Empty
-        otherwise."""
+        otherwise. A Dynasty Discard is left to :meth:`province_menu`."""
         card = self.session.game.table.cards_by_id[card_id]
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
-            if isinstance(action, ActivateAbility) and action.card_id == card_id:
+            if (
+                isinstance(action, ActivateAbility)
+                and action.card_id == card_id
+                and not is_dynasty_discard(action)
+            ):
                 ability = ability_for(self.session.game, card, action.ability_key)
                 label = ability_label(card, ability) if ability is not None else "Activate ability"
                 items.append((label, action))

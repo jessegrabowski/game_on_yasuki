@@ -5,7 +5,12 @@ from typing import TypeGuard
 from yasuki_core.ruleset import in_force
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, InvestAbility
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    InvestAbility,
+)
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
@@ -13,6 +18,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Ongoing, SeatAbilityGrant
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.text_split import split_text_box
 from yasuki_core.game_pieces.prints import HoldingPrint
@@ -41,6 +47,8 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 _ABILITIES: dict[str, tuple[Ability, ...]] = {}
 # The abilities a keyword confers on every card carrying it, by the keyword's lowercase form.
 KEYWORD_ABILITIES: dict[str, tuple[Ability, ...]] = {}
+# The abilities the rulebook confers on every card sitting at a location, by the location.
+LOCATION_ABILITIES: dict[CardLocation, tuple[Ability, ...]] = {}
 _INVEST: dict[str, InvestAbility] = {}
 _INTERRUPTS: dict[str, tuple[Interrupt, ...]] = {}
 
@@ -229,6 +237,24 @@ def register_keyword_ability(value: Ability) -> None:
     KEYWORD_ABILITIES[keyword] = (*registered, value)
 
 
+def register_location_ability(value: Ability) -> None:
+    """Register ``value`` as an ability the rulebook confers on every card sitting at any of its
+    ``located_at``.
+
+    Raise ValueError for an ability not marked ``from_location``, or naming no key, for the reason
+    :func:`~.register_keyword_ability` gives.
+    """
+    if not value.from_location:
+        raise ValueError("a location ability is marked from_location")
+    if value.key is None:
+        raise ValueError("a location ability needs a key")
+    for location in value.located_at:
+        registered = LOCATION_ABILITIES.get(location, ())
+        if any(held.key == value.key and _read_together(held, value) for held in registered):
+            raise ValueError(f"{location.value} already confers an ability keyed {value.key!r}")
+        LOCATION_ABILITIES[location] = (*registered, value)
+
+
 def may_attack(card: L5RCard) -> bool:
     """Whether ``card``'s text leaves it able to attack, which is what lets the Attacker assign
     it."""
@@ -290,9 +316,10 @@ def fixed_invest_amount(game: GameState, card: L5RCard) -> int | None:
 def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     """Every activated ability ``card`` has right now: the ones registered for its printed id and
     in force under the active ruleset, in registration order, then the ones recorded grants give
-    it or every card of its owner's, in the order they were granted, then the ones its
-    keywords confer. A keyword's ability yields to a granted one under the same key, which is
-    how a card changes a rulebook ability for a while."""
+    it or every card of its owner's, in the order they were granted, then the ones its keywords
+    confer, then the ones the rulebook confers on every card where it sits. A conferred ability
+    yields to a granted one under the same key, which is how a card changes a rulebook ability for
+    a while."""
     printed = tuple(held for held in _ABILITIES.get(card.printed_id, ()) if in_force(held))
     granted = tuple(
         GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](
@@ -313,6 +340,10 @@ def _grants_to(recorded: Ongoing, card: L5RCard) -> TypeGuard[AbilityGrant | Sea
 
 
 def _conferred(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
+    return (*_by_keyword(game, card), *_by_location(game, card))
+
+
+def _by_keyword(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     if not KEYWORD_ABILITIES:
         return ()
     carried = {keyword.lower() for keyword in effective_keywords(game, card)}
@@ -322,6 +353,33 @@ def _conferred(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
         if keyword in carried
         for held in conferred
         if in_force(held)
+    )
+
+
+def _by_location(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
+    return tuple(
+        held
+        for location, conferred in LOCATION_ABILITIES.items()
+        if _sits_at(game, card, location)
+        for held in conferred
+        if in_force(held)
+    )
+
+
+_LOCATION_ZONE_ROLES = {
+    CardLocation.PROVINCE: ZoneRole.PROVINCE,
+    CardLocation.HAND: ZoneRole.HAND,
+    CardLocation.RULEBOOK: ZoneRole.RULEBOOK,
+}
+
+
+def _sits_at(game: GameState, card: L5RCard, location: CardLocation) -> bool:
+    if location is CardLocation.BATTLEFIELD:
+        return any(held is card for held in game.table.battlefield.cards)
+    role = _LOCATION_ZONE_ROLES[location]
+    return any(
+        key.role is role and any(held is card for held in zone.cards)
+        for key, zone in game.table.zones.items()
     )
 
 

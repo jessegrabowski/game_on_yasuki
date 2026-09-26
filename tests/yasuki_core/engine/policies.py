@@ -1,6 +1,6 @@
+from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
-    DynastyDiscard,
     Legacy,
     Pass,
     Recruit,
@@ -23,7 +23,7 @@ class DiscardFirst:
     name = "discard-first"
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
-        return next((a for a in actions if isinstance(a, DynastyDiscard)), Pass())
+        return next((a for a in actions if is_dynasty_discard(a)), Pass())
 
 
 class RecruitElseDiscard:
@@ -34,7 +34,7 @@ class RecruitElseDiscard:
     def choose(self, view: GameView, actions: list[Action]) -> Action:
         return next(
             (a for a in actions if isinstance(a, Recruit)),
-            next((a for a in actions if isinstance(a, DynastyDiscard)), Pass()),
+            next((a for a in actions if is_dynasty_discard(a)), Pass()),
         )
 
 

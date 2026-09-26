@@ -15,9 +15,9 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine import ops
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
-    DynastyDiscard,
     Equip,
     Pass,
     Recruit,
@@ -413,13 +413,16 @@ def test_dynasty_discard_is_offered_for_any_face_up_province_card_in_dynasty():
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 1)] = province
     session = EngineSession.start(state, PlayerId.P1)
 
-    assert DynastyDiscard("P1-junk") not in session.legal_actions(PlayerId.P1)  # Action phase
+    discard_junk = ActivateAbility("P1-junk", DYNASTY_DISCARD)
+    discard_person = ActivateAbility("P1-person", DYNASTY_DISCARD)
+
+    assert discard_junk not in session.legal_actions(PlayerId.P1)  # Action phase
+
     _in_dynasty(session)
     actions = session.legal_actions(PlayerId.P1)
-    assert (
-        DynastyDiscard("P1-junk") in actions
-    )  # a Holding too expensive to recruit is still discardable
-    assert DynastyDiscard("P1-person") in actions  # a recruitable Personality is also discardable
+
+    assert discard_junk in actions  # a Holding too expensive to recruit is still discardable
+    assert discard_person in actions  # a recruitable Personality is also discardable
     assert Recruit("P1-person") in actions
 
 
@@ -437,7 +440,7 @@ def test_dynasty_discard_moves_the_card_to_the_discard_and_refills():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, DynastyDiscard("P1-junk"))
+    session.act(PlayerId.P1, ActivateAbility("P1-junk", DYNASTY_DISCARD))
 
     game = session.game
     discard = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
@@ -460,7 +463,7 @@ def test_dynasty_discard_survives_a_replay():
     _holding_in_province(state, "P1-junk", gold_cost=9)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
-    session.act(PlayerId.P1, DynastyDiscard("P1-junk"))
+    session.act(PlayerId.P1, ActivateAbility("P1-junk", DYNASTY_DISCARD))
 
     replayed = session.log.replay()
     discard = replayed.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
@@ -633,12 +636,12 @@ def test_an_action_that_raises_is_unwound_from_the_tape():
     taped = len(session.log.entries)
 
     with pytest.raises(RuntimeError, match="part-way through"):
-        session.act(PlayerId.P1, DynastyDiscard("P1-junk"))
+        session.act(PlayerId.P1, ActivateAbility("P1-junk", DYNASTY_DISCARD))
 
     province = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
     assert [card.id for card in province] == ["P1-junk"]
     assert len(session.log.entries) == taped
-    assert DynastyDiscard("P1-junk") in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-junk", DYNASTY_DISCARD) in session.legal_actions(PlayerId.P1)
 
 
 def test_an_end_of_turn_discard_over_queued_work_is_refused_and_unwound():
@@ -682,7 +685,7 @@ def test_undo_last_reverses_a_dynasty_discard_and_cannot_repeat():
     _holding_in_province(state, "P1-junk", gold_cost=9)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
-    session.act(PlayerId.P1, DynastyDiscard("P1-junk"))
+    session.act(PlayerId.P1, ActivateAbility("P1-junk", DYNASTY_DISCARD))
 
     assert session.undo_last(PlayerId.P1) is True
 

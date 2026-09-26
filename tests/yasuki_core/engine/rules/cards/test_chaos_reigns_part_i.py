@@ -11,10 +11,10 @@ from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.rulebook.equip import may_attach
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
 from yasuki_core.engine.rules.board.queries import owned_personalities
+from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
-    DynastyDiscard,
     Pass,
     PlayInterrupt,
     PlayStrategy,
@@ -201,7 +201,7 @@ def test_a_dynasty_discard_offers_nothing():
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty, where a Province card may be discarded
 
-    session.act(P1, DynastyDiscard("spare-dynasty"))
+    session.act(P1, ActivateAbility("spare-dynasty", DYNASTY_DISCARD))
 
     assert not _step_is_open(session)
 

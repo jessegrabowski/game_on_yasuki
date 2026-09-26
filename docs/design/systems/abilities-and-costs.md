@@ -120,6 +120,13 @@ hand does with it: a card's own hand ability is played, as a Strategy is, while 
 is activated in place, so {func}`~.activatable` offers it from the hand and {func}`~.playable`
 leaves it out.
 
+A location ability is one the rulebook attaches to where a card sits, as Dynasty Discard is on
+every face-up Province card. {func}`~.register_location_ability` files it under each location its
+`located_at` names, and `abilities_for` confers it on a card while the card is there. It sets
+`from_location` and carries a `key` for the same reasons a keyword ability sets `from_keyword`.
+`Ability.from_rulebook` is true for both kinds. Each is a player ability, so it plays no card and
+takes no keyword from the card it sits on.
+
 ## What narrows a target list
 
 A handler's `targets` output is not final. `legal_targets` in `legality.py` narrows it by the Rules

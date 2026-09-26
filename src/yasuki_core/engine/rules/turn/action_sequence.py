@@ -16,7 +16,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Cycle,
     DeclareAttack,
     DiscardToInterrupt,
-    DynastyDiscard,
     Equip,
     Inheritance,
     Legacy,
@@ -61,7 +60,6 @@ from yasuki_core.engine.rules.rulebook.recruit import (
     recruit,
 )
 from yasuki_core.engine.rules.rulebook.cycle import cycle
-from yasuki_core.engine.rules.rulebook.dynasty_discard import dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor_payment import use_favor_ability
 from yasuki_core.engine.rules.interrupts import (
     apply_interrupt_adjustment,
@@ -89,7 +87,7 @@ from yasuki_core.engine.rules.turn.structure import RoundKind
 # this dispatcher, and a registry read before the card modules load is silently empty.
 # Guarded by test_importing_the_engine_registers_the_cards.
 from yasuki_core.engine.rules import cards  # noqa: F401
-from yasuki_core.engine.rules.rulebook import dishonor  # noqa: F401
+from yasuki_core.engine.rules.rulebook import dishonor, dynasty_discard  # noqa: F401
 
 
 # How each action reads when a Response Step names the thing it answers. A Response is taken against
@@ -98,7 +96,6 @@ _ACTION_WORDING: dict[type, str] = {
     Recruit: "the Recruit of",
     Equip: "the Equip of",
     ActivateAbility: "the ability on",
-    DynastyDiscard: "the discard of",
     PlayStrategy: "the Strategy",
     Legacy: "Legacy",
     Cycle: "Cycle",
@@ -150,8 +147,6 @@ def perform(game: GameState, action: Action) -> None:
             recruit(game, card_id, invest, proclaim=proclaim)
         case Equip(card_id=card_id, invest=invest):
             equip(game, card_id, invest=invest)
-        case DynastyDiscard(card_id=card_id):
-            dynasty_discard(game, card_id)
         case Legacy():
             legacy(game)
         case Inheritance():
