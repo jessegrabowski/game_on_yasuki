@@ -207,7 +207,9 @@ one of the action's effects is checked against the modifications the step collec
 applied, while what a trigger returns inside that cascade is a trait's or the rulebook's and is
 applied as returned. A `Then` among the action's effects carries that provenance to the deferred
 step, which opens no second round. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
-effects held until a given moment. {func}`~yasuki_core.engine.rules.triggers.enforce_state_based_actions`
+effects held until a given moment. {func}`~yasuki_core.engine.rules.triggers.reach_moment` is the
+same for a moment ongoing records also last until: it lapses them, settles the board their expiry
+leaves, and resolves the held effects, in one walk so a question any part asks pauses the rest. {func}`~yasuki_core.engine.rules.triggers.enforce_state_based_actions`
 is how a caller that mutated the board directly gets the same guarantee the walk gives itself
 after every effect: it settles the rules first and starts a walk only if that raised anything.
 It carries the check itself because `_advance` would see the open question only after the rules

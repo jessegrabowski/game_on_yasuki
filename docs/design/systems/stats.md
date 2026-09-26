@@ -45,9 +45,10 @@ The named readers wrap it. {func}`~.effective_force`, {func}`~.effective_chi`,
 A change to a stat is one of two kinds, and which kind decides where it lives.
 
 A recorded change comes from an action. It is written into `game.ongoing` as data, a
-{class}`~.Duration` ends it, and it outlives whatever created it, so a Strategy in the discard can
-still be the source of one. Because replay compares it by value, a record holds only data: a
-target id or a {class}`~.Condition`, and a fixed amount.
+{class}`~.Duration` or a {class}`~.Moment` the flow reaches ends it, the end of the turn ends every
+one but a `WHILE_SOURCE_IN_PLAY` or `PERMANENT` one, and it outlives whatever created it, so a
+Strategy in the discard can still be the source of one. Because replay compares it by value, a
+record holds only data: a target id or a {class}`~.Condition`, and a fixed amount.
 
 A derived change comes from a card in play. Nothing is written anywhere, since the card being on
 the battlefield is the whole record. It is read off the board on every read and ends the moment

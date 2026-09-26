@@ -12,6 +12,7 @@ yasuki_core.engine.rules.battle.resolution
     AnnounceResolution
     EndBattle
     FightNextBattle
+    LeaveBattle
 
 .. rubric:: Functions
 

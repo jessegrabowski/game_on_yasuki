@@ -22,9 +22,11 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import Moment, RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, RoundKind
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     ConditionalModifier,
+    Duration,
+    Lifetime,
     LobbyModifier,
     ProvinceModifier,
     SeatAbilityGrant,
@@ -498,6 +500,56 @@ def enforce_state_based_actions(game: GameState) -> None:
         _advance(game, (), [], None, queue, interruptible=False)
 
 
+def lapse_ongoing(game: GameState, moment: Moment) -> None:
+    """Drop the ongoing records that last until ``moment``, now the flow has reached it, and
+    satisfy the state-based rules against the board their expiry leaves.
+
+    An expiring stat change can make the board illegal with no effect committing, as a Chi bonus
+    ending under a Personality does, so nothing else would catch it. Settling it may ask a
+    question, so a caller queues what follows the moment before calling this.
+
+    Raise ``RuntimeError`` if a decision is pending.
+    """
+    if _lapse(game, moment):
+        enforce_state_based_actions(game)
+
+
+def reach_moment(game: GameState, moment: Moment, *announcing: GameEvent) -> None:
+    """Lapse the ongoing records that last until ``moment``, then resolve the effects held until
+    it, as one cascade that first settles the board the lapse leaves and then announces
+    ``announcing``, the events that mark the moment.
+
+    One cascade, so a question any part of it asks pauses the rest rather than being overtaken.
+
+    Raise ``RuntimeError`` if a decision is pending.
+    """
+    _refuse_mid_decision(game, "reach_moment")
+    _lapse(game, moment)
+    held = _take_held(game, moment)
+    queue: list[GameEvent] = []
+    _settle_state_based_actions(game, queue)
+    queue.extend(announcing)
+    _advance(game, tuple(held), [], None, queue, interruptible=False)
+
+
+def _lapse(game: GameState, moment: Moment) -> bool:
+    """Drop the ongoing records that last until ``moment``, saying whether any did."""
+    kept = [recorded for recorded in game.ongoing if not _lapses_at(recorded.duration, moment)]
+    lapsed = len(kept) < len(game.ongoing)
+    game.ongoing = kept
+    return lapsed
+
+
+def _lapses_at(duration: Lifetime, moment: Moment) -> bool:
+    """Whether a record lasting for ``duration`` ends at ``moment``. The end of the turn ends
+    every one but the two that outlast it: an ongoing effect lasts until the end of the turn unless
+    it says otherwise (CR, Duration of Effects), and a phase or a battle does not outlast its turn,
+    so a record whose moment the turn never reached ends there too."""
+    if moment == END_OF_TURN:
+        return duration not in (Duration.WHILE_SOURCE_IN_PLAY, Duration.PERMANENT)
+    return duration == moment
+
+
 def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     """Drop ongoing records whose target has left the battlefield and the Provinces.
 
@@ -830,11 +882,9 @@ def resolve_delayed(game: GameState, moment: Moment) -> None:
     A held effect whose card has since left the table is a no-op, so one destroyed or banished
     earlier in the turn is not chased into the next.
     """
-    held = [effect for held_until, effect in game.delayed if held_until == moment]
-    if not held:
-        return
-    discard_delayed(game, moment)
-    resolve_effects(game, held)
+    held = _take_held(game, moment)
+    if held:
+        resolve_effects(game, held)
 
 
 def discard_delayed(game: GameState, moment: Moment) -> None:
@@ -844,3 +894,10 @@ def discard_delayed(game: GameState, moment: Moment) -> None:
     resolve off the next stretch of play to reach that edge instead.
     """
     game.delayed = [entry for entry in game.delayed if entry[0] != moment]
+
+
+def _take_held(game: GameState, moment: Moment) -> list[Effect]:
+    """Remove and return the effects held until ``moment``."""
+    held = [effect for held_until, effect in game.delayed if held_until == moment]
+    discard_delayed(game, moment)
+    return held

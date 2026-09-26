@@ -161,11 +161,12 @@ def test_empty_fate_deck_draws_nothing_and_still_passes_the_turn():
 
 def test_the_turns_end_drops_a_conditional_modifier_with_the_rest():
     game = _game(hand=0, fate_deck=1)
-    game.ongoing.append(
+    game.ongoing += [
         ConditionalModifier(
             "flashy", Condition.ATTACKING, Stat.FORCE, -1, Duration.UNTIL_END_OF_TURN
-        )
-    )
+        ),
+        ConditionalModifier("flashy", Condition.ATTACKING, Stat.FORCE, -1, END_OF_TURN),
+    ]
 
     _advance_to_end_of_turn(game)
 
@@ -854,7 +855,9 @@ def test_every_fired_moment_has_a_resolve_call_behind_it():
     called = {
         name
         for module in (sequence, resolution, duel_resolution)
-        for name in re.findall(r"resolve_delayed\(game, (\w+)\)", inspect.getsource(module))
+        for name in re.findall(
+            r"(?:resolve_delayed|reach_moment)\(game, (\w+)[,)]", inspect.getsource(module)
+        )
     }
     segment_beginnings = {Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS}
 

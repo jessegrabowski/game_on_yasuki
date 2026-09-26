@@ -43,14 +43,15 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
     Condition,
     ConditionalModifier,
-    Duration,
     KeywordGrant,
+    Lifetime,
     LobbyModifier,
     Minimum,
     Modifier,
     ProvinceModifier,
     SeatAbilityGrant,
     Stat,
+    describe_lifetime,
 )
 from yasuki_core.engine.rules.state import (
     GameState,
@@ -614,12 +615,12 @@ class GrantModifier(Effect):
     target_id: str
     stat: Stat
     amount: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} grants {self.target_id} {self.amount:+d} "
-            f"{self.stat.name} ({self.duration.name})"
+            f"{self.stat.name} ({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -639,12 +640,12 @@ class GrantConditionalModifier(Effect):
     condition: Condition
     stat: Stat
     amount: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} grants {self.amount:+d} {self.stat.name} while "
-            f"{self.condition.value} ({self.duration.name})"
+            f"{self.condition.value} ({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -665,10 +666,11 @@ class GrantAbility(Effect):
     source_id: str
     target_id: str
     context: tuple[str, ...]
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
-        return f"{self.source_id} grants {self.target_id} an ability ({self.duration.name})"
+        lifetime = describe_lifetime(self.duration)
+        return f"{self.source_id} grants {self.target_id} an ability ({lifetime})"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
@@ -686,10 +688,11 @@ class GrantSeatAbility(Effect):
     source_id: str
     seat: PlayerId
     context: tuple[str, ...]
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
-        return f"{self.source_id} grants {self.seat.name}'s cards an ability ({self.duration.name})"
+        lifetime = describe_lifetime(self.duration)
+        return f"{self.source_id} grants {self.seat.name}'s cards an ability ({lifetime})"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
@@ -735,12 +738,12 @@ class GrantMinimum(Effect):
     target_id: str
     stat: Stat
     value: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} gives {self.target_id} a minimum {self.stat.name} of {self.value} "
-            f"({self.duration.name})"
+            f"({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -762,12 +765,12 @@ class GrantProvinceStrength(Effect):
     source_id: str
     province: ZoneKey
     amount: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} gives {self.province.token} {self.amount:+d} province strength "
-            f"({self.duration.name})"
+            f"({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -861,12 +864,12 @@ class GrantLobbyBonus(Effect):
     source_id: str
     seat: PlayerId
     amount: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} gives {self.seat.name} a {self.amount:+d} Lobby Bonus "
-            f"({self.duration.name})"
+            f"({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -1098,10 +1101,11 @@ class GrantKeyword(Effect):
     source_id: str
     target_id: str
     keyword: str
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
-        return f"{self.source_id} gives {self.target_id} {self.keyword} ({self.duration.name})"
+        lifetime = describe_lifetime(self.duration)
+        return f"{self.source_id} gives {self.target_id} {self.keyword} ({lifetime})"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(

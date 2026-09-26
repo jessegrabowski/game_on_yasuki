@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.turn.structure import Moment
 from yasuki_core.engine.table import ZoneKey
 
 
@@ -42,6 +43,16 @@ class Duration(Enum):
     PERMANENT = "permanent"
 
 
+# How long an ongoing record lasts: a Duration, or a Moment it lapses at the first time the flow
+# reaches it, as "until the end of the phase" or "this battle" has it.
+Lifetime = Duration | Moment
+
+
+def describe_lifetime(lifetime: Lifetime) -> str:
+    """How long a record lasts, worded for a trace."""
+    return lifetime.name if isinstance(lifetime, Duration) else lifetime.describe()
+
+
 @dataclass(frozen=True, slots=True)
 class Modifier:
     """A continuous effect that adjusts one card's stat by a fixed amount while active. Every stat
@@ -59,7 +70,7 @@ class Modifier:
         Which stat is adjusted.
     amount : int
         The bonus (positive) or penalty (negative) added to the stat.
-    duration : Duration
+    duration : Duration or Moment
         When the modifier stops applying.
     """
 
@@ -67,7 +78,7 @@ class Modifier:
     target_id: str
     stat: Stat
     amount: int
-    duration: Duration
+    duration: Lifetime
 
 
 class Condition(Enum):
@@ -100,7 +111,7 @@ class ConditionalModifier:
         Which stat is adjusted.
     amount : int
         The bonus (positive) or penalty (negative) added to the stat.
-    duration : Duration
+    duration : Duration or Moment
         When the modifier stops applying.
     """
 
@@ -108,7 +119,7 @@ class ConditionalModifier:
     condition: Condition
     stat: Stat
     amount: int
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -130,14 +141,14 @@ class AbilityGrant:
     context : tuple of str
         What the granting action settled, handed to the factory: the ids the ability's own
         condition or targets read.
-    duration : Duration
+    duration : Duration or Moment
         When the grant stops applying.
     """
 
     source_id: str
     target_id: str
     context: tuple[str, ...]
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -160,14 +171,14 @@ class SeatAbilityGrant:
         The player whose owned cards have the ability while the grant lasts.
     context : tuple of str
         What the granting action settled, handed to the factory.
-    duration : Duration
+    duration : Duration or Moment
         When the grant stops applying.
     """
 
     source_id: str
     seat: PlayerId
     context: tuple[str, ...]
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -183,14 +194,14 @@ class KeywordGrant:
         The card that carries the keyword while the grant lasts.
     keyword : str
         The keyword gained, spelled as the card database spells it.
-    duration : Duration
+    duration : Duration or Moment
         When the grant stops applying.
     """
 
     source_id: str
     target_id: str
     keyword: str
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -214,7 +225,7 @@ class Minimum:
         Which stat the floor applies to.
     value : int
         The lowest the stat may read while this is active.
-    duration : Duration
+    duration : Duration or Moment
         When the minimum stops applying.
     """
 
@@ -222,7 +233,7 @@ class Minimum:
     target_id: str
     stat: Stat
     value: int
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -241,14 +252,14 @@ class ProvinceModifier:
         The Province slot whose strength is adjusted.
     amount : int
         The bonus (positive) or penalty (negative) added to the strength.
-    duration : Duration
+    duration : Duration or Moment
         When the modifier stops applying.
     """
 
     source_id: str
     province: ZoneKey
     amount: int
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -269,14 +280,14 @@ class LobbyModifier:
         The player whose Lobby amounts are adjusted.
     amount : int
         The Bonus (positive) or Penalty (negative).
-    duration : Duration
+    duration : Duration or Moment
         When the adjustment stops applying.
     """
 
     source_id: str
     seat: PlayerId
     amount: int
-    duration: Duration
+    duration: Lifetime
 
 
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a

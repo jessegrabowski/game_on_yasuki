@@ -28,12 +28,12 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.interrupts import interrupt_actions
 from yasuki_core.engine.rules.legality import activatable, permitted_timings, playable
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     BEGINNING_OF_ACTION_PHASE,
+    Boundary,
     END_OF_ACTION_PHASE,
     END_OF_TURN,
     Moment,
@@ -142,10 +142,14 @@ def advance(game: GameState) -> None:
         _lift_straighten_delays(game, END_OF_ACTION_PHASE)
     elif game.phase is Phase.BATTLE:
         resolution.end_attack_phase(game)
-    following = next_phase(game.phase)
+    ended = game.phase
+    following = next_phase(ended)
     if following is not None:
         game.phase = following
         _announce_phase(game)
+        # After the next phase is queued, so a question settling the board asks is answered first.
+        # The last phase ends with the turn, where every record lasting for a phase lapses.
+        triggers.lapse_ongoing(game, Moment(ended, Boundary.END))
         run_stack(game)
         return
     _end_turn(game)
@@ -349,14 +353,11 @@ class BeginNextTurn:
 
 
 def begin_next_turn(game: GameState) -> None:
-    # Drop until-end-of-turn modifiers as the turn ends; the comprehension keeps creation order so
-    # the list rebuilds identically under replay.
-    game.ongoing = [m for m in game.ongoing if m.duration is not Duration.UNTIL_END_OF_TURN]
-    # Modifiers expiring can make the board illegal on their own, with no effect committing and so
-    # no cascade to catch it. Settle that before the new turn starts and anything reads the board,
-    # with the turn's opening queued beneath in case the settling asks a question.
+    # Ongoing records lapse here rather than with the effects held for the end of the turn, so they
+    # last through its draw and discard. The turn's opening is queued beneath, in case settling the
+    # board their expiry leaves asks a question.
     game.stack.append(OpenNextTurn())
-    triggers.enforce_state_based_actions(game)
+    triggers.lapse_ongoing(game, END_OF_TURN)
 
 
 @dataclass(frozen=True, slots=True)
