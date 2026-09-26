@@ -36,6 +36,6 @@ register_location_ability(
         key=DYNASTY_DISCARD,
         repeatable=True,
         located_at=(CardLocation.PROVINCE,),
-        from_location=True,
+        from_rulebook=True,
     )
 )

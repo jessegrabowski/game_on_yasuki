@@ -255,7 +255,7 @@ def test_a_seat_grant_reaches_every_card_its_seat_owns_and_none_of_the_opponents
 
 def test_a_keyword_ability_joins_every_card_carrying_the_keyword_after_its_own():
     plain = _ABILITIES["millet_farm"][0]
-    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe"))
+    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe", from_rulebook=True))
 
     try:
         game = two_seat_game()
@@ -272,7 +272,7 @@ def test_a_keyword_ability_joins_every_card_carrying_the_keyword_after_its_own()
 
 def test_a_granted_keyword_brings_its_abilities_with_it():
     plain = _ABILITIES["millet_farm"][0]
-    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe"))
+    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe", from_rulebook=True))
 
     try:
         game = two_seat_game()
@@ -293,7 +293,7 @@ def test_a_granted_keyword_brings_its_abilities_with_it():
 
 def test_a_granted_ability_under_a_keyword_abilitys_key_stands_in_for_it():
     plain = _ABILITIES["millet_farm"][0]
-    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe"))
+    register_keyword_ability(replace(plain, key="probe", from_keyword="Probe", from_rulebook=True))
     granted_ability("grant_probe")(
         lambda game, card, context: replace(plain, key="probe", label=f"Granted to {card.id}")
     )
@@ -317,12 +317,21 @@ def test_a_keyword_ability_must_name_its_keyword_and_a_key():
     with pytest.raises(ValueError, match="names the keyword"):
         register_keyword_ability(replace(plain, key="probe"))
     with pytest.raises(ValueError, match="needs a key"):
-        register_keyword_ability(replace(plain, from_keyword="Probe"))
+        register_keyword_ability(replace(plain, from_keyword="Probe", from_rulebook=True))
     assert "probe" not in KEYWORD_ABILITIES
 
 
+def test_a_keyword_ability_is_a_rulebook_ability():
+    plain = _ABILITIES["millet_farm"][0]
+
+    with pytest.raises(ValueError, match="is a rulebook ability"):
+        replace(plain, key="probe", from_keyword="Probe")
+
+
 def test_a_keyword_may_not_confer_two_abilities_under_one_key():
-    plain = replace(_ABILITIES["millet_farm"][0], key="probe", from_keyword="Probe")
+    plain = replace(
+        _ABILITIES["millet_farm"][0], key="probe", from_keyword="Probe", from_rulebook=True
+    )
     register_keyword_ability(plain)
 
     try:
@@ -453,7 +462,7 @@ def location_abilities():
 @pytest.mark.usefixtures("location_abilities")
 def test_a_location_ability_joins_every_card_sitting_there_and_leaves_with_it():
     plain = _ABILITIES["millet_farm"][0]
-    conferred = replace(plain, key="probe", located_at=(CardLocation.HAND,), from_location=True)
+    conferred = replace(plain, key="probe", located_at=(CardLocation.HAND,), from_rulebook=True)
     register_location_ability(conferred)
     game = two_seat_game()
     held = fate_card("held", PlayerId.P1)
@@ -474,12 +483,12 @@ def test_a_location_ability_joins_every_card_sitting_there_and_leaves_with_it():
 def test_a_location_ability_must_be_marked_and_keyed_and_unique_where_it_sits():
     plain = replace(_ABILITIES["millet_farm"][0], located_at=(CardLocation.HAND,))
 
-    with pytest.raises(ValueError, match="marked from_location"):
+    with pytest.raises(ValueError, match="marked from_rulebook"):
         register_location_ability(replace(plain, key="probe"))
     with pytest.raises(ValueError, match="needs a key"):
-        register_location_ability(replace(plain, from_location=True))
+        register_location_ability(replace(plain, from_rulebook=True))
 
-    register_location_ability(replace(plain, key="probe", from_location=True))
+    register_location_ability(replace(plain, key="probe", from_rulebook=True))
 
     with pytest.raises(ValueError, match="hand already confers an ability keyed 'probe'"):
-        register_location_ability(replace(plain, key="probe", from_location=True))
+        register_location_ability(replace(plain, key="probe", from_rulebook=True))

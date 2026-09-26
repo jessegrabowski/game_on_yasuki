@@ -241,11 +241,11 @@ def register_location_ability(value: Ability) -> None:
     """Register ``value`` as an ability the rulebook confers on every card sitting at any of its
     ``located_at``.
 
-    Raise ValueError for an ability not marked ``from_location``, or naming no key, for the reason
+    Raise ValueError for an ability not marked ``from_rulebook``, or naming no key, for the reason
     :func:`~.register_keyword_ability` gives.
     """
-    if not value.from_location:
-        raise ValueError("a location ability is marked from_location")
+    if not value.from_rulebook:
+        raise ValueError("a location ability is marked from_rulebook")
     if value.key is None:
         raise ValueError("a location ability needs a key")
     for location in value.located_at:
