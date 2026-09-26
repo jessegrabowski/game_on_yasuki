@@ -197,25 +197,22 @@ def test_a_seat_may_focus_four_times_and_then_only_strike():
         assert session.game.pending is None
 
 
-def test_a_seat_at_the_focus_limit_strikes_while_the_other_may_still_focus():
+def test_the_focus_limit_is_counted_per_seat():
+    # The alternating loop can only drive both seats to the cap together, so what the cap is counted
+    # against is read off the sources each seat is offered at the same moment.
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         limit = ruleset.ACTIVE.focus_limit
         session = _duel_game(hand={}, deck={P1: 6, P2: 6})
         _challenge(session)
 
-        # P2 spends its whole allowance while P1 answers each offer by striking is not possible --
-        # a strike ends the duel -- so P1 focuses once for every two of P2's, which it cannot do
-        # with an alternating loop. Drive P2 to the cap and read what it is offered next.
-        for _ in range(limit):
+        for _ in range(limit - 1):
             session.submit(P2, DecisionResponse((DECK_TOP,)))
             session.submit(P1, DecisionResponse((DECK_TOP,)))
+        session.submit(P2, DecisionResponse((DECK_TOP,)))
         duel = session.game.duel
 
-        assert duel.focuses(P2) == limit
+        assert (duel.focuses(P2), duel.focuses(P1)) == (limit, limit - 1)
         assert procedure.focus_sources(session.game, duel, P2) == ()
-        # The cap is per seat, so P1 sitting at the same count is a coincidence of the loop, not the
-        # thing being asserted: one seat exhausted leaves the other's own allowance untouched.
-        duel.focused[P1] = 0
         assert DECK_TOP in procedure.focus_sources(session.game, duel, P1)
 
 
@@ -245,7 +242,10 @@ def test_an_arc_with_no_focus_limit_is_capped_only_by_what_a_seat_holds(monkeypa
             session.submit(P1, DecisionResponse((DECK_TOP,)))
 
         assert session.game.duel.focuses(P2) == 5
-        assert session.game.pending is not None
+        pending = session.game.pending
+        assert isinstance(pending, FocusOrStrike)
+        assert pending.seat is P2
+        assert DECK_TOP in pending.candidates
 
 
 def test_a_challenge_between_one_players_own_personalities_never_happens():
@@ -279,20 +279,6 @@ def test_a_challenge_to_a_card_that_is_not_a_personality_never_happens():
         assert session.game.duel is None
 
 
-def test_a_challenge_to_a_card_that_has_left_play_never_happens():
-    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
-        session = _duel_game()
-
-        procedure.declare_duel(
-            session.game,
-            challenger_duelist="challenger",
-            challenged_duelist="gone",
-            source="challenger",
-        )
-
-        assert session.game.duel is None
-
-
 def test_a_duel_whose_target_left_play_starts_no_duel_from_the_effect():
     # The route a card takes. The effect reads no card off the table itself, so a Personality
     # destroyed between being targeted and the duel resolving refuses the challenge rather than
@@ -306,13 +292,27 @@ def test_a_duel_whose_target_left_play_starts_no_duel_from_the_effect():
         assert not [key for key in session.game.table.zones if key.role is ZoneRole.FOCUS]
 
 
-def test_the_duel_replays_from_its_tape():
+def test_a_duel_paused_mid_focusing_replays_from_its_tape():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         session = _duel_game(hand={P1: 2, P2: 2})
         _challenge(session)
         session.submit(P2, DecisionResponse((focus_token("P2-h0"),)))
         session.submit(P1, DecisionResponse((DECK_TOP,)))
 
+        assert replay(session.log) == session.game
+
+
+def test_a_resolved_duel_replays_from_its_tape():
+    # The reveal, the outcome, the discards and the focusing areas going away all have to come back
+    # the same, and none of the duel is serialized: the tape rebuilds it by re-running the engine.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(hand={P1: 2, P2: 2})
+        _challenge(session)
+        session.submit(P2, DecisionResponse((focus_token("P2-h0"),)))
+        session.submit(P1, DecisionResponse((DECK_TOP,)))
+        session.submit(P2, DecisionResponse((STRIKE,)))
+
+        assert session.game.duel.step is DuelStep.ENDED
         assert replay(session.log) == session.game
 
 

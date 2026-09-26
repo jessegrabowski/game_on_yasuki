@@ -11,14 +11,10 @@ from yasuki_core.engine.rules.duel import procedure, resolution
 from yasuki_core.engine.rules.duel.records import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
-from yasuki_core.engine.rules.effects import Ask, StartDuel
-from yasuki_core.engine.rules.triggers import (
-    CHOICE_RESOLVERS,
-    choice_resolver,
-    enforce_state_based_actions,
-)
+from yasuki_core.engine.rules.effects import Ask, GrantModifier, StartDuel
+from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.modifiers import Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -34,12 +30,13 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
 from tests.yasuki_core.engine.builders import (
+    fate_card,
     personality,
     put_in_play,
     register,
     two_seat_game,
 )
-from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_resolver
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -128,9 +125,25 @@ def _challenge(session: EngineSession) -> None:
 
 
 def _strike_out(session: EngineSession) -> None:
-    """Strike with whichever seat is being asked, until nobody is."""
-    while session.game.pending is not None:
-        session.submit(session.game.pending.seat, DecisionResponse((STRIKE,)))
+    """Strike with whichever seat is being asked, until nobody is.
+
+    Bounded by the seat count rather than looping until nothing is pending, so a duel that failed to
+    end on a strike fails the test instead of hanging it.
+    """
+    for _ in session.game.table.seats:
+        pending = session.game.pending
+        if pending is None:
+            return
+        session.submit(pending.seat, DecisionResponse((STRIKE,)))
+    assert session.game.pending is None, "the duel kept asking after both seats struck"
+
+
+def test_a_card_with_no_printed_focus_value_adds_nothing():
+    # What may be focused is the procedure's business. A card that got into a focusing area another
+    # way still has to total, and the CR lets cards other than Fate cards be there.
+    assert resolution.focus_value(_focus_card("fv3", P2, 3)) == 3
+    assert resolution.focus_value(fate_card("plain", P2)) == 0
+    assert resolution.focus_value(personality("bushi", owner=P2)) == 0
 
 
 def test_the_higher_total_wins_the_duel():
@@ -182,14 +195,32 @@ def test_two_duelists_tie_and_both_lose():
         assert set(outcome.losers) == {P1, P2}
 
 
-def test_the_duel_stat_is_chi_and_a_modified_chi_counts():
+def test_the_duel_stat_is_chi_as_it_stands_rather_than_as_printed():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
-        session = _duel_game(chi={P1: 5, P2: 2})
+        # A card each, so the duel pauses on the first option instead of resolving on two forced
+        # strikes, and the bonus lands while the duel is still open. Focus Value zero keeps the
+        # totals reading the duel stat alone.
+        session = _duel_game(
+            chi={P1: 5, P2: 2},
+            held=(_focus_card("P2-fv0", P2, 0), _focus_card("P1-fv0", P1, 0)),
+        )
         _challenge(session)
+        # A Chi bonus on the weaker duelist turns the duel around, so the totals read the stat as it
+        # stands rather than the number printed on the card.
+        apply_effect(
+            session.game,
+            GrantModifier(
+                source_id="challenger",
+                target_id="rival",
+                stat=Stat.CHI,
+                amount=4,
+                duration=Duration.UNTIL_END_OF_TURN,
+            ),
+        )
         _strike_out(session)
 
-        assert session.game.duel.outcome.totals == {P1: 5, P2: 2}
-        assert session.game.duel.outcome.winner is P1
+        assert session.game.duel.outcome.totals == {P1: 5, P2: 6}
+        assert session.game.duel.outcome.winner is P2
 
 
 def test_the_duel_stat_comes_from_the_ruleset(monkeypatch):
@@ -205,6 +236,14 @@ def test_the_duel_stat_comes_from_the_ruleset(monkeypatch):
         assert session.game.duel.outcome.winner is P2
 
 
+def _resume_next(game, step: type) -> None:
+    """Run the next queued duel step, asserting it is the one the CR puts here. Named rather than
+    popped blind, so a change to the push order fails on the step it reordered."""
+    item = game.stack.pop()
+    assert isinstance(item, step)
+    item.resume(game)
+
+
 def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     # The CR discards the focused cards as the duel's last step, after its outcome and after the
     # consequences that may alter it, so a consequence reads a card that is still in the area.
@@ -214,15 +253,15 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     procedure.focus(game, P2, focus_token("P2-fv1"))
     procedure.strike(game, P2)
 
-    game.stack.pop().resume(game)  # reveal
-    game.stack.pop().resume(game)  # decide
+    _resume_next(game, resolution.RevealFocusedCards)
+    _resume_next(game, resolution.DecideTheDuel)
 
     outcome = game.duel.outcome
     assert outcome.resolved and outcome.winner is P2
     assert [held.id for held in procedure.focused_cards(game, P2)] == ["P2-fv1"]
     assert game.duel.step is DuelStep.RESOLUTION
 
-    game.stack.pop().resume(game)  # end
+    _resume_next(game, resolution.EndTheDuel)
 
     assert game.duel.step is DuelStep.ENDED
     assert game.duel.outcome == outcome
@@ -319,40 +358,37 @@ def test_a_duel_that_ended_early_drops_its_own_steps_and_nothing_else():
         assert session.game.stack == [marker]
 
 
+def _accept_the_challenge(game, source_id, chosen, seat):
+    """The refusable challenge's resolver: a yes starts the duel, a no does nothing."""
+    return [StartDuel(source_id, chosen[0], source_id)] if chosen else []
+
+
 def test_a_refused_challenge_starts_no_duel():
-    @choice_resolver("probe_accept_challenge")
-    def _accept(game, source_id, chosen, seat):
-        return [StartDuel(source_id, chosen[0], source_id)] if chosen else []
+    with (
+        probe_resolver("probe_accept_challenge", _accept_the_challenge),
+        probe_ability(REFUSABLE_PROBE, REFUSABLE_ABILITY),
+    ):
+        session = _duel_game(probe=REFUSABLE_PROBE)
+        _challenge(session)
 
-    try:
-        with probe_ability(REFUSABLE_PROBE, REFUSABLE_ABILITY):
-            session = _duel_game(probe=REFUSABLE_PROBE)
-            _challenge(session)
+        session.submit(P2, DecisionResponse(()))
 
-            session.submit(P2, DecisionResponse(()))
-
-            assert session.game.duel is None
-            assert not [key for key in session.game.table.zones if key.role is ZoneRole.FOCUS]
-    finally:
-        CHOICE_RESOLVERS.pop("probe_accept_challenge", None)
+        assert session.game.duel is None
+        assert not [key for key in session.game.table.zones if key.role is ZoneRole.FOCUS]
 
 
 def test_an_accepted_challenge_opens_the_focusing():
-    @choice_resolver("probe_accept_challenge")
-    def _accept(game, source_id, chosen, seat):
-        return [StartDuel(source_id, chosen[0], source_id)] if chosen else []
+    with (
+        probe_resolver("probe_accept_challenge", _accept_the_challenge),
+        probe_ability(REFUSABLE_PROBE, REFUSABLE_ABILITY),
+    ):
+        session = _duel_game(probe=REFUSABLE_PROBE, held=(_focus_card("P2-fv1", P2, 1),))
+        _challenge(session)
 
-    try:
-        with probe_ability(REFUSABLE_PROBE, REFUSABLE_ABILITY):
-            session = _duel_game(probe=REFUSABLE_PROBE, held=(_focus_card("P2-fv1", P2, 1),))
-            _challenge(session)
+        session.submit(P2, DecisionResponse(("rival",)))
 
-            session.submit(P2, DecisionResponse(("rival",)))
-
-            assert session.game.duel is not None
-            assert session.game.duel.step is DuelStep.FOCUSING
-    finally:
-        CHOICE_RESOLVERS.pop("probe_accept_challenge", None)
+        assert session.game.duel is not None
+        assert session.game.duel.step is DuelStep.FOCUSING
 
 
 def test_a_duel_step_outside_a_duel_is_refused():

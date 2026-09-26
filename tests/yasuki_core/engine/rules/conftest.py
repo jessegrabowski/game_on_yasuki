@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import pytest
 
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
@@ -32,6 +33,20 @@ def reacting():
     for event, printed_id in registered:
         for by_card in triggers._TRIGGERS.get(event, {}).values():
             by_card.pop(printed_id, None)
+
+
+@contextmanager
+def probe_resolver(key: str, resolver):
+    """Register ``resolver`` under ``key`` for the body of a ``with`` and remove it after.
+
+    The resolver registry is module-global and refuses a second registration under one key, so a
+    resolver a raising test left behind fails every later test that registers the same probe.
+    """
+    CHOICE_RESOLVERS[key] = resolver
+    try:
+        yield
+    finally:
+        CHOICE_RESOLVERS.pop(key, None)
 
 
 @contextmanager
