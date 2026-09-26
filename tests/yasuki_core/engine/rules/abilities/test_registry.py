@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     ENTRY_STATES,
     GRANTED_ABILITIES,
     KEYWORD_ABILITIES,
+    LOCATION_ABILITIES,
     EntryState,
     abilities_for,
     ability_for,
@@ -21,11 +22,12 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
     register_invest,
     register_keyword_ability,
+    register_location_ability,
 )
 
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
 from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.game_pieces.cards import L5RCard
@@ -438,3 +440,46 @@ def test_ability_registrations_lists_what_is_in_force_under_one_ruleset():
         )
     finally:
         _ABILITIES.pop("scope_probe")
+
+
+@pytest.fixture
+def location_abilities():
+    before = dict(LOCATION_ABILITIES)
+    yield
+    LOCATION_ABILITIES.clear()
+    LOCATION_ABILITIES.update(before)
+
+
+@pytest.mark.usefixtures("location_abilities")
+def test_a_location_ability_joins_every_card_sitting_there_and_leaves_with_it():
+    plain = _ABILITIES["millet_farm"][0]
+    conferred = replace(plain, key="probe", located_at=(CardLocation.HAND,), from_location=True)
+    register_location_ability(conferred)
+    game = two_seat_game()
+    held = fate_card("held", PlayerId.P1)
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(register(game.table, held))
+    farm = put_in_play(game, holding("farm", printed_id="millet_farm"))
+
+    assert abilities_for(game, held) == (conferred,)
+    assert abilities_for(game, farm) == (plain,)
+    assert ability_for(game, held, "probe").from_rulebook
+
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].remove(held)
+    game.table.battlefield.add(held)
+
+    assert abilities_for(game, held) == ()
+
+
+@pytest.mark.usefixtures("location_abilities")
+def test_a_location_ability_must_be_marked_and_keyed_and_unique_where_it_sits():
+    plain = replace(_ABILITIES["millet_farm"][0], located_at=(CardLocation.HAND,))
+
+    with pytest.raises(ValueError, match="marked from_location"):
+        register_location_ability(replace(plain, key="probe"))
+    with pytest.raises(ValueError, match="needs a key"):
+        register_location_ability(replace(plain, from_location=True))
+
+    register_location_ability(replace(plain, key="probe", from_location=True))
+
+    with pytest.raises(ValueError, match="hand already confers an ability keyed 'probe'"):
+        register_location_ability(replace(plain, key="probe", from_location=True))

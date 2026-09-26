@@ -630,7 +630,7 @@ def playable(
 
 
 def _activated(location: CardLocation, ability: Ability) -> bool:
-    return location is not CardLocation.HAND or ability.from_keyword is not None
+    return location is not CardLocation.HAND or ability.from_rulebook
 
 
 def _played(location: CardLocation, ability: Ability) -> bool:

@@ -34,6 +34,7 @@ yasuki_core.engine.rules.abilities.registry
     register_interrupt
     register_invest
     register_keyword_ability
+    register_location_ability
 
 .. automodule:: yasuki_core.engine.rules.abilities.registry
     :members:

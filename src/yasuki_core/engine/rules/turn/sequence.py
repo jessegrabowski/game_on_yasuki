@@ -476,7 +476,7 @@ def _announce_resolution(game: GameState) -> None:
         seat=game.action_seat,
         card_id=getattr(game.action, "card_id", None),
         favor=is_favor_action(game),
-        printed=ability is not None and ability.from_keyword is None,
+        printed=ability is not None and not ability.from_rulebook,
     )
     triggers.fire(game, resolved)
 

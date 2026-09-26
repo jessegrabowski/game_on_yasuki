@@ -567,6 +567,8 @@ NOT_KEYED_BY_CARD = {
     "WINDOWS",  # the event types a step fires before committing
     "_CONDITIONS",  # keyed by Condition: what a conditional modifier asks of a card
     "KEYWORD_ABILITIES",  # keyed by keyword: the abilities one confers on every card carrying it
+    "LOCATION_ABILITIES",  # keyed by location: the abilities it confers on every card sitting there
+    "_LOCATION_ZONE_ROLES",  # the zone role each location off the battlefield names
 }
 
 
