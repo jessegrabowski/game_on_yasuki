@@ -30,6 +30,7 @@ yasuki_core.engine.rules.vocabulary.decisions
     DecisionRequest
     DecisionResponse
     DiscardToHandSize
+    FocusOrStrike
     LeaveBowed
     PlaceLegacy
 
@@ -39,6 +40,8 @@ yasuki_core.engine.rules.vocabulary.decisions
 
     assignment
     assignment_token
+    focus_source
+    focus_token
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.decisions
     :members:

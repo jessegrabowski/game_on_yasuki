@@ -587,6 +587,51 @@ class ChooseBattlefield(DecisionRequest):
         return _chooses_exactly_one(self, response)
 
 
+# What a seat answers :class:`~.FocusOrStrike` with: the top of its own Fate deck, taken unseen, or
+# the strike that ends the focusing. A card in hand is named by :func:`~.focus_token` instead.
+DECK_TOP = "deck:top"
+STRIKE = "strike"
+HAND_SOURCE = "hand:"
+
+
+def focus_token(card_id: str) -> str:
+    """The candidate string naming the hand card ``card_id`` as something to focus: how
+    :class:`~.FocusOrStrike` offers one, told apart from ``deck:top`` and ``strike`` by its prefix
+    rather than by elimination."""
+    return f"{HAND_SOURCE}{card_id}"
+
+
+def focus_source(token: str) -> str:
+    """The hand card :func:`~.focus_token` encoded. Raise ``ValueError`` for any other token."""
+    if not token.startswith(HAND_SOURCE) or token == HAND_SOURCE:
+        raise ValueError(f"not a hand focus token: {token!r}")
+    return token[len(HAND_SOURCE) :]
+
+
+@dataclass(frozen=True, slots=True)
+class FocusOrStrike(DecisionRequest):
+    """The seat whose option it is must focus one card or strike (CR, Duel).
+
+    The candidates are source tokens rather than card ids, because focusing off the top of the deck
+    names no card the seat may see: :func:`~.focus_token` for each card in hand, ``deck:top``, and
+    ``strike``. Read a choice by comparing it against those rather than by splitting the string.
+
+    A seat with nothing left to focus is never asked, so a request that exists always offers a real
+    choice. Striking is not a decline: it is the answer that ends the focusing, so it sits among the
+    candidates rather than on a decline button.
+    """
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return "Focus a card or strike"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Focus"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+
 @dataclass(frozen=True, slots=True)
 class ChooseFortificationProvince(DecisionRequest):
     """The seat must choose which of its Provinces a Fortification attaches to.

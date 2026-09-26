@@ -57,6 +57,7 @@ from yasuki_core.engine.rules.effects import (
     PayFavorCost,
     PutIntoPlay,
     SpendOncePerTurn,
+    StartDuel,
     SpendSeatOncePerTurn,
     PayGold,
     IgnoreHonorRequirements,
@@ -88,6 +89,10 @@ EFFECTS = [
         "the resolution at battlefield 0 does not bow P1",
     ),
     (Straighten("farm_1"), "straighten farm_1"),
+    (
+        StartDuel("kakita", "bayushi", "sanctioned_duel"),
+        "duel: kakita challenges bayushi",
+    ),
     (Dishonor("hero_1", PlayerId.P2), "dishonor hero_1"),
     (Negated(Bow("hero_1")), "negated: bow hero_1"),
     (RevokeGrants("ground"), "ground revokes its grants"),

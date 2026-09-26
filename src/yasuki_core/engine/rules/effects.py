@@ -937,6 +937,49 @@ class Fear(AttackEffect):
 
 
 @dataclass(frozen=True, slots=True)
+class StartDuel(Effect):
+    """Have ``challenger`` challenge ``challenged`` to a duel, and open its focusing.
+
+    The seats are the two Personalities' own, so a card creating a duel names the duelists and
+    nothing else.
+
+    Attributes
+    ----------
+    challenger : str
+        The id of the Personality issuing the challenge.
+    challenged : str
+        The id of the Personality challenged, whose seat has the first option to focus or strike.
+    source_card_id : str
+        The id of the card creating the duel, which the duel records so a consequence can name what
+        set it.
+    """
+
+    challenger: str
+    challenged: str
+    source_card_id: str
+
+    def describe(self) -> str:
+        return f"duel: {self.challenger} challenges {self.challenged}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        # The procedure imports this module for the effects a duel resolves, so importing it here
+        # would close that cycle.
+        from yasuki_core.engine.rules.duel.procedure import declare_duel
+
+        challenger = game.table.cards_by_id[self.challenger]
+        challenged = game.table.cards_by_id[self.challenged]
+        declare_duel(
+            game,
+            challenger=challenger.owner,
+            challenged=challenged.owner,
+            challenger_duelist=challenger.id,
+            challenged_duelist=challenged.id,
+            source=self.source_card_id,
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class GrantPriority(Effect):
     """Hand ``seat`` the opportunity to act in the round now open, overriding the seat that round
     started on. A card naming the first actor in a round still to open delays this to that round's
