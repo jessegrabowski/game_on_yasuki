@@ -99,6 +99,7 @@ deferred through `Then` instead.
    PlaceInProvince
    PlaceOnDeck
    PutIntoPlay
+   ReshuffleFromHand
    RangedAttack
    RecruitCard
    RefillProvince

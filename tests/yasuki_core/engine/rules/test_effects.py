@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.effects import (
     PlaceInProvince,
     Effect,
     Rehonor,
+    ReshuffleFromHand,
     RevokeGrants,
     seppuku,
     TakeFavor,
@@ -774,6 +775,20 @@ def test_a_named_candidate_that_left_the_hand_is_not_discarded():
 
     assert game.pending is None
     assert _p2_hand(game) == ["P2-h1"]
+
+
+def test_a_reshuffle_moves_random_hand_cards_into_the_fate_deck_the_same_way_each_seed():
+    def reshuffle() -> tuple[list[str], list[str]]:
+        game = _p2_holding(3)
+        resolve_effects(game, [ReshuffleFromHand(PlayerId.P2, 1)])
+        deck = game.table.decks[DeckKey(PlayerId.P2, Side.FATE)].cards
+        return _p2_hand(game), [card.id for card in deck]
+
+    kept, deck = reshuffle()
+
+    assert len(kept) == 2 and len(deck) == 1
+    assert set(kept) | set(deck) == {"P2-h0", "P2-h1", "P2-h2"}
+    assert reshuffle() == (kept, deck)
 
 
 def test_discarding_cards_as_a_cost_needs_enough_of_them_in_hand():

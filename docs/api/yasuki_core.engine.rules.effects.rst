@@ -68,6 +68,7 @@ yasuki_core.engine.rules.effects
     RecruitCard
     RefillProvince
     Rehonor
+    ReshuffleFromHand
     RevealProvinces
     RevokeGrants
     Show

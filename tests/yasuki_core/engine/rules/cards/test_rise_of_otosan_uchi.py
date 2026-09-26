@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -28,9 +28,17 @@ from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_options
-from yasuki_core.engine.rules.effects import Bow, Fear, Move, Straighten, TakeFavor
+from yasuki_core.engine.rules.abilities.idioms import PITCH
+from yasuki_core.engine.rules.effects import (
+    Bow,
+    DiscardFromHand,
+    Fear,
+    Move,
+    Straighten,
+    TakeFavor,
+)
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import fire, resolve_effects
+from yasuki_core.engine.rules.triggers import enforce_state_based_actions, fire, resolve_effects
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.projection import project
@@ -39,7 +47,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import Element, Side
 from yasuki_core.game_pieces.prints import FatePrint, RingPrint
 
 from yasuki_core.engine import ops
@@ -1371,3 +1379,189 @@ def test_master_your_thoughts_on_a_bowed_target_looks_at_nothing():
     assert session.game.look is None
     assert session.game.pending is None
     assert _hand(session, P1) == []
+
+
+# --- Dark Ring of the Void (Experienced) ---
+
+
+def _ring_card(card_id: str, printed_id: str, element: Element) -> L5RCard:
+    return L5RCard.of(
+        RingPrint,
+        id=card_id,
+        name=printed_id,
+        printed_id=printed_id,
+        side=Side.FATE,
+        owner=P1,
+        element=element,
+    )
+
+
+def _void_game(*, in_play: bool, held: tuple[L5RCard, ...] = (), discards: int = 2):
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    ring = register(state, _ring_card("dv", "dark_ring_of_the_void_experienced", Element.VOID))
+    if in_play:
+        put_in_play(state, ring)
+    else:
+        state.zones[ZoneKey(P1, ZoneRole.HAND)].add(ring)
+    for card in held:
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    pile = state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    for index in range(discards):
+        pile.add(register(state, fate_card(f"gone{index}", P1)))
+    return EngineSession.start(state, P1)
+
+
+def test_the_dark_void_enters_as_the_only_card_in_hand_and_costs_three_honor():
+    session = _void_game(in_play=False)
+    before = _honor(session, P1)
+
+    session.act(P1, PlayStrategy("dv", "enter"))
+    pay(session, P1)
+
+    assert session.game.table.cards_by_id["dv"] in session.game.table.battlefield.cards
+    assert _honor(session, P1) == before - 3
+
+
+def test_the_dark_void_is_withheld_from_a_hand_holding_another_card():
+    session = _void_game(in_play=False, held=(fate_card("other", P1),))
+
+    assert PlayStrategy("dv", "enter") not in session.legal_actions(P1)
+
+
+def test_the_dark_void_banishes_two_discards_to_make_a_player_discard_at_random():
+    held = tuple(fate_card(f"theirs{index}", P2) for index in range(3))
+    session = _void_game(in_play=True, held=held)
+
+    session.act(P1, ActivateAbility("dv", "void"))
+    session.submit(P1, DecisionResponse(("gone0", "gone1")))
+    assert isinstance(session.game.pending, ChooseOption)
+    session.submit(P1, DecisionResponse((session.game.table.seats[P2].name,)))
+
+    assert session.game.pending is None
+    assert session.game.table.cards_by_id["dv"].bowed
+    discarded = session.game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards
+    assert len(_hand(session, P2)) == 2 and len(discarded) == 1
+    banished = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)].cards
+    assert {card.id for card in banished} == {"gone0", "gone1"}
+
+
+def test_the_dark_void_is_withheld_without_two_cards_to_banish():
+    session = _void_game(in_play=True, held=(fate_card("theirs", P2),), discards=1)
+
+    assert ActivateAbility("dv", "void") not in session.legal_actions(P1)
+
+
+# --- Legacy of Fudo ---
+
+
+def _fudo_game(*, in_play: bool, mine: int = 0, theirs: int = 0, deck: int = 2):
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    fudo = register(state, _ring_card("fudo", "legacy_of_fudo", Element.VOID))
+    if in_play:
+        put_in_play(state, fudo)
+    else:
+        state.zones[ZoneKey(P1, ZoneRole.HAND)].add(fudo)
+    for seat, count in ((P1, mine), (P2, theirs)):
+        hand = state.zones[ZoneKey(seat, ZoneRole.HAND)]
+        for index in range(count):
+            hand.add(register(state, fate_card(f"{seat.name}-h{index}", seat)))
+        state.decks[DeckKey(seat, Side.FATE)].cards = [
+            register(state, fate_card(f"{seat.name}-d{index}", seat)) for index in range(deck)
+        ]
+    return EngineSession.start(state, P1)
+
+
+def test_fudo_enters_while_the_opponent_holds_nothing_and_costs_one_honor():
+    session = _fudo_game(in_play=False)
+    before = _honor(session, P1)
+
+    session.act(P1, PlayStrategy("fudo", "enter"))
+    pay(session, P1)
+
+    assert session.game.table.cards_by_id["fudo"] in session.game.table.battlefield.cards
+    assert _honor(session, P1) == before - 1
+
+
+def test_fudo_is_withheld_while_the_opponent_holds_a_card():
+    session = _fudo_game(in_play=False, theirs=1)
+
+    assert PlayStrategy("fudo", "enter") not in session.legal_actions(P1)
+
+
+def test_fudo_enters_in_the_dynasty_phase_too():
+    session = _fudo_game(in_play=False)
+    end_phase(session)
+    end_phase(session)
+
+    assert PlayStrategy("fudo", "enter") in session.legal_actions(P1)
+
+
+def test_fudo_is_withheld_while_no_player_holds_a_card():
+    session = _fudo_game(in_play=True)
+
+    assert ActivateAbility("fudo", "fudo") not in session.legal_actions(P1)
+
+
+def test_fudo_reshuffles_a_random_card_of_the_target_into_their_deck_and_draws_two():
+    session = _fudo_game(in_play=True, theirs=2)
+
+    session.act(P1, ActivateAbility("fudo", "fudo"))
+    session.submit(P1, DecisionResponse((session.game.table.seats[P2].name,)))
+
+    assert session.game.pending is None
+    assert len(_hand(session, P2)) == 3
+    assert len(session.game.table.decks[DeckKey(P2, Side.FATE)].cards) == 1
+
+
+def test_fudo_pitched_from_hand_is_discarded_and_costs_one_honor():
+    session = _fudo_game(in_play=False, theirs=2)
+    before = _honor(session, P1)
+
+    session.act(P1, PlayStrategy("fudo", PITCH))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse((session.game.table.seats[P2].name,)))
+
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["fudo"]
+    assert _honor(session, P1) == before - 1
+
+
+def test_fudo_discarded_by_the_rulebook_costs_no_honor():
+    session = _fudo_game(in_play=False)
+    before = _honor(session, P1)
+
+    resolve_effects(
+        session.game,
+        [DiscardFromHand(P1, 1, Rulebook.MAXIMUM_HAND_SIZE, P1, candidates=("fudo",))],
+    )
+
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["fudo"]
+    assert _honor(session, P1) == before
+
+
+def _ring_session_with_four_elements() -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    for element in (Element.AIR, Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(state, register(state, _ring_card(element.name, "generic_ring", element)))
+    return EngineSession.start(state, P1)
+
+
+@pytest.mark.parametrize(
+    "printed_id, wins",
+    [
+        ("generic_ring", True),
+        ("dark_ring_of_the_void_experienced", False),
+        ("legacy_of_fudo", False),
+    ],
+)
+def test_only_a_counting_ring_completes_an_enlightenment(printed_id, wins):
+    session = _ring_session_with_four_elements()
+    put_in_play(session.game, _ring_card("fifth", printed_id, Element.VOID))
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.game_over is wins

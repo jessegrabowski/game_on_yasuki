@@ -4,7 +4,9 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     ask_whose_honor_moves,
     declarable_gold,
+    register_entry,
     register_event_entry,
+    register_ring,
 )
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
@@ -30,7 +32,12 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     top_of_deck,
 )
-from yasuki_core.engine.rules.board.seats import cards_in_play
+from yasuki_core.engine.rules.board.seats import (
+    cards_in_hand,
+    cards_in_play,
+    opposing_seats,
+    seat_named,
+)
 from yasuki_core.engine.rules.rulebook.looks import TAKE_ONE_AND_SHUFFLE
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
@@ -38,6 +45,7 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
     AskAmount,
+    AskOption,
     AttackEffect,
     Banish,
     Bow,
@@ -45,6 +53,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Destroy,
     Discard,
+    DiscardFromHand,
     DrawCard,
     Effect,
     Fear,
@@ -55,6 +64,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
     MoveToDeck,
     Negated,
+    ReshuffleFromHand,
     ShuffleDeck,
     SpendOncePerTurn,
     Then,
@@ -69,10 +79,11 @@ from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.state import GameState, used_this_turn
+from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, Straightened
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay, Straightened
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint, RingPrint
@@ -364,6 +375,100 @@ register_ability(
 )
 
 
+# --- Dark Ring of the Void (Experienced) ---
+
+DARK_VOID_HONOR_LOSS = 3
+DARK_VOID_BANISHED = 2
+
+
+def _dark_ring_of_the_void_experienced_condition(game: GameState, source: L5RCard) -> bool:
+    """ "If this is the only card in your hand when announcing this action." Read as no other card
+    in hand, since once announced the Ring is in the resolution area rather than the hand."""
+    return all(card.id == source.id for card in cards_in_hand(game, source.owner))
+
+
+def _dark_ring_of_the_void_experienced_entry_effects(
+    game: GameState, source: L5RCard
+) -> list[Effect]:
+    return [GainHonor(source.owner, -DARK_VOID_HONOR_LOSS, source_id=source.id)]
+
+
+register_entry(
+    "dark_ring_of_the_void_experienced",
+    condition=_dark_ring_of_the_void_experienced_condition,
+    extra_effects=_dark_ring_of_the_void_experienced_entry_effects,
+    key="enter",
+)
+register_no_enlightenment("dark_ring_of_the_void_experienced")
+
+
+def _dark_ring_of_the_void_experienced_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Bow the Ring and banish two cards from either of your discard piles. The banish is written
+    as "X to Y" after the colon, which this engine reads as part of the cost."""
+    piles = tuple(
+        card.id
+        for role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD)
+        for card in game.table.zones[ZoneKey(source.owner, role)].cards
+    )
+    return [
+        *bow_cost(game, source),
+        Choose(
+            source.owner,
+            piles,
+            DARK_VOID_BANISHED,
+            DARK_VOID_BANISHED,
+            "dark_ring_of_the_void_experienced_banish",
+            source.id,
+        ),
+    ]
+
+
+@choice_resolver("dark_ring_of_the_void_experienced_banish", prompt="Banish two cards")
+def _resolve_dark_ring_of_the_void_experienced_banish(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Banish(card_id) for card_id in chosen]
+
+
+def _dark_ring_of_the_void_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Name the target player."""
+    names = tuple(info.name for info in game.table.seats.values())
+    return [
+        AskOption(
+            source.owner,
+            names,
+            "Who discards a card at random?",
+            "dark_ring_of_the_void_experienced",
+            source.id,
+        )
+    ]
+
+
+@choice_resolver("dark_ring_of_the_void_experienced")
+def _resolve_dark_ring_of_the_void_experienced(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    named = seat_named(game, chosen[0])
+    return [DiscardFromHand(named, 1, seat, None)]
+
+
+register_ring(
+    "dark_ring_of_the_void_experienced",
+    ability=Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=_dark_ring_of_the_void_experienced_cost,
+        targets=itself,
+        effects=_dark_ring_of_the_void_experienced_effects,
+        hits_every_target=True,
+        key="void",
+        keywords=frozenset({keywords.VOID}),
+    ),
+    pitch=None,
+)
+
+
 # --- Doji Yuten ---
 
 
@@ -457,6 +562,91 @@ register_ability(
         targeting_message="your Holding",
         effects=_kitsu_watanabe_experienced_effects,
     ),
+)
+
+
+# --- Legacy of Fudo ---
+
+FUDO_HONOR_LOSS = 1
+FUDO_RESHUFFLED = 1
+FUDO_DRAWN = 2
+FUDO_PITCH = (
+    "Discard this Ring from your hand to target a player with at least one card in their hand."
+)
+
+
+def _legacy_of_fudo_condition(game: GameState, source: L5RCard) -> bool:
+    """ "If your opponent has no cards in their hand." """
+    return not any(cards_in_hand(game, seat) for seat in opposing_seats(game, source.owner))
+
+
+def _legacy_of_fudo_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:
+    """The Honor lost when its own action puts it into play."""
+    return [GainHonor(source.owner, -FUDO_HONOR_LOSS, source_id=source.id)]
+
+
+register_entry(
+    "legacy_of_fudo",
+    timing=(ActionTiming.OPEN, ActionTiming.DYNASTY),
+    condition=_legacy_of_fudo_condition,
+    extra_effects=_legacy_of_fudo_entry_effects,
+    key="enter",
+)
+register_no_enlightenment("legacy_of_fudo")
+
+
+@on(CardDiscarded, "legacy_of_fudo")
+def _legacy_of_fudo_card_discarded(ctx: TriggerContext) -> list[Effect]:
+    """After an action discards this Ring, lose 1 Honor. A discard the rulebook or a trait causes is
+    no action's."""
+    if ctx.event.card_id != ctx.card.id or not isinstance(ctx.event.cause, PlayerId):
+        return []
+    return [GainHonor(ctx.card.owner, -FUDO_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+def _legacy_of_fudo_players(game: GameState) -> tuple[PlayerId, ...]:
+    """The players with at least one card in their hand."""
+    return tuple(seat for seat in game.table.seats if cards_in_hand(game, seat))
+
+
+def _legacy_of_fudo_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [source.id] if _legacy_of_fudo_players(game) else []
+
+
+def _legacy_of_fudo_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Name the target player, one with at least one card in their hand."""
+    names = tuple(game.table.seats[seat].name for seat in _legacy_of_fudo_players(game))
+    if not names:
+        return []
+    return [
+        AskOption(
+            source.owner, names, "Who reshuffles a card and draws two?", "legacy_of_fudo", source.id
+        )
+    ]
+
+
+@choice_resolver("legacy_of_fudo")
+def _resolve_legacy_of_fudo(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    named = seat_named(game, chosen[0])
+    return [
+        ReshuffleFromHand(named, FUDO_RESHUFFLED),
+        *(DrawCard(named) for _ in range(FUDO_DRAWN)),
+    ]
+
+
+register_ring(
+    "legacy_of_fudo",
+    ability=Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        targets=_legacy_of_fudo_targets,
+        effects=_legacy_of_fudo_effects,
+        hits_every_target=True,
+        key="fudo",
+    ),
+    pitch=FUDO_PITCH,
 )
 
 

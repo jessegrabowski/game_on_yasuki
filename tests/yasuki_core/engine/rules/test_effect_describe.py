@@ -72,6 +72,7 @@ from yasuki_core.engine.rules.effects import (
     Show,
     ShuffleDeck,
     Rehonor,
+    ReshuffleFromHand,
     RevokeGrants,
     Straighten,
     Then,
@@ -284,6 +285,7 @@ EFFECTS = [
         DiscardFromHand(PlayerId.P2, 2, PlayerId.P1, None),
         "P2 discards 2 from hand, at random",
     ),
+    (ReshuffleFromHand(PlayerId.P2, 1), "P2 reshuffles 1 from hand at random"),
     (
         Ask(PlayerId.P1, "Destroy Rice Farm to straighten Kobune?", "rice_farm", ("rice_1",)),
         "P1 is asked: Destroy Rice Farm to straighten Kobune?",
