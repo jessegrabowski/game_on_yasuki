@@ -4,7 +4,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.duel.focusing import focus_value, focused_cards
+from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.procedure import duel_in_progress
 from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelStep, DuelWork
 from yasuki_core.engine.rules.effects import Discard
@@ -57,10 +57,11 @@ def reveal_focused_cards(game: GameState) -> None:
 
 
 def duel_total(game: GameState, duel: DuelRecord, seat: PlayerId) -> int:
-    """What ``seat``'s Personality totals: its duel stat plus the Focus Values of the cards ``seat``
-    focused (CR, Duel)."""
+    """What ``seat``'s Personality totals: its duel stat plus whatever its focused cards add (CR,
+    Duel). How much they add belongs to the focus procedure, since an arc may have applied each
+    Focus Value as its card was focused."""
     duelist = game.table.cards_by_id[duel.duelist_of(seat)]
-    return duel_stat(game, duelist) + sum(focus_value(card) for card in focused_cards(game, seat))
+    return duel_stat(game, duelist) + ruleset.ACTIVE.focus_procedure.focus_total(game, duel, seat)
 
 
 def duel_stat(game: GameState, card: L5RCard) -> int:

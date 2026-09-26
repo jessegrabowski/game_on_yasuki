@@ -60,6 +60,11 @@ class FocusProcedure(Protocol):
         """Focus the card ``token`` names for ``seat``, and return the effects that follow."""
         ...
 
+    def focus_total(self, game: GameState, duel: DuelRecord, seat: PlayerId) -> int:
+        """What ``seat``'s focused cards add to its duel stat at the reveal. Zero for a procedure
+        that applied each Focus Value as its card was focused rather than totaling at the end."""
+        ...
+
     def cleanup(self, game: GameState, duel: DuelRecord) -> list[Effect]:
         """The effects the duel's ending owes this procedure, read once the outcome is recorded."""
         ...
@@ -99,6 +104,9 @@ class TwentyFestivalsFocusing:
         card.clear_peekers()
         card.add_peeker(seat)
         return []
+
+    def focus_total(self, game: GameState, duel: DuelRecord, seat: PlayerId) -> int:
+        return sum(focus_value(card) for card in focused_cards(game, seat))
 
     def cleanup(self, game: GameState, duel: DuelRecord) -> list[Effect]:
         return []
