@@ -155,8 +155,9 @@ class InterruptingEffect(Effect, ABC):
     __slots__ = ()
 
     @abstractmethod
-    def request(self, game: GameState) -> DecisionRequest:
-        """The decision to put to the seat."""
+    def request(self, game: GameState) -> DecisionRequest | None:
+        """The decision to put to the seat, or None when the work it queued needs no answer, which
+        then runs as the stack drains, ahead of the rest of the cascade."""
 
     def is_interruptible(self, game: GameState) -> bool:
         """False: a question the action asks is nothing to interrupt, and what its answer produces
@@ -2074,7 +2075,8 @@ class RecruitCard(InterruptingEffect):
     def perform(self, game: GameState) -> list[GameEvent]:
         return []
 
-    def request(self, game: GameState) -> DecisionRequest:
+    def request(self, game: GameState) -> DecisionRequest | None:
+        """The payment the recruit asks for, or None for a card that costs nothing."""
         # Announcing a recruit builds a payment, and the payment loop is written in the effects
         # this module defines -- so the entry point is reached lazily whatever module holds it.
         from yasuki_core.engine.rules.rulebook.recruit import announce_recruit
