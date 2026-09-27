@@ -66,6 +66,13 @@ class L5RCard:
         printed = {name: fields.pop(name) for name in list(fields) if name in printed_names}
         return cls(printed=print_cls(**printed), **fields)
 
+    # Declared rather than forwarded through __getattr__: every registry lookup reads it.
+    @property
+    def printed_id(self) -> str:
+        """The printed id of the face this copy presents."""
+        face = self.back_printed if self.showing_back and self.back_printed else self.printed
+        return face.printed_id
+
     def __getattr__(self, name: str):
         """Answer a printed characteristic off the face this copy presents."""
         # showing_back is declared after printed and back_printed, so its slot existing means all
