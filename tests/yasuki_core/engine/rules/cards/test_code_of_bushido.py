@@ -8,7 +8,6 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 
 from tests.yasuki_core.engine.builders import (
     attachment,
-    pay,
     personality,
     put_in_play,
     register,
@@ -38,7 +37,6 @@ def _hand_an_attachment(state, card):
 
 def _equip(session, card_id, target_id):
     session.act(P1, Equip(card_id))
-    pay(session, P1)
     session.submit(P1, DecisionResponse((target_id,)))
 
 

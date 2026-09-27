@@ -77,7 +77,6 @@ def _reach_the_combat_segment(session: EngineSession, holder: PlayerId) -> None:
 
 def _offered_targets(session: EngineSession, holder: PlayerId) -> tuple[str, ...]:
     session.act(holder, PlayStrategy("refugees"))
-    session.submit(holder, DecisionResponse())
     return session.game.pending.candidates
 
 

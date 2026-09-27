@@ -575,7 +575,6 @@ def test_a_loss_a_card_prevents_is_not_offered_to_the_honor_interrupt(mishime, o
     session.game.table.cards_by_id["disgraced"].dishonor()
 
     session.act(P1, PlayStrategy("forget"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse(("disgraced",)))
 
     assert (PlayInterrupt("P2-honor0", "honor") in session.legal_actions(P2)) is offered
@@ -778,7 +777,6 @@ def test_a_negated_effect_resolves_as_nothing_and_the_action_goes_on():
     session = _fear_announced({}, strategies=(NEGATOR,), probe="fear_then_honor_probe")
 
     session.act(DEFENDER, PlayInterrupt("negator"))
-    pay(session, DEFENDER)
 
     assert not _guard_bowed(session)
     assert session.game.pending is None
@@ -792,7 +790,6 @@ def test_a_negated_attack_leaves_its_outcome_unreached():
     session.act(ATTACKER, Pass())
 
     session.act(DEFENDER, PlayInterrupt("negator"))
-    pay(session, DEFENDER)
 
     assert not _guard_bowed(session)
     assert session.game.pending is None
@@ -822,7 +819,6 @@ def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
     )
 
     session.act(DEFENDER, PlayInterrupt("okura"))
-    pay(session, DEFENDER)
 
     # The replacement resolves where the Fear stood, so the ability's next effect applies before
     # a reaction to what the replacement did fires, the same as after a rulebook discard. Okura's
@@ -837,7 +833,6 @@ def test_a_played_interrupts_own_effects_resolve_inside_the_step_and_are_not_the
     )
 
     session.act(DEFENDER, PlayInterrupt("probe"))
-    pay(session, DEFENDER)
 
     # The Strategy's own gain and its discard happened inside the step, before the action resolved
     # its gain, and only the action's own gain is on its record.
@@ -1027,16 +1022,19 @@ def test_interrupts_from_both_seats_net_against_the_change_and_never_reverse_it(
 # --- a targeted Interrupt that substitutes the action's target ---
 
 
-def _substitution_game(*, stand_in_bowed: bool = False) -> GameState:
+def _substitution_game(*, stand_in_bowed: bool = False, probe_cost: int = 0) -> GameState:
     """P2's ability is about to resolve against P1's victim, with P1 holding the substitute probe
-    and a second Personality to point the action at."""
+    and a second Personality to point the action at. A probe costing Gold comes with a Holding to
+    pay for it."""
     game = two_seat_game()
+    if probe_cost:
+        put_in_play(game, holding("P1-mine", owner=P1, gold_production=probe_cost))
     source = put_in_play(game, holding("P2-src", owner=P2, printed_id="bow_then_destroy_probe"))
     put_in_play(game, personality("P1-victim"))
     stand_in = put_in_play(game, personality("P1-stand-in"))
     if stand_in_bowed:
         stand_in.bow()
-    _strategy(game.table, "P1-sub", "substitute_probe", P1)
+    _strategy(game.table, "P1-sub", "substitute_probe", P1, gold_cost=probe_cost)
     game.action = ActivateAbility(source.id)
     game.action_seat = P2
     return game
@@ -1085,7 +1083,6 @@ def test_substituting_the_target_resolves_the_whole_ability_against_the_stand_in
 
     action_sequence.perform(game, PlayInterrupt("P1-sub"))
     action_sequence.submit(game, DecisionResponse(("P1-stand-in",)))
-    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
     sequence.run_stack(game)
 
     assert game.pending is None
@@ -1106,10 +1103,10 @@ def test_a_stand_in_the_action_could_not_target_is_not_offered():
     assert "P1-victim" not in _on_the_table(game)
 
 
-def _substitution_session() -> EngineSession:
+def _substitution_session(*, probe_cost: int = 0) -> EngineSession:
     """P2 has announced the probe against P1's victim through a session, so the tape holds the
     action a cancel unwinds to."""
-    table = _substitution_game().table
+    table = _substitution_game(probe_cost=probe_cost).table
     session = EngineSession.start(table, P2)
     session.act(P2, ActivateAbility("P2-src"))
     session.submit(P2, DecisionResponse(("P1-victim",)))
@@ -1132,7 +1129,7 @@ def test_backing_out_of_the_target_question_unwinds_the_interrupt():
 def test_backing_out_of_the_interrupts_payment_unwinds_the_interrupt():
     # The Interrupt is an action of its own on the tape, so a cancel at its payment takes back
     # the Interrupt and leaves P2's action standing beneath the step.
-    session = _substitution_session()
+    session = _substitution_session(probe_cost=1)
     session.act(P1, PlayInterrupt("P1-sub"))
     session.submit(P1, DecisionResponse(("P1-stand-in",)))
     assert isinstance(session.game.pending, ChoosePayment)
@@ -1149,7 +1146,6 @@ def test_the_substitution_replays_to_the_same_board():
     session = _substitution_session()
     session.act(P1, PlayInterrupt("P1-sub"))
     session.submit(P1, DecisionResponse(("P1-stand-in",)))
-    pay(session, P1)
     assert session.game.pending is None
 
     rebuilt = replay(session.log)
@@ -1280,7 +1276,6 @@ def test_an_interrupt_bound_to_an_effect_the_action_never_produces_is_spent_with
         {DEFENDER: 1}, strategies=(("probe", "bow_negating_probe", DEFENDER),)
     )
     session.act(DEFENDER, PlayInterrupt("probe"))
-    pay(session, DEFENDER)
     assert session.game.modifications
     _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
 
@@ -1326,7 +1321,6 @@ def test_a_card_interrupt_answers_the_effect_as_earlier_interrupts_left_it():
     assert _asked(session) is DEFENDER
 
     session.act(DEFENDER, PlayInterrupt("okura"))
-    pay(session, DEFENDER)
 
     assert session.game.pending is None
     assert not _guard_bowed(session)
@@ -1370,7 +1364,6 @@ def test_an_interrupt_answering_every_effect_binds_to_all_of_them():
     resolve_action_effects(game, [GainHonor(P1, 2), Bow(farm.id)])
 
     action_sequence.perform(game, PlayInterrupt("P2-negate"))
-    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
     sequence.run_stack(game)
 
     assert game.pending is None and game.round.kind is not RoundKind.INTERRUPT
@@ -1513,11 +1506,9 @@ def test_a_substituted_ability_resolves_with_the_values_the_step_forecast():
     resolve_action_effects(game, [ResolveAbility("P2-src", "P1-victim").built(game)])
     action_sequence.perform(game, PlayInterrupt("P1-sub"))
     action_sequence.submit(game, DecisionResponse(("P1-stand-in",)))
-    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
     action_sequence.perform(game, PlayInterrupt("P1-honor0", "honor"))
     action_sequence.submit(game, DecisionResponse(("Reduce by 1",)))
     action_sequence.perform(game, PlayInterrupt("P1-gift"))
-    action_sequence.submit(game, DecisionResponse(()))  # the cost of zero
 
     assert game.round.kind is not RoundKind.INTERRUPT and game.pending is None
     assert game.table.seats[P2].honor == 1  # the gift's 1, then the gain of 1 reduced to 0
@@ -1586,4 +1577,6 @@ def test_the_which_effect_question_reads_each_effect_as_it_stands_and_takes_the_
     assert isinstance(which, ChooseInterruptEffect)
     assert which.candidates == ("Fear 4 on P1-left", "Fear 2 on P1-right")
     action_sequence.submit(game, DecisionResponse(("Fear 4 on P1-left",)))
-    assert isinstance(game.pending, ChoosePayment)
+
+    assert left not in game.table.battlefield.cards
+    assert right in game.table.battlefield.cards and right.bowed

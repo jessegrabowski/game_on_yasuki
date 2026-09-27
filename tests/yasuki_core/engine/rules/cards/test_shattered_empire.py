@@ -542,7 +542,6 @@ def test_doji_yasuko_draws_after_a_strategy_gains_a_player_honor():
         session = EngineSession.start(state, P1)
 
         session.act(P1, PlayStrategy("probe"))
-        session.submit(P1, DecisionResponse())
         assert ActivateAbility("yasuko") in session.legal_actions(P1)
         session.act(P1, ActivateAbility("yasuko"))
 
@@ -1287,7 +1286,6 @@ def _void_equip_game(*also_held: L5RCard, holds_favor: bool = False) -> EngineSe
     if holds_favor:
         resolve_effects(session.game, [TakeFavor(P1)])
     session.act(P1, Equip("ashigaru"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse(("bearer",)))
     return session
 
@@ -1301,7 +1299,7 @@ def _void_game(*held: L5RCard, in_play: int) -> EngineSession:
     """P1's "bearer" carrying ``in_play`` Followers, "follower0" upward, and Ring of the Void in
     P1's hand beside ``held``, started with no action taken."""
     state = TableState.empty_two_seat()
-    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(state, register(state, stronghold(P1, gold_production=1)))
     put_in_play(state, personality("bearer", owner=P1))
     for index in range(in_play):
         follower = attachment(f"follower{index}", attachment_type=AttachmentType.FOLLOWER)
@@ -1351,7 +1349,10 @@ _GAIN_HONOR = Ability(
 @pytest.mark.parametrize(
     ("announced", "action"),
     [
-        (attachment("played", attachment_type=AttachmentType.FOLLOWER), Equip("played")),
+        (
+            attachment("played", attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
+            Equip("played"),
+        ),
         (
             L5RCard.of(
                 ActionPrint,
@@ -1360,6 +1361,7 @@ _GAIN_HONOR = Ability(
                 printed_id="probe_gain_honor",
                 side=Side.FATE,
                 owner=P1,
+                gold_cost=1,
             ),
             PlayStrategy("played"),
         ),

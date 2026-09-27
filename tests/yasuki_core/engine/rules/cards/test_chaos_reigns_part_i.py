@@ -38,7 +38,6 @@ from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.builders import (
     datasheet_favor_ability,
-    pay,
     attached,
     attachment,
     end_phase,
@@ -232,7 +231,6 @@ def test_a_caravansary_is_not_offered_for_the_discard_of_your_own_interrupt():
         holding("caravansary", printed_id="caravansary", owner=DEFENDER, gold_production=2),
     )
     session.act(DEFENDER, PlayInterrupt("okura"))
-    pay(session, DEFENDER)
 
     assert session.game.round.kind is not RoundKind.RESPONSE
     assert not any(isinstance(event, CardDiscarded) for event in session.game.action_events)

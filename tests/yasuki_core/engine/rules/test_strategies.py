@@ -7,7 +7,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
-from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseAbilityTarget,
+    ChoosePayment,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -232,22 +236,28 @@ def test_an_untargeted_strategy_still_resolves_before_it_is_discarded():
     assert _discard(session) == [card.id]
 
 
-def test_a_free_strategy_needs_no_payment_and_still_discards():
-    """Nothing to pay is the boundary the payment path can skip over: a Strategy costing zero must
-    still resolve and still leave the hand."""
-    state = TableState.empty_two_seat()
-    put_in_play(state, holding("farm", owner=SEAT, gold_production=0))
-    card = _strategy(state, gold_cost=0)
-    session = EngineSession.start(state, SEAT)
+def test_a_free_strategy_asks_for_its_target_without_a_payment_and_still_discards():
+    session, card = _session(gold_cost=0, production=0)
 
     session.act(SEAT, PlayStrategy(card.id))
-    while session.game.pending is not None:
-        asked = session.game.pending
-        session.submit(asked.seat, DecisionResponse(asked.candidates[:1]))
+    assert isinstance(session.game.pending, ChooseAbilityTarget)
+    session.submit(SEAT, DecisionResponse(("farm",)))
 
     assert session.game.table.cards_by_id["farm"].counters.get(WEALTH.key) == 1
     assert _hand(session) == []
     assert _discard(session) == [card.id]
+
+
+def test_backing_out_of_a_free_strategys_target_leaves_the_card_in_hand():
+    session, card = _session(gold_cost=0)
+    session.act(SEAT, PlayStrategy(card.id))
+
+    assert session.can_cancel(SEAT)
+    session.cancel(SEAT)
+
+    assert _hand(session) == [card.id]
+    assert session.game.pending is None
+    assert PlayStrategy(card.id) in session.legal_actions(SEAT)
 
 
 # Where the played card sat while its own effects ran, recorded by the ability below. A list rather

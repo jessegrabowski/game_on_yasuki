@@ -133,7 +133,6 @@ def test_final_sacrifice_targets_a_yojimbo_and_the_action_goes_for_him_instead()
     assert isinstance(target, ChooseInterruptTarget)
     assert target.candidates == ("yojimbo",)
     session.submit(P1, DecisionResponse(("yojimbo",)))
-    pay(session, P1)
 
     assert session.game.pending is None
     on_the_table = {card.id for card in session.game.table.battlefield.cards}
@@ -170,6 +169,5 @@ def test_the_final_sacrifice_game_replays_to_the_same_board():
     session = _sacrifice_session()
     session.act(P1, PlayInterrupt("sacrifice"))
     session.submit(P1, DecisionResponse(("yojimbo",)))
-    pay(session, P1)
 
     assert replay(session.log) == session.game

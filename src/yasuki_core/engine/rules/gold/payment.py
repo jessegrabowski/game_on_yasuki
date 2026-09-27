@@ -62,7 +62,8 @@ class ContinuePayment:
 @dataclass(frozen=True, slots=True)
 class RequestPayment:
     """Ask ``seat`` to pay ``amount`` once the work queued above it has run, for an action whose
-    announcement settles the board first and may stop there to ask something else.
+    announcement settles the board first and may stop there to ask something else. An amount of
+    zero asks nothing.
 
     Attributes
     ----------
@@ -82,6 +83,8 @@ class RequestPayment:
     target_id: str
 
     def resume(self, game: GameState) -> None:
+        if self.amount == 0:
+            return
         target = game.table.cards_by_id.get(self.target_id)
         game.pending = payment_request(game, self.seat, self.amount, self.label, target=target)
 

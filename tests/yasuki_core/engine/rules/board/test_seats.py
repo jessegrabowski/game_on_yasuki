@@ -75,7 +75,7 @@ def test_cards_in_play_is_only_the_seats_own():
 def test_cards_in_hand_leaves_out_a_card_announced_until_its_payment_is_canceled():
     game = two_seat_game()
     put_in_play(game, personality("bearer", owner=PlayerId.P1))
-    blade = register(game.table, attachment("blade", owner=PlayerId.P1))
+    blade = register(game.table, attachment("blade", owner=PlayerId.P1, gold_cost=1))
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(blade)
 
     equip.equip(game, blade.id)

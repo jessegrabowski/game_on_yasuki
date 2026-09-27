@@ -11,7 +11,6 @@ from yasuki_core.game_pieces.prints import ActionPrint
 from tests.yasuki_core.engine.builders import (
     end_phase,
     fate_card,
-    pay,
     personality,
     province_card,
     put_in_play,
@@ -64,7 +63,6 @@ def test_discretionary_valor_sends_an_opposed_personality_home_for_honor_and_a_c
     session = _valor_battle()
 
     session.act(P2, PlayStrategy("valor"))
-    pay(session, P2)
     assert session.game.pending.candidates == ("kakita",)  # neither the raider nor the aide
     session.submit(P2, DecisionResponse(("kakita",)))
 

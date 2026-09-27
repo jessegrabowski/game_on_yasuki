@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 
-from tests.yasuki_core.engine.builders import pay, personality, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import personality, put_in_play, two_seat_game
 from tests.yasuki_core.engine.rules.test_interrupts import (
     ATTACKER,
     DEFENDER,
@@ -34,7 +34,6 @@ def test_okura_is_offered_against_a_fear_and_destroys_what_it_bows():
     assert session.legal_actions(DEFENDER) == [Pass(), PlayInterrupt("okura")]
 
     session.act(DEFENDER, PlayInterrupt("okura"))
-    pay(session, DEFENDER)
 
     assert session.game.pending is None
     assert not _in_play(session, "guard")
@@ -46,7 +45,6 @@ def test_okura_leaves_a_target_the_fear_does_not_reach_alone():
     session = _fear_announced({DEFENDER: 1}, strategies=(OKURA,))
 
     session.act(DEFENDER, PlayInterrupt("okura"))
-    pay(session, DEFENDER)
     session.act(DEFENDER, PlayInterrupt("P2-courage0", "courage"))
     session.submit(DEFENDER, DecisionResponse(("-2 strength",)))
 
@@ -84,7 +82,6 @@ def test_okura_is_not_offered_when_its_gold_cost_is_out_of_reach():
 def test_the_okura_game_replays_to_the_same_board():
     session = _fear_announced({}, strategies=(OKURA,))
     session.act(DEFENDER, PlayInterrupt("okura"))
-    pay(session, DEFENDER)
 
     rebuilt = replay(session.log)
 
