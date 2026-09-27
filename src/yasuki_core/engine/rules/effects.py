@@ -155,8 +155,9 @@ class InterruptingEffect(Effect, ABC):
     __slots__ = ()
 
     @abstractmethod
-    def request(self, game: GameState) -> DecisionRequest:
-        """The decision to put to the seat."""
+    def request(self, game: GameState) -> DecisionRequest | None:
+        """The decision to put to the seat, or None when the work it queued needs no answer, which
+        then runs as the stack drains, ahead of the rest of the cascade."""
 
     def is_interruptible(self, game: GameState) -> bool:
         """False: a question the action asks is nothing to interrupt, and what its answer produces

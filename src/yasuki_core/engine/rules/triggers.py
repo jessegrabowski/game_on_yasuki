@@ -383,10 +383,10 @@ def _advance(
     committing at once, its derived events joining ``queue``), then fire the next trigger still
     ``firing`` for ``event``, whose effects become the next ``effects`` in hand, then pop the next
     event off ``queue`` and collect its triggers. An :class:`~.InterruptingEffect` among the effects
-    pauses the machine: it records that effect's decision and stashes the exact remainder (the
-    effects after it, the triggers not yet fired, the event, and the queue) as a
-    :class:`~.ResumeCascade`, so :func:`~.resume_cascade` continues from precisely here once the
-    seat answers.
+    pauses the machine: it stashes the exact remainder (the effects after it, the triggers not yet
+    fired, the event, and the queue) as a :class:`~.ResumeCascade` and records that effect's
+    decision, so :func:`~.resume_cascade` continues from precisely here once the seat answers. An
+    effect with nothing to ask leaves the stash to drain behind the work it queued.
 
     ``interruptible`` says the effects in hand are an action's own, the only ones an Interrupt may
     modify (ShE datasheet, Interrupt). Each is checked against the modifications the action's
@@ -420,7 +420,8 @@ def _advance(
                 # run before the remainder of this cascade resumes.
                 _stash(game, tuple(pending), firing, event, queue, interruptible, triggered)
                 request = effect.request(game)
-                game.pending = replace(request, triggered=True) if triggered else request
+                if request is not None:
+                    game.pending = replace(request, triggered=True) if triggered else request
                 return
             _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
