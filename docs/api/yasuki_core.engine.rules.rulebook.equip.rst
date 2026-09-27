@@ -17,6 +17,7 @@ yasuki_core.engine.rules.rulebook.equip
     apply_equip_target
     creation_targets
     equip
+    equip_gold
     equip_targets
     has_caster
     is_spell

@@ -33,12 +33,10 @@ from yasuki_core.engine.rules.board.queries import (
     province_cards,
     units_at,
 )
-from yasuki_core.engine.rules.rulebook.equip import equip_targets
+from yasuki_core.engine.rules.rulebook.equip import equip_gold, equip_targets
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import (
-    discounted_gold,
-    equip_purchase,
     discounted_gold_cost,
     effective_recruit_discount,
 )
@@ -297,13 +295,11 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         affordable = fixed + sum(
             maximum_gold_production(game, producer, targets=(card,)) for producer in variable
         )
-        base = effective_gold_cost(game, card)
-        purchase = equip_purchase(card)
-        if discounted_gold(game, purchase, base) > affordable or not equip_targets(game, card):
+        if equip_gold(game, card) > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
-        invest = fixed_invest_amount(game, card)
-        if invest is not None and discounted_gold(game, purchase, base + invest) <= affordable:
+        has_invest = fixed_invest_amount(game, card) is not None
+        if has_invest and equip_gold(game, card, invest=True) <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips
 
