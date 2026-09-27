@@ -19,7 +19,9 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayStrategy,
     Recruit,
 )
+from yasuki_core.engine.rules.action_record import is_printed_action
 from yasuki_core.engine.rules.battle import resolution
+from yasuki_core.engine.rules.battle.presence import record_printed_action
 from yasuki_core.engine.rules.duel import focus_effects
 from yasuki_core.engine.rules.duel import procedure as duel_procedure
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -114,6 +116,10 @@ def perform(game: GameState, action: Action) -> None:
         game.interrupts_offered = False
         game.modifications.clear()
         game.hidden_card_shown = False
+    # "Resolved no printed actions" during a battle counts Interrupts and Responses too, so the
+    # record is kept here, where every action a seat takes passes.
+    if is_printed_action(game, action):
+        record_printed_action(game, acted_in.priority)
     match action:
         case Pass():
             yield_priority(game, passed=True)

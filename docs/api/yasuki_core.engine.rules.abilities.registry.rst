@@ -27,6 +27,7 @@ yasuki_core.engine.rules.abilities.registry
     interrupts_for
     invest_amounts
     invest_for
+    is_printed_ability
     may_attack
     may_stay_bowed
     printed_ability_line

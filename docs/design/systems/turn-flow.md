@@ -16,8 +16,9 @@ outcome and announces `BattleResolved` once the resolution's own cascade has set
 question a trigger in it asks, so the outcome sees everything the resolution did.
 {class}`~.AfterResolution` is the work item that opens the step once `BattleResolved` has been
 announced, and the item waits beneath the step the way a held action waits beneath its Interrupt
-round. When the step closes, the item runs After Resolution, bows and sends home the survivors, and
-moves the fight on. The battle
+round. When the step closes, the item runs After Resolution, bows and sends home the survivors,
+and announces `BattleEnded` at the end of the battle before moving the fight on. `BattleEnded`
+carries the seats that took a printed action while the battle was fought, the step included. The battle
 segment reads `RESOLUTION` for as long as the step is open, which is what a card reading "after a
 battle's Resolution Segment" checks.
 

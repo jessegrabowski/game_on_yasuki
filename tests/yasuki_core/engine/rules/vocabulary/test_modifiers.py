@@ -1,14 +1,18 @@
+import pytest
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.effects import Bow, Destroy
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import enforce_state_based_actions, resolve_effects
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.table import BATTLEFIELD
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     Condition,
     ConditionalModifier,
     Duration,
     Modifier,
+    Negation,
     Stat,
 )
 from yasuki_core.engine.rules.stats.calculation import active_modifiers
@@ -23,6 +27,7 @@ from tests.yasuki_core.engine.builders import (
     two_seat_game,
 )
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import ActionPrint
 
 
 def _game(card: L5RCard, modifiers=()) -> GameState:
@@ -166,3 +171,29 @@ def test_a_conditional_modifier_survives_the_sweep_of_departed_targets():
     enforce_state_based_actions(game)
 
     assert game.ongoing == [penalty]
+
+
+def test_a_negation_names_a_source_only_when_it_gives_a_kind_or_a_title():
+    assert Negation("ring", END_OF_TURN, source_kind=ActionPrint).names_a_source
+    assert Negation("ring", END_OF_TURN, source_title="Plan").names_a_source
+    assert not Negation("ring", END_OF_TURN, effect_kind=Bow).names_a_source
+
+
+@pytest.mark.parametrize(
+    "criteria",
+    [{}, {"source_kind": ActionPrint, "once": True}],
+    ids=["names nothing", "a source spent by its first use"],
+)
+def test_a_negation_that_cannot_be_honored_is_refused(criteria):
+    with pytest.raises(ValueError):
+        Negation("ring", END_OF_TURN, **criteria)
+
+
+def test_the_sweep_keeps_a_negation_naming_no_card_and_forgets_one_naming_a_departed_card():
+    game = two_seat_game()
+    kept = Negation("gone", END_OF_TURN, effect_kind=Bow)
+    game.ongoing += [kept, Negation("ring", END_OF_TURN, effect_kind=Bow, subject_id="gone")]
+
+    enforce_state_based_actions(game)
+
+    assert game.ongoing == [kept]

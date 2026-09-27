@@ -43,14 +43,16 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
     Condition,
     ConditionalModifier,
-    Duration,
     KeywordGrant,
+    Lifetime,
     LobbyModifier,
     Minimum,
     Modifier,
+    Negation,
     ProvinceModifier,
     SeatAbilityGrant,
     Stat,
+    describe_lifetime,
 )
 from yasuki_core.engine.rules.state import (
     GameState,
@@ -119,6 +121,12 @@ class Effect(ABC):
             The cards this same cost bows, which are no longer free to pay the rest of it. Default
             empty.
         """
+        return True
+
+    def would_happen(self, game: GameState) -> bool:
+        """Whether performing this now would change anything. Most effects always would. A bow of a
+        card already bowed would not, since a card bows only in going from unbowed to bowed (CR,
+        Bowed and Unbowed), so "its next bowing" is still to come after one."""
         return True
 
     @abstractmethod
@@ -201,6 +209,27 @@ class Negated(Effect):
 
     def narrate(self, game: GameState) -> str:
         return f"negated: {self.effect.narrate(game)}"
+
+
+@dataclass(frozen=True, slots=True)
+class GrantNegation(Effect):
+    """Record a continuous negation: the effects ``negation`` matches are negated while it lasts.
+
+    Attributes
+    ----------
+    negation : Negation
+        The record, naming its source, what it negates and how long it lasts.
+    """
+
+    negation: Negation
+
+    def describe(self) -> str:
+        lifetime = describe_lifetime(self.negation.duration)
+        return f"{self.negation.source_id} negates effects ({lifetime})"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(self.negation)
+        return []
 
 
 @dataclass(frozen=True, slots=True)
@@ -615,12 +644,12 @@ class GrantModifier(Effect):
     target_id: str
     stat: Stat
     amount: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} grants {self.target_id} {self.amount:+d} "
-            f"{self.stat.name} ({self.duration.name})"
+            f"{self.stat.name} ({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -640,12 +669,12 @@ class GrantConditionalModifier(Effect):
     condition: Condition
     stat: Stat
     amount: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} grants {self.amount:+d} {self.stat.name} while "
-            f"{self.condition.value} ({self.duration.name})"
+            f"{self.condition.value} ({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -666,10 +695,11 @@ class GrantAbility(Effect):
     source_id: str
     target_id: str
     context: tuple[str, ...]
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
-        return f"{self.source_id} grants {self.target_id} an ability ({self.duration.name})"
+        lifetime = describe_lifetime(self.duration)
+        return f"{self.source_id} grants {self.target_id} an ability ({lifetime})"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
@@ -687,10 +717,11 @@ class GrantSeatAbility(Effect):
     source_id: str
     seat: PlayerId
     context: tuple[str, ...]
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
-        return f"{self.source_id} grants {self.seat.name}'s cards an ability ({self.duration.name})"
+        lifetime = describe_lifetime(self.duration)
+        return f"{self.source_id} grants {self.seat.name}'s cards an ability ({lifetime})"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
@@ -736,12 +767,12 @@ class GrantMinimum(Effect):
     target_id: str
     stat: Stat
     value: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} gives {self.target_id} a minimum {self.stat.name} of {self.value} "
-            f"({self.duration.name})"
+            f"({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -763,12 +794,12 @@ class GrantProvinceStrength(Effect):
     source_id: str
     province: ZoneKey
     amount: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} gives {self.province.token} {self.amount:+d} province strength "
-            f"({self.duration.name})"
+            f"({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -862,12 +893,12 @@ class GrantLobbyBonus(Effect):
     source_id: str
     seat: PlayerId
     amount: int
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
         return (
             f"{self.source_id} gives {self.seat.name} a {self.amount:+d} Lobby Bonus "
-            f"({self.duration.name})"
+            f"({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -1099,10 +1130,11 @@ class GrantKeyword(Effect):
     source_id: str
     target_id: str
     keyword: str
-    duration: Duration
+    duration: Lifetime
 
     def describe(self) -> str:
-        return f"{self.source_id} gives {self.target_id} {self.keyword} ({self.duration.name})"
+        lifetime = describe_lifetime(self.duration)
+        return f"{self.source_id} gives {self.target_id} {self.keyword} ({lifetime})"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
@@ -1450,11 +1482,14 @@ class Bow(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         return card is not None and not card.bowed
 
-    def perform(self, game: GameState) -> list[GameEvent]:
+    def would_happen(self, game: GameState) -> bool:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is None or card.bowed:
+        return card is not None and not card.bowed
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        if not self.would_happen(game):
             return []
-        card.bow()
+        game.table.cards_by_id[self.card_id].bow()
         return [Bowed(self.card_id)]
 
 
@@ -1493,11 +1528,14 @@ class Straighten(Effect):
     def describe(self) -> str:
         return f"straighten {self.card_id}"
 
-    def perform(self, game: GameState) -> list[GameEvent]:
+    def would_happen(self, game: GameState) -> bool:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is None or not card.bowed or self.card_id in game.straighten_delayed:
+        return card is not None and card.bowed and self.card_id not in game.straighten_delayed
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        if not self.would_happen(game):
             return []
-        card.unbow()
+        game.table.cards_by_id[self.card_id].unbow()
         return [Straightened(self.card_id)]
 
 
@@ -1568,7 +1606,7 @@ def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     Seppuku). Two effects rather than one, so each passes through the Interrupt step on its own,
     and the destruction is deferred through ``Then`` so the Personality's own reaction to his
     rehonoring fires while he is still in play. The CR adds that neither can be negated, which
-    nothing here models because negation is not modeled.
+    nothing here enforces.
 
     Parameters
     ----------

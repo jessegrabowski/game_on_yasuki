@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.turn.structure import Moment
 from yasuki_core.engine.table import ZoneKey
 
 
@@ -42,6 +43,16 @@ class Duration(Enum):
     PERMANENT = "permanent"
 
 
+# How long an ongoing record lasts: a Duration, or a Moment it lapses at the first time the flow
+# reaches it, as "until the end of the phase" or "this battle" has it.
+Lifetime = Duration | Moment
+
+
+def describe_lifetime(lifetime: Lifetime) -> str:
+    """How long a record lasts, worded for a trace."""
+    return lifetime.name if isinstance(lifetime, Duration) else lifetime.describe()
+
+
 @dataclass(frozen=True, slots=True)
 class Modifier:
     """A continuous effect that adjusts one card's stat by a fixed amount while active. Every stat
@@ -59,7 +70,7 @@ class Modifier:
         Which stat is adjusted.
     amount : int
         The bonus (positive) or penalty (negative) added to the stat.
-    duration : Duration
+    duration : Duration or Moment
         When the modifier stops applying.
     """
 
@@ -67,7 +78,7 @@ class Modifier:
     target_id: str
     stat: Stat
     amount: int
-    duration: Duration
+    duration: Lifetime
 
 
 class Condition(Enum):
@@ -100,7 +111,7 @@ class ConditionalModifier:
         Which stat is adjusted.
     amount : int
         The bonus (positive) or penalty (negative) added to the stat.
-    duration : Duration
+    duration : Duration or Moment
         When the modifier stops applying.
     """
 
@@ -108,7 +119,7 @@ class ConditionalModifier:
     condition: Condition
     stat: Stat
     amount: int
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -130,14 +141,14 @@ class AbilityGrant:
     context : tuple of str
         What the granting action settled, handed to the factory: the ids the ability's own
         condition or targets read.
-    duration : Duration
+    duration : Duration or Moment
         When the grant stops applying.
     """
 
     source_id: str
     target_id: str
     context: tuple[str, ...]
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -160,14 +171,14 @@ class SeatAbilityGrant:
         The player whose owned cards have the ability while the grant lasts.
     context : tuple of str
         What the granting action settled, handed to the factory.
-    duration : Duration
+    duration : Duration or Moment
         When the grant stops applying.
     """
 
     source_id: str
     seat: PlayerId
     context: tuple[str, ...]
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -183,14 +194,14 @@ class KeywordGrant:
         The card that carries the keyword while the grant lasts.
     keyword : str
         The keyword gained, spelled as the card database spells it.
-    duration : Duration
+    duration : Duration or Moment
         When the grant stops applying.
     """
 
     source_id: str
     target_id: str
     keyword: str
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -214,7 +225,7 @@ class Minimum:
         Which stat the floor applies to.
     value : int
         The lowest the stat may read while this is active.
-    duration : Duration
+    duration : Duration or Moment
         When the minimum stops applying.
     """
 
@@ -222,7 +233,7 @@ class Minimum:
     target_id: str
     stat: Stat
     value: int
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -241,14 +252,14 @@ class ProvinceModifier:
         The Province slot whose strength is adjusted.
     amount : int
         The bonus (positive) or penalty (negative) added to the strength.
-    duration : Duration
+    duration : Duration or Moment
         When the modifier stops applying.
     """
 
     source_id: str
     province: ZoneKey
     amount: int
-    duration: Duration
+    duration: Lifetime
 
 
 @dataclass(frozen=True, slots=True)
@@ -269,22 +280,77 @@ class LobbyModifier:
         The player whose Lobby amounts are adjusted.
     amount : int
         The Bonus (positive) or Penalty (negative).
-    duration : Duration
+    duration : Duration or Moment
         When the adjustment stops applying.
     """
 
     source_id: str
     seat: PlayerId
     amount: int
-    duration: Duration
+    duration: Lifetime
+
+
+@dataclass(frozen=True, slots=True)
+class Negation:
+    """A continuous effect that negates the effects matching it while active (CR, Prevention), as
+    "negate the effects of actions from Strategies until the end of the phase" or "negate its
+    bowing (this turn)" has it. A criterion left None matches anything.
+
+    One naming a source negates the effects of actions from matching cards, and is read where such
+    an action hands over its effects, since only there is it known whose action they are. One
+    naming none negates every matching effect as it commits, whatever produced it. Neither reads a
+    cost, which is no effect (CR, Effects).
+
+    Attributes
+    ----------
+    source_id : str
+        The card the negation comes from, used to expire a ``WHILE_SOURCE_IN_PLAY`` one when it
+        leaves play and to attribute the effect.
+    duration : Duration or Moment
+        When the negation stops applying.
+    source_kind : type, optional
+        The print class, such as ``ActionPrint`` for a Strategy, of the card whose actions' effects
+        are negated. Default None.
+    source_title : str, optional
+        The title of that card. Default None.
+    effect_kind : type, optional
+        The effect class negated, such as ``Bow`` for "bowing". Default None.
+    subject_id : str, optional
+        The card the negated effects act on, read off their ``card_id``. A negation naming one is
+        forgotten when that card leaves the table (CR, Card Memory Rule). Default None.
+    once : bool, optional
+        Whether the negation is spent by the first effect it negates, as "his next straightening"
+        is. Only one naming no source may be spent this way. Default False.
+    """
+
+    source_id: str
+    duration: Lifetime
+    source_kind: type | None = None
+    source_title: str | None = None
+    effect_kind: type | None = None
+    subject_id: str | None = None
+    once: bool = False
+
+    def __post_init__(self) -> None:
+        """Raise ValueError for a negation naming nothing it negates, or one naming a source that
+        is spent by its first use."""
+        if not self.names_a_source and self.effect_kind is None and self.subject_id is None:
+            raise ValueError("a negation names what it negates")
+        if self.names_a_source and self.once:
+            raise ValueError("only a negation naming no source is spent by its first use")
+
+    @property
+    def names_a_source(self) -> bool:
+        """Whether the negation is about whose action an effect comes from."""
+        return self.source_kind is not None or self.source_title is not None
 
 
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
 # Province's strength beside a stat change. Each is ongoing and lasts to the end of the turn
 # unless the card says otherwise. So they are recorded in one list and expire together (CR,
 # Duration of Effects). The four that name a card are forgotten when it leaves the table; the
-# four that name a condition, a Province slot or a player are not, because none of those is a
-# card that can leave it.
+# five that name a condition, a Province slot, a player or what an effect matches are not, because
+# none of those is a card that can leave it.
 Ongoing = (
     Modifier
     | ConditionalModifier
@@ -294,4 +360,5 @@ Ongoing = (
     | Minimum
     | ProvinceModifier
     | LobbyModifier
+    | Negation
 )

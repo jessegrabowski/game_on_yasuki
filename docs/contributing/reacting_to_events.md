@@ -97,6 +97,7 @@ Seventeen events:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducedGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ActionResolved`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.BattleResolved`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.BattleEnded`
 
 Each one carries the fields your guard reads, so follow the link for the event you want. If the
 moment your card names is not one of them, it needs a new event in the engine, which is a core

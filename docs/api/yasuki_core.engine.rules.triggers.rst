@@ -27,7 +27,10 @@ yasuki_core.engine.rules.triggers
     enforce_state_based_actions
     fire
     fire_all
+    lapse_ongoing
     on
+    pay_costs
+    reach_moment
     resolve_action_effects
     resolve_delayed
     resolve_effects

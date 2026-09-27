@@ -1,13 +1,21 @@
 from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.abilities.registry import ability_for, recruit_timing_of
+from yasuki_core.engine.rules.abilities.registry import (
+    ability_for,
+    interrupt_for,
+    is_printed_ability,
+    recruit_timing_of,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
     ACTION_TIMINGS,
+    Action,
     ActivateAbility,
+    PlayInterrupt,
     PlayStrategy,
     Recruit,
 )
+from yasuki_core.game_pieces.prints import RulebookPrint
 
 
 def action_round(game: GameState) -> ActionRound:
@@ -30,6 +38,29 @@ def resolving_ability(game: GameState) -> Ability | None:
             return None if card is None else ability_for(game, card, key)
         case _:
             return None
+
+
+def is_printed_action(game: GameState, action: Action) -> bool:
+    """Whether ``action`` is a printed action from a card: an ability or an Interrupt the card's
+    own text carries, as against a rulebook one such as a keyword's (CR, Printed; CR, From)."""
+    match action:
+        case (
+            ActivateAbility(card_id=card_id, ability_key=key)
+            | PlayStrategy(card_id=card_id, ability_key=key)
+        ):
+            card = game.table.cards_by_id.get(card_id)
+            if card is None:
+                return False
+            ability = ability_for(game, card, key)
+            return ability is not None and is_printed_ability(card, ability)
+        case PlayInterrupt(card_id=card_id, interrupt_key=key):
+            card = game.table.cards_by_id.get(card_id)
+            if card is None or isinstance(card.printed, RulebookPrint):
+                return False
+            interrupt = interrupt_for(card, key)
+            return interrupt is not None and interrupt.acts_from_its_card
+        case _:
+            return False
 
 
 def action_is_unstoppable(game: GameState) -> bool:

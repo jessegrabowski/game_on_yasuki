@@ -5,14 +5,18 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import abilities_for
+from yasuki_core.engine.rules.effects import GrantNegation
 from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL, kharmic_ability
+from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.replay.game_log import game_log_from_dict, game_log_to_dict, replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.prints import FatePrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint
 from tests.yasuki_core.engine.builders import (
     attachment,
     end_phase,
@@ -28,7 +32,7 @@ KHARMIC = ("Kharmic",)
 P1, P2 = PlayerId.P1, PlayerId.P2
 
 
-def _table(*, hand_kharmic=1, province_kharmic=1, production=2, seat=P1):
+def _table(*, hand_kharmic=1, province_kharmic=1, production=2, seat=P1, hand_print=FatePrint):
     """A board where ``seat`` can pay for Kharmic and has a card to spend on each form."""
     state = TableState.empty_two_seat()
     put_in_play(
@@ -43,7 +47,7 @@ def _table(*, hand_kharmic=1, province_kharmic=1, production=2, seat=P1):
             register(
                 state,
                 L5RCard.of(
-                    FatePrint,
+                    hand_print,
                     id=f"{seat.name}-k{index}",
                     name="Kharmic Fate",
                     side=Side.FATE,
@@ -198,6 +202,20 @@ def test_the_dynasty_form_discards_from_a_province_and_refills_it_face_up():
     # Face-up is the whole point: a face-down refill would leave the Province unrecruitable, and a
     # count-based assertion would pass either way.
     assert len(province.cards) == 1 and province.cards[0].face_up
+
+
+def test_the_fate_form_on_a_strategy_is_the_rulebooks_and_escapes_a_negation_of_strategies():
+    session = EngineSession.start(_table(hand_print=ActionPrint), P1)
+    negation = Negation("ring", END_OF_TURN, source_kind=ActionPrint)
+    resolve_effects(session.game, [GrantNegation(negation)])
+    deck = session.game.table.decks[DeckKey(P1, Side.FATE)]
+    before = len(deck.cards)
+
+    spend(session, P1, DRAW)
+
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    assert [card.id for card in discard.cards] == ["P1-k0"]
+    assert len(deck.cards) == before - 1
 
 
 def test_kharmic_is_repeatable_within_one_turn():

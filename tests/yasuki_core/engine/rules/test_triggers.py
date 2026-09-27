@@ -4,7 +4,21 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import action_sequence, sequence
-from yasuki_core.engine.rules.turn.structure import END_OF_TURN, ActionRound, RoundKind
+from yasuki_core.engine.rules.turn.structure import (
+    END_OF_BATTLE,
+    END_OF_TURN,
+    ActionRound,
+    RoundKind,
+)
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    Condition,
+    ConditionalModifier,
+    Duration,
+    LobbyModifier,
+    Modifier,
+    Negation,
+    Stat,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     ChooseCards,
@@ -48,7 +62,9 @@ from yasuki_core.engine.rules.triggers import (
     enforce_state_based_actions,
     fire,
     fire_all,
+    lapse_ongoing,
     on,
+    reach_moment,
     resolve_delayed,
     resolve_effects,
     resume_paused_cascade,
@@ -1069,3 +1085,67 @@ def test_a_watch_can_look_from_play(watching):
 def test_registering_a_trigger_on_a_watched_condition_is_refused():
     with pytest.raises(ValueError, match="own watch"):
         on(ConditionFulfilled, "anything")
+
+
+def test_a_record_lapses_at_its_own_moment_whatever_its_kind():
+    game = two_seat_game()
+    kept = LobbyModifier("src", PlayerId.P1, 1, END_OF_TURN)
+    game.ongoing += [
+        LobbyModifier("src", PlayerId.P1, 1, END_OF_BATTLE),
+        ConditionalModifier("src", Condition.ATTACKING, Stat.FORCE, -1, END_OF_BATTLE),
+        kept,
+    ]
+
+    lapse_ongoing(game, END_OF_BATTLE)
+
+    assert game.ongoing == [kept]
+
+
+def test_the_turns_end_lapses_every_record_but_those_that_outlast_it():
+    game = two_seat_game()
+    kept = [
+        LobbyModifier("src", PlayerId.P1, 1, Duration.PERMANENT),
+        LobbyModifier("src", PlayerId.P1, 1, Duration.WHILE_SOURCE_IN_PLAY),
+    ]
+    game.ongoing += [
+        LobbyModifier("src", PlayerId.P1, 1, Duration.UNTIL_END_OF_TURN),
+        ConditionalModifier("src", Condition.ATTACKING, Stat.FORCE, -1, END_OF_TURN),
+        LobbyModifier("src", PlayerId.P1, 1, END_OF_BATTLE),
+        *kept,
+    ]
+
+    lapse_ongoing(game, END_OF_TURN)
+
+    assert game.ongoing == kept
+
+
+def test_a_chi_bonus_lapsing_under_a_personality_kills_him():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", chi=0))
+    game.ongoing.append(Modifier("src", hero.id, Stat.CHI, 1, END_OF_BATTLE))
+
+    lapse_ongoing(game, END_OF_BATTLE)
+
+    assert hero not in game.table.battlefield.cards
+
+
+def test_resolving_the_effects_held_for_the_turns_end_leaves_ongoing_records_in_force():
+    game = two_seat_game()
+    penalty = ConditionalModifier("src", Condition.ATTACKING, Stat.FORCE, -1, END_OF_TURN)
+    game.ongoing.append(penalty)
+
+    resolve_delayed(game, END_OF_TURN)
+
+    assert game.ongoing == [penalty]
+
+
+def test_reaching_a_moment_lapses_what_lasted_until_it_before_resolving_what_waited_for_it():
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm"))
+    game.ongoing.append(Negation("ring", END_OF_BATTLE, effect_kind=Bow, subject_id="farm"))
+    game.delayed = [(END_OF_BATTLE, Bow("farm"))]
+
+    reach_moment(game, END_OF_BATTLE)
+
+    assert game.ongoing == []
+    assert farm.bowed

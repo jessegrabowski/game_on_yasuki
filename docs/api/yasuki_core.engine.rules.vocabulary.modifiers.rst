@@ -15,9 +15,16 @@ yasuki_core.engine.rules.vocabulary.modifiers
     LobbyModifier
     Minimum
     Modifier
+    Negation
     ProvinceModifier
     SeatAbilityGrant
     Stat
+
+.. rubric:: Functions
+
+.. autosummary::
+
+    describe_lifetime
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.modifiers
     :members:

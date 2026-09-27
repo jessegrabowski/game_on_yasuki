@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.turn.structure import (
     END_OF_TURN,
 )
 from yasuki_core.engine.rules.effects import (
+    GrantNegation,
     Negated,
     RefillProvince,
     AdjustCounter,
@@ -85,7 +86,8 @@ from yasuki_core.engine.rules.effects import (
     TurnOver,
     Then,
 )
-from yasuki_core.engine.rules.vocabulary.modifiers import Condition, Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Condition, Duration, Negation, Stat
+from yasuki_core.game_pieces.prints import ActionPrint
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WALL, WEALTH
@@ -108,6 +110,10 @@ EFFECTS = [
     ),
     (Dishonor("hero_1", PlayerId.P2), "dishonor hero_1"),
     (Negated(Bow("hero_1")), "negated: bow hero_1"),
+    (
+        GrantNegation(Negation("ring", END_OF_TURN, source_kind=ActionPrint)),
+        "ring negates effects (at the end of the turn)",
+    ),
     (RevokeGrants("ground"), "ground revokes its grants"),
     (Rehonor("hero_1"), "rehonor hero_1"),
     (BanishTopFate(PlayerId.P2), "banish the top of P2's fate deck"),

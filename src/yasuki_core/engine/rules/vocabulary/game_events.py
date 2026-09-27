@@ -294,7 +294,8 @@ class ActionResolved:
         Whether it was a Favor action (ShE datasheet, The Favor Icon), read as it resolved, which
         is the last moment that is settled.
     printed : bool
-        Whether it was a card's printed ability, as against a rulebook action such as a Recruit.
+        Whether it was a printed action from a card, as against a rulebook action such as a
+        Recruit, a trait, or an ability another card grants.
     """
 
     seat: PlayerId
@@ -354,6 +355,24 @@ class BattleResolved:
     destroyed_controllers: frozenset[PlayerId]
     terrains_played: frozenset[tuple[PlayerId, str]]
     terrains_destroyed: frozenset[tuple[PlayerId, str]]
+
+
+@dataclass(frozen=True, slots=True)
+class BattleEnded:
+    """A battle has ended, once After Resolution is done (CR, Battle Sequence): the
+    ``END_OF_BATTLE`` moment.
+
+    Attributes
+    ----------
+    resolved : BattleResolved
+        How the battle resolved.
+    printed_actions : frozenset of PlayerId
+        The seats that took a printed action from one of their cards while the battle was being
+        fought, the Response Step after its resolution included.
+    """
+
+    resolved: BattleResolved
+    printed_actions: frozenset[PlayerId]
 
 
 @dataclass(frozen=True, slots=True)
@@ -509,6 +528,7 @@ GameEvent = (
     ActionResolved
     | Assigned
     | BattleResolved
+    | BattleEnded
     | Bowed
     | CardFocused
     | ConditionFulfilled

@@ -48,6 +48,7 @@ yasuki_core.engine.rules.effects
     GrantLobbyBonus
     GrantMinimum
     GrantModifier
+    GrantNegation
     GrantPriority
     GrantProvinceStrength
     GrantSeatAbility

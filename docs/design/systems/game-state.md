@@ -54,8 +54,8 @@ point raises while it is set. [Decisions and resumption](decisions-and-resumptio
 lifecycle. A card never reads it: a handler runs on a cleared slot, and the request it raises is
 the one that will be pending when control returns.
 
-Ephemeral does not mean empty at rest. `ongoing` holds every continuous grant in force and its
-order is load-bearing, since grants apply in creation order.
+Ephemeral does not mean empty at rest. `ongoing` holds every continuous grant and negation in force
+and its order is load-bearing, since grants apply in creation order.
 
 `rng` is the engine's only source of randomness, rebuilt from `seed`. A handler that wants a random
 choice uses it. Anything else makes the tape a lie.

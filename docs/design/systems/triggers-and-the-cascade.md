@@ -198,8 +198,11 @@ an order the rules do not give, and once a trigger on the first one pauses, the 
 be a walk driven mid-decision.
 
 {func}`~yasuki_core.engine.rules.triggers.resolve_effects` is the walk entered with effects in
-hand and an empty queue, which is how a cost, a rulebook procedure's effects or a resolver's output
-gets its derived reactions. {func}`~yasuki_core.engine.rules.triggers.resolve_action_effects` is
+hand and an empty queue, which is how a rulebook procedure's effects or a resolver's output gets
+its derived reactions. {func}`~yasuki_core.engine.rules.triggers.pay_costs` is the same walk for a
+cost. A cost is no effect (CR, Effects), so the walk checks every other effect against the
+{class}`~.Negation` records in force as it commits and passes a cost's payments through, and a
+payment that pauses on a question stays a cost once answered. {func}`~yasuki_core.engine.rules.triggers.resolve_action_effects` is
 the same walk for an action's own effects, the ones step E of the Action Sequence hands over. The
 first effects an action hands over are held on the stack as a `HeldAction` beneath an Interrupt
 round before any resolves, once per action and only when some seat holds an Interrupt, and every
@@ -207,7 +210,9 @@ one of the action's effects is checked against the modifications the step collec
 applied, while what a trigger returns inside that cascade is a trait's or the rulebook's and is
 applied as returned. A `Then` among the action's effects carries that provenance to the deferred
 step, which opens no second round. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
-effects held until a given moment. {func}`~yasuki_core.engine.rules.triggers.enforce_state_based_actions`
+effects held until a given moment. {func}`~yasuki_core.engine.rules.triggers.reach_moment` is the
+same for a moment ongoing records also last until: it lapses them, settles the board their expiry
+leaves, and resolves the held effects, in one walk so a question any part asks pauses the rest. {func}`~yasuki_core.engine.rules.triggers.enforce_state_based_actions`
 is how a caller that mutated the board directly gets the same guarantee the walk gives itself
 after every effect: it settles the rules first and starts a walk only if that raised anything.
 It carries the check itself because `_advance` would see the open question only after the rules

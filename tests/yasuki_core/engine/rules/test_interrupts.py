@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
+    GrantNegation,
     Negated,
     RevokeGrants,
     Straighten,
@@ -45,6 +46,9 @@ from yasuki_core.engine.rules.turn.structure import (
     INTERRUPT_TIMINGS,
     RESPONSE_TIMINGS,
     ActionRound,
+    Boundary,
+    Moment,
+    Phase,
     RoundKind,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -66,6 +70,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed, Straightened
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -716,6 +721,17 @@ def test_the_defender_is_offered_the_courage_interrupt_and_a_reduction_saves_the
     assert session.game.pending is None
 
 
+def test_a_keyword_interrupt_is_the_rulebooks_and_escapes_a_negation_naming_its_card():
+    session = _fear_announced({DEFENDER: 1})
+    session.game.ongoing.append(Negation("ring", END_OF_TURN, source_title="Courage Fate"))
+
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
+
+    assert not _guard_bowed(session)
+    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["P2-courage0"]
+
+
 def test_passing_lets_the_fear_resolve_at_full_strength():
     session = _fear_announced({DEFENDER: 1})
 
@@ -779,6 +795,18 @@ def test_a_negated_effect_resolves_as_nothing_and_the_action_goes_on():
     assert not _guard_bowed(session)
     assert session.game.pending is None
     assert _event_names(session) == ["HonorChanged"]
+
+
+def test_an_interrupt_strategy_under_a_negation_is_played_but_changes_nothing():
+    session = _fear_announced({}, strategies=(NEGATOR,), probe="fear_then_honor_probe")
+    negation = Negation("ring", Moment(Phase.BATTLE, Boundary.END), source_kind=ActionPrint)
+    resolve_effects(session.game, [GrantNegation(negation)])
+
+    session.act(DEFENDER, PlayInterrupt("negator"))
+
+    assert _guard_bowed(session)
+    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["negator"]
 
 
 def test_a_negated_attack_leaves_its_outcome_unreached():
@@ -1383,6 +1411,24 @@ def test_an_interrupt_on_an_event_in_a_province_is_offered_and_taken_from_there(
     sequence.run_stack(game)
 
     assert game.table.seats[P2].honor == 1 and farm.bowed
+    discard = game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)].cards
+    assert "P2-event" in {card.id for card in discard}
+
+
+def test_an_interrupts_discard_cost_is_paid_under_a_negation_of_that_discard():
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+    event = holding("P2-event", owner=P2, printed_id="province_event_probe")
+    event.turn_face_up()
+    province = ProvinceZone(owner=P2)
+    province.add(register(game.table, event))
+    game.table.zones[ZoneKey(P2, ZoneRole.PROVINCE, 0)] = province
+    game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=Discard, subject_id="P2-event"))
+    resolve_action_effects(game, [Bow(farm.id)])
+
+    action_sequence.perform(game, PlayInterrupt("P2-event"))
+    sequence.run_stack(game)
+
     discard = game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)].cards
     assert "P2-event" in {card.id for card in discard}
 

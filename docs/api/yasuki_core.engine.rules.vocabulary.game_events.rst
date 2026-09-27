@@ -9,6 +9,7 @@ yasuki_core.engine.rules.vocabulary.game_events
 
     ActionResolved
     Assigned
+    BattleEnded
     BattleResolved
     Bowed
     CardDiscarded

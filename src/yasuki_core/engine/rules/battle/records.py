@@ -48,6 +48,9 @@ class BattlefieldInfo(NamedTuple):
         Each seat and the Terrain it played here from its hand. Default empty.
     terrains_destroyed : frozenset of (PlayerId, str)
         Each seat and the Terrain here it destroyed. Default empty.
+    printed_actions : frozenset of PlayerId
+        The seats that took a printed action from one of their cards while the battle here was
+        being fought. Default empty.
     """
 
     province: ZoneKey
@@ -56,6 +59,7 @@ class BattlefieldInfo(NamedTuple):
     bow_exempt: frozenset[PlayerId] = frozenset()
     terrains_played: frozenset[tuple[PlayerId, str]] = frozenset()
     terrains_destroyed: frozenset[tuple[PlayerId, str]] = frozenset()
+    printed_actions: frozenset[PlayerId] = frozenset()
 
 
 @dataclass(slots=True)

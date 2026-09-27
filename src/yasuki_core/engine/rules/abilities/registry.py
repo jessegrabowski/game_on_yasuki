@@ -470,6 +470,14 @@ def _sits_at(game: GameState, card: L5RCard, location: CardLocation) -> bool:
     )
 
 
+def is_printed_ability(card: L5RCard, ability: Ability) -> bool:
+    """Whether using ``ability`` is a printed action from ``card``: an action its own text carries,
+    as against a trait, a rulebook ability, or one another card grants it (CR, Printed)."""
+    return ability.acts_from_its_card and any(
+        held is ability for held in _ABILITIES.get(card.printed_id, ())
+    )
+
+
 def ability_for(game: GameState, card: L5RCard, key: str | None = None) -> Ability | None:
     """The activated ability ``key`` names on ``card``, or None if no ability it has answers to it.
 
