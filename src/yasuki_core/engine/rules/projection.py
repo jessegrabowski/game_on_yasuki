@@ -6,7 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.units.membership import attachments_of
-from yasuki_core.engine.rules.stats.calculation import active_modifiers, effective_stat
+from yasuki_core.engine.rules.stats.calculation import effective_stat, is_modified
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
@@ -249,16 +249,8 @@ def _modified_cards(game: GameState, identifiable: set[str]) -> Iterator[L5RCard
     """
     granters = stat_granters(game)
     for card in game.table.cards_by_id.values():
-        if card.id in identifiable and _is_modified(game, card, granters):
+        if card.id in identifiable and is_modified(game, card, granters=granters):
             yield card
-
-
-def _is_modified(game: GameState, card: L5RCard, granters: tuple[L5RCard, ...]) -> bool:
-    """Whether any active modifier reaches ``card``, over any stat."""
-    return any(
-        next(active_modifiers(game, card, stat, granters=granters), None) is not None
-        for stat in Stat
-    )
 
 
 def project(game: GameState, viewer: PlayerId) -> GameView:

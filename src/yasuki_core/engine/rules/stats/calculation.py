@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.rules.stats.conditions import condition_holds
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
-from yasuki_core.engine.rules.stats.stat_grants import granted_stats
+from yasuki_core.engine.rules.stats.stat_grants import granted_stats, stat_granters
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -25,6 +25,8 @@ from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 # modifier"). Starting Family Honor is absent: it is a seat scalar read once at setup, not a card
 # stat anything reads again.
 _SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
+
+_ALL_STATS = tuple(Stat)
 
 
 def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
@@ -60,32 +62,69 @@ def active_modifiers(
         The board's :func:`~.stat_granters`, for a caller reading many cards against one board.
         Default None, read off the board here.
     """
+    return _modifiers(game, card, (stat,), granters=granters)
+
+
+def is_modified(
+    game: GameState, card: L5RCard, *, granters: Sequence[L5RCard] | None = None
+) -> bool:
+    """Whether any :func:`active_modifiers` reaches ``card``, over any stat.
+
+    Parameters
+    ----------
+    granters : sequence of L5RCard, optional
+        The board's :func:`~.stat_granters`, for a caller asking of many cards against one board.
+        Default None, read off the board here.
+    """
+    return next(_modifiers(game, card, _ALL_STATS, granters=granters), None) is not None
+
+
+def _modifiers(
+    game: GameState,
+    card: L5RCard,
+    stats: tuple[Stat, ...],
+    *,
+    granters: Sequence[L5RCard] | None,
+) -> Iterator[Modifier]:
+    """The :func:`active_modifiers` of each of ``stats``, reading the board once for all of them.
+    For one stat, in the order that function lists them."""
+    granters = stat_granters(game) if granters is None else granters
     # A counter's source is the card itself, in play by construction here (this is only reached for
     # an in-play card), so no source-in-play check is needed for the derived modifiers.
     for key, count in card.counters.items():
-        per_count = getattr(counter_from_key(key), stat.value, 0)
-        if per_count and count:
-            yield Modifier(card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY)
-    printed_modifier = f"{stat.value}_modifier"
+        if not count:
+            continue
+        counter = counter_from_key(key)
+        for stat in stats:
+            per_count = getattr(counter, stat.value, 0)
+            if per_count:
+                yield Modifier(
+                    card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY
+                )
     for attached in attachments_of(game, card):
-        amount = getattr(attached, printed_modifier, 0)
-        if amount:
-            yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
-    for granting, amount in granted_stats(game, card, stat, granters=granters):
-        yield Modifier(granting.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
+        for stat in stats:
+            amount = getattr(attached, f"{stat.value}_modifier", 0)
+            if amount:
+                yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
+    for stat in stats:
+        for granting, amount in granted_stats(game, card, stat, granters=granters):
+            yield Modifier(granting.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
     # Kensai raises the limit rather than exempting him from it: Two-Handed still binds a
     # Kensai, and that rule is checked separately.
-    if stat is Stat.WEAPON_LIMIT and keywords.KENSAI in effective_keywords(game, card):
-        yield Modifier(card.id, card.id, stat, 1, Duration.WHILE_SOURCE_IN_PLAY)
-    if stat in _SENSEI_GRANTED_STATS and isinstance(card.printed, StrongholdPrint):
+    if Stat.WEAPON_LIMIT in stats and keywords.KENSAI in effective_keywords(game, card):
+        yield Modifier(card.id, card.id, Stat.WEAPON_LIMIT, 1, Duration.WHILE_SOURCE_IN_PLAY)
+    sensei_stats = [stat for stat in stats if stat in _SENSEI_GRANTED_STATS]
+    if sensei_stats and isinstance(card.printed, StrongholdPrint):
         for sensei in _senseis_of(game, card.owner):
-            delta = getattr(sensei, stat.value)
-            if delta:
-                yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
+            for stat in sensei_stats:
+                delta = getattr(sensei, stat.value)
+                if delta:
+                    yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
     for recorded in game.ongoing:
-        if not isinstance(recorded, Modifier | ConditionalModifier) or recorded.stat is not stat:
+        if not isinstance(recorded, Modifier | ConditionalModifier):
             continue
-        if not grant_applies(game, recorded):
+        stat = recorded.stat
+        if stat not in stats or not grant_applies(game, recorded):
             continue
         if isinstance(recorded, Modifier):
             if recorded.target_id == card.id:

@@ -1,7 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
-from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.stats.calculation import effective_stat, is_modified
 from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
     effective_force,
@@ -149,6 +149,33 @@ def test_a_conditional_grant_adjusts_only_the_stat_it_names():
     _attacked_by(game, samurai)
 
     assert effective_chi(game, samurai) == 3
+
+
+def test_is_modified_answers_for_a_modifier_on_any_stat():
+    plain = _personality("plain")
+    blessed = _personality("blessed", counters={"aura": 1})
+    honored = _personality("honored")
+    kensai = L5RCard.of(
+        PersonalityPrint,
+        id="kensai",
+        printed_id="kensai",
+        name="kensai",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        force=2,
+        chi=3,
+        keywords=("Kensai",),
+    )
+    game = _game(
+        plain, [Modifier("src", honored.id, Stat.PERSONAL_HONOR, 1, Duration.UNTIL_END_OF_TURN)]
+    )
+    for card in (blessed, honored, kensai):
+        put_in_play(game, card)
+
+    assert not is_modified(game, plain)
+    assert is_modified(game, blessed)
+    assert is_modified(game, honored)
+    assert is_modified(game, kensai)
 
 
 def test_the_minimum_applies_to_the_total_rather_than_to_each_step():
