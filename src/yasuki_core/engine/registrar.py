@@ -120,6 +120,7 @@ class HandlerRegistry[T](Mapping[str, T]):
     @overload
     def get[D](self, printed_id: str, default: T | D, /) -> T | D: ...
     def get(self, printed_id: str, default: object = None, /) -> object:
+        """``printed_id``'s handler, or ``default`` when it has none."""
         return self._handlers.get(printed_id, default)
 
     def __contains__(self, printed_id: object) -> bool:
