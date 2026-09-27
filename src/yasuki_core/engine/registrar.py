@@ -1,5 +1,5 @@
 from collections.abc import Callable, Iterator, Mapping
-from typing import Any
+from typing import Any, overload
 
 # Every per-card registry built here, in creation order. What validation reads instead of a
 # hand-kept list: a registry that exists is a registry that is checked, so a new one cannot escape
@@ -111,6 +111,19 @@ class HandlerRegistry[T](Mapping[str, T]):
 
     def __getitem__(self, printed_id: str) -> T:
         return self._handlers[printed_id]
+
+    # Delegated rather than inherited from Mapping, whose versions answer a miss by raising and
+    # catching KeyError. Most lookups miss, since few cards register in any one registry, and the
+    # engine makes them on every stat read.
+    @overload
+    def get(self, printed_id: str, /) -> T | None: ...
+    @overload
+    def get[D](self, printed_id: str, default: T | D, /) -> T | D: ...
+    def get(self, printed_id: str, default: object = None, /) -> object:
+        return self._handlers.get(printed_id, default)
+
+    def __contains__(self, printed_id: object) -> bool:
+        return printed_id in self._handlers
 
     def __iter__(self) -> Iterator[str]:
         return iter(self._handlers)
