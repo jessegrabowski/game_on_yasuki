@@ -273,6 +273,7 @@ for bearer in ("shahai", "shahai2"):
     card = L5RCard.of(
         PersonalityPrint,
         id=bearer,
+        printed_id=bearer,
         name=bearer,
         side=Side.DYNASTY,
         owner=P1,
@@ -286,10 +287,14 @@ for bearer in ("shahai", "shahai2"):
 # Seven filler cards in hand and one in the fate deck. The end of the turn draws one, so the hand
 # will hold ten against a limit of eight, and the trim will ask for two.
 for index in range(7):
-    filler = L5RCard.of(FatePrint, id=f"P1-h{index}", name="H", side=Side.FATE, owner=P1)
+    filler = L5RCard.of(
+        FatePrint, id=f"P1-h{index}", printed_id=f"P1-h{index}", name="H", side=Side.FATE, owner=P1
+    )
     state.cards_by_id[filler.id] = filler
     hand.add(filler)
-drawn = L5RCard.of(FatePrint, id="P1-fd0", name="F", side=Side.FATE, owner=P1)
+drawn = L5RCard.of(
+    FatePrint, id="P1-fd0", printed_id="P1-fd0", name="F", side=Side.FATE, owner=P1
+)
 state.cards_by_id[drawn.id] = drawn
 state.decks[DeckKey(P1, Side.FATE)].cards = [drawn]
 
