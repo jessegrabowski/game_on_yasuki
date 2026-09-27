@@ -7,7 +7,9 @@ from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.duel.records import DuelRecord
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.vocabulary.decisions import DECK_TOP, focus_source, focus_token
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -23,7 +25,13 @@ def focused_cards(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
 def focus_value(card: L5RCard) -> int:
     """The Focus Value printed on ``card``, or zero where it prints none. A card with no printed
     Focus Value contributes nothing rather than refusing to be focused: what may be focused is the
-    focus procedure's business, and this only reads what was."""
+    focus procedure's business, and this only reads what was.
+
+    What a duel totals is
+    :func:`~yasuki_core.engine.rules.stats.calculation.effective_stat` over
+    :attr:`~yasuki_core.engine.rules.vocabulary.modifiers.Stat.FOCUS`, which counts a card that
+    raises another card's Focus Value.
+    """
     printed = getattr(card.printed, "focus", None)
     return printed if isinstance(printed, int) else 0
 
@@ -99,7 +107,7 @@ class TwentyFestivalsFocusing:
         return []
 
     def focus_total(self, game: GameState, duel: DuelRecord, seat: PlayerId) -> int:
-        return sum(focus_value(card) for card in focused_cards(game, seat))
+        return sum(effective_stat(game, card, Stat.FOCUS) for card in focused_cards(game, seat))
 
     def cleanup(self, game: GameState, duel: DuelRecord) -> list[Effect]:
         return []

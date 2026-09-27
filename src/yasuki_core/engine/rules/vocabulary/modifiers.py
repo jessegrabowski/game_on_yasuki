@@ -17,6 +17,7 @@ class Stat(Enum):
     """
 
     CHI = "chi"
+    FOCUS = "focus"
     FORCE = "force"
     GOLD_COST = "gold_cost"
     GOLD_PRODUCTION = "gold_production"

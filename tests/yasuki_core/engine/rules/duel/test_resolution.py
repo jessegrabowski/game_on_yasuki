@@ -157,6 +157,23 @@ def test_the_higher_total_wins_the_duel():
         assert outcome.losers == (P1,)
 
 
+def test_a_raised_focus_value_counts_toward_the_total():
+    # Weigh the Cost and Isawa Ichimon both raise a focused card's Focus Value, so the duel totals
+    # the modified value rather than what the card prints. A card in reserve for each seat keeps the
+    # focusing loop open, since a seat with nothing to focus strikes without being asked.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(held=(focus_card("P2-fv1", P2, 1), focus_card("P1-spare", P1, 1)))
+        _challenge(session)
+        session.submit(P2, DecisionResponse((focus_token("P2-fv1"),)))
+        apply_effect(
+            session.game,
+            GrantModifier("ichimon", "P2-fv1", Stat.FOCUS, 2, DUEL_CONSEQUENCES),
+        )
+        _strike_out(session)
+
+        assert session.game.duel.outcome.totals == {P1: 3, P2: 6}
+
+
 def test_a_duel_scoped_grant_is_gone_once_the_duel_ends():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         session = _duel_game(held=(focus_card("P2-spare", P2, 1), focus_card("P1-spare", P1, 1)))
