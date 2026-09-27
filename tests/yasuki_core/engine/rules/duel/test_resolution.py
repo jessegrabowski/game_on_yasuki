@@ -354,6 +354,25 @@ def test_a_question_asked_on_the_duels_resolution_is_answered_before_the_duel_en
     assert session.game.duel.step is DuelStep.ENDED
 
 
+def test_a_duelist_leaving_after_the_duel_is_decided_leaves_the_outcome_standing():
+    game = _duel_on_a_bare_game()
+    procedure.strike(game, P2)
+    for step in (
+        resolution.RevealFocusedCards,
+        focus_effects.ResolveFocusEffects,
+        resolution.AnnounceFocusEffectsResolved,
+        resolution.DecideTheDuel,
+    ):
+        _resume_next(game, step)
+    outcome = game.duel.outcome
+
+    ops.remove_card(game.table, game.table.cards_by_id["rival"])
+    enforce_state_based_actions(game)
+
+    assert game.duel.outcome == outcome
+    assert isinstance(game.stack[-1], resolution.EndTheDuel)
+
+
 def test_a_duel_both_duelists_are_still_in_demands_nothing():
     game = _duel_on_a_bare_game()
 
