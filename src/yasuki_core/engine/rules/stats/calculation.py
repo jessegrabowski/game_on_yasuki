@@ -157,7 +157,13 @@ def stat_maximum(game: GameState, card: L5RCard, stat: Stat) -> int | None:
     return None
 
 
-def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
+def effective_stat(
+    game: GameState,
+    card: L5RCard,
+    stat: Stat,
+    *,
+    granters: Sequence[L5RCard] | None = None,
+) -> int:
     """``card``'s ``stat`` right now: its printed value plus every active modifier on it, floored at
     zero or at whatever higher minimum a card has given it, and capped at whatever maximum applies.
 
@@ -175,6 +181,9 @@ def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
         The card being read.
     stat : Stat
         Which stat to total.
+    granters : sequence of L5RCard, optional
+        The board's :func:`~.stat_granters`, for a caller reading many cards against one board.
+        Default None, read off the board here.
 
     Returns
     -------
@@ -184,7 +193,8 @@ def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
     base = getattr(card, stat.value, None)
     if base is None:
         return 0
-    total = base + sum(modifier.amount for modifier in active_modifiers(game, card, stat))
+    modifiers = active_modifiers(game, card, stat, granters=granters)
+    total = base + sum(modifier.amount for modifier in modifiers)
     floor = stat_minimum(game, card, stat)
     cap = stat_maximum(game, card, stat)
     if cap is None:
