@@ -46,7 +46,6 @@ from tests.yasuki_core.engine.builders import (
     holding,
     personality,
     put_in_play,
-    pay,
     register,
     stronghold,
     token_template,
@@ -396,7 +395,6 @@ def test_proclaiming_a_dishonored_aitso_for_three_rehonors_her_instead():
         if isinstance(action, Recruit) and action.proclaim
     )
     session.act(P1, proclaim)
-    pay(session, P1)
     assert isinstance(session.game.pending, Confirm)
     session.submit(P1, DecisionResponse(session.game.pending.candidates))
 

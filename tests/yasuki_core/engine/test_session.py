@@ -205,6 +205,18 @@ def _stronghold(state, clan: str) -> L5RCard:
     return stronghold
 
 
+def test_recruiting_a_card_that_costs_nothing_asks_no_payment():
+    state = _dealt_table()
+    _personality_in_province(state, "P1-person", gold_cost=0)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, Recruit("P1-person"))
+
+    assert session.game.pending is None
+    assert session.game.table.cards_by_id["P1-person"] in session.game.table.battlefield.cards
+
+
 def test_recruit_pays_then_brings_the_personality_into_play_unbowed_and_refills():
     state = _dealt_table()
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
@@ -328,7 +340,6 @@ def test_proclaim_is_available_again_on_the_seats_next_turn():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
     session.act(PlayerId.P1, Recruit("P1-first", proclaim=True))
-    pay(session, PlayerId.P1)
     assert Recruit("P1-second", proclaim=True) not in session.legal_actions(PlayerId.P1)
 
     end_phase(session)  # end P1's turn; the full hand + fate draw forces a discard
@@ -345,7 +356,7 @@ def test_cancel_of_a_proclaim_payment_leaves_the_proclaim_available():
     state = _dealt_table()
     _stronghold(state, clan="Crab")
     _gold_source(state, "P1-SH", 8)
-    _personality_in_province(state, "P1-person", clan="Crab", personal_honor=2)
+    _personality_in_province(state, "P1-person", clan="Crab", personal_honor=2, gold_cost=1)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
@@ -758,7 +769,6 @@ def test_proclaim_gains_the_honor_the_personality_is_worth_now():
     before = session.game.table.seats[PlayerId.P1].honor
 
     session.act(PlayerId.P1, Recruit("P1-person", proclaim=True))
-    pay(session, PlayerId.P1)
 
     assert session.game.table.seats[PlayerId.P1].honor == before + 4
 

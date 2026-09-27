@@ -2075,7 +2075,8 @@ class RecruitCard(InterruptingEffect):
     def perform(self, game: GameState) -> list[GameEvent]:
         return []
 
-    def request(self, game: GameState) -> DecisionRequest:
+    def request(self, game: GameState) -> DecisionRequest | None:
+        """The payment the recruit asks for, or None for a card that costs nothing."""
         # Announcing a recruit builds a payment, and the payment loop is written in the effects
         # this module defines -- so the entry point is reached lazily whatever module holds it.
         from yasuki_core.engine.rules.rulebook.recruit import announce_recruit

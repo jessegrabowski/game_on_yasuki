@@ -41,9 +41,9 @@ def recruit(
     renew: bool = False,
     proclaim: bool = False,
 ) -> None:
-    """Announce a Recruit: defer bringing the card into play, then pause for its cost payment. The
-    payment bows gold producers to cover :func:`~.recruit_cost` plus any Invest cost. Once answered,
-    the stack resolves the move into play and the province refill.
+    """Announce a Recruit: defer bringing the card into play, then pause for its cost payment unless
+    it costs nothing. The payment bows gold producers to cover :func:`~.recruit_cost` plus any
+    Invest cost. Once answered, the stack resolves the move into play and the province refill.
 
     With ``invest`` set, also pay the card's Invest cost for its one-time enter-play effect. A fixed
     Invest folds straight into the payment. A variable one pauses first for
@@ -122,10 +122,13 @@ def announce_recruit(
     invest_amount: int | None,
     renew: bool = False,
     proclaim: bool = False,
-) -> ChoosePayment:
-    """Queue the recruit and build the payment it must be paid with."""
+) -> ChoosePayment | None:
+    """Queue the recruit and build the payment it must be paid with, or None for a recruit that
+    costs nothing."""
     game.stack.append(ResolveRecruit(seat, card.id, invest_amount, renew, proclaim))
     amount = recruit_cost(game, card) + (invest_amount or 0)
+    if amount == 0:
+        return None
     return payment_request(game, seat, amount, card.name, target=card)
 
 

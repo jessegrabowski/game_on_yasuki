@@ -78,7 +78,6 @@ from tests.yasuki_core.engine.builders import (
     dealt_table,
     end_phase,
     holding,
-    pay,
     personality,
     province_card,
     put_in_play,
@@ -454,7 +453,6 @@ def _proclaim_session(
         if isinstance(action, Recruit) and action.proclaim
     )
     session.act(P1, proclaim)
-    pay(session, P1)
     return session
 
 
