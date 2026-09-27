@@ -14,9 +14,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     ability_label,
     interrupt_for,
     interrupt_label,
-    invest_amounts,
 )
-from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
@@ -104,32 +102,27 @@ class GameRunner:
         Empty when the card offers nothing right now. Kharmic is on the seat's proxy card."""
         game = self.session.game
         card = game.table.cards_by_id[card_id]
-        # Deferred until a Recruit action confirms this is a recruitable card: recruit_cost reads
-        # gold_cost, which only Dynasty/Fate cards carry. Clicking a card that only offers an
-        # activated ability (e.g. a stronghold) must not reach it.
-        base: int | None = None
         items: list[tuple[str, Action]] = []
         discards: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if getattr(action, "card_id", None) != card_id:
                 continue
             if isinstance(action, Recruit):
-                if base is None:
-                    base = legality.recruit_cost(game, card)
+                pay = _pay(legality.action_gold(game, action))
                 if action.invest:
-                    items.append((self._invest_label(game, card, base), action))
+                    items.append((f"Invest: {pay}", action))
                 elif action.proclaim:
-                    items.append((self._proclaim_label(game, card, base), action))
+                    items.append((self._proclaim_label(game, card, pay), action))
                 else:
-                    items.append((f"Recruit: Pay {base} gold", action))
+                    items.append((f"Recruit: {pay}", action))
             elif is_dynasty_discard(action):
                 discards.append(("Discard from province", action))
         return items + discards
 
-    def _proclaim_label(self, game: GameState, card: L5RCard, base: int) -> str:
+    def _proclaim_label(self, game: GameState, card: L5RCard, pay: str) -> str:
         """The Proclaim entry names the Honor it gains, unless the card offers an alternative
         the seat is asked about after entry, when the amount is not yet decided."""
-        label = f"Recruit & Proclaim: Pay {base} gold"
+        label = f"Recruit & Proclaim: {pay}"
         if card.printed_id in PROCLAIM_GAINS:
             return label
         return f"{label}, gain {effective_personal_honor(game, card)} honor"
@@ -148,35 +141,15 @@ class GameRunner:
             if getattr(action, "card_id", None) != card_id:
                 continue
             if isinstance(action, Equip):
-                card = game.table.cards_by_id[card_id]
-                cost = effective_gold_cost(game, card)
-                if action.invest:
-                    items.append((self._invest_label(game, card, cost, "Equip & Invest"), action))
-                else:
-                    items.append((f"Equip: Pay {cost} gold", action))
+                verb = "Equip & Invest" if action.invest else "Equip"
+                items.append((f"{verb}: {_pay(legality.action_gold(game, action))}", action))
             elif isinstance(action, PlayStrategy):
                 card = game.table.cards_by_id[card_id]
+                prices = legality.action_gold(game, action)
                 ability = ability_for(game, card, action.ability_key)
-                cost = effective_gold_cost(game, card)
-                label = (
-                    ability_label(card, ability) if ability is not None else "Play this Strategy"
-                )
-                items.append((label if cost == 0 else f"{label} -- Pay {cost} gold", action))
+                label = "Play this Strategy" if ability is None else ability_label(card, ability)
+                items.append((label if prices == (0,) else f"{label} -- {_pay(prices)}", action))
         return items
-
-    @staticmethod
-    def _invest_label(game: GameState, card: L5RCard, base: int, verb: str = "Invest") -> str:
-        """The menu wording for taking ``card``'s Invest on top of ``base``: one price, or the
-        prices the payer chooses among. Read off the board, so a card discounting its own Invest is
-        offered at what it will actually charge."""
-        prices = [base + amount for amount in invest_amounts(game, card)]
-        if len(prices) == 1:
-            return f"{verb}: Pay {prices[0]} gold"
-        # A span reads as one, the way the card prints it; separate prices are listed as separate.
-        if len(prices) == prices[-1] - prices[0] + 1:
-            return f"{verb}: Pay {prices[0]}\u2013{prices[-1]} gold"
-        listed = ", ".join(str(price) for price in prices[:-1])
-        return f"{verb}: Pay {listed} or {prices[-1]} gold"
 
     def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """Every activated-ability action offered for an in-play card the human controls, each
@@ -512,3 +485,14 @@ class GameRunner:
                 self.session.act(seat, chosen)
             else:
                 return
+
+
+def _pay(prices: tuple[int, ...]) -> str:
+    """The menu wording for paying one of ``prices``, least first: one price, a span read as one
+    the way a card prints it, or separate prices listed."""
+    if len(prices) == 1:
+        return f"Pay {prices[0]} gold"
+    if len(prices) == prices[-1] - prices[0] + 1:
+        return f"Pay {prices[0]}\u2013{prices[-1]} gold"
+    listed = ", ".join(str(price) for price in prices[:-1])
+    return f"Pay {listed} or {prices[-1]} gold"

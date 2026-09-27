@@ -319,6 +319,33 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     ]
 
 
+def action_gold(game: GameState, action: Recruit | Equip | PlayStrategy) -> tuple[int, ...]:
+    """The Gold ``action`` charges in all, discounts included, least first: one amount, or several
+    for a Recruit whose Invest amount the payer picks. A Strategy whose ability charges Gold as well
+    pays its Gold Cost and that Gold as two payments, and the amount is their sum.
+
+    Raise ``ValueError`` for an Invest the card does not print, or a Strategy ability the card
+    does not have.
+    """
+    card = game.table.cards_by_id[action.card_id]
+    match action:
+        case Recruit(invest=True):
+            amounts = invest_amounts(game, card)
+            if amounts is None:
+                raise ValueError(f"{card.id} prints no Invest to recruit with")
+            base = recruit_cost(game, card)
+            return tuple(base + amount for amount in amounts)
+        case Recruit():
+            return (recruit_cost(game, card),)
+        case Equip(invest=invest):
+            return (equip_gold(game, card, invest=invest),)
+        case PlayStrategy(ability_key=key):
+            ability = ability_for(game, card, key)
+            if ability is None:
+                raise ValueError(f"{card.id} has no ability keyed {key!r} to play")
+            return (strategy_gold(game, card, ability),)
+
+
 def strategy_gold(game: GameState, card: L5RCard, ability: Ability) -> int:
     """The Gold playing ``card`` for ``ability`` charges in all: its Gold Cost and the Gold its
     ability's cost adds, with the action's one discount spent across both."""

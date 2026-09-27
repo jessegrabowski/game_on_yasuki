@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.replay.game_log import game_log_from_dict, game_log_to_dict
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.rules.legality import action_gold
 
 from tests.yasuki_core.engine.builders import end_phase, pay, put_in_play, register
 
@@ -129,6 +130,20 @@ def test_rebuilt_harbor_grants_wealth_tokens_equal_to_the_amount_invested():
     assert isinstance(pending, ChoosePayment) and pending.amount == 4  # base 1 + chosen 3
     pay(session, PlayerId.P1)
     assert session.game.table.cards_by_id["rh"].counters == {"wealth": 3}
+
+
+def test_a_variable_invest_recruit_is_priced_at_every_amount_the_payer_may_choose():
+    session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
+
+    assert action_gold(session.game, Recruit("rh", invest=True)) == (2, 3, 4)
+    assert action_gold(session.game, Recruit("rh")) == (1,)
+
+
+def test_a_recruit_with_invest_on_a_card_printing_none_has_no_price():
+    session = _invest_game("farm", "millet_farm", gold_cost=1)
+
+    with pytest.raises(ValueError, match="prints no Invest"):
+        action_gold(session.game, Recruit("farm", invest=True))
 
 
 def test_variable_invest_amounts_are_capped_by_affordable_gold():
