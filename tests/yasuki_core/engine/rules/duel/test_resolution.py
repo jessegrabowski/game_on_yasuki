@@ -13,6 +13,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.effects import Ask, GrantModifier, StartDuel
 from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
@@ -154,6 +155,21 @@ def test_the_higher_total_wins_the_duel():
         assert outcome.totals == {P1: 3, P2: 6}
         assert outcome.winners == (P2,)
         assert outcome.losers == (P1,)
+
+
+def test_a_duel_scoped_grant_is_gone_once_the_duel_ends():
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(held=(focus_card("P2-spare", P2, 1), focus_card("P1-spare", P1, 1)))
+        _challenge(session)
+        apply_effect(
+            session.game,
+            GrantModifier("technique", "rival", Stat.CHI, 2, DUEL_CONSEQUENCES),
+        )
+        _strike_out(session)
+
+        # The outcome was read while the grant stood, and nothing carries it past the duel.
+        assert session.game.duel.outcome.totals == {P1: 3, P2: 5}
+        assert session.game.ongoing == []
 
 
 def test_a_tie_is_lost_by_both_personalities():
@@ -371,6 +387,20 @@ def test_a_duelist_leaving_after_the_duel_is_decided_leaves_the_outcome_standing
 
     assert game.duel.outcome == outcome
     assert isinstance(game.stack[-1], resolution.EndTheDuel)
+
+
+def test_a_duel_that_ends_without_resolving_drops_what_it_scoped():
+    game = _duel_on_a_bare_game()
+    # Granted to the duelist that stays, so only the duel's own ending can drop it.
+    apply_effect(
+        game,
+        GrantModifier("technique", "challenger", Stat.CHI, 2, DUEL_CONSEQUENCES),
+    )
+    ops.remove_card(game.table, game.table.cards_by_id["rival"])
+
+    enforce_state_based_actions(game)
+
+    assert game.ongoing == []
 
 
 def test_a_duel_both_duelists_are_still_in_demands_nothing():
