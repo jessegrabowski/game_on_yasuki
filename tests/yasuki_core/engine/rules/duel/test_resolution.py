@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, DuelResolved
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DECK_TOP,
     STRIKE,
@@ -251,13 +251,17 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     _resume_next(game, resolution.RevealFocusedCards)
     # The reveal queues the Focus Effect step, which has nothing to do here.
     _resume_next(game, focus_effects.ResolveFocusEffects)
+    _resume_next(game, resolution.AnnounceFocusEffectsResolved)
     _resume_next(game, resolution.DecideTheDuel)
 
     outcome = game.duel.outcome
     assert outcome.winners == (P2,)
     assert [held.id for held in focusing.focused_cards(game, P2)] == ["P2-fv1"]
-    # The duel has ended the moment its resolution step closed, before the discard (CR, Duel).
+
+    _resume_next(game, resolution.EndTheDuel)
+    # The duel ends before its consequences apply and before the discard (CR, Duel).
     assert game.duel.step is DuelStep.ENDED
+    _resume_next(game, resolution.ApplyDuelConsequences)
 
     _resume_next(game, resolution.DiscardFocusedCards)
 
@@ -327,6 +331,27 @@ def test_a_duelist_off_the_board_ends_the_duel_without_resolution():
     # The focusing loop does not pick up again on a duel that has ended.
     assert game.stack == []
     assert not [key for key in game.table.zones if key.role is ZoneRole.FOCUS]
+
+
+def test_a_question_asked_on_the_duels_resolution_is_answered_before_the_duel_ends(reacting):
+    reacting(
+        DuelResolved,
+        DUEL_PROBE,
+        lambda ctx: [Ask(P1, "Note the outcome?", "probe_note_outcome", source_id=ctx.card.id)],
+    )
+    with (
+        probe_resolver("probe_note_outcome", lambda game, source_id, chosen, seat: []),
+        probe_ability(DUEL_PROBE, DUEL_ABILITY),
+    ):
+        session = _duel_game()
+        _challenge(session)  # neither seat has a card to focus, so both strike unasked
+
+        assert session.game.pending.seat is P1
+        assert session.game.duel.step is DuelStep.RESOLUTION
+
+        session.submit(P1, DecisionResponse(()))
+
+    assert session.game.duel.step is DuelStep.ENDED
 
 
 def test_a_duel_both_duelists_are_still_in_demands_nothing():
