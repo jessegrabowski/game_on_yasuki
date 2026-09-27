@@ -7,6 +7,7 @@ yasuki_core.engine.rules.legality
 
 .. autosummary::
 
+    action_gold
     activatable
     can_proclaim
     has_absent_ability

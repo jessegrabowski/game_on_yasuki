@@ -33,12 +33,10 @@ from yasuki_core.engine.rules.board.queries import (
     province_cards,
     units_at,
 )
-from yasuki_core.engine.rules.rulebook.equip import equip_targets
+from yasuki_core.engine.rules.rulebook.equip import equip_gold, equip_targets
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import (
-    discounted_gold,
-    equip_purchase,
     discounted_gold_cost,
     effective_recruit_discount,
 )
@@ -297,13 +295,11 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
         affordable = fixed + sum(
             maximum_gold_production(game, producer, targets=(card,)) for producer in variable
         )
-        base = effective_gold_cost(game, card)
-        purchase = equip_purchase(card)
-        if discounted_gold(game, purchase, base) > affordable or not equip_targets(game, card):
+        if equip_gold(game, card) > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
-        invest = fixed_invest_amount(game, card)
-        if invest is not None and discounted_gold(game, purchase, base + invest) <= affordable:
+        has_invest = fixed_invest_amount(game, card) is not None
+        if has_invest and equip_gold(game, card, invest=True) <= affordable:
             equips.append(Equip(card.id, invest=True))
     return equips
 
@@ -321,6 +317,33 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
         if (only is None or card.id == only)
         and strategy_gold(game, card, ability) <= reachable_gold(game, seat, card)
     ]
+
+
+def action_gold(game: GameState, action: Recruit | Equip | PlayStrategy) -> tuple[int, ...]:
+    """The Gold ``action`` charges in all, discounts included, least first: one amount, or several
+    for a Recruit whose Invest amount the payer picks. A Strategy whose ability charges Gold as well
+    pays its Gold Cost and that Gold as two payments, and the amount is their sum.
+
+    Raise ``ValueError`` for an Invest the card does not print, or a Strategy ability the card
+    does not have.
+    """
+    card = game.table.cards_by_id[action.card_id]
+    match action:
+        case Recruit(invest=True):
+            amounts = invest_amounts(game, card)
+            if amounts is None:
+                raise ValueError(f"{card.id} prints no Invest to recruit with")
+            base = recruit_cost(game, card)
+            return tuple(base + amount for amount in amounts)
+        case Recruit():
+            return (recruit_cost(game, card),)
+        case Equip(invest=invest):
+            return (equip_gold(game, card, invest=invest),)
+        case PlayStrategy(ability_key=key):
+            ability = ability_for(game, card, key)
+            if ability is None:
+                raise ValueError(f"{card.id} has no ability keyed {key!r} to play")
+            return (strategy_gold(game, card, ability),)
 
 
 def strategy_gold(game: GameState, card: L5RCard, ability: Ability) -> int:

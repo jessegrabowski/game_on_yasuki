@@ -152,12 +152,21 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
     card = game.table.cards_by_id[card_id]
     candidates = tuple(target.id for target in equip_targets(game, card))
     invest_amount = equip_invest_amount(game, card) if invest else None
-    purchase = equip_purchase(card)
-    amount = discounted_gold(game, purchase, effective_gold_cost(game, card) + (invest_amount or 0))
+    amount = equip_gold(game, card, invest=invest)
     game.announced_from_hand |= {card_id}
     game.stack.append(SelectEquipTarget(card_id, candidates, invest_amount))
     game.stack.append(RequestPayment(card.owner, amount, card.name, card_id))
     triggers.enforce_state_based_actions(game)
+
+
+def equip_gold(game: GameState, card: L5RCard, *, invest: bool = False) -> int:
+    """The Gold Equipping ``card`` charges: its Gold Cost, and its Invest when ``invest``, less the
+    seat's discount on the Equip. Raise ``ValueError`` for ``invest`` on a card printing no fixed
+    Invest."""
+    invest_amount = equip_invest_amount(game, card) if invest else 0
+    return discounted_gold(
+        game, equip_purchase(card), effective_gold_cost(game, card) + invest_amount
+    )
 
 
 @dataclass(frozen=True, slots=True)

@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
 from yasuki_core.engine.rules.rulebook.legacy import is_legacy
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
-from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
@@ -24,7 +24,16 @@ from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
 from yasuki_core.engine.driver import Controls
-from tests.yasuki_core.engine.builders import datasheet_favor_ability, province_card
+from tests.yasuki_core.engine.builders import (
+    attachment,
+    datasheet_favor_ability,
+    personality,
+    province_card,
+    put_in_play,
+    register,
+    sensei,
+    stronghold,
+)
 from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
 from tests.yasuki_core.engine.rules.test_kharmic import _table as _kharmic_table
 from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFILL
@@ -656,6 +665,18 @@ def test_an_investable_attachment_prices_its_two_equips_apart():
         ("Equip: Pay 3 gold", Equip("P1-katana")),
         ("Equip & Invest: Pay 4 gold", Equip("P1-katana", invest=True)),
     ]
+
+
+def test_an_equip_is_priced_at_what_the_seats_discount_leaves():
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(PlayerId.P1, gold_production=5))
+    put_in_play(state, sensei(PlayerId.P1, printed_id="mishime_sensei", keywords=("Shadowlands",)))
+    put_in_play(state, personality("shugenja", keywords=("Shugenja",)))
+    spell = register(state, attachment("spell", attachment_type=AttachmentType.SPELL, gold_cost=3))
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(spell)
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
+
+    assert runner.hand_menu("spell") == [("Equip: Pay 1 gold", Equip("spell"))]
 
 
 def _ruins_runner() -> GameRunner:
