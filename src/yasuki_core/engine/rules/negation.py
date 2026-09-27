@@ -26,7 +26,7 @@ def negates_from(game: GameState, source: L5RCard, effect: Effect) -> bool:
 
 def negate_committed(game: GameState, effect: Effect) -> Effect:
     """``effect``, about to commit, as :class:`~.Negated` where a negation naming no source says
-    so. A negation spent by its first use is spent here."""
+    so. A negation spent by its first use is spent here, by an effect that would happen."""
     negation = next(
         (
             negation
@@ -37,7 +37,7 @@ def negate_committed(game: GameState, effect: Effect) -> Effect:
     )
     if negation is None:
         return effect
-    if negation.once:
+    if negation.once and effect.would_happen(game):
         game.ongoing.remove(negation)
     return Negated(effect)
 

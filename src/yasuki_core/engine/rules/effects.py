@@ -123,6 +123,12 @@ class Effect(ABC):
         """
         return True
 
+    def would_happen(self, game: GameState) -> bool:
+        """Whether performing this now would change anything. Most effects always would. A bow of a
+        card already bowed would not, since a card bows only in going from unbowed to bowed (CR,
+        Bowed and Unbowed), so "its next bowing" is still to come after one."""
+        return True
+
     @abstractmethod
     def describe(self) -> str:
         """One short line naming what this effect does, for a cascade trace. Abstract so a new
@@ -1475,11 +1481,14 @@ class Bow(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         return card is not None and not card.bowed
 
-    def perform(self, game: GameState) -> list[GameEvent]:
+    def would_happen(self, game: GameState) -> bool:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is None or card.bowed:
+        return card is not None and not card.bowed
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        if not self.would_happen(game):
             return []
-        card.bow()
+        game.table.cards_by_id[self.card_id].bow()
         return [Bowed(self.card_id)]
 
 
@@ -1518,11 +1527,14 @@ class Straighten(Effect):
     def describe(self) -> str:
         return f"straighten {self.card_id}"
 
-    def perform(self, game: GameState) -> list[GameEvent]:
+    def would_happen(self, game: GameState) -> bool:
         card = game.table.cards_by_id.get(self.card_id)
-        if card is None or not card.bowed or self.card_id in game.straighten_delayed:
+        return card is not None and card.bowed and self.card_id not in game.straighten_delayed
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        if not self.would_happen(game):
             return []
-        card.unbow()
+        game.table.cards_by_id[self.card_id].unbow()
         return [Straightened(self.card_id)]
 
 

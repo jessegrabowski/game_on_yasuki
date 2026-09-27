@@ -71,10 +71,42 @@ def test_an_effect_must_be_of_the_kind_and_act_on_the_card_the_negation_names():
 
 def test_a_once_negation_is_spent_by_the_first_effect_it_negates():
     game = two_seat_game()
+    put_in_play(game, holding("farm"))
     game.ongoing.append(Negation("ring", END_OF_BATTLE, effect_kind=Bow, once=True))
 
     assert negate_committed(game, Bow("farm")) == Negated(Bow("farm"))
     assert negate_committed(game, Bow("farm")) == Bow("farm")
+
+
+def test_a_once_negation_of_bowing_waits_for_a_bow_that_would_happen():
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm"))
+    farm.bow()
+    negation = Negation("ring", END_OF_TURN, effect_kind=Bow, subject_id="farm", once=True)
+    game.ongoing.append(negation)
+
+    resolve_effects(game, [Bow("farm")])
+    assert game.ongoing == [negation]
+
+    farm.unbow()
+    resolve_effects(game, [Bow("farm")])
+    assert not farm.bowed
+    assert game.ongoing == []
+
+
+def test_a_once_negation_of_straightening_waits_for_a_straighten_that_would_happen():
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm"))
+    negation = Negation("ring", END_OF_TURN, effect_kind=Straighten, subject_id="farm", once=True)
+    game.ongoing.append(negation)
+
+    resolve_effects(game, [Straighten("farm")])
+    assert game.ongoing == [negation]
+
+    farm.bow()
+    resolve_effects(game, [Straighten("farm")])
+    assert farm.bowed
+    assert game.ongoing == []
 
 
 def test_a_while_source_in_play_negation_ends_with_its_source():
