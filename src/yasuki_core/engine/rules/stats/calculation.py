@@ -1,4 +1,4 @@
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.units.membership import attachments_of
@@ -37,7 +37,13 @@ def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
     )
 
 
-def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
+def active_modifiers(
+    game: GameState,
+    card: L5RCard,
+    stat: Stat,
+    *,
+    granters: Sequence[L5RCard] | None = None,
+) -> Iterator[Modifier]:
     """Every modifier adjusting ``card``'s ``stat`` right now: one from each counter it holds,
     granting its per-count stat while in play, one from each card attached to it for the modifier
     that card prints, one from each card in play whose text gives it a stat, one from each Sensei
@@ -46,7 +52,14 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
     ``WHILE_SOURCE_IN_PLAY`` one of either only while its source is on the battlefield.
 
     Everything but the recorded modifiers is read off the board, so a derived grant lasts exactly as
-    long as the card granting it stays in play, whenever that card arrived."""
+    long as the card granting it stays in play, whenever that card arrived.
+
+    Parameters
+    ----------
+    granters : sequence of L5RCard, optional
+        The board's :func:`~.stat_granters`, for a caller reading many cards against one board.
+        Default None, read off the board here.
+    """
     # A counter's source is the card itself, in play by construction here (this is only reached for
     # an in-play card), so no source-in-play check is needed for the derived modifiers.
     for key, count in card.counters.items():
@@ -58,7 +71,7 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
         amount = getattr(attached, printed_modifier, 0)
         if amount:
             yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
-    for granting, amount in granted_stats(game, card, stat):
+    for granting, amount in granted_stats(game, card, stat, granters=granters):
         yield Modifier(granting.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
     # Kensai raises the limit rather than exempting him from it: Two-Handed still binds a
     # Kensai, and that rule is checked separately.

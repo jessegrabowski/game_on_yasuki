@@ -17,6 +17,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.stats.stat_grants import STAT_GRANTS, stat_grant
 from yasuki_core.engine.rules.projection import _identifiable_ids, project
 
 from tests.yasuki_core.engine.builders import (
@@ -248,6 +249,29 @@ def test_a_modified_cards_effective_stats_reach_the_view():
 
     assert view.stat(farm, Stat.GOLD_PRODUCTION) == 4  # printed 2, +1 per Wealth
     assert farm.gold_production == 2  # the card itself still answers what it was printed at
+
+
+def _one_force_to_every_bowed_personality(game, source, card, stat):
+    return 1 if stat is Stat.FORCE and card.bowed else 0
+
+
+def test_another_cards_stat_grant_reaches_the_view():
+    stat_grant("grant_probe")(_one_force_to_every_bowed_personality)
+
+    try:
+        game = two_seat_game()
+        put_in_play(game, holding("shrine", printed_id="grant_probe"))
+        upright = put_in_play(game, personality("upright", force=2))
+        bowed = put_in_play(game, personality("bowed", force=2))
+        bowed.bow()
+
+        view = project(game, PlayerId.P1)
+
+        assert view.stat(bowed, Stat.FORCE) == 3
+        assert view.stat(upright, Stat.FORCE) == 2
+        assert upright.id not in view.stats
+    finally:
+        STAT_GRANTS.pop("grant_probe", None)
 
 
 def test_an_attachments_bonus_reaches_the_view():

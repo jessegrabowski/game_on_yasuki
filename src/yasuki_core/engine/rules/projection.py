@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.calculation import active_modifiers, effective_stat
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
+from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import BattleOutcome
@@ -246,14 +247,18 @@ def _modified_cards(game: GameState, identifiable: set[str]) -> Iterator[L5RCard
     straight off it. A card the viewer may not identify is skipped: its stats would say what it is,
     and a view carries only what its seat is entitled to.
     """
+    granters = stat_granters(game)
     for card in game.table.cards_by_id.values():
-        if card.id in identifiable and _is_modified(game, card):
+        if card.id in identifiable and _is_modified(game, card, granters):
             yield card
 
 
-def _is_modified(game: GameState, card: L5RCard) -> bool:
+def _is_modified(game: GameState, card: L5RCard, granters: tuple[L5RCard, ...]) -> bool:
     """Whether any active modifier reaches ``card``, over any stat."""
-    return any(next(active_modifiers(game, card, stat), None) is not None for stat in Stat)
+    return any(
+        next(active_modifiers(game, card, stat, granters=granters), None) is not None
+        for stat in Stat
+    )
 
 
 def project(game: GameState, viewer: PlayerId) -> GameView:
