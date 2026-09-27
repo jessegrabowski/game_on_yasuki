@@ -35,6 +35,12 @@ the basic floor of zero remains (CR, Minimums and Maximums).
 A stat the card type does not have, and a stat printed as a dash, both read zero and take no
 modifiers at all.
 
+A caller reading many cards against one board passes the board's {func}`~.stat_granters` as
+`granters`, so the cards whose text grants stats are found once for the whole batch rather than
+once per read. The projection and the Chi death check both do. It is not a cache: nothing outlives
+the call. {func}`~.is_modified` asks every stat of a card in one pass, which is how the projection
+decides which cards carry effective stats.
+
 The named readers wrap it. {func}`~.effective_force`, {func}`~.effective_chi`,
 {func}`~.effective_personal_honor` and {func}`~.effective_weapon_limit` each pass one `Stat`.
 {func}`~.effective_keywords` answers the same question for keywords, and

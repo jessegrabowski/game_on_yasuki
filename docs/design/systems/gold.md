@@ -35,6 +35,10 @@ offered yet. {func}`~.is_production_window` recognizes the question by the card 
 the pool. It walks the unbowed producers, counts what each would make, and includes the self-grants
 nobody has been asked about yet.
 
+{func}`~.gold_reach` splits that total into the part no producer's yield depends on and the
+producers whose gold handler reads what they pay for. Legality computes it once per call and prices
+each card through {meth}`~.GoldReach.for_card`.
+
 That total decides whether a purchase is offered. Two things go wrong at that boundary. A purchase
 the seat cannot complete should never be offered, and one it could reach by taking a grant should
 never be withheld.

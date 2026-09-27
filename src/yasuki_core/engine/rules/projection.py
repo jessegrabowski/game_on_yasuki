@@ -240,8 +240,8 @@ def _modified_cards(game: GameState, identifiable: set[str]) -> Iterator[L5RCard
 
     Only some modifier sources are recorded on the game: a counter and a granted effect are, while
     an attachment's printed modifier, a Sensei's grant to its Stronghold and a Kensai's raised
-    weapon limit are derived from the board as it stands. :func:`~.active_modifiers` is what knows
-    about all of them, so it is what decides.
+    weapon limit are derived from the board as it stands. :func:`~.is_modified` reads every source
+    :func:`~.active_modifiers` knows about, so it is what decides.
 
     A card no modifier reaches has only its printed stats, which :meth:`GameView.stat` reads
     straight off it. A card the viewer may not identify is skipped: its stats would say what it is,
