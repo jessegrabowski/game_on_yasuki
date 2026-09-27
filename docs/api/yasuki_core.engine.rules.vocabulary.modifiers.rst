@@ -10,6 +10,7 @@ yasuki_core.engine.rules.vocabulary.modifiers
     AbilityGrant
     Condition
     ConditionalModifier
+    DuelStatOverride
     Duration
     KeywordGrant
     LobbyModifier

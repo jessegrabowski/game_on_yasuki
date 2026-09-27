@@ -238,6 +238,34 @@ class Minimum:
 
 
 @dataclass(frozen=True, slots=True)
+class DuelStatOverride:
+    """A continuous effect that changes which stat one Personality's duels compare (CR, Duel Stat).
+
+    A duel compares the arc's duel stat unless a card names another, and it names it per Personality
+    rather than per duel: Hida Ryusei's Berserkers duel on Force while the Personality opposing them
+    duels on Chi. The stat named here replaces the arc's default for this card, and the modifiers on
+    that stat still apply to it.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the override comes from, used to expire a ``WHILE_SOURCE_IN_PLAY`` override when it
+        leaves play and to attribute the effect.
+    target_id : str
+        The Personality whose duels compare the named stat.
+    stat : Stat
+        The stat its duels compare.
+    duration : Duration
+        When the override stops applying.
+    """
+
+    source_id: str
+    target_id: str
+    stat: Stat
+    duration: Duration
+
+
+@dataclass(frozen=True, slots=True)
 class ProvinceModifier:
     """A continuous effect that adjusts one Province's strength while active.
 
@@ -357,6 +385,7 @@ Ongoing = (
     | ConditionalModifier
     | AbilityGrant
     | SeatAbilityGrant
+    | DuelStatOverride
     | KeywordGrant
     | Minimum
     | ProvinceModifier

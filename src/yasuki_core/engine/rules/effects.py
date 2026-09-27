@@ -43,6 +43,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
     Condition,
     ConditionalModifier,
+    DuelStatOverride,
     KeywordGrant,
     Lifetime,
     LobbyModifier,
@@ -778,6 +779,32 @@ class GrantMinimum(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
             Minimum(self.source_id, self.target_id, self.stat, self.value, self.duration)
+        )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantDuelStat(Effect):
+    """Record which stat ``target``'s duels compare for ``duration`` (CR, Duel Stat).
+
+    The stat is named per Personality, so one duelist can compare Force while the other compares
+    Chi.
+    """
+
+    source_id: str
+    target_id: str
+    stat: Stat
+    duration: Lifetime
+
+    def describe(self) -> str:
+        return (
+            f"{self.source_id} gives {self.target_id} a duel stat of {self.stat.name} "
+            f"({describe_lifetime(self.duration)})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(
+            DuelStatOverride(self.source_id, self.target_id, self.stat, self.duration)
         )
         return []
 

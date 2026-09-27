@@ -44,6 +44,7 @@ yasuki_core.engine.rules.effects
     GainHonor
     GrantAbility
     GrantConditionalModifier
+    GrantDuelStat
     GrantKeyword
     GrantLobbyBonus
     GrantMinimum

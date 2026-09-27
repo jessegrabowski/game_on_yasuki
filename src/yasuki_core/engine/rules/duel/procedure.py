@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.duel.records import DuelRecord, DuelWork
 from yasuki_core.engine.rules.vocabulary.segments import Boundary, DuelStep
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.stats.ongoing_grants import named_duel_stat
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardFocused,
     DuelDeclared,
@@ -138,9 +139,10 @@ class OfferFocusOrStrike(DuelWork):
 
 
 def duel_stat(game: GameState, card: L5RCard) -> int:
-    """The stat this duel compares for ``card``, which is the ruleset's ``duel_stat_default`` until a
-    card overrides it per duel or per Personality (CR, Duel Stat)."""
-    return effective_stat(game, card, ruleset.ACTIVE.duel_stat_default)
+    """The stat this duel compares for ``card``: the ruleset's ``duel_stat_default`` unless a card
+    has named another for this Personality (CR, Duel Stat)."""
+    stat = named_duel_stat(game, card.id) or ruleset.ACTIVE.duel_stat_default
+    return effective_stat(game, card, stat)
 
 
 def offer_focus_or_strike(game: GameState, seat: PlayerId) -> None:

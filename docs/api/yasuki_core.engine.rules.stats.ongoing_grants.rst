@@ -8,6 +8,7 @@ yasuki_core.engine.rules.stats.ongoing_grants
 .. autosummary::
 
     grant_applies
+    named_duel_stat
 
 .. automodule:: yasuki_core.engine.rules.stats.ongoing_grants
     :members:

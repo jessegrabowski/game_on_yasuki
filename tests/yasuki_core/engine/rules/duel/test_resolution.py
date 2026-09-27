@@ -11,7 +11,7 @@ from yasuki_core.engine.rules.duel import focus_effects, focusing, procedure, re
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
-from yasuki_core.engine.rules.effects import Ask, GrantModifier, StartDuel
+from yasuki_core.engine.rules.effects import Ask, GrantDuelStat, GrantModifier, StartDuel
 from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -187,6 +187,27 @@ def test_a_duel_scoped_grant_is_gone_once_the_duel_ends():
         # The outcome was read while the grant stood, and nothing carries it past the duel.
         assert session.game.duel.outcome.totals == {P1: 3, P2: 5}
         assert session.game.ongoing == []
+
+
+def test_a_duelist_duels_on_the_stat_a_card_named_for_it():
+    # Hida Ryusei's shape: her Berserkers duel on Force while the Personality opposing them duels on
+    # Chi, so the stat is named per Personality rather than per duel.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(
+            chi={P1: 1, P2: 3},
+            force={P1: 4, P2: 2},
+            held=(focus_card("P2-spare", P2, 1), focus_card("P1-spare", P1, 1)),
+        )
+        _challenge(session)
+        apply_effect(
+            session.game,
+            GrantDuelStat("ryusei", "challenger", Stat.FORCE, DUEL_CONSEQUENCES),
+        )
+        _strike_out(session)
+
+        outcome = session.game.duel.outcome
+        assert outcome.totals == {P1: 4, P2: 3}
+        assert outcome.winners == (P1,)
 
 
 def test_a_tie_is_lost_by_both_personalities():
