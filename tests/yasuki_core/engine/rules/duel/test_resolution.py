@@ -11,7 +11,13 @@ from yasuki_core.engine.rules.duel import focus_effects, focusing, procedure, re
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
-from yasuki_core.engine.rules.effects import Ask, GrantDuelStat, GrantModifier, StartDuel
+from yasuki_core.engine.rules.effects import (
+    Ask,
+    GrantDuelStat,
+    GrantMinimum,
+    GrantModifier,
+    StartDuel,
+)
 from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -187,6 +193,31 @@ def test_a_duel_scoped_grant_is_gone_once_the_duel_ends():
         # The outcome was read while the grant stood, and nothing carries it past the duel.
         assert session.game.duel.outcome.totals == {P1: 3, P2: 5}
         assert session.game.ongoing == []
+
+
+def test_a_duel_scoped_minimum_expiring_leaves_the_board_judged():
+    # A Personality held above zero Chi only by a duel-scoped floor is destroyed as the duel ends.
+    # Nothing in the duel enforces the state-based rules: the drop happens, then the duel announces
+    # its end, and firing that event is what judges the board.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(
+            chi={P1: 3, P2: 2},
+            held=(focus_card("P2-spare", P2, 1), focus_card("P1-spare", P1, 1)),
+        )
+        _challenge(session)
+        apply_effect(
+            session.game,
+            GrantMinimum("technique", "rival", Stat.CHI, 1, DUEL_CONSEQUENCES),
+        )
+        apply_effect(
+            session.game,
+            GrantModifier("poison", "rival", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN),
+        )
+        _strike_out(session)
+
+        # The floor stood while the duel read the totals, and went with the duel.
+        assert session.game.duel.outcome.totals == {P1: 3, P2: 1}
+        assert "rival" not in {card.id for card in session.game.table.battlefield.cards}
 
 
 def test_a_duelist_duels_on_the_stat_a_card_named_for_it():
