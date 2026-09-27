@@ -49,7 +49,6 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     end_turn,
     holding,
-    pay,
     personality,
     province_card,
     put_in_play,
@@ -636,7 +635,6 @@ def test_unity_of_spirit_straightens_an_opposed_yojimbo_and_grants_the_chosen_bo
         session.game.table.cards_by_id["kakita"].bow()
 
         session.act(PlayerId.P2, PlayStrategy("unity"))
-        pay(session, PlayerId.P2)
         assert session.game.pending.candidates == ("kakita",)
         session.submit(PlayerId.P2, DecisionResponse(("kakita",)))
         assert session.game.pending.candidates == (UNITY_FORCE, UNITY_CHI)
@@ -653,7 +651,6 @@ def test_unity_of_spirit_offers_no_bonus_to_a_personality_who_is_not_a_yojimbo()
         session.game.table.cards_by_id["kakita"].bow()
 
         session.act(PlayerId.P2, PlayStrategy("unity"))
-        pay(session, PlayerId.P2)
         session.submit(PlayerId.P2, DecisionResponse(("kakita",)))
 
         assert session.game.table.cards_by_id["kakita"].bowed is False

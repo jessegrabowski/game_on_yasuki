@@ -60,7 +60,6 @@ def _incapacitated_battle(*, holder: PlayerId = ATTACKER) -> EngineSession:
 
 def _offered_targets(session: EngineSession, holder: PlayerId) -> tuple[str, ...]:
     session.act(holder, PlayStrategy("incapacitated"))
-    session.submit(holder, DecisionResponse())
     return session.game.pending.candidates
 
 

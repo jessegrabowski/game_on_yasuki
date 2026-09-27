@@ -1126,7 +1126,6 @@ def _oaths_attack(*, guard_force: int) -> EngineSession:
 
 def _play_oaths(session: EngineSession, bowing: str) -> None:
     session.act(P1, PlayStrategy("oaths"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse((bowing,)))
     session.submit(P1, DecisionResponse(("guard",)))
 
@@ -1157,7 +1156,6 @@ def test_draw_strength_offers_only_unbowed_personalities_at_the_battle():
     session.game.table.cards_by_id["kakita"].bow()
 
     session.act(P1, PlayStrategy("oaths"))
-    pay(session, P1)
 
     assert session.game.pending.candidates == ("bushi",)
 
@@ -1192,7 +1190,6 @@ def test_i_do_not_forget_targets_only_a_dishonorable_personality():
     session = _i_do_not_forget_game(personal_honor=3)
 
     session.act(P1, PlayStrategy("forget"))
-    pay(session, P1)
 
     assert session.game.pending.candidates == ("disgraced",)
 
@@ -1201,7 +1198,6 @@ def test_i_do_not_forget_costs_the_printed_personal_honor_the_cap_hides():
     session = _i_do_not_forget_game(personal_honor=3)
 
     session.act(P1, PlayStrategy("forget"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse(("disgraced",)))
 
     assert session.game.table.seats[PlayerId.P2].honor == -3
@@ -1211,7 +1207,6 @@ def test_i_do_not_forget_costs_at_least_one():
     session = _i_do_not_forget_game(personal_honor=0)
 
     session.act(P1, PlayStrategy("forget"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse(("disgraced",)))
 
     assert session.game.table.seats[PlayerId.P2].honor == -1

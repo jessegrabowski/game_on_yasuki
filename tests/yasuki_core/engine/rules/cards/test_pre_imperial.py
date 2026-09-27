@@ -86,7 +86,6 @@ def _pass_while(session: EngineSession, still: Callable[[EngineSession], bool]) 
 
 def _play_terrain(session: EngineSession, seat: PlayerId, card_id: str) -> None:
     session.act(seat, PlayStrategy(card_id))
-    pay(session, seat)
 
 
 def test_contentious_terrain_enters_play_at_the_battlefield_in_no_army():
@@ -136,7 +135,6 @@ def test_contentious_terrain_destroys_the_terrain_already_at_the_battlefield():
     _play_terrain(session, P1, "first")
 
     session.act(P2, PlayStrategy("second"))
-    pay(session, P2)
 
     table = session.game.table
     assert "first" in _fate_discard(table, P1)
@@ -151,7 +149,6 @@ def test_contentious_terrain_asks_which_terrain_to_destroy_when_there_are_severa
 
     session.act(P2, Pass())
     session.act(P1, PlayStrategy("ct"))
-    pay(session, P1)
     assert isinstance(session.game.pending, ChooseCards)
     session.submit(P1, DecisionResponse(("right",)))
 
@@ -268,7 +265,6 @@ def test_rallying_cry_keeps_the_players_units_standing_through_after_resolution(
     session = _battle_resolved_holding_the_cry(held_by=P1)
 
     session.act(P1, PlayStrategy("cry-P1"))
-    session.submit(P1, DecisionResponse(()))
     while session.game.round.kind is RoundKind.RESPONSE:
         session.act(session.game.round.priority, Pass())
 

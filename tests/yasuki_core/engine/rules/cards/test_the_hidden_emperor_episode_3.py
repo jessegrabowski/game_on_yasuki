@@ -7,7 +7,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
-from tests.yasuki_core.engine.builders import fate_card, pay, personality, put_in_play, register
+from tests.yasuki_core.engine.builders import fate_card, personality, put_in_play, register
 
 P1 = PlayerId.P1
 FATE = DeckKey(P1, Side.FATE)
@@ -48,7 +48,6 @@ def _fate_deck(session: EngineSession) -> list[str]:
 def test_banish_all_shadows_targets_unbowed_monks_and_shugenja():
     session = _shadows_game()
     session.act(P1, PlayStrategy("shadows"))
-    pay(session, P1)
 
     assert session.game.pending.candidates == ("monk", "priest")
 
@@ -56,7 +55,6 @@ def test_banish_all_shadows_targets_unbowed_monks_and_shugenja():
 def test_banish_all_shadows_takes_one_of_four_and_shuffles():
     session = _shadows_game()
     session.act(P1, PlayStrategy("shadows"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse(("monk",)))
     pending = session.game.pending
     assert isinstance(pending, ChooseCards) and pending.candidates == ("a", "b", "c", "d")

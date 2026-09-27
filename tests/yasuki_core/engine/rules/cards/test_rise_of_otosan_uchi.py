@@ -979,10 +979,8 @@ def _man_the_walls_battle() -> EngineSession:
 
 
 def _play_walls(session: EngineSession, target: str) -> None:
-    """Play Man the Walls! at ``target``: its blank Gold Cost raises a payment of nothing, and the
-    target is chosen on the far side of it."""
+    """Play Man the Walls! at ``target``."""
     session.act(P1, PlayStrategy("walls"))
-    session.submit(P1, DecisionResponse())
     asked = session.game.pending
     assert asked is not None and target in asked.candidates, f"{target} was not offered"
     session.submit(asked.seat, DecisionResponse((target,)))
@@ -994,7 +992,6 @@ def test_man_the_walls_reaches_a_target_left_at_home():
     session = _man_the_walls_battle()
 
     session.act(P1, PlayStrategy("walls"))
-    session.submit(P1, DecisionResponse())
     asked = session.game.pending
 
     assert set(asked.candidates) == {"front", "rear", "ashigaru"}
@@ -1037,7 +1034,6 @@ def test_a_bowed_card_is_no_target():
     session.game.table.cards_by_id["rear"].bow()
 
     session.act(P1, PlayStrategy("walls"))
-    session.submit(P1, DecisionResponse())
 
     assert "rear" not in session.game.pending.candidates
 
@@ -1344,7 +1340,6 @@ def _thoughts_game(*, rings: int = 0, deck=("a", "b", "c", "d")) -> EngineSessio
 
 def _thoughts_on(session: EngineSession, target: str) -> None:
     session.act(P1, PlayStrategy("thoughts"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse((target,)))
 
 
@@ -1418,7 +1413,6 @@ def test_the_dark_void_enters_as_the_only_card_in_hand_and_costs_three_honor():
     before = _honor(session, P1)
 
     session.act(P1, PlayStrategy("dv", "enter"))
-    pay(session, P1)
 
     assert session.game.table.cards_by_id["dv"] in session.game.table.battlefield.cards
     assert _honor(session, P1) == before - 3
@@ -1479,7 +1473,6 @@ def test_fudo_enters_while_the_opponent_holds_nothing_and_costs_one_honor():
     before = _honor(session, P1)
 
     session.act(P1, PlayStrategy("fudo", "enter"))
-    pay(session, P1)
 
     assert session.game.table.cards_by_id["fudo"] in session.game.table.battlefield.cards
     assert _honor(session, P1) == before - 1
@@ -1521,7 +1514,6 @@ def test_fudo_pitched_from_hand_is_discarded_and_costs_one_honor():
     before = _honor(session, P1)
 
     session.act(P1, PlayStrategy("fudo", PITCH))
-    pay(session, P1)
     session.submit(P1, DecisionResponse((session.game.table.seats[P2].name,)))
 
     discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
@@ -1646,7 +1638,6 @@ def test_the_dark_earth_enters_among_six_provinces_and_costs_three_honor():
     before = _honor(session, P1)
 
     session.act(P1, PlayStrategy("earth", "enter"))
-    pay(session, P1)
 
     assert session.game.table.cards_by_id["earth"] in session.game.table.battlefield.cards
     assert _honor(session, P1) == before - 3
@@ -1707,7 +1698,6 @@ def test_the_dark_air_enters_among_three_bowed_personalities_a_side_and_costs_th
     before = _honor(session, P1)
 
     session.act(P1, PlayStrategy("air", "enter"))
-    pay(session, P1)
 
     assert session.game.table.cards_by_id["air"] in session.game.table.battlefield.cards
     assert _honor(session, P1) == before - 3
@@ -1776,7 +1766,6 @@ def test_the_dark_fire_enters_after_two_personalities_fall_to_their_controllers_
     before = _honor(session, P1)
 
     session.act(P1, PlayStrategy("fire", "enter"))
-    pay(session, P1)
 
     assert session.game.table.cards_by_id["fire"] in session.game.table.battlefield.cards
     assert _honor(session, P1) == before - 3

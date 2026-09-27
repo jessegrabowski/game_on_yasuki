@@ -514,9 +514,10 @@ register_interrupt(
 )
 
 
-def _opponent_holds_a_negation(state: TableState) -> TableState:
-    """``state`` with P2 holding an Interrupt that negates every effect of an action. Dealt before
-    the session starts, so a cancel's replay deals it too."""
+def _opponent_holds_a_negation(state: TableState, *, gold_cost: int = 0) -> TableState:
+    """``state`` with P2 holding an Interrupt that negates every effect of an action, and a Holding
+    to pay for it when it costs Gold. Dealt before the session starts, so a cancel's replay deals
+    it too."""
     card = L5RCard.of(
         ActionPrint,
         id="P2-negate",
@@ -524,7 +525,10 @@ def _opponent_holds_a_negation(state: TableState) -> TableState:
         printed_id="legacy_negate_probe",
         side=Side.FATE,
         owner=PlayerId.P2,
+        gold_cost=gold_cost,
     )
+    if gold_cost:
+        put_in_play(state, holding("P2-mine", owner=PlayerId.P2, gold_production=gold_cost))
     state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(register(state, card))
     return state
 
@@ -546,7 +550,9 @@ def test_the_search_waits_for_the_interrupt_step_after_the_banish():
 
 
 def test_the_opponents_interrupt_question_can_be_cancelled():
-    session = _dynasty_session_from(_opponent_holds_a_negation(_table(legacy_in="deck")))
+    session = _dynasty_session_from(
+        _opponent_holds_a_negation(_table(legacy_in="deck"), gold_cost=1)
+    )
     session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
     session.act(PlayerId.P2, PlayInterrupt("P2-negate"))
@@ -563,7 +569,6 @@ def test_a_negated_legacy_neither_searches_nor_loses_but_keeps_its_banish():
     session.act(PlayerId.P1, _legacy(session.game))
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
     session.act(PlayerId.P2, PlayInterrupt("P2-negate"))
-    session.submit(PlayerId.P2, DecisionResponse(()))  # the cost of zero
 
     banish = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH)]
     assert not session.game.game_over

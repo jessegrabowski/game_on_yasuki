@@ -26,7 +26,6 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
-    pay,
     personality,
     province_card,
     put_in_play,
@@ -188,7 +187,6 @@ def _well_prepared_in_combat(*, terrain_owner: PlayerId | None) -> EngineSession
 
 def _play_well_prepared_on(session: EngineSession, target_id: str) -> None:
     session.act(P1, PlayStrategy("prepared"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse((target_id,)))
 
 

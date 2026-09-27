@@ -35,7 +35,7 @@ def _uncertainty(state: TableState) -> L5RCard:
 
 
 def _play_at(session: EngineSession, target_id: str) -> None:
-    """Play Uncertainty and point it at ``target_id``, answering the free payment on the way."""
+    """Play Uncertainty and point it at ``target_id``."""
     session.act(PLAYER, PlayStrategy("uncertainty"))
     for _ in range(4):
         asked = session.game.pending

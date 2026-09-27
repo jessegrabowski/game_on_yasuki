@@ -178,9 +178,7 @@ def _outer_walls_battle(*, present: bool, provinces: int = 1) -> EngineSession:
 
 
 def _play_walls(session: EngineSession) -> None:
-    """Play Outer Walls, answering the payment its zero Gold Cost still raises."""
     session.act(ATTACKER, PlayStrategy("walls"))
-    session.submit(ATTACKER, DecisionResponse())
 
 
 def test_outer_walls_strengthens_the_province_the_battle_is_at():

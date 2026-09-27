@@ -282,7 +282,6 @@ def _play_sneak_attack(session: EngineSession, holder: PlayerId) -> None:
     if session.game.round.priority is not holder:
         session.act(session.game.round.priority, Pass())
     session.act(holder, PlayStrategy("sneak_attack"))
-    session.submit(holder, DecisionResponse())
 
 
 def test_the_combat_segment_opens_on_the_defender_without_it():

@@ -17,7 +17,6 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     end_turn,
     fate_card,
-    pay,
     personality,
     province_card,
     put_in_play,
@@ -58,7 +57,6 @@ def _flashy_in_hand(*copies: str) -> EngineSession:
 
 def _play(session: EngineSession, card_id: str) -> None:
     session.act(P1, PlayStrategy(card_id))
-    pay(session, P1)
 
 
 def _attack_with_the_raider(session: EngineSession) -> None:
@@ -142,7 +140,6 @@ def _fate_deck(session: EngineSession) -> list[str]:
 
 def _play_to_the_look(session: EngineSession) -> None:
     session.act(P1, PlayStrategy("doubt"))
-    pay(session, P1)  # the Gold Cost of zero is still asked for
     pending = session.game.pending
     assert isinstance(pending, ChooseAbilityTarget) and pending.candidates == ("tactician",)
     session.submit(P1, DecisionResponse(("tactician",)))

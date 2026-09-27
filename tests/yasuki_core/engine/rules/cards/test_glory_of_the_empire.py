@@ -144,9 +144,8 @@ def _challenge_battle() -> EngineSession:
 
 
 def _announce_challenge(session: EngineSession) -> tuple[str, ...]:
-    """Play the Strategy for its Gold Cost of zero and return the Courtiers it offers."""
+    """Play the Strategy and return the Courtiers it offers."""
     session.act(ATTACKER, PlayStrategy("challenge"))
-    session.submit(ATTACKER, DecisionResponse())
     return session.game.pending.candidates
 
 

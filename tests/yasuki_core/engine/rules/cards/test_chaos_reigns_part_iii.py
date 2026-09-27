@@ -563,7 +563,6 @@ def test_hungry_moon_dishonors_only_a_bowed_personality():
     session = _hungry_moon_game()
 
     session.act(P1, PlayStrategy("moon", "dishonor"))
-    pay(session, P1)
     asked = session.game.pending
     assert asked is not None and asked.candidates == ("kneeling",)
     session.submit(P1, DecisionResponse(("kneeling",)))
@@ -575,7 +574,6 @@ def test_hungry_moon_strips_a_holdings_wealth_and_names_who_pays():
     session = _hungry_moon_game()
 
     session.act(P1, PlayStrategy("moon", "wealth"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse(("market",)))
     session.submit(P1, DecisionResponse(("P2",)))
 
@@ -587,7 +585,6 @@ def test_hungry_moon_on_a_holding_with_no_wealth_asks_nobody_to_pay():
     session = _hungry_moon_game()
 
     session.act(P1, PlayStrategy("moon", "wealth"))
-    pay(session, P1)
     session.submit(P1, DecisionResponse(("farm",)))
 
     assert session.game.pending is None
@@ -781,7 +778,6 @@ def _education_fate_deck(session: EngineSession) -> list[str]:
 
 def _play_education(session: EngineSession) -> None:
     session.act(P1, PlayStrategy("education"))
-    pay(session, P1)
 
 
 def test_comprehensive_education_walks_take_then_discard_then_bottom():

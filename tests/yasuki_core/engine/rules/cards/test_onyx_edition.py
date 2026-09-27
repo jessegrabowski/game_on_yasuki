@@ -190,7 +190,6 @@ def test_fields_of_slaughter_enters_play_in_the_engage_segment():
     session.act(P2, Pass())
 
     session.act(P1, PlayStrategy("fields"))
-    pay(session, P1)
 
     game = session.game
     assert game.attack.battle_segment is BattleSegment.ENGAGE
@@ -1491,7 +1490,6 @@ def _water_combat(
 
 def _play_terrain(session: EngineSession, seat: PlayerId, card_id: str) -> None:
     session.act(seat, PlayStrategy(card_id))
-    pay(session, seat)
 
 
 def _fight_out(session: EngineSession) -> None:
@@ -1621,7 +1619,6 @@ def test_a_terrain_whose_entry_is_negated_still_counts_as_played():
     session.act(P2, Pass())
     _play_terrain(session, P1, "mine")
     session.act(P2, PlayInterrupt("negator"))
-    pay(session, P2)
 
     table = session.game.table
     assert not any(card.id == "mine" for card in table.battlefield.cards)
