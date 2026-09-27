@@ -84,6 +84,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
     BattleResolved,
     Bowed,
+    DuelDeclared,
+    DuelResolved,
     FavorDiscarded,
     HonorChanged,
 )
@@ -411,10 +413,32 @@ register_interrupt(
 
 # --- Ring of Fire ---
 
-# "Play after you win a duel during a battle, if your Personality did not enter the duel with
-# higher duel stat than the other." Duels are not modeled, so the entry has no handler.
-
 RING_OF_FIRE_PENALTY = -4
+
+
+def _ring_of_fire_condition(ctx: TriggerContext) -> bool:
+    """ "Play after you win a duel during a battle, if your Personality did not enter the duel with
+    higher duel stat than the other." The stats it entered on are the ones its declaration
+    recorded."""
+    game, owner = ctx.game, ctx.card.owner
+    if owner not in ctx.event.winners or game.attack is None or game.attack.current is None:
+        return False
+    declared = next(
+        event
+        for event in reversed(game.turn_events)
+        if isinstance(event, DuelDeclared) and event.source_card_id == ctx.event.source_card_id
+    )
+    if declared.challenger is owner:
+        return declared.challenger_stat <= declared.challenged_stat
+    return declared.challenged_stat <= declared.challenger_stat
+
+
+register_trait_entry(
+    "ring_of_fire",
+    DuelResolved,
+    _ring_of_fire_condition,
+    ruleset=ruleset.SHATTERED_EMPIRE.name,
+)
 
 
 def _ring_of_fire_targets(game: GameState, source: L5RCard) -> list[str]:

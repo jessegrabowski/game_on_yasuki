@@ -278,7 +278,8 @@ register_interrupt(
 # --- Ring of Fire ---
 
 # "Play after you win a duel during a battle, if your Personality did not enter the duel with
-# higher Chi than the other." Duels are not modeled, so the entry has no handler.
+# higher Chi than the other." The entry has no handler: DuelDeclared records the duel stats the
+# Personalities entered on, and a card can make that stat something other than Chi.
 
 
 def _ring_of_fire_targets(game: GameState, source: L5RCard) -> list[str]:
