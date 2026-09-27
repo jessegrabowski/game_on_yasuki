@@ -40,8 +40,7 @@ from yasuki_core.engine.rules.gold.discounts import (
     discounted_gold_cost,
     effective_recruit_discount,
 )
-from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
-from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production
+from yasuki_core.engine.rules.gold.producers import gold_reach
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
@@ -242,7 +241,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
     seat_info = game.table.seats[seat]
     honor = seat_info.honor
     enforce_honor = not seat_info.ignores_honor_requirements
-    fixed, variable = gold_reach(game, seat)
+    reach = gold_reach(game, seat)
     for card in province_cards(game, seat):
         if only is not None and card.id != only:
             continue
@@ -259,9 +258,7 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
             and honor < card.honor_requirement
         ):
             continue
-        affordable = fixed + sum(
-            maximum_gold_production(game, producer, targets=(card,)) for producer in variable
-        )
+        affordable = reach.for_card(game, card)
         base = recruit_cost(game, card)
         if base <= affordable:
             recruits.append(Recruit(card.id))
@@ -283,7 +280,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
     if not permits(game, seat, ACTION_TIMINGS[Equip]):
         return []
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
-    fixed, variable = gold_reach(game, seat)
+    reach = gold_reach(game, seat)
     equips: list[Action] = []
     for card in hand:
         if only is not None and card.id != only:
@@ -292,9 +289,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
             continue
         if not copy_may_enter(game, seat, card):
             continue
-        affordable = fixed + sum(
-            maximum_gold_production(game, producer, targets=(card,)) for producer in variable
-        )
+        affordable = reach.for_card(game, card)
         if equip_gold(game, card) > affordable or not equip_targets(game, card):
             continue
         equips.append(Equip(card.id))
@@ -311,11 +306,12 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     Asks :func:`~yasuki_core.engine.rules.playable` for the hand, since the card's own ability
     decides when it may be played. ``only`` narrows to a single card.
     """
+    reach = gold_reach(game, seat)
     return [
         PlayStrategy(card.id, ability.key)
         for card, ability in playable(game, seat, permitted_timings(game, seat))
         if (only is None or card.id == only)
-        and strategy_gold(game, card, ability) <= reachable_gold(game, seat, card)
+        and strategy_gold(game, card, ability) <= reach.for_card(game, card)
     ]
 
 

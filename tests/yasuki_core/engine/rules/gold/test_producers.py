@@ -29,8 +29,6 @@ def test_a_bowed_producer_and_a_sensei_are_not_sources():
 
 
 def test_gold_reach_splits_the_producers_that_still_need_a_target():
-    """A producer whose yield can vary with what it pays for cannot be totalled before the purchase
-    is known, so it comes back separately instead of being folded into the fixed sum."""
     game = two_seat_game()
     game.gold[PlayerId.P1] = 1
     put_in_play(game, holding("P1-plain", owner=PlayerId.P1, gold_production=2))
@@ -43,10 +41,10 @@ def test_gold_reach_splits_the_producers_that_still_need_a_target():
         return 5 if targets else card.gold_production
 
     try:
-        fixed, variable = gold_reach(game, PlayerId.P1)
+        reach = gold_reach(game, PlayerId.P1)
 
-        assert fixed == 1 + 2, "the pool and the target-independent producer only"
-        assert variable == (varies,)
+        assert reach.fixed == 1 + 2, "the pool and the target-independent producer only"
+        assert reach.variable == (varies,)
         assert reachable_gold(game, PlayerId.P1) == 3 + 3
         assert reachable_gold(game, PlayerId.P1, varies) == 3 + 5
     finally:

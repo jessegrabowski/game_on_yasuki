@@ -3,6 +3,12 @@ yasuki_core.engine.rules.gold.producers
 
 .. currentmodule:: yasuki_core.engine.rules.gold.producers
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    GoldReach
+
 .. rubric:: Functions
 
 .. autosummary::
