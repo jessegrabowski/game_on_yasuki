@@ -7,7 +7,9 @@ from yasuki_core.game_pieces.prints import CardPrint
 
 
 def test_real_card_passes_through_unchanged():
-    card = L5RCard.of(CardPrint, id="c1", name="Bushi", side=Side.DYNASTY, owner=PlayerId.P1)
+    card = L5RCard.of(
+        CardPrint, id="c1", printed_id="c1", name="Bushi", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     assert to_render_card(card) is card
 
 

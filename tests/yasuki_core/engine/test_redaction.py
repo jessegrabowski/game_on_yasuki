@@ -17,6 +17,7 @@ def _card(card_id, side=Side.FATE, owner=P1, face_up=False, shown=False, peekers
     return L5RCard.of(
         CardPrint,
         id=card_id,
+        printed_id=card_id,
         name=f"name-{card_id}",
         side=side,
         owner=owner,

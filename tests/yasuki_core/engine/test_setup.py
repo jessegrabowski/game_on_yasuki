@@ -33,12 +33,24 @@ UNDRAWN = default_rng(0)
 def _resolved(owner=PlayerId.P1, dynasty_n=10, fate_n=10):
     dynasty = [
         L5RCard.of(
-            DynastyPrint, id=f"{owner.name}-d{i}", name=f"D{i}", side=Side.DYNASTY, owner=owner
+            DynastyPrint,
+            id=f"{owner.name}-d{i}",
+            printed_id=f"{owner.name}-d{i}",
+            name=f"D{i}",
+            side=Side.DYNASTY,
+            owner=owner,
         )
         for i in range(dynasty_n)
     ]
     fate = [
-        L5RCard.of(FatePrint, id=f"{owner.name}-f{i}", name=f"F{i}", side=Side.FATE, owner=owner)
+        L5RCard.of(
+            FatePrint,
+            id=f"{owner.name}-f{i}",
+            printed_id=f"{owner.name}-f{i}",
+            name=f"F{i}",
+            side=Side.FATE,
+            owner=owner,
+        )
         for i in range(fate_n)
     ]
     return ResolvedDeck(dynasty=dynasty, fate=fate)
@@ -88,6 +100,7 @@ def test_province_count_comes_from_the_stronghold():
         L5RCard.of(
             StrongholdPrint,
             id="sh",
+            printed_id="sh",
             name="Wall",
             side=Side.STRONGHOLD,
             province_count=5,
@@ -124,6 +137,7 @@ def test_starting_hand_size_comes_from_the_stronghold():
         L5RCard.of(
             StrongholdPrint,
             id="sh",
+            printed_id="sh",
             name="Wall",
             side=Side.STRONGHOLD,
             starting_hand_size=3,
@@ -142,9 +156,16 @@ def test_pre_game_cards_are_dealt_face_up_as_loose_battlefield_cards():
     state = TableState.empty_two_seat()
     resolved = _resolved()
     stronghold = L5RCard.of(
-        StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1
+        StrongholdPrint,
+        id="sh",
+        printed_id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        owner=PlayerId.P1,
     )
-    sensei = L5RCard.of(SenseiPrint, id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1)
+    sensei = L5RCard.of(
+        SenseiPrint, id="se", printed_id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1
+    )
     resolved.pre_game.extend([stronghold, sensei])
 
     setup_seat(state, PlayerId.P1, resolved, rng=default_rng(1))
@@ -186,13 +207,20 @@ def test_starting_honor_sums_stronghold_and_sensei():
         L5RCard.of(
             StrongholdPrint,
             id="sh",
+            printed_id="sh",
             name="Kyuden",
             side=Side.STRONGHOLD,
             starting_honor=10,
             owner=PlayerId.P1,
         ),
         L5RCard.of(
-            SenseiPrint, id="se", name="Sensei", side=Side.FATE, starting_honor=5, owner=PlayerId.P1
+            SenseiPrint,
+            id="se",
+            printed_id="se",
+            name="Sensei",
+            side=Side.FATE,
+            starting_honor=5,
+            owner=PlayerId.P1,
         ),
     )
     assert state.seats[PlayerId.P1].honor == 15
@@ -201,7 +229,12 @@ def test_starting_honor_sums_stronghold_and_sensei():
 def test_a_stronghold_without_a_sensei_starts_unattached():
     state = _setup_with_pregame(
         L5RCard.of(
-            StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1
+            StrongholdPrint,
+            id="sh",
+            printed_id="sh",
+            name="Kyuden",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
         ),
     )
     assert state.attachments == {}
@@ -211,7 +244,9 @@ def test_a_stronghold_without_a_sensei_starts_unattached():
 def test_a_sensei_without_a_stronghold_is_not_attached():
     # No stronghold to hang on: the sensei is left loose rather than attached to nothing (a crash).
     state = _setup_with_pregame(
-        L5RCard.of(SenseiPrint, id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1),
+        L5RCard.of(
+            SenseiPrint, id="se", printed_id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1
+        ),
     )
     assert state.attachments == {}
     state.validate()
@@ -222,6 +257,7 @@ def test_starting_honor_from_a_stronghold_alone_is_its_base():
         L5RCard.of(
             StrongholdPrint,
             id="sh",
+            printed_id="sh",
             name="Kyuden",
             side=Side.STRONGHOLD,
             starting_honor=10,
@@ -239,6 +275,7 @@ def test_a_negative_sensei_delta_lowers_what_the_stronghold_reads():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         gold_production=8,
@@ -248,6 +285,7 @@ def test_a_negative_sensei_delta_lowers_what_the_stronghold_reads():
     sensei = L5RCard.of(
         SenseiPrint,
         id="se",
+        printed_id="se",
         name="Sensei",
         side=Side.FATE,
         gold_production=-1,
@@ -269,6 +307,7 @@ def test_every_sensei_characteristic_reaches_the_seat():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         starting_honor=10,
@@ -279,6 +318,7 @@ def test_every_sensei_characteristic_reaches_the_seat():
     sensei = L5RCard.of(
         SenseiPrint,
         id="se",
+        printed_id="se",
         name="Sensei",
         side=Side.FATE,
         starting_honor=5,
@@ -305,6 +345,7 @@ def test_several_senseis_all_contribute():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         starting_honor=10,
@@ -315,6 +356,7 @@ def test_several_senseis_all_contribute():
         L5RCard.of(
             SenseiPrint,
             id="se1",
+            printed_id="se1",
             name="One",
             side=Side.FATE,
             starting_honor=5,
@@ -324,6 +366,7 @@ def test_several_senseis_all_contribute():
         L5RCard.of(
             SenseiPrint,
             id="se2",
+            printed_id="se2",
             name="Two",
             side=Side.FATE,
             starting_honor=1,
@@ -344,13 +387,20 @@ def test_a_sensei_is_not_a_second_gold_producer():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         gold_production=3,
         owner=PlayerId.P1,
     )
     sensei = L5RCard.of(
-        SenseiPrint, id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+        SenseiPrint,
+        id="se",
+        printed_id="se",
+        name="Sensei",
+        side=Side.FATE,
+        gold_production=2,
+        owner=PlayerId.P1,
     )
     state = _setup_with_pregame(stronghold, sensei)
 
@@ -363,6 +413,7 @@ def test_a_sensei_with_no_stronghold_contributes_nothing():
     sensei = L5RCard.of(
         SenseiPrint,
         id="se",
+        printed_id="se",
         name="Sensei",
         side=Side.FATE,
         starting_honor=5,
@@ -380,6 +431,7 @@ def test_a_stronghold_without_a_sensei_keeps_its_printed_stats():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         gold_production=8,
@@ -403,6 +455,7 @@ def _two_seat_table(p1_honor, p2_honor, *, p2_has_back=True, p2_back_printed=Non
     p1_sh = L5RCard.of(
         StrongholdPrint,
         id="p1sh",
+        printed_id="p1sh",
         name="Front1",
         side=Side.STRONGHOLD,
         owner=PlayerId.P1,
@@ -509,13 +562,20 @@ def test_a_sensei_leaving_play_takes_its_gold_with_it():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         gold_production=3,
         owner=PlayerId.P1,
     )
     sensei = L5RCard.of(
-        SenseiPrint, id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+        SenseiPrint,
+        id="se",
+        printed_id="se",
+        name="Sensei",
+        side=Side.FATE,
+        gold_production=2,
+        owner=PlayerId.P1,
     )
     game = _begun(_setup_with_pregame(stronghold, sensei))
     assert effective_gold_production(game, stronghold) == 5
@@ -532,6 +592,7 @@ def test_a_sensei_reaching_the_table_after_setup_still_grants():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         gold_production=3,
@@ -541,7 +602,13 @@ def test_a_sensei_reaching_the_table_after_setup_still_grants():
     assert effective_gold_production(game, stronghold) == 3
 
     latecomer = L5RCard.of(
-        SenseiPrint, id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+        SenseiPrint,
+        id="se",
+        printed_id="se",
+        name="Sensei",
+        side=Side.FATE,
+        gold_production=2,
+        owner=PlayerId.P1,
     )
     game.table.battlefield.add(latecomer)
     game.table.cards_by_id[latecomer.id] = latecomer
@@ -555,18 +622,26 @@ def test_a_sensei_grants_to_the_stronghold_and_nothing_else():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         gold_production=3,
         owner=PlayerId.P1,
     )
     sensei = L5RCard.of(
-        SenseiPrint, id="se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P1
+        SenseiPrint,
+        id="se",
+        printed_id="se",
+        name="Sensei",
+        side=Side.FATE,
+        gold_production=2,
+        owner=PlayerId.P1,
     )
     game = _begun(_setup_with_pregame(stronghold, sensei))
     mine = L5RCard.of(
         HoldingPrint,
         id="farm",
+        printed_id="farm",
         name="Farm",
         side=Side.DYNASTY,
         gold_production=1,
@@ -586,6 +661,7 @@ def test_a_sensei_modifies_only_its_own_seats_stronghold():
     mine = L5RCard.of(
         StrongholdPrint,
         id="p1-sh",
+        printed_id="p1-sh",
         name="Mine",
         side=Side.STRONGHOLD,
         gold_production=3,
@@ -594,13 +670,20 @@ def test_a_sensei_modifies_only_its_own_seats_stronghold():
     theirs = L5RCard.of(
         StrongholdPrint,
         id="p2-sh",
+        printed_id="p2-sh",
         name="Theirs",
         side=Side.STRONGHOLD,
         gold_production=3,
         owner=PlayerId.P2,
     )
     sensei = L5RCard.of(
-        SenseiPrint, id="p2-se", name="Sensei", side=Side.FATE, gold_production=2, owner=PlayerId.P2
+        SenseiPrint,
+        id="p2-se",
+        printed_id="p2-se",
+        name="Sensei",
+        side=Side.FATE,
+        gold_production=2,
+        owner=PlayerId.P2,
     )
     # The sensei belongs to the seat set up *second*, so "its own stronghold" and "the first
     # stronghold found" are different cards and a grant that ignores ownership lands visibly wrong.
@@ -621,12 +704,15 @@ def test_a_sensei_with_nothing_to_give_grants_nothing():
     stronghold = L5RCard.of(
         StrongholdPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         gold_production=3,
         owner=PlayerId.P1,
     )
-    sensei = L5RCard.of(SenseiPrint, id="se", name="Blank", side=Side.FATE, owner=PlayerId.P1)
+    sensei = L5RCard.of(
+        SenseiPrint, id="se", printed_id="se", name="Blank", side=Side.FATE, owner=PlayerId.P1
+    )
 
     game = _begun(_setup_with_pregame(stronghold, sensei))
 

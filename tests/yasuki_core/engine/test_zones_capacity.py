@@ -7,8 +7,12 @@ from yasuki_core.engine.players import PlayerId
 
 def test_province_capacity_enforced():
     prov = ProvinceZone()
-    d1 = L5RCard.of(CardPrint, id="d1", name="D1", side=Side.DYNASTY, owner=PlayerId.P1)
-    d2 = L5RCard.of(CardPrint, id="d2", name="D2", side=Side.DYNASTY, owner=PlayerId.P1)
+    d1 = L5RCard.of(
+        CardPrint, id="d1", printed_id="d1", name="D1", side=Side.DYNASTY, owner=PlayerId.P1
+    )
+    d2 = L5RCard.of(
+        CardPrint, id="d2", printed_id="d2", name="D2", side=Side.DYNASTY, owner=PlayerId.P1
+    )
 
     assert prov.add(d1) is True
     assert len(prov) == 1

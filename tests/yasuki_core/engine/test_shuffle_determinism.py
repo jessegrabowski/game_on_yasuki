@@ -11,7 +11,14 @@ def _table_with_fate_deck(n: int = 20) -> TableState:
     table = TableState.empty_two_seat()
     deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
     for i in range(n):
-        card = L5RCard.of(FatePrint, id=f"f{i}", name=f"f{i}", side=Side.FATE, owner=PlayerId.P1)
+        card = L5RCard.of(
+            FatePrint,
+            id=f"f{i}",
+            printed_id=f"f{i}",
+            name=f"f{i}",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+        )
         table.cards_by_id[card.id] = card
         deck.cards.append(card)
     return table

@@ -30,6 +30,7 @@ def _personality(
     return L5RCard.of(
         PersonalityPrint,
         id=card_id,
+        printed_id=card_id,
         name=card_id,
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -205,6 +206,7 @@ def test_an_attachments_printed_force_is_readable():
     bow = L5RCard.of(
         AttachmentPrint,
         id="bow",
+        printed_id="bow",
         name="Bow",
         side=Side.FATE,
         owner=PlayerId.P1,

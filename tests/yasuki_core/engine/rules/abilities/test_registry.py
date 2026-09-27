@@ -210,7 +210,13 @@ def _labelless(**fields) -> Ability:
 
 def _printed(text: str) -> L5RCard:
     return L5RCard.of(
-        HoldingPrint, id="farm", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1, text=text
+        HoldingPrint,
+        id="farm",
+        printed_id="farm",
+        name="Farm",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        text=text,
     )
 
 
@@ -416,7 +422,7 @@ def _probe_card(printed_id: str) -> L5RCard:
         HoldingPrint,
         id="probe",
         name="Probe",
-        printed_id=printed_id,
+        printed_id="probe" if printed_id is None else printed_id,
         side=Side.DYNASTY,
         owner=PlayerId.P1,
     )

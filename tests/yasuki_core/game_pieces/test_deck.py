@@ -10,12 +10,24 @@ from yasuki_core.engine.players import PlayerId
 
 
 def mk_fate(i: int) -> L5RCard:
-    return L5RCard.of(FatePrint, id=f"f{i}", name=f"Fate {i}", side=Side.FATE, owner=PlayerId.P1)
+    return L5RCard.of(
+        FatePrint,
+        id=f"f{i}",
+        printed_id=f"f{i}",
+        name=f"Fate {i}",
+        side=Side.FATE,
+        owner=PlayerId.P1,
+    )
 
 
 def mk_dyn(i: int) -> L5RCard:
     return L5RCard.of(
-        DynastyPrint, id=f"d{i}", name=f"Dyn {i}", side=Side.DYNASTY, owner=PlayerId.P1
+        DynastyPrint,
+        id=f"d{i}",
+        printed_id=f"d{i}",
+        name=f"Dyn {i}",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
     )
 
 

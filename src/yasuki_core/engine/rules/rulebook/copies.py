@@ -49,7 +49,5 @@ _EXPERIENCE_TAIL = re.compile(r"_(?:in)?experienced.*$")
 
 def printed_title(card: L5RCard) -> str:
     """The title ``card`` prints as its id spells it, shared by every experience level of one
-    card. A card built without an id, as a test fixture is, reads as its name."""
-    if card.printed_id is None:
-        return card.name
+    card."""
     return _EXPERIENCE_TAIL.sub("", card.printed_id)

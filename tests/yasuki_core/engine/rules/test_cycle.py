@@ -32,6 +32,7 @@ def _table(*, provinces: int = 3, deck: int = 3, second_seat_provinces: int = 0)
                 L5RCard.of(
                     DynastyPrint,
                     id=f"{seat.name}-pv{index}",
+                    printed_id=f"{seat.name}-pv{index}",
                     name="P",
                     side=Side.DYNASTY,
                     owner=seat,
@@ -45,6 +46,7 @@ def _table(*, provinces: int = 3, deck: int = 3, second_seat_provinces: int = 0)
                 L5RCard.of(
                     DynastyPrint,
                     id=f"{seat.name}-dd{index}",
+                    printed_id=f"{seat.name}-dd{index}",
                     name="D",
                     side=Side.DYNASTY,
                     owner=seat,

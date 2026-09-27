@@ -75,6 +75,7 @@ def _sand_game(*, production=8, in_deck=("spare",)) -> EngineSession:
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=P1,
@@ -88,6 +89,7 @@ def _sand_game(*, production=8, in_deck=("spare",)) -> EngineSession:
             L5RCard.of(
                 PersonalityPrint,
                 id="bearer",
+                printed_id="bearer",
                 name="Bearer",
                 side=Side.DYNASTY,
                 owner=P1,
@@ -196,6 +198,7 @@ def _beiru_game(*, provinces=("keep",), discarded=("wall",)):
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=P1,

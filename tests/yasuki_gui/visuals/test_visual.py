@@ -30,6 +30,7 @@ class TestCounterBadges:
         return L5RCard.of(
             CardPrint,
             id="c",
+            printed_id="c",
             name="C",
             side=Side.DYNASTY,
             owner=PlayerId.P1,

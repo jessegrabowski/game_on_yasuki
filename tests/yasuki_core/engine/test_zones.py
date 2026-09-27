@@ -9,9 +9,11 @@ from yasuki_core.engine.players import PlayerId
 
 def test_zone_add_remove_and_constraints():
     hand = HandZone()
-    fate_card = L5RCard.of(CardPrint, id="f1", name="Fate", side=Side.FATE, owner=PlayerId.P1)
+    fate_card = L5RCard.of(
+        CardPrint, id="f1", printed_id="f1", name="Fate", side=Side.FATE, owner=PlayerId.P1
+    )
     dynasty_card = L5RCard.of(
-        CardPrint, id="d1", name="Dynasty", side=Side.DYNASTY, owner=PlayerId.P1
+        CardPrint, id="d1", printed_id="d1", name="Dynasty", side=Side.DYNASTY, owner=PlayerId.P1
     )
 
     hand.add(fate_card)

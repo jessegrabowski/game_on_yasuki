@@ -35,8 +35,8 @@ class CardPrint:
     name: str
     side: Side
     # The stable printed identity: the database card slug, shared by every copy and printing.
-    # Per-card effect handlers key off it; None for fabricated demo cards and spawned tokens.
-    printed_id: str | None = None
+    # Per-card effect handlers key off it.
+    printed_id: str
     clan: str | None = None
     clans: tuple[str, ...] = ()
     keywords: tuple[str, ...] = ()

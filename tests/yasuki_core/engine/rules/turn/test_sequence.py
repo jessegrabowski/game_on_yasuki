@@ -106,7 +106,12 @@ def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
             register(
                 state,
                 L5RCard.of(
-                    FatePrint, id=f"{seat.name}-fd{i}", name="F", side=Side.FATE, owner=seat
+                    FatePrint,
+                    id=f"{seat.name}-fd{i}",
+                    printed_id=f"{seat.name}-fd{i}",
+                    name="F",
+                    side=Side.FATE,
+                    owner=seat,
                 ),
             )
             for i in range(fate_deck)
@@ -116,7 +121,14 @@ def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
         hand_zone.add(
             register(
                 state,
-                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"P1-h{i}",
+                    printed_id=f"P1-h{i}",
+                    name="H",
+                    side=Side.FATE,
+                    owner=PlayerId.P1,
+                ),
             )
         )
     return GameState.start(state, PlayerId.P1)
@@ -250,7 +262,10 @@ def test_submit_rejects_a_malformed_or_illegal_answer():
 
 def _bowed_on_battlefield(state: TableState, seat: PlayerId, card_id: str):
     card = register(
-        state, L5RCard.of(DynastyPrint, id=card_id, name="B", side=Side.DYNASTY, owner=seat)
+        state,
+        L5RCard.of(
+            DynastyPrint, id=card_id, printed_id=card_id, name="B", side=Side.DYNASTY, owner=seat
+        ),
     )
     card.bow()
     state.battlefield.add(card)
@@ -259,7 +274,10 @@ def _bowed_on_battlefield(state: TableState, seat: PlayerId, card_id: str):
 
 def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
     card = register(
-        state, L5RCard.of(DynastyPrint, id=card_id, name="P", side=Side.DYNASTY, owner=seat)
+        state,
+        L5RCard.of(
+            DynastyPrint, id=card_id, printed_id=card_id, name="P", side=Side.DYNASTY, owner=seat
+        ),
     )
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
@@ -432,7 +450,14 @@ def test_a_new_game_refills_a_short_province_before_the_first_action():
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
             state,
-            L5RCard.of(DynastyPrint, id="P1-next", name="N", side=Side.DYNASTY, owner=PlayerId.P1),
+            L5RCard.of(
+                DynastyPrint,
+                id="P1-next",
+                printed_id="P1-next",
+                name="N",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+            ),
         )
     ]
     game = GameState.start(state, PlayerId.P1)
@@ -905,7 +930,14 @@ def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
     state = TableState.empty_two_seat()
     put_in_play(
         state,
-        L5RCard.of(StrongholdPrint, id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1),
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            printed_id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+        ),
     )
     put_in_play(
         state,

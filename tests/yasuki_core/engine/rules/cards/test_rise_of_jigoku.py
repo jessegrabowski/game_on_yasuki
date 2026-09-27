@@ -189,7 +189,14 @@ def _modest_farm_game(
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
         register(
             state,
-            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1),
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=P1,
+            ),
         )
     ]
     if with_producer:
@@ -198,6 +205,7 @@ def _modest_farm_game(
             L5RCard.of(
                 HoldingPrint,
                 id="SH",
+                printed_id="SH",
                 name="SH",
                 side=Side.DYNASTY,
                 owner=P1,
@@ -335,7 +343,14 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
         register(
             state,
-            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1),
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=P1,
+            ),
         )
     ]
     put_in_play(
@@ -343,6 +358,7 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
         L5RCard.of(
             HoldingPrint,
             id="SH",
+            printed_id="SH",
             name="SH",
             side=Side.DYNASTY,
             owner=P1,
@@ -354,6 +370,7 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
         L5RCard.of(
             HoldingPrint,
             id="warrens",
+            printed_id="warrens",
             name="W",
             side=Side.DYNASTY,
             owner=P1,
@@ -399,6 +416,7 @@ def test_modest_farm_recruit_puts_its_questions_in_a_fixed_order():
             L5RCard.of(
                 HoldingPrint,
                 id="other-farm",
+                printed_id="other-farm",
                 name="Other Farm",
                 side=Side.DYNASTY,
                 owner=P1,
@@ -828,6 +846,7 @@ def test_makeshift_fortifications_walls_the_province_it_was_recruited_from():
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=P1,

@@ -175,7 +175,15 @@ def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
         register(
-            state, L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1)
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=P1,
+            ),
         )
     ]
     put_in_play(
@@ -195,6 +203,7 @@ def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
         L5RCard.of(
             HoldingPrint,
             id="jade",
+            printed_id="jade",
             name="Jade Thing",
             side=Side.DYNASTY,
             owner=P1,

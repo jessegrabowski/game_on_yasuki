@@ -83,7 +83,7 @@
       "__enum__": "Side",
       "value": "STRONGHOLD"
     },
-    "printed_id": null,
+    "printed_id": "sh",
     "clan": null,
     "clans": {
       "__tuple__": []

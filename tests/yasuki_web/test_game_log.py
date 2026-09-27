@@ -36,7 +36,13 @@ P1 = PlayerId.P1
 
 def _board_card(table, card_id="c1", name="Hida Kisada", face_up=True):
     card = L5RCard.of(
-        CardPrint, id=card_id, name=name, side=Side.DYNASTY, owner=PlayerId.P1, face_up=face_up
+        CardPrint,
+        id=card_id,
+        printed_id=card_id,
+        name=name,
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        face_up=face_up,
     )
     table.battlefield.add(card)
     table.cards_by_id[card_id] = card
@@ -86,7 +92,14 @@ def test_showing_a_fate_card_in_hand_names_it():
     # named.
     table = TableState.empty_two_seat()
     card = L5RCard.of(
-        CardPrint, id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=True, shown=True
+        CardPrint,
+        id="f1",
+        printed_id="f1",
+        name="Secret",
+        side=Side.FATE,
+        owner=P1,
+        face_up=True,
+        shown=True,
     )
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
     table.cards_by_id["f1"] = card
@@ -102,7 +115,14 @@ def test_showing_a_face_down_dynasty_card_stays_generic():
     # The owner still sees a back, so the card is not public to all; naming it would leak it.
     table = TableState.empty_two_seat()
     card = L5RCard.of(
-        CardPrint, id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False, shown=True
+        CardPrint,
+        id="d1",
+        printed_id="d1",
+        name="Gold Mine",
+        side=Side.DYNASTY,
+        owner=P1,
+        face_up=False,
+        shown=True,
     )
     table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
     table.cards_by_id["d1"] = card
@@ -115,7 +135,13 @@ def test_showing_a_face_down_dynasty_card_stays_generic():
 def test_unshow_is_generic():
     table = TableState.empty_two_seat()
     card = L5RCard.of(
-        CardPrint, id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False
+        CardPrint,
+        id="d1",
+        printed_id="d1",
+        name="Gold Mine",
+        side=Side.DYNASTY,
+        owner=P1,
+        face_up=False,
     )
     table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
     table.cards_by_id["d1"] = card
@@ -128,7 +154,9 @@ def test_unshow_is_generic():
 
 def test_peek_is_always_generic():
     table = TableState.empty_two_seat()
-    card = L5RCard.of(CardPrint, id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False)
+    card = L5RCard.of(
+        CardPrint, id="f1", printed_id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False
+    )
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
     table.cards_by_id["f1"] = card
 
@@ -140,7 +168,13 @@ def test_peek_is_always_generic():
 def test_unpeek_is_generic():
     table = TableState.empty_two_seat()
     card = L5RCard.of(
-        CardPrint, id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False
+        CardPrint,
+        id="d1",
+        printed_id="d1",
+        name="Gold Mine",
+        side=Side.DYNASTY,
+        owner=P1,
+        face_up=False,
     )
     table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
     table.cards_by_id["d1"] = card
@@ -154,7 +188,9 @@ def test_unpeek_is_generic():
 def test_a_face_up_card_off_the_battlefield_is_not_named():
     # Public by its face flag, but in a private/off-board zone and must still read as "a card".
     table = TableState.empty_two_seat()
-    card = L5RCard.of(CardPrint, id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=True)
+    card = L5RCard.of(
+        CardPrint, id="f1", printed_id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=True
+    )
     table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
     table.cards_by_id["f1"] = card
 
@@ -167,7 +203,13 @@ def test_a_face_up_card_in_a_province_is_named():
     # Flipping a province card face up makes its identity public, so the log names it.
     table = TableState.empty_two_seat()
     card = L5RCard.of(
-        CardPrint, id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=True
+        CardPrint,
+        id="d1",
+        printed_id="d1",
+        name="Gold Mine",
+        side=Side.DYNASTY,
+        owner=P1,
+        face_up=True,
     )
     table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
     table.cards_by_id["d1"] = card
@@ -178,7 +220,13 @@ def test_a_face_up_card_in_a_province_is_named():
 def test_move_to_a_public_discard_names_the_card():
     table = TableState.empty_two_seat()
     card = L5RCard.of(
-        CardPrint, id="f1", name="Ancestral Armor", side=Side.FATE, owner=P1, face_up=True
+        CardPrint,
+        id="f1",
+        printed_id="f1",
+        name="Ancestral Armor",
+        side=Side.FATE,
+        owner=P1,
+        face_up=True,
     )
     table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards.append(card)
     table.cards_by_id["f1"] = card
@@ -218,7 +266,14 @@ def test_spawn_links_the_new_card():
     _board_card(table, "tok1", "Token")
     intent = SpawnCard(
         card_id="tok1",
-        printed=L5RCard.of(CardPrint, id="src", name="Token", side=Side.DYNASTY, owner=PlayerId.P1),
+        printed=L5RCard.of(
+            CardPrint,
+            id="src",
+            printed_id="src",
+            name="Token",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+        ),
         position=BoardPos(0.0, 0.0),
     )
     assert _describe(table, intent, ("tok1",))[-1] == {"card_id": "tok1", "name": "Token"}

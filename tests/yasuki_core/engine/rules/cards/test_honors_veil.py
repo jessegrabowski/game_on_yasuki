@@ -17,13 +17,27 @@ def _recruit_the_bazaar(*, printed_keywords: tuple[str, ...]) -> EngineSession:
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
         register(
-            state, L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1)
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=P1,
+            ),
         )
     ]
     put_in_play(
         state,
         L5RCard.of(
-            HoldingPrint, id="SH", name="SH", side=Side.DYNASTY, owner=P1, gold_production=8
+            HoldingPrint,
+            id="SH",
+            printed_id="SH",
+            name="SH",
+            side=Side.DYNASTY,
+            owner=P1,
+            gold_production=8,
         ),
     )
     bazaar = register(

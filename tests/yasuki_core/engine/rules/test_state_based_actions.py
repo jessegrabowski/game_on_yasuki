@@ -52,7 +52,7 @@ def _personality(
         name=card_id,
         side=Side.DYNASTY,
         owner=owner,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         force=2,
         chi=chi,
     )
@@ -184,7 +184,14 @@ def test_a_card_on_a_province_is_not_swept_by_the_orphan_rule():
     game.table.zones[province] = ProvinceZone(owner=P1)
     region = put_in_play(
         game,
-        L5RCard.of(RegionPrint, id="region", name="region", side=Side.DYNASTY, owner=P1),
+        L5RCard.of(
+            RegionPrint,
+            id="region",
+            printed_id="region",
+            name="region",
+            side=Side.DYNASTY,
+            owner=P1,
+        ),
     )
     ops.attach_to_province(game.table, region, province)
 
@@ -466,6 +473,7 @@ def test_proclaiming_a_personality_who_dies_on_arrival_still_gains_the_honor():
     doomed = L5RCard.of(
         PersonalityPrint,
         id="P1-doomed",
+        printed_id="P1-doomed",
         name="P1-doomed",
         side=Side.DYNASTY,
         owner=P1,

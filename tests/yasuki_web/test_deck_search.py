@@ -44,7 +44,13 @@ def _stock_deck(room, seat, side, card_ids):
     deck = room.state.decks[DeckKey(seat, side)]
     for card_id in card_ids:
         card = L5RCard.of(
-            CardPrint, id=card_id, name=f"Card {card_id}", side=side, owner=seat, face_up=False
+            CardPrint,
+            id=card_id,
+            printed_id=card_id,
+            name=f"Card {card_id}",
+            side=side,
+            owner=seat,
+            face_up=False,
         )
         deck.cards.append(card)
         room.state.cards_by_id[card_id] = card

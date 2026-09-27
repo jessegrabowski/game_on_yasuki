@@ -332,7 +332,7 @@ def _in_hand(state: TableState, card_id: str, printed_id: str):
             FatePrint,
             id=card_id,
             name=card_id,
-            printed_id=printed_id,
+            printed_id=card_id if printed_id is None else printed_id,
             side=Side.FATE,
             owner=PlayerId.P1,
         ),
@@ -677,6 +677,7 @@ def _game_with_stronghold_clan(clan: str | None) -> GameState:
         L5RCard.of(
             StrongholdPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -691,6 +692,7 @@ def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
     same = L5RCard.of(
         HoldingPrint,
         id="h1",
+        printed_id="h1",
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -700,6 +702,7 @@ def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
     other = L5RCard.of(
         HoldingPrint,
         id="h2",
+        printed_id="h2",
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -716,6 +719,7 @@ def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
     holding = L5RCard.of(
         HoldingPrint,
         id="h",
+        printed_id="h",
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -729,6 +733,7 @@ def _personality(clans: tuple[str, ...], **kwargs) -> L5RCard:
     return L5RCard.of(
         PersonalityPrint,
         id="p",
+        printed_id="p",
         name="P",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -777,6 +782,7 @@ def test_a_stronghold_printing_several_clans_surcharges_none_of_them():
         L5RCard.of(
             StrongholdPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -818,7 +824,14 @@ def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
     state = TableState.empty_two_seat()
     put_in_play(
         state,
-        L5RCard.of(StrongholdPrint, id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1),
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            printed_id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+        ),
     )
     put_in_play(
         state,
@@ -848,6 +861,7 @@ def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
         L5RCard.of(
             StrongholdPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -866,7 +880,7 @@ def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> L5RCar
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
-        printed_id=printed_id,
+        printed_id=f"{printed_id}-inst" if printed_id is None else printed_id,
         gold_cost=gold_cost,
         clan=clan,
     )
@@ -888,6 +902,7 @@ def test_moto_traders_discounts_with_another_merchant_caravan_in_play():
     caravan = L5RCard.of(
         HoldingPrint,
         id="mc",
+        printed_id="mc",
         name="C",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -915,6 +930,7 @@ def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
     caravan = L5RCard.of(
         HoldingPrint,
         id="mc",
+        printed_id="mc",
         name="C",
         side=Side.DYNASTY,
         owner=PlayerId.P1,

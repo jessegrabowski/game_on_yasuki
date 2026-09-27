@@ -76,7 +76,7 @@ def _probe(
         ActionPrint,
         id=card_id,
         name=printed_id,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         side=Side.FATE,
         owner=owner,
         gold_cost=0,
@@ -163,7 +163,12 @@ def test_the_entry_shows_its_printed_ability_unless_a_label_is_given():
 
 def _ring(card_id: str, printed_id: str) -> L5RCard:
     return L5RCard.of(
-        RingPrint, id=card_id, name=printed_id, printed_id=printed_id, side=Side.FATE, owner=P1
+        RingPrint,
+        id=card_id,
+        name=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
+        side=Side.FATE,
+        owner=P1,
     )
 
 

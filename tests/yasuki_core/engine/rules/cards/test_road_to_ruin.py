@@ -187,14 +187,28 @@ def _outlying_game(*, target_cost=2, with_producer=True):
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
         register(
-            state, L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1)
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=P1,
+            ),
         )
     ]
     if with_producer:
         put_in_play(
             state,
             L5RCard.of(
-                HoldingPrint, id="sh", name="SH", side=Side.DYNASTY, owner=P1, gold_production=8
+                HoldingPrint,
+                id="sh",
+                printed_id="sh",
+                name="SH",
+                side=Side.DYNASTY,
+                owner=P1,
+                gold_production=8,
             ),
         )
     put_in_play(

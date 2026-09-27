@@ -590,7 +590,12 @@ def _estate_holding_the_favor() -> EngineSession:
         ),
     )
     state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
-        register(state, L5RCard.of(FatePrint, id="fate", name="Fate", side=Side.FATE, owner=P1))
+        register(
+            state,
+            L5RCard.of(
+                FatePrint, id="fate", printed_id="fate", name="Fate", side=Side.FATE, owner=P1
+            ),
+        )
     )
     session = EngineSession.start(state, P1)
     TakeFavor(P1).perform(session.game)
@@ -857,6 +862,7 @@ def _sacred_ground(
             L5RCard.of(
                 FatePrint,
                 id="k",
+                printed_id="k",
                 name="Kharmic Fate",
                 side=Side.FATE,
                 owner=P1,
@@ -881,6 +887,7 @@ def _sacred_ground(
                 L5RCard.of(
                     FatePrint,
                     id="P2-k",
+                    printed_id="P2-k",
                     name="Kharmic Fate",
                     side=Side.FATE,
                     owner=P2,
@@ -1081,7 +1088,12 @@ MOVE_PROBE = "probe_battle_move_an_enemy_home"
 
 def _ring(card_id: str, printed_id: str, owner: PlayerId = P1) -> L5RCard:
     return L5RCard.of(
-        RingPrint, id=card_id, name=printed_id, printed_id=printed_id, side=Side.FATE, owner=owner
+        RingPrint,
+        id=card_id,
+        name=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
+        side=Side.FATE,
+        owner=owner,
     )
 
 

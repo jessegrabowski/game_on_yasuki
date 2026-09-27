@@ -11,7 +11,9 @@ from yasuki_core.engine.players import PlayerId
 
 
 def test_size_and_bbox_flip_with_bowed(root):
-    c = L5RCard.of(CardPrint, id="s1", name="Sprite", side=Side.FATE, owner=PlayerId.P1)
+    c = L5RCard.of(
+        CardPrint, id="s1", printed_id="s1", name="Sprite", side=Side.FATE, owner=PlayerId.P1
+    )
     sv = CardSpriteVisual(c, x=100, y=100, tag="card:1")
     w, h = sv.size
     assert w > 0 and h > 0
@@ -23,7 +25,9 @@ def test_size_and_bbox_flip_with_bowed(root):
 
 
 def test_draw_creates_canvas_items(root):
-    c = L5RCard.of(CardPrint, id="s2", name="SpriteDraw", side=Side.DYNASTY, owner=PlayerId.P1)
+    c = L5RCard.of(
+        CardPrint, id="s2", printed_id="s2", name="SpriteDraw", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     sv = CardSpriteVisual(c, x=80, y=60, tag="card:2")
     _ = root.nametowidget(root._w)  # root is a Tk; but we need a Canvas to draw on
 
@@ -47,13 +51,16 @@ def test_wealth_counter_draws_a_badge(root):
     cv.pack()
     root.update_idletasks()
 
-    plain = L5RCard.of(CardPrint, id="p1", name="Plain", side=Side.DYNASTY, owner=PlayerId.P1)
+    plain = L5RCard.of(
+        CardPrint, id="p1", printed_id="p1", name="Plain", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     CardSpriteVisual(plain, x=60, y=60, tag="card:p").draw(cv)
     assert cv.find_withtag("card:p:counter") == ()  # no counters, no badge
 
     rich = L5RCard.of(
         CardPrint,
         id="w1",
+        printed_id="w1",
         name="Rice Farm",
         side=Side.DYNASTY,
         counters={"wealth": 2},
@@ -72,6 +79,7 @@ def test_styled_counters_draw_their_own_colors(root):
     card = L5RCard.of(
         CardPrint,
         id="c1",
+        printed_id="c1",
         name="C",
         side=Side.DYNASTY,
         counters={"wealth": 1, "sincerity": 2},
@@ -94,6 +102,7 @@ def test_badges_scale_with_the_cards_counters_not_the_catalogue(root):
     card = L5RCard.of(
         CardPrint,
         id="c2",
+        printed_id="c2",
         name="C",
         side=Side.DYNASTY,
         counters={"fire": 1, "poison": 3, "wealth": 2},
@@ -116,7 +125,14 @@ def _stamped(canvas, tag):
 def test_a_sprite_stamps_the_stats_it_was_given(root):
     cv = tk.Canvas(root, width=200, height=200)
     hero = L5RCard.of(
-        PersonalityPrint, id="h", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, force=3, chi=4
+        PersonalityPrint,
+        id="h",
+        printed_id="h",
+        name="Hero",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        force=3,
+        chi=4,
     )
 
     CardSpriteVisual(hero, x=100, y=100, tag="card:h", stats={"h": {Stat.FORCE: 7}}).draw(cv)
@@ -129,7 +145,14 @@ def test_refreshing_a_face_replaces_the_stamps_rather_than_adding_to_them(root):
     redraw. A Personality whose Force just changed would then carry both numbers at once."""
     cv = tk.Canvas(root, width=200, height=200)
     hero = L5RCard.of(
-        PersonalityPrint, id="h", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, force=3, chi=4
+        PersonalityPrint,
+        id="h",
+        printed_id="h",
+        name="Hero",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        force=3,
+        chi=4,
     )
     sprite = CardSpriteVisual(hero, x=100, y=100, tag="card:h")
     sprite.draw(cv)
@@ -147,6 +170,7 @@ def test_moving_a_sprite_takes_every_layer_with_it(root):
     card = L5RCard.of(
         PersonalityPrint,
         id="h",
+        printed_id="h",
         name="Hero",
         side=Side.DYNASTY,
         owner=PlayerId.P1,

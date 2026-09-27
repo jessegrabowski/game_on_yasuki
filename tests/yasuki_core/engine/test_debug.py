@@ -24,8 +24,10 @@ P1 = PlayerId.P1
 P2 = PlayerId.P2
 HAND = ZoneKey(P1, ZoneRole.HAND)
 FIRST = ZoneKey(P1, ZoneRole.PROVINCE, 0)
-A_STRATEGY = ActionPrint(name="Debug Strategy", side=Side.FATE)
-A_PERSONALITY = PersonalityPrint(name="Debug Bushi", side=Side.DYNASTY, force=2, chi=2)
+A_STRATEGY = ActionPrint(name="Debug Strategy", printed_id="debug_strategy", side=Side.FATE)
+A_PERSONALITY = PersonalityPrint(
+    name="Debug Bushi", printed_id="debug_bushi", side=Side.DYNASTY, force=2, chi=2
+)
 
 
 def test_debug_gold_lands_in_the_pool():

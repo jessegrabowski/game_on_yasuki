@@ -49,6 +49,7 @@ def _table(*, hand_kharmic=1, province_kharmic=1, production=2, seat=P1, hand_pr
                 L5RCard.of(
                     hand_print,
                     id=f"{seat.name}-k{index}",
+                    printed_id=f"{seat.name}-k{index}",
                     name="Kharmic Fate",
                     side=Side.FATE,
                     owner=seat,

@@ -346,7 +346,7 @@ def _build_print(
     return print_cls(
         name=record.get("extended_title") or record["name"],
         side=side,
-        printed_id=record.get("card_id"),
+        printed_id=record["card_id"],
         clan=clans[0] if clans else None,
         clans=tuple(clans),
         keywords=tuple(record.get("keywords") or ()),

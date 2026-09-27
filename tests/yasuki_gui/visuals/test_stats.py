@@ -20,6 +20,7 @@ def personality(card_id="hida", force=3, chi=4):
     return L5RCard.of(
         PersonalityPrint,
         id=card_id,
+        printed_id=card_id,
         name="Hida",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -32,6 +33,7 @@ def follower(card_id="banner", force=2):
     return L5RCard.of(
         AttachmentPrint,
         id=card_id,
+        printed_id=card_id,
         name="Banner",
         side=Side.FATE,
         owner=PlayerId.P1,
@@ -41,7 +43,14 @@ def follower(card_id="banner", force=2):
 
 
 def holding(card_id="mine"):
-    return L5RCard.of(HoldingPrint, id=card_id, name="Mine", side=Side.DYNASTY, owner=PlayerId.P1)
+    return L5RCard.of(
+        HoldingPrint,
+        id=card_id,
+        printed_id=card_id,
+        name="Mine",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+    )
 
 
 @pytest.fixture

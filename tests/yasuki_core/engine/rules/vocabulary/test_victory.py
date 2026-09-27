@@ -190,7 +190,7 @@ def _ring(
         RingPrint,
         id=card_id,
         name=card_id,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         side=Side.FATE,
         owner=owner,
         element=element,

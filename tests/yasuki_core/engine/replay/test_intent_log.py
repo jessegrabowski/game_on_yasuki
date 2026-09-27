@@ -89,23 +89,54 @@ def _fate_deck(owner: PlayerId) -> list[L5RCard]:
         L5RCard.of(
             ActionPrint,
             id=f"{tag}_fa1",
+            printed_id=f"{tag}_fa1",
             name="Strike",
             side=Side.FATE,
             owner=owner,
             timings=(Timing.OPEN,),
         ),
-        L5RCard.of(AttachmentPrint, id=f"{tag}_fa2", name="Katana", side=Side.FATE, owner=owner),
+        L5RCard.of(
+            AttachmentPrint,
+            id=f"{tag}_fa2",
+            printed_id=f"{tag}_fa2",
+            name="Katana",
+            side=Side.FATE,
+            owner=owner,
+        ),
         L5RCard.of(
             RingPrint,
             id=f"{tag}_fr",
+            printed_id=f"{tag}_fr",
             name="Ring of Fire",
             side=Side.FATE,
             owner=owner,
             element=Element.FIRE,
         ),
-        L5RCard.of(FatePrint, id=f"{tag}_f4", name="Spell", side=Side.FATE, owner=owner, focus=3),
-        L5RCard.of(FatePrint, id=f"{tag}_f5", name="Ally", side=Side.FATE, owner=owner),
-        L5RCard.of(FatePrint, id=f"{tag}_f6", name="Item", side=Side.FATE, owner=owner),
+        L5RCard.of(
+            FatePrint,
+            id=f"{tag}_f4",
+            printed_id=f"{tag}_f4",
+            name="Spell",
+            side=Side.FATE,
+            owner=owner,
+            focus=3,
+        ),
+        L5RCard.of(
+            FatePrint,
+            id=f"{tag}_f5",
+            printed_id=f"{tag}_f5",
+            name="Ally",
+            side=Side.FATE,
+            owner=owner,
+        ),
+        L5RCard.of(
+            FatePrint,
+            id=f"{tag}_f6",
+            printed_id=f"{tag}_f6",
+            name="Item",
+            side=Side.FATE,
+            owner=owner,
+        ),
     ]
 
 
@@ -115,6 +146,7 @@ def _dynasty_deck(owner: PlayerId) -> list[L5RCard]:
         L5RCard.of(
             PersonalityPrint,
             id=f"{tag}_dp1",
+            printed_id=f"{tag}_dp1",
             name="Bushi",
             side=Side.DYNASTY,
             owner=owner,
@@ -124,25 +156,42 @@ def _dynasty_deck(owner: PlayerId) -> list[L5RCard]:
         L5RCard.of(
             HoldingPrint,
             id=f"{tag}_dh1",
+            printed_id=f"{tag}_dh1",
             name="Mine",
             side=Side.DYNASTY,
             owner=owner,
             gold_production=2,
         ),
-        L5RCard.of(DynastyPrint, id=f"{tag}_d3", name="Event", side=Side.DYNASTY, owner=owner),
+        L5RCard.of(
+            DynastyPrint,
+            id=f"{tag}_d3",
+            printed_id=f"{tag}_d3",
+            name="Event",
+            side=Side.DYNASTY,
+            owner=owner,
+        ),
         L5RCard.of(
             PersonalityPrint,
             id=f"{tag}_dp2",
+            printed_id=f"{tag}_dp2",
             name="Shugenja",
             side=Side.DYNASTY,
             owner=owner,
             force=1,
             chi=4,
         ),
-        L5RCard.of(DynastyPrint, id=f"{tag}_d5", name="Region", side=Side.DYNASTY, owner=owner),
+        L5RCard.of(
+            DynastyPrint,
+            id=f"{tag}_d5",
+            printed_id=f"{tag}_d5",
+            name="Region",
+            side=Side.DYNASTY,
+            owner=owner,
+        ),
         L5RCard.of(
             HoldingPrint,
             id=f"{tag}_dh2",
+            printed_id=f"{tag}_dh2",
             name="Dojo",
             side=Side.DYNASTY,
             owner=owner,
@@ -291,11 +340,22 @@ def _post_setup_state() -> TableState:
     state = _start_state()
     province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
     holding = L5RCard.of(
-        DynastyPrint, id="prov0", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1, face_up=False
+        DynastyPrint,
+        id="prov0",
+        printed_id="prov0",
+        name="Mine",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        face_up=False,
     )
     state.zones[province] = ProvinceZone(owner=PlayerId.P1, cards=[holding])
     stronghold = L5RCard.of(
-        StrongholdPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1
+        StrongholdPrint,
+        id="sh",
+        printed_id="sh",
+        name="Kyuden",
+        side=Side.STRONGHOLD,
+        owner=PlayerId.P1,
     )
     state.battlefield.cards.append(stronghold)
     state.positions["sh"] = BoardPos(5.0, 6.0)
@@ -321,13 +381,28 @@ def _attached_state() -> TableState:
     fortification on a province, so a snapshot that drops one of the three fails here."""
     state = _post_setup_state()
     hero = L5RCard.of(
-        PersonalityPrint, id="hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1
+        PersonalityPrint,
+        id="hero",
+        printed_id="hero",
+        name="Hero",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
     )
     follower = L5RCard.of(
-        DynastyPrint, id="foll", name="Follower", side=Side.DYNASTY, owner=PlayerId.P1
+        DynastyPrint,
+        id="foll",
+        printed_id="foll",
+        name="Follower",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
     )
     fort = L5RCard.of(
-        DynastyPrint, id="fort", name="Fortification", side=Side.DYNASTY, owner=PlayerId.P1
+        DynastyPrint,
+        id="fort",
+        printed_id="fort",
+        name="Fortification",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
     )
     for card in (hero, follower, fort):
         state.battlefield.cards.append(card)
@@ -420,7 +495,7 @@ def test_replay_reproduces_spawned_and_removed_cards():
         PlayerId.P1,
         SpawnCard(
             card_id="t1",
-            printed=CardPrint(name="A", side=Side.FATE),
+            printed=CardPrint(name="A", printed_id="a", side=Side.FATE),
             position=BoardPos(1.0, 2.0),
         ),
         ts=1.0,
@@ -431,7 +506,7 @@ def test_replay_reproduces_spawned_and_removed_cards():
         PlayerId.P2,
         SpawnCard(
             card_id="t2",
-            printed=CardPrint(name="B", side=Side.DYNASTY),
+            printed=CardPrint(name="B", printed_id="b", side=Side.DYNASTY),
             position=BoardPos(3.0, 4.0),
         ),
         ts=2.0,
@@ -537,7 +612,7 @@ def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
         SetHonor(value=-1),
         SpawnCard(
             card_id="tok1",
-            printed=CardPrint(name="Token", side=Side.DYNASTY),
+            printed=CardPrint(name="Token", printed_id="token", side=Side.DYNASTY),
             position=BoardPos(5.0, 6.0),
         ),
         SpawnCard(card_id="tok2", token_id="some_token", position=BoardPos(0.0, 0.0)),
@@ -567,7 +642,7 @@ def test_creatable_tokens_survive_serialization():
     # needs no database. The templates round-trip through the tape intact.
     state = _start_state()
     state.creatable_tokens["ghul"] = PersonalityPrint(
-        name="Ghul", side=Side.DYNASTY, force=2, chi=2, keywords=("Undead",)
+        name="Ghul", printed_id="ghul", side=Side.DYNASTY, force=2, chi=2, keywords=("Undead",)
     )
 
     restored = intent_log_from_dict(
@@ -582,7 +657,7 @@ def test_creatable_tokens_survive_serialization():
 def test_replay_reproduces_a_creatable_token_spawn():
     state = _start_state()
     state.creatable_tokens["ghul"] = PersonalityPrint(
-        name="Ghul", side=Side.DYNASTY, force=2, chi=2
+        name="Ghul", printed_id="ghul", side=Side.DYNASTY, force=2, chi=2
     )
     log = IntentLog(initial=InitialRecord.from_state(state))
     apply_and_log(
@@ -619,6 +694,7 @@ def test_a_back_face_survives_serialization():
     front = L5RCard.of(
         StrongholdPrint,
         id="kk",
+        printed_id="kk",
         name="Kyuden Kuni",
         side=Side.STRONGHOLD,
         back_card_id="kk__back",

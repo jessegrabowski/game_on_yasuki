@@ -77,7 +77,7 @@ def _face_up_holding_in_province(state, card_id, gold_cost, printed_id=""):
             side=Side.DYNASTY,
             owner=PlayerId.P1,
             gold_cost=gold_cost,
-            printed_id=printed_id,
+            printed_id=card_id if printed_id is None else printed_id,
         ),
     )
     holding.turn_face_up()
@@ -117,7 +117,14 @@ def _dealt_table(p1_hand: int) -> TableState:
         state.decks[DeckKey(seat, Side.FATE)].cards = [
             _register(
                 state,
-                L5RCard.of(FatePrint, id=f"{seat.name}-fd", name="F", side=Side.FATE, owner=seat),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"{seat.name}-fd",
+                    printed_id=f"{seat.name}-fd",
+                    name="F",
+                    side=Side.FATE,
+                    owner=seat,
+                ),
             )
         ]
     hand = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
@@ -125,7 +132,14 @@ def _dealt_table(p1_hand: int) -> TableState:
         hand.add(
             _register(
                 state,
-                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"P1-h{i}",
+                    printed_id=f"P1-h{i}",
+                    name="H",
+                    side=Side.FATE,
+                    owner=PlayerId.P1,
+                ),
             )
         )
     return state
@@ -222,7 +236,14 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
         state.decks[DeckKey(seat, Side.FATE)].cards = [
             _register(
                 state,
-                L5RCard.of(FatePrint, id=f"{seat.name}-fd", name="F", side=Side.FATE, owner=seat),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"{seat.name}-fd",
+                    printed_id=f"{seat.name}-fd",
+                    name="F",
+                    side=Side.FATE,
+                    owner=seat,
+                ),
             )
         ]
     p2_hand = state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
@@ -230,7 +251,14 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
         p2_hand.add(
             _register(
                 state,
-                L5RCard.of(FatePrint, id=f"P2-h{i}", name="H", side=Side.FATE, owner=PlayerId.P2),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"P2-h{i}",
+                    printed_id=f"P2-h{i}",
+                    name="H",
+                    side=Side.FATE,
+                    owner=PlayerId.P2,
+                ),
             )
         )
     runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
@@ -264,6 +292,7 @@ def test_province_menu_offers_recruit_with_cost_and_dynasty_discard():
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=PlayerId.P1,
@@ -288,6 +317,7 @@ def test_province_menu_offers_proclaim_for_an_own_clan_personality():
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=PlayerId.P1,
@@ -301,6 +331,7 @@ def test_province_menu_offers_proclaim_for_an_own_clan_personality():
         L5RCard.of(
             PersonalityPrint,
             id="P1-person",
+            printed_id="P1-person",
             name="Hero",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -334,6 +365,7 @@ def test_province_menu_names_no_amount_for_a_proclaim_the_seat_is_asked_about():
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=PlayerId.P1,
@@ -384,7 +416,12 @@ def test_province_menu_is_empty_for_a_stronghold():
         _register(
             state,
             L5RCard.of(
-                StrongholdPrint, id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1
+                StrongholdPrint,
+                id="P1-SH",
+                printed_id="P1-SH",
+                name="SH",
+                side=Side.STRONGHOLD,
+                owner=PlayerId.P1,
             ),
         )
     )
@@ -400,6 +437,7 @@ def _dynasty_runner_with_producer(card_id, printed_id, gold_cost):
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=PlayerId.P1,
@@ -547,6 +585,7 @@ def test_ability_menu_is_empty_for_a_card_with_no_ability():
     plain = L5RCard.of(
         HoldingPrint,
         id="plain",
+        printed_id="plain",
         name="Plain",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -578,6 +617,7 @@ def _equip_runner(*, printed_id: str | None = None) -> GameRunner:
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=PlayerId.P1,
@@ -591,6 +631,7 @@ def _equip_runner(*, printed_id: str | None = None) -> GameRunner:
             L5RCard.of(
                 PersonalityPrint,
                 id="P1-bearer",
+                printed_id="P1-bearer",
                 name="Bearer",
                 side=Side.DYNASTY,
                 owner=PlayerId.P1,
@@ -608,7 +649,7 @@ def _equip_runner(*, printed_id: str | None = None) -> GameRunner:
                 name="Katana",
                 side=Side.FATE,
                 owner=PlayerId.P1,
-                printed_id=printed_id,
+                printed_id="P1-katana" if printed_id is None else printed_id,
                 gold_cost=3,
                 keywords=("Weapon",),
             ),
@@ -764,6 +805,7 @@ def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
                 L5RCard.of(
                     HoldingPrint,
                     id=card_id,
+                    printed_id=card_id,
                     name=card_id,
                     side=Side.DYNASTY,
                     owner=PlayerId.P1,
@@ -779,7 +821,13 @@ def test_a_legacy_search_keeps_its_wider_pool_of_everything_it_looked_through():
         _register(
             state,
             L5RCard.of(
-                HoldingPrint, id="pv", name="P", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=1
+                HoldingPrint,
+                id="pv",
+                printed_id="pv",
+                name="P",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                gold_cost=1,
             ),
         )
     )
@@ -827,6 +875,7 @@ def test_an_ability_targeting_a_province_card_stays_a_board_selection():
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=PlayerId.P1,
@@ -866,7 +915,14 @@ def test_a_yes_no_question_never_becomes_a_search_dialog():
     state = _dealt_table(0)
     buried = _register(
         state,
-        L5RCard.of(HoldingPrint, id="buried", name="Buried", side=Side.DYNASTY, owner=PlayerId.P1),
+        L5RCard.of(
+            HoldingPrint,
+            id="buried",
+            printed_id="buried",
+            name="Buried",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+        ),
     )
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [buried]
     runner_ = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
@@ -890,7 +946,12 @@ def _wisdom_runner() -> GameRunner:
             _register(
                 state,
                 L5RCard.of(
-                    RingPrint, id=f"{seat.name}-ring", name="Ring", side=Side.FATE, owner=seat
+                    RingPrint,
+                    id=f"{seat.name}-ring",
+                    printed_id=f"{seat.name}-ring",
+                    name="Ring",
+                    side=Side.FATE,
+                    owner=seat,
                 ),
             )
         )
@@ -898,7 +959,12 @@ def _wisdom_runner() -> GameRunner:
         _register(
             state,
             L5RCard.of(
-                HoldingPrint, id="spare", name="Spare", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="spare",
+                printed_id="spare",
+                name="Spare",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]

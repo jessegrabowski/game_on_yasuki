@@ -105,7 +105,14 @@ def _panda_game(fate_cards: int = 2, *, dynasty: tuple[str, ...] = ()) -> Engine
         state.decks[DeckKey(seat, Side.FATE)].cards = [
             register(
                 state,
-                L5RCard.of(FatePrint, id=f"{seat.name}-f{i}", name="F", side=Side.FATE, owner=seat),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"{seat.name}-f{i}",
+                    printed_id=f"{seat.name}-f{i}",
+                    name="F",
+                    side=Side.FATE,
+                    owner=seat,
+                ),
             )
             for i in range(fate_cards)
         ]
@@ -1313,7 +1320,12 @@ def _thoughts_game(*, rings: int = 0, deck=("a", "b", "c", "d")) -> EngineSessio
             register(
                 state,
                 L5RCard.of(
-                    RingPrint, id=f"ring{index}", name=f"Ring {index}", side=Side.FATE, owner=P1
+                    RingPrint,
+                    id=f"ring{index}",
+                    printed_id=f"ring{index}",
+                    name=f"Ring {index}",
+                    side=Side.FATE,
+                    owner=P1,
                 ),
             ),
         )
@@ -1385,7 +1397,7 @@ def _ring_card(card_id: str, printed_id: str, element: Element, *, owner: Player
         RingPrint,
         id=card_id,
         name=printed_id,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         side=Side.FATE,
         owner=owner,
         element=element,

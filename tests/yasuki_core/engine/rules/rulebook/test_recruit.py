@@ -39,7 +39,12 @@ def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
             register(
                 state,
                 L5RCard.of(
-                    FatePrint, id=f"{seat.name}-fd{i}", name="F", side=Side.FATE, owner=seat
+                    FatePrint,
+                    id=f"{seat.name}-fd{i}",
+                    printed_id=f"{seat.name}-fd{i}",
+                    name="F",
+                    side=Side.FATE,
+                    owner=seat,
                 ),
             )
             for i in range(fate_deck)
@@ -49,7 +54,14 @@ def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
         hand_zone.add(
             register(
                 state,
-                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"P1-h{i}",
+                    printed_id=f"P1-h{i}",
+                    name="H",
+                    side=Side.FATE,
+                    owner=PlayerId.P1,
+                ),
             )
         )
     return GameState.start(state, PlayerId.P1)
@@ -63,7 +75,10 @@ def _advance_to_end_of_turn(game: GameState) -> None:
 
 def _bowed_on_battlefield(state: TableState, seat: PlayerId, card_id: str):
     card = register(
-        state, L5RCard.of(DynastyPrint, id=card_id, name="B", side=Side.DYNASTY, owner=seat)
+        state,
+        L5RCard.of(
+            DynastyPrint, id=card_id, printed_id=card_id, name="B", side=Side.DYNASTY, owner=seat
+        ),
     )
     card.bow()
     state.battlefield.add(card)
@@ -72,7 +87,10 @@ def _bowed_on_battlefield(state: TableState, seat: PlayerId, card_id: str):
 
 def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
     card = register(
-        state, L5RCard.of(DynastyPrint, id=card_id, name="P", side=Side.DYNASTY, owner=seat)
+        state,
+        L5RCard.of(
+            DynastyPrint, id=card_id, printed_id=card_id, name="P", side=Side.DYNASTY, owner=seat
+        ),
     )
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
@@ -171,6 +189,7 @@ def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
         L5RCard.of(
             StrongholdPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -189,7 +208,7 @@ def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> L5RCar
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
-        printed_id=printed_id,
+        printed_id=f"{printed_id}-inst" if printed_id is None else printed_id,
         gold_cost=gold_cost,
         clan=clan,
     )

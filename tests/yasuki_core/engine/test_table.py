@@ -53,8 +53,12 @@ def test_empty_table_passes_validation():
 
 def test_validate_accepts_a_populated_table():
     table = TableState.empty_two_seat()
-    in_hand = L5RCard.of(CardPrint, id="f1", name="Fate", side=Side.FATE, owner=PlayerId.P1)
-    on_board = L5RCard.of(CardPrint, id="d1", name="Dynasty", side=Side.DYNASTY, owner=PlayerId.P1)
+    in_hand = L5RCard.of(
+        CardPrint, id="f1", printed_id="f1", name="Fate", side=Side.FATE, owner=PlayerId.P1
+    )
+    on_board = L5RCard.of(
+        CardPrint, id="d1", printed_id="d1", name="Dynasty", side=Side.DYNASTY, owner=PlayerId.P1
+    )
 
     table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(in_hand)
     table.battlefield.add(on_board)
@@ -66,8 +70,12 @@ def test_validate_accepts_a_populated_table():
 
 def test_validate_rejects_duplicate_card_ids():
     table = TableState.empty_two_seat()
-    dup_a = L5RCard.of(CardPrint, id="x", name="A", side=Side.FATE, owner=PlayerId.P1)
-    dup_b = L5RCard.of(CardPrint, id="x", name="B", side=Side.DYNASTY, owner=PlayerId.P1)
+    dup_a = L5RCard.of(
+        CardPrint, id="x", printed_id="x", name="A", side=Side.FATE, owner=PlayerId.P1
+    )
+    dup_b = L5RCard.of(
+        CardPrint, id="x", printed_id="x", name="B", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(dup_a)
     table.battlefield.add(dup_b)
     table.cards_by_id = {"x": dup_a}
@@ -78,7 +86,9 @@ def test_validate_rejects_duplicate_card_ids():
 
 def test_validate_rejects_index_out_of_sync():
     table = TableState.empty_two_seat()
-    card = L5RCard.of(CardPrint, id="f1", name="Fate", side=Side.FATE, owner=PlayerId.P1)
+    card = L5RCard.of(
+        CardPrint, id="f1", printed_id="f1", name="Fate", side=Side.FATE, owner=PlayerId.P1
+    )
     table.battlefield.add(card)
     # card present on the board but missing from the identity map
 
@@ -88,7 +98,9 @@ def test_validate_rejects_index_out_of_sync():
 
 def test_validate_rejects_position_for_non_battlefield_card():
     table = TableState.empty_two_seat()
-    card = L5RCard.of(CardPrint, id="f1", name="Fate", side=Side.FATE, owner=PlayerId.P1)
+    card = L5RCard.of(
+        CardPrint, id="f1", printed_id="f1", name="Fate", side=Side.FATE, owner=PlayerId.P1
+    )
     table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
     table.cards_by_id = {card.id: card}
     table.positions[card.id] = BoardPos(10.0, 10.0)
@@ -136,7 +148,9 @@ def test_validate_rejects_deck_with_non_play_side():
 def test_focus_zone_validates_without_an_idx():
     table = TableState.empty_two_seat()
     table.zones[ZoneKey(PlayerId.P1, ZoneRole.FOCUS)] = FocusZone(owner=PlayerId.P1)
-    card = L5RCard.of(CardPrint, id="f1", name="F", side=Side.FATE, owner=PlayerId.P1)
+    card = L5RCard.of(
+        CardPrint, id="f1", printed_id="f1", name="F", side=Side.FATE, owner=PlayerId.P1
+    )
     table.zones[ZoneKey(PlayerId.P1, ZoneRole.FOCUS)].add(card)
     table.cards_by_id["f1"] = card
 
@@ -152,7 +166,14 @@ def test_province_zone_keyed_by_idx_validates():
 
 
 def _put_on_battlefield(table: TableState, card_id: str) -> L5RCard:
-    card = L5RCard.of(CardPrint, id=card_id, name=card_id, side=Side.DYNASTY, owner=PlayerId.P1)
+    card = L5RCard.of(
+        CardPrint,
+        id=card_id,
+        printed_id=card_id,
+        name=card_id,
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+    )
     table.battlefield.add(card)
     table.positions[card_id] = BoardPos(0.0, 0.0)
     table.cards_by_id[card_id] = card
@@ -161,7 +182,12 @@ def _put_on_battlefield(table: TableState, card_id: str) -> L5RCard:
 
 def _put_personality_on_battlefield(table: TableState, card_id: str) -> L5RCard:
     card = L5RCard.of(
-        PersonalityPrint, id=card_id, name=card_id, side=Side.DYNASTY, owner=PlayerId.P1
+        PersonalityPrint,
+        id=card_id,
+        printed_id=card_id,
+        name=card_id,
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
     )
     table.battlefield.add(card)
     table.positions[card_id] = BoardPos(0.0, 0.0)

@@ -48,7 +48,15 @@ def _dealt_table() -> TableState:
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
         _register(
-            state, L5RCard.of(FatePrint, id="P1-fd", name="F", side=Side.FATE, owner=PlayerId.P1)
+            state,
+            L5RCard.of(
+                FatePrint,
+                id="P1-fd",
+                printed_id="P1-fd",
+                name="F",
+                side=Side.FATE,
+                owner=PlayerId.P1,
+            ),
         )
     ]
     hand = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
@@ -56,7 +64,14 @@ def _dealt_table() -> TableState:
         hand.add(
             _register(
                 state,
-                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"P1-h{i}",
+                    printed_id=f"P1-h{i}",
+                    name="H",
+                    side=Side.FATE,
+                    owner=PlayerId.P1,
+                ),
             )
         )
     return state
@@ -88,6 +103,7 @@ def _gold_source(state, card_id: str, amount: int, owner=PlayerId.P1) -> L5RCard
         L5RCard.of(
             HoldingPrint,
             id=card_id,
+            printed_id=card_id,
             name="Gold Mine",
             side=Side.DYNASTY,
             owner=owner,
@@ -115,6 +131,7 @@ def _holding_in_province(
         L5RCard.of(
             HoldingPrint,
             id=card_id,
+            printed_id=card_id,
             name="Holding",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -171,6 +188,7 @@ def _personality_in_province(
         L5RCard.of(
             PersonalityPrint,
             id=card_id,
+            printed_id=card_id,
             name="Hero",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -195,6 +213,7 @@ def _stronghold(state, clan: str) -> L5RCard:
         L5RCard.of(
             StrongholdPrint,
             id="P1-strong",
+            printed_id="P1-strong",
             name="Keep",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -223,7 +242,12 @@ def test_recruit_pays_then_brings_the_personality_into_play_unbowed_and_refills(
         _register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]
@@ -374,7 +398,12 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
         _register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]
@@ -411,6 +440,7 @@ def test_dynasty_discard_is_offered_for_any_face_up_province_card_in_dynasty():
         L5RCard.of(
             PersonalityPrint,
             id="P1-person",
+            printed_id="P1-person",
             name="Hero",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -443,7 +473,12 @@ def test_dynasty_discard_moves_the_card_to_the_discard_and_refills():
         _register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]
@@ -467,7 +502,12 @@ def test_dynasty_discard_survives_a_replay():
         _register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]
@@ -691,7 +731,12 @@ def test_undo_last_reverses_a_dynasty_discard_and_cannot_repeat():
         _register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]
@@ -781,6 +826,7 @@ def _personality_in_play(state, card_id: str, *, keywords=(), owner=PlayerId.P1)
         L5RCard.of(
             PersonalityPrint,
             id=card_id,
+            printed_id=card_id,
             name="Hero",
             side=Side.DYNASTY,
             owner=owner,
@@ -806,7 +852,7 @@ def _attachment_in_hand(
             owner=PlayerId.P1,
             gold_cost=gold_cost,
             keywords=keywords,
-            printed_id=printed_id,
+            printed_id=card_id if printed_id is None else printed_id,
         ),
     )
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
@@ -908,7 +954,14 @@ def test_only_an_attachment_is_offered_for_equip():
     _personality_in_play(state, "P1-hero")
     strategy = _register(
         state,
-        L5RCard.of(FatePrint, id="P1-strategy", name="S", side=Side.FATE, owner=PlayerId.P1),
+        L5RCard.of(
+            FatePrint,
+            id="P1-strategy",
+            printed_id="P1-strategy",
+            name="S",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+        ),
     )
     state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(strategy)
     session = EngineSession.start(state, PlayerId.P1)
@@ -1013,7 +1066,12 @@ def test_a_fortification_stays_on_its_province_when_the_slot_refills_behind_it()
         _register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]

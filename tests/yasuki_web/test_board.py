@@ -44,7 +44,9 @@ def _room_with_seat():
 
 def _spawn(room, ws, **overrides):
     # Seed a creatable-token template so a token_id spawn resolves with no database call.
-    room.state.creatable_tokens.setdefault("hida", PersonalityPrint(name="Hida", side=Side.DYNASTY))
+    room.state.creatable_tokens.setdefault(
+        "hida", PersonalityPrint(name="Hida", printed_id="hida", side=Side.DYNASTY)
+    )
     fields = {"token_id": "hida", "position": [10, 20], **overrides}
     asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.SPAWN_CARD, **fields)))
     return room.state.battlefield.cards[-1].id
@@ -157,7 +159,7 @@ def test_spawn_round_trips_over_the_socket(client):
         ws.receive_json()  # SNAPSHOT
         ws.receive_json()  # LOG "Ada joined"
         active_game_rooms[room_id].state.creatable_tokens["x"] = PersonalityPrint(
-            name="X", side=Side.DYNASTY
+            name="X", printed_id="x", side=Side.DYNASTY
         )
         ws.send_json(
             {
@@ -408,7 +410,9 @@ def test_an_ordinary_card_leaving_a_hand_is_not_logged_as_a_favor_discard():
     """The discard line is keyed on the card, not on the move, so a normal hand-to-discard reads the
     way it always did."""
     room, ws, _ = _two_seat_room()
-    card = L5RCard.of(FatePrint, id="f1", name="Ambush", side=Side.FATE, owner=PlayerId.P1)
+    card = L5RCard.of(
+        FatePrint, id="f1", printed_id="f1", name="Ambush", side=Side.FATE, owner=PlayerId.P1
+    )
     room.state.cards_by_id["f1"] = card
     room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
 
