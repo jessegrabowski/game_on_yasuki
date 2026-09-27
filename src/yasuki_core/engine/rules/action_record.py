@@ -1,6 +1,7 @@
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import (
     ability_for,
+    interrupt_for,
     is_printed_ability,
     recruit_timing_of,
 )
@@ -40,8 +41,8 @@ def resolving_ability(game: GameState) -> Ability | None:
 
 
 def is_printed_action(game: GameState, action: Action) -> bool:
-    """Whether ``action`` is a printed action from a card: an ability the card's own text carries,
-    or an Interrupt played from a card rather than from the rulebook (CR, Printed; CR, From)."""
+    """Whether ``action`` is a printed action from a card: an ability or an Interrupt the card's
+    own text carries, as against a rulebook one such as a keyword's (CR, Printed; CR, From)."""
     match action:
         case (
             ActivateAbility(card_id=card_id, ability_key=key)
@@ -52,9 +53,12 @@ def is_printed_action(game: GameState, action: Action) -> bool:
                 return False
             ability = ability_for(game, card, key)
             return ability is not None and is_printed_ability(card, ability)
-        case PlayInterrupt(card_id=card_id):
+        case PlayInterrupt(card_id=card_id, interrupt_key=key):
             card = game.table.cards_by_id.get(card_id)
-            return card is not None and not isinstance(card.printed, RulebookPrint)
+            if card is None or isinstance(card.printed, RulebookPrint):
+                return False
+            interrupt = interrupt_for(card, key)
+            return interrupt is not None and interrupt.acts_from_its_card
         case _:
             return False
 

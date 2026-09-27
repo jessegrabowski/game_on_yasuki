@@ -723,6 +723,17 @@ def test_the_defender_is_offered_the_courage_interrupt_and_a_reduction_saves_the
     assert session.game.pending is None
 
 
+def test_a_keyword_interrupt_is_the_rulebooks_and_escapes_a_negation_naming_its_card():
+    session = _fear_announced({DEFENDER: 1})
+    session.game.ongoing.append(Negation("ring", END_OF_TURN, source_title="Courage Fate"))
+
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
+
+    assert not _guard_bowed(session)
+    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["P2-courage0"]
+
+
 def test_passing_lets_the_fear_resolve_at_full_strength():
     session = _fear_announced({DEFENDER: 1})
 

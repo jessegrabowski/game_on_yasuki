@@ -392,8 +392,10 @@ def _play(
         target = game.table.cards_by_id[target_id]
         interruption = interrupt.interrupt(game, card, effect, target)
     # A negated Interrupt is still taken, paid for and, from hand, discarded. It binds nothing,
-    # since a bound replacement is asked of the card again as its effect resolves.
-    if not negates_from(game, card, interruption.replacement):
+    # since a bound replacement is asked of the card again as its effect resolves. A rulebook
+    # Interrupt is no action from its card, so no negation naming a source reaches it.
+    from_card = interrupt.acts_from_its_card
+    if not (from_card and negates_from(game, card, interruption.replacement)):
         if interrupt.answers_every:
             bound = answered_by(game, card, interrupt, foreseen)
             game.modifications.extend(
@@ -410,7 +412,9 @@ def _play(
                     interrupt_key=key,
                 )
             )
-    own_effects = negate_from(game, card, interruption.effects)
+    own_effects = list(interruption.effects)
+    if from_card:
+        own_effects = negate_from(game, card, own_effects)
     if _plays_card(interrupt, location):
         play_strategy_with(game, card, tuple(own_effects))
         return

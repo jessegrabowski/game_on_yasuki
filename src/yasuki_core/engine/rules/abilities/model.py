@@ -135,6 +135,12 @@ class Interrupt[T: Effect]:
         if self.from_keyword is not None and not self.from_rulebook:
             raise ValueError(f"the {self.from_keyword} Interrupt is a rulebook Interrupt")
 
+    @property
+    def acts_from_its_card(self) -> bool:
+        """Whether taking this Interrupt is an action from the card it is on, as against a rulebook
+        Interrupt, whose source is the rulebook even when it discards the card (CR, From)."""
+        return not self.from_rulebook
+
     def purchase(self, game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
         """What taking this Interrupt on ``card`` pays for, the way :meth:`Ability.purchase` says."""
         return _purchase(

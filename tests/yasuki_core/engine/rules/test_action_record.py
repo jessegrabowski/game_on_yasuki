@@ -12,7 +12,9 @@ from yasuki_core.engine.rules.abilities.registry import (
 from yasuki_core.engine.rules.action_record import action_keywords, is_printed_action
 from yasuki_core.engine.rules.board.queries import rulebook_proxy
 from yasuki_core.engine.rules.rulebook import proxies
+from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_INTERRUPT
 from yasuki_core.engine.rules.rulebook.lobby import LOBBY
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
@@ -20,6 +22,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint
@@ -30,6 +33,7 @@ from tests.yasuki_core.engine.builders import (
     datasheet_favor_ability,
     holding,
     put_in_play,
+    register,
     two_seat_game,
 )
 
@@ -76,12 +80,35 @@ def test_a_recruit_carries_no_keywords():
     assert action_keywords(game) == frozenset()
 
 
-def test_a_cards_own_ability_and_an_interrupt_from_a_card_are_printed_actions():
+def _okura(game: GameState) -> L5RCard:
+    """Okura Is Released, a Strategy printing an Interrupt and carrying Courage, in P1's hand."""
+    card = L5RCard.of(
+        ActionPrint,
+        id="okura",
+        name="Okura Is Released",
+        printed_id="okura_is_released",
+        side=Side.FATE,
+        owner=P1,
+        keywords=(keywords.COURAGE,),
+    )
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(game.table, card))
+    return card
+
+
+def test_a_cards_own_ability_and_its_own_interrupt_are_printed_actions():
     game = two_seat_game()
     put_in_play(game, holding("court", printed_id="training_court"))
+    _okura(game)
 
     assert is_printed_action(game, ActivateAbility("court"))
-    assert is_printed_action(game, PlayInterrupt("court"))
+    assert is_printed_action(game, PlayInterrupt("okura"))
+
+
+def test_a_keyword_interrupt_is_no_printed_action_from_the_card_it_discards():
+    game = two_seat_game()
+    _okura(game)
+
+    assert not is_printed_action(game, PlayInterrupt("okura", COURAGE_INTERRUPT))
 
 
 def test_a_trait_a_rulebook_ability_and_a_rulebook_interrupt_are_no_printed_actions():
