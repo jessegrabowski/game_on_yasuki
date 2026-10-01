@@ -416,6 +416,8 @@ def _play(
     if from_card:
         own_effects = negate_from(game, card, own_effects)
     if _plays_card(interrupt, location):
+        if interruption.costs:
+            raise ValueError(f"{card_id} plays its card, so its Interrupt can add no costs")
         play_strategy_with(game, card, tuple(own_effects))
         return
     purchase = interrupt.purchase(game, card, plays_card=False)
@@ -423,7 +425,7 @@ def _play(
     claimed = _claim(game, seat, card, interrupt)
     # Queued beneath the payment, so the cost is paid, and what reacts to it resolves, first.
     game.stack.append(ApplyEffects(tuple(own_effects)))
-    triggers.pay_costs(game, [*claimed, *paid])
+    triggers.pay_costs(game, [*claimed, *paid, *interruption.costs])
 
 
 def _claim(game: GameState, seat: PlayerId, card: L5RCard, interrupt: Interrupt) -> list[Effect]:

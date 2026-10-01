@@ -301,6 +301,18 @@ register_interrupt(
 
 
 register_interrupt(
+    "costing_strategy_probe",
+    Interrupt(
+        label="Interrupt: negate a Fear, bowing this card as well",
+        answers=Fear,
+        interrupt=lambda game, source, effect: Interruption(
+            Negated(effect), costs=(Bow(source.id),)
+        ),
+    ),
+)
+
+
+register_interrupt(
     "bow_negating_probe",
     Interrupt(
         label="Interrupt: negate a Bow",
@@ -732,6 +744,37 @@ def test_a_keyword_interrupt_is_the_rulebooks_and_escapes_a_negation_naming_its_
     assert not _guard_bowed(session)
     discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
     assert [card.id for card in discard] == ["P2-courage0"]
+
+
+def test_a_negation_of_discarding_does_not_reach_the_courage_cost():
+    session = _fear_announced({DEFENDER: 1})
+    session.game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=Discard))
+
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
+
+    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["P2-courage0"]
+    assert not _guard_bowed(session)
+
+
+def test_a_negation_of_the_adjustment_leaves_the_courage_card_paid():
+    session = _fear_announced({DEFENDER: 1})
+    session.game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=AdjustPending))
+
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
+
+    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
+    assert [card.id for card in discard] == ["P2-courage0"]
+    assert _guard_bowed(session)
+
+
+def test_a_strategy_interrupt_may_not_add_costs_it_has_no_payment_for():
+    session = _fear_announced(
+        {DEFENDER: 1}, strategies=(("probe", "costing_strategy_probe", DEFENDER),)
+    )
+
+    with pytest.raises(ValueError, match="can add no costs"):
+        session.act(DEFENDER, PlayInterrupt("probe"))
 
 
 def test_passing_lets_the_fear_resolve_at_full_strength():

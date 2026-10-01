@@ -188,10 +188,11 @@ keyed and marked `from_keyword` and `from_rulebook`, the way a keyword confers a
 {func}`~.interrupt_for` finds one by key even after the card has lost the keyword. Taken from hand,
 a rulebook Interrupt pays its own `cost` and plays nothing. The datasheet's Courage and Honor
 Interrupts, in `rulebook/courage_and_honor.py`, are two of these. Each asks for its adjustment
-through an {class}`~.AskOption` among its own effects, and the answer returns an
-{class}`~.AdjustPending` that binds the adjustment to the effect, followed by the discard. The
-question comes before the discard, against the CR's order, so that backing out of it leaves the
-card in hand.
+through an {class}`~.AskOption` in its `Interruption.costs`, which are paid with its cost because
+they depend on the effect it answers. The answer returns the discard, paid as a cost that no
+negation reaches, and an {class}`~.AdjustPending` deferred behind it, which binds the adjustment to
+the effect as the Interrupt's own effect. The question comes before the discard, against the CR's
+order, so that backing out of it leaves the card in hand.
 
 A Personality or attachment prints an Interrupt too, taken from play rather than from hand, and an
 Event face up in a Province may as well. Its `located_at` names the battlefield or the Province,
