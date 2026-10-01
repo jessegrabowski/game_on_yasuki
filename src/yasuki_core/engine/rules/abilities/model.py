@@ -142,7 +142,7 @@ class Interrupt[T: Effect]:
         return not self.from_rulebook
 
     def purchase(self, game: GameState, card: L5RCard, *, plays_card: bool) -> Purchase:
-        """What taking this Interrupt on ``card`` pays for, the way :meth:`Ability.purchase` says."""
+        """What taking this Interrupt on ``card`` pays for, as :meth:`Ability.purchase` says."""
         return _purchase(
             game,
             card,

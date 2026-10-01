@@ -31,8 +31,8 @@ COURAGE_LABEL = (
     "action, discard a Courage card to give one such effect +2 or -2 strength."
 )
 HONOR_LABEL = (
-    "Honor Repeatable Interrupt: If the action has any Honor gains or losses, discard an Honor card "
-    "to increase or reduce one such gain or loss by 1."
+    "Honor Repeatable Interrupt: If the action has any Honor gains or losses, discard an Honor "
+    "card to increase or reduce one such gain or loss by 1."
 )
 
 _COURAGE_RESOLVER = "courage_interrupt"
