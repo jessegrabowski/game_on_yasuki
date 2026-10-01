@@ -184,6 +184,7 @@ numpydoc_xref_aliases = {
     "PlayerInfoBox": "yasuki_gui.ui.info_box.PlayerInfoBox",
     "Policy": "yasuki_core.bots.policies.Policy",
     "PromptBox": "yasuki_gui.ui.prompt_box.PromptBox",
+    "Provenance": "yasuki_core.engine.rules.vocabulary.work.Provenance",
     "ProvinceModifier": "yasuki_core.engine.rules.vocabulary.modifiers.ProvinceModifier",
     "ResolvedDeck": "yasuki_core.game_pieces.factory.ResolvedDeck",
     "Rulebook": "yasuki_core.engine.players.Rulebook",
