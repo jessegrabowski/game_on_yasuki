@@ -72,6 +72,25 @@ numpydoc_xref_param_type = True
 # our prose type fields use ("dict mapping (deck, era) to str"); the second is our own unions,
 # type aliases and TypeVars, which autodoc documents nowhere.
 numpydoc_xref_ignore = {
+    # Builtins. numpydoc's DEFAULT_LINKS points each of these at docs.python.org, and nobody
+    # follows a link to learn what an int is. Listed here and aliased to themselves below, they
+    # render as plain text.
+    "bool",
+    "boolean",
+    "callable",
+    "dict",
+    "False",
+    "float",
+    "generator",
+    "int",
+    "iterable",
+    "list",
+    "None",
+    "sequence",
+    "str",
+    "string",
+    "True",
+    "tuple",
     "Ongoing",
     "of",
     "or",
@@ -108,6 +127,23 @@ numpydoc_xref_ignore = {
 # numpydoc_xref_param_type turns every word of a type field into a reference, so a class named by
 # its bare name resolves nowhere. These are the ones our docstrings name that way.
 numpydoc_xref_aliases = {
+    # Each builtin to itself, which overrides numpydoc's DEFAULT_LINKS entry for it.
+    "bool": "bool",
+    "boolean": "bool",
+    "callable": "callable",
+    "dict": "dict",
+    "False": "False",
+    "float": "float",
+    "generator": "generator",
+    "int": "int",
+    "iterable": "iterable",
+    "list": "list",
+    "None": "None",
+    "sequence": "sequence",
+    "str": "str",
+    "string": "str",
+    "True": "True",
+    "tuple": "tuple",
     "ACTION_TIMINGS": "yasuki_core.engine.rules.vocabulary.actions.ACTION_TIMINGS",
     "Act": "yasuki_core.engine.replay.game_log.Act",
     "Action": "yasuki_gui.services.actions.Action",
