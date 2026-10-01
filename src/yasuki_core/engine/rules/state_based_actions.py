@@ -98,10 +98,11 @@ def duelist_left_play(game: GameState) -> list[Effect]:
     """End a duel one of its Personalities has left, without resolution (CR, Duel).
 
     A condition rather than a reaction to the leaving, so a Personality destroyed, discarded, moved
-    out of play or taken by any other route ends the duel the same way.
+    out of play or taken by any other route ends the duel the same way. A duel already decided has
+    resolved, so one of its Personalities leaving before it ends leaves the outcome standing.
     """
     duel = duel_being_fought(game)
-    if duel is None:
+    if duel is None or duel.outcome is not None:
         return []
     in_play = {card.id for card in game.table.battlefield.cards}
     if duel.challenger_duelist in in_play and duel.challenged_duelist in in_play:

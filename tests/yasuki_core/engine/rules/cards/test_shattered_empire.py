@@ -54,12 +54,15 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    STRIKE,
     ChooseDiscard,
     ChoosePayment,
     Confirm,
+    FocusOrStrike,
+    focus_token,
 )
 from yasuki_core.engine.rules.vocabulary.actions import PlayInterrupt
-from yasuki_core.engine.rules.effects import Move
+from yasuki_core.engine.rules.effects import Move, StartDuel
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from tests.yasuki_core.engine.rules.conftest import probe_ability
@@ -71,6 +74,7 @@ from tests.yasuki_core.engine.builders import (
     attachment,
     end_phase,
     fate_card,
+    focus_card,
     holding,
     pay,
     personality,
@@ -1084,6 +1088,7 @@ def _ring_battle(
     *,
     raider_printed_id: str | None = None,
     guard_force: int = 3,
+    raider_chi: int = 3,
     in_play: tuple[L5RCard, ...] = (),
     held: tuple[L5RCard, ...] = (),
 ) -> EngineSession:
@@ -1092,7 +1097,7 @@ def _ring_battle(
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=P1, index=0)
     province_card(state, "def-prov0", seat=P2, index=0)
-    put_in_play(state, personality("raider", force=2, printed_id=raider_printed_id))
+    put_in_play(state, personality("raider", force=2, chi=raider_chi, printed_id=raider_printed_id))
     put_in_play(state, personality("guard", owner=P2, force=guard_force))
     for card in in_play:
         put_in_play(state, register(state, card))
@@ -1119,6 +1124,93 @@ def test_ring_of_fire_lowers_an_enemy_personalitys_force_for_the_turn():
     _answer_until_settled(session, "guard")
 
     assert effective_force(session.game, session.game.table.cards_by_id["guard"]) == 6 - 4
+
+
+DUEL_PROBE = "probe_battle_challenge_to_a_duel"
+DUEL_ABILITY = Ability(
+    timings=(ActionTiming.OPEN, ActionTiming.BATTLE),
+    label="Open or Battle: challenge a target enemy Personality to a duel",
+    cost=no_cost,
+    targets=_enemy_personalities,
+    effects=lambda game, source, target: [StartDuel(source.id, target.id, source.id)],
+)
+
+
+def _focusers(p1_focus: int | None) -> tuple[L5RCard, ...]:
+    """P2's Focus Value 1 card, and P1's of ``p1_focus`` when one is given."""
+    cards = [focus_card("P2-fv", P2, 1)]
+    if p1_focus is not None:
+        cards.append(focus_card("P1-fv", P1, p1_focus))
+    return tuple(cards)
+
+
+def _duel(session: EngineSession) -> None:
+    """P1's raider challenges P2's guard. Each seat focuses its one focusing card, if it holds one,
+    the first time it is asked, and strikes after. P2 is asked first."""
+    session.act(P1, ActivateAbility("raider"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while isinstance(session.game.pending, FocusOrStrike):
+        pending = session.game.pending
+        token = focus_token(f"{pending.seat.name}-fv")
+        answer = token if token in pending.candidates else STRIKE
+        session.submit(pending.seat, DecisionResponse((answer,)))
+
+
+def _ring_of_fire_offered(session: EngineSession) -> bool:
+    pending = session.game.pending
+    return isinstance(pending, Confirm) and pending.candidates == ("fire",)
+
+
+@pytest.mark.parametrize(
+    ("raider_chi", "focus"),
+    [(2, 3), (3, 2)],
+    ids=["entered with the lower duel stat", "entered level"],
+)
+def test_ring_of_fire_is_offered_after_winning_a_battle_duel_entered_without_the_higher_stat(
+    raider_chi, focus
+):
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _ring_battle(
+            raider_printed_id=DUEL_PROBE,
+            raider_chi=raider_chi,
+            held=(_ring("fire", "ring_of_fire"), *_focusers(focus)),
+        )
+        _duel(session)
+
+        assert _ring_of_fire_offered(session)
+        session.submit(P1, DecisionResponse(("fire",)))
+
+    assert "fire" in _in_play(session)
+
+
+@pytest.mark.parametrize(
+    "raider_chi",
+    [5, 2],
+    ids=["won having entered with the higher duel stat", "lost"],
+)
+def test_ring_of_fire_is_not_offered_after_a_duel_won_on_the_higher_stat_or_lost(raider_chi):
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _ring_battle(
+            raider_printed_id=DUEL_PROBE,
+            raider_chi=raider_chi,
+            held=(_ring("fire", "ring_of_fire"), *_focusers(None)),
+        )
+        _duel(session)
+
+        assert not _ring_of_fire_offered(session)
+
+
+def test_ring_of_fire_is_not_offered_after_winning_a_duel_outside_a_battle():
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("raider", chi=2, printed_id=DUEL_PROBE))
+    put_in_play(state, personality("guard", owner=P2))
+    for card in (_ring("fire", "ring_of_fire"), *_focusers(3)):
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = EngineSession.start(state, P1)
+        _duel(session)
+
+        assert not _ring_of_fire_offered(session)
 
 
 def test_ring_of_water_moves_a_personality_to_the_battlefield_and_another_home():

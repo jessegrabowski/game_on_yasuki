@@ -47,19 +47,25 @@ class RevealFocusedCards(DuelWork):
 
 
 @dataclass(frozen=True, slots=True)
-class DecideTheDuel(DuelWork):
-    """Total both sides, record who won, and end the duel (CR, Duel 0.0.9-0.0.12).
+class AnnounceFocusEffectsResolved(DuelWork):
+    """Announce that the Focus Effects have resolved, the step that follows them (CR, Duel: the
+    effects resolve, then the duel is decided)."""
 
-    The duel ends when this step ends, which is before its consequences apply and before its focused
-    cards are discarded (CR, Duel). Those consequences are effects their cards delayed until
-    ``DUEL_CONSEQUENCES``, and they resolve here.
+    def resume(self, game: GameState) -> None:
+        duel = duel_in_progress(game)
+        triggers.fire(game, FocusEffectsResolved(source_card_id=duel.source))
+
+
+@dataclass(frozen=True, slots=True)
+class DecideTheDuel(DuelWork):
+    """Total both sides, record who won and announce it (CR, Duel 0.0.9-0.0.11).
+
+    The duel's end and its consequences are steps of their own, so a question a card asks on
+    :class:`~.DuelResolved` is answered before the duel ends.
     """
 
     def resume(self, game: GameState) -> None:
         duel = duel_in_progress(game)
-        # The Focus Effects have all resolved by the time this step runs, so the step that follows
-        # them announces it (CR, Duel: the effects resolve, then the duel is decided).
-        triggers.fire(game, FocusEffectsResolved(source_card_id=duel.source))
         duel.step = DuelStep.RESOLUTION
         outcome = _outcome_on_totals(game, duel)
         duel.outcome = outcome
@@ -72,8 +78,25 @@ class DecideTheDuel(DuelWork):
                 source_card_id=duel.source,
             ),
         )
+
+
+@dataclass(frozen=True, slots=True)
+class EndTheDuel(DuelWork):
+    """End the duel once it is decided, before its consequences apply and before its focused cards
+    are discarded (CR, Duel 0.0.12)."""
+
+    def resume(self, game: GameState) -> None:
+        duel = duel_in_progress(game)
         duel.step = DuelStep.ENDED
         triggers.fire(game, DuelEnded(resolved=True, source_card_id=duel.source))
+
+
+@dataclass(frozen=True, slots=True)
+class ApplyDuelConsequences(DuelWork):
+    """Resolve the consequences cards delayed until ``DUEL_CONSEQUENCES``, once the duel has
+    ended."""
+
+    def resume(self, game: GameState) -> None:
         triggers.resolve_delayed(game, DUEL_CONSEQUENCES)
 
 

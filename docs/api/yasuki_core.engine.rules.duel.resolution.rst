@@ -7,8 +7,11 @@ yasuki_core.engine.rules.duel.resolution
 
 .. autosummary::
 
+    AnnounceFocusEffectsResolved
+    ApplyDuelConsequences
     DecideTheDuel
     DiscardFocusedCards
+    EndTheDuel
     RevealFocusedCards
 
 .. rubric:: Functions

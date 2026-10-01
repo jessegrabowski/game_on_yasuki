@@ -197,13 +197,26 @@ def strike(game: GameState, seat: PlayerId) -> None:
     # The steps import this module for the loop they follow, so importing them at the top would
     # close that cycle.
     from yasuki_core.engine.rules.duel.resolution import (
+        AnnounceFocusEffectsResolved,
+        ApplyDuelConsequences,
         DecideTheDuel,
         DiscardFocusedCards,
+        EndTheDuel,
         RevealFocusedCards,
     )
 
     duel_in_progress(game)
     # Pushed in reverse, so they run in the CR's order: the reveal, the Focus Effects it queues, the
-    # outcome and the duel's end with the consequences that wait for it, then the discard.
-    game.stack.extend((DiscardFocusedCards(), DecideTheDuel(), RevealFocusedCards()))
+    # outcome, the duel's end, the consequences that wait for it, then the discard. One step per
+    # announcement, so a question asked on one is answered before the next is made.
+    game.stack.extend(
+        (
+            DiscardFocusedCards(),
+            ApplyDuelConsequences(),
+            EndTheDuel(),
+            DecideTheDuel(),
+            AnnounceFocusEffectsResolved(),
+            RevealFocusedCards(),
+        )
+    )
     triggers.fire(game, StrikeDeclared(seat=seat))
