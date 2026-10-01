@@ -88,6 +88,9 @@ class EndTheDuel(DuelWork):
     def resume(self, game: GameState) -> None:
         duel = duel_in_progress(game)
         duel.step = DuelStep.ENDED
+        # Lapsed before the end is announced, so nothing reacting to it reads a stat the duel was
+        # still holding up, and so the board their expiry leaves is settled first.
+        triggers.lapse_ongoing(game, DUEL_CONSEQUENCES)
         triggers.fire(game, DuelEnded(resolved=True, source_card_id=duel.source))
 
 
@@ -173,8 +176,10 @@ def end_without_resolution(game: GameState) -> list[GameEvent]:
     duel = duel_in_progress(game)
     duel.step = DuelStep.ENDED
     game.stack[:] = [item for item in game.stack if not isinstance(item, DuelWork)]
-    # The duel reached no outcome, so the consequences that waited for its end have nothing to
-    # apply to, and one left held would resolve off the next duel's end (CR, Duel).
+    # The duel reached no outcome, so what waited for its end does not happen: the records lasting
+    # until it lapse, and the consequences held for it are dropped rather than resolved. One left
+    # held would resolve off the next duel's end (CR, Duel).
+    triggers.lapse_ongoing(game, DUEL_CONSEQUENCES)
     triggers.discard_delayed(game, DUEL_CONSEQUENCES)
     duel.outcome = DuelOutcome(winners=(), losers=(), totals={})
     return [DuelEnded(resolved=False, source_card_id=duel.source), *end_duel(game)]

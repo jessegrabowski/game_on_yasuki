@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.turn.action_sequence import run_stack
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed, EnteredPlay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.vocabulary.actions import Recruit
@@ -32,6 +33,7 @@ from tests.yasuki_core.engine.builders import (
     attachment,
     dealt_table,
     end_phase,
+    focus_card,
     holding,
     put_in_play,
     register,
@@ -80,6 +82,23 @@ def test_a_personality_penalised_to_zero_chi_is_destroyed():
     triggers.enforce_state_based_actions(game)
 
     assert "doomed" not in _battlefield(game)
+
+
+def test_a_grant_on_a_focused_card_is_kept_and_one_on_a_card_in_hand_is_not():
+    # A focused card is on the table for as long as the duel holds it, so a card raising its Focus
+    # Value survives to the reveal that totals it. A card in hand is not, and never was.
+    game = two_seat_game()
+    focused = register(game.table, focus_card("focused", P1, 1))
+    held = register(game.table, focus_card("held", P1, 1))
+    ops.create_focus_area(game.table, P1)
+    ops.move_card(game.table, focused, ZoneKey(P1, ZoneRole.FOCUS))
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(held)
+    game.ongoing.append(Modifier("ichimon", "focused", Stat.FOCUS, 2, DUEL_CONSEQUENCES))
+    game.ongoing.append(Modifier("ichimon", "held", Stat.FOCUS, 2, DUEL_CONSEQUENCES))
+
+    triggers.enforce_state_based_actions(game)
+
+    assert [record.target_id for record in game.ongoing] == ["focused"]
 
 
 def test_a_personality_at_one_chi_is_left_alone():

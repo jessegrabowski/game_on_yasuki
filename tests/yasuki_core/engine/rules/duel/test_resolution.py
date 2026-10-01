@@ -11,8 +11,15 @@ from yasuki_core.engine.rules.duel import focus_effects, focusing, procedure, re
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
-from yasuki_core.engine.rules.effects import Ask, GrantModifier, StartDuel
+from yasuki_core.engine.rules.effects import (
+    Ask,
+    GrantDuelStat,
+    GrantMinimum,
+    GrantModifier,
+    StartDuel,
+)
 from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
@@ -154,6 +161,84 @@ def test_the_higher_total_wins_the_duel():
         assert outcome.totals == {P1: 3, P2: 6}
         assert outcome.winners == (P2,)
         assert outcome.losers == (P1,)
+
+
+def test_a_raised_focus_value_counts_toward_the_total():
+    # Weigh the Cost and Isawa Ichimon both raise a focused card's Focus Value, so the duel totals
+    # the modified value rather than what the card prints. A card in reserve for each seat keeps the
+    # focusing loop open, since a seat with nothing to focus strikes without being asked.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(held=(focus_card("P2-fv1", P2, 1), focus_card("P1-spare", P1, 1)))
+        _challenge(session)
+        session.submit(P2, DecisionResponse((focus_token("P2-fv1"),)))
+        apply_effect(
+            session.game,
+            GrantModifier("ichimon", "P2-fv1", Stat.FOCUS, 2, DUEL_CONSEQUENCES),
+        )
+        _strike_out(session)
+
+        assert session.game.duel.outcome.totals == {P1: 3, P2: 6}
+
+
+def test_a_duel_scoped_grant_is_gone_once_the_duel_ends():
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(held=(focus_card("P2-spare", P2, 1), focus_card("P1-spare", P1, 1)))
+        _challenge(session)
+        apply_effect(
+            session.game,
+            GrantModifier("technique", "rival", Stat.CHI, 2, DUEL_CONSEQUENCES),
+        )
+        _strike_out(session)
+
+        # The outcome was read while the grant stood, and nothing carries it past the duel.
+        assert session.game.duel.outcome.totals == {P1: 3, P2: 5}
+        assert session.game.ongoing == []
+
+
+def test_a_duel_scoped_minimum_expiring_leaves_the_board_judged():
+    # A Personality held above zero Chi only by a duel-scoped floor is destroyed as the duel ends.
+    # Nothing in the duel enforces the state-based rules: the drop happens, then the duel announces
+    # its end, and firing that event is what judges the board.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(
+            chi={P1: 3, P2: 2},
+            held=(focus_card("P2-spare", P2, 1), focus_card("P1-spare", P1, 1)),
+        )
+        _challenge(session)
+        apply_effect(
+            session.game,
+            GrantMinimum("technique", "rival", Stat.CHI, 1, DUEL_CONSEQUENCES),
+        )
+        apply_effect(
+            session.game,
+            GrantModifier("poison", "rival", Stat.CHI, -2, Duration.UNTIL_END_OF_TURN),
+        )
+        _strike_out(session)
+
+        # The floor stood while the duel read the totals, and went with the duel.
+        assert session.game.duel.outcome.totals == {P1: 3, P2: 1}
+        assert "rival" not in {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_a_duelist_duels_on_the_stat_a_card_named_for_it():
+    # Hida Ryusei's shape: her Berserkers duel on Force while the Personality opposing them duels on
+    # Chi, so the stat is named per Personality rather than per duel.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _duel_game(
+            chi={P1: 1, P2: 3},
+            force={P1: 4, P2: 2},
+            held=(focus_card("P2-spare", P2, 1), focus_card("P1-spare", P1, 1)),
+        )
+        _challenge(session)
+        apply_effect(
+            session.game,
+            GrantDuelStat("ryusei", "challenger", Stat.FORCE, DUEL_CONSEQUENCES),
+        )
+        _strike_out(session)
+
+        outcome = session.game.duel.outcome
+        assert outcome.totals == {P1: 4, P2: 3}
+        assert outcome.winners == (P1,)
 
 
 def test_a_tie_is_lost_by_both_personalities():
@@ -371,6 +456,20 @@ def test_a_duelist_leaving_after_the_duel_is_decided_leaves_the_outcome_standing
 
     assert game.duel.outcome == outcome
     assert isinstance(game.stack[-1], resolution.EndTheDuel)
+
+
+def test_a_duel_that_ends_without_resolving_drops_what_it_scoped():
+    game = _duel_on_a_bare_game()
+    # Granted to the duelist that stays, so only the duel's own ending can drop it.
+    apply_effect(
+        game,
+        GrantModifier("technique", "challenger", Stat.CHI, 2, DUEL_CONSEQUENCES),
+    )
+    ops.remove_card(game.table, game.table.cards_by_id["rival"])
+
+    enforce_state_based_actions(game)
+
+    assert game.ongoing == []
 
 
 def test_a_duel_both_duelists_are_still_in_demands_nothing():

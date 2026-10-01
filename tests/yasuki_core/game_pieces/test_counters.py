@@ -35,8 +35,14 @@ def test_unknown_key_raises():
         counter_from_key("not_a_counter")
 
 
+# Stats no counter carries a delta for. `active_modifiers` reads a counter's delta with a default of
+# 0, so a stat absent here contributes nothing rather than failing. Focus Value belongs to a Fate
+# card, and no card in the corpus puts a counter on one.
+NOT_CARRIED_BY_COUNTERS = {Stat.FOCUS}
+
+
 def test_counter_has_a_field_for_every_bridged_stat():
-    # active_modifiers reads deltas via getattr(counter,
-    # stat.value); every Stat must map to a field.
-    for stat in Stat:
+    # active_modifiers reads deltas via getattr(counter, stat.value), so a stat a counter does carry
+    # needs the field under exactly that name.
+    for stat in set(Stat) - NOT_CARRIED_BY_COUNTERS:
         assert hasattr(Counter("k"), stat.value)

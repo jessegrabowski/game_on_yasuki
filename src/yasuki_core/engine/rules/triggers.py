@@ -570,7 +570,9 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     A card that leaves play ceases to exist (CR), so nothing granted to it outlives the departure,
     ``PERMANENT`` included, whose permanence is against its *source* going away rather than its
     target. A Province card counts as still on the table. Repairing the Ruins raises a Holding's
-    Gold Cost while it waits in one, and that has to survive being Recruited out of it.
+    Gold Cost while it waits in one, and that has to survive being Recruited out of it. A focused
+    card counts too, so that a card raising another's Focus Value survives to the reveal that totals
+    it. The duel discards what it focused, which is what ends those changes (CR, Duel).
 
     Forgotten rather than skipped when read: a card can return to a Province, and a record merely
     filtered out would come back attached to the card that replaced it. One laid on a condition, a
@@ -582,7 +584,7 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
         return
     on_table = {card.id for card in game.table.battlefield.cards}
     for key, zone in game.table.zones.items():
-        if key.role is ZoneRole.PROVINCE:
+        if key.role in (ZoneRole.PROVINCE, ZoneRole.FOCUS):
             on_table.update(card.id for card in zone.cards)
     game.ongoing[:] = [record for record in game.ongoing if _names_no_card_off(record, on_table)]
 

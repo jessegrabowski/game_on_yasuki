@@ -56,6 +56,7 @@ from yasuki_core.engine.rules.effects import (
     GrantPriority,
     RangedAttack,
     GrantKeyword,
+    GrantDuelStat,
     GrantMinimum,
     GrantAbility,
     GrantSeatAbility,
@@ -158,6 +159,10 @@ EFFECTS = [
     (
         GrantMinimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
         "uncertainty gives shiba a minimum CHI of 1 (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantDuelStat("ryusei", "berserker", Stat.FORCE, DUEL_CONSEQUENCES),
+        "ryusei gives berserker a duel stat of FORCE (as the duel ends)",
     ),
     (
         PayFavorCost(),
