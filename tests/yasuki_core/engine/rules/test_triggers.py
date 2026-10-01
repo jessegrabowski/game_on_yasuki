@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.effects import (
@@ -160,6 +161,11 @@ def test_resuming_a_choice_without_its_stash_on_top_raises():
 
     with pytest.raises(RuntimeError, match="without its stashed cascade"):
         resume_paused_cascade(game, [])
+
+
+def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():
+    with pytest.raises(ValueError, match="resolve_action_effects"):
+        resolve_effects(two_seat_game(), [], provenance=Provenance(interruptible=True))
 
 
 def test_ignore_honor_requirements_effect_sets_the_seat_flag():

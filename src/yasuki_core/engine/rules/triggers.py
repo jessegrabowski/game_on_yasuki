@@ -845,8 +845,11 @@ def resolve_effects(
     ``provenance`` says where they came from, as a ``Then`` deferring a trigger's effects keeps
     them the trigger's.
 
-    Raise ``RuntimeError`` if a decision is pending.
+    Raise ``ValueError`` if ``provenance`` names an action's own effects, which
+    :func:`~.resolve_action_effects` resolves, and ``RuntimeError`` if a decision is pending.
     """
+    if provenance.interruptible:
+        raise ValueError("an action's own effects resolve through resolve_action_effects")
     _refuse_mid_decision(game, "resolve_effects")
     _advance(game, tuple(effects), [], None, [], provenance)
 
