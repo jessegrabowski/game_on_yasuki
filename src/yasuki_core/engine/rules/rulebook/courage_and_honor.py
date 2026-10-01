@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
+    Then,
 )
 from yasuki_core.engine.rules.interrupts import as_modified, foreseen_now
 from yasuki_core.engine.rules.state import GameState
@@ -43,12 +44,13 @@ _HONOR_ADJUSTMENTS = {"Increase by 1": 1, "Reduce by 1": -1}
 
 
 # The datasheet discards the card to take the Interrupt, and the adjustment is chosen after. Here
-# the seat is asked first and its answer discards the card, which is the wrong order by the CR. The
-# order is deliberate. Cancel is offered until the board changes, and the discard changes it. A
-# discard can set off something that cannot be taken back, such as a Ring of the Void becoming
-# legal and entering play, and the seat could then no longer back out of a question it had not yet
-# answered. Asked first, backing out of the question leaves the card in hand. The CR puts nothing
-# between the discard and the choice, so no card can tell the two orders apart.
+# the seat is asked first, as part of the cost, and its answer discards the card, which is the wrong
+# order by the CR. The order is deliberate. Cancel is offered until the board changes, and the
+# discard changes it. A discard can set off something that cannot be taken back, such as a Ring of
+# the Void becoming legal and entering play, and the seat could then no longer back out of a
+# question it had not yet answered. Asked first, backing out of the question leaves the card in
+# hand. The CR puts nothing between the discard and the choice, so no card can tell the two orders
+# apart.
 def _asks(
     question: str, adjustments: dict[str, int], resolver: str
 ) -> Callable[[GameState, L5RCard, Effect], Interruption]:
@@ -61,7 +63,7 @@ def _asks(
             source_id=card.id,
             resolver_context=(effect.describe(),),
         )
-        return Interruption(replacement=effect, effects=(ask,))
+        return Interruption(replacement=effect, costs=(ask,))
 
     return interrupt
 
@@ -77,16 +79,21 @@ def _adjusts(adjustments: dict[str, int]) -> Resolver:
         resolver_context: tuple[str, ...],
     ) -> list[Effect]:
         delta = adjustments[choices[0]]
-        return _adjust_and_discard(game, source_id, seat, resolver_context[0], delta)
+        return _discard_and_adjust(game, source_id, seat, resolver_context[0], delta)
 
     return resolve
 
 
-def _adjust_and_discard(
+def _discard_and_adjust(
     game: GameState, card_id: str, seat: PlayerId, described: str, delta: int
 ) -> list[Effect]:
-    """Bind ``delta`` to the held action's effect ``described``, then discard ``card_id``. Raise
-    ``RuntimeError`` if the forecast no longer holds the effect."""
+    """Discard ``card_id``, then bind ``delta`` to the held action's effect ``described``. Raise
+    ``RuntimeError`` if the forecast no longer holds the effect.
+
+    The question is part of the cost, so what its answer returns is paid as a cost too: the discard
+    is, and no negation reaches it. The adjustment is deferred behind it, so it resolves as the
+    Interrupt's effect, which a negation of the Interrupt can still stop.
+    """
     bound = next(
         (
             effect
@@ -97,7 +104,7 @@ def _adjust_and_discard(
     )
     if bound is None:
         raise RuntimeError("the effect answered is no longer among the action's")
-    return [AdjustPending(bound, delta), Discard(card_id, seat)]
+    return [Discard(card_id, seat), Then((AdjustPending(bound, delta),))]
 
 
 choice_resolver(_COURAGE_RESOLVER)(_adjusts(_COURAGE_ADJUSTMENTS))
