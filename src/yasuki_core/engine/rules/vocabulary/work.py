@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
 
@@ -30,3 +31,27 @@ class Modification(Protocol):
         """The effect that resolves in place of ``effect``, which may already carry an earlier
         modification of the same original."""
         ...
+
+
+@dataclass(frozen=True, slots=True)
+class Provenance:
+    """Where the effects a cascade holds came from, which decides what may reach them. The cascade
+    carries it across every pause and deferral, so an effect a question or a ``Then`` holds back
+    resolves as what it was.
+
+    Attributes
+    ----------
+    interruptible : bool, optional
+        Whether the effects are an action's own, the only ones an Interrupt may modify (ShE
+        datasheet, Interrupt). Default False.
+    triggered : bool, optional
+        Whether the effects are a trigger's, so a decision among them is the trigger's question and
+        cannot be backed out of. Default False.
+    paying : bool, optional
+        Whether the effects are a cost's payments, which are no effects (CR, Effects), so no
+        negation reaches them. Default False.
+    """
+
+    interruptible: bool = False
+    triggered: bool = False
+    paying: bool = False

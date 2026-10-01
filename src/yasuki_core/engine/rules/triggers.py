@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.ruleset import in_force
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -378,10 +379,7 @@ def _advance(
     firing: list[tuple[L5RCard, Trigger]],
     event: GameEvent | None,
     queue: list[GameEvent],
-    *,
-    interruptible: bool,
-    triggered: bool = False,
-    paying: bool = False,
+    provenance: Provenance = Provenance(),
 ) -> None:
     """Run the effect-and-trigger cascade to a fixpoint from an arbitrary resume point.
 
@@ -394,23 +392,24 @@ def _advance(
     decision, so :func:`~.resume_cascade` continues from precisely here once the seat answers. An
     effect with nothing to ask leaves the stash to drain behind the work it queued.
 
-    ``interruptible`` says the effects in hand are an action's own, the only ones an Interrupt may
-    modify (ShE datasheet, Interrupt). Each is checked against the modifications the action's
-    :class:`~.InterruptWindow` collected before it is applied, and resolves as what the Interrupt
-    made of it. What a trigger returns is a trait's or the rulebook's, never the action's, so it
-    is applied as returned, and a ``Then`` among the action's effects carries the flag to the
-    deferred step.
+    ``provenance`` says where the effects in hand came from. Its ``interruptible`` says they are an
+    action's own, the only ones an Interrupt may modify (ShE datasheet, Interrupt). Each is checked
+    against the modifications the action's :class:`~.InterruptWindow` collected before it is
+    applied, and resolves as what the Interrupt made of it. What a trigger returns is a trait's or
+    the rulebook's, never the action's, so it is applied as returned, and a ``Then`` among the
+    action's effects carries the flag to the deferred step.
 
     Every other effect is checked against the negations in force as it commits, whatever produced
     it, since a negation makes an effect fail to happen whenever it would occur (CR, Prevention).
-    ``paying`` says the effects in hand are a cost's payments instead, which are no effects (CR,
-    Effects), so no negation reaches them. What reacts to them is effects again.
+    The provenance's ``paying`` says the effects in hand are a cost's payments instead, which are
+    no effects (CR, Effects), so no negation reaches them. What reacts to them is effects again,
+    and so is what a ``Then`` among them defers.
 
-    ``triggered`` says the effects in hand are a trigger's, so a decision among them is marked as
-    the trigger's question, one that cannot be backed out of. The machine sets it itself once it
-    fires a trigger for an event that has happened, and a stash or a ``Then`` carries it on to the
-    effects that follow. A trigger firing in a window a step opens before committing asks on the step's
-    behalf, and its question stays the step's own."""
+    The provenance's ``triggered`` says the effects in hand are a trigger's, so a decision among
+    them is marked as the trigger's question, one that cannot be backed out of. The machine sets it
+    itself once it fires a trigger for an event that has happened, and a stash or a ``Then``
+    carries it on to the effects that follow. A trigger firing in a window a step opens before
+    committing asks on the step's behalf, and its question stays the step's own."""
     resolved = 0
     firing = list(firing)
     while True:
@@ -419,23 +418,23 @@ def _advance(
             effect = pending.pop(0)
             if isinstance(effect, Then):
                 _trace.append(f"    {effect.describe()}")
-                game.stack.append(
-                    ApplyEffects(effect.effects, interruptible=interruptible, triggered=triggered)
-                )
+                game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
                 continue
             if not isinstance(effect, InterruptingEffect):
-                if interruptible:
+                if provenance.interruptible:
                     effect = _modified(game, effect)
-                if not paying:
+                if not provenance.paying:
                     effect = negate_committed(game, effect)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
-                _stash(game, tuple(pending), firing, event, queue, interruptible, triggered, paying)
+                _stash(game, tuple(pending), firing, event, queue, provenance)
                 request = effect.request(game)
                 if request is not None:
-                    game.pending = replace(request, triggered=True) if triggered else request
+                    game.pending = (
+                        replace(request, triggered=True) if provenance.triggered else request
+                    )
                 return
             _trace.append(f"    {effect.describe()}")
             queue.extend(apply_effect(game, effect))
@@ -444,13 +443,11 @@ def _advance(
             pending[:0] = effect.follow_on(game)
             _settle_state_based_actions(game, queue)
         effects = ()
-        interruptible = False
-        paying = False
         if firing:
             card, trigger = firing.pop(0)
             _trace.append(f"  {card.printed_id} ({card.id}) reacts")
             effects = tuple(trigger(TriggerContext(game, card, event)))
-            triggered = not opens_a_window(event)
+            provenance = Provenance(triggered=not opens_a_window(event))
             continue
         if not queue:
             # The walk can be entered on a board something else already made illegal, and with
@@ -511,7 +508,7 @@ def enforce_state_based_actions(game: GameState) -> None:
     queue: list[GameEvent] = []
     _settle_state_based_actions(game, queue)
     if queue:
-        _advance(game, (), [], None, queue, interruptible=False)
+        _advance(game, (), [], None, queue)
 
 
 def lapse_ongoing(game: GameState, moment: Moment) -> None:
@@ -543,7 +540,7 @@ def reach_moment(game: GameState, moment: Moment, *announcing: GameEvent) -> Non
     queue: list[GameEvent] = []
     _settle_state_based_actions(game, queue)
     queue.extend(announcing)
-    _advance(game, tuple(held), [], None, queue, interruptible=False)
+    _advance(game, tuple(held), [], None, queue)
 
 
 def _lapse(game: GameState, moment: Moment) -> bool:
@@ -717,24 +714,15 @@ class ResumeCascade:
         The event those triggers are firing for, or None when the pause held only loose effects.
     queue : tuple of GameEvent
         The events still waiting behind ``event`` in the paused worklist.
-    interruptible : bool, optional
-        Whether the effects still to apply are an action's own, open to the Interrupt step.
-        Default False.
-    triggered : bool, optional
-        Whether the effects still to apply are a trigger's, so a decision among them is the
-        trigger's question. Default False.
-    paying : bool, optional
-        Whether the effects still to apply are a cost's payments, which no negation reaches.
-        Default False.
+    provenance : Provenance, optional
+        Where the effects still to apply came from. Default a rulebook procedure's.
     """
 
     effects: tuple[Effect, ...]
     firing: tuple[tuple[str, Trigger], ...]
     event: GameEvent | None
     queue: tuple[GameEvent, ...]
-    interruptible: bool = False
-    triggered: bool = False
-    paying: bool = False
+    provenance: Provenance = Provenance()
 
     def resume(self, game: GameState) -> None:
         # An interrupting effect whose answer produces no effects of its own, a payment, say, leaves
@@ -749,14 +737,10 @@ def _stash(
     firing: list[tuple[L5RCard, Trigger]],
     event: GameEvent | None,
     queue: list[GameEvent],
-    interruptible: bool,
-    triggered: bool,
-    paying: bool,
+    provenance: Provenance,
 ) -> None:
     remaining = tuple((card.id, trigger) for card, trigger in firing)
-    game.stack.append(
-        ResumeCascade(effects, remaining, event, tuple(queue), interruptible, triggered, paying)
-    )
+    game.stack.append(ResumeCascade(effects, remaining, event, tuple(queue), provenance))
 
 
 def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:
@@ -774,9 +758,7 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
         firing,
         item.event,
         list(item.queue),
-        interruptible=item.interruptible,
-        triggered=item.triggered,
-        paying=item.paying,
+        item.provenance,
     )
 
 
@@ -813,7 +795,7 @@ class HeldAction:
     effects: tuple[Effect, ...]
 
     def resume(self, game: GameState) -> None:
-        _advance(game, self.effects, [], None, [], interruptible=True)
+        _advance(game, self.effects, [], None, [], Provenance(interruptible=True))
 
 
 def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
@@ -837,7 +819,7 @@ def fire(game: GameState, event: GameEvent) -> None:
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "fire")
-    _advance(game, (), [], None, [event], interruptible=False)
+    _advance(game, (), [], None, [event])
 
 
 def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
@@ -850,21 +832,23 @@ def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "fire_all")
-    _advance(game, (), [], None, list(events), interruptible=False)
+    _advance(game, (), [], None, list(events))
 
 
-def resolve_effects(game: GameState, effects: list[Effect], *, triggered: bool = False) -> None:
+def resolve_effects(
+    game: GameState, effects: list[Effect], *, provenance: Provenance = Provenance()
+) -> None:
     """Apply ``effects`` and run the derived-event cascade the same way :func:`~.fire` does, so a
     triggered reaction to those effects still resolves. The effects are not an action's own, so
     none is held at the Interrupt step: a rulebook procedure's effects, a trait's, and an
     Interrupt's own effects all come through here, and a cost through :func:`~.pay_costs`.
-    ``triggered`` says they are a trigger's, deferred by a ``Then``, so a decision among them is the
-    trigger's question.
+    ``provenance`` says where they came from, as a ``Then`` deferring a trigger's effects keeps
+    them the trigger's.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "resolve_effects")
-    _advance(game, tuple(effects), [], None, [], interruptible=False, triggered=triggered)
+    _advance(game, tuple(effects), [], None, [], provenance)
 
 
 def pay_costs(game: GameState, costs: list[Effect]) -> None:
@@ -875,7 +859,7 @@ def pay_costs(game: GameState, costs: list[Effect]) -> None:
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "pay_costs")
-    _advance(game, tuple(costs), [], None, [], interruptible=False, paying=True)
+    _advance(game, tuple(costs), [], None, [], Provenance(paying=True))
 
 
 def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:
@@ -894,7 +878,7 @@ def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:
 
     _refuse_mid_decision(game, "resolve_action_effects")
     if game.interrupts_offered:
-        _advance(game, tuple(effects), [], None, [], interruptible=True)
+        _advance(game, tuple(effects), [], None, [], Provenance(interruptible=True))
         return
     game.interrupts_offered = True
     held = HeldAction(tuple(effects))
