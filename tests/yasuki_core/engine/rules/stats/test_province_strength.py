@@ -26,6 +26,7 @@ def _walled_game(*, printed_strength: int = 3, provinces: int = 2):
         L5RCard.of(
             StrongholdPrint,
             id="SH",
+            printed_id="SH",
             name="SH",
             side=Side.STRONGHOLD,
             owner=P1,

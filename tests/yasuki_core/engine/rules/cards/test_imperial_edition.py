@@ -108,7 +108,14 @@ def _gift_game(*, items=("katana",), plain=("strategy",), dynasty=("next-card",)
         deck.cards.append(
             register(
                 state,
-                L5RCard.of(FatePrint, id=card_id, name=card_id, side=Side.FATE, owner=P1),
+                L5RCard.of(
+                    FatePrint,
+                    id=card_id,
+                    printed_id=card_id,
+                    name=card_id,
+                    side=Side.FATE,
+                    owner=P1,
+                ),
             )
         )
     for card_id in items:
@@ -118,6 +125,7 @@ def _gift_game(*, items=("katana",), plain=("strategy",), dynasty=("next-card",)
                 L5RCard.of(
                     AttachmentPrint,
                     id=card_id,
+                    printed_id=card_id,
                     name=card_id,
                     side=Side.FATE,
                     owner=P1,

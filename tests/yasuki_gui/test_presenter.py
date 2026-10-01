@@ -88,7 +88,15 @@ def _grant_board() -> EngineSession:
     state = TableState.empty_two_seat()
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
         register(
-            state, L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=P1)
+            state,
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=P1,
+            ),
         )
     ]
     put_in_play(

@@ -24,7 +24,14 @@ def _game(spares: int = 1):
     put_in_play(game, holding("P1-eyes", owner=P1, printed_id="refill_probe"))
     province_card(game, "P1-victim", seat=P1, gold_cost=0)
     deck = [
-        L5RCard.of(DynastyPrint, id=f"P1-spare{index}", name="Spare", side=Side.DYNASTY, owner=P1)
+        L5RCard.of(
+            DynastyPrint,
+            id=f"P1-spare{index}",
+            printed_id=f"P1-spare{index}",
+            name="Spare",
+            side=Side.DYNASTY,
+            owner=P1,
+        )
         for index in range(spares)
     ]
     game.table.decks[DYNASTY].cards = deck
@@ -129,7 +136,12 @@ def test_both_seats_provinces_refill_not_only_the_active_one():
     effect on the human's turn emptied it."""
     game = _game()
     opponent_spare = L5RCard.of(
-        DynastyPrint, id="P2-spare", name="Spare", side=Side.DYNASTY, owner=PlayerId.P2
+        DynastyPrint,
+        id="P2-spare",
+        printed_id="P2-spare",
+        name="Spare",
+        side=Side.DYNASTY,
+        owner=PlayerId.P2,
     )
     game.table.decks[DeckKey(PlayerId.P2, Side.DYNASTY)].cards = [opponent_spare]
     game.table.cards_by_id[opponent_spare.id] = opponent_spare

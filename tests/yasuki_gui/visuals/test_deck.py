@@ -24,7 +24,9 @@ def test_size_bbox_and_draw_empty_fallback(root):
 
 
 def test_draw_with_top_card_uses_back_image_or_fallback(root):
-    c = L5RCard.of(CardPrint, id="d1", name="C1", side=Side.FATE, owner=PlayerId.P1)
+    c = L5RCard.of(
+        CardPrint, id="d1", printed_id="d1", name="C1", side=Side.FATE, owner=PlayerId.P1
+    )
     dv = DeckVisual(1, c, x=60, y=60, tag="deck:2", label="Fate Deck")
 
     cv = tk.Canvas(root, width=200, height=200)

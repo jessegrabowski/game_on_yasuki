@@ -350,6 +350,7 @@ def _keyword_card(table: TableState, card_id: str, owner: PlayerId, keyword: str
     card = L5RCard.of(
         FatePrint,
         id=card_id,
+        printed_id=card_id,
         name=f"{keyword} Fate",
         side=Side.FATE,
         owner=owner,
@@ -380,7 +381,7 @@ def _strategy(
         ActionPrint,
         id=card_id,
         name=card_id,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         side=Side.FATE,
         owner=owner,
         gold_cost=gold_cost,
@@ -432,6 +433,7 @@ def _proclaim_session(
     samurai = L5RCard.of(
         PersonalityPrint,
         id="P1-samurai",
+        printed_id="P1-samurai",
         name="P1-samurai",
         side=Side.DYNASTY,
         owner=P1,

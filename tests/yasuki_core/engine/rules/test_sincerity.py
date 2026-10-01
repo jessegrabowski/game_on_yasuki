@@ -63,6 +63,7 @@ def test_a_sincerity_card_in_play_does_not_accrue():
     card = L5RCard.of(
         HoldingPrint,
         id="s",
+        printed_id="s",
         name="s",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -91,12 +92,13 @@ def test_sincerity_accrues_only_on_the_owners_own_turns():
 def test_sincerity_accrual_replays_through_a_full_turn():
     state = TableState.empty_two_seat()
     state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
-        L5RCard.of(FatePrint, id="fd", name="F", side=Side.FATE, owner=PlayerId.P1)
+        L5RCard.of(FatePrint, id="fd", printed_id="fd", name="F", side=Side.FATE, owner=PlayerId.P1)
     ]
     state.cards_by_id["fd"] = state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards[0]
     card = L5RCard.of(
         HoldingPrint,
         id="s",
+        printed_id="s",
         name="s",
         side=Side.DYNASTY,
         owner=PlayerId.P1,

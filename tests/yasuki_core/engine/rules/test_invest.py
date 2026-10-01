@@ -49,7 +49,14 @@ def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: 
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
             state,
-            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1),
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+            ),
         )
     ]
     put_in_play(
@@ -57,6 +64,7 @@ def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: 
         L5RCard.of(
             HoldingPrint,
             id="SH",
+            printed_id="SH",
             name="SH",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -71,7 +79,7 @@ def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: 
             name=holding_id,
             side=Side.DYNASTY,
             owner=PlayerId.P1,
-            printed_id=printed_id,
+            printed_id=holding_id if printed_id is None else printed_id,
             gold_cost=gold_cost,
         ),
     )

@@ -260,7 +260,7 @@ def _edict(card_id: str, printed_id: str) -> L5RCard:
         ActionPrint,
         id=card_id,
         name=printed_id,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         side=Side.FATE,
         owner=P1,
         gold_cost=0,
@@ -542,6 +542,7 @@ def _courtier_of(clan: str) -> L5RCard:
     return L5RCard.of(
         PersonalityPrint,
         id="courtier",
+        printed_id="courtier",
         name="Courtier",
         side=Side.DYNASTY,
         owner=P1,
@@ -605,7 +606,12 @@ def test_doji_yasuko_draws_after_a_strategy_gains_a_player_honor():
             )
         )
         state.decks[DeckKey(P1, Side.FATE)].cards = [
-            register(state, L5RCard.of(ActionPrint, id="top", name="Top", side=Side.FATE, owner=P1))
+            register(
+                state,
+                L5RCard.of(
+                    ActionPrint, id="top", printed_id="top", name="Top", side=Side.FATE, owner=P1
+                ),
+            )
         ]
         session = EngineSession.start(state, P1)
 
@@ -647,7 +653,7 @@ def _wind_named(owner: PlayerId, printed_id: str) -> L5RCard:
         WindPrint,
         id=f"{owner.name}-wind",
         name=printed_id,
-        printed_id=printed_id,
+        printed_id=f"{owner.name}-wind" if printed_id is None else printed_id,
         side=Side.FATE,
         owner=owner,
     )
@@ -966,7 +972,12 @@ MOVE_PROBE = "probe_battle_move_an_enemy_home"
 
 def _ring(card_id: str, printed_id: str, owner: PlayerId = P1) -> L5RCard:
     return L5RCard.of(
-        RingPrint, id=card_id, name=printed_id, printed_id=printed_id, side=Side.FATE, owner=owner
+        RingPrint,
+        id=card_id,
+        name=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
+        side=Side.FATE,
+        owner=owner,
     )
 
 

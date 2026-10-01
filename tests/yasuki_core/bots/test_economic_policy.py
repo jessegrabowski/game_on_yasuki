@@ -146,7 +146,13 @@ def test_a_personality_is_ranked_without_gold_production():
     hero = register(
         session.game.table,
         L5RCard.of(
-            PersonalityPrint, id="hero", name="Hero", side=Side.DYNASTY, owner=P1, gold_cost=5
+            PersonalityPrint,
+            id="hero",
+            printed_id="hero",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=P1,
+            gold_cost=5,
         ),
     )
     hero.turn_face_up()

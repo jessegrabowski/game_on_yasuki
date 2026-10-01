@@ -35,7 +35,9 @@ def _harsh_game(*, other_provinces=1, fate_cards=5) -> EngineSession:
     state.decks[DeckKey(P1, Side.FATE)].cards = [
         register(
             state,
-            L5RCard.of(FatePrint, id=f"f{i}", name=f"F{i}", side=Side.FATE, owner=P1),
+            L5RCard.of(
+                FatePrint, id=f"f{i}", printed_id=f"f{i}", name=f"F{i}", side=Side.FATE, owner=P1
+            ),
         )
         for i in range(fate_cards)
     ]

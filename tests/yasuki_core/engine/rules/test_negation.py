@@ -21,7 +21,9 @@ from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_gam
 
 
 def _card(print_class, name: str = "Plan") -> L5RCard:
-    return L5RCard.of(print_class, id=name, name=name, side=Side.FATE, owner=PlayerId.P1)
+    return L5RCard.of(
+        print_class, id=name, printed_id=name, name=name, side=Side.FATE, owner=PlayerId.P1
+    )
 
 
 @choice_resolver("test_negation_cost_bow")

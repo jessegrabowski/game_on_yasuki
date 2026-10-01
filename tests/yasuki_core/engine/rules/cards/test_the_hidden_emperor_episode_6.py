@@ -16,7 +16,9 @@ P1 = PlayerId.P1
 def _ring(state, card_id, seat):
     return register(
         state,
-        L5RCard.of(RingPrint, id=card_id, name=card_id, side=Side.FATE, owner=seat),
+        L5RCard.of(
+            RingPrint, id=card_id, printed_id=card_id, name=card_id, side=Side.FATE, owner=seat
+        ),
     )
 
 

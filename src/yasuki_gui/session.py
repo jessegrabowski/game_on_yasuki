@@ -52,6 +52,7 @@ def _resolved_demo_deck(seat: PlayerId) -> ResolvedDeck:
             L5RCard.of(
                 print_cls,
                 id=f"{prefix}-D{i}",
+                printed_id=f"{prefix}-D{i}",
                 name=f"{label} {i + 1}",
                 side=Side.DYNASTY,
                 owner=seat,
@@ -63,6 +64,7 @@ def _resolved_demo_deck(seat: PlayerId) -> ResolvedDeck:
         L5RCard.of(
             HoldingPrint,
             id=f"{prefix}-LEG",
+            printed_id=f"{prefix}-LEG",
             name="Ancestral Shrine",
             side=Side.DYNASTY,
             owner=seat,
@@ -89,12 +91,18 @@ def _resolved_demo_deck(seat: PlayerId) -> ResolvedDeck:
         print_cls, label = _FATE_CYCLE[i % len(_FATE_CYCLE)]
         fate.append(
             L5RCard.of(
-                print_cls, id=f"{prefix}-F{i}", name=f"{label} {i + 1}", side=Side.FATE, owner=seat
+                print_cls,
+                id=f"{prefix}-F{i}",
+                printed_id=f"{prefix}-F{i}",
+                name=f"{label} {i + 1}",
+                side=Side.FATE,
+                owner=seat,
             )
         )
     stronghold = L5RCard.of(
         StrongholdPrint,
         id=f"{prefix}-SH",
+        printed_id=f"{prefix}-SH",
         name=f"{prefix} Stronghold",
         side=Side.STRONGHOLD,
         owner=seat,

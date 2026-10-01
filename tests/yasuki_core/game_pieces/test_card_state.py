@@ -7,7 +7,9 @@ from yasuki_core.engine.players import PlayerId
 
 
 def test_card_bow_and_unbow():
-    c = L5RCard.of(CardPrint, id="c1", name="Test", side=Side.FATE, owner=PlayerId.P1)
+    c = L5RCard.of(
+        CardPrint, id="c1", printed_id="c1", name="Test", side=Side.FATE, owner=PlayerId.P1
+    )
     assert c.bowed is False
 
     c.bow()
@@ -18,7 +20,9 @@ def test_card_bow_and_unbow():
 
 
 def test_card_face_up_down_and_flip():
-    c = L5RCard.of(CardPrint, id="c2", name="Test2", side=Side.DYNASTY, owner=PlayerId.P1)
+    c = L5RCard.of(
+        CardPrint, id="c2", printed_id="c2", name="Test2", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     assert c.face_up is True
 
     c.turn_face_down()
@@ -34,7 +38,9 @@ def test_card_face_up_down_and_flip():
 
 
 def test_adjust_counter_accumulates_floors_at_zero_and_drops_the_key():
-    c = L5RCard.of(CardPrint, id="c4", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1)
+    c = L5RCard.of(
+        CardPrint, id="c4", printed_id="c4", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     assert c.counters == {}
 
     c.adjust_counter("wealth", 2)
@@ -51,7 +57,9 @@ def test_adjust_counter_accumulates_floors_at_zero_and_drops_the_key():
 def test_replace_built_cards_do_not_share_counters():
     # The factory builds synthetic back faces with dataclasses.replace; the copies must not alias
     # the source's mutable tally.
-    front = L5RCard.of(CardPrint, id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
+    front = L5RCard.of(
+        CardPrint, id="sh", printed_id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1
+    )
     back = replace(front, id="sh__back")
     front.adjust_counter("wealth", 1)
     assert back.counters == {}
@@ -63,10 +71,13 @@ def test_counters_survive_a_face_flip():
     card = L5RCard.of(
         CardPrint,
         id="sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         back_card_id="sh__back",
-        back_printed=CardPrint(name="Kyuden, Defiled", side=Side.STRONGHOLD),
+        back_printed=CardPrint(
+            name="Kyuden, Defiled", printed_id="kyuden_defiled", side=Side.STRONGHOLD
+        ),
         owner=PlayerId.P1,
     )
     card.adjust_counter("wealth", 2)
@@ -105,14 +116,20 @@ def test_a_flipped_card_reads_as_its_back_face():
 
 def test_counters_participate_in_card_equality():
     # A replay must detect counter drift, so counters compare (unlike note/art_swap, which don't).
-    plain = L5RCard.of(CardPrint, id="c5", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1)
-    tokened = L5RCard.of(CardPrint, id="c5", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1)
+    plain = L5RCard.of(
+        CardPrint, id="c5", printed_id="c5", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1
+    )
+    tokened = L5RCard.of(
+        CardPrint, id="c5", printed_id="c5", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     tokened.adjust_counter("wealth", 1)
     assert plain != tokened
 
 
 def test_card_dishonor_and_rehonor():
-    c = L5RCard.of(CardPrint, id="c3", name="Rot", side=Side.FATE, owner=PlayerId.P1)
+    c = L5RCard.of(
+        CardPrint, id="c3", printed_id="c3", name="Rot", side=Side.FATE, owner=PlayerId.P1
+    )
     assert c.dishonorable is False
     c.dishonor()
     assert c.dishonorable is True

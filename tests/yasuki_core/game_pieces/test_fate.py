@@ -8,6 +8,7 @@ def test_fateaction_timings_normalized():
     a = L5RCard.of(
         ActionPrint,
         id="fa1",
+        printed_id="fa1",
         name="Act",
         side=Side.FATE,
         timings=[Timing.OPEN, Timing.BATTLE],
@@ -21,6 +22,7 @@ def test_fateattachment_restrictions_normalized_to_tuple():
     att = L5RCard.of(
         AttachmentPrint,
         id="fa2",
+        printed_id="fa2",
         name="Katana",
         side=Side.FATE,
         attachment_type=AttachmentType.ITEM,
@@ -33,6 +35,11 @@ def test_fateattachment_restrictions_normalized_to_tuple():
 
 def test_fatering_element_default():
     ring = L5RCard.of(
-        RingPrint, id="r1", name="Ring of the Void", side=Side.FATE, owner=PlayerId.P1
+        RingPrint,
+        id="r1",
+        printed_id="r1",
+        name="Ring of the Void",
+        side=Side.FATE,
+        owner=PlayerId.P1,
     )
     assert ring.element is Element.VOID

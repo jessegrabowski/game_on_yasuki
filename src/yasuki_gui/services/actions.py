@@ -307,7 +307,8 @@ def fresh_token_id(state) -> str:
 
 def spawn_token(view: HasView, name: str, side: Side, pos: BoardPos) -> None:
     token_id = fresh_token_id(view.state)
-    view.dispatch(SpawnCard(token_id, pos, printed=CardPrint(name=name, side=side)))
+    printed = CardPrint(name=name, side=side, printed_id=token_id)
+    view.dispatch(SpawnCard(token_id, pos, printed=printed))
 
 
 def duplicate_card(view: HasView, card_id: str) -> None:

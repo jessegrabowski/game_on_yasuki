@@ -33,6 +33,7 @@ def _stronghold(seat: PlayerId, *, two_faced: bool = True) -> L5RCard:
     return L5RCard.of(
         StrongholdPrint,
         id=f"{seat.name}-SH",
+        printed_id=f"{seat.name}-SH",
         name="Sun",
         side=Side.STRONGHOLD,
         owner=seat,

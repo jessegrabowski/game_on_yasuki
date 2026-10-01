@@ -1,4 +1,4 @@
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Sequence
 
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
@@ -18,13 +18,28 @@ STAT_GRANTS: HandlerRegistry[StatGrantHandler] = HandlerRegistry(
 stat_grant = STAT_GRANTS.make_decorator()
 
 
-def granted_stats(game: GameState, card: L5RCard, stat: Stat) -> Iterator[tuple[L5RCard, int]]:
+def stat_granters(game: GameState) -> tuple[L5RCard, ...]:
+    """The cards in play whose text gives stats, in play order."""
+    return tuple(card for card in game.table.battlefield.cards if card.printed_id in STAT_GRANTS)
+
+
+def granted_stats(
+    game: GameState,
+    card: L5RCard,
+    stat: Stat,
+    *,
+    granters: Sequence[L5RCard] | None = None,
+) -> Iterator[tuple[L5RCard, int]]:
     """Each card in play whose text gives ``card`` something for ``stat`` right now, with the
-    amount, in play order."""
-    for granting in game.table.battlefield.cards:
-        handler = STAT_GRANTS.get(granting.printed_id)
-        if handler is None:
-            continue
-        amount = handler(game, granting, card, stat)
+    amount, in play order.
+
+    Parameters
+    ----------
+    granters : sequence of L5RCard, optional
+        What :func:`stat_granters` returns for this board, for a caller reading many cards against
+        one board. Default None, read off the board here.
+    """
+    for granting in stat_granters(game) if granters is None else granters:
+        amount = STAT_GRANTS[granting.printed_id](game, granting, card, stat)
         if amount:
             yield granting, amount

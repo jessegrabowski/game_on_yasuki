@@ -41,6 +41,7 @@ def _memorial_game() -> EngineSession:
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=P1,

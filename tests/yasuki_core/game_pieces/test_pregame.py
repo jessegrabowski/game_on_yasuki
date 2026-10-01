@@ -17,7 +17,9 @@ from yasuki_core.engine.players import PlayerId
 )
 def test_each_pre_game_card_wires_its_default_art(print_cls, side, expected_art):
     assert (
-        L5RCard.of(print_cls, id="c", name="C", side=side, owner=PlayerId.P1).image_front
+        L5RCard.of(
+            print_cls, id="c", printed_id="c", name="C", side=side, owner=PlayerId.P1
+        ).image_front
         == expected_art
     )
 
@@ -25,11 +27,18 @@ def test_each_pre_game_card_wires_its_default_art(print_cls, side, expected_art)
 def test_honor_bearing_pre_game_cards_default_to_zero_honor():
     assert (
         L5RCard.of(
-            StrongholdPrint, id="sh", name="S", side=Side.STRONGHOLD, owner=PlayerId.P1
+            StrongholdPrint,
+            id="sh",
+            printed_id="sh",
+            name="S",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
         ).starting_honor
         == 0
     )
     assert (
-        L5RCard.of(SenseiPrint, id="se", name="S", side=Side.FATE, owner=PlayerId.P1).starting_honor
+        L5RCard.of(
+            SenseiPrint, id="se", printed_id="se", name="S", side=Side.FATE, owner=PlayerId.P1
+        ).starting_honor
         == 0
     )

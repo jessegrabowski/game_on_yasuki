@@ -57,7 +57,12 @@ def test_a_card_arriving_face_up_is_not_a_reveal(reacting):
     game = _watching_game()
     game.table.zones[PROVINCE] = ProvinceZone(owner=P1)
     arriving = L5RCard.of(
-        DynastyPrint, id="P1-renewed", name="Renewed", side=Side.DYNASTY, owner=P1
+        DynastyPrint,
+        id="P1-renewed",
+        printed_id="P1-renewed",
+        name="Renewed",
+        side=Side.DYNASTY,
+        owner=P1,
     )
     game.table.cards_by_id[arriving.id] = arriving
     game.table.decks[DeckKey(P1, Side.DYNASTY)].cards = [arriving]

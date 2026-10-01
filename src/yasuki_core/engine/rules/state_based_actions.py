@@ -5,6 +5,7 @@ from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.rules.board.queries import rings_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.duel.procedure import duel_being_fought
 from yasuki_core.engine.rules.effects import (
     Destroy,
@@ -59,11 +60,12 @@ def chi_death(game: GameState) -> list[Effect]:
     zero and dies. A card whose own text exempts it is skipped, which the CR permits because that
     text is a continuous effect and only those work against Chi death.
     """
+    granters = stat_granters(game)
     return [
         Destroy(card.id, Rulebook.CHI_DEATH)
         for card in game.table.battlefield.cards
         if isinstance(card.printed, PersonalityPrint)
-        and effective_chi(game, card) == 0
+        and effective_chi(game, card, granters=granters) == 0
         and not _exempt_from_chi_death(card)
     ]
 

@@ -19,7 +19,7 @@ def _game_with_a_three_card_deck():
     game = two_seat_game()
     province_card(game, "mover", seat=P1)
     resident = [
-        L5RCard.of(DynastyPrint, id=name, name=name, side=Side.DYNASTY, owner=P1)
+        L5RCard.of(DynastyPrint, id=name, printed_id=name, name=name, side=Side.DYNASTY, owner=P1)
         for name in ("bottom", "middle", "top")
     ]
     game.table.cards_by_id.update({card.id: card for card in resident})

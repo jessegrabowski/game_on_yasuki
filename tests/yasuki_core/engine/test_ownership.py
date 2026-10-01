@@ -18,8 +18,12 @@ from yasuki_core.game_pieces.prints import CardPrint
 
 def _table_with_cards() -> TableState:
     table = TableState.empty_two_seat()
-    p1_card = L5RCard.of(CardPrint, id="p1", name="Mine", side=Side.FATE, owner=PlayerId.P1)
-    p2_card = L5RCard.of(CardPrint, id="p2", name="Theirs", side=Side.FATE, owner=PlayerId.P2)
+    p1_card = L5RCard.of(
+        CardPrint, id="p1", printed_id="p1", name="Mine", side=Side.FATE, owner=PlayerId.P1
+    )
+    p2_card = L5RCard.of(
+        CardPrint, id="p2", printed_id="p2", name="Theirs", side=Side.FATE, owner=PlayerId.P2
+    )
     table.cards_by_id = {c.id: c for c in (p1_card, p2_card)}
     return table
 
@@ -67,24 +71,36 @@ def test_owns_own_deck_not_opponents():
 
 def test_zone_owned_by_card_blocks_cross_owner():
     p1_zone = HandZone(owner=PlayerId.P1)
-    p1_card = L5RCard.of(CardPrint, id="a", name="A", side=Side.FATE, owner=PlayerId.P1)
-    p2_card = L5RCard.of(CardPrint, id="b", name="B", side=Side.FATE, owner=PlayerId.P2)
+    p1_card = L5RCard.of(
+        CardPrint, id="a", printed_id="a", name="A", side=Side.FATE, owner=PlayerId.P1
+    )
+    p2_card = L5RCard.of(
+        CardPrint, id="b", printed_id="b", name="B", side=Side.FATE, owner=PlayerId.P2
+    )
     assert zone_owned_by_card(p1_zone, p1_card) is True
     assert zone_owned_by_card(p1_zone, p2_card) is False
 
 
 def test_zone_accepts_enforces_side():
     hand = HandZone(owner=PlayerId.P1)  # fate-only
-    fate = L5RCard.of(CardPrint, id="f", name="F", side=Side.FATE, owner=PlayerId.P1)
-    dynasty = L5RCard.of(CardPrint, id="d", name="D", side=Side.DYNASTY, owner=PlayerId.P1)
+    fate = L5RCard.of(
+        CardPrint, id="f", printed_id="f", name="F", side=Side.FATE, owner=PlayerId.P1
+    )
+    dynasty = L5RCard.of(
+        CardPrint, id="d", printed_id="d", name="D", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     assert zone_accepts(hand, fate) is True
     assert zone_accepts(hand, dynasty) is False
 
 
 def test_zone_accepts_enforces_capacity():
     province = ProvinceZone(owner=PlayerId.P1)  # capacity 1, dynasty-only
-    first = L5RCard.of(CardPrint, id="d1", name="D1", side=Side.DYNASTY, owner=PlayerId.P1)
-    second = L5RCard.of(CardPrint, id="d2", name="D2", side=Side.DYNASTY, owner=PlayerId.P1)
+    first = L5RCard.of(
+        CardPrint, id="d1", printed_id="d1", name="D1", side=Side.DYNASTY, owner=PlayerId.P1
+    )
+    second = L5RCard.of(
+        CardPrint, id="d2", printed_id="d2", name="D2", side=Side.DYNASTY, owner=PlayerId.P1
+    )
     assert zone_accepts(province, first) is True
     province.add(first)
     assert zone_accepts(province, second) is False

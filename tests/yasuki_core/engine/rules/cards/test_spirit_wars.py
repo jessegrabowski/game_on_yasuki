@@ -23,6 +23,7 @@ def _garden_game(printed_id: str = "poorly_placed_garden") -> EngineSession:
             L5RCard.of(
                 StrongholdPrint,
                 id="P1-SH",
+                printed_id="P1-SH",
                 name="SH",
                 side=Side.STRONGHOLD,
                 owner=P1,

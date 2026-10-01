@@ -133,7 +133,9 @@ from yasuki_core.game_pieces.prints import (
         SetHonor(value=-1),
         SpawnCard(
             card_id="tok1",
-            printed=PersonalityPrint(name="Token", side=Side.DYNASTY, force=2, chi=2),
+            printed=PersonalityPrint(
+                name="Token", printed_id="token", side=Side.DYNASTY, force=2, chi=2
+            ),
             position=BoardPos(5.0, 6.0),
         ),
         SpawnCard(card_id="tok2", token_id="some_token", position=BoardPos(0.0, 0.0)),
@@ -169,6 +171,7 @@ def test_card_print_and_typed_fields_survive_round_trip():
     personality = L5RCard.of(
         PersonalityPrint,
         id="dp1",
+        printed_id="dp1",
         name="Bushi",
         side=Side.DYNASTY,
         force=3,
@@ -178,6 +181,7 @@ def test_card_print_and_typed_fields_survive_round_trip():
     ring = L5RCard.of(
         RingPrint,
         id="fr",
+        printed_id="fr",
         name="Ring of Fire",
         side=Side.FATE,
         element=Element.FIRE,
@@ -203,6 +207,7 @@ def test_card_counters_survive_a_json_round_trip():
     personality = L5RCard.of(
         PersonalityPrint,
         id="dp2",
+        printed_id="dp2",
         name="Magistrate",
         side=Side.DYNASTY,
         counters={"wealth": 2, "honor": 1},
@@ -217,6 +222,7 @@ def test_a_back_face_survives_round_trip():
     front = L5RCard.of(
         StrongholdPrint,
         id="kk",
+        printed_id="kk",
         name="Kyuden Kuni",
         side=Side.STRONGHOLD,
         back_card_id="kk__back",
@@ -315,13 +321,21 @@ def test_encoding_a_print_with_no_list_says_so():
 
     with pytest.raises(KeyError, match="UnknownPrint has no persisted-field list"):
         encode_card(
-            L5RCard.of(UnknownPrint, id="u", name="U", side=Side.DYNASTY, owner=PlayerId.P1)
+            L5RCard.of(
+                UnknownPrint, id="u", printed_id="u", name="U", side=Side.DYNASTY, owner=PlayerId.P1
+            )
         )
 
 
 def test_a_payload_carries_exactly_the_pinned_fields():
     holding = L5RCard.of(
-        HoldingPrint, id="h", name="Farm", side=Side.DYNASTY, gold_production=2, owner=PlayerId.P1
+        HoldingPrint,
+        id="h",
+        printed_id="h",
+        name="Farm",
+        side=Side.DYNASTY,
+        gold_production=2,
+        owner=PlayerId.P1,
     )
 
     payload = encode_card(holding)
@@ -379,6 +393,7 @@ def _golden_cards() -> dict[str, L5RCard]:
     front = L5RCard.of(
         StrongholdPrint,
         id="P1-sh",
+        printed_id="sh",
         name="Kyuden",
         side=Side.STRONGHOLD,
         back_card_id="sh__back",
@@ -413,6 +428,7 @@ def test_a_cards_art_swap_survives_the_round_trip():
     swapped = L5RCard.of(
         HoldingPrint,
         id="h",
+        printed_id="h",
         name="Repairing the Ruins",
         side=Side.DYNASTY,
         art_swap={
@@ -438,6 +454,7 @@ def test_a_list_stays_a_list_and_a_tuple_stays_a_tuple():
     holding = L5RCard.of(
         HoldingPrint,
         id="h2",
+        printed_id="h2",
         name="X",
         side=Side.DYNASTY,
         keywords=("Farm",),
@@ -458,7 +475,13 @@ def test_the_pinned_list_is_the_format_not_the_dataclass():
     matters on the day a field moves off the card."""
     original = _PERSISTED_FIELDS["HoldingPrint"]
     holding = L5RCard.of(
-        HoldingPrint, id="h", name="Farm", side=Side.DYNASTY, gold_production=2, owner=PlayerId.P1
+        HoldingPrint,
+        id="h",
+        printed_id="h",
+        name="Farm",
+        side=Side.DYNASTY,
+        gold_production=2,
+        owner=PlayerId.P1,
     )
     _PERSISTED_FIELDS["HoldingPrint"] = ("id", "name", "side")
     try:

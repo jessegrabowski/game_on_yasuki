@@ -6,8 +6,9 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.units.membership import attachments_of
-from yasuki_core.engine.rules.stats.calculation import active_modifiers, effective_stat
+from yasuki_core.engine.rules.stats.calculation import effective_stat, is_modified
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
+from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import BattleOutcome
@@ -239,21 +240,17 @@ def _modified_cards(game: GameState, identifiable: set[str]) -> Iterator[L5RCard
 
     Only some modifier sources are recorded on the game: a counter and a granted effect are, while
     an attachment's printed modifier, a Sensei's grant to its Stronghold and a Kensai's raised
-    weapon limit are derived from the board as it stands. :func:`~.active_modifiers` is what knows
-    about all of them, so it is what decides.
+    weapon limit are derived from the board as it stands. :func:`~.is_modified` reads every source
+    :func:`~.active_modifiers` knows about, so it is what decides.
 
     A card no modifier reaches has only its printed stats, which :meth:`GameView.stat` reads
     straight off it. A card the viewer may not identify is skipped: its stats would say what it is,
     and a view carries only what its seat is entitled to.
     """
+    granters = stat_granters(game)
     for card in game.table.cards_by_id.values():
-        if card.id in identifiable and _is_modified(game, card):
+        if card.id in identifiable and is_modified(game, card, granters=granters):
             yield card
-
-
-def _is_modified(game: GameState, card: L5RCard) -> bool:
-    """Whether any active modifier reaches ``card``, over any stat."""
-    return any(next(active_modifiers(game, card, stat), None) is not None for stat in Stat)
 
 
 def project(game: GameState, viewer: PlayerId) -> GameView:

@@ -90,7 +90,12 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
         register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]
@@ -99,6 +104,7 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
         L5RCard.of(
             HoldingPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -108,7 +114,13 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
     _place_in_province(
         state,
         L5RCard.of(
-            HoldingPrint, id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5
+            HoldingPrint,
+            id="P1-buy",
+            printed_id="P1-buy",
+            name="Buy",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=5,
         ),
     )
 
@@ -133,6 +145,7 @@ def test_proclaimed_recruit_replays_and_round_trips():
         L5RCard.of(
             StrongholdPrint,
             id="P1-strong",
+            printed_id="P1-strong",
             name="Keep",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -144,6 +157,7 @@ def test_proclaimed_recruit_replays_and_round_trips():
         L5RCard.of(
             HoldingPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -155,6 +169,7 @@ def test_proclaimed_recruit_replays_and_round_trips():
         L5RCard.of(
             PersonalityPrint,
             id="P1-person",
+            printed_id="P1-person",
             name="Hero",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -185,7 +200,12 @@ def test_a_grant_taken_in_a_production_window_round_trips_through_the_codec():
         register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]
@@ -206,7 +226,13 @@ def test_a_grant_taken_in_a_production_window_round_trips_through_the_codec():
     _place_in_province(
         state,
         L5RCard.of(
-            HoldingPrint, id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4
+            HoldingPrint,
+            id="P1-buy",
+            printed_id="P1-buy",
+            name="Buy",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=4,
         ),
     )
 
@@ -237,7 +263,12 @@ def test_triggered_choice_replays_and_round_trips():
         register(
             state,
             L5RCard.of(
-                HoldingPrint, id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1
+                HoldingPrint,
+                id="P1-refill",
+                printed_id="P1-refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     ]
@@ -246,6 +277,7 @@ def test_triggered_choice_replays_and_round_trips():
         L5RCard.of(
             HoldingPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -257,6 +289,7 @@ def test_triggered_choice_replays_and_round_trips():
         L5RCard.of(
             HoldingPrint,
             id="P1-other",
+            printed_id="P1-other",
             name="Other Farm",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -300,6 +333,7 @@ def test_cancelled_recruit_payment_replays_and_round_trips():
         L5RCard.of(
             HoldingPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -309,7 +343,13 @@ def test_cancelled_recruit_payment_replays_and_round_trips():
     _place_in_province(
         state,
         L5RCard.of(
-            HoldingPrint, id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5
+            HoldingPrint,
+            id="P1-buy",
+            printed_id="P1-buy",
+            name="Buy",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=5,
         ),
     )
 

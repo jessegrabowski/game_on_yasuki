@@ -22,7 +22,12 @@ def test_a_non_producer_yields_zero_with_or_without_wealth_counters():
     hero = put_in_play(
         game,
         L5RCard.of(
-            PersonalityPrint, id="P1-hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1
+            PersonalityPrint,
+            id="P1-hero",
+            printed_id="P1-hero",
+            name="Hero",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         ),
     )
     assert effective_gold_production(game, hero) == 0  # personalities have no gold_production
@@ -228,6 +233,7 @@ def _clan_stronghold(seat, clan):
     return L5RCard.of(
         StrongholdPrint,
         id=f"{seat.name}-SH",
+        printed_id=f"{seat.name}-SH",
         name="SH",
         side=Side.STRONGHOLD,
         owner=seat,

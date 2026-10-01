@@ -28,7 +28,14 @@ def _recruit_game(
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
             state,
-            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1),
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+            ),
         )
     ]
     put_in_play(
@@ -36,6 +43,7 @@ def _recruit_game(
         L5RCard.of(
             HoldingPrint,
             id="SH",
+            printed_id="SH",
             name="SH",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -50,7 +58,7 @@ def _recruit_game(
             name=holding_id,
             side=Side.DYNASTY,
             owner=PlayerId.P1,
-            printed_id=printed_id,
+            printed_id=holding_id if printed_id is None else printed_id,
             keywords=keywords,
             gold_cost=gold_cost,
             gold_production=gp,
@@ -159,7 +167,14 @@ def _base_state():
     state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
         register(
             state,
-            L5RCard.of(HoldingPrint, id="refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1),
+            L5RCard.of(
+                HoldingPrint,
+                id="refill",
+                printed_id="refill",
+                name="R",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+            ),
         )
     ]
     put_in_play(
@@ -167,6 +182,7 @@ def _base_state():
         L5RCard.of(
             HoldingPrint,
             id="SH",
+            printed_id="SH",
             name="SH",
             side=Side.DYNASTY,
             owner=PlayerId.P1,

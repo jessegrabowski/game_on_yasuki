@@ -86,7 +86,13 @@ def test_a_personality_counts_as_producing_nothing():
     # rather than through the module's accessor raises instead of ranking it last.
     session = _opening(4)
     hero = L5RCard.of(
-        PersonalityPrint, id="hero", name="Bushi", side=Side.DYNASTY, owner=P1, force=3
+        PersonalityPrint,
+        id="hero",
+        printed_id="hero",
+        name="Bushi",
+        side=Side.DYNASTY,
+        owner=P1,
+        force=3,
     )
     register(session.game.table, hero)
     hero.turn_face_up()
@@ -100,7 +106,11 @@ def test_a_deck_of_personalities_averages_to_nothing():
     # The same accessor covers the other loop: a real deck holds Personalities, so summing the
     # stat directly would raise before any Province card was judged.
     session = _opening(0)
-    deck = [L5RCard.of(PersonalityPrint, id="p", name="Bushi", side=Side.DYNASTY, owner=P1)]
+    deck = [
+        L5RCard.of(
+            PersonalityPrint, id="p", printed_id="p", name="Bushi", side=Side.DYNASTY, owner=P1
+        )
+    ]
 
     assert cards_to_cycle(replace(session.project(P1), dynasty_deck=tuple(deck))) == ()
 

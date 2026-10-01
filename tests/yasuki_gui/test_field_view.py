@@ -116,7 +116,12 @@ class TestHomeRow:
         field, state = loaded
         # P1's stronghold starts unplaced; add a second unplaced P1 card beside it.
         extra = L5RCard.of(
-            CardPrint, id="P1-extra", name="Sensei", side=Side.DYNASTY, owner=PlayerId.P1
+            CardPrint,
+            id="P1-extra",
+            printed_id="P1-extra",
+            name="Sensei",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         )
         state.cards_by_id["P1-extra"] = extra
         state.battlefield.add(extra)
@@ -130,10 +135,20 @@ class TestHomeRow:
     def test_recruited_personality_sits_in_front_of_a_holding(self, loaded):
         field, state = loaded
         holding = L5RCard.of(
-            HoldingPrint, id="P1-hold", name="Farm", side=Side.DYNASTY, owner=PlayerId.P1
+            HoldingPrint,
+            id="P1-hold",
+            printed_id="P1-hold",
+            name="Farm",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         )
         personality = L5RCard.of(
-            PersonalityPrint, id="P1-pers", name="Bushi", side=Side.DYNASTY, owner=PlayerId.P1
+            PersonalityPrint,
+            id="P1-pers",
+            printed_id="P1-pers",
+            name="Bushi",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         )
         for card in (holding, personality):
             state.cards_by_id[card.id] = card
@@ -173,10 +188,24 @@ class TestOffBoardReads:
         state = TableState.empty_two_seat()
         deck = state.decks[DeckKey(PlayerId.P2, Side.FATE)]
         for i in range(3):
-            card = L5RCard.of(CardPrint, id=f"P2-f{i}", name="F", side=Side.FATE, owner=PlayerId.P2)
+            card = L5RCard.of(
+                CardPrint,
+                id=f"P2-f{i}",
+                printed_id=f"P2-f{i}",
+                name="F",
+                side=Side.FATE,
+                owner=PlayerId.P2,
+            )
             state.cards_by_id[card.id] = card
             deck.cards.append(card)
-        held = L5RCard.of(CardPrint, id="P2-h", name="Secret", side=Side.FATE, owner=PlayerId.P2)
+        held = L5RCard.of(
+            CardPrint,
+            id="P2-h",
+            printed_id="P2-h",
+            name="Secret",
+            side=Side.FATE,
+            owner=PlayerId.P2,
+        )
         state.cards_by_id["P2-h"] = held
         state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(held)
         session = EngineSession.start(state, PlayerId.P1)
@@ -197,7 +226,12 @@ class TestRulesModeRender:
         field, _ = loaded
         state = TableState.empty_two_seat()
         secret = L5RCard.of(
-            CardPrint, id="P2-bf", name="Ambush", side=Side.DYNASTY, owner=PlayerId.P2
+            CardPrint,
+            id="P2-bf",
+            printed_id="P2-bf",
+            name="Ambush",
+            side=Side.DYNASTY,
+            owner=PlayerId.P2,
         )
         secret.turn_face_down()
         state.cards_by_id["P2-bf"] = secret
@@ -222,6 +256,7 @@ class TestRulesModeRender:
         hero = L5RCard.of(
             PersonalityPrint,
             id="P1-hero",
+            printed_id="P1-hero",
             name="Hero",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -229,7 +264,12 @@ class TestRulesModeRender:
             chi=3,
         )
         katana = L5RCard.of(
-            AttachmentPrint, id="P1-katana", name="Katana", side=Side.FATE, owner=PlayerId.P1
+            AttachmentPrint,
+            id="P1-katana",
+            printed_id="P1-katana",
+            name="Katana",
+            side=Side.FATE,
+            owner=PlayerId.P1,
         )
         for card in (hero, katana):
             state.cards_by_id[card.id] = card
@@ -254,6 +294,7 @@ class TestRulesModeRender:
         hero = L5RCard.of(
             PersonalityPrint,
             id="hero",
+            printed_id="hero",
             name="Hero",
             side=Side.DYNASTY,
             owner=owner,
@@ -261,7 +302,14 @@ class TestRulesModeRender:
             chi=3,
         )
         cards = [hero] + [
-            L5RCard.of(AttachmentPrint, id=card_id, name=card_id, side=Side.FATE, owner=owner)
+            L5RCard.of(
+                AttachmentPrint,
+                id=card_id,
+                printed_id=card_id,
+                name=card_id,
+                side=Side.FATE,
+                owner=owner,
+            )
             for card_id in attachments
         ]
         for card in cards:
@@ -332,6 +380,7 @@ class TestRulesModeRender:
         wall = L5RCard.of(
             HoldingPrint,
             id="wall",
+            printed_id="wall",
             name="Wall",
             side=Side.DYNASTY,
             owner=seat,
@@ -373,6 +422,7 @@ class TestRulesModeRender:
             card = L5RCard.of(
                 HoldingPrint,
                 id=card_id,
+                printed_id=card_id,
                 name=card_id,
                 side=Side.DYNASTY,
                 owner=owner,
@@ -430,6 +480,7 @@ class TestRulesModeRender:
         hero = L5RCard.of(
             PersonalityPrint,
             id="P1-hero",
+            printed_id="P1-hero",
             name="Hero",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -437,10 +488,20 @@ class TestRulesModeRender:
             chi=3,
         )
         holding = L5RCard.of(
-            HoldingPrint, id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1
+            HoldingPrint,
+            id="P1-mine",
+            printed_id="P1-mine",
+            name="Mine",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         )
         katana = L5RCard.of(
-            AttachmentPrint, id="P1-katana", name="Katana", side=Side.FATE, owner=PlayerId.P1
+            AttachmentPrint,
+            id="P1-katana",
+            printed_id="P1-katana",
+            name="Katana",
+            side=Side.FATE,
+            owner=PlayerId.P1,
         )
         for card in (hero, holding, katana):
             state.cards_by_id[card.id] = card
@@ -473,6 +534,7 @@ class TestRulesModeRender:
         hero = L5RCard.of(
             PersonalityPrint,
             id="P1-hero",
+            printed_id="P1-hero",
             name="Hero",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -480,11 +542,17 @@ class TestRulesModeRender:
             chi=3,
         )
         mine = L5RCard.of(
-            HoldingPrint, id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1
+            HoldingPrint,
+            id="P1-mine",
+            printed_id="P1-mine",
+            name="Mine",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         )
         event = L5RCard.of(
             DynastyPrint,
             id="P1-event",
+            printed_id="P1-event",
             name="Commanding Favor",
             side=Side.DYNASTY,
             owner=PlayerId.P1,
@@ -499,7 +567,12 @@ class TestRulesModeRender:
         so it reaches the battlefield as neither a Personality nor a Holding."""
         field, _ = loaded
         mine = L5RCard.of(
-            HoldingPrint, id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1
+            HoldingPrint,
+            id="P1-mine",
+            printed_id="P1-mine",
+            name="Mine",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         )
         edict = L5RCard.of(
             ActionPrint,
@@ -522,6 +595,7 @@ class TestRulesModeRender:
             L5RCard.of(
                 DynastyPrint,
                 id=f"P1-e{index}",
+                printed_id=f"P1-e{index}",
                 name="Edict",
                 side=Side.DYNASTY,
                 owner=PlayerId.P1,
@@ -542,10 +616,20 @@ class TestRulesModeRender:
         would swallow both. They start in play beside the stronghold and stay there."""
         field, _ = loaded
         mine = L5RCard.of(
-            HoldingPrint, id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1
+            HoldingPrint,
+            id="P1-mine",
+            printed_id="P1-mine",
+            name="Mine",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         )
         permanent = L5RCard.of(
-            printed, id="P1-permanent", name="Permanent", side=Side.FATE, owner=PlayerId.P1
+            printed,
+            id="P1-permanent",
+            printed_id="P1-permanent",
+            name="Permanent",
+            side=Side.FATE,
+            owner=PlayerId.P1,
         )
         home = self._in_play(field, mine, permanent)
 
@@ -582,7 +666,12 @@ class TestRulesModeRender:
         table = session.game.table
         if modified.get("attached"):
             charm = L5RCard.of(
-                AttachmentPrint, id="P1-charm", name="Charm", side=Side.FATE, owner=PlayerId.P1
+                AttachmentPrint,
+                id="P1-charm",
+                printed_id="P1-charm",
+                name="Charm",
+                side=Side.FATE,
+                owner=PlayerId.P1,
             )
             table.cards_by_id[charm.id] = charm
             table.battlefield.add(charm)
@@ -710,7 +799,7 @@ class TestRulesModeRender:
                 HoldingPrint,
                 id=card_id,
                 name=printed_id,
-                printed_id=printed_id,
+                printed_id=card_id if printed_id is None else printed_id,
                 side=Side.DYNASTY,
                 owner=PlayerId.P1,
                 gold_production=2,
@@ -765,7 +854,12 @@ class TestRulesModeRender:
         field, _ = loaded
         state = TableState.empty_two_seat()
         secret = L5RCard.of(
-            CardPrint, id="P2-bf", name="Ambush", side=Side.DYNASTY, owner=PlayerId.P2
+            CardPrint,
+            id="P2-bf",
+            printed_id="P2-bf",
+            name="Ambush",
+            side=Side.DYNASTY,
+            owner=PlayerId.P2,
         )
         secret.turn_face_down()
         state.cards_by_id["P2-bf"] = secret
@@ -854,7 +948,12 @@ class TestAllocationSelection:
         """A second P1 card on the board, so a division has two cards to
         trade a creation between."""
         extra = L5RCard.of(
-            CardPrint, id="P1-extra", name="Bearer", side=Side.DYNASTY, owner=PlayerId.P1
+            CardPrint,
+            id="P1-extra",
+            printed_id="P1-extra",
+            name="Bearer",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
         )
         state.cards_by_id["P1-extra"] = extra
         state.battlefield.add(extra)

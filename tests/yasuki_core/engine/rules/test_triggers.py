@@ -753,7 +753,13 @@ def test_chi_death_names_the_rule_rather_than_a_seat():
     game = two_seat_game()
     probe = put_in_play(game, holding("P1-probe", printed_id="test_death_probe", owner=PlayerId.P1))
     doomed = L5RCard.of(
-        PersonalityPrint, id="doomed", name="doomed", side=Side.DYNASTY, owner=PlayerId.P1, chi=0
+        PersonalityPrint,
+        id="doomed",
+        printed_id="doomed",
+        name="doomed",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        chi=0,
     )
     put_in_play(game, doomed)
 
@@ -981,7 +987,12 @@ def _watcher_game(watching) -> tuple[GameState, list[str]]:
 
 def _fate(card_id: str, *, printed_id: str) -> L5RCard:
     return L5RCard.of(
-        FatePrint, id=card_id, name="F", printed_id=printed_id, side=Side.FATE, owner=PlayerId.P1
+        FatePrint,
+        id=card_id,
+        name="F",
+        printed_id=card_id if printed_id is None else printed_id,
+        side=Side.FATE,
+        owner=PlayerId.P1,
     )
 
 

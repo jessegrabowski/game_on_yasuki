@@ -17,6 +17,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
+from yasuki_core.engine.rules.stats.stat_grants import STAT_GRANTS, stat_grant
 from yasuki_core.engine.rules.projection import _identifiable_ids, project
 
 from tests.yasuki_core.engine.builders import (
@@ -66,7 +67,14 @@ def test_pending_decision_reaches_only_the_answerer():
 
 def test_table_is_redacted_for_the_viewer():
     game = _game()
-    secret = L5RCard.of(FatePrint, id="P1-secret", name="Ambush", side=Side.FATE, owner=PlayerId.P1)
+    secret = L5RCard.of(
+        FatePrint,
+        id="P1-secret",
+        printed_id="P1-secret",
+        name="Ambush",
+        side=Side.FATE,
+        owner=PlayerId.P1,
+    )
     game.table.cards_by_id[secret.id] = secret
     game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(secret)
 
@@ -93,6 +101,7 @@ def _legacy_holding(card_id: str, owner=PlayerId.P1, production=3) -> L5RCard:
     return L5RCard.of(
         HoldingPrint,
         id=card_id,
+        printed_id=card_id,
         name=f"Estate {card_id}",
         side=Side.DYNASTY,
         owner=owner,
@@ -104,7 +113,12 @@ def _legacy_holding(card_id: str, owner=PlayerId.P1, production=3) -> L5RCard:
 def _dynasty_holding(card_id: str, owner=PlayerId.P1) -> L5RCard:
     """A plain Holding, for tests where the Legacy keyword would be a false signal."""
     return L5RCard.of(
-        HoldingPrint, id=card_id, name=f"Holding {card_id}", side=Side.DYNASTY, owner=owner
+        HoldingPrint,
+        id=card_id,
+        printed_id=card_id,
+        name=f"Holding {card_id}",
+        side=Side.DYNASTY,
+        owner=owner,
     )
 
 
@@ -120,6 +134,7 @@ def test_the_pool_holds_the_viewers_findable_legacy_cards():
     plain = L5RCard.of(
         HoldingPrint,
         id="P1-1",
+        printed_id="P1-1",
         name="Mine",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -135,7 +150,14 @@ def test_the_pool_is_empty_when_no_legacy_card_remains():
     _seed_deck(
         game,
         PlayerId.P1,
-        L5RCard.of(HoldingPrint, id="P1-1", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1),
+        L5RCard.of(
+            HoldingPrint,
+            id="P1-1",
+            printed_id="P1-1",
+            name="Mine",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+        ),
     )
 
     assert project(game, PlayerId.P1).legacy_pool == ()
@@ -248,6 +270,29 @@ def test_a_modified_cards_effective_stats_reach_the_view():
 
     assert view.stat(farm, Stat.GOLD_PRODUCTION) == 4  # printed 2, +1 per Wealth
     assert farm.gold_production == 2  # the card itself still answers what it was printed at
+
+
+def _one_force_to_every_bowed_personality(game, source, card, stat):
+    return 1 if stat is Stat.FORCE and card.bowed else 0
+
+
+def test_another_cards_stat_grant_reaches_the_view():
+    stat_grant("grant_probe")(_one_force_to_every_bowed_personality)
+
+    try:
+        game = two_seat_game()
+        put_in_play(game, holding("shrine", printed_id="grant_probe"))
+        upright = put_in_play(game, personality("upright", force=2))
+        bowed = put_in_play(game, personality("bowed", force=2))
+        bowed.bow()
+
+        view = project(game, PlayerId.P1)
+
+        assert view.stat(bowed, Stat.FORCE) == 3
+        assert view.stat(upright, Stat.FORCE) == 2
+        assert upright.id not in view.stats
+    finally:
+        STAT_GRANTS.pop("grant_probe", None)
 
 
 def test_an_attachments_bonus_reaches_the_view():
@@ -499,7 +544,13 @@ def test_the_viewers_own_hidden_card_still_carries_its_stats_to_them():
     by what the *snapshot* shows must not cost a seat its own cards."""
     game = _game()
     mine = L5RCard.of(
-        FatePrint, id="P1-inhand", name="Mine", side=Side.FATE, owner=PlayerId.P1, gold_cost=4
+        FatePrint,
+        id="P1-inhand",
+        printed_id="P1-inhand",
+        name="Mine",
+        side=Side.FATE,
+        owner=PlayerId.P1,
+        gold_cost=4,
     )
     game.table.cards_by_id[mine.id] = mine
     assert game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(mine)

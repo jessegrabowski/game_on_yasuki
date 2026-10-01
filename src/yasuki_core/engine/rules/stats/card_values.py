@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat
@@ -9,11 +11,20 @@ def effective_force(game: GameState, card: L5RCard) -> int:
     return effective_stat(game, card, Stat.FORCE)
 
 
-def effective_chi(game: GameState, card: L5RCard) -> int:
+def effective_chi(
+    game: GameState, card: L5RCard, *, granters: Sequence[L5RCard] | None = None
+) -> int:
     """``card``'s Chi right now, counters and granted modifiers included. Zero is a meaningful
     answer for a Personality rather than merely a floor: the Chi Death Rule destroys one whose Chi
-    is ever zero."""
-    return effective_stat(game, card, Stat.CHI)
+    is ever zero.
+
+    Parameters
+    ----------
+    granters : sequence of L5RCard, optional
+        The board's :func:`~.stat_granters`, for a caller reading many cards against one board.
+        Default None, read off the board here.
+    """
+    return effective_stat(game, card, Stat.CHI, granters=granters)
 
 
 def effective_personal_honor(game: GameState, card: L5RCard) -> int:

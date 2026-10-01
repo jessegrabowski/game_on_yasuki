@@ -761,6 +761,7 @@ def _education_game(deck) -> EngineSession:
                 L5RCard.of(
                     ActionPrint,
                     id=card_id,
+                    printed_id=card_id,
                     name=card_id,
                     side=Side.FATE,
                     owner=P1,

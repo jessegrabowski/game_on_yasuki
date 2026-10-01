@@ -17,6 +17,7 @@ def _inject_double_faced(state, owner=PlayerId.P1):
     front = L5RCard.of(
         CardPrint,
         id="DF",
+        printed_id="DF",
         name="Front Face",
         side=Side.DYNASTY,
         owner=owner,

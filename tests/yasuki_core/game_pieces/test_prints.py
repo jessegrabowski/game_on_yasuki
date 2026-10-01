@@ -6,15 +6,17 @@ from yasuki_core.paths import DEFAULT_HOLDING, DYNASTY_BACK, FATE_BACK
 def test_a_print_carries_the_default_art_of_its_type():
     """The record supplies a card's own art, and the type supplies what to draw when it has none
     and what its deck back looks like. Both live here because they are the same for every copy."""
-    holding = HoldingPrint(name="Farm", side=Side.DYNASTY)
-    strategy = FatePrint(name="Ambush", side=Side.FATE)
+    holding = HoldingPrint(name="Farm", printed_id="farm", side=Side.DYNASTY)
+    strategy = FatePrint(name="Ambush", printed_id="ambush", side=Side.FATE)
 
     assert (holding.image_front, holding.image_back) == (DEFAULT_HOLDING, DYNASTY_BACK)
     assert strategy.image_back == FATE_BACK
 
 
 def test_a_print_normalizes_its_collections():
-    printed = CardPrint(name="X", side=Side.DYNASTY, clans=["crab"], keywords=["Farm"])
+    printed = CardPrint(
+        name="X", printed_id="x", side=Side.DYNASTY, clans=["crab"], keywords=["Farm"]
+    )
 
     assert printed.clans == ("crab",) and printed.keywords == ("Farm",)
 

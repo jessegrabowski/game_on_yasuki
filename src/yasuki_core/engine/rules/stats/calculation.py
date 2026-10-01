@@ -1,4 +1,4 @@
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.units.membership import attachments_of
@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.rules.stats.conditions import condition_holds
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
-from yasuki_core.engine.rules.stats.stat_grants import granted_stats
+from yasuki_core.engine.rules.stats.stat_grants import granted_stats, stat_granters
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -26,6 +26,8 @@ from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 # stat anything reads again.
 _SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
 
+_ALL_STATS = tuple(Stat)
+
 
 def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
     """The Senseis ``seat`` has in play. A Sensei bows and acts on its own (CR, Sensei), so it is a
@@ -37,7 +39,13 @@ def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
     )
 
 
-def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
+def active_modifiers(
+    game: GameState,
+    card: L5RCard,
+    stat: Stat,
+    *,
+    granters: Sequence[L5RCard] | None = None,
+) -> Iterator[Modifier]:
     """Every modifier adjusting ``card``'s ``stat`` right now: one from each counter it holds,
     granting its per-count stat while in play, one from each card attached to it for the modifier
     that card prints, one from each card in play whose text gives it a stat, one from each Sensei
@@ -46,33 +54,77 @@ def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Mod
     ``WHILE_SOURCE_IN_PLAY`` one of either only while its source is on the battlefield.
 
     Everything but the recorded modifiers is read off the board, so a derived grant lasts exactly as
-    long as the card granting it stays in play, whenever that card arrived."""
+    long as the card granting it stays in play, whenever that card arrived.
+
+    Parameters
+    ----------
+    granters : sequence of L5RCard, optional
+        The board's :func:`~.stat_granters`, for a caller reading many cards against one board.
+        Default None, read off the board here.
+    """
+    return _modifiers(game, card, (stat,), granters=granters)
+
+
+def is_modified(
+    game: GameState, card: L5RCard, *, granters: Sequence[L5RCard] | None = None
+) -> bool:
+    """Whether any :func:`active_modifiers` reaches ``card``, over any stat.
+
+    Parameters
+    ----------
+    granters : sequence of L5RCard, optional
+        The board's :func:`~.stat_granters`, for a caller asking of many cards against one board.
+        Default None, read off the board here.
+    """
+    return next(_modifiers(game, card, _ALL_STATS, granters=granters), None) is not None
+
+
+def _modifiers(
+    game: GameState,
+    card: L5RCard,
+    stats: tuple[Stat, ...],
+    *,
+    granters: Sequence[L5RCard] | None,
+) -> Iterator[Modifier]:
+    """The :func:`active_modifiers` of each of ``stats``, reading the board once for all of them.
+    For one stat, in the order that function lists them."""
+    granters = stat_granters(game) if granters is None else granters
     # A counter's source is the card itself, in play by construction here (this is only reached for
     # an in-play card), so no source-in-play check is needed for the derived modifiers.
     for key, count in card.counters.items():
-        per_count = getattr(counter_from_key(key), stat.value, 0)
-        if per_count and count:
-            yield Modifier(card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY)
-    printed_modifier = f"{stat.value}_modifier"
+        if not count:
+            continue
+        counter = counter_from_key(key)
+        for stat in stats:
+            per_count = getattr(counter, stat.value, 0)
+            if per_count:
+                yield Modifier(
+                    card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY
+                )
     for attached in attachments_of(game, card):
-        amount = getattr(attached, printed_modifier, 0)
-        if amount:
-            yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
-    for granting, amount in granted_stats(game, card, stat):
-        yield Modifier(granting.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
+        for stat in stats:
+            amount = getattr(attached, f"{stat.value}_modifier", 0)
+            if amount:
+                yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
+    for stat in stats:
+        for granting, amount in granted_stats(game, card, stat, granters=granters):
+            yield Modifier(granting.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
     # Kensai raises the limit rather than exempting him from it: Two-Handed still binds a
     # Kensai, and that rule is checked separately.
-    if stat is Stat.WEAPON_LIMIT and keywords.KENSAI in effective_keywords(game, card):
-        yield Modifier(card.id, card.id, stat, 1, Duration.WHILE_SOURCE_IN_PLAY)
-    if stat in _SENSEI_GRANTED_STATS and isinstance(card.printed, StrongholdPrint):
+    if Stat.WEAPON_LIMIT in stats and keywords.KENSAI in effective_keywords(game, card):
+        yield Modifier(card.id, card.id, Stat.WEAPON_LIMIT, 1, Duration.WHILE_SOURCE_IN_PLAY)
+    sensei_stats = [stat for stat in stats if stat in _SENSEI_GRANTED_STATS]
+    if sensei_stats and isinstance(card.printed, StrongholdPrint):
         for sensei in _senseis_of(game, card.owner):
-            delta = getattr(sensei, stat.value)
-            if delta:
-                yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
+            for stat in sensei_stats:
+                delta = getattr(sensei, stat.value)
+                if delta:
+                    yield Modifier(sensei.id, card.id, stat, delta, Duration.WHILE_SOURCE_IN_PLAY)
     for recorded in game.ongoing:
-        if not isinstance(recorded, Modifier | ConditionalModifier) or recorded.stat is not stat:
+        if not isinstance(recorded, Modifier | ConditionalModifier):
             continue
-        if not grant_applies(game, recorded):
+        stat = recorded.stat
+        if stat not in stats or not grant_applies(game, recorded):
             continue
         if isinstance(recorded, Modifier):
             if recorded.target_id == card.id:
@@ -105,7 +157,13 @@ def stat_maximum(game: GameState, card: L5RCard, stat: Stat) -> int | None:
     return None
 
 
-def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
+def effective_stat(
+    game: GameState,
+    card: L5RCard,
+    stat: Stat,
+    *,
+    granters: Sequence[L5RCard] | None = None,
+) -> int:
     """``card``'s ``stat`` right now: its printed value plus every active modifier on it, floored at
     zero or at whatever higher minimum a card has given it, and capped at whatever maximum applies.
 
@@ -123,6 +181,9 @@ def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
         The card being read.
     stat : Stat
         Which stat to total.
+    granters : sequence of L5RCard, optional
+        The board's :func:`~.stat_granters`, for a caller reading many cards against one board.
+        Default None, read off the board here.
 
     Returns
     -------
@@ -132,7 +193,8 @@ def effective_stat(game: GameState, card: L5RCard, stat: Stat) -> int:
     base = getattr(card, stat.value, None)
     if base is None:
         return 0
-    total = base + sum(modifier.amount for modifier in active_modifiers(game, card, stat))
+    modifiers = active_modifiers(game, card, stat, granters=granters)
+    total = base + sum(modifier.amount for modifier in modifiers)
     floor = stat_minimum(game, card, stat)
     cap = stat_maximum(game, card, stat)
     if cap is None:

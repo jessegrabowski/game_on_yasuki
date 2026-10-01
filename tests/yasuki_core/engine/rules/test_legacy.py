@@ -59,6 +59,7 @@ def _legacy_holding(seat: PlayerId, card_id: str) -> L5RCard:
     return L5RCard.of(
         HoldingPrint,
         id=card_id,
+        printed_id=card_id,
         name="Ancestral Shrine",
         side=Side.DYNASTY,
         owner=seat,
@@ -76,7 +77,12 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
             state,
             PlayerId.P1,
             L5RCard.of(
-                DynastyPrint, id=f"P1-pv{i}", name="P", side=Side.DYNASTY, owner=PlayerId.P1
+                DynastyPrint,
+                id=f"P1-pv{i}",
+                printed_id=f"P1-pv{i}",
+                name="P",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
     hand_zone = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
@@ -84,7 +90,14 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
         hand_zone.add(
             register(
                 state,
-                L5RCard.of(FatePrint, id=f"P1-h{i}", name="H", side=Side.FATE, owner=PlayerId.P1),
+                L5RCard.of(
+                    FatePrint,
+                    id=f"P1-h{i}",
+                    printed_id=f"P1-h{i}",
+                    name="H",
+                    side=Side.FATE,
+                    owner=PlayerId.P1,
+                ),
             )
         )
     deck = state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
@@ -92,7 +105,12 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
         register(
             state,
             L5RCard.of(
-                DynastyPrint, id=f"P1-dd{i}", name="D", side=Side.DYNASTY, owner=PlayerId.P1
+                DynastyPrint,
+                id=f"P1-dd{i}",
+                printed_id=f"P1-dd{i}",
+                name="D",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
             ),
         )
         for i in range(3)
@@ -378,6 +396,7 @@ def _buried_province_card(session: EngineSession) -> L5RCard:
     buried = L5RCard.of(
         HoldingPrint,
         id="P1-buried",
+        printed_id="P1-buried",
         name="Mine",
         side=Side.DYNASTY,
         owner=PlayerId.P1,

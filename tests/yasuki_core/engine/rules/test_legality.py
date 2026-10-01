@@ -73,6 +73,7 @@ from yasuki_core.game_setup import build_state_from_deck
 from tests.yasuki_core.db_guard import requires_db
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import sequence
+from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 
 DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
 
@@ -192,10 +193,10 @@ def test_gold_reach_holds_a_target_independent_producer_in_its_fixed_part():
     session = _board()
     game = session.game
 
-    fixed, variable = legality.gold_reach(game, PlayerId.P1)
+    reach = gold_reach(game, PlayerId.P1)
 
-    assert variable == ()
-    assert fixed == 5 + 1 + 2
+    assert reach.variable == ()
+    assert reach.fixed == 5 + 1 + 2
 
 
 def test_gold_reach_counts_a_bow_time_boost_the_seat_could_opt_into():
@@ -206,10 +207,10 @@ def test_gold_reach_counts_a_bow_time_boost_the_seat_could_opt_into():
     put_in_play(state, holding("outlying", printed_id="outlying_farms", gold_production=3))
     game = EngineSession.start(state, PlayerId.P1).game
 
-    fixed, variable = legality.gold_reach(game, PlayerId.P1)
+    reach = gold_reach(game, PlayerId.P1)
 
-    assert variable == ()
-    assert fixed == 3 + 2
+    assert reach.variable == ()
+    assert reach.fixed == 3 + 2
 
 
 def test_gold_reach_leaves_a_producer_that_reads_its_target_variable():
@@ -222,12 +223,12 @@ def test_gold_reach_leaves_a_producer_that_reads_its_target_variable():
     province_card(state, "plain", printed_id="other_holding", gold_cost=1, index=1)
     game = EngineSession.start(state, PlayerId.P1).game
 
-    fixed, variable = legality.gold_reach(game, PlayerId.P1)
+    reach = gold_reach(game, PlayerId.P1)
 
-    assert fixed == 3
-    assert [card.id for card in variable] == ["jade"]
-    assert legality.reachable_gold(game, PlayerId.P1, game.table.cards_by_id["jadecard"]) == 3 + 4
-    assert legality.reachable_gold(game, PlayerId.P1, game.table.cards_by_id["plain"]) == 3 + 2
+    assert reach.fixed == 3
+    assert [card.id for card in reach.variable] == ["jade"]
+    assert reachable_gold(game, PlayerId.P1, game.table.cards_by_id["jadecard"]) == 3 + 4
+    assert reachable_gold(game, PlayerId.P1, game.table.cards_by_id["plain"]) == 3 + 2
 
 
 @pytest.mark.parametrize("card_id", ["cheap", "dear"])
@@ -237,7 +238,7 @@ def test_reachable_gold_ignores_the_target_when_no_producer_reads_it(card_id):
     game = _dynasty(_board()).game
     card = game.table.cards_by_id[card_id]
 
-    assert legality.reachable_gold(game, PlayerId.P1, card) == 5 + 1 + 2
+    assert reachable_gold(game, PlayerId.P1, card) == 5 + 1 + 2
 
 
 def test_a_recruit_reachable_only_by_a_self_grant_is_still_offered():
@@ -331,7 +332,7 @@ def _in_hand(state: TableState, card_id: str, printed_id: str):
             FatePrint,
             id=card_id,
             name=card_id,
-            printed_id=printed_id,
+            printed_id=card_id if printed_id is None else printed_id,
             side=Side.FATE,
             owner=PlayerId.P1,
         ),
@@ -676,6 +677,7 @@ def _game_with_stronghold_clan(clan: str | None) -> GameState:
         L5RCard.of(
             StrongholdPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -690,6 +692,7 @@ def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
     same = L5RCard.of(
         HoldingPrint,
         id="h1",
+        printed_id="h1",
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -699,6 +702,7 @@ def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
     other = L5RCard.of(
         HoldingPrint,
         id="h2",
+        printed_id="h2",
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -715,6 +719,7 @@ def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
     holding = L5RCard.of(
         HoldingPrint,
         id="h",
+        printed_id="h",
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -728,6 +733,7 @@ def _personality(clans: tuple[str, ...], **kwargs) -> L5RCard:
     return L5RCard.of(
         PersonalityPrint,
         id="p",
+        printed_id="p",
         name="P",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -776,6 +782,7 @@ def test_a_stronghold_printing_several_clans_surcharges_none_of_them():
         L5RCard.of(
             StrongholdPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -817,7 +824,14 @@ def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
     state = TableState.empty_two_seat()
     put_in_play(
         state,
-        L5RCard.of(StrongholdPrint, id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1),
+        L5RCard.of(
+            StrongholdPrint,
+            id="P1-SH",
+            printed_id="P1-SH",
+            name="SH",
+            side=Side.STRONGHOLD,
+            owner=PlayerId.P1,
+        ),
     )
     put_in_play(
         state,
@@ -847,6 +861,7 @@ def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
         L5RCard.of(
             StrongholdPrint,
             id="P1-SH",
+            printed_id="P1-SH",
             name="SH",
             side=Side.STRONGHOLD,
             owner=PlayerId.P1,
@@ -865,7 +880,7 @@ def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> L5RCar
         name="H",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
-        printed_id=printed_id,
+        printed_id=f"{printed_id}-inst" if printed_id is None else printed_id,
         gold_cost=gold_cost,
         clan=clan,
     )
@@ -887,6 +902,7 @@ def test_moto_traders_discounts_with_another_merchant_caravan_in_play():
     caravan = L5RCard.of(
         HoldingPrint,
         id="mc",
+        printed_id="mc",
         name="C",
         side=Side.DYNASTY,
         owner=PlayerId.P1,
@@ -914,6 +930,7 @@ def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
     caravan = L5RCard.of(
         HoldingPrint,
         id="mc",
+        printed_id="mc",
         name="C",
         side=Side.DYNASTY,
         owner=PlayerId.P1,

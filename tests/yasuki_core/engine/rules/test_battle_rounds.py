@@ -386,7 +386,7 @@ def _in_hand(session: EngineSession, card_id: str, printed_id: str) -> None:
             ActionPrint,
             id=card_id,
             name=card_id,
-            printed_id=printed_id,
+            printed_id=card_id if printed_id is None else printed_id,
             side=Side.FATE,
             owner=ATTACKER,
         ),

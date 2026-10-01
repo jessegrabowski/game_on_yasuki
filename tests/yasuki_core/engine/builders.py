@@ -74,7 +74,7 @@ def personality(
         name=name or card_id,
         side=Side.DYNASTY,
         owner=owner,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         force=force,
         chi=chi,
         personal_honor=personal_honor,
@@ -106,7 +106,7 @@ def attachment(
         name=name or card_id,
         side=Side.FATE,
         owner=owner,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         attachment_type=attachment_type,
         force=force,
         chi=chi,
@@ -181,7 +181,7 @@ def holding(
         name=name or card_id,
         side=Side.DYNASTY,
         owner=owner,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         keywords=keywords,
         gold_production=gold_production,
         gold_cost=gold_cost,
@@ -202,6 +202,7 @@ def stronghold(
     return L5RCard.of(
         StrongholdPrint,
         id=f"{owner.name}-SH",
+        printed_id=f"{owner.name}-SH",
         name="SH",
         side=Side.STRONGHOLD,
         owner=owner,
@@ -227,7 +228,7 @@ def flip_stronghold(
         StrongholdPrint,
         id=card_id,
         name=printed_id,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         side=Side.STRONGHOLD,
         owner=owner,
         back_card_id=f"{printed_id}__back",
@@ -287,7 +288,7 @@ def sensei(
         name="Sensei",
         side=Side.FATE,
         owner=owner,
-        printed_id=printed_id,
+        printed_id=f"{owner.name}-sensei" if printed_id is None else printed_id,
         keywords=keywords,
     )
 
@@ -297,6 +298,7 @@ def wind(owner: PlayerId = PlayerId.P1, *, name: str = "Wind") -> L5RCard:
     return L5RCard.of(
         WindPrint,
         id=f"{owner.name}-wind",
+        printed_id=f"{owner.name}-wind",
         name=name,
         side=Side.FATE,
         owner=owner,
@@ -304,7 +306,9 @@ def wind(owner: PlayerId = PlayerId.P1, *, name: str = "Wind") -> L5RCard:
 
 
 def fate_card(card_id: str, owner: PlayerId, *, name: str = "F") -> L5RCard:
-    return L5RCard.of(FatePrint, id=card_id, name=name, side=Side.FATE, owner=owner)
+    return L5RCard.of(
+        FatePrint, id=card_id, printed_id=card_id, name=name, side=Side.FATE, owner=owner
+    )
 
 
 def focus_card(
@@ -322,14 +326,20 @@ def focus_card(
         name=name or card_id,
         side=Side.FATE,
         owner=owner,
-        printed_id=printed_id,
+        printed_id=card_id if printed_id is None else printed_id,
         focus=focus,
     )
 
 
 def terrain(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
     return L5RCard.of(
-        ActionPrint, id=card_id, name="Terrain", side=Side.FATE, owner=owner, keywords=("Terrain",)
+        ActionPrint,
+        id=card_id,
+        printed_id=card_id,
+        name="Terrain",
+        side=Side.FATE,
+        owner=owner,
+        keywords=("Terrain",),
     )
 
 
@@ -351,6 +361,7 @@ def doro_no_oni(card_id: str, *, owner: PlayerId = PlayerId.P1) -> L5RCard:
     return L5RCard.of(
         ActionPrint,
         id=card_id,
+        printed_id=card_id,
         name="Doro no Oni",
         side=Side.FATE,
         owner=owner,
