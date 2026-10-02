@@ -44,7 +44,7 @@ def _chasing_battle() -> EngineSession:
     return session
 
 
-def test_chasing_osano_wo_bows_a_performer_at_home_to_give_force_plus_personal_honor():
+def test_chasing_osano_wo_bows_a_monk_at_home_and_gives_personal_honor_plus_his_force():
     session = _chasing_battle()
 
     session.act(P1, PlayStrategy("chasing"))
@@ -57,12 +57,8 @@ def test_chasing_osano_wo_bows_a_performer_at_home_to_give_force_plus_personal_h
     assert effective_force(session.game, table.cards_by_id["samurai"]) == 2 + 3 + 4
 
 
-def test_chasing_osano_wo_from_a_bowed_performer_gives_nothing():
+def test_chasing_osano_wo_does_not_offer_a_bowed_monk():
     session = _chasing_battle()
     session.game.table.cards_by_id["monk"].bow()
 
-    session.act(P1, PlayStrategy("chasing"))
-    session.submit(P1, DecisionResponse(("monk",)))
-
-    assert session.game.pending is None
-    assert effective_force(session.game, session.game.table.cards_by_id["samurai"]) == 2
+    assert PlayStrategy("chasing") not in session.legal_actions(P1)

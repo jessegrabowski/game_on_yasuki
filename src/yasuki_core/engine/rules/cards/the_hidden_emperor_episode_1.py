@@ -28,23 +28,21 @@ def _chasing_osano_wo_recipients(game: GameState) -> tuple[str, ...]:
 
 
 def _chasing_osano_wo_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Your Monks and Shugenja at any location, bowed or not, once there is a Personality to give
-    the bonus to."""
+    """Your unbowed Monks and Shugenja at any location, once there is a Personality to give the
+    bonus to."""
     if not _chasing_osano_wo_recipients(game):
         return []
     return [
         card.id
         for card in owned_personalities(game, source.owner)
-        if has_keyword(game, card, keywords.MONK) or has_keyword(game, card, keywords.SHUGENJA)
+        if not card.bowed
+        and (has_keyword(game, card, keywords.MONK) or has_keyword(game, card, keywords.SHUGENJA))
     ]
 
 
 def _chasing_osano_wo_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """The bow is what gives the bonus ("bow ... to give"), so a performer already bowed gives
-    nothing (CR, To). The performer stands as the choice's source so its resolver can read his
-    Force."""
-    if target.bowed:
-        return []
+    """Bow the first target, then give the bonus. The first target stands as the choice's source so
+    its resolver can read his Force."""
     recipients = _chasing_osano_wo_recipients(game)
     return [Bow(target.id), Choose(source.owner, recipients, 1, 1, "chasing_osano_wo", target.id)]
 
@@ -53,11 +51,10 @@ def _chasing_osano_wo_effects(game: GameState, source: L5RCard, target: L5RCard)
 def _resolve_chasing_osano_wo(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """ "A Force bonus equal to the Force of the performer plus the Personality's own Personal
-    Honor (until the turn ends)." """
-    performer = game.table.cards_by_id[source_id]
+    """ "A Force bonus equal to their Personal Honor plus the Force of the first target." """
+    first = game.table.cards_by_id[source_id]
     recipient = game.table.cards_by_id[chosen[0]]
-    bonus = effective_force(game, performer) + effective_personal_honor(game, recipient)
+    bonus = effective_personal_honor(game, recipient) + effective_force(game, first)
     return [GrantModifier(source_id, recipient.id, Stat.FORCE, bonus, Duration.UNTIL_END_OF_TURN)]
 
 
