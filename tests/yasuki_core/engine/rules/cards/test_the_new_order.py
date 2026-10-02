@@ -1,10 +1,14 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import ActionPrint, RingPrint
 
 from tests.yasuki_core.engine.builders import (
     end_phase,
@@ -113,3 +117,68 @@ def test_plain_library_is_not_offered_after_another_recruit():
     session.submit(P1, DecisionResponse(()))
 
     assert ActivateAbility("library") not in session.legal_actions(P1)
+
+
+# --- Remote Temple ---
+
+
+def _temple_game(*deck: L5RCard) -> EngineSession:
+    """Remote Temple in P1's play, "held" in P1's hand, and ``deck`` as P1's Fate deck."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1))
+    put_in_play(state, register(state, holding("temple", printed_id="remote_temple")))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, fate_card("held", P1)))
+    state.decks[FATE].cards = [register(state, card) for card in deck]
+    return EngineSession.start(state, P1)
+
+
+def _ring(card_id: str) -> L5RCard:
+    return L5RCard.of(
+        RingPrint, id=card_id, printed_id=card_id, name=card_id, side=Side.FATE, owner=P1
+    )
+
+
+def _way_of_the_dragon(card_id: str) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        printed_id="way_of_the_dragon_experienced",
+        name="Way of the Dragon",
+        side=Side.FATE,
+        owner=P1,
+    )
+
+
+def _hand(session: EngineSession) -> set[str]:
+    return {card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards}
+
+
+def _discarded(session: EngineSession, role: ZoneRole) -> set[str]:
+    return {card.id for card in session.game.table.zones[ZoneKey(P1, role)].cards}
+
+
+@pytest.mark.parametrize(
+    "found", [_ring("ring"), _way_of_the_dragon("ring")], ids=["ring", "dragon"]
+)
+def test_remote_temple_takes_a_ring_then_discards_a_card_and_destroys_itself(found):
+    session = _temple_game(fate_card("plain", P1), found)
+
+    session.act(P1, ActivateAbility("temple"))
+    assert session.game.pending.candidates == ("ring",)
+    session.submit(P1, DecisionResponse(("ring",)))
+    session.submit(P1, DecisionResponse(("held",)))
+
+    assert _hand(session) == {"ring"}
+    assert _discarded(session, ZoneRole.FATE_DISCARD) == {"held"}
+    assert _discarded(session, ZoneRole.DYNASTY_DISCARD) == {"temple"}
+    assert [card.id for card in session.game.table.decks[FATE].cards] == ["plain"]
+
+
+def test_remote_temple_finding_no_ring_still_discards_and_destroys_itself():
+    session = _temple_game(fate_card("plain", P1))
+
+    session.act(P1, ActivateAbility("temple"))
+
+    assert _hand(session) == set()
+    assert _discarded(session, ZoneRole.FATE_DISCARD) == {"held"}
+    assert _discarded(session, ZoneRole.DYNASTY_DISCARD) == {"temple"}
