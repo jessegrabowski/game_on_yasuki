@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.effects import (
     AttachCard,
     Banish,
     DelayedEffect,
+    FromAction,
     Evaluate,
     Arrange,
     BanishTopFate,
@@ -88,6 +89,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Condition, Duration, Negation, Stat
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.game_pieces.prints import ActionPrint
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -288,6 +290,7 @@ EFFECTS = [
         DelayedEffect(Banish("oni"), END_OF_TURN),
         "banish oni at the end of the turn",
     ),
+    (FromAction(Bow("farm"), Provenance(acting="plan")), "bow farm"),
     (PayGold(PlayerId.P2, 3, "Colonial Farm"), "P2 pays 3 gold for Colonial Farm"),
     (CounterOnAttachedProvince("wall", WALL, 1), "+1 Wall on wall's province"),
     (

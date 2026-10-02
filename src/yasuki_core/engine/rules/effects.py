@@ -550,6 +550,38 @@ class DelayedEffect(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class FromAction(Effect):
+    """``effect``, held until a later moment, resolving as an effect of the action that scheduled
+    it. A delayed effect stays that action's, so a negation of the action's effects in force when
+    it resolves still reaches it (CR, Delayed Effects).
+
+    Attributes
+    ----------
+    effect : Effect
+        What resolves.
+    provenance : Provenance
+        The scheduling action's acting card and the negations it spent.
+    """
+
+    effect: Effect
+    provenance: Provenance
+
+    def describe(self) -> str:
+        return self.effect.describe()
+
+    def narrate(self, game: GameState) -> str:
+        return self.effect.narrate(game)
+
+    def is_negatable(self, game: GameState) -> bool:
+        """False: ``effect`` is checked when it resolves under ``provenance``."""
+        return False
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Never reached: the cascade resolves ``effect`` under ``provenance`` instead."""
+        raise RuntimeError("an effect held from an action is resolved by the cascade")
+
+
+@dataclass(frozen=True, slots=True)
 class Evaluate(Effect):
     """Produce the effects the resolver named ``resolver`` returns for the board as it stands when
     this resolves.

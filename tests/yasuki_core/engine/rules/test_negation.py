@@ -4,6 +4,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.effects import (
     Ask,
     Bow,
+    DelayedEffect,
     Destroy,
     DiscardFromHand,
     Effect,
@@ -444,3 +445,43 @@ def test_an_interrupt_cannot_negate_an_effect_that_cannot_be_negated():
 
     assert hero not in game.table.battlefield.cards
     assert game.modifications == []
+
+
+def test_a_strategys_delayed_effect_is_negated_by_a_negation_made_after_it_was_held():
+    game = two_seat_game()
+    plan = _card(game, ActionPrint)
+    farm = put_in_play(game, holding("farm"))
+    held = DelayedEffect(Bow(farm.id), END_OF_BATTLE)
+    resolve_action_effects(game, [held], provenance=action_provenance(game, plan.id))
+    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
+
+    resolve_delayed(game, END_OF_BATTLE)
+    run_stack(game)
+
+    assert not farm.bowed
+
+
+def test_a_traits_delayed_effect_is_no_action_a_source_negation_reaches():
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm"))
+    resolve_effects(game, [DelayedEffect(Bow(farm.id), END_OF_BATTLE)])
+    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
+
+    resolve_delayed(game, END_OF_BATTLE)
+    run_stack(game)
+
+    assert farm.bowed
+
+
+def test_effects_held_for_one_moment_resolve_in_the_order_they_were_held():
+    game = two_seat_game()
+    plan = _card(game, ActionPrint)
+    farm = put_in_play(game, holding("farm"))
+    held = DelayedEffect(Bow(farm.id), END_OF_BATTLE)
+    resolve_action_effects(game, [held], provenance=action_provenance(game, plan.id))
+    resolve_effects(game, [DelayedEffect(Straighten(farm.id), END_OF_BATTLE)])
+
+    resolve_delayed(game, END_OF_BATTLE)
+    run_stack(game)
+
+    assert not farm.bowed

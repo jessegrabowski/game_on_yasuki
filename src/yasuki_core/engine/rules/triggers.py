@@ -16,6 +16,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
+    DelayedEffect,
+    FromAction,
     InterruptingEffect,
     Effect,
     Negated,
@@ -425,10 +427,16 @@ def _advance(
                 _trace.append(f"    {effect.describe()}")
                 game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
                 continue
+            if isinstance(effect, FromAction):
+                # Stashed beneath it, so the effects held for the same moment keep their order.
+                _stash(game, tuple(pending), firing, event, queue, provenance)
+                game.stack.append(ApplyEffects((effect.effect,), effect.provenance))
+                return
             if provenance.interruptible and not isinstance(effect, InterruptingEffect):
                 effect = _modified(game, effect)
             if not provenance.paying:
                 effect = negate_committed(game, effect, provenance)
+            effect = _held_from(effect, provenance)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
@@ -474,6 +482,16 @@ def _advance(
             game.action_events.append(event)
         _trace.append(type(event).__name__)
         firing = _collect(game, event)
+
+
+def _held_from(effect: Effect, provenance: Provenance) -> Effect:
+    """``effect``, with the effect a delay holds wrapped in :class:`~.FromAction` when an action
+    from a card schedules it, so it resolves as that action's. Anything else is returned unchanged.
+    """
+    if not isinstance(effect, DelayedEffect) or provenance.acting is None:
+        return effect
+    action = Provenance(acting=provenance.acting, negations=provenance.negations)
+    return replace(effect, effect=FromAction(effect.effect, action))
 
 
 def _modified(game: GameState, effect: Effect) -> Effect:
