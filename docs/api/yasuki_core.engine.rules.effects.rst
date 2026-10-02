@@ -40,6 +40,7 @@ yasuki_core.engine.rules.effects
     Evaluate
     ExemptFromResolutionBow
     Fear
+    FromAction
     GainGold
     GainHonor
     GrantAbility
