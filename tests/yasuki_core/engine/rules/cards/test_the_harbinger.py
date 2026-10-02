@@ -1,6 +1,19 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.card_values import effective_force
-from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass, PlayStrategy
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.effects import Move
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+    PlayInterrupt,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseAbilityTarget,
@@ -8,12 +21,14 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint, FatePrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, RingPrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
+    combat_segment,
     end_phase,
     end_turn,
     fate_card,
@@ -195,3 +210,86 @@ def test_banish_all_doubt_on_a_single_card_takes_it_with_nothing_left_for_the_bo
     assert session.game.pending is None
     assert session.game.look is None
     assert _fate_deck(session) == []
+
+
+# --- Cowed by Wisdom ---
+
+MOVE_HOME_PROBE = "probe_battle_move_a_personality_home"
+MOVE_HOME = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: move a target Personality home",
+    cost=no_cost,
+    targets=lambda game, source: [card.id for card in personalities_in_play(game)],
+    effects=lambda game, source, target: [Move(target.id, Location.home(target.owner))],
+)
+
+
+def _cowed(owner: PlayerId) -> L5RCard:
+    return L5RCard.of(
+        FatePrint,
+        id="cowed",
+        printed_id="cowed_by_wisdom",
+        name="Cowed by Wisdom",
+        side=Side.FATE,
+        owner=owner,
+        gold_cost=0,
+    )
+
+
+def _cowed_battle(*, holder: PlayerId, ring: bool = False) -> EngineSession:
+    """P1's raider, whose Battle action moves a target Personality home, against P2's guard at the
+    battlefield, with Cowed by Wisdom in ``holder``'s hand. ``ring`` puts a Ring in P1's play."""
+    in_play = [
+        personality("raider", printed_id=MOVE_HOME_PROBE),
+        personality("guard", owner=P2),
+    ]
+    if ring:
+        in_play.append(
+            L5RCard.of(
+                RingPrint, id="ring", printed_id="ring", name="ring", side=Side.FATE, owner=P1
+            )
+        )
+    session = combat_segment(in_play, {"raider": 0}, {"guard": 0})
+    table = session.game.table
+    table.zones[ZoneKey(holder, ZoneRole.HAND)].add(register(table, _cowed(holder)))
+    return session
+
+
+def _at_the_battlefield(session: EngineSession, card_id: str) -> bool:
+    table = session.game.table
+    return location_of(table, table.cards_by_id[card_id]).battlefield == 0
+
+
+def test_cowed_by_wisdom_negates_an_action_moving_an_enemy_from_the_battlefield():
+    with probe_ability(MOVE_HOME_PROBE, MOVE_HOME):
+        session = _cowed_battle(holder=P2)
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("raider",)))
+
+        session.act(P2, PlayInterrupt("cowed"))
+        while session.game.pending is not None:
+            session.submit(session.game.pending.seat, DecisionResponse(()))
+
+        assert _at_the_battlefield(session, "raider")
+
+
+def test_cowed_by_wisdom_is_not_offered_against_moving_your_own_personality():
+    with probe_ability(MOVE_HOME_PROBE, MOVE_HOME):
+        session = _cowed_battle(holder=P2)
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        assert PlayInterrupt("cowed") not in session.legal_actions(P2)
+
+
+@pytest.mark.parametrize(("ring", "performer_bowed"), [(False, True), (True, False)])
+def test_cowed_by_wisdom_bows_your_personality_unless_you_control_a_ring(ring, performer_bowed):
+    session = _cowed_battle(holder=P1, ring=ring)
+
+    session.act(P1, PlayStrategy("cowed"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    table = session.game.table
+    assert table.cards_by_id["guard"].bowed
+    assert table.cards_by_id["raider"].bowed is performer_bowed

@@ -1,31 +1,45 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+    itself,
+)
+from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
+from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.board.queries import (
     has_keyword,
     owned_personalities,
     remaining_look,
+    rings_in_play,
     top_of_deck,
 )
 from yasuki_core.engine.rules.effects import (
     Arrange,
+    Bow,
     Choose,
     Effect,
     EndLook,
     GrantConditionalModifier,
     LookAtTop,
+    Move,
     MoveToHand,
+    Negated,
     SpendSeatOncePerTurn,
 )
+from yasuki_core.engine.rules.legality import location_permits
 from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM
 from yasuki_core.engine.rules.state import GameState, seat_once_key
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Condition, Duration, Stat
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.rules.units.membership import attached_to
+from yasuki_core.engine.table import DeckKey, location_of
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import PersonalityPrint, StrongholdPrint
 from yasuki_core.game_pieces.constants import Side
 
 
@@ -77,6 +91,90 @@ register_ability(
         targets=_banish_all_doubt_targets,
         targeting_message="your performing unbowed Tactician",
         effects=_banish_all_doubt_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
+
+
+# --- Cowed by Wisdom ---
+
+
+def _cowed_by_wisdom_applies(game: GameState, source: L5RCard, effect: Move) -> bool:
+    """ "The action's movement of other players' Personalities from the current battlefield", read
+    off the unit the Move names a card in."""
+    attack = game.attack
+    card = game.table.cards_by_id.get(effect.card_id)
+    if attack is None or attack.current is None or card is None:
+        return False
+    personality = card if isinstance(card.printed, PersonalityPrint) else attached_to(game, card)
+    if personality is None or personality.owner is source.owner:
+        return False
+    return (
+        location_of(game.table, personality).battlefield == attack.current
+        and effect.to.battlefield != attack.current
+    )
+
+
+def _cowed_by_wisdom_interrupt(game: GameState, source: L5RCard, effect: Move) -> Interruption:
+    return Interruption(Negated(effect))
+
+
+register_interrupt(
+    "cowed_by_wisdom",
+    Interrupt(
+        answers=Move,
+        interrupt=_cowed_by_wisdom_interrupt,
+        applies=_cowed_by_wisdom_applies,
+        answers_every=True,
+    ),
+)
+
+
+def _cowed_by_wisdom_enemies(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The enemy cards the action may target where they stand. A Stronghold is left out, as
+    Ring of Fire leaves it out of "a target enemy card"."""
+    return tuple(
+        card.id
+        for card in game.table.battlefield.cards
+        if card.owner is not seat
+        and not isinstance(card.printed, StrongholdPrint)
+        and location_permits(game, card)
+    )
+
+
+def _cowed_by_wisdom_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your unbowed Personalities, once there is an enemy card to bow."""
+    if not _cowed_by_wisdom_enemies(game, source.owner):
+        return []
+    return [card.id for card in owned_personalities(game, source.owner) if not card.bowed]
+
+
+def _cowed_by_wisdom_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Bow them unless you control a Ring. Bow a target enemy card." The enemy card bows either
+    way."""
+    enemies = _cowed_by_wisdom_enemies(game, source.owner)
+    bow_enemy = Choose(source.owner, enemies, 1, 1, "cowed_by_wisdom", source.id)
+    if rings_in_play(game, source.owner, Asking.action(source)):
+        return [bow_enemy]
+    return [Bow(target.id), bow_enemy]
+
+
+@choice_resolver("cowed_by_wisdom", prompt="Bow a target enemy card")
+def _resolve_cowed_by_wisdom(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Bow(chosen[0])]
+
+
+register_ability(
+    "cowed_by_wisdom",
+    Ability(
+        printed_index=1,
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_cowed_by_wisdom_targets,
+        targeting_message="your unbowed Personality",
+        effects=_cowed_by_wisdom_effects,
         located_at=(CardLocation.HAND,),
     ),
 )
