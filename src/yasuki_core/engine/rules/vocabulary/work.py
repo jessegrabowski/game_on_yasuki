@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
+
 
 if TYPE_CHECKING:
     from yasuki_core.engine.rules.effects import Effect
@@ -53,9 +55,13 @@ class Provenance:
     acting : str, optional
         The card whose action produced the effects, which a negation naming a source is matched
         against. Default None, for a trait's, the rulebook's, a delayed effect's or a cost's.
+    negations : tuple of Negation, optional
+        The ``once`` negations naming only a source that the action spent as it handed its effects
+        over, which negate every effect of that action and no other. Default none.
     """
 
     interruptible: bool = False
     triggered: bool = False
     paying: bool = False
     acting: str | None = None
+    negations: tuple[Negation, ...] = ()

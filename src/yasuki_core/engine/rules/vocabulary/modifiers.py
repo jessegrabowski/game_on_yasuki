@@ -348,8 +348,9 @@ class Negation:
         The card the negated effects act on, read off their ``card_id``. A negation naming one is
         forgotten when that card leaves the table (CR, Card Memory Rule). Default None.
     once : bool, optional
-        Whether the negation is spent by the first effect it negates, as "his next straightening"
-        is. Default False.
+        Whether the negation is spent by its first use: by the first effect it negates, as "his
+        next straightening" is, or, for one naming only a source, by the first action from a
+        matching card, all of whose effects it negates. Default False.
     """
 
     source_id: str

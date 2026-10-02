@@ -65,17 +65,16 @@ def strategy_cost(game: GameState, card: L5RCard, ability_key: str | None = None
 
 
 def play_strategy_with(
-    game: GameState, card: L5RCard, effects: tuple[Effect, ...], *, acting: str | None
+    game: GameState, card: L5RCard, effects: tuple[Effect, ...], provenance: Provenance
 ) -> None:
     """Announce ``card`` for ``effects`` in place of its printed ability's: pause for its Gold
     Cost, unless it costs nothing, with its discard and those effects queued behind. How an
     Interrupt plays a Strategy, since what it does is decided against the effect it interrupts
-    rather than against a target. ``acting`` names the card whose action the effects are, and
-    None a rulebook Interrupt's.
+    rather than against a target. ``provenance`` says whose action the effects are.
     """
     game.announced_from_hand |= {card.id}
     game.stack.append(DiscardPlayed(card.id))
-    game.stack.append(ApplyEffects(effects, Provenance(acting=acting)))
+    game.stack.append(ApplyEffects(effects, provenance))
     cost = discounted_gold_cost(game, card_purchase(game, card, plays_card=True))
     if cost:
         game.pending = payment_request(game, card.owner, cost, card.name, target=card)

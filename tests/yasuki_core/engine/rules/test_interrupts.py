@@ -71,6 +71,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed, Straightened
 from yasuki_core.engine.rules.vocabulary.modifiers import Negation
+from yasuki_core.engine.rules.negation import action_provenance
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -1123,7 +1124,9 @@ def test_a_negation_of_the_actions_effects_leaves_what_it_targeted():
     game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=HoldingPrint))
     game.interrupts_offered = True
 
-    resolve_action_effects(game, [TARGETING.built(game)], acting="P2-src")
+    resolve_action_effects(
+        game, [TARGETING.built(game)], provenance=action_provenance(game, "P2-src")
+    )
 
     assert game.action_targets == ("P1-victim",)
     assert not game.table.cards_by_id["P1-victim"].bowed

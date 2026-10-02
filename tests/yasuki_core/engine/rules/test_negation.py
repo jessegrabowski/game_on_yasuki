@@ -1,7 +1,10 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import Ask, Bow, Effect, Negated, Straighten, Then
 from yasuki_core.engine.rules.interrupts import forecast
-from yasuki_core.engine.rules.negation import negate_committed
+from yasuki_core.engine.rules.negation import (
+    action_provenance,
+    negate_committed,
+)
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE_PROXY
 from yasuki_core.engine.rules.triggers import (
     choice_resolver,
@@ -85,7 +88,9 @@ def test_a_named_source_negates_what_its_action_defers():
     farm = put_in_play(game, holding("farm"))
     game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
 
-    resolve_action_effects(game, [Then((Bow(farm.id),))], acting=plan.id)
+    resolve_action_effects(
+        game, [Then((Bow(farm.id),))], provenance=action_provenance(game, plan.id)
+    )
     run_stack(game)
 
     assert not game.stack
@@ -99,7 +104,7 @@ def test_a_named_source_negates_what_an_answer_in_its_action_produces():
     game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
 
     asked = Ask(PlayerId.P1, "Bow it?", "test_negation_cost_bow", source_id=farm.id)
-    resolve_action_effects(game, [asked], acting=plan.id)
+    resolve_action_effects(game, [asked], provenance=action_provenance(game, plan.id))
     submit(game, DecisionResponse(()))
 
     assert not farm.bowed
@@ -110,7 +115,7 @@ def test_the_interrupt_step_does_not_offer_an_effect_a_negation_will_negate():
     plan = _card(game, ActionPrint)
     game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
 
-    assert forecast(game, (Bow("farm"),), plan.id) == ()
+    assert forecast(game, (Bow("farm"),), Provenance(acting=plan.id)) == ()
     assert forecast(game, (Bow("farm"),)) == (Bow("farm"),)
 
 
@@ -132,18 +137,36 @@ def test_a_once_negation_is_spent_by_the_first_effect_it_negates():
     assert negate_committed(game, Bow("farm"), FROM_NO_ACTION) == Bow("farm")
 
 
-def test_a_once_negation_naming_a_source_is_spent_by_that_sources_first_action():
+def test_a_once_negation_naming_a_source_negates_all_of_that_sources_first_action():
+    game = two_seat_game()
+    plan = _card(game, ActionPrint)
+    farm = put_in_play(game, holding("farm"))
+    mine = put_in_play(game, holding("mine"))
+    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint, once=True))
+
+    first = action_provenance(game, plan.id)
+    resolve_action_effects(game, [Bow(farm.id), Bow(mine.id)], provenance=first)
+    assert not farm.bowed
+    assert not mine.bowed
+
+    game.interrupts_offered = False
+    second = action_provenance(game, plan.id)
+    resolve_action_effects(game, [Bow(farm.id)], provenance=second)
+    assert farm.bowed
+
+
+def test_a_once_negation_an_action_spent_negates_what_that_action_defers():
     game = two_seat_game()
     plan = _card(game, ActionPrint)
     farm = put_in_play(game, holding("farm"))
     game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint, once=True))
 
-    resolve_action_effects(game, [Bow(farm.id)], acting=plan.id)
-    assert not farm.bowed
+    provenance = action_provenance(game, plan.id)
+    resolve_action_effects(game, [Then((Bow(farm.id),))], provenance=provenance)
+    run_stack(game)
 
-    game.interrupts_offered = False
-    resolve_action_effects(game, [Bow(farm.id)], acting=plan.id)
-    assert farm.bowed
+    assert not game.stack
+    assert not farm.bowed
 
 
 def test_an_effect_already_negated_spends_no_once_negation():

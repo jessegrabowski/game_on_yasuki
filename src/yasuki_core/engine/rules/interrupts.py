@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.legality import (
     permitted_timings_in,
     seat_cards,
 )
-from yasuki_core.engine.rules.negation import negates_interrupt, would_negate
+from yasuki_core.engine.rules.negation import action_provenance, strips_interrupt, would_negate
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.action_record import action_is_unstoppable
@@ -44,25 +44,25 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 
 def forecast(
-    game: GameState, effects: tuple[Effect, ...], acting: str | None = None
+    game: GameState, effects: tuple[Effect, ...], provenance: Provenance = Provenance()
 ) -> tuple[Effect, ...]:
-    """What an action from the card ``acting`` names handing ``effects`` to step E is about to do,
-    as the Interrupt step offers it: the effects in order, a ``Then``'s contents where it stands,
-    an ability's effects behind the :class:`~.ResolveAbility` that targets them, and an attack's
+    """What an action with ``provenance`` handing ``effects`` to step E is about to do, as the
+    Interrupt step offers it: the effects in order, a ``Then``'s contents where it stands, an
+    ability's effects behind the :class:`~.ResolveAbility` that targets them, and an attack's
     outcome behind the attack when it reaches on the board as it stands. An effect that is nothing
-    to interrupt, an Honor change of zero, a question the action asks or one a negation in force
-    will negate, is left out, and what a choice resolver produces later is not foreseeable and is
-    not offered."""
+    to interrupt, an Honor change of zero, a question the action asks or one a negation will
+    negate, is left out, and what a choice resolver produces later is not foreseeable and is not
+    offered."""
     seen: list[Effect] = []
     for effect in effects:
         if isinstance(effect, Then):
-            seen.extend(forecast(game, effect.effects, acting))
+            seen.extend(forecast(game, effect.effects, provenance))
             continue
-        if effect.is_interruptible(game) and not would_negate(game, effect, acting):
+        if effect.is_interruptible(game) and not would_negate(game, effect, provenance):
             seen.append(effect)
         stands = as_modified(game, effect)
         if isinstance(stands, ResolveAbility | AttackEffect):
-            seen.extend(forecast(game, stands.follow_on(game), acting))
+            seen.extend(forecast(game, stands.follow_on(game), provenance))
     return tuple(seen)
 
 
@@ -234,7 +234,7 @@ def held_action(game: GameState) -> triggers.HeldAction:
 def foreseen_now(game: GameState) -> tuple[Effect, ...]:
     """The forecast of the action held at the Interrupt step."""
     held = held_action(game)
-    return forecast(game, held.effects, held.acting)
+    return forecast(game, held.effects, held.provenance)
 
 
 def interrupt_actions(game: GameState, seat: PlayerId) -> list[Action]:
@@ -399,8 +399,8 @@ def _play(
     # A negated Interrupt is still taken, paid for and, from hand, discarded. It binds nothing,
     # since a bound replacement is asked of the card again as its effect resolves. A rulebook
     # Interrupt is no action from its card, so no negation naming a source reaches it.
-    from_card = interrupt.acts_from_its_card
-    if not (from_card and negates_interrupt(game, card, interruption.replacement)):
+    provenance = action_provenance(game, card.id if interrupt.acts_from_its_card else None)
+    if not strips_interrupt(game, interruption.replacement, provenance):
         if interrupt.answers_every:
             bound = answered_by(game, card, interrupt, foreseen)
             game.modifications.extend(
@@ -417,17 +417,16 @@ def _play(
                     interrupt_key=key,
                 )
             )
-    acting = card.id if from_card else None
     if _plays_card(interrupt, location):
         if interruption.costs:
             raise ValueError(f"{card_id} plays its card, so its Interrupt can add no costs")
-        play_strategy_with(game, card, interruption.effects, acting=acting)
+        play_strategy_with(game, card, interruption.effects, provenance)
         return
     purchase = interrupt.purchase(game, card, plays_card=False)
     paid = priced_cost(game, purchase, interrupt.cost(game, card))
     claimed = _claim(game, seat, card, interrupt)
     # Queued beneath the payment, so the cost is paid, and what reacts to it resolves, first.
-    game.stack.append(ApplyEffects(interruption.effects, Provenance(acting=acting)))
+    game.stack.append(ApplyEffects(interruption.effects, provenance))
     triggers.pay_costs(game, [*claimed, *paid, *interruption.costs])
 
 

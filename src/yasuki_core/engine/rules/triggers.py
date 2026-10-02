@@ -402,8 +402,9 @@ def _advance(
     Every other effect is checked against the negations in force as it commits, whatever produced
     it, since a negation makes an effect fail to happen whenever it would occur (CR, Prevention).
     The provenance's ``acting`` names the card whose action produced the effects in hand, which a
-    negation naming a source reads. A ``Then``, a pause and what an effect produces keep it, and a
-    trigger's effects carry none. The provenance's ``paying`` says the effects in hand are a
+    negation naming a source reads, and its ``negations`` are the ones that action spent. A
+    ``Then``, a pause and what an effect produces keep both, and a trigger's effects carry
+    neither. The provenance's ``paying`` says the effects in hand are a
     cost's payments instead, which are no effects (CR, Effects), so no negation reaches them. What
     reacts to them is effects again, and so is what a ``Then`` among them defers.
 
@@ -797,17 +798,15 @@ class HeldAction:
     ----------
     effects : tuple of Effect
         The action's effects, in the order they will resolve.
-    acting : str, optional
-        The card whose action this is. Default None, an action from no card, as the rulebook's
-        are.
+    provenance : Provenance
+        Where the action's effects come from.
     """
 
     effects: tuple[Effect, ...]
-    acting: str | None = None
+    provenance: Provenance
 
     def resume(self, game: GameState) -> None:
-        provenance = Provenance(interruptible=True, acting=self.acting)
-        _advance(game, self.effects, [], None, [], provenance)
+        _advance(game, self.effects, [], None, [], self.provenance)
 
 
 def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
@@ -878,15 +877,15 @@ def pay_costs(game: GameState, costs: list[Effect]) -> None:
 
 
 def resolve_action_effects(
-    game: GameState, effects: list[Effect], *, acting: str | None = None
+    game: GameState, effects: list[Effect], *, provenance: Provenance = Provenance()
 ) -> None:
     """Apply ``effects`` as an action's own, which is what step E of the Action Sequence hands
     over. The first effects an action hands over are held beneath an Interrupt round first (CR,
     Action Sequence step D), when any seat holds an Interrupt to take, and every effect resolves
     as the Interrupts taken there make of it. What the action defers behind them through a
     ``Then`` opens no second round. The derived-event cascade runs as in
-    :func:`~.resolve_effects`. ``acting`` names the card whose action this is, and None an action
-    from no card.
+    :func:`~.resolve_effects`. ``provenance`` says whose action this is, as
+    :func:`~.action_provenance` builds it, and an action from no card by default.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
@@ -895,11 +894,12 @@ def resolve_action_effects(
     from yasuki_core.engine.rules.interrupts import open_interrupt_window
 
     _refuse_mid_decision(game, "resolve_action_effects")
+    provenance = replace(provenance, interruptible=True)
     if game.interrupts_offered:
-        _advance(game, tuple(effects), [], None, [], Provenance(interruptible=True, acting=acting))
+        _advance(game, tuple(effects), [], None, [], provenance)
         return
     game.interrupts_offered = True
-    held = HeldAction(tuple(effects), acting)
+    held = HeldAction(tuple(effects), provenance)
     game.stack.append(held)
     if not open_interrupt_window(game):
         game.stack.pop()

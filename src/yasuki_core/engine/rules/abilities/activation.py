@@ -4,6 +4,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.model import Ability, once_tag
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.effects import Effect
+from yasuki_core.engine.rules.negation import action_provenance
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
@@ -193,7 +194,7 @@ def _resolve(
         triggers.resolve_effects(game, effects)
         return
     acting = source.id if ability is not None and ability.acts_from_its_card else None
-    triggers.resolve_action_effects(game, effects, acting=acting)
+    triggers.resolve_action_effects(game, effects, provenance=action_provenance(game, acting))
 
 
 def _record_targets(game: GameState, target_ids: tuple[str, ...]) -> None:

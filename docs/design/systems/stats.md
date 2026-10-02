@@ -121,7 +121,9 @@ reaches a cost, which is no effect (CR, Effects), or an action's targeting, whic
 and answers `is_negatable` with False, and neither reaches a state-based action, which would only
 be demanded again. One naming a card is forgotten when the card leaves the table (CR,
 Card Memory Rule). A `once` negation is spent by the first effect it negates, as "his next
-straightening" is.
+straightening" is. One naming only a source is spent by the first action from a matching card
+instead, and negates every effect of that action (CR, Negate an Action): the action takes it out
+of `ongoing` as it hands its effects over and carries it in its provenance.
 {card}`Dark Ring of Water` names Strategies as a source and {card}`Way of the Crab` names its
 Fortification's bowing.
 
