@@ -241,6 +241,12 @@ class Ability:
         keyword, on every card at a location as Dynasty Discard is, or on a proxy in a seat's
         rulebook zone as Cycle is. It is a player ability, so it plays no card, carries only its own
         keywords, and is not announced as printed. Default False.
+    targets_after_cost : bool, optional
+        Whether ``targets`` is read once the cost is paid instead of when the ability is announced,
+        for an ability whose targets depend on the amount its cost declares, which ``targets``
+        reads from ``game.amount_paid`` (CR, Action Sequence steps B and C). The ability is offered
+        whenever its cost is payable, and an amount that reaches no target targets nothing.
+        Default False.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -263,6 +269,7 @@ class Ability:
     ruleset: str | None = None
     from_keyword: str | None = None
     from_rulebook: bool = False
+    targets_after_cost: bool = False
 
     def __post_init__(self) -> None:
         """Raise ValueError for a keyword's ability not marked ``from_rulebook``."""
