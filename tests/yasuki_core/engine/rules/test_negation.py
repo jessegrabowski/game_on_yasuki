@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
     seppuku,
 )
-from yasuki_core.engine.rules.interrupts import forecast
+from yasuki_core.engine.rules.interrupts import Replacement, forecast
 from yasuki_core.engine.rules.negation import (
     action_provenance,
     negate_committed,
@@ -429,3 +429,18 @@ def test_seppuku_spends_no_once_negation():
     run_stack(game)
 
     assert game.ongoing == [negation]
+
+
+def test_an_interrupt_cannot_negate_an_effect_that_cannot_be_negated():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    destroy = Destroy(hero.id, PlayerId.P1, negatable=False)
+    game.modifications.append(
+        Replacement(bound=destroy, card_id="ward", replacement=Negated(destroy))
+    )
+    game.interrupts_offered = True
+
+    resolve_action_effects(game, [destroy])
+
+    assert hero not in game.table.battlefield.cards
+    assert game.modifications == []
