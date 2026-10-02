@@ -41,6 +41,11 @@ stays off the menu.
 returns instead of asking the seat to pick one, which is how an untargeted "your other Farms" grant
 is written. Poorly Placed Garden above uses it to act on itself.
 
+An ability that targets a number of cards at once, as {card}`Bound in Blood`'s "a number of your
+Personalities" does, sets `target_count` to say how many and builds its effects over the whole set
+with `effects_for_targets` in place of `effects`. The seat picks that many distinct targets in one
+answer, and every one is recorded as the action's target.
+
 ## Where a cost builder lives
 
 `abilities/costs.py` holds the builders more than one card uses: {func}`~.no_cost`,

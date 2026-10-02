@@ -49,7 +49,7 @@ from yasuki_core.engine.table import DeckKey, Location, TableState, ZoneKey, Zon
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Element, Side
-from yasuki_core.game_pieces.prints import FatePrint, RingPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint, RingPrint
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
@@ -62,7 +62,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import has_keyword, personalities_in_play
-from yasuki_core.engine.rules.turn.structure import Boundary, Moment, Phase, RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Boundary, Moment, Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from yasuki_core.engine.rules.units.composition import followers_of
@@ -316,8 +316,7 @@ def test_a_discount_lowers_the_payment_but_not_the_bodies_it_buys():
     assert session.game.pending.amount == 4
     pay(session, P1)
 
-    assert session.game.pending.minimum == 3
-    assert session.game.pending.maximum == 3
+    assert session.game.pending.count == 3
 
 
 def test_a_declared_amount_the_discount_covers_asks_for_no_payment():
@@ -326,7 +325,7 @@ def test_a_declared_amount_the_discount_covers_asks_for_no_payment():
     session.act(P1, ActivateAbility("spell"))
     session.submit(P1, DecisionResponse(("2",)))
 
-    assert session.game.pending.minimum == 1
+    assert session.game.pending.count == 1
     assert session.game.gold[P1] == 0
 
 
@@ -359,6 +358,32 @@ def test_the_bound_are_banished_and_the_spell_destroyed():
     assert game.table.cards_by_id["spell"] not in game.table.battlefield.cards
 
 
+def test_every_personality_bound_is_a_target_of_the_action():
+    session = _blood_game()
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("4",)))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("acolyte", "novice")))
+
+    assert session.game.action_targets == ("acolyte", "novice")
+
+
+def test_a_negation_of_the_spells_actions_binds_no_one():
+    """The Horror, the banishing and the Spell's destruction are the action's effects, not its
+    cost, so a negation of the effects of actions from Spells reaches all of them (CR, Effects)."""
+    session = _blood_game()
+    session.game.ongoing.append(Negation("ward", END_OF_TURN, source_kind=AttachmentPrint))
+
+    session.act(P1, ActivateAbility("spell"))
+    session.submit(P1, DecisionResponse(("4",)))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("acolyte", "novice")))
+
+    battlefield = {card.id for card in session.game.table.battlefield.cards}
+    assert {"acolyte", "novice", "spell"} <= battlefield
+
+
 def test_the_amount_settles_how_many_may_be_bound():
     """The count is priced, not chosen: two Gold binds exactly one."""
     session = _blood_game()
@@ -367,8 +392,7 @@ def test_the_amount_settles_how_many_may_be_bound():
     session.submit(P1, DecisionResponse(("2",)))
     pay(session, P1)
 
-    assert session.game.pending.minimum == 1
-    assert session.game.pending.maximum == 1
+    assert session.game.pending.count == 1
 
 
 def test_bound_in_blood_is_withheld_when_no_amount_buys_a_body():

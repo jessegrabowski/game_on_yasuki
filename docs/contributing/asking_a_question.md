@@ -52,7 +52,9 @@ record the amount as the action's `amount_paid`. The ability sets `targets_after
 
 What the card does then resolves as the action's own effects, which the Interrupt step offers and
 a negation of the action reaches. A resolver that returned the destruction from inside the cost
-would make it a payment, which neither reaches.
+would make it a payment, which neither reaches. A count of targets the amount buys, as
+{card}`Bound in Blood`'s "half the Gold spent", is its `target_count`, which reads
+`game.amount_paid` the same way.
 
 ## A card
 
