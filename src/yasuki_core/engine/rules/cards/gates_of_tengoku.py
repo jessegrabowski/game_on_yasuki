@@ -34,7 +34,7 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
     Unpayable,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
@@ -232,17 +232,17 @@ register_ability(
 NORITADA_MOVE_HOME = "Move Noritada home"
 
 
-@on(CounterChanged, "togashi_noritada_defender_of_the_high_house_experienced")
-def _togashi_noritada_defender_of_the_high_house_experienced_counter_changed(
+@on(EnteredPlay, "togashi_noritada_defender_of_the_high_house_experienced")
+def _togashi_noritada_defender_of_the_high_house_experienced_entered_play(
     ctx: TriggerContext,
 ) -> list[Effect]:
     """Sincerity: Give Noritada a +1F Fire token for each token removed."""
-    event = ctx.event
-    if not isinstance(event, CounterChanged) or event.card_id != ctx.card.id:
+    if ctx.event.card_id != ctx.card.id:
         return []
-    if event.counter.key != SINCERITY.key or event.amount >= 0:
+    sincerity = ctx.card.counters.get(SINCERITY.key, 0)
+    if sincerity == 0:
         return []
-    return [AdjustCounter(ctx.card.id, FIRE, -event.amount)]
+    return [AdjustCounter(ctx.card.id, FIRE, sincerity)]
 
 
 def _togashi_noritada_defender_of_the_high_house_experienced_destroy_options(
