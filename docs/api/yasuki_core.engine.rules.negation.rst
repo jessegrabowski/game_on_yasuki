@@ -8,6 +8,7 @@ yasuki_core.engine.rules.negation
 .. autosummary::
 
     action_provenance
+    continuously_negated
     negate_committed
     strips_interrupt
     would_negate

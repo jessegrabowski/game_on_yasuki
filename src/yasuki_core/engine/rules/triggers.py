@@ -641,7 +641,8 @@ def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None
     that has gone.
 
     A state-based action is applied without the negation check. One a negation stopped would be
-    demanded again on the next round, so the enforcement would never settle.
+    demanded again on the next round, so the enforcement would never settle. A rule that a
+    continuous effect can hold off asks before demanding instead, as Chi death does.
     """
     for _ in range(_MAX_CASCADE):
         _forget_ongoing_on_cards_off_the_table(game)

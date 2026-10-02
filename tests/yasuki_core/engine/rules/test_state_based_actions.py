@@ -13,9 +13,15 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.turn.action_sequence import run_stack
-from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_TURN
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed, EnteredPlay
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    Duration,
+    Minimum,
+    Modifier,
+    Negation,
+    Stat,
+)
 from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.state import GameState
@@ -134,6 +140,32 @@ def test_a_card_whose_own_text_exempts_it_survives_zero_chi():
 
     assert "breaker" in _battlefield(game)
     assert "mortal" not in _battlefield(game)
+
+
+def test_a_lasting_negation_of_his_destruction_keeps_a_personality_alive_at_zero_chi():
+    samurai = _personality("spared", chi=0)
+    game = _in_play(samurai)
+    negation = Negation("ward", END_OF_TURN, effect_kind=Destroy, subject_id="spared")
+    game.ongoing.append(negation)
+
+    triggers.enforce_state_based_actions(game)
+    assert "spared" in _battlefield(game)
+
+    game.ongoing.remove(negation)
+    triggers.enforce_state_based_actions(game)
+
+    assert "spared" not in _battlefield(game)
+
+
+def test_a_once_negation_of_his_destruction_does_not_hold_against_chi_death():
+    samurai = _personality("doomed", chi=0)
+    game = _in_play(samurai)
+    negation = Negation("ward", END_OF_TURN, effect_kind=Destroy, subject_id="doomed", once=True)
+    game.ongoing.append(negation)
+
+    triggers.enforce_state_based_actions(game)
+
+    assert "doomed" not in _battlefield(game)
 
 
 def test_a_destroyed_personality_takes_his_unit_with_him():

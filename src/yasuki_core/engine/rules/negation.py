@@ -88,6 +88,16 @@ def would_negate(
     return True
 
 
+def continuously_negated(game: GameState, effect: Effect) -> bool:
+    """Whether a negation in force that is not ``once`` would stop ``effect``, which comes from no
+    action. Spends nothing. What a state-based action asks before demanding an effect, since only
+    a continuous effect holds against one and a spent negation would only see it demanded again
+    (CR, Chi Death Rule)."""
+    if not effect.is_negatable(game):
+        return False
+    return any(not negation.once for negation in _matching(game, effect, Provenance()))
+
+
 def strips_interrupt(game: GameState, replacement: Effect, provenance: Provenance) -> bool:
     """Whether a negation naming a source negates ``replacement``, the modification an Interrupt
     with ``provenance`` makes, spending a ``once`` negation that does. A stripped Interrupt binds
