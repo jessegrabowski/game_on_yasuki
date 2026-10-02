@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_cannot_attack,
 )
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     attack_targets,
     has_keyword,
     opposed_units_in_battle,
@@ -19,12 +20,14 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Ask,
     AskOption,
     Bow,
     Choose,
     CreateToken,
     DrawCard,
     Effect,
+    Evaluate,
     GrantAbility,
     GrantKeyword,
     GrantModifier,
@@ -33,12 +36,14 @@ from yasuki_core.engine.rules.effects import (
     RangedAttack,
     ShuffleDeck,
     Straighten,
+    Then,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
     Bowed,
     CounterGained,
+    Destroyed,
     EnteredPlay,
     TurnStarted,
 )
@@ -324,6 +329,62 @@ register_ability(
         targeting_message="your Monk",
         effects=_togashi_bairei_effects,
         tireless=True,
+    ),
+)
+
+
+# --- Togashi Chiyo ---
+
+CHIYO_MELEE = 2
+
+
+def _togashi_chiyo_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The Melee 2, then a reading of whether it destroyed anything, deferred until the Melee and
+    the destruction it causes have resolved."""
+    return [
+        MeleeAttack(CHIYO_MELEE, target.id, source.owner),
+        Then((Evaluate("togashi_chiyo_destroyed", source.id, source.owner),)),
+    ]
+
+
+@choice_resolver("togashi_chiyo_destroyed")
+def _resolve_togashi_chiyo_destroyed(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "If this destroyed any cards, you may bow Chiyo to make a Melee 2." Chiyo is asked only
+    when he is unbowed and the second Melee has something to reach."""
+    chiyo = game.table.cards_by_id[source_id]
+    if not action_did(game, Destroyed) or chiyo.bowed or not attack_targets(game, chiyo):
+        return []
+    question = f"Bow {chiyo.name} to make a Melee {CHIYO_MELEE}?"
+    return [Ask(seat, question, "togashi_chiyo_bow", subjects=(source_id,), source_id=source_id)]
+
+
+@choice_resolver("togashi_chiyo_bow")
+def _resolve_togashi_chiyo_bow(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    if not chosen:
+        return []
+    reachable = tuple(attack_targets(game, game.table.cards_by_id[source_id]))
+    return [Bow(source_id), Choose(seat, reachable, 1, 1, "togashi_chiyo_second_melee", source_id)]
+
+
+@choice_resolver("togashi_chiyo_second_melee", prompt=f"Melee {CHIYO_MELEE} Attack")
+def _resolve_togashi_chiyo_second_melee(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [MeleeAttack(CHIYO_MELEE, chosen[0], seat)]
+
+
+register_ability(
+    "togashi_chiyo",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_togashi_chiyo_effects,
     ),
 )
 

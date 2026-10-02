@@ -580,3 +580,60 @@ def test_wrath_of_the_shattered_star_from_a_bowed_monk_does_nothing():
 
     assert session.game.pending is None
     assert effective_force(session.game, session.game.table.cards_by_id["samurai"]) == 2
+
+
+# --- Togashi Chiyo ---
+
+
+def _chiyo_battle() -> EngineSession:
+    """Chiyo at the battlefield against P2's 1F weakling, 1F second and 5F veteran."""
+    return combat_segment(
+        [
+            personality("chiyo", printed_id="togashi_chiyo", force=4),
+            personality("weakling", owner=PlayerId.P2, force=1),
+            personality("second", owner=PlayerId.P2, force=1),
+            personality("veteran", owner=PlayerId.P2, force=5),
+        ],
+        {"chiyo": 0},
+        {"weakling": 0, "second": 0, "veteran": 0},
+    )
+
+
+def _destroyed(session: EngineSession) -> set[str]:
+    discard = session.game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.DYNASTY_DISCARD)]
+    return {card.id for card in discard.cards}
+
+
+def test_togashi_chiyo_may_bow_for_a_second_melee_after_the_first_destroys_a_card():
+    session = _chiyo_battle()
+
+    session.act(P1, ActivateAbility("chiyo"))
+    session.submit(P1, DecisionResponse(("weakling",)))
+    session.submit(P1, DecisionResponse(("chiyo",)))  # yes, bow Chiyo
+    session.submit(P1, DecisionResponse(("second",)))
+
+    assert session.game.table.cards_by_id["chiyo"].bowed
+    assert _destroyed(session) == {"weakling", "second"}
+
+
+def test_togashi_chiyo_declining_the_second_melee_leaves_him_unbowed():
+    session = _chiyo_battle()
+
+    session.act(P1, ActivateAbility("chiyo"))
+    session.submit(P1, DecisionResponse(("weakling",)))
+    session.submit(P1, DecisionResponse(()))  # no
+
+    assert session.game.pending is None
+    assert not session.game.table.cards_by_id["chiyo"].bowed
+    assert _destroyed(session) == {"weakling"}
+
+
+def test_togashi_chiyo_offers_no_second_melee_when_the_first_destroys_nothing():
+    session = _chiyo_battle()
+
+    session.act(P1, ActivateAbility("chiyo"))
+    session.submit(P1, DecisionResponse(("veteran",)))
+
+    assert session.game.pending is None
+    assert not session.game.table.cards_by_id["chiyo"].bowed
+    assert _destroyed(session) == set()
