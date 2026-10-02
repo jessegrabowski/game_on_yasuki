@@ -61,6 +61,16 @@ jobs:
             python-version: "3.12"
             test-subset: "tests/yasuki_gui/"
 
+          - subset-name: "Web Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/yasuki_web/"
+
+          - subset-name: "Skills Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/yasuki_skills/ tests/hooks/"
+
     name: ${{ matrix.subset-name }} (${{ matrix.os }} Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
 
@@ -370,14 +380,13 @@ jobs:
         run: pixi run install-db
 
       - name: Run tests
-        # The GUI subset runs here rather than only in the bare GUI job: the desktop client's
-        # characterization tests deal a real decklist, so Postgres is what makes them run at all
-        # instead of skipping on requires_db.
+        # Only the tests marked db, which skip in the test matrix for want of Postgres. Every other
+        # test runs there, so running it here again would only repeat it.
         env:
           YASUKI_DATABASE_URL: postgresql://yasuki:yasuki@localhost:5432/yasuki
           DISPLAY: ":99"
         run: |
-          pixi run pytest tests/ --ignore=tests/e2e -p no:playwright \
+          pixi run pytest tests/ --ignore=tests/e2e -p no:playwright -m db \
             --cov=yasuki_core --cov=yasuki_web --cov=yasuki_gui \
             --cov-report=xml:coverage/coverage-web.xml --no-cov-on-fail
 
