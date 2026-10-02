@@ -61,8 +61,12 @@ class SelectAbilityTarget:
         candidates = self.candidates
         if candidates is None:
             candidates = tuple(legal_targets(game, source, ability)) if ability is not None else ()
-            if not candidates:
-                return
+        wanted = 1
+        if ability is not None and ability.target_count is not None:
+            wanted = ability.target_count(game, source)
+        count = min(wanted, len(candidates))
+        if count == 0:
+            return
         game.pending = ChooseAbilityTarget(
             seat=source.owner,
             candidates=candidates,
@@ -70,6 +74,7 @@ class SelectAbilityTarget:
             ability_key=self.ability_key,
             source_name=source.name,
             targeting_message=ability.targeting_message if ability is not None else None,
+            count=count,
         )
 
 
@@ -95,15 +100,7 @@ class ApplyAbilityEffects:
     ability_key: str | None = None
 
     def resume(self, game: GameState) -> None:
-        source = game.table.cards_by_id[self.card_id]
-        ability = ability_for(game, source, self.ability_key)
-        _record_targets(game, self.target_ids)
-        effects = [
-            effect
-            for target_id in self.target_ids
-            for effect in ability.effects(game, source, game.table.cards_by_id[target_id])
-        ]
-        _resolve(game, source, ability, effects)
+        _hit_every_target(game, self.card_id, self.target_ids, self.ability_key)
 
 
 def defer_ability(game: GameState, card: L5RCard, ability: Ability, *, plays_card: bool) -> None:
@@ -183,16 +180,36 @@ class ResolveAbility(Effect):
     def _build(self, game: GameState) -> tuple[Effect, ...]:
         source = game.table.cards_by_id[self.card_id]
         ability = ability_for(game, source, self.ability_key)
-        return tuple(ability.effects(game, source, game.table.cards_by_id[self.target_id]))
+        return tuple(
+            ability.effects_against(game, source, (game.table.cards_by_id[self.target_id],))
+        )
 
 
 def apply_ability_target(
     game: GameState, request: ChooseAbilityTarget, response: DecisionResponse
 ) -> None:
-    targeting = ResolveAbility(request.source_card_id, response.choices[0], request.ability_key)
+    """Resolve the ability against the target the seat chose, held at the Interrupt step as its
+    targeting, or against every target of one that targets several at once."""
     source = game.table.cards_by_id[request.source_card_id]
     ability = ability_for(game, source, request.ability_key)
+    if ability is not None and ability.target_count is not None:
+        _hit_every_target(game, request.source_card_id, response.choices, request.ability_key)
+        return
+    targeting = ResolveAbility(request.source_card_id, response.choices[0], request.ability_key)
     _resolve(game, source, ability, [targeting.built(game)])
+
+
+def _hit_every_target(
+    game: GameState, card_id: str, target_ids: tuple[str, ...], ability_key: str | None
+) -> None:
+    """Record ``target_ids`` as the action's and resolve the ability's effects against all of
+    them."""
+    source = game.table.cards_by_id[card_id]
+    ability = ability_for(game, source, ability_key)
+    _record_targets(game, target_ids)
+    targets = tuple(game.table.cards_by_id[target_id] for target_id in target_ids)
+    effects = ability.effects_against(game, source, targets) if ability is not None else []
+    _resolve(game, source, ability, effects)
 
 
 def _resolve(

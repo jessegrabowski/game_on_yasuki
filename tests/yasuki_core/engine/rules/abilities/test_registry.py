@@ -363,6 +363,18 @@ def test_a_keyword_ability_is_a_rulebook_ability():
         replace(plain, key="probe", from_keyword="Probe")
 
 
+def test_an_ability_builds_its_effects_one_way():
+    plain = _ABILITIES["millet_farm"][0]
+
+    def over_the_set(game, source, targets):
+        return []
+
+    with pytest.raises(ValueError, match="per target or over the set"):
+        replace(plain, effects_for_targets=over_the_set, target_count=lambda game, source: 2)
+    with pytest.raises(ValueError, match="counts its targets"):
+        replace(plain, effects=None, effects_for_targets=over_the_set)
+
+
 def test_a_keyword_may_not_confer_two_abilities_under_one_key():
     plain = replace(
         _ABILITIES["millet_farm"][0], key="probe", from_keyword="Probe", from_rulebook=True
