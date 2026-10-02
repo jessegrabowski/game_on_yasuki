@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import (
     granted_ability,
     register_ability,
@@ -19,12 +19,16 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    AskOption,
+    Bow,
     Choose,
     CreateToken,
     DrawCard,
     Effect,
     GrantAbility,
+    GrantKeyword,
     GrantModifier,
+    MeleeAttack,
     MoveToDeck,
     RangedAttack,
     ShuffleDeck,
@@ -348,3 +352,105 @@ def _resolve_wheat_farm(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
+
+
+# --- Wrath of the Shattered Star ---
+
+WRATH_MELEE = 3
+WRATH_FORCE_BONUS = 2
+WRATH_MELEE_MODE = "Make a Melee 3"
+WRATH_FIRE_MODE = "Give one or two opposed Personalities Fire and +2F"
+WRATH_MOST_OPPOSED = 2
+
+
+def _wrath_of_the_shattered_star_modes(game: GameState, source: L5RCard) -> tuple[str, ...]:
+    """The halves of the text the board leaves something to do with."""
+    offered = (
+        (WRATH_MELEE_MODE, attack_targets(game, source)),
+        (WRATH_FIRE_MODE, opposed_units_in_battle(game, source.owner)),
+    )
+    return tuple(mode for mode, reachable in offered if reachable)
+
+
+def _wrath_of_the_shattered_star_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your Monks, bowed or not, once either half of the text has something to act on."""
+    if not _wrath_of_the_shattered_star_modes(game, source):
+        return []
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if has_keyword(game, card, keywords.MONK)
+    ]
+
+
+def _wrath_of_the_shattered_star_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """The bow is what does either ("bow ... to make ... or to give"), so a Monk already bowed does
+    nothing (CR, To)."""
+    if target.bowed:
+        return []
+    modes = _wrath_of_the_shattered_star_modes(game, source)
+    return [
+        Bow(target.id),
+        AskOption(
+            source.owner,
+            modes,
+            "Bow the Monk to do which?",
+            "wrath_of_the_shattered_star",
+            source.id,
+        ),
+    ]
+
+
+@choice_resolver("wrath_of_the_shattered_star")
+def _resolve_wrath_of_the_shattered_star(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    if chosen[0] == WRATH_MELEE_MODE:
+        reachable = tuple(attack_targets(game, game.table.cards_by_id[source_id]))
+        return [Choose(seat, reachable, 1, 1, "wrath_of_the_shattered_star_melee", source_id)]
+    opposed = opposed_units_in_battle(game, seat)
+    most = min(WRATH_MOST_OPPOSED, len(opposed))
+    return [Choose(seat, opposed, 1, most, "wrath_of_the_shattered_star_fire", source_id)]
+
+
+@choice_resolver("wrath_of_the_shattered_star_melee", prompt="Target of the Melee 3")
+def _resolve_wrath_of_the_shattered_star_melee(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [MeleeAttack(WRATH_MELEE, chosen[0], seat)]
+
+
+@choice_resolver(
+    "wrath_of_the_shattered_star_fire",
+    prompt="Give one or two of your opposed Personalities Fire and +2F",
+)
+def _resolve_wrath_of_the_shattered_star_fire(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The text gives no duration, so both last until the end of the turn (CR, Ongoing)."""
+    return [
+        effect
+        for card_id in chosen
+        for effect in (
+            GrantKeyword(source_id, card_id, keywords.FIRE, Duration.UNTIL_END_OF_TURN),
+            GrantModifier(
+                source_id, card_id, Stat.FORCE, WRATH_FORCE_BONUS, Duration.UNTIL_END_OF_TURN
+            ),
+        )
+    ]
+
+
+register_ability(
+    "wrath_of_the_shattered_star",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        keywords=frozenset({keywords.KIHO}),
+        cost=no_cost,
+        targets=_wrath_of_the_shattered_star_targets,
+        targeting_message="your Monk",
+        effects=_wrath_of_the_shattered_star_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
