@@ -39,7 +39,7 @@ from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, FavorDiscarded
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, RoundKind
-from yasuki_core.engine.rules.vocabulary.modifiers import Negation
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Negation, Stat
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.players import Trait
 from yasuki_core.engine.rules.rulebook import proxies
@@ -70,6 +70,7 @@ from tests.yasuki_core.engine.rules.conftest import probe_ability
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.builders import (
+    combat_segment,
     datasheet_favor_ability,
     attached,
     attachment,
@@ -991,6 +992,35 @@ def test_mayuko_cannot_pay_her_dishonoring_twice():
     session = _mayuko_attacking(dishonored=True)
 
     assert ActivateAbility("mayuko") not in session.legal_actions(P1)
+
+
+# --- Togashi Toyonobu, Soul of Togashi Binya ---
+
+
+@pytest.mark.parametrize(
+    ("target_force", "penalty"),
+    [(5, 0), (1, 0), (2, -3)],
+    ids=["lowered", "raised", "raised_from_below_zero"],
+)
+def test_togashi_toyonobu_sets_a_target_personalitys_force_to_his_own(target_force, penalty):
+    session = combat_segment(
+        [
+            personality("toyonobu", printed_id="togashi_toyonobu_soul_of_togashi_binya", force=2),
+            personality("target", owner=P2, force=target_force),
+        ],
+        {"toyonobu": 0},
+        {"target": 0},
+    )
+    if penalty:
+        session.game.ongoing.append(
+            Modifier("penalty", "target", Stat.FORCE, penalty, Duration.UNTIL_END_OF_TURN)
+        )
+
+    session.act(P1, ActivateAbility("toyonobu"))
+    session.submit(P1, DecisionResponse(("target",)))
+
+    target = session.game.table.cards_by_id["target"]
+    assert effective_force(session.game, target) == 2
 
 
 # --- Daidoji Tashiko ---

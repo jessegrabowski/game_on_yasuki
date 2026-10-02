@@ -15,10 +15,19 @@ every derived source spends within.
 
 ## The read path
 
-{func}`~.effective_stat` is the whole calculation:
+{func}`~.unbounded_stat` sums the printed value and every active modifier:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/stats/calculation.py
 :start-at: base = getattr(card, stat.value, None)
+:end-at: return base + sum(modifier.amount for modifier in modifiers)
+:dedent: 4
+:language: python
+```
+
+{func}`~.effective_stat` floors and caps that total:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/stats/calculation.py
+:start-at: if getattr(card, stat.value, None) is None:
 :end-at: return max(floor, min(cap, total))
 :dedent: 4
 :language: python
@@ -27,6 +36,10 @@ every derived source spends within.
 Three steps, and the order is the rulebook's. The printed value, plus every active modifier summed,
 then floored and capped. A card printed 2F, penalized -3F and then given +2F reads 1 rather than 2,
 because the minimum applies to the total rather than to each step.
+
+An effect that sets a stat measures from the unbounded total, because the CR sets a stat "not
+counting maximums or minimums" (CR, Setting Stats to Values). A 2F card penalized -3F reads 0, but
+setting it to 2 takes +3F, since its unbounded total is -1.
 
 The one maximum the rulebook imposes is a dishonorable Personality's Personal Honor of 0, and
 {func}`~.stat_maximum` is where it lives. A minimum granted above that cap cancels both, so only

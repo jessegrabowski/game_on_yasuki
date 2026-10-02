@@ -12,6 +12,7 @@ yasuki_core.engine.rules.stats.calculation
     is_modified
     stat_maximum
     stat_minimum
+    unbounded_stat
 
 .. automodule:: yasuki_core.engine.rules.stats.calculation
     :members:

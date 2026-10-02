@@ -66,7 +66,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
+from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.rulebook.kharmic import (
@@ -1635,3 +1635,57 @@ def test_a_terrain_whose_entry_is_negated_still_counts_as_played():
     table = session.game.table
     assert not any(card.id == "mine" for card in table.battlefield.cards)
     assert session.game.attack.battlefields[0].terrains_played == frozenset({(P1, "mine")})
+
+
+# --- Mirumoto Higashi ---
+
+
+def _higashi_game() -> GameState:
+    """Mirumoto Higashi in P1's play over a three-card Fate deck."""
+    game = two_seat_game()
+    put_in_play(game, personality("higashi", printed_id="mirumoto_higashi"))
+    game.table.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(game.table, fate_card(f"deck{index}", P1)) for index in range(3)
+    ]
+    return game
+
+
+def _enters_play(game: GameState, card: L5RCard) -> None:
+    put_in_play(game, register(game.table, card))
+    fire(game, EnteredPlay(card.id))
+
+
+def _hand_size(game: GameState) -> int:
+    return len(game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards)
+
+
+def test_mirumoto_higashi_draws_once_per_turn_after_you_put_a_ring_into_play():
+    game = _higashi_game()
+
+    _enters_play(game, _ring("first", "generic_ring"))
+    _enters_play(game, _ring("second", "generic_ring"))
+
+    assert _hand_size(game) == 1
+
+
+@pytest.mark.parametrize(
+    "entering",
+    [
+        _ring("theirs", "generic_ring", P2),
+        L5RCard.of(
+            ActionPrint,
+            id="way",
+            printed_id="way_of_the_dragon_experienced",
+            name="Way of the Dragon",
+            side=Side.FATE,
+            owner=P1,
+        ),
+    ],
+    ids=["opponents_ring", "way_of_the_dragon"],
+)
+def test_mirumoto_higashi_ignores_what_is_not_your_ring_for_a_trait(entering):
+    game = _higashi_game()
+
+    _enters_play(game, entering)
+
+    assert _hand_size(game) == 0

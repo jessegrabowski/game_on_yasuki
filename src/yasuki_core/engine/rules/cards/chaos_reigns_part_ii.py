@@ -10,9 +10,11 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
+    has_keyword,
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_holdings,
+    owned_personalities,
     personalities_in_play,
 )
 from yasuki_core.engine.rules.effects import (
@@ -26,10 +28,12 @@ from yasuki_core.engine.rules.effects import (
     MoveToDeck,
     RangedAttack,
     ShuffleDeck,
+    Straighten,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
+    Bowed,
     CounterGained,
     EnteredPlay,
     TurnStarted,
@@ -40,16 +44,17 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.state import claim_once_per_turn
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
+    action_did,
     at_cap,
     choice_resolver,
     on,
 )
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
 
 
 # --- Daidoji Kaede ---
@@ -271,6 +276,52 @@ def _tetsuo_hiyamako_experienced_entered_play(ctx: TriggerContext) -> list[Effec
         CreateToken(HIYAMAKOS_CLAW, ctx.card.owner, ctx.card.id, attach_to=ctx.card.id)
         for _ in range(CLAW_COUNT)
     ]
+
+
+# --- Togashi Bairei ---
+
+
+def _togashi_bairei_bowed_an_enemy_here(game: GameState, source: L5RCard) -> bool:
+    """ "If the action was yours and bowed an enemy Personality at this battlefield." """
+    here = location_of(game.table, source).battlefield
+    if here is None or game.action_seat is not source.owner:
+        return False
+    bowed = (game.table.cards_by_id.get(event.card_id) for event in action_did(game, Bowed))
+    return any(
+        card is not None
+        and card.owner is not source.owner
+        and isinstance(card.printed, PersonalityPrint)
+        and location_of(game.table, card).battlefield == here
+        for card in bowed
+    )
+
+
+def _togashi_bairei_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your Monk Personalities, bowed or not: the text asks for no more."""
+    if not _togashi_bairei_bowed_an_enemy_here(game, source):
+        return []
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if has_keyword(game, card, keywords.MONK)
+    ]
+
+
+def _togashi_bairei_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Straighten(target.id)]
+
+
+register_ability(
+    "togashi_bairei",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=no_cost,
+        targets=_togashi_bairei_targets,
+        targeting_message="your Monk",
+        effects=_togashi_bairei_effects,
+        tireless=True,
+    ),
+)
 
 
 # --- Wheat Farm ---

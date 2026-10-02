@@ -1,7 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
-from yasuki_core.engine.rules.stats.calculation import effective_stat, is_modified
+from yasuki_core.engine.rules.stats.calculation import effective_stat, is_modified, unbounded_stat
 from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
     effective_force,
@@ -196,6 +196,14 @@ def test_force_floors_at_zero_rather_than_going_negative():
     game = _game(samurai, [penalty])
 
     assert effective_force(game, samurai) == 0  # "zero for all purposes, not -1"
+
+
+def test_the_unbounded_stat_reads_past_the_floor():
+    samurai = _personality(force=2)
+    penalty = Modifier("src", samurai.id, Stat.FORCE, -3, Duration.UNTIL_END_OF_TURN)
+    game = _game(samurai, [penalty])
+
+    assert unbounded_stat(game, samurai, Stat.FORCE) == -1
 
 
 def test_chi_penalised_past_zero_reads_zero_which_is_what_kills_a_personality():

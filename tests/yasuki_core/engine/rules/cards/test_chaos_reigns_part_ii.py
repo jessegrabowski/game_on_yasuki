@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, DeclareAttack, Pass
@@ -10,7 +12,11 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import HIYAMAKOS_CLAW, 
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.production import effective_gold_production
-from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.effects import Bow, Destroy
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.battle.resolution import assignment_candidates
@@ -21,8 +27,10 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attachment,
+    combat_segment,
     end_phase,
     fate_card,
     holding,
@@ -416,3 +424,76 @@ def test_kaede_lacks_the_ranged_attack_without_her_open():
     session = _kaede_defending(marked=None)
 
     assert ActivateAbility("kaede", ability_key="ranged") not in session.legal_actions(PlayerId.P2)
+
+
+# --- Togashi Bairei ---
+
+BOW_PROBE = "probe_battle_bow_a_personality"
+
+
+def _bow_a_personality() -> Ability:
+    return Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle: bow a target Personality",
+        cost=no_cost,
+        targets=lambda game, source: [card.id for card in personalities_in_play(game)],
+        effects=lambda game, source, target: [Bow(target.id)],
+        targets_any_location=True,
+    )
+
+
+def _bairei_battle() -> EngineSession:
+    """Bairei, P1's bowed Monk and P2's guard at the battlefield, P2's sentry at home, and a
+    Holding for each seat whose Battle action bows a target Personality anywhere."""
+    session = combat_segment(
+        [
+            personality("bairei", printed_id="togashi_bairei", keywords=("Monk",)),
+            personality("monk", keywords=("Monk",)),
+            holding("bower", printed_id=BOW_PROBE),
+            holding("their_bower", printed_id=BOW_PROBE, owner=PlayerId.P2),
+            personality("guard", owner=PlayerId.P2),
+            personality("sentry", owner=PlayerId.P2),
+        ],
+        {"bairei": 0, "monk": 0},
+        {"guard": 0},
+    )
+    session.game.table.cards_by_id["monk"].bow()
+    return session
+
+
+@pytest.mark.parametrize(("bowed", "offered"), [("guard", True), ("sentry", False)])
+def test_togashi_bairei_responds_only_to_your_action_bowing_an_enemy_at_its_battlefield(
+    bowed, offered
+):
+    with probe_ability(BOW_PROBE, _bow_a_personality()):
+        session = _bairei_battle()
+
+        session.act(P1, ActivateAbility("bower"))
+        session.submit(P1, DecisionResponse((bowed,)))
+
+        assert (ActivateAbility("bairei") in session.legal_actions(P1)) is offered
+
+
+def test_togashi_bairei_ignores_the_opponents_action_bowing_an_enemy():
+    with probe_ability(BOW_PROBE, _bow_a_personality()):
+        session = _bairei_battle()
+        session.act(P1, ActivateAbility("bower"))
+        session.submit(P1, DecisionResponse(("sentry",)))
+
+        session.act(PlayerId.P2, ActivateAbility("their_bower"))
+        session.submit(PlayerId.P2, DecisionResponse(("guard",)))
+
+        assert session.game.table.cards_by_id["guard"].bowed
+        assert ActivateAbility("bairei") not in session.legal_actions(P1)
+
+
+def test_togashi_bairei_straightens_your_target_monk():
+    with probe_ability(BOW_PROBE, _bow_a_personality()):
+        session = _bairei_battle()
+        session.act(P1, ActivateAbility("bower"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        session.act(P1, ActivateAbility("bairei"))
+        session.submit(P1, DecisionResponse(("monk",)))
+
+        assert session.game.table.cards_by_id["monk"].bowed is False

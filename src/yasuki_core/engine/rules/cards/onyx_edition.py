@@ -69,14 +69,14 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     EnteredPlay,
 )
-from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.rules.board.clans import card_alignments
-from yasuki_core.engine.rules.board.counts_as import Asking
+from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
     has_keyword,
@@ -94,7 +94,12 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration, SeatAbilityG
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
+    PersonalityPrint,
+    RingPrint,
+    StrongholdPrint,
+)
 from yasuki_core.game_pieces.counters import SINCERITY
 
 
@@ -190,6 +195,25 @@ register_invest(
     "kitsu_hayako",
     InvestAbility(amounts=(ONE_ANCESTOR, TWO_ANCESTORS), effect=_kitsu_hayako_invest),
 )
+
+
+# --- Mirumoto Higashi ---
+
+MIRUMOTO_HIGASHI_TAG = "mirumoto_higashi_draw"
+
+
+@on(EnteredPlay, "mirumoto_higashi")
+def _mirumoto_higashi_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """Once per turn, after you put a Ring into play, draw a card. The trait asks, so a card
+    counting as a Ring only for actions does not set it off."""
+    entered = ctx.game.table.cards_by_id[ctx.event.card_id]
+    if entered.owner is not ctx.card.owner:
+        return []
+    if not counts_as(ctx.game, entered, RingPrint, Asking.trait(ctx.card)):
+        return []
+    if not claim_once_per_turn(ctx.game, ctx.card, MIRUMOTO_HIGASHI_TAG):
+        return []
+    return [DrawCard(ctx.card.owner)]
 
 
 # --- Ring of Air ---
