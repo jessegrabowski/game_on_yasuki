@@ -2,13 +2,25 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, DeclareAttack, Pass
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
-from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import HIYAMAKOS_CLAW, NAGA_FOLLOWER
+from yasuki_core.engine.rules.board.queries import has_keyword
+from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import (
+    HIYAMAKOS_CLAW,
+    NAGA_FOLLOWER,
+    WRATH_FIRE_MODE,
+    WRATH_MELEE_MODE,
+)
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.production import effective_gold_production
@@ -25,7 +37,7 @@ from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
@@ -497,3 +509,74 @@ def test_togashi_bairei_straightens_your_target_monk():
         session.submit(P1, DecisionResponse(("monk",)))
 
         assert session.game.table.cards_by_id["monk"].bowed is False
+
+
+# --- Wrath of the Shattered Star ---
+
+
+def _wrath_battle() -> EngineSession:
+    """P1's Monk and samurai opposed by P2's 2F guard at the battlefield, and Wrath of the
+    Shattered Star in P1's hand."""
+    session = combat_segment(
+        [
+            personality("monk", keywords=(keywords.MONK,)),
+            personality("samurai"),
+            personality("guard", owner=PlayerId.P2, force=2),
+        ],
+        {"monk": 0, "samurai": 0},
+        {"guard": 0},
+    )
+    table = session.game.table
+    wrath = L5RCard.of(
+        FatePrint,
+        id="wrath",
+        printed_id="wrath_of_the_shattered_star",
+        name="Wrath of the Shattered Star",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+        keywords=(keywords.FIRE,),
+    )
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(table, wrath))
+    return session
+
+
+def _wrath_with(session: EngineSession, mode: str) -> None:
+    session.act(P1, PlayStrategy("wrath"))
+    session.submit(P1, DecisionResponse(("monk",)))
+    assert session.game.pending.candidates == (WRATH_MELEE_MODE, WRATH_FIRE_MODE)
+    session.submit(P1, DecisionResponse((mode,)))
+
+
+def test_wrath_of_the_shattered_star_bows_the_monk_to_make_a_melee_3():
+    session = _wrath_battle()
+
+    _wrath_with(session, WRATH_MELEE_MODE)
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["monk"].bowed
+    discard = session.game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.DYNASTY_DISCARD)]
+    assert "guard" in {card.id for card in discard.cards}
+
+
+def test_wrath_of_the_shattered_star_gives_two_opposed_personalities_fire_and_force():
+    session = _wrath_battle()
+
+    _wrath_with(session, WRATH_FIRE_MODE)
+    session.submit(P1, DecisionResponse(("monk", "samurai")))
+
+    for card_id in ("monk", "samurai"):
+        card = session.game.table.cards_by_id[card_id]
+        assert has_keyword(session.game, card, keywords.FIRE)
+        assert effective_force(session.game, card) == 2 + 2
+
+
+def test_wrath_of_the_shattered_star_from_a_bowed_monk_does_nothing():
+    session = _wrath_battle()
+    session.game.table.cards_by_id["monk"].bow()
+
+    session.act(P1, PlayStrategy("wrath"))
+    session.submit(P1, DecisionResponse(("monk",)))
+
+    assert session.game.pending is None
+    assert effective_force(session.game, session.game.table.cards_by_id["samurai"]) == 2
