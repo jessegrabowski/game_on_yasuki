@@ -43,6 +43,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     the_harbinger,
     the_heavens_will,
     the_hidden_city,
+    the_hidden_emperor_episode_1,
     the_hidden_emperor_episode_3,
     the_hidden_emperor_episode_6,
     the_hidden_emperor_the_dark_journey_home,
