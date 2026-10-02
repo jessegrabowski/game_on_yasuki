@@ -131,16 +131,18 @@ question's answer produces, so one naming a source reaches all of them. A trait 
 ability is no action from its card and carries none. One naming no source reaches every matching
 effect, a trait's, a rulebook procedure's and a delayed one's as much as an action's. Neither
 reaches a cost, which is no effect (CR, Effects), or an action's targeting, which is none either and
-answers `is_negatable` with False, and neither reaches a state-based action, which would only be
-demanded again. An effect the rules say cannot be negated, as seppuku's rehonoring and destruction,
-answers `is_negatable` with False too, and an Interrupt that would negate it is spent and changes
-nothing. A question an action asks is no effect either, so it is still asked and what its answer
-produces is checked as that commits. An effect that asks before it happens, a chosen discard, is
-checked before it asks, so a negated one asks nothing. One naming a card is forgotten when the card
-leaves the table (CR, Card Memory Rule). A `once` negation is spent by the first effect it negates,
-as "his next straightening" is. One naming only a source is spent by the first action from a
-matching card instead, and negates every effect of that action (CR, Negate an Action): the action
-takes it out of `ongoing` as it hands its effects over and carries it in its provenance.
+answers `is_negatable` with False, and neither reaches a state-based action as it commits, which
+would only be demanded again. Chi death asks before demanding instead, and spares a Personality a
+negation of his destruction that is not `once` covers, since only a continuous effect holds against
+it (CR, Chi Death Rule). An effect the rules say cannot be negated, as seppuku's rehonoring and
+destruction, answers `is_negatable` with False too, and an Interrupt that would negate it is spent
+and changes nothing. A question an action asks is no effect either, so it is still asked and what
+its answer produces is checked as that commits. An effect that asks before it happens, a chosen
+discard, is checked before it asks, so a negated one asks nothing. One naming a card is forgotten
+when the card leaves the table (CR, Card Memory Rule). A `once` negation is spent by the first
+effect it negates, as "his next straightening" is. One naming only a source is spent by the first
+action from a matching card instead, and negates every effect of that action (CR, Negate an Action):
+the action takes it out of `ongoing` as it hands its effects over and carries it in its provenance.
 {card}`Dark Ring of Water` names Strategies as a source and {card}`Way of the Crab` names its
 Fortification's bowing.
 
