@@ -90,12 +90,27 @@ def would_negate(
 
 def continuously_negated(game: GameState, effect: Effect) -> bool:
     """Whether a negation in force that is not ``once`` would stop ``effect``, which comes from no
-    action. Spends nothing. What a state-based action asks before demanding an effect, since only
-    a continuous effect holds against one and a spent negation would only see it demanded again
-    (CR, Chi Death Rule)."""
+    action. Spends nothing. What a state-based rule asks before demanding an effect, since only a
+    continuous effect holds against one (CR, Chi Death Rule)."""
     if not effect.is_negatable(game):
         return False
     return any(not negation.once for negation in _matching(game, effect, Provenance()))
+
+
+def spend_once(game: GameState, effect: Effect) -> Effect:
+    """``effect``, which a state-based rule demands, as :class:`~.Negated` where a ``once`` negation
+    matches it, spending that negation. The rule demands the effect again on its next round, so it
+    happens then. A lasting negation is never applied here, since the rule would demand the effect
+    forever, and a rule it can hold off asks :func:`continuously_negated` before demanding."""
+    if not effect.is_negatable(game) or not effect.would_happen(game):
+        return effect
+    negation = next(
+        (negation for negation in _matching(game, effect, Provenance()) if negation.once), None
+    )
+    if negation is None:
+        return effect
+    game.ongoing.remove(negation)
+    return Negated(effect)
 
 
 def strips_interrupt(game: GameState, replacement: Effect, provenance: Provenance) -> bool:

@@ -157,15 +157,29 @@ def test_a_lasting_negation_of_his_destruction_keeps_a_personality_alive_at_zero
     assert "spared" not in _battlefield(game)
 
 
-def test_a_once_negation_of_his_destruction_does_not_hold_against_chi_death():
+def test_a_lasting_negation_keeps_him_alive_without_spending_a_once_negation():
+    samurai = _personality("spared", chi=0)
+    game = _in_play(samurai)
+    lasting = Negation("ward", END_OF_TURN, effect_kind=Destroy, subject_id="spared")
+    once = Negation("charm", END_OF_TURN, effect_kind=Destroy, once=True)
+    game.ongoing += [lasting, once]
+
+    triggers.enforce_state_based_actions(game)
+
+    assert "spared" in _battlefield(game)
+    assert once in game.ongoing
+
+
+def test_a_once_negation_of_destruction_is_spent_and_chi_death_destroys_him_anyway():
     samurai = _personality("doomed", chi=0)
     game = _in_play(samurai)
-    negation = Negation("ward", END_OF_TURN, effect_kind=Destroy, subject_id="doomed", once=True)
+    negation = Negation("ward", END_OF_TURN, effect_kind=Destroy, once=True)
     game.ongoing.append(negation)
 
     triggers.enforce_state_based_actions(game)
 
     assert "doomed" not in _battlefield(game)
+    assert game.ongoing == []
 
 
 def test_a_destroyed_personality_takes_his_unit_with_him():
