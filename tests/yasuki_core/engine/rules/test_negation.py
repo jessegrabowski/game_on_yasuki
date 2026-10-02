@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.interrupts import forecast
 from yasuki_core.engine.rules.negation import (
     action_provenance,
     negate_committed,
+    strips_interrupt,
 )
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE_PROXY
 from yasuki_core.engine.rules.triggers import (
@@ -188,6 +189,19 @@ def test_an_effect_already_negated_spends_no_once_negation():
 
     assert committed == Negated(Bow("farm"))
     assert game.ongoing == [negation]
+
+
+def test_a_once_negation_stripping_an_interrupt_is_spent():
+    game = two_seat_game()
+    plan = _card(game, ActionPrint)
+    put_in_play(game, holding("farm"))
+    game.ongoing.append(
+        Negation("ring", END_OF_TURN, source_kind=ActionPrint, effect_kind=Bow, once=True)
+    )
+    provenance = action_provenance(game, plan.id)
+
+    assert strips_interrupt(game, Bow("farm"), provenance)
+    assert not strips_interrupt(game, Bow("farm"), provenance)
 
 
 def test_a_once_negation_of_bowing_waits_for_a_bow_that_would_happen():

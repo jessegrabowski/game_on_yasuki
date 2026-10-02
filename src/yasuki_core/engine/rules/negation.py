@@ -90,7 +90,7 @@ def would_negate(
 
 def strips_interrupt(game: GameState, replacement: Effect, provenance: Provenance) -> bool:
     """Whether a negation naming a source negates ``replacement``, the modification an Interrupt
-    with ``provenance`` makes. A stripped Interrupt binds
+    with ``provenance`` makes, spending a ``once`` negation that does. A stripped Interrupt binds
     nothing, so the effect it answers goes ahead. Whether ``replacement`` is itself negatable does
     not matter: what is negated is the Interrupt's modifying it, even into a negation."""
     negation = next(
@@ -101,7 +101,10 @@ def strips_interrupt(game: GameState, replacement: Effect, provenance: Provenanc
         ),
         None,
     )
-    return negation is not None
+    if negation is None:
+        return False
+    _spend(game, negation, replacement, provenance)
+    return True
 
 
 def _matching(game: GameState, effect: Effect, provenance: Provenance) -> Iterator[Negation]:
