@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules import state_based_actions
-from yasuki_core.engine.rules.negation import negate_committed
+from yasuki_core.engine.rules.negation import negate_committed, spend_once
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, STEP_ROUNDS, Moment
 from yasuki_core.engine.rules.vocabulary.modifiers import (
@@ -640,8 +640,10 @@ def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None
     records of whatever the last one drove off the table, so no rule reads a stat off a card
     that has gone.
 
-    A state-based action is applied without the negation check. One a negation stopped would be
-    demanded again on the next round, so the enforcement would never settle.
+    A state-based action is not checked against a lasting negation: one it stopped would be
+    demanded again on every round, so the enforcement would never settle. A rule that a continuous
+    effect can hold off asks before demanding instead, as Chi death does. A ``once`` negation is
+    spent on the action and negates it for that round, and the rule demands it again on the next.
     """
     for _ in range(_MAX_CASCADE):
         _forget_ongoing_on_cards_off_the_table(game)
@@ -650,6 +652,7 @@ def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None
             queue.extend(_newly_fulfilled(game))
             return
         for effect in demanded:
+            effect = spend_once(game, effect)
             _trace.append(f"    {effect.describe()} (state-based action)")
             queue.extend(apply_effect(game, effect))
     raise RuntimeError(

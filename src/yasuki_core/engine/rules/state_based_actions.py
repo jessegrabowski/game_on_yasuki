@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.board.queries import rings_in_play
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
+from yasuki_core.engine.rules.negation import continuously_negated
 from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
@@ -58,17 +59,20 @@ def chi_death(game: GameState) -> list[Effect]:
     """Destroy every Personality in play whose Chi is zero (CR, Chi Death Rule).
 
     Zero is the whole condition: the stat floors there, so a Personality penalised past zero reads
-    zero and dies. A card whose own text exempts it is skipped, which the CR permits because that
-    text is a continuous effect and only those work against Chi death.
+    zero and dies. A card whose own text exempts it is skipped, and so is one a lasting negation of
+    his destruction covers, which the CR permits because both are continuous effects and only those
+    work against Chi death.
     """
     granters = stat_granters(game)
-    return [
-        Destroy(card.id, Rulebook.CHI_DEATH)
+    dying = (
+        card
         for card in game.table.battlefield.cards
         if isinstance(card.printed, PersonalityPrint)
         and effective_chi(game, card, granters=granters) == 0
         and not _exempt_from_chi_death(card)
-    ]
+    )
+    destroys = (Destroy(card.id, Rulebook.CHI_DEATH) for card in dying)
+    return [destroy for destroy in destroys if not continuously_negated(game, destroy)]
 
 
 def _exempt_from_chi_death(card: L5RCard) -> bool:
