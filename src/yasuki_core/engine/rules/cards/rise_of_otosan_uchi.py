@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     ask_whose_honor_moves,
     declarable_gold,
+    declare_amount,
     register_entry,
     register_event_entry,
     register_ring,
@@ -56,7 +57,6 @@ from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
-    AskAmount,
     AskOption,
     AttackEffect,
     Banish,
@@ -237,47 +237,40 @@ def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
     before the Personalities are chosen (CR, Action Sequence)."""
     return [
         Bow(source.id),
-        AskAmount(
-            source.owner,
+        declare_amount(
+            source,
             _bound_in_blood_amounts(game, source),
             "How much Gold do you spend on Bound in Blood?",
-            "bound_in_blood",
-            source.id,
         ),
     ]
 
 
-@choice_resolver("bound_in_blood")
-def _resolve_bound_in_blood(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """Take the bodies the declared amount bought."""
-    spent = int(chosen[0])
-    bodies = min(MOST_SACRIFICES, spent // GOLD_PER_SACRIFICE)
-    offered = tuple(card.id for card in owned_personalities(game, seat))
-    return [
-        Choose(seat, offered, bodies, bodies, "bound_in_blood_sacrifice", source_id),
-    ]
+def _bound_in_blood_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The controller's Personalities, any of whom the bodies bought can be."""
+    return [card.id for card in owned_personalities(game, source.owner)]
 
 
-@choice_resolver("bound_in_blood_sacrifice", prompt="Choose the Personalities to target")
-def _resolve_bound_in_blood_sacrifice(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+def _bound_in_blood_target_count(game: GameState, source: L5RCard) -> int:
+    """The bodies the amount bought: half the Gold spent, rounded down, to a most of four."""
+    return min(MOST_SACRIFICES, (game.amount_paid or 0) // GOLD_PER_SACRIFICE)
+
+
+def _bound_in_blood_effects(
+    game: GameState, source: L5RCard, bound: tuple[L5RCard, ...]
 ) -> list[Effect]:
     """The Horror is measured against the bound before they are banished, since it is made of what
     they were."""
-    bound = [game.table.cards_by_id[card_id] for card_id in chosen]
     horror = CreateToken(
         HORROR,
-        seat,
-        source_id,
+        source.owner,
+        source.id,
         stats=(
             (Stat.GOLD_COST, sum(effective_gold_cost(game, card) for card in bound)),
             (Stat.FORCE, sum(effective_chi(game, card) for card in bound)),
             (Stat.CHI, len(bound)),
         ),
     )
-    return [horror, *(Banish(card.id) for card in bound), Destroy(source_id, seat)]
+    return [horror, *(Banish(card.id) for card in bound), Destroy(source.id, source.owner)]
 
 
 register_ability(
@@ -285,9 +278,11 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         cost=_bound_in_blood_cost,
-        targets=itself,
-        effects=lambda game, source, target: [],
-        hits_every_target=True,
+        targets=_bound_in_blood_targets,
+        targeting_message="your Personalities",
+        targets_after_cost=True,
+        target_count=_bound_in_blood_target_count,
+        effects_for_targets=_bound_in_blood_effects,
     ),
 )
 

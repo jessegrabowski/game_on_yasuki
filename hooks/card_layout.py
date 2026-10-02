@@ -257,6 +257,7 @@ ROLES = frozenset(
         # the parts of an activated ability
         "cost",
         "targets",
+        "target_count",
         "effects",
         "interrupt",
         "applies",

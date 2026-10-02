@@ -263,7 +263,7 @@ class GoldRushPolicy:
         return flush if flush is not None else chosen
 
     def decide(self, request: DecisionRequest, view: GameView) -> DecisionResponse:
-        if isinstance(request, ChooseAbilityTarget):
+        if isinstance(request, ChooseAbilityTarget) and request.count == 1:
             return DecisionResponse((_best_ability_target(view, request),))
         if isinstance(request, ChooseCards):
             if request.resolver == CYCLE:

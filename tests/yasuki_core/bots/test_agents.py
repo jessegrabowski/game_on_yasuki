@@ -3,6 +3,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.bots.agents import AGENTS, AutoAgent, make_agent
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseAbilityTarget,
     ArrangeCards,
     ChooseDiscard,
     ChooseDistribution,
@@ -16,6 +17,12 @@ def test_auto_agent_answers_with_the_shortest_accepting_prefix():
     response = AutoAgent().decide(request, view=None)
     assert request.accepts(response)
     assert response.choices == ("a", "b")
+
+
+def test_auto_agent_takes_as_many_targets_as_the_choice_asks():
+    request = ChooseAbilityTarget(PlayerId.P1, ("a", "b", "c"), "spell", count=2)
+
+    assert AutoAgent().decide(request, view=None).choices == ("a", "b")
 
 
 def test_auto_agent_handles_a_zero_count():

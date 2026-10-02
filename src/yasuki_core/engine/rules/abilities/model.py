@@ -185,9 +185,9 @@ class Ability:
         What the ability targets, worded as the card prints it: "your Courtier at any location".
         The target prompt reads "Target your Courtier at any location for Inexplicable Challenge".
         Default None, which prompts for a card by the card's name alone.
-    effects : callable
+    effects : callable, optional
         Maps ``(game, source_card, target_card)`` to the effects the ability emits against a
-        target.
+        target. Default None, for an ability that sets ``effects_for_targets`` instead.
     hits_every_target : bool
         Whether the ability hits every card ``targets`` returns rather than one chosen among them,
         as an untargeted "your other Farms" grant instead of a single pick. Default False.
@@ -247,12 +247,20 @@ class Ability:
         reads from ``game.amount_paid`` (CR, Action Sequence steps B and C). The ability is offered
         whenever its cost is payable, and an amount that reaches no target targets nothing.
         Default False.
+    target_count : callable, optional
+        Maps ``(game, source_card)`` to how many targets the seat chooses at once, as "target a
+        number of your Personalities" reads, for an ability that sets ``effects_for_targets``.
+        Default None, one target.
+    effects_for_targets : callable, optional
+        Maps ``(game, source_card, target_cards)`` to the effects the ability emits against all of
+        its targets together, for one whose effects depend on the whole set. Set with
+        ``target_count`` and in place of ``effects``. Default None.
     """
 
     timings: tuple[ActionTiming, ...]
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
-    effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]]
+    effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]] | None = None
     label: str | None = None
     printed_index: int = 0
     hits_every_target: bool = False
@@ -270,11 +278,32 @@ class Ability:
     from_keyword: str | None = None
     from_rulebook: bool = False
     targets_after_cost: bool = False
+    target_count: Callable[[GameState, L5RCard], int] | None = None
+    effects_for_targets: (
+        Callable[[GameState, L5RCard, tuple[L5RCard, ...]], list[Effect]] | None
+    ) = None
 
     def __post_init__(self) -> None:
-        """Raise ValueError for a keyword's ability not marked ``from_rulebook``."""
+        """Raise ValueError for a keyword's ability not marked ``from_rulebook``, one that gives
+        neither or both of ``effects`` and ``effects_for_targets``, or one that counts its targets
+        without building its effects over the set."""
         if self.from_keyword is not None and not self.from_rulebook:
             raise ValueError(f"the {self.from_keyword} ability is a rulebook ability")
+        if (self.effects is None) == (self.effects_for_targets is None):
+            raise ValueError("an ability builds its effects per target or over the set, not both")
+        if (self.target_count is None) != (self.effects_for_targets is None):
+            raise ValueError("an ability that counts its targets builds its effects over the set")
+
+    def effects_against(
+        self, game: GameState, source: L5RCard, targets: tuple[L5RCard, ...]
+    ) -> list[Effect]:
+        """The effects the ability emits against ``targets``: built over the set where it sets
+        ``effects_for_targets``, otherwise against each target in turn."""
+        if self.effects_for_targets is not None:
+            return self.effects_for_targets(game, source, targets)
+        if self.effects is None:
+            raise ValueError("an ability builds its effects per target or over the set")
+        return [effect for target in targets for effect in self.effects(game, source, target)]
 
     @property
     def acts_from_its_card(self) -> bool:

@@ -368,19 +368,30 @@ class ChooseAbilityTarget(DecisionRequest):
         The card's name, for the prompt. Default empty, which leaves the card unnamed.
     targeting_message : str, optional
         What the ability targets, as its card words it. Default None, which asks for a card.
+    count : int, optional
+        How many distinct targets the seat chooses at once. Default 1.
     """
 
     source_card_id: str
     ability_key: str | None = None
     source_name: str = ""
     targeting_message: str | None = None
+    count: int = 1
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        asked = f"Target {self.targeting_message or 'a card'}"
+        if self.count == 1:
+            asked = f"Target {self.targeting_message or 'a card'}"
+        else:
+            asked = f"Target {self.count} of {self.targeting_message or 'the cards offered'}"
         return f"{asked} for {self.source_name}" if self.source_name else asked
 
     def accepts(self, response: DecisionResponse) -> bool:
-        return _chooses_exactly_one(self, response)
+        choices = response.choices
+        return (
+            len(choices) == self.count
+            and len(set(choices)) == self.count
+            and all(choice in self.candidates for choice in choices)
+        )
 
     @property
     def cancellable(self) -> bool:
