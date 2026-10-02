@@ -211,6 +211,10 @@ class Negated(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         return []
 
+    def is_negatable(self, game: GameState) -> bool:
+        """False: it is already nothing, so a negation has nothing left to stop."""
+        return False
+
     def describe(self) -> str:
         return f"negated: {self.effect.describe()}"
 

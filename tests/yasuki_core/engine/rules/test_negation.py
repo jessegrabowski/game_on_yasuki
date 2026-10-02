@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.effects import Ask, Bow, Negated, Straighten, Then
+from yasuki_core.engine.rules.effects import Ask, Bow, Effect, Negated, Straighten, Then
 from yasuki_core.engine.rules.interrupts import forecast
 from yasuki_core.engine.rules.negation import negate_committed
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE_PROXY
@@ -144,6 +144,17 @@ def test_a_once_negation_naming_a_source_is_spent_by_that_sources_first_action()
     game.interrupts_offered = False
     resolve_action_effects(game, [Bow(farm.id)], acting=plan.id)
     assert farm.bowed
+
+
+def test_an_effect_already_negated_spends_no_once_negation():
+    game = two_seat_game()
+    negation = Negation("ring", END_OF_TURN, effect_kind=Effect, once=True)
+    game.ongoing.append(negation)
+
+    committed = negate_committed(game, Negated(Bow("farm")), FROM_NO_ACTION)
+
+    assert committed == Negated(Bow("farm"))
+    assert game.ongoing == [negation]
 
 
 def test_a_once_negation_of_bowing_waits_for_a_bow_that_would_happen():
