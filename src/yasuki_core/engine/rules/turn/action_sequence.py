@@ -110,6 +110,7 @@ def perform(game: GameState, action: Action) -> None:
         game.action_taken = describe_action(game, action)
         game.action_seat = game.round.priority
         game.action_targets = ()
+        game.amount_paid = None
         game.action_is_favor = False
         game.action = action
         game.interrupts_taken.clear()
@@ -279,10 +280,13 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
 def _apply_amount_choice(
     game: GameState, request: ChooseAmount, response: DecisionResponse
 ) -> None:
-    """Charge the declared amount less the action's discount, then hand the declared amount to the
-    card's resolver, which reads it. A charge discounted to nothing is not asked for."""
+    """Charge the declared amount less the action's discount, record it as the action's
+    ``amount_paid``, then hand it to the card's resolver. A charge discounted to nothing is not
+    asked for."""
     resolver = triggers.CHOICE_RESOLVERS[request.resolver]
-    charged = max(0, int(response.choices[0]) - request.discount)
+    declared = int(response.choices[0])
+    game.amount_paid = declared
+    charged = max(0, declared - request.discount)
     source = game.table.cards_by_id[request.source_id]
     payment = [PayGold(request.seat, charged, source.name)] if charged else []
     produced = resolver(game, request.source_id, response.choices, request.seat)
