@@ -9,9 +9,10 @@ called.
 ## Why the vocabulary stays small
 
 Every noun in [the card vocabulary](card_vocabulary.md) has a fixed cost that grows with the engine.
-An effect carries its own `perform`, `describe`, `is_payable` and `is_interruptible`, and each has
-to be right for every place the effect can appear. A decision has to be answerable by every seat
-type, which includes the bots, the desktop client and the replay tape. Every trigger in the engine
+An effect carries its own `perform`, `describe`, `is_payable`, `is_interruptible`,
+`is_negatable` and `subject_id`, and each has to be right for every place the effect can appear.
+A decision has to be answerable by every seat type, which includes the bots, the desktop client
+and the replay tape. Every trigger in the engine
 can subscribe to an event, and a registry is a hook that
 [registration and the audit](systems/registration-and-the-audit.md) has to check and
 [bots and policies](systems/bots-and-policies.md) has to score. A term with one user pays all of
