@@ -294,7 +294,7 @@ ROLES = frozenset(
         "straightened",
         "turn_started",
         "phase_started",
-        "counter_gained",
+        "counter_changed",
         "card_discarded",
         "dishonored",
         "rehonored",

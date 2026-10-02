@@ -73,8 +73,20 @@ class FavorDiscarded:
 
 
 @dataclass(frozen=True, slots=True)
-class CounterGained:
-    """A card gained ``amount`` of a counter: the actual number added, after any floor."""
+class CounterChanged:
+    """A card's count of a counter moved. Never raised for a change of zero.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose counter moved.
+    counter : Counter
+        Which counter.
+    amount : int
+        The signed change actually made, after the floor at zero: positive for tokens gained,
+        negative for tokens removed or destroyed, a card's Sincerity tokens cleared once it is
+        Recruited among them. A trigger that reads "after X gains tokens" guards on the sign.
+    """
 
     card_id: str
     counter: Counter
@@ -534,7 +546,7 @@ GameEvent = (
     | ConditionFulfilled
     | TurnStarted
     | CardDiscarded
-    | CounterGained
+    | CounterChanged
     | Destroyed
     | Dishonored
     | DuelDeclared

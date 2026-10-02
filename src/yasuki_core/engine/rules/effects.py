@@ -30,7 +30,7 @@ from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Bowed,
     CardDiscarded,
-    CounterGained,
+    CounterChanged,
     Destroyed,
     Dishonored,
     EnteredPlay,
@@ -285,10 +285,10 @@ class AdjustCounter(Effect):
             return []
         before = card.counters.get(self.counter.key, 0)
         card.adjust_counter(self.counter.key, self.delta)
-        gained = card.counters.get(self.counter.key, 0) - before
-        if gained > 0:
-            return [CounterGained(self.card_id, self.counter, gained)]
-        return []
+        changed = card.counters.get(self.counter.key, 0) - before
+        if changed == 0:
+            return []
+        return [CounterChanged(self.card_id, self.counter, changed)]
 
 
 @dataclass(frozen=True, slots=True)

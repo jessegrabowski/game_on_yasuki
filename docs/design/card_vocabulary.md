@@ -141,7 +141,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    Assigned
    Bowed
    CardDiscarded
-   CounterGained
+   CounterChanged
    Destroyed
    Dishonored
    EnteredPlay

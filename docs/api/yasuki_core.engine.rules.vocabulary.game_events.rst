@@ -15,7 +15,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     CardDiscarded
     CardFocused
     ConditionFulfilled
-    CounterGained
+    CounterChanged
     Destroyed
     Dishonored
     DuelDeclared

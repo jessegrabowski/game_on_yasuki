@@ -323,7 +323,7 @@ def _hand_size(game, seat):
 
 
 def test_gaining_wealth_cascades_into_aokis_draw():
-    # The cascade: turn start -> Rice Farm gains wealth -> CounterGained -> Aoki draws a card.
+    # The cascade: turn start -> Rice Farm gains wealth -> CounterChanged -> Aoki draws a card.
     game = two_seat_game()
     _rice_farm(game)
     _aoki(game)
@@ -344,7 +344,7 @@ def test_aoki_draws_at_most_once_per_turn():
 
     fire(game, TurnStarted(PlayerId.P1))
 
-    assert _hand_size(game, PlayerId.P1) == 1  # two CounterGained events, one draw
+    assert _hand_size(game, PlayerId.P1) == 1  # two CounterChanged events, one draw
 
 
 def test_aoki_draws_again_on_the_next_turn():
@@ -368,6 +368,18 @@ def test_aoki_ignores_wealth_gained_on_an_opponents_holding():
     _seed_fate_deck(game, PlayerId.P1, 3)
 
     fire(game, TurnStarted(PlayerId.P2))  # P2's farm gains wealth: not Aoki's Holding
+
+    assert _hand_size(game, PlayerId.P1) == 0
+
+
+def test_aoki_ignores_wealth_removed_from_your_holding():
+    game = two_seat_game()
+    farm = _rice_farm(game)
+    farm.adjust_counter(WEALTH.key, 2)
+    _aoki(game)
+    _seed_fate_deck(game, PlayerId.P1, 3)
+
+    resolve_effects(game, [AdjustCounter(farm.id, WEALTH, -1)])
 
     assert _hand_size(game, PlayerId.P1) == 0
 
