@@ -2,18 +2,28 @@ import pytest
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.board.counts_as import (
+    COUNTS_AS,
+    AskedBy,
+    Asking,
+    CountsAs,
+    register_counts_as,
+    while_in_play,
+)
 from yasuki_core.engine.rules.board.queries import (
     controls_terrain_at,
     has_keyword,
     owned_holdings,
     phase_history,
     province_key_of,
+    rings_in_play,
     terrains_at,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, PhaseStarted
 from yasuki_core.engine.table import Location
+from yasuki_core.game_pieces.prints import RingPrint
 
 from tests.yasuki_core.engine.builders import (
     doro_no_oni,
@@ -118,3 +128,19 @@ def test_the_phase_history_holds_what_happened_since_the_latest_phase_began():
     )
 
     assert phase_history(game) == (later,)
+
+
+def test_rings_in_play_takes_a_card_counting_as_a_ring_for_the_asker():
+    game = two_seat_game()
+    heart = put_in_play(game, holding("P1-heart", owner=PlayerId.P1, printed_id="ring_probe"))
+    put_in_play(game, holding("P1-plain", owner=PlayerId.P1))
+    register_counts_as(
+        "ring_probe", CountsAs(RingPrint, frozenset({AskedBy.ACTION}), while_in_play)
+    )
+
+    try:
+        assert rings_in_play(game, PlayerId.P1, Asking.action(heart)) == (heart,)
+        assert rings_in_play(game, PlayerId.P1, Asking.trait(heart)) == ()
+        assert rings_in_play(game, PlayerId.P2, Asking.action(heart)) == ()
+    finally:
+        COUNTS_AS.pop("ring_probe")

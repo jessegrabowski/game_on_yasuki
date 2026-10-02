@@ -3,6 +3,7 @@ from collections.abc import Callable
 from yasuki_core import ruleset
 from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.registrar import FlagRegistry
+from yasuki_core.engine.rules.board.counts_as import RULEBOOK
 from yasuki_core.engine.rules.board.queries import rings_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
@@ -150,7 +151,7 @@ def enlightenment(game: GameState) -> list[Effect]:
             continue
         elements = {
             card.printed.element
-            for card in rings_in_play(game, seat)
+            for card in rings_in_play(game, seat, RULEBOOK)
             if isinstance(card.printed, RingPrint) and card.printed_id not in NO_ENLIGHTENMENT
         }
         if len(elements) == len(Element):

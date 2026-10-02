@@ -76,6 +76,7 @@ from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.rules.board.clans import card_alignments
+from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
     has_keyword,
@@ -329,7 +330,7 @@ VOID_RINGS_ALLOWED = 2
 
 def _ring_of_the_void_condition(game: GameState, source: L5RCard) -> bool:
     """ "Play if you have two or fewer Rings in play." """
-    return len(rings_in_play(game, source.owner)) <= VOID_RINGS_ALLOWED
+    return len(rings_in_play(game, source.owner, Asking.action(source))) <= VOID_RINGS_ALLOWED
 
 
 def _ring_of_the_void_entry_effects(game: GameState, source: L5RCard) -> list[Effect]:

@@ -1,6 +1,7 @@
 from collections.abc import Iterator
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, GameEvent, PhaseStarted
@@ -159,12 +160,12 @@ def phase_history(game: GameState) -> tuple[GameEvent, ...]:
     return events[starts[-1] + 1 :] if starts else events
 
 
-def rings_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
-    """The Rings ``seat`` has in play."""
+def rings_in_play(game: GameState, seat: PlayerId, asking: Asking) -> tuple[L5RCard, ...]:
+    """The Rings ``seat`` has in play, as ``asking`` counts them."""
     return tuple(
         card
         for card in game.table.battlefield.cards
-        if isinstance(card.printed, RingPrint) and card.owner is seat
+        if card.owner is seat and counts_as(game, card, RingPrint, asking)
     )
 
 
