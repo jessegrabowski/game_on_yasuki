@@ -40,6 +40,20 @@ to spend, and the answer decides what the card can reach:
 :language: python
 ```
 
+An amount printed in the cost block, a :X:, is paid at step B and shapes the targets chosen at
+step C (CR, Action Sequence). {func}`~.declare_amount` asks it, and its answer does nothing but
+record the amount as the action's `amount_paid`. The ability sets `targets_after_cost`, so its
+`targets` are read once the cost is paid, and they and its `effects` read `game.amount_paid`:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/lotus_edition.py
+:pyobject: _hired_killer_targets
+:language: python
+```
+
+What the card does then resolves as the action's own effects, which the Interrupt step offers and
+a negation of the action reaches. A resolver that returned the destruction from inside the cost
+would make it a payment, which neither reaches.
+
 ## A card
 
 ```{card-image} Ichiro Yojimbo
@@ -119,8 +133,8 @@ has the whole shape, including the look the cards sit in while the questions are
 ## Two rules that catch people
 
 **Return nothing rather than an empty question.** Every shape takes the candidates it may be
-answered with, and a question with none of them is not a question. Both Hired Killer and Ichiro
-Yojimbo check first and return the rest of their effects, or no effects at all.
+answered with, and a question with none of them is not a question. Ichiro Yojimbo checks first and
+returns the rest of its effects, or no effects at all.
 
 **Register a prompt, and keep counts out of it.** Without one the seat is asked "Choose 1 card",
 which says nothing about what the card is doing. Pass `prompt=` to `@choice_resolver`, as Ichiro
