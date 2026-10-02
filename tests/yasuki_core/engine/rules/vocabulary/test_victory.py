@@ -3,6 +3,14 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules.board.counts_as import (
+    COUNTS_AS,
+    AskedBy,
+    CountsAs,
+    register_counts_as,
+    while_in_play,
+)
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
 from yasuki_core.engine.rules.triggers import enforce_state_based_actions
@@ -12,7 +20,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Element, Side
 from yasuki_core.game_pieces.prints import RingPrint
 
-from tests.yasuki_core.engine.builders import end_turn, fate_card, put_in_play, register
+from tests.yasuki_core.engine.builders import end_turn, fate_card, holding, put_in_play, register
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 HONOR_VICTORY_AT = ruleset.ACTIVE.honor_victory_at
@@ -194,6 +202,7 @@ def _ring(
         side=Side.FATE,
         owner=owner,
         element=element,
+        keywords=(element.value,),
     )
 
 
@@ -231,6 +240,70 @@ def test_a_ring_registered_as_not_counting_does_not_complete_the_set():
     enforce_state_based_actions(session.game)
 
     assert session.game.game_over is False
+
+
+@pytest.mark.parametrize(
+    ("asked_by", "wins"),
+    [
+        (frozenset({AskedBy.ACTION, AskedBy.TRAIT}), False),
+        (frozenset({AskedBy.RULE}), True),
+    ],
+)
+def test_a_card_counting_as_a_ring_wins_only_when_the_rulebook_may_ask(asked_by, wins):
+    session = _game()
+    for ring in _rings_of(Element.AIR, Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(session.game, ring)
+    put_in_play(session.game, holding("heart", printed_id="ring_probe", keywords=("Void",)))
+    register_counts_as("ring_probe", CountsAs(RingPrint, asked_by, while_in_play))
+
+    try:
+        enforce_state_based_actions(session.game)
+    finally:
+        COUNTS_AS.pop("ring_probe")
+
+    assert session.game.game_over is wins
+
+
+def test_a_ring_with_two_element_keywords_stands_for_only_one():
+    session = _game()
+    for ring in _rings_of(Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(session.game, ring)
+    double = put_in_play(session.game, _ring("double", Element.AIR))
+    session.game.ongoing.append(
+        KeywordGrant("source", double.id, "Void", Duration.UNTIL_END_OF_TURN)
+    )
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.game_over is False
+
+
+def test_a_ring_with_two_element_keywords_takes_the_one_no_other_ring_carries():
+    session = _game()
+    air_and_void = put_in_play(session.game, _ring("air_and_void", Element.AIR))
+    session.game.ongoing.append(
+        KeywordGrant("source", air_and_void.id, "Void", Duration.UNTIL_END_OF_TURN)
+    )
+    for ring in _rings_of(Element.AIR, Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(session.game, ring)
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.winner is P1
+
+
+def test_a_granted_element_keyword_completes_the_set():
+    session = _game()
+    for ring in _rings_of(Element.AIR, Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(session.game, ring)
+    second_water = put_in_play(session.game, _ring("second_water", Element.WATER))
+    session.game.ongoing.append(
+        KeywordGrant("source", second_water.id, "Void", Duration.UNTIL_END_OF_TURN)
+    )
+
+    enforce_state_based_actions(session.game)
+
+    assert session.game.winner is P1
 
 
 def test_rings_split_between_the_seats_win_nobody():

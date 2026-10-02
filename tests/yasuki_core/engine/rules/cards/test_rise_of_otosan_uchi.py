@@ -1401,6 +1401,7 @@ def _ring_card(card_id: str, printed_id: str, element: Element, *, owner: Player
         side=Side.FATE,
         owner=owner,
         element=element,
+        keywords=(element.value,),
     )
 
 

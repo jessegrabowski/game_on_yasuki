@@ -5,6 +5,7 @@ from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.rules.board.counts_as import RULEBOOK
 from yasuki_core.engine.rules.board.queries import rings_in_play
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.duel.procedure import duel_being_fought
@@ -21,7 +22,7 @@ from yasuki_core.game_pieces.constants import Element
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.table import ZoneRole
-from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint, RingPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
 # A state-based action reads the board and returns the effects the rules demand of it. Unlike a
 # trigger it answers to no event: the CR states these as conditions that hold at all times rather
@@ -138,23 +139,44 @@ NO_ENLIGHTENMENT = FlagRegistry("no enlightenment", "already does not count towa
 register_no_enlightenment = NO_ENLIGHTENMENT.make_register()
 
 
+def _ring_elements(game: GameState, ring: L5RCard) -> frozenset[Element]:
+    carried = {keyword.lower() for keyword in effective_keywords(game, ring)}
+    return frozenset(element for element in Element if element.value.lower() in carried)
+
+
+def _five_different_elements(rings: list[frozenset[Element]]) -> bool:
+    """Whether each element can be matched to a different Ring carrying its keyword, so a Ring
+    with two element keywords stands for only one of them."""
+
+    def match(elements: tuple[Element, ...], free: frozenset[int]) -> bool:
+        if not elements:
+            return True
+        first, rest = elements[0], elements[1:]
+        return any(match(rest, free - {index}) for index in free if first in rings[index])
+
+    return match(tuple(Element), frozenset(range(len(rings))))
+
+
 def enlightenment(game: GameState) -> list[Effect]:
-    """Win the game for a seat controlling Rings of all five elements (CR, Enlightenment Victory).
+    """Win the game for a seat controlling "five Rings with five different element keywords"
+    (CR, Enlightenment Victory).
 
     The CR wins "immediately", so this is a state-based rule rather than a check at a moment in
-    the turn. A Ring registered through ``register_no_enlightenment`` is left out of the count.
+    the turn. The rulebook asks, so a card counting as a Ring only for actions or traits is left
+    out, and so is a Ring registered through ``register_no_enlightenment``. Elements are read from
+    keywords as they stand, granted ones included.
     """
     if game.game_over:
         return []
     for seat, rules in game.active_rules.items():
         if VictoryRule.ENLIGHTENMENT not in rules:
             continue
-        elements = {
-            card.printed.element
+        rings = [
+            _ring_elements(game, card)
             for card in rings_in_play(game, seat, RULEBOOK)
-            if isinstance(card.printed, RingPrint) and card.printed_id not in NO_ENLIGHTENMENT
-        }
-        if len(elements) == len(Element):
+            if card.printed_id not in NO_ENLIGHTENMENT
+        ]
+        if _five_different_elements(rings):
             return [WinGame(seat, "Enlightenment Victory with Rings of all five elements")]
     return []
 
