@@ -131,6 +131,12 @@ class Effect(ABC):
         Bowed and Unbowed), so "its next bowing" is still to come after one."""
         return True
 
+    @property
+    def subject_id(self) -> str | None:
+        """The card this effect acts on, which a negation naming a card matches, or None for an
+        effect that acts on no card. Card memory, such as a once-per-turn record, acts on none."""
+        return None
+
     def is_negatable(self, game: GameState) -> bool:
         """Whether a negation in force can reach this effect as it commits. True unless the effect
         is no effect at all, such as an action's targeting."""
@@ -258,6 +264,10 @@ class AdjustCounter(Effect):
     counter: Counter
     delta: int
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         return f"{self.delta:+d} {self.counter.name} on {self.card_id}"
 
@@ -309,6 +319,10 @@ class Move(Effect):
     card_id: str
     to: Location
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         where = (
             f"{self.to.seat.name}'s home"
@@ -331,6 +345,10 @@ class Show(Effect):
 
     card_id: str
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         return f"show {self.card_id}"
 
@@ -348,6 +366,10 @@ class MoveToHand(Effect):
 
     card_id: str
     seat: PlayerId
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
 
     def describe(self) -> str:
         return f"{self.card_id} to {self.seat.name}'s hand"
@@ -402,6 +424,10 @@ class Destroy(Effect):
     card_id: str
     cause: Cause
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         return f"destroy {self.card_id}"
 
@@ -439,6 +465,10 @@ class Discard(Effect):
     card_id: str
     cause: Cause
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         return f"{self.cause.name} discards {self.card_id}"
 
@@ -467,6 +497,10 @@ class Banish(Effect):
     """
 
     card_id: str
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
 
     def describe(self) -> str:
         return f"banish {self.card_id}"
@@ -583,6 +617,10 @@ class PlaceInProvince(Effect):
     card_id: str
     zone: ZoneKey
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         return f"place {self.card_id} in {self.zone.owner.name} province {self.zone.idx}"
 
@@ -662,6 +700,10 @@ class GrantModifier(Effect):
     amount: int
     duration: Lifetime
 
+    @property
+    def subject_id(self) -> str:
+        return self.target_id
+
     def describe(self) -> str:
         return (
             f"{self.source_id} grants {self.target_id} {self.amount:+d} "
@@ -712,6 +754,10 @@ class GrantAbility(Effect):
     target_id: str
     context: tuple[str, ...]
     duration: Lifetime
+
+    @property
+    def subject_id(self) -> str:
+        return self.target_id
 
     def describe(self) -> str:
         lifetime = describe_lifetime(self.duration)
@@ -785,6 +831,10 @@ class GrantMinimum(Effect):
     value: int
     duration: Lifetime
 
+    @property
+    def subject_id(self) -> str:
+        return self.target_id
+
     def describe(self) -> str:
         return (
             f"{self.source_id} gives {self.target_id} a minimum {self.stat.name} of {self.value} "
@@ -810,6 +860,10 @@ class GrantDuelStat(Effect):
     target_id: str
     stat: Stat
     duration: Lifetime
+
+    @property
+    def subject_id(self) -> str:
+        return self.target_id
 
     def describe(self) -> str:
         return (
@@ -988,6 +1042,10 @@ class AttackEffect(Effect, ABC):
     @property
     @abstractmethod
     def name(self) -> str: ...
+
+    @property
+    def subject_id(self) -> str:
+        return self.target_id
 
     strength: int
     target_id: str
@@ -1174,6 +1232,10 @@ class GrantKeyword(Effect):
     keyword: str
     duration: Lifetime
 
+    @property
+    def subject_id(self) -> str:
+        return self.target_id
+
     def describe(self) -> str:
         lifetime = describe_lifetime(self.duration)
         return f"{self.source_id} gives {self.target_id} {self.keyword} ({lifetime})"
@@ -1203,6 +1265,10 @@ class AttachCard(Effect):
 
     card_id: str
     target_id: str
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
 
     def describe(self) -> str:
         return f"attach {self.card_id} to {self.target_id}"
@@ -1240,6 +1306,10 @@ class PutIntoPlay(Effect):
 
     card_id: str
     battlefield: int | None = None
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
 
     def describe(self) -> str:
         if self.battlefield is not None:
@@ -1516,6 +1586,10 @@ class Bow(Effect):
 
     card_id: str
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         return f"bow {self.card_id}"
 
@@ -1545,6 +1619,10 @@ class TurnOver(Effect):
 
     card_id: str
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         return f"turn {self.card_id} over"
 
@@ -1566,6 +1644,10 @@ class Straighten(Effect):
     straightening reads. One already standing, or forbidden to straighten, announces nothing."""
 
     card_id: str
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
 
     def describe(self) -> str:
         return f"straighten {self.card_id}"
@@ -1598,6 +1680,10 @@ class Dishonor(Effect):
     card_id: str
     cause: Cause
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         return f"dishonor {self.card_id}"
 
@@ -1626,6 +1712,10 @@ class Rehonor(Effect):
     reacts to a rehonoring reads. One already honorable announces nothing."""
 
     card_id: str
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
 
     def describe(self) -> str:
         return f"rehonor {self.card_id}"
@@ -1825,6 +1915,10 @@ class MoveToDeck(Effect):
     deck: DeckKey
     from_top: int | None = None
     from_bottom: int | None = None
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
 
     def __post_init__(self) -> None:
         """Raise ValueError unless exactly one non-negative depth names an end."""
@@ -2102,6 +2196,10 @@ class DelayStraighten(Effect):
     card_id: str
     until: Moment = END_OF_ACTION_PHASE
 
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
     def describe(self) -> str:
         if self.until == BEGINNING_OF_ACTION_PHASE:
             return f"{self.card_id} may not straighten until its next Action Phase begins"
@@ -2142,6 +2240,10 @@ class RecruitCard(InterruptingEffect):
 
     card_id: str
     renew: bool = False
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
 
     def describe(self) -> str:
         renewed = ", renewing the province" if self.renew else ""

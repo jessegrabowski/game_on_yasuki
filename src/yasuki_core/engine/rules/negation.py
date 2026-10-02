@@ -151,7 +151,7 @@ def _matches_effect(negation: Negation, effect: Effect) -> bool:
     """Whether ``effect`` is of the kind, and acts on the card, ``negation`` negates."""
     if negation.effect_kind is not None and not isinstance(effect, negation.effect_kind):
         return False
-    return negation.subject_id is None or getattr(effect, "card_id", None) == negation.subject_id
+    return negation.subject_id is None or effect.subject_id == negation.subject_id
 
 
 def _negations(game: GameState) -> list[Negation]:
