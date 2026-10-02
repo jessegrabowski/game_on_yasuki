@@ -1,9 +1,21 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
+from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import top_of_deck
-from yasuki_core.engine.rules.effects import Choose, Effect, EndLook, LookAtTop, PlaceOnDeck
+from yasuki_core.engine.rules.effects import (
+    Choose,
+    Destroy,
+    DiscardFromHand,
+    Effect,
+    EndLook,
+    LookAtTop,
+    MoveToHand,
+    PlaceOnDeck,
+    Show,
+    ShuffleDeck,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import action_did, choice_resolver
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -11,6 +23,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import RingPrint
 
 
 # --- Plain Library ---
@@ -61,5 +74,54 @@ register_ability(
         effects=_plain_library_effects,
         hits_every_target=True,
         tireless=True,
+    ),
+)
+
+
+# --- Remote Temple ---
+
+
+def _remote_temple_rings(game: GameState, source: L5RCard) -> tuple[str, ...]:
+    asking = Asking.action(source)
+    deck = game.table.decks[DeckKey(source.owner, Side.FATE)].cards
+    return tuple(card.id for card in deck if counts_as(game, card, RingPrint, asking))
+
+
+def _remote_temple_after_search(seat: PlayerId, source_id: str) -> list[Effect]:
+    """The searched deck is shuffled (CR, Search), then "Discard a card. Destroy this Holding." """
+    return [
+        ShuffleDeck(DeckKey(seat, Side.FATE)),
+        DiscardFromHand(seat, 1, seat, seat),
+        Destroy(source_id, seat),
+    ]
+
+
+def _remote_temple_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """A deck holding no Ring is still searched, so the rest of the text resolves without one."""
+    rings = _remote_temple_rings(game, source)
+    if not rings:
+        return _remote_temple_after_search(source.owner, source.id)
+    return [Choose(source.owner, rings, 1, 1, "remote_temple", source.id)]
+
+
+@choice_resolver("remote_temple", prompt="Take a Ring into your hand")
+def _resolve_remote_temple(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [
+        Show(chosen[0]),
+        MoveToHand(chosen[0], seat),
+        *_remote_temple_after_search(seat, source_id),
+    ]
+
+
+register_ability(
+    "remote_temple",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        targets=itself,
+        hits_every_target=True,
+        effects=_remote_temple_effects,
     ),
 )
