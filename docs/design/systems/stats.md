@@ -111,13 +111,17 @@ datasheet adds that an adjustment to Family Honor through one is neither an Hono
 Honor loss.
 
 {class}`~.Negation` changes no stat. It negates the effects that match it (CR, Prevention): those
-of actions from a kind or title of card, or those of an effect class or acting on one card. One
-naming a source is read where an action from a card hands over its effects, since only there is it
-known whose action they are, and a trait or a rulebook ability is no action from its card. One
-naming none is read as every effect commits, a trait's, a rulebook procedure's and a delayed one's
-as much as an action's. Neither reaches a cost, which is no effect (CR, Effects). One naming a card
-is forgotten when the card leaves the table (CR, Card Memory Rule). A `once` negation is spent by
-the first effect it negates, as "his next straightening" is, and only one naming no source may be.
+of actions from a kind or title of card, or those of an effect class or acting on one card. Every
+negation is read as each effect commits. The cascade carries the card whose action produced the
+effects, as the `acting` of its {class}`~.Provenance`, through a `Then`, a pause and what a
+question's answer produces, so one naming a source reaches all of them. A trait or a rulebook
+ability is no action from its card and carries none. One naming no source reaches every matching
+effect, a trait's, a rulebook procedure's and a delayed one's as much as an action's. Neither
+reaches a cost, which is no effect (CR, Effects), or an action's targeting, which is none either
+and answers `is_negatable` with False, and neither reaches a state-based action, which would only
+be demanded again. One naming a card is forgotten when the card leaves the table (CR,
+Card Memory Rule). A `once` negation is spent by the first effect it negates, as "his next
+straightening" is.
 {card}`Dark Ring of Water` names Strategies as a source and {card}`Way of the Crab` names its
 Fortification's bowing.
 

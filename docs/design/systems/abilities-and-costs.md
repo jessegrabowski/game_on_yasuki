@@ -166,7 +166,8 @@ as a modification bound to the effect it answered and applied when that effect c
 resolve, which is the CR's "delayed until those effects occur": Okura's destroy waits on the Fear
 it modifies, and a Courage discard adjusts the Fear as it resolves. A card that reads "negate"
 returns {class}`~.Negated` around the effect it answers, which resolves as nothing where the
-effect would have, and the forecast then shows nothing behind it. When the forecast holds several
+effect would have, and the forecast then shows nothing behind it. An effect a {class}`~.Negation`
+in force will negate as it commits is left out of the forecast too. When the forecast holds several
 effects a card could answer, {class}`~.ChooseInterruptEffect` asks which, and a card that answers
 the action as a whole, "negate the action's effects", sets `answers_every` and binds to all of
 them at once. Any of the action's own effects can be answered, and only those: the step is over
