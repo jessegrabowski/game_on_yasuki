@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.looks import Look
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Bowed,
     CardDiscarded,
@@ -2261,26 +2262,23 @@ class ApplyEffects:
     ----------
     effects : tuple of Effect
         The effects to resolve, in order.
-    interruptible : bool, optional
-        Whether the effects are an action's own, open to the Interrupt step. Default False.
-    triggered : bool, optional
-        Whether the effects are a trigger's, so a decision among them is the trigger's question and
-        cannot be backed out of. Default False.
+    provenance : Provenance, optional
+        Where the effects came from. Default a rulebook procedure's, neither an action's own nor a
+        trigger's.
     """
 
     effects: tuple[Effect, ...]
-    interruptible: bool = False
-    triggered: bool = False
+    provenance: Provenance = Provenance()
 
     def resume(self, game: GameState) -> None:
         # The cascade imports this module, so the one module this item drives cannot be imported at
         # the top without closing that cycle.
         from yasuki_core.engine.rules import triggers
 
-        if self.interruptible:
+        if self.provenance.interruptible:
             triggers.resolve_action_effects(game, list(self.effects))
         else:
-            triggers.resolve_effects(game, list(self.effects), triggered=self.triggered)
+            triggers.resolve_effects(game, list(self.effects), provenance=self.provenance)
 
 
 @dataclass(frozen=True, slots=True)

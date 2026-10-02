@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
     Confirm,
@@ -458,7 +459,9 @@ def test_a_payment_for_effects_resolves_them_after_a_partial_payment():
     put_in_play(game, holding("b", owner=PlayerId.P1, gold_production=2))
     victim = put_in_play(game, holding("victim", owner=PlayerId.P1))
 
-    game.stack.append(ApplyEffects((Destroy("victim", PlayerId.P1),), interruptible=True))
+    game.stack.append(
+        ApplyEffects((Destroy("victim", PlayerId.P1),), Provenance(interruptible=True))
+    )
     game.pending = payment_request(game, PlayerId.P1, 3, "probe")
     action_sequence.submit(game, DecisionResponse(("a",)))  # one of the three
 
