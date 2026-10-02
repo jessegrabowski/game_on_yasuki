@@ -42,23 +42,30 @@ class SelectAbilityTarget:
     ----------
     card_id : str
         The card whose ability is resolving.
-    candidates : tuple of str
-        The ids the ability may target, fixed before paying so the choice is never left empty.
+    candidates : tuple of str or None
+        The ids the ability may target, fixed before paying so the choice is never left empty, or
+        None for an ability that targets after its cost, whose targets are read now. Such an
+        ability with nothing to target does nothing more.
     ability_key : str, optional
         Names the ability among the several the card prints, so the one announced is the one
         that resolves. Default None, the card's only ability.
     """
 
     card_id: str
-    candidates: tuple[str, ...]
+    candidates: tuple[str, ...] | None
     ability_key: str | None = None
 
     def resume(self, game: GameState) -> None:
         source = game.table.cards_by_id[self.card_id]
         ability = ability_for(game, source, self.ability_key)
+        candidates = self.candidates
+        if candidates is None:
+            candidates = tuple(legal_targets(game, source, ability)) if ability is not None else ()
+            if not candidates:
+                return
         game.pending = ChooseAbilityTarget(
             seat=source.owner,
-            candidates=self.candidates,
+            candidates=candidates,
             source_card_id=self.card_id,
             ability_key=self.ability_key,
             source_name=source.name,
@@ -107,12 +114,15 @@ def defer_ability(game: GameState, card: L5RCard, ability: Ability, *, plays_car
     ``plays_card`` says whether taking the ability plays ``card``, as a Strategy from hand is
     played, whose Gold Cost has then already taken its share of the action's discount.
     """
-    targets = tuple(legal_targets(game, card, ability))
-    game.stack.append(
-        ApplyAbilityEffects(card.id, targets, ability.key)
-        if ability.hits_every_target
-        else SelectAbilityTarget(card.id, targets, ability.key)
-    )
+    if ability.targets_after_cost:
+        game.stack.append(SelectAbilityTarget(card.id, None, ability.key))
+    else:
+        targets = tuple(legal_targets(game, card, ability))
+        game.stack.append(
+            ApplyAbilityEffects(card.id, targets, ability.key)
+            if ability.hits_every_target
+            else SelectAbilityTarget(card.id, targets, ability.key)
+        )
     triggers.pay_costs(game, ability.discounted_cost(game, card, plays_card=plays_card))
 
 

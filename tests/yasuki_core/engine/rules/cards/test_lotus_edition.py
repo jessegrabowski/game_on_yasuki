@@ -5,6 +5,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -200,3 +202,33 @@ def test_the_player_may_pay_to_destroy_his_own_personality():
     _answer_everything(session, amount=3)  # his unit costs 1
 
     assert "own" not in _in_play(session)
+
+
+def test_a_negation_of_strategies_stops_the_killing_and_the_honor_loss():
+    """The destruction and the Honor loss are the action's effects, not its cost, so a negation of
+    the effects of Strategy actions reaches both (CR, Effects)."""
+    state = _table()
+    put_in_play(state, personality("dear", owner=OPPONENT, gold_cost=6))
+    card = _hired_killer(state)
+    session = EngineSession.start(state, PLAYER)
+    session.game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
+    before = session.game.table.seats[PLAYER].honor
+
+    session.act(PLAYER, PlayStrategy(card.id))
+    _answer_everything(session, amount=8)
+
+    assert "dear" in _in_play(session)
+    assert session.game.table.seats[PLAYER].honor == before
+
+
+def test_the_personality_chosen_is_the_actions_target():
+    state = _table()
+    put_in_play(state, personality("dear", owner=OPPONENT, gold_cost=6))
+    card = _hired_killer(state)
+    session = EngineSession.start(state, PLAYER)
+
+    session.act(PLAYER, PlayStrategy(card.id))
+    _answer_everything(session, amount=8)
+
+    assert session.game.action_targets == ("dear",)
+    assert session.game.amount_paid == 8

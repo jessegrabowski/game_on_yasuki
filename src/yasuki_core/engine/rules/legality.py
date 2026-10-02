@@ -522,7 +522,7 @@ def _usable(
             costs = ability.discounted_cost(game, card, plays_card=_played(location, ability))
             if not payable(game, costs):
                 continue
-            if legal_targets(game, card, ability):
+            if ability.targets_after_cost or legal_targets(game, card, ability):
                 ready.append((card, ability))
     return ready
 

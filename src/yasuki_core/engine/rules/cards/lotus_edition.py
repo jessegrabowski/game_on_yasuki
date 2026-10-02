@@ -1,13 +1,11 @@
-from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.abilities.idioms import declarable_gold
+from yasuki_core.engine.rules.abilities.idioms import declarable_gold, declare_amount
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
-from yasuki_core.engine.rules.effects import AskAmount, Choose, Destroy, Effect, GainHonor
+from yasuki_core.engine.rules.effects import Destroy, Effect, GainHonor
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -35,47 +33,37 @@ def _hired_killer_amounts(game: GameState, source: L5RCard) -> tuple[int, ...]:
 
 
 def _hired_killer_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    """Settle the amount before the target is chosen: the amount is the cost block, and the legal
-    targets are shaped by it (CR, Action Sequence steps B and C)."""
+    """The amount is the cost block, settled before the target is chosen, since the legal targets
+    are shaped by it (CR, Action Sequence steps B and C)."""
     return [
-        AskAmount(
-            source.owner,
+        declare_amount(
+            source,
             _hired_killer_amounts(game, source),
             "How much Gold do you spend on Hired Killer?",
-            "hired_killer",
-            source.id,
         )
     ]
 
 
-@choice_resolver("hired_killer")
-def _resolve_hired_killer(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """Choose among the Personalities the declared amount reaches. More than one unit can cost the
-    same, so the choice remains after the amount is settled.
-
-    An amount that reaches no Personality destroys nothing: the Gold is spent in the cost step and
-    the effects after it do not happen, the Honor loss included, because an effect that requires a
-    target and cannot find one stops the effects that follow it (CR, Action Sequence step E).
-    """
-    paid = int(chosen[0])
-    targets = tuple(
+def _hired_killer_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The Personalities whose unit's Gold Cost is the amount paid minus two. More than one unit
+    can cost the same, so a choice remains once the amount is settled. An amount that reaches none
+    targets nothing, and the card does nothing more, the Honor loss included (CR, Action Sequence
+    step E)."""
+    if game.amount_paid is None:
+        return []
+    return [
         card.id
         for card in personalities_in_play(game)
-        if unit_gold_cost(game, card) == paid - PAID_ABOVE_UNIT_COST
-    )
-    if not targets:
-        return []
-    return [Choose(seat, targets, 1, 1, "hired_killer_target", source_id)]
+        if unit_gold_cost(game, card) == game.amount_paid - PAID_ABOVE_UNIT_COST
+    ]
 
 
-@choice_resolver("hired_killer_target", prompt="Choose a Personality to destroy")
-def _resolve_hired_killer_target(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
+def _hired_killer_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Destroy the target, then lose the Honor, in the order the card prints them."""
-    return [Destroy(chosen[0], seat), GainHonor(seat, -HONOR_LOST, source_id=source_id)]
+    return [
+        Destroy(target.id, source.owner),
+        GainHonor(source.owner, -HONOR_LOST, source_id=source.id),
+    ]
 
 
 register_ability(
@@ -83,9 +71,10 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         cost=_hired_killer_cost,
-        targets=itself,
-        effects=lambda game, source, target: [],
-        hits_every_target=True,
+        targets=_hired_killer_targets,
+        effects=_hired_killer_effects,
         located_at=(CardLocation.HAND,),
+        targeting_message="a Personality to destroy",
+        targets_after_cost=True,
     ),
 )

@@ -2,6 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     declarable_gold,
+    declare_amount,
     register_event_entry,
 )
 from yasuki_core.engine.rules.abilities.model import (
@@ -9,7 +10,6 @@ from yasuki_core.engine.rules.abilities.model import (
     CardLocation,
     Interrupt,
     Interruption,
-    itself,
 )
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import owned_personalities, personalities_in_play
@@ -20,9 +20,7 @@ from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import went_second
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    AskAmount,
     Banish,
-    Choose,
     CreateToken,
     DelayedEffect,
     Destroy,
@@ -36,7 +34,7 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
-from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.triggers import TriggerContext, on
 from yasuki_core.engine.rules.board.queries import sincerity_seed_targets
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey
@@ -179,48 +177,35 @@ def _the_bad_death_of_hida_daizu_amounts(game: GameState, source: L5RCard) -> tu
 
 
 def _the_bad_death_of_hida_daizu_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    """Settle the amount before the target is chosen: the amount is the cost block, and the legal
-    targets are shaped by it (CR, Action Sequence steps B and C)."""
+    """The amount is the cost block, settled before the target is chosen, since the legal targets
+    are shaped by it (CR, Action Sequence steps B and C)."""
     return [
-        AskAmount(
-            source.owner,
+        declare_amount(
+            source,
             _the_bad_death_of_hida_daizu_amounts(game, source),
             "How much Gold do you spend on The Bad Death of Hida Daizu?",
-            "the_bad_death_of_hida_daizu",
-            source.id,
         )
     ]
 
 
-@choice_resolver("the_bad_death_of_hida_daizu")
-def _resolve_the_bad_death_of_hida_daizu(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """Choose among the Personalities the declared amount reaches.
-
-    An amount below every unit's Gold Cost reaches no target: the Gold is spent in the cost step and
-    the effects after it do not happen, because an effect that requires a target and cannot find one
-    stops the effects that follow it (CR, Action Sequence step E).
-    """
-    paid = int(chosen[0])
-    targets = tuple(
-        card.id for card in personalities_in_play(game) if unit_gold_cost(game, card) <= paid
-    )
-    if not targets:
+def _the_bad_death_of_hida_daizu_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The Personalities whose unit costs no more than the amount paid. An amount below every unit
+    reaches none, and the card does nothing more (CR, Action Sequence step E)."""
+    if game.amount_paid is None:
         return []
-    return [Choose(seat, targets, 1, 1, "the_bad_death_of_hida_daizu_target", source_id)]
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if unit_gold_cost(game, card) <= game.amount_paid
+    ]
 
 
-@choice_resolver(
-    "the_bad_death_of_hida_daizu_target",
-    prompt="Choose a Personality to banish at the end of the turn",
-)
-def _resolve_the_bad_death_of_hida_daizu_target(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+def _the_bad_death_of_hida_daizu_effects(
+    game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     """The target stays in play until the turn ends, and the card banishes itself rather than
     reaching the discard through step F."""
-    return [DelayedEffect(Banish(chosen[0]), END_OF_TURN), Banish(source_id)]
+    return [DelayedEffect(Banish(target.id), END_OF_TURN), Banish(source.id)]
 
 
 register_ability(
@@ -228,9 +213,10 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         cost=_the_bad_death_of_hida_daizu_cost,
-        targets=itself,
-        effects=lambda game, source, target: [],
-        hits_every_target=True,
+        targets=_the_bad_death_of_hida_daizu_targets,
+        effects=_the_bad_death_of_hida_daizu_effects,
         located_at=(CardLocation.HAND,),
+        targeting_message="a Personality to banish at the end of the turn",
+        targets_after_cost=True,
     ),
 )
