@@ -4,8 +4,8 @@ from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.gates_of_tengoku import SASADAS_OROCHI
 from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
+    ChooseAbilityTarget,
     ChooseAmount,
-    ChooseCards,
     ChoosePayment,
     DecisionResponse,
 )
@@ -31,7 +31,8 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayInterrupt,
     Recruit,
 )
-from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, RoundKind
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
@@ -141,7 +142,7 @@ def _targets_offered(session: EngineSession, *, paying: int) -> tuple[str, ...]:
     """Spend ``paying`` and advance to the target choice, handing back the candidates."""
     for _ in range(8):
         asked = session.game.pending
-        if isinstance(asked, ChooseCards):
+        if isinstance(asked, ChooseAbilityTarget):
             return asked.candidates
         assert asked is not None, "no targets were offered"
         session.submit(asked.seat, _bad_death_reply(asked, paying))
@@ -182,6 +183,23 @@ def test_the_target_stays_in_play_until_the_turn_ends():
     end_turn(session)
 
     assert "target" not in _on_board(session)
+
+
+def test_a_negation_of_strategies_leaves_the_target_in_play_past_the_turn():
+    """The delayed banishing is the action's effect, not its cost, so a negation of the effects of
+    Strategy actions reaches it (CR, Effects)."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("mine", owner=PLAYER, gold_production=10))
+    put_in_play(state, personality("target", owner=OPPONENT, gold_cost=2))
+    card = _bad_death(state)
+    session = EngineSession.start(state, PLAYER)
+    session.game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
+
+    session.act(PLAYER, PlayStrategy(card.id))
+    _spend(session, 2)
+    end_turn(session)
+
+    assert "target" in _on_board(session)
 
 
 def test_the_card_banishes_itself_rather_than_going_to_the_discard():
