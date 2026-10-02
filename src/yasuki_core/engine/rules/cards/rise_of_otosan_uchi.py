@@ -24,6 +24,12 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
     register_invest,
 )
+from yasuki_core.engine.rules.board.counts_as import (
+    AskedBy,
+    CountsAs,
+    register_counts_as,
+    while_in_play,
+)
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
@@ -63,6 +69,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
+    GrantKeyword,
     GrantNegation,
     GrantProvinceStrength,
     LookAtTop,
@@ -1081,3 +1088,51 @@ def _shinjo_saeki_clan_champion_experienced_2_entered_play(ctx: TriggerContext) 
         CreateToken(CAVALRY_FOLLOWER, ctx.card.owner, ctx.card.id, attach_to=rider.id)
         for rider in creation_targets(ctx.game, ctx.card.owner, cavalry, keyword=keywords.CAVALRY)
     ]
+
+
+# --- Shinsei's Heart ---
+
+# "This Holding counts as a Ring for actions while in play."
+register_counts_as(
+    "shinseis_heart", CountsAs(RingPrint, frozenset({AskedBy.ACTION}), while_in_play)
+)
+
+# In the order the card names them.
+SHINSEIS_HEART_ELEMENTS = (
+    keywords.AIR,
+    keywords.EARTH,
+    keywords.FIRE,
+    keywords.VOID,
+    keywords.WATER,
+)
+
+
+def _shinseis_heart_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [
+        AskOption(
+            source.owner,
+            SHINSEIS_HEART_ELEMENTS,
+            "Give this Holding which element?",
+            "shinseis_heart",
+            source.id,
+        )
+    ]
+
+
+@choice_resolver("shinseis_heart")
+def _resolve_shinseis_heart(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [GrantKeyword(source_id, source_id, chosen[0], Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "shinseis_heart",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        hits_every_target=True,
+        effects=_shinseis_heart_effects,
+    ),
+)
