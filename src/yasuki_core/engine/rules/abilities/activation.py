@@ -4,7 +4,6 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.model import Ability, once_tag
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.effects import Effect
-from yasuki_core.engine.rules.negation import negate_from
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
@@ -96,9 +95,7 @@ class ApplyAbilityEffects:
             for target_id in self.target_ids
             for effect in ability.effects(game, source, game.table.cards_by_id[target_id])
         ]
-        if ability is not None and ability.acts_from_its_card:
-            effects = negate_from(game, source, effects)
-        _resolve(game, effects, trait=ability is not None and ability.trait)
+        _resolve(game, source, ability, effects)
 
 
 def defer_ability(game: GameState, card: L5RCard, ability: Ability, *, plays_card: bool) -> None:
@@ -170,10 +167,7 @@ class ResolveAbility(Effect):
     def _build(self, game: GameState) -> tuple[Effect, ...]:
         source = game.table.cards_by_id[self.card_id]
         ability = ability_for(game, source, self.ability_key)
-        effects = ability.effects(game, source, game.table.cards_by_id[self.target_id])
-        if ability.acts_from_its_card:
-            effects = negate_from(game, source, effects)
-        return tuple(effects)
+        return tuple(ability.effects(game, source, game.table.cards_by_id[self.target_id]))
 
 
 def apply_ability_target(
@@ -182,15 +176,19 @@ def apply_ability_target(
     targeting = ResolveAbility(request.source_card_id, response.choices[0], request.ability_key)
     source = game.table.cards_by_id[request.source_card_id]
     ability = ability_for(game, source, request.ability_key)
-    _resolve(game, [targeting.built(game)], trait=ability is not None and ability.trait)
+    _resolve(game, source, ability, [targeting.built(game)])
 
 
-def _resolve(game: GameState, effects: list[Effect], *, trait: bool) -> None:
-    """Hand ``effects`` over as the action's own, or as a trait's when the ability is one."""
-    if trait:
+def _resolve(
+    game: GameState, source: L5RCard, ability: Ability | None, effects: list[Effect]
+) -> None:
+    """Hand ``effects`` over as the action's own, or as a trait's when ``ability`` is one. The
+    action is from ``source`` unless the ability is the rulebook's."""
+    if ability is not None and ability.trait:
         triggers.resolve_effects(game, effects)
         return
-    triggers.resolve_action_effects(game, effects)
+    acting = source.id if ability is not None and ability.acts_from_its_card else None
+    triggers.resolve_action_effects(game, effects, acting=acting)
 
 
 def _record_targets(game: GameState, target_ids: tuple[str, ...]) -> None:

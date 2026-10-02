@@ -325,9 +325,9 @@ class Negation:
     "negate the effects of actions from Strategies until the end of the phase" or "negate its
     bowing (this turn)" has it. A criterion left None matches anything.
 
-    One naming a source negates the effects of actions from matching cards, and is read where such
-    an action hands over its effects, since only there is it known whose action they are. One
-    naming none negates every matching effect as it commits, whatever produced it. Neither reads a
+    Every negation is read as each effect commits. One naming a source negates the effects of
+    actions from matching cards, including what such an action defers or a question in it
+    produces. One naming none negates every matching effect, whatever produced it. Neither reads a
     cost, which is no effect (CR, Effects).
 
     Attributes

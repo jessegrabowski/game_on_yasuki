@@ -8,8 +8,8 @@ yasuki_core.engine.rules.negation
 .. autosummary::
 
     negate_committed
-    negate_from
-    negates_from
+    negates_interrupt
+    would_negate
 
 .. automodule:: yasuki_core.engine.rules.negation
     :members:

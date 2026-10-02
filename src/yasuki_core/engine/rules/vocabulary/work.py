@@ -50,8 +50,12 @@ class Provenance:
     paying : bool, optional
         Whether the effects are a cost's payments, which are no effects (CR, Effects), so no
         negation reaches them. Default False.
+    acting : str, optional
+        The card whose action produced the effects, which a negation naming a source is matched
+        against. Default None, for a trait's, the rulebook's, a delayed effect's or a cost's.
     """
 
     interruptible: bool = False
     triggered: bool = False
     paying: bool = False
+    acting: str | None = None

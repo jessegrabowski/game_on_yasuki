@@ -1,45 +1,66 @@
-from collections.abc import Iterable
-
 from yasuki_core.engine.rules.effects import Effect, Negated
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import Negation
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import RulebookPrint
 
 
-def negate_from(game: GameState, source: L5RCard, effects: Iterable[Effect]) -> list[Effect]:
-    """``effects``, as an action from ``source`` hands them over, each :class:`~.Negated` where a
-    negation naming a source says so."""
-    return [Negated(effect) if negates_from(game, source, effect) else effect for effect in effects]
+def negate_committed(game: GameState, effect: Effect, provenance: Provenance) -> Effect:
+    """``effect``, about to commit, as :class:`~.Negated` where a negation in force says so. A
+    negation spent by its first use is spent here, by an effect that would happen.
 
+    Parameters
+    ----------
+    game : GameState
+        The game the effect commits in.
+    effect : Effect
+        The effect about to commit.
+    provenance : Provenance
+        Where the effect came from. Its ``acting`` is the card whose action produced it, which a
+        negation naming a source is matched against.
 
-def negates_from(game: GameState, source: L5RCard, effect: Effect) -> bool:
-    """Whether a negation naming a source negates ``effect`` from an action of ``source``."""
-    return any(
-        negation.names_a_source
-        and _matches_source(negation, source)
-        and _matches_effect(negation, effect)
-        for negation in _negations(game)
-    )
-
-
-def negate_committed(game: GameState, effect: Effect) -> Effect:
-    """``effect``, about to commit, as :class:`~.Negated` where a negation naming no source says
-    so. A negation spent by its first use is spent here, by an effect that would happen."""
-    negation = next(
-        (
-            negation
-            for negation in _negations(game)
-            if not negation.names_a_source and _matches_effect(negation, effect)
-        ),
-        None,
-    )
+    Returns
+    -------
+    committed : Effect
+        ``effect`` itself, or ``effect`` wrapped in :class:`~.Negated`.
+    """
+    negation = _negating(game, effect, provenance.acting)
     if negation is None:
         return effect
     if negation.once and effect.would_happen(game):
         game.ongoing.remove(negation)
     return Negated(effect)
+
+
+def would_negate(game: GameState, effect: Effect, acting: str | None) -> bool:
+    """Whether a negation in force would negate ``effect`` from an action of the card ``acting``
+    names, or from no action where it is None. Spends nothing."""
+    return _negating(game, effect, acting) is not None
+
+
+def negates_interrupt(game: GameState, card: L5RCard, replacement: Effect) -> bool:
+    """Whether a negation naming a source negates ``replacement``, the modification an Interrupt
+    from ``card`` makes. One that does binds nothing, so the effect it answers goes ahead."""
+    return any(
+        negation.names_a_source
+        and _matches_source(negation, card)
+        and _matches_effect(negation, replacement)
+        for negation in _negations(game)
+    )
+
+
+def _negating(game: GameState, effect: Effect, acting: str | None) -> Negation | None:
+    """The first negation in force that negates ``effect`` from an action of ``acting``."""
+    source = game.table.cards_by_id.get(acting) if acting is not None else None
+    for negation in _negations(game):
+        if not _matches_effect(negation, effect):
+            continue
+        if negation.names_a_source and (source is None or not _matches_source(negation, source)):
+            continue
+        return negation
+    return None
 
 
 def _matches_source(negation: Negation, source: L5RCard) -> bool:

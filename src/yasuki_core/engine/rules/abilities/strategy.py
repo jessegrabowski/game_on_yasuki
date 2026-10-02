@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.gold.discounts import card_purchase, discounted_go
 from yasuki_core.engine.rules.gold.payment import RequestPayment, payment_request
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -63,15 +64,18 @@ def strategy_cost(game: GameState, card: L5RCard, ability_key: str | None = None
     return discounted_gold_cost(game, ability.purchase(game, card, plays_card=True))
 
 
-def play_strategy_with(game: GameState, card: L5RCard, effects: tuple[Effect, ...]) -> None:
+def play_strategy_with(
+    game: GameState, card: L5RCard, effects: tuple[Effect, ...], *, acting: str | None
+) -> None:
     """Announce ``card`` for ``effects`` in place of its printed ability's: pause for its Gold
     Cost, unless it costs nothing, with its discard and those effects queued behind. How an
     Interrupt plays a Strategy, since what it does is decided against the effect it interrupts
-    rather than against a target.
+    rather than against a target. ``acting`` names the card whose action the effects are, and
+    None a rulebook Interrupt's.
     """
     game.announced_from_hand |= {card.id}
     game.stack.append(DiscardPlayed(card.id))
-    game.stack.append(ApplyEffects(effects))
+    game.stack.append(ApplyEffects(effects, Provenance(acting=acting)))
     cost = discounted_gold_cost(game, card_purchase(game, card, plays_card=True))
     if cost:
         game.pending = payment_request(game, card.owner, cost, card.name, target=card)

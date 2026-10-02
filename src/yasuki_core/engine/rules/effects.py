@@ -2276,7 +2276,7 @@ class ApplyEffects:
         from yasuki_core.engine.rules import triggers
 
         if self.provenance.interruptible:
-            triggers.resolve_action_effects(game, list(self.effects))
+            triggers.resolve_action_effects(game, list(self.effects), acting=self.provenance.acting)
         else:
             triggers.resolve_effects(game, list(self.effects), provenance=self.provenance)
 

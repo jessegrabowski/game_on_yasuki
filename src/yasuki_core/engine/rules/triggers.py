@@ -401,9 +401,11 @@ def _advance(
 
     Every other effect is checked against the negations in force as it commits, whatever produced
     it, since a negation makes an effect fail to happen whenever it would occur (CR, Prevention).
-    The provenance's ``paying`` says the effects in hand are a cost's payments instead, which are
-    no effects (CR, Effects), so no negation reaches them. What reacts to them is effects again,
-    and so is what a ``Then`` among them defers.
+    The provenance's ``acting`` names the card whose action produced the effects in hand, which a
+    negation naming a source reads. A ``Then``, a pause and what an effect produces keep it, and a
+    trigger's effects carry none. The provenance's ``paying`` says the effects in hand are a
+    cost's payments instead, which are no effects (CR, Effects), so no negation reaches them. What
+    reacts to them is effects again, and so is what a ``Then`` among them defers.
 
     The provenance's ``triggered`` says the effects in hand are a trigger's, so a decision among
     them is marked as the trigger's question, one that cannot be backed out of. The machine sets it
@@ -424,7 +426,7 @@ def _advance(
                 if provenance.interruptible:
                     effect = _modified(game, effect)
                 if not provenance.paying:
-                    effect = negate_committed(game, effect)
+                    effect = negate_committed(game, effect, provenance)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
@@ -613,6 +615,9 @@ def _settle_state_based_actions(game: GameState, queue: list[GameEvent]) -> None
     a seat losing its last Province loses the game. Each round begins by forgetting the ongoing
     records of whatever the last one drove off the table, so no rule reads a stat off a card
     that has gone.
+
+    A state-based action is applied without the negation check. One a negation stopped would be
+    demanded again on the next round, so the enforcement would never settle.
     """
     for _ in range(_MAX_CASCADE):
         _forget_ongoing_on_cards_off_the_table(game)
@@ -792,12 +797,17 @@ class HeldAction:
     ----------
     effects : tuple of Effect
         The action's effects, in the order they will resolve.
+    acting : str, optional
+        The card whose action this is. Default None, an action from no card, as the rulebook's
+        are.
     """
 
     effects: tuple[Effect, ...]
+    acting: str | None = None
 
     def resume(self, game: GameState) -> None:
-        _advance(game, self.effects, [], None, [], Provenance(interruptible=True))
+        provenance = Provenance(interruptible=True, acting=self.acting)
+        _advance(game, self.effects, [], None, [], provenance)
 
 
 def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
@@ -867,13 +877,16 @@ def pay_costs(game: GameState, costs: list[Effect]) -> None:
     _advance(game, tuple(costs), [], None, [], Provenance(paying=True))
 
 
-def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:
+def resolve_action_effects(
+    game: GameState, effects: list[Effect], *, acting: str | None = None
+) -> None:
     """Apply ``effects`` as an action's own, which is what step E of the Action Sequence hands
     over. The first effects an action hands over are held beneath an Interrupt round first (CR,
     Action Sequence step D), when any seat holds an Interrupt to take, and every effect resolves
     as the Interrupts taken there make of it. What the action defers behind them through a
     ``Then`` opens no second round. The derived-event cascade runs as in
-    :func:`~.resolve_effects`.
+    :func:`~.resolve_effects`. ``acting`` names the card whose action this is, and None an action
+    from no card.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
@@ -883,10 +896,10 @@ def resolve_action_effects(game: GameState, effects: list[Effect]) -> None:
 
     _refuse_mid_decision(game, "resolve_action_effects")
     if game.interrupts_offered:
-        _advance(game, tuple(effects), [], None, [], Provenance(interruptible=True))
+        _advance(game, tuple(effects), [], None, [], Provenance(interruptible=True, acting=acting))
         return
     game.interrupts_offered = True
-    held = HeldAction(tuple(effects))
+    held = HeldAction(tuple(effects), acting)
     game.stack.append(held)
     if not open_interrupt_window(game):
         game.stack.pop()
