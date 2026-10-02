@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, Batt
 from yasuki_core.ruleset import RingEntry, ring_entry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.engine.rules.rulebook.recruit_restrictions import RecruitRestriction
 
 # The key of the ability a Ring is discarded from hand to use.
 PITCH = "pitch"
@@ -52,6 +53,16 @@ def plays_clan(clan: str) -> Callable[[GameState, L5RCard], bool]:
         return is_clan(game, source.owner, clan)
 
     return condition
+
+
+def clan_player(clan: str) -> RecruitRestriction:
+    """ "A <clan> Clan player", for a restriction on who may Recruit a card, read from the seat's
+    Stronghold."""
+
+    def restriction(game: GameState, seat: PlayerId) -> bool:
+        return is_clan(game, seat, clan)
+
+    return restriction
 
 
 def register_entry(
