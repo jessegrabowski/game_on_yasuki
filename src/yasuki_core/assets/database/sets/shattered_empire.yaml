@@ -391,8 +391,8 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: <b>Battle:</b> Bow your target unbowed Ring. Bow a target enemy card without attachments. <br><b>Battle:</b>
-    Target your bowed Ring and an attachment. Straighten both targets.
+  text: <b>Battle:</b> Bow your target unbowed Ring to bow a target enemy card without attachments.<br><b>Battle:</b>
+    Target an attachment and your bowed Ring. Straighten them.
   gold_cost: 0
   focus: 3
   legality:
@@ -1266,9 +1266,8 @@ cards:
   keywords:
   - Kiho
   - Thunder
-  text: <b>Kiho Thunder Battle:</b> Bow your target performing Monk or Shugenja at any location to give
-    a target Personality a Force bonus equal to the Force of the performer plus the Personality's own
-    Personal Honor <i>(until the turn ends)</i>.
+  text: <b>Kiho Battle:</b> Bow your target unbowed Monk or Shugenja at any location. Give a target Personality
+    a Force bonus equal to their Personal Honor plus the Force of the first target.
   gold_cost: 0
   focus: 3
   legality:
@@ -1630,9 +1629,9 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: <b>Reaction:</b> Before an action's resolution, negate the action's movement of Personalities
-    that are not yours from the current battlefield.<br><b>Battle:</b> Target your performing unbowed
-    Personality and bow him unless you control a Ring to bow a target enemy card.
+  text: <b>Interrupt:</b> Negate the action's movement of other players' Personalities from the current
+    battlefield.<br><b>Battle:</b> Target your unbowed Personality. Bow them unless you control a Ring.
+    Bow a target enemy card.
   gold_cost: 0
   focus: 4
   legality:
