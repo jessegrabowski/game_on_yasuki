@@ -43,6 +43,7 @@ WEALTH = _BY_KEY["wealth"]
 SINCERITY = _BY_KEY["sincerity"]
 MINUS_1F = _BY_KEY["minus1f"]
 WALL = _BY_KEY["wall"]
+FIRE = _BY_KEY["fire"]
 
 
 def counter_from_key(key: str) -> Counter:
