@@ -339,6 +339,13 @@ class GameState:
         self.winner = seat
         self.win_reason = reason
 
+    @property
+    def duel_being_fought(self) -> DuelRecord | None:
+        """The duel being fought, or None where none is. A duel that has ended is not one being
+        fought, though its record stays here for whatever resolves afterwards to read."""
+        duel = self.duel
+        return None if duel is None or duel.step is DuelStep.ENDED else duel
+
     def begin_duel(self, duel: DuelRecord) -> None:
         """Record ``duel`` as the duel being fought, replacing a duel that has already ended.
 
@@ -346,7 +353,7 @@ class GameState:
         inside another, so a second one is a bug in whatever failed to end the first rather than a
         nesting to support.
         """
-        if self.duel is not None and self.duel.step is not DuelStep.ENDED:
+        if self.duel_being_fought is not None:
             raise RuntimeError("a duel is already being fought")
         self.duel = duel
 

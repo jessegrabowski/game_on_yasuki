@@ -6,7 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.records import DuelRecord, DuelWork
-from yasuki_core.engine.rules.vocabulary.segments import Boundary, DuelStep
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.stats.ongoing_grants import named_duel_stat
@@ -25,17 +25,10 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
 
-def duel_being_fought(game: GameState) -> DuelRecord | None:
-    """The duel being fought, or None where none is. A duel that has ended is not one being fought,
-    though its record stays on the game for whatever resolves afterwards to read."""
-    duel = game.duel
-    return None if duel is None or duel.step is DuelStep.ENDED else duel
-
-
 def duel_in_progress(game: GameState) -> DuelRecord:
-    """The duel being fought. Raise ``RuntimeError`` where none is, since every caller here is part
-    of a duel's own procedure and has no second thing to mean."""
-    duel = duel_being_fought(game)
+    """``GameState.duel_being_fought``, raising ``RuntimeError`` where no duel is. Every caller here
+    is part of a duel's own procedure and has no second thing to mean."""
+    duel = game.duel_being_fought
     if duel is None:
         raise RuntimeError("no duel is being fought")
     return duel

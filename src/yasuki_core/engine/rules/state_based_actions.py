@@ -8,7 +8,6 @@ from yasuki_core.engine.rules.board.queries import rings_in_play
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
-from yasuki_core.engine.rules.duel.procedure import duel_being_fought
 from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
@@ -103,7 +102,7 @@ def duelist_left_play(game: GameState) -> list[Effect]:
     out of play or taken by any other route ends the duel the same way. A duel already decided has
     resolved, so one of its Personalities leaving before it ends leaves the outcome standing.
     """
-    duel = duel_being_fought(game)
+    duel = game.duel_being_fought
     if duel is None or duel.outcome is not None:
         return []
     in_play = {card.id for card in game.table.battlefield.cards}
