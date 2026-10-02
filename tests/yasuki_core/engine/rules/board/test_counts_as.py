@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.board.counts_as import (
     register_counts_as,
     while_in_play,
 )
-from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint, RingPrint
+from yasuki_core.game_pieces.prints import FatePrint, RingPrint
 
 from tests.yasuki_core.engine.builders import (
     fate_card,
@@ -56,8 +56,8 @@ def test_a_card_counting_as_a_ring_for_actions_answers_only_an_action(asking_for
         COUNTS_AS.pop("ring_anywhere_probe")
 
 
-@pytest.mark.parametrize(("kind", "counts"), [(FatePrint, True), (PersonalityPrint, False)])
-def test_a_card_counting_as_a_ring_counts_as_what_a_printed_ring_is(kind, counts):
+@pytest.mark.parametrize(("kind", "counts"), [(RingPrint, True), (FatePrint, False)])
+def test_a_card_counting_as_a_ring_counts_as_a_ring_only(kind, counts):
     game = two_seat_game()
     heart = put_in_play(game, holding("P1-heart", owner=PlayerId.P1, printed_id="ring_kind_probe"))
     register_counts_as(

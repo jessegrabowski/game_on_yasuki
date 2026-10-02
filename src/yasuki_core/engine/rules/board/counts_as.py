@@ -56,8 +56,8 @@ class CountsAs:
     Parameters
     ----------
     kind : type of CardPrint
-        The print class the card counts as, such as ``RingPrint``. The card also counts as each
-        class it derives from, as a printed one would.
+        The print class the card counts as, such as ``RingPrint``. The card counts as that class
+        only, not the ones it derives from: a Holding counting as a Ring is not a Fate card.
     asked_by : frozenset of AskedBy
         The askers the printed qualifier admits: "for actions" admits only ``AskedBy.ACTION``.
     condition : callable
@@ -94,7 +94,7 @@ def counts_as(game: GameState, card: L5RCard, kind: type[CardPrint], asking: Ask
     grant = COUNTS_AS.get(card.printed_id)
     return (
         grant is not None
-        and issubclass(grant.kind, kind)
+        and grant.kind is kind
         and asking.by in grant.asked_by
         and grant.condition(game, card, asking)
     )
