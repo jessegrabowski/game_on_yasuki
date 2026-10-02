@@ -71,13 +71,14 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed, Straightened
 from yasuki_core.engine.rules.vocabulary.modifiers import Negation
+from yasuki_core.engine.rules.negation import action_provenance
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, HoldingPrint, PersonalityPrint
 
 from tests.yasuki_core.engine.builders import (
     dealt_table,
@@ -1116,6 +1117,20 @@ TARGETING = ResolveAbility("P2-src", "P1-victim")
 
 def _on_the_table(game: GameState) -> set[str]:
     return {card.id for card in game.table.battlefield.cards}
+
+
+def test_a_negation_of_the_actions_effects_leaves_what_it_targeted():
+    game = _substitution_game()
+    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=HoldingPrint))
+    game.interrupts_offered = True
+
+    resolve_action_effects(
+        game, [TARGETING.built(game)], provenance=action_provenance(game, "P2-src")
+    )
+
+    assert game.action_targets == ("P1-victim",)
+    assert not game.table.cards_by_id["P1-victim"].bowed
+    assert "P1-victim" in _on_the_table(game)
 
 
 def test_the_actions_targeting_is_held_at_the_step_ahead_of_what_it_does():

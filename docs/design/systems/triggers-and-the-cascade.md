@@ -209,7 +209,8 @@ round before any resolves, once per action and only when some seat holds an Inte
 one of the action's effects is checked against the modifications the step collected before it is
 applied, while what a trigger returns inside that cascade is a trait's or the rulebook's and is
 applied as returned. A `Then` among the action's effects carries that provenance to the deferred
-step, which opens no second round. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
+step, which opens no second round. The provenance also names the card whose action it is, which a
+{class}`~.Negation` naming a source reads as each effect commits. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
 effects held until a given moment. {func}`~yasuki_core.engine.rules.triggers.reach_moment` is the
 same for a moment ongoing records also last until: it lapses them, settles the board their expiry
 leaves, and resolves the held effects, in one walk so a question any part asks pauses the rest. {func}`~yasuki_core.engine.rules.triggers.enforce_state_based_actions`

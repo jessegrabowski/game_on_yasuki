@@ -131,6 +131,11 @@ class Effect(ABC):
         Bowed and Unbowed), so "its next bowing" is still to come after one."""
         return True
 
+    def is_negatable(self, game: GameState) -> bool:
+        """Whether a negation in force can reach this effect as it commits. True unless the effect
+        is no effect at all, such as an action's targeting."""
+        return True
+
     @abstractmethod
     def describe(self) -> str:
         """One short line naming what this effect does, for a cascade trace. Abstract so a new
@@ -205,6 +210,10 @@ class Negated(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         return []
+
+    def is_negatable(self, game: GameState) -> bool:
+        """False: it is already nothing, so a negation has nothing left to stop."""
+        return False
 
     def describe(self) -> str:
         return f"negated: {self.effect.describe()}"
@@ -2276,7 +2285,7 @@ class ApplyEffects:
         from yasuki_core.engine.rules import triggers
 
         if self.provenance.interruptible:
-            triggers.resolve_action_effects(game, list(self.effects))
+            triggers.resolve_action_effects(game, list(self.effects), provenance=self.provenance)
         else:
             triggers.resolve_effects(game, list(self.effects), provenance=self.provenance)
 

@@ -325,9 +325,9 @@ class Negation:
     "negate the effects of actions from Strategies until the end of the phase" or "negate its
     bowing (this turn)" has it. A criterion left None matches anything.
 
-    One naming a source negates the effects of actions from matching cards, and is read where such
-    an action hands over its effects, since only there is it known whose action they are. One
-    naming none negates every matching effect as it commits, whatever produced it. Neither reads a
+    Every negation is read as each effect commits. One naming a source negates the effects of
+    actions from matching cards, including what such an action defers or a question in it
+    produces. One naming none negates every matching effect, whatever produced it. Neither reads a
     cost, which is no effect (CR, Effects).
 
     Attributes
@@ -348,8 +348,9 @@ class Negation:
         The card the negated effects act on, read off their ``card_id``. A negation naming one is
         forgotten when that card leaves the table (CR, Card Memory Rule). Default None.
     once : bool, optional
-        Whether the negation is spent by the first effect it negates, as "his next straightening"
-        is. Only one naming no source may be spent this way. Default False.
+        Whether the negation is spent by its first use: by the first effect it negates, as "his
+        next straightening" is, or, for one naming only a source, by the first action from a
+        matching card, all of whose effects it negates. Default False.
     """
 
     source_id: str
@@ -361,12 +362,9 @@ class Negation:
     once: bool = False
 
     def __post_init__(self) -> None:
-        """Raise ValueError for a negation naming nothing it negates, or one naming a source that
-        is spent by its first use."""
+        """Raise ValueError for a negation naming nothing it negates."""
         if not self.names_a_source and self.effect_kind is None and self.subject_id is None:
             raise ValueError("a negation names what it negates")
-        if self.names_a_source and self.once:
-            raise ValueError("only a negation naming no source is spent by its first use")
 
     @property
     def names_a_source(self) -> bool:

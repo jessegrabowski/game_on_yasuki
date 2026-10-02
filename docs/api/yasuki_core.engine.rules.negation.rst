@@ -7,9 +7,10 @@ yasuki_core.engine.rules.negation
 
 .. autosummary::
 
+    action_provenance
     negate_committed
-    negate_from
-    negates_from
+    strips_interrupt
+    would_negate
 
 .. automodule:: yasuki_core.engine.rules.negation
     :members:
