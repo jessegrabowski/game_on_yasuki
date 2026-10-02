@@ -60,8 +60,8 @@ def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():
 # Registries that exist before the first card that registers into one. Listing them keeps the
 # emptiness guard below meaningful for every other registry; drop an entry when its first card
 # lands. "no enlightenment" waits on the Dark Rings and Legacy of Fudo, the Rings that do not
-# count toward Enlightenment. "recruit restrictions" waits on Togashi's Library.
-KNOWINGLY_EMPTY: set[str] = {"no enlightenment", "recruit restrictions"}
+# count toward Enlightenment.
+KNOWINGLY_EMPTY: set[str] = {"no enlightenment"}
 
 
 def test_no_registry_reports_as_empty():

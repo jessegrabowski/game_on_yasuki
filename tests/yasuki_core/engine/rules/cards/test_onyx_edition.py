@@ -93,6 +93,7 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     end_turn,
     fate_card,
+    focus_card,
     holding,
     pay,
     personality,
@@ -1689,3 +1690,47 @@ def test_mirumoto_higashi_ignores_what_is_not_your_ring_for_a_trait(entering):
     _enters_play(game, entering)
 
     assert _hand_size(game) == 0
+
+
+# --- Togashi's Library ---
+
+
+def _library_game(*, clan: str = ruleset.DRAGON, top_focus: int = 2) -> EngineSession:
+    """P1 a ``clan`` player with Togashi's Library and a 3C samurai in play, over a Fate deck whose
+    top card has Focus Value ``top_focus``."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, clan=clan, gold_production=5))
+    put_in_play(state, register(state, holding("library", printed_id="togashis_library")))
+    put_in_play(state, register(state, personality("samurai", chi=3)))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(state, fate_card("under", P1)),
+        register(state, focus_card("top", P1, top_focus)),
+    ]
+    return EngineSession.start(state, P1)
+
+
+@pytest.mark.parametrize(("clan", "offered"), [(ruleset.DRAGON, True), (ruleset.CRANE, False)])
+def test_togashis_library_may_only_be_recruited_by_a_dragon_clan_player(clan, offered):
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, clan=clan, gold_production=5))
+    province_card(state, "library", printed_id="togashis_library", gold_cost=2)
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+
+    assert (Recruit("library") in session.legal_actions(P1)) is offered
+
+
+@pytest.mark.parametrize(
+    ("top_focus", "drawn"), [(2, True), (3, False)], ids=["focus_below_chi", "focus_at_chi"]
+)
+def test_togashis_library_draws_the_top_card_only_below_the_targets_chi(top_focus, drawn):
+    session = _library_game(top_focus=top_focus)
+
+    session.act(P1, ActivateAbility("library"))
+    session.submit(P1, DecisionResponse(("samurai",)))
+
+    hand = {card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards}
+    deck = [card.id for card in session.game.table.decks[DeckKey(P1, Side.FATE)].cards]
+    assert ("top" in hand) is drawn
+    assert deck == (["under"] if drawn else ["top", "under"])
