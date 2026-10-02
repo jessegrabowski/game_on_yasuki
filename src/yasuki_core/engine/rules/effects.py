@@ -184,6 +184,11 @@ class InterruptingEffect(Effect, ABC):
         case the walker performs the effect instead of asking."""
         return True
 
+    def is_negatable(self, game: GameState) -> bool:
+        """False: a question is no effect, and what its answer produces is checked as it commits.
+        An effect that asks before it happens, as a chosen discard does, says True."""
+        return False
+
     def perform(self, game: GameState) -> list[GameEvent]:
         """Never reached: the walker records :meth:`~.InterruptingEffect.request` and pauses instead
         of committing."""
@@ -2142,6 +2147,9 @@ class RecruitCard(InterruptingEffect):
         renewed = ", renewing the province" if self.renew else ""
         return f"recruit {self.card_id} out of sequence{renewed}"
 
+    def is_negatable(self, game: GameState) -> bool:
+        return True
+
     def pauses(self, game: GameState) -> bool:
         """No payment is asked for a card Unique or Singular keeps out of play."""
         card = game.table.cards_by_id[self.card_id]
@@ -2461,6 +2469,13 @@ class DiscardFromHand(InterruptingEffect):
 
     def pauses(self, game: GameState) -> bool:
         return self.picker is not None and len(self._eligible(game)) > self.count
+
+    def is_negatable(self, game: GameState) -> bool:
+        return True
+
+    def would_happen(self, game: GameState) -> bool:
+        """Whether any card would leave the hand."""
+        return self.count > 0 and bool(self._eligible(game))
 
     def request(self, game: GameState) -> DecisionRequest:
         if self.picker is None:

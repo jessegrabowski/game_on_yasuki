@@ -399,8 +399,9 @@ def _advance(
     the rulebook's, never the action's, so it is applied as returned, and a ``Then`` among the
     action's effects carries the flag to the deferred step.
 
-    Every other effect is checked against the negations in force as it commits, whatever produced
-    it, since a negation makes an effect fail to happen whenever it would occur (CR, Prevention).
+    Every effect, an action's or not, is checked against the negations in force as it commits,
+    whatever produced it, since a negation makes an effect fail to happen whenever it would occur
+    (CR, Prevention). The check comes before an effect pauses, so a negated discard asks nothing.
     The provenance's ``acting`` names the card whose action produced the effects in hand, which a
     negation naming a source reads, and its ``negations`` are the ones that action spent. A
     ``Then``, a pause and what an effect produces keep both, and a trigger's effects carry
@@ -423,11 +424,10 @@ def _advance(
                 _trace.append(f"    {effect.describe()}")
                 game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
                 continue
-            if not isinstance(effect, InterruptingEffect):
-                if provenance.interruptible:
-                    effect = _modified(game, effect)
-                if not provenance.paying:
-                    effect = negate_committed(game, effect, provenance)
+            if provenance.interruptible and not isinstance(effect, InterruptingEffect):
+                effect = _modified(game, effect)
+            if not provenance.paying:
+                effect = negate_committed(game, effect, provenance)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
