@@ -22,7 +22,7 @@ class AskedBy(Enum):
 class Asking:
     """Who asks what type a card is: an action or trait printed on ``card``, or the rulebook.
 
-    Build one with :meth:`action`, :meth:`trait` or :data:`RULEBOOK`. Raise ValueError for a card
+    Build one with :meth:`action`, :meth:`trait` or ``RULEBOOK``. Raise ValueError for a card
     with a rule or a missing card with an action or trait.
     """
 
