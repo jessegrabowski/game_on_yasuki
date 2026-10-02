@@ -1,4 +1,5 @@
 import os
+from functools import cache
 
 import psycopg
 import pytest
@@ -24,6 +25,7 @@ def _schema_name() -> str:
     return f"{ACCOUNTS_TEST_SCHEMA}_{os.environ.get('PYTEST_XDIST_WORKER', 'main')}"
 
 
+@cache
 def _db_available() -> bool:
     try:
         psycopg.connect(get_connection_string(), connect_timeout=5).close()
@@ -32,14 +34,26 @@ def _db_available() -> bool:
         return False
 
 
+def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
+    """Mark every test that reads Postgres ``db``, and skip those tests where it is unreachable.
+
+    A test opts in with ``@pytest.mark.db``, or by asking for ``accounts_conn``. The Docker
+    integration job runs ``-m db`` against a live database, and the jobs without one skip them.
+    """
+    skip = pytest.mark.skip(reason="PostgreSQL not available")
+    for item in items:
+        if "accounts_conn" in getattr(item, "fixturenames", ()):
+            item.add_marker(pytest.mark.db)
+        if item.get_closest_marker("db") and not _db_available():
+            item.add_marker(skip)
+
+
 @pytest.fixture
 def accounts_conn():
     """A dict-row connection scoped to a throwaway schema with all accounts migrations applied.
 
     Uses ``dict_row`` to match the production pool, so repository code behaves identically here.
     """
-    if not _db_available():
-        pytest.skip("PostgreSQL not available")
     schema = _schema_name()
     conn = psycopg.connect(get_connection_string(), autocommit=True, row_factory=dict_row)
     with conn.cursor() as cur:

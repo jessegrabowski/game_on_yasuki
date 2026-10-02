@@ -1,4 +1,3 @@
-import psycopg
 import pytest
 
 from yasuki_core.database import (
@@ -19,7 +18,6 @@ from yasuki_core.database import (
     get_back_faces,
     get_card_backs,
     get_cards_by_names,
-    get_connection_string,
     get_db_connection,
     get_rulebook_proxies,
     RULEBOOK_PROXY_IDS,
@@ -36,16 +34,7 @@ from yasuki_core.search import parse_and_build_query
 _IMAGES_PRESENT = SETS_DIR.exists() and any(SETS_DIR.iterdir())
 
 
-def _db_available():
-    try:
-        conn = psycopg.connect(get_connection_string())
-        conn.close()
-        return True
-    except psycopg.OperationalError:
-        return False
-
-
-pytestmark = pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+pytestmark = pytest.mark.db
 
 
 @pytest.fixture

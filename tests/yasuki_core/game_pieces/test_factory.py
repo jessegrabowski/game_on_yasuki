@@ -1,7 +1,6 @@
-import psycopg
 import pytest
 
-from yasuki_core.database import get_connection_string, get_creates_for_cards
+from yasuki_core.database import get_creates_for_cards
 from yasuki_core.decklist import parse_deck_yaml
 
 from yasuki_core.paths import DYNASTY_BACK, FATE_BACK
@@ -347,16 +346,7 @@ def test_entry_without_a_set_uses_the_first_print():
     assert r.dynasty[0].image_front.as_posix() == "sets/ie/kuni_yori.png"
 
 
-def _db_available():
-    try:
-        conn = psycopg.connect(get_connection_string())
-        conn.close()
-        return True
-    except psycopg.OperationalError:
-        return False
-
-
-@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+@pytest.mark.db
 def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
     # The Great Death creates exactly Bird of Prey (the single token matching its printed traits).
     creates, tokens = get_creates_for_cards(["the_great_death"])
@@ -368,7 +358,7 @@ def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
     assert build_print(record).side is not None
 
 
-@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+@pytest.mark.db
 def test_get_creates_for_cards_offers_only_spawnable_cards():
     # Courts of Otosan Uchi creates a real courtier (a spawnable card) and grants a Wealth counter.
     # Only the card is offered: counter grants live in card_grants_counter, not card_creates.
@@ -385,7 +375,7 @@ def test_get_creates_for_cards_offers_only_spawnable_cards():
     assert marker_tokens == {}
 
 
-@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+@pytest.mark.db
 def test_art_swap_carries_the_donor_print_and_both_frames():
     # Building the swap classifies both prints' eras, which reads set release dates from the
     # database.
@@ -493,7 +483,7 @@ def test_two_copies_of_a_flip_card_share_both_prints():
     assert first.back_printed is second.back_printed
 
 
-@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+@pytest.mark.db
 def test_borrowed_art_dresses_the_front_alone():
     """A synthesised back is derived from the front before borrowed art is applied, so flipping a
     card with swapped art shows its own back rather than the donor payload."""
