@@ -9,6 +9,7 @@ yasuki_core.engine.rules.abilities.idioms
 
     ask_who_loses_honor
     ask_whose_honor_moves
+    clan_player
     declarable_gold
     declare_amount
     enemy_units_ever_present

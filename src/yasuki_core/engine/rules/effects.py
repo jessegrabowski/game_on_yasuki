@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.battle.presence import place_unit, record_terrain_
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
+from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
 from yasuki_core.engine.players import Cause, PlayerId, Trait
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
@@ -2307,12 +2308,13 @@ class RecruitCard(InterruptingEffect):
         return True
 
     def would_happen(self, game: GameState) -> bool:
-        """Whether the card may enter play: Unique and Singular can keep it out."""
+        """Whether the card may enter play: Unique and Singular can keep it out, and so can its own
+        "May only be Recruited by" text."""
         card = game.table.cards_by_id[self.card_id]
-        return copy_may_enter(game, card.owner, card)
+        return copy_may_enter(game, card.owner, card) and may_recruit(game, card.owner, card)
 
     def pauses(self, game: GameState) -> bool:
-        """No payment is asked for a card Unique or Singular keeps out of play."""
+        """No payment is asked for a card that may not enter play."""
         return self.would_happen(game)
 
     def perform(self, game: GameState) -> list[GameEvent]:

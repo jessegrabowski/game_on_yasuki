@@ -95,6 +95,7 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.lobby <yasuki_core.engine.rules.rulebook.lobby>
     yasuki_core.engine.rules.rulebook.proxies <yasuki_core.engine.rules.rulebook.proxies>
     yasuki_core.engine.rules.rulebook.recruit <yasuki_core.engine.rules.rulebook.recruit>
+    yasuki_core.engine.rules.rulebook.recruit_restrictions <yasuki_core.engine.rules.rulebook.recruit_restrictions>
     yasuki_core.engine.rules.state <yasuki_core.engine.rules.state>
     yasuki_core.engine.rules.state_based_actions <yasuki_core.engine.rules.state_based_actions>
     yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>

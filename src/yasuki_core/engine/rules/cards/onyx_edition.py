@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.rulebook.lobby import register_may_not_lobby
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     RING_PITCH,
+    clan_player,
     one_wealth,
     register_entry,
     register_event_entry,
@@ -49,8 +50,10 @@ from yasuki_core.engine.rules.effects import (
     GrantKeyword,
     GrantSeatAbility,
     Move,
+    MoveToDeck,
     Negated,
     RevokeGrants,
+    Show,
     Straighten,
     TakeFavor,
 )
@@ -85,14 +88,21 @@ from yasuki_core.engine.rules.board.queries import (
     personalities_in_play,
     rings_in_play,
     sincerity_seed_targets,
+    top_of_deck,
     units_at,
 )
 from yasuki_core.engine.rules.board.seats import cards_in_hand, cards_in_play
-from yasuki_core.engine.rules.stats.card_values import effective_force, effective_personal_honor
+from yasuki_core.engine.rules.rulebook.recruit_restrictions import register_recruit_restriction
+from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.stats.card_values import (
+    effective_chi,
+    effective_force,
+    effective_personal_honor,
+)
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, SeatAbilityGrant, Stat
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import Location, location_of
+from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
@@ -100,6 +110,7 @@ from yasuki_core.game_pieces.prints import (
     RingPrint,
     StrongholdPrint,
 )
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import SINCERITY
 
 
@@ -810,6 +821,41 @@ def _the_sacred_ground_of_the_phoenix__back_granted_ability(
 ) -> Ability:
     """The back's "and": free on any card."""
     return _the_sacred_ground_of_the_phoenix_licensed(context, free=True)
+
+
+# --- Togashi's Library ---
+
+register_recruit_restriction("togashis_library", clan_player(ruleset.DRAGON))
+
+
+def _togashis_library_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in owned_personalities(game, source.owner) if not card.bowed]
+
+
+def _togashis_library_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Show the top card of your Fate deck, and draw it if its Focus Value is less than the
+    target's Chi. Otherwise it goes to the bottom of the deck. An empty deck shows nothing."""
+    seat = source.owner
+    fate = DeckKey(seat, Side.FATE)
+    seen = top_of_deck(game, fate, 1)
+    if not seen:
+        return []
+    top = game.table.cards_by_id[seen[0]]
+    if effective_stat(game, top, Stat.FOCUS) < effective_chi(game, target):
+        return [Show(top.id), DrawCard(seat)]
+    return [Show(top.id), MoveToDeck(top.id, fate, from_bottom=0)]
+
+
+register_ability(
+    "togashis_library",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        targets=_togashis_library_targets,
+        targeting_message="your unbowed Personality",
+        effects=_togashis_library_effects,
+    ),
+)
 
 
 # --- Training Court ---
