@@ -33,6 +33,14 @@ from yasuki_core.engine.rules.board.seats import (
     cards_in_play,
     fate_cards_in_play,
 )
+from yasuki_core.engine.rules.board.counts_as import (
+    AskedBy,
+    Asking,
+    CountsAs,
+    anywhere,
+    counts_as,
+    register_counts_as,
+)
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
@@ -44,6 +52,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     province_zones,
+    top_of_deck,
     units_at,
 )
 from yasuki_core.engine.rules.effects import (
@@ -56,12 +65,15 @@ from yasuki_core.engine.rules.effects import (
     Dishonor,
     DrawCard,
     Effect,
+    EndLook,
     Evaluate,
     GainHonor,
     GrantModifier,
     GrantNegation,
+    LookAtTop,
     MeleeAttack,
     Move,
+    MoveToDeck,
     Negated,
     Rehonor,
     Straighten,
@@ -88,12 +100,20 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     DuelResolved,
     FavorDiscarded,
     HonorChanged,
+    TurnStarted,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
-from yasuki_core.engine.table import Location, location_of
+from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import AttachmentPrint, FatePrint, PersonalityPrint, WindPrint
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
+    FatePrint,
+    PersonalityPrint,
+    RingPrint,
+    WindPrint,
+)
 
 
 # --- Daidoji Tashiko ---
@@ -710,6 +730,57 @@ register_ability(
 register_entry(
     "way_of_the_dragon_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.DRAGON)
 )
+
+# "This Strategy counts as a Ring for actions."
+register_counts_as(
+    "way_of_the_dragon_experienced", CountsAs(RingPrint, frozenset({AskedBy.ACTION}), anywhere)
+)
+
+WAY_OF_THE_DRAGON_DISCARDS = (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD)
+
+
+@lobby_bonus_grant("way_of_the_dragon_experienced")
+def _way_of_the_dragon_experienced_lobby_bonus(game: GameState, card: L5RCard) -> int:
+    """ "You have a +1 Lobby bonus for each Ring in play or in a discard pile." The bonus is a
+    trait, so a card counting as a Ring only for actions, this one included, is not counted."""
+    asking = Asking.trait(card)
+    discarded = (
+        held
+        for seat in game.table.seats
+        for role in WAY_OF_THE_DRAGON_DISCARDS
+        for held in game.table.zones[ZoneKey(seat, role)].cards
+    )
+    return sum(
+        counts_as(game, held, RingPrint, asking)
+        for held in (*game.table.battlefield.cards, *discarded)
+    )
+
+
+@on(TurnStarted, "way_of_the_dragon_experienced")
+def _way_of_the_dragon_experienced_turn_started(ctx: TriggerContext) -> list[Effect]:
+    """After your turn begins, look at the top card of your Fate deck. You may put it on the bottom
+    of the deck."""
+    seat = ctx.card.owner
+    if seat is not ctx.event.seat:
+        return []
+    fate = DeckKey(seat, Side.FATE)
+    seen = top_of_deck(ctx.game, fate, 1)
+    if not seen:
+        return []
+    return [
+        LookAtTop(seat, fate, 1),
+        Choose(seat, seen, 0, 1, "way_of_the_dragon_experienced_bottom", ctx.card.id),
+    ]
+
+
+@choice_resolver(
+    "way_of_the_dragon_experienced_bottom", prompt="You may put it on the bottom of the deck"
+)
+def _resolve_way_of_the_dragon_experienced_bottom(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    fate = DeckKey(seat, Side.FATE)
+    return [*(MoveToDeck(card_id, fate, from_bottom=0) for card_id in chosen), EndLook()]
 
 
 # --- Way of the Lion (Experienced) ---
