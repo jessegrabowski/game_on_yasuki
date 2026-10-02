@@ -12,14 +12,15 @@ yasuki_core.engine.rules.duel.resolution
     DecideTheDuel
     DiscardFocusedCards
     EndTheDuel
+    RemoveFocusAreas
     RevealFocusedCards
 
 .. rubric:: Functions
 
 .. autosummary::
 
+    duel_cleanup
     duel_total
-    end_duel
     end_without_resolution
     reveal_focused_cards
 

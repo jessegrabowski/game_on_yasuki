@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.procedure import duel_in_progress, duel_stat
 from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelWork
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
-from yasuki_core.engine.rules.effects import Discard
+from yasuki_core.engine.rules.effects import ApplyEffects, Discard, Effect
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -109,7 +109,28 @@ class DiscardFocusedCards(DuelWork):
     CR's DUEL entry, after the duel has ended and its consequences have applied."""
 
     def resume(self, game: GameState) -> None:
-        triggers.fire_all(game, end_duel(game))
+        game.stack.append(RemoveFocusAreas())
+        triggers.resolve_effects(game, duel_cleanup(game))
+
+
+@dataclass(frozen=True, slots=True)
+class RemoveFocusAreas:
+    """Take both focusing areas off the table once the duel's cleanup has resolved, cascade
+    included. Not a step of the duel's own, so a duel ending early does not drop it.
+
+    Raise ``RuntimeError`` if an area still holds a card, as one whose discard was negated would.
+    """
+
+    def resume(self, game: GameState) -> None:
+        duel = game.duel
+        if duel is None:
+            raise RuntimeError("the focusing areas are being removed with no duel on the game")
+        for seat in (duel.challenger, duel.challenged):
+            left = ops.remove_focus_area(game.table, seat)
+            if left:
+                raise RuntimeError(
+                    f"{seat.name}'s focusing area still held {[card.id for card in left]}"
+                )
 
 
 def reveal_focused_cards(game: GameState) -> None:
@@ -131,10 +152,10 @@ def duel_total(game: GameState, duel: DuelRecord, seat: PlayerId) -> int:
     return duel_stat(game, duelist) + ruleset.ACTIVE.focus_procedure.focus_total(game, duel, seat)
 
 
-def end_duel(game: GameState) -> list[GameEvent]:
-    """Discard the duel's focused cards and take its focusing areas off the table (CR, Duel), running
-    the focus procedure's own cleanup first. Return the events that raises, for the caller's cascade
-    to drain.
+def duel_cleanup(game: GameState) -> list[Effect]:
+    """The effects that clear a duel away (CR, Duel): the focus procedure's own cleanup, then a
+    discard of each focused card. They resolve through the cascade like any rulebook procedure's,
+    and :class:`RemoveFocusAreas` follows them.
 
     The record stays on the game with its outcome, so what resolves after a duel can still read how
     it went. The next duel declared replaces it.
@@ -147,24 +168,20 @@ def end_duel(game: GameState) -> list[GameEvent]:
     duel = game.duel
     if duel is None or duel.outcome is None:
         raise RuntimeError("the duel's focused cards are being discarded before it was decided")
-    events: list[GameEvent] = []
-    # While the focused cards are still in their areas, since a procedure's cleanup may read them.
-    for effect in ruleset.ACTIVE.focus_procedure.cleanup(game, duel):
-        events.extend(triggers.apply_effect(game, effect))
-    for seat in (duel.challenger, duel.challenged):
-        for card in focused_cards(game, seat):
-            events.extend(triggers.apply_effect(game, Discard(card.id, Rulebook.DUEL_RESOLUTION)))
-        left = ops.remove_focus_area(game.table, seat)
-        if left:
-            raise RuntimeError(
-                f"{seat.name}'s focusing area still held {[card.id for card in left]}"
-            )
-    return events
+    # Built while the focused cards are still in their areas, since a procedure's cleanup may read
+    # them, and listed ahead of the discards so it resolves while they are still there.
+    discards = [
+        Discard(card.id, Rulebook.DUEL_RESOLUTION)
+        for seat in (duel.challenger, duel.challenged)
+        for card in focused_cards(game, seat)
+    ]
+    return [*ruleset.ACTIVE.focus_procedure.cleanup(game, duel), *discards]
 
 
 def end_without_resolution(game: GameState) -> list[GameEvent]:
     """End the duel where it stands, with no winner and no totals: what a duelist leaving play does
-    to a duel (CR, Duel). Return the events ending it raises.
+    to a duel (CR, Duel). Return the event ending it. Its cleanup is queued to resolve once the
+    cascade it ended in has settled, since this runs inside an effect.
 
     The duel's queued work goes with it, so no step of a duel that has ended runs. Work queued by
     whatever created the duel is left alone: the action that declared it still has its own steps to
@@ -182,7 +199,9 @@ def end_without_resolution(game: GameState) -> list[GameEvent]:
     triggers.lapse_ongoing(game, DUEL_CONSEQUENCES)
     triggers.discard_delayed(game, DUEL_CONSEQUENCES)
     duel.outcome = DuelOutcome(winners=(), losers=(), totals={})
-    return [DuelEnded(resolved=False, source_card_id=duel.source), *end_duel(game)]
+    game.stack.append(RemoveFocusAreas())
+    game.stack.append(ApplyEffects(tuple(duel_cleanup(game))))
+    return [DuelEnded(resolved=False, source_card_id=duel.source)]
 
 
 def _is_duelist(game: GameState, card: L5RCard) -> bool:
