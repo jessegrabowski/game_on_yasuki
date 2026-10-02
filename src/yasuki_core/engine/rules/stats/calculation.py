@@ -157,6 +157,30 @@ def stat_maximum(game: GameState, card: L5RCard, stat: Stat) -> int | None:
     return None
 
 
+def unbounded_stat(
+    game: GameState,
+    card: L5RCard,
+    stat: Stat,
+    *,
+    granters: Sequence[L5RCard] | None = None,
+) -> int:
+    """``card``'s ``stat`` as its printed value plus every active modifier, before any minimum or
+    maximum applies. Setting a stat measures from this (CR, Setting Stats to Values). An absent or
+    dash stat reads zero.
+
+    Parameters
+    ----------
+    granters : sequence of L5RCard, optional
+        The board's :func:`~.stat_granters`, for a caller reading many cards against one board.
+        Default None, read off the board here.
+    """
+    base = getattr(card, stat.value, None)
+    if base is None:
+        return 0
+    modifiers = active_modifiers(game, card, stat, granters=granters)
+    return base + sum(modifier.amount for modifier in modifiers)
+
+
 def effective_stat(
     game: GameState,
     card: L5RCard,
@@ -190,11 +214,9 @@ def effective_stat(
     value : int
         The modified stat.
     """
-    base = getattr(card, stat.value, None)
-    if base is None:
+    if getattr(card, stat.value, None) is None:
         return 0
-    modifiers = active_modifiers(game, card, stat, granters=granters)
-    total = base + sum(modifier.amount for modifier in modifiers)
+    total = unbounded_stat(game, card, stat, granters=granters)
     floor = stat_minimum(game, card, stat)
     cap = stat_maximum(game, card, stat)
     if cap is None:
