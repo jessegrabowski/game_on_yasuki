@@ -1,5 +1,14 @@
-from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.effects import Ask, Bow, Effect, Negated, Straighten, Then
+from yasuki_core.engine.players import PlayerId, Rulebook
+from yasuki_core.engine.rules.effects import (
+    Ask,
+    Bow,
+    DiscardFromHand,
+    RecruitCard,
+    Effect,
+    Negated,
+    Straighten,
+    Then,
+)
 from yasuki_core.engine.rules.interrupts import forecast
 from yasuki_core.engine.rules.negation import (
     action_provenance,
@@ -18,13 +27,22 @@ from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE, END_OF_TURN
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, register, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    fate_card,
+    holding,
+    province_card,
+    put_in_play,
+    register,
+    two_seat_game,
+)
 
 FROM_NO_ACTION = Provenance()
 
@@ -34,6 +52,13 @@ def _card(game, print_class, name: str = "Plan") -> L5RCard:
         print_class, id=name, printed_id=name, name=name, side=Side.FATE, owner=PlayerId.P1
     )
     return register(game.table, card)
+
+
+def _hand(game, seat, count):
+    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
+    for index in range(count):
+        hand.add(register(game.table, fate_card(f"{seat.name}-held-{index}", seat)))
+    return hand
 
 
 @choice_resolver("test_negation_cost_bow")
@@ -274,3 +299,72 @@ def test_a_cost_that_pauses_on_a_question_is_still_a_cost_once_answered():
     submit(game, DecisionResponse(()))
 
     assert farm.bowed
+
+
+def test_a_negated_discard_asks_nothing_and_discards_nothing():
+    game = two_seat_game()
+    hand = _hand(game, PlayerId.P1, 3)
+    game.ongoing.append(Negation("any", END_OF_TURN, effect_kind=DiscardFromHand))
+
+    resolve_effects(
+        game, [DiscardFromHand(PlayerId.P1, 1, Rulebook.MAXIMUM_HAND_SIZE, PlayerId.P1)]
+    )
+
+    assert game.pending is None
+    assert len(hand.cards) == 3
+
+
+def test_a_strategys_random_discard_is_negated_with_its_other_effects():
+    game = two_seat_game()
+    plan = _card(game, ActionPrint)
+    hand = _hand(game, PlayerId.P2, 3)
+    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
+
+    discard = DiscardFromHand(PlayerId.P2, 1, PlayerId.P1, None)
+    resolve_action_effects(game, [discard], provenance=action_provenance(game, plan.id))
+
+    assert len(hand.cards) == 3
+
+
+def test_a_question_in_a_negated_action_is_still_asked():
+    game = two_seat_game()
+    plan = _card(game, ActionPrint)
+    farm = put_in_play(game, holding("farm"))
+    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
+
+    asked = Ask(PlayerId.P1, "Bow it?", "test_negation_cost_bow", source_id=farm.id)
+    resolve_action_effects(game, [asked], provenance=action_provenance(game, plan.id))
+
+    assert game.pending is not None
+
+
+def test_a_discard_paid_as_a_cost_is_not_negated():
+    game = two_seat_game()
+    hand = _hand(game, PlayerId.P1, 1)
+    game.ongoing.append(Negation("any", END_OF_TURN, effect_kind=DiscardFromHand))
+
+    pay_costs(game, [DiscardFromHand(PlayerId.P1, 1, PlayerId.P1, PlayerId.P1)])
+
+    assert not hand.cards
+
+
+def test_a_once_negation_of_discarding_waits_for_a_discard_that_would_happen():
+    game = two_seat_game()
+    negation = Negation("any", END_OF_TURN, effect_kind=DiscardFromHand, once=True)
+    game.ongoing.append(negation)
+
+    resolve_effects(game, [DiscardFromHand(PlayerId.P1, 1, PlayerId.P1, None)])
+
+    assert game.ongoing == [negation]
+
+
+def test_a_once_negation_of_recruiting_waits_for_a_card_that_may_enter_play():
+    game = two_seat_game()
+    put_in_play(game, holding("P2-shrine", owner=PlayerId.P2, printed_id="shrine"))
+    target = province_card(game, "P1-shrine", printed_id="shrine", keywords=(keywords.SINGULAR,))
+    negation = Negation("any", END_OF_TURN, effect_kind=RecruitCard, once=True)
+    game.ongoing.append(negation)
+
+    resolve_effects(game, [RecruitCard(target.id)])
+
+    assert game.ongoing == [negation]
