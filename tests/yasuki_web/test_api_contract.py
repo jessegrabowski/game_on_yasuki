@@ -1,19 +1,8 @@
-import psycopg
 import pytest
 from fastapi.testclient import TestClient
 
-from yasuki_core.database import get_connection_string
 
-
-def _db_available():
-    try:
-        psycopg.connect(get_connection_string()).close()
-        return True
-    except psycopg.OperationalError:
-        return False
-
-
-pytestmark = pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+pytestmark = pytest.mark.db
 
 
 @pytest.fixture(scope="module")

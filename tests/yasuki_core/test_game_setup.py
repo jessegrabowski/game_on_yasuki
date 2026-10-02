@@ -1,3 +1,4 @@
+import pytest
 from numpy.random import default_rng
 
 from yasuki_core.engine.players import PlayerId
@@ -10,9 +11,8 @@ from yasuki_core.game_setup import build_state_from_deck
 # of its own, and inventing one to avoid the import would be a second thing to keep current.
 from yasuki_gui.session import DEMO_DECK_PATH
 
-from tests.yasuki_core.db_guard import requires_db
 
-pytestmark = requires_db
+pytestmark = pytest.mark.db
 
 DECKS = DEMO_DECK_PATH.parent
 

@@ -8,9 +8,8 @@ from yasuki_core.game_pieces.prints import StrongholdPrint
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.session import DEMO_DECK_PATH
 
-from tests.yasuki_core.db_guard import requires_db
 
-# Dealing a real decklist reads the cards out of Postgres, so those cases carry @requires_db and
+# Dealing a real decklist reads the cards out of Postgres, so those cases carry @pytest.mark.db and
 # skip in the bare unit-test jobs. The two fallback cases below raise before reaching it and run
 # everywhere.
 #
@@ -33,7 +32,7 @@ def _stronghold_name(host: GameHost, seat: PlayerId) -> str:
     )
 
 
-@requires_db
+@pytest.mark.db
 def test_it_deals_a_game_on_construction():
     host = _host()
 
@@ -41,14 +40,14 @@ def test_it_deals_a_game_on_construction():
     assert host.session.game.table.battlefield
 
 
-@requires_db
+@pytest.mark.db
 def test_the_higher_honor_deck_takes_the_first_turn():
     host = _host(human=HIGH_HONOR, opponent=LOW_HONOR)
 
     assert host.session.game.first_player is host.human_seat
 
 
-@requires_db
+@pytest.mark.db
 def test_loading_a_deck_deals_a_new_game_from_it():
     host = _host()
     before = _stronghold_name(host, PlayerId.P2)
@@ -58,7 +57,7 @@ def test_loading_a_deck_deals_a_new_game_from_it():
     assert _stronghold_name(host, PlayerId.P2) != before
 
 
-@requires_db
+@pytest.mark.db
 def test_loading_a_deck_replaces_the_runner():
     host = _host()
     before = host.runner
@@ -68,7 +67,7 @@ def test_loading_a_deck_replaces_the_runner():
     assert host.runner is not before
 
 
-@requires_db
+@pytest.mark.db
 def test_a_deck_that_cannot_be_read_leaves_the_game_running():
     host = _host()
     before = host.runner
@@ -79,7 +78,7 @@ def test_a_deck_that_cannot_be_read_leaves_the_game_running():
     assert host.runner is before
 
 
-@requires_db
+@pytest.mark.db
 def test_a_failed_load_does_not_strand_the_next_one_on_the_bad_deck():
     """The slot rolls back, so a later reload of the other seat deals the pairing that was there
     before rather than retrying the deck that failed."""

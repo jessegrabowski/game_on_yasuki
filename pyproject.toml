@@ -59,7 +59,10 @@ line-length = 100
 # The repo root is on the path so the test packages can import their shared builders
 # (tests/yasuki_core/engine/builders.py); every tests/ directory already carries an __init__.py.
 pythonpath = ["src", "."]
-addopts = "-q"
+addopts = "-q --strict-markers"
+markers = [
+    "db: reads PostgreSQL; skipped without it, and the only tests the Docker integration job runs",
+]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]

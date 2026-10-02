@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pytest
 
-from tests.conftest import _db_available
 from tests.yasuki_core.game_pieces.test_factory import RECORDS
 
 from yasuki_core.engine.players import PlayerId
@@ -507,7 +506,7 @@ def test_re_encoding_a_decoded_payload_reproduces_it():
     assert {name: encode_card(decode_card(p)) for name, p in stored.items()} == stored
 
 
-@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+@pytest.mark.db
 def test_a_card_the_factory_built_encodes():
     """The hand-built art-swap case above pins a shape this test proves is the real one. The codec
     could not encode a factory-built card at all until the list branch landed, and no test held the

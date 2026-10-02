@@ -71,6 +71,15 @@ repos:
       language: system
       files: ^src/yasuki_core/.*\.py$
 
+    - id: tests-run-in-ci
+      name: every test runs in a CI job
+      # Stdlib only, so it runs in CI's pre-commit job. It reads every tracked test module rather
+      # than the changed ones: moving a job's paths in the workflow orphans tests nobody touched.
+      entry: python hooks/tests_run_in_ci.py
+      language: system
+      pass_filenames: false
+      files: ^(tests/.*\.py|\.github/workflows/ci\.yml|pyproject\.toml)$
+
     - id: docs-api
       name: API pages match the source
       entry: pixi run -e docs docs-api

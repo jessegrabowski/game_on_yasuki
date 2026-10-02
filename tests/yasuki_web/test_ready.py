@@ -103,6 +103,7 @@ def test_one_ready_seat_does_not_trigger_setup(room):
     assert not room.setup_done
 
 
+@pytest.mark.db
 def test_solo_ready_deals_a_one_seat_goldfish_table(room):
     ada = _seat(room, "Ada")
     asyncio.run(room.handle_load_deck(ada, DECK_YAML))
@@ -120,6 +121,7 @@ def test_a_lone_ready_without_solo_waits_for_an_opponent(room):
     assert not room.setup_done
 
 
+@pytest.mark.db
 def test_reset_needs_every_seated_player_to_agree(room):
     ada, kenji = _both_loaded(room)
     asyncio.run(room.handle_ready(ada, True))
@@ -142,6 +144,7 @@ def test_reset_needs_every_seated_player_to_agree(room):
     assert len(room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards) == 6
 
 
+@pytest.mark.db
 def test_a_solo_goldfisher_resets_on_their_own(room):
     ada = _seat(room, "Ada")
     asyncio.run(room.handle_load_deck(ada, DECK_YAML))
@@ -153,6 +156,7 @@ def test_a_solo_goldfisher_resets_on_their_own(room):
     assert room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards == []
 
 
+@pytest.mark.db
 def test_the_seat_going_second_plays_its_strongholds_back_face(room):
     ada, kenji = _both_loaded(room)
     asyncio.run(room.handle_ready(ada, True))
@@ -166,6 +170,7 @@ def test_the_seat_going_second_plays_its_strongholds_back_face(room):
     assert (flipped[0].printed_id, flipped[0].province_strength) == ("kyuden_hida__back", 9)
 
 
+@pytest.mark.db
 def test_both_ready_deals_the_table_and_broadcasts(room):
     ada, kenji = _both_loaded(room)
     asyncio.run(room.handle_ready(ada, True))
@@ -177,6 +182,7 @@ def test_both_ready_deals_the_table_and_broadcasts(room):
     assert ada.sent[-1]["type"] == "SNAPSHOT"
 
 
+@pytest.mark.db
 def test_the_deal_fills_provinces_and_draws_the_starting_hand(room):
     ada, kenji = _both_loaded(room)
     asyncio.run(room.handle_ready(ada, True))
@@ -201,6 +207,7 @@ def test_readying_without_a_deck_is_rejected(room):
     assert not room.state.seats[PlayerId.P1].ready
 
 
+@pytest.mark.db
 def test_re_ready_after_setup_does_not_rerun_it(room):
     ada, kenji = _both_loaded(room)
     asyncio.run(room.handle_ready(ada, True))
@@ -212,6 +219,7 @@ def test_re_ready_after_setup_does_not_rerun_it(room):
     assert room.intent_log is log_after_setup  # rerunning setup would re-seed a new log
 
 
+@pytest.mark.db
 def test_setup_snapshot_holds_redaction_and_honor(room):
     ada, kenji = _both_loaded(room)
     asyncio.run(room.handle_ready(ada, True))

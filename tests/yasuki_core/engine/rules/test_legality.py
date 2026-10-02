@@ -70,7 +70,6 @@ from yasuki_core.bots.agents import make_agent
 from yasuki_core.bots.policies import make_policy
 from yasuki_core.engine.driver import Controls, run_game
 from yasuki_core.game_setup import build_state_from_deck
-from tests.yasuki_core.db_guard import requires_db
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
@@ -165,7 +164,7 @@ def test_is_legal_rejects_every_action_while_a_decision_is_pending():
     assert not legality.is_legal(session.game, PlayerId.P1, Pass())
 
 
-@requires_db
+@pytest.mark.db
 def test_is_legal_and_the_enumeration_agree_across_a_driven_game():
     # The fixtures above are hand-built and shallow. This walks real boards (refills, bowed
     # producers, spent gold, a used Legacy) and checks the two never diverge on any of them.

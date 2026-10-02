@@ -9,7 +9,6 @@ from yasuki_web.rooms import rooms
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.engine.players import PlayerId
 
-from tests.yasuki_core.db_guard import requires_db
 from tests.yasuki_web._support import account
 
 DECK_YAML = """\
@@ -141,7 +140,7 @@ def test_entry_names_is_just_the_card_without_an_art_swap():
     assert list(_entry_names({"name": "Ambush", "art": None})) == ["Ambush"]
 
 
-@requires_db
+@pytest.mark.db
 def test_setup_leaves_rulebook_proxies_on_the_table(room):
     """The per-deck token pull assigns ``creatable_tokens`` wholesale, so the rulebook proxies are
     merged after it. Swapping the two would drop the Favor from every room.
