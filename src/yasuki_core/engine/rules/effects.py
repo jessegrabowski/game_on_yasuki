@@ -419,10 +419,14 @@ class Destroy(Effect):
         The card to destroy.
     cause : PlayerId, Rulebook or Trait
         Who or what destroyed it: the seat whose card did, or the rule that demanded it.
+    negatable : bool, optional
+        Whether a negation can stop it. False for a destruction the rules say cannot be negated,
+        as seppuku's. Default True.
     """
 
     card_id: str
     cause: Cause
+    negatable: bool = True
 
     @property
     def subject_id(self) -> str:
@@ -430,6 +434,9 @@ class Destroy(Effect):
 
     def describe(self) -> str:
         return f"destroy {self.card_id}"
+
+    def is_negatable(self, game: GameState) -> bool:
+        return self.negatable
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
@@ -1709,9 +1716,19 @@ class Dishonor(Effect):
 @dataclass(frozen=True, slots=True)
 class Rehonor(Effect):
     """Rehonor a dishonorable Personality (CR, Rehonoring). Announces the change, which a card that
-    reacts to a rehonoring reads. One already honorable announces nothing."""
+    reacts to a rehonoring reads. One already honorable announces nothing.
+
+    Attributes
+    ----------
+    card_id : str
+        The Personality to rehonor.
+    negatable : bool, optional
+        Whether a negation can stop it. False for a rehonoring the rules say cannot be negated, as
+        seppuku's. Default True.
+    """
 
     card_id: str
+    negatable: bool = True
 
     @property
     def subject_id(self) -> str:
@@ -1719,6 +1736,9 @@ class Rehonor(Effect):
 
     def describe(self) -> str:
         return f"rehonor {self.card_id}"
+
+    def is_negatable(self, game: GameState) -> bool:
+        return self.negatable
 
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """An honorable Personality cannot be rehonored."""
@@ -1737,8 +1757,8 @@ def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     """The effects of a Personality committing seppuku: rehonor him, then destroy him (CR,
     Seppuku). Two effects rather than one, so each passes through the Interrupt step on its own,
     and the destruction is deferred through ``Then`` so the Personality's own reaction to his
-    rehonoring fires while he is still in play. The CR adds that neither can be negated, which
-    nothing here enforces.
+    rehonoring fires while he is still in play. The CR adds that neither can be negated, so both
+    are built not negatable, against a lasting negation and an Interrupt's alike.
 
     Parameters
     ----------
@@ -1747,7 +1767,10 @@ def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     cause : PlayerId, Rulebook or Trait
         Who or what directed it: the seat whose card did, or the rule that demanded it.
     """
-    return [Rehonor(card_id), Then((Destroy(card_id, cause),))]
+    return [
+        Rehonor(card_id, negatable=False),
+        Then((Destroy(card_id, cause, negatable=False),)),
+    ]
 
 
 @dataclass(frozen=True, slots=True)

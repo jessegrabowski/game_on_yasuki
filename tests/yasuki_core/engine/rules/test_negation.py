@@ -4,16 +4,19 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.effects import (
     Ask,
     Bow,
+    Destroy,
     DiscardFromHand,
     Effect,
     GrantModifier,
     Negated,
     RecruitCard,
+    Rehonor,
     SpendOncePerTurn,
     Straighten,
     Then,
+    seppuku,
 )
-from yasuki_core.engine.rules.interrupts import forecast
+from yasuki_core.engine.rules.interrupts import Replacement, forecast
 from yasuki_core.engine.rules.negation import (
     action_provenance,
     negate_committed,
@@ -32,6 +35,7 @@ from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE, END_OF_TURN
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.game_events import Rehonored
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.game_pieces.cards import L5RCard
@@ -42,6 +46,7 @@ from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
+    personality,
     province_card,
     put_in_play,
     register,
@@ -390,3 +395,52 @@ def test_a_negation_naming_a_card_reaches_what_acts_on_that_card(effect, negated
     committed = negate_committed(game, effect, FROM_NO_ACTION)
 
     assert (committed == Negated(effect)) is negated
+
+
+def test_seppuku_destroys_a_personality_a_negation_of_his_destruction_names():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    game.ongoing.append(Negation("any", END_OF_TURN, effect_kind=Destroy, subject_id=hero.id))
+
+    resolve_effects(game, seppuku(hero.id, PlayerId.P1))
+    run_stack(game)
+
+    assert hero not in game.table.battlefield.cards
+
+
+def test_seppuku_rehonors_a_personality_a_negation_of_rehonoring_names():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    hero.dishonor()
+    game.ongoing.append(Negation("any", END_OF_TURN, effect_kind=Rehonor, subject_id=hero.id))
+
+    resolve_effects(game, seppuku(hero.id, PlayerId.P1))
+
+    assert Rehonored(hero.id) in game.turn_events
+
+
+def test_seppuku_spends_no_once_negation():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    negation = Negation("any", END_OF_TURN, effect_kind=Destroy, once=True)
+    game.ongoing.append(negation)
+
+    resolve_effects(game, seppuku(hero.id, PlayerId.P1))
+    run_stack(game)
+
+    assert game.ongoing == [negation]
+
+
+def test_an_interrupt_cannot_negate_an_effect_that_cannot_be_negated():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    destroy = Destroy(hero.id, PlayerId.P1, negatable=False)
+    game.modifications.append(
+        Replacement(bound=destroy, card_id="ward", replacement=Negated(destroy))
+    )
+    game.interrupts_offered = True
+
+    resolve_action_effects(game, [destroy])
+
+    assert hero not in game.table.battlefield.cards
+    assert game.modifications == []

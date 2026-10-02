@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     InterruptingEffect,
     Effect,
+    Negated,
     Then,
 )
 from yasuki_core.engine.rules import state_based_actions
@@ -477,11 +478,15 @@ def _advance(
 
 def _modified(game: GameState, effect: Effect) -> Effect:
     """``effect`` as the Interrupts taken against the action make of it: every modification bound
-    to it applies in the order the Interrupts were taken, and is spent."""
+    to it applies in the order the Interrupts were taken, and is spent. One that would negate an
+    effect that cannot be negated is spent and changes nothing."""
     original = effect
     for modification in list(game.modifications):
         if modification.answers(original):
-            effect = modification.apply(game, effect)
+            modified = modification.apply(game, effect)
+            refused = isinstance(modified, Negated) and not effect.is_negatable(game)
+            if not refused:
+                effect = modified
             game.modifications.remove(modification)
     return effect
 
