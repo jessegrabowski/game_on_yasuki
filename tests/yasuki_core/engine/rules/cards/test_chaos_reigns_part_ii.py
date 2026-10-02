@@ -22,7 +22,7 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import (
 )
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
@@ -37,10 +37,11 @@ from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint, RingPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
+    attached,
     attachment,
     combat_segment,
     end_phase,
@@ -637,3 +638,67 @@ def test_togashi_chiyo_offers_no_second_melee_when_the_first_destroys_nothing():
     assert session.game.pending is None
     assert not session.game.table.cards_by_id["chiyo"].bowed
     assert _destroyed(session) == set()
+
+
+# --- Burnt Offering ---
+
+
+def _burnt_offering_battle(*, ring: bool = False) -> EngineSession:
+    """P1's Monk against P2's guard, who carries a Follower and an Item, at the battlefield, and
+    Burnt Offering in P1's hand. ``ring`` puts a Ring in P1's play."""
+    in_play = [
+        personality("monk", keywords=(keywords.MONK,)),
+        personality("guard", owner=PlayerId.P2),
+    ]
+    if ring:
+        in_play.append(
+            L5RCard.of(
+                RingPrint, id="ring", printed_id="ring", name="ring", side=Side.FATE, owner=P1
+            )
+        )
+    session = combat_segment(in_play, {"monk": 0}, {"guard": 0})
+    table = session.game.table
+    follower = attachment(
+        "spear", owner=PlayerId.P2, attachment_type=AttachmentType.FOLLOWER, force=1
+    )
+    attached(table, follower, "guard")
+    attached(table, attachment("helm", owner=PlayerId.P2), "guard")
+    offering = L5RCard.of(
+        FatePrint,
+        id="offering",
+        printed_id="burnt_offering",
+        name="Burnt Offering",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+        keywords=(keywords.FIRE,),
+    )
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(table, offering))
+    return session
+
+
+def _offer(session: EngineSession, destroyed: str) -> L5RCard:
+    session.act(P1, PlayStrategy("offering"))
+    session.submit(P1, DecisionResponse(("monk",)))
+    session.submit(P1, DecisionResponse((destroyed,)))
+    return session.game.table.cards_by_id["monk"]
+
+
+@pytest.mark.parametrize(("destroyed", "force"), [("spear", 4), ("helm", 2)])
+def test_burnt_offering_gives_force_only_when_the_personality_is_left_without_followers(
+    destroyed, force
+):
+    session = _burnt_offering_battle()
+
+    monk = _offer(session, destroyed)
+
+    assert effective_force(session.game, monk) == force
+    assert effective_chi(session.game, monk) == 3
+
+
+def test_burnt_offering_gives_chi_while_you_control_a_ring():
+    session = _burnt_offering_battle(ring=True)
+
+    monk = _offer(session, "helm")
+
+    assert effective_chi(session.game, monk) == 3 + 2

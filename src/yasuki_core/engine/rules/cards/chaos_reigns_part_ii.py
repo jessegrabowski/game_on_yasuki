@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_holdings,
     owned_personalities,
     personalities_in_play,
+    rings_in_play,
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -25,6 +26,7 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     CreateToken,
+    Destroy,
     DrawCard,
     Effect,
     Evaluate,
@@ -38,7 +40,11 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
     Then,
 )
+from yasuki_core.engine.rules.board.counts_as import Asking
+from yasuki_core.engine.rules.legality import location_permits
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
     Bowed,
@@ -64,6 +70,90 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
+
+
+# --- Burnt Offering ---
+
+BURNT_OFFERING_BONUS = 2
+
+
+def _burnt_offering_attachments(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The enemy attachments the action may target where they stand."""
+    return tuple(
+        card.id
+        for card in game.table.battlefield.cards
+        if card.owner is not seat
+        and isinstance(card.printed, AttachmentPrint)
+        and attached_to(game, card) is not None
+        and location_permits(game, card)
+    )
+
+
+def _burnt_offering_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your unbowed Monks, once there is an enemy attachment to destroy."""
+    if not _burnt_offering_attachments(game, source.owner):
+        return []
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if not card.bowed and has_keyword(game, card, keywords.MONK)
+    ]
+
+
+def _burnt_offering_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "If you control a Ring, give them +2C" reads nothing the destruction changes, so it is
+    settled here. The targeted Monk stands as the choice's source so the later steps can name
+    him."""
+    attachments = _burnt_offering_attachments(game, source.owner)
+    chosen = Choose(source.owner, attachments, 1, 1, "burnt_offering", target.id)
+    if not rings_in_play(game, source.owner, Asking.action(source)):
+        return [chosen]
+    chi = GrantModifier(
+        source.id, target.id, Stat.CHI, BURNT_OFFERING_BONUS, Duration.UNTIL_END_OF_TURN
+    )
+    return [chi, chosen]
+
+
+@choice_resolver("burnt_offering", prompt="Destroy a target enemy attachment")
+def _resolve_burnt_offering(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Destroy the attachment, then read its Personality once the destruction has resolved."""
+    destroyed = Destroy(chosen[0], seat)
+    personality = attached_to(game, game.table.cards_by_id[chosen[0]])
+    if personality is None:
+        return [destroyed]
+    after = Evaluate("burnt_offering_followers", source_id, seat, (personality.id,))
+    return [destroyed, Then((after,))]
+
+
+@choice_resolver("burnt_offering_followers")
+def _resolve_burnt_offering_followers(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "If its Personality now has no Followers, give your targeted Monk +2F." """
+    personality = game.table.cards_by_id[chosen[0]]
+    if followers_of(game, personality):
+        return []
+    return [
+        GrantModifier(
+            source_id, source_id, Stat.FORCE, BURNT_OFFERING_BONUS, Duration.UNTIL_END_OF_TURN
+        )
+    ]
+
+
+register_ability(
+    "burnt_offering",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        keywords=frozenset({keywords.KIHO}),
+        cost=no_cost,
+        targets=_burnt_offering_targets,
+        targeting_message="your unbowed Monk",
+        effects=_burnt_offering_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
 
 
 # --- Daidoji Kaede ---
