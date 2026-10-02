@@ -1,4 +1,4 @@
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass, replace
 
 from yasuki_core import ruleset
@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.legality import (
 )
 from yasuki_core.engine.rules.negation import action_provenance, strips_interrupt, would_negate
 from yasuki_core.engine.rules.state import GameState, used_this_turn
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.action_record import action_is_unstoppable
 from yasuki_core.engine.rules.turn.structure import (
@@ -52,18 +53,22 @@ def forecast(
     outcome behind the attack when it reaches on the board as it stands. An effect that is nothing
     to interrupt, an Honor change of zero, a question the action asks or one a negation will
     negate, is left out, and what a choice resolver produces later is not foreseeable and is not
-    offered."""
-    seen: list[Effect] = []
+    offered. A ``once`` negation leaves out only the first effect it will spend itself on."""
+    return tuple(_foreseen(game, effects, provenance, []))
+
+
+def _foreseen(
+    game: GameState, effects: tuple[Effect, ...], provenance: Provenance, spent: list[Negation]
+) -> Iterator[Effect]:
     for effect in effects:
         if isinstance(effect, Then):
-            seen.extend(forecast(game, effect.effects, provenance))
+            yield from _foreseen(game, effect.effects, provenance, spent)
             continue
-        if effect.is_interruptible(game) and not would_negate(game, effect, provenance):
-            seen.append(effect)
+        if effect.is_interruptible(game) and not would_negate(game, effect, provenance, spent):
+            yield effect
         stands = as_modified(game, effect)
         if isinstance(stands, ResolveAbility | AttackEffect):
-            seen.extend(forecast(game, stands.follow_on(game), provenance))
-    return tuple(seen)
+            yield from _foreseen(game, stands.follow_on(game), provenance, spent)
 
 
 def as_modified(game: GameState, effect: Effect) -> Effect:

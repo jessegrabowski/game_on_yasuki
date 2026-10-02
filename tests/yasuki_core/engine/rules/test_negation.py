@@ -169,6 +169,16 @@ def test_a_once_negation_an_action_spent_negates_what_that_action_defers():
     assert not farm.bowed
 
 
+def test_the_interrupt_step_offers_the_effects_a_once_negation_will_not_reach():
+    game = two_seat_game()
+    game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=Bow, once=True))
+    put_in_play(game, holding("farm"))
+    put_in_play(game, holding("mine"))
+
+    assert forecast(game, (Bow("farm"), Bow("mine"))) == (Bow("mine"),)
+    assert len(game.ongoing) == 1
+
+
 def test_an_effect_already_negated_spends_no_once_negation():
     game = two_seat_game()
     negation = Negation("ring", END_OF_TURN, effect_kind=Effect, once=True)

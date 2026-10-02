@@ -69,10 +69,23 @@ def negate_committed(game: GameState, effect: Effect, provenance: Provenance) ->
     return Negated(effect)
 
 
-def would_negate(game: GameState, effect: Effect, provenance: Provenance) -> bool:
-    """Whether ``effect`` would be negated as it commits from ``provenance``'s action. Spends
-    nothing."""
-    return effect.is_negatable(game) and next(_matching(game, effect, provenance), None) is not None
+def would_negate(
+    game: GameState, effect: Effect, provenance: Provenance, spent: list[Negation]
+) -> bool:
+    """Whether ``effect`` would be negated as it commits, once the effects before it have spent the
+    ``once`` negations in ``spent``. One ``effect`` would spend joins ``spent``, and nothing leaves
+    ``game.ongoing``."""
+    if not effect.is_negatable(game):
+        return False
+    negation = next(
+        (negation for negation in _matching(game, effect, provenance) if negation not in spent),
+        None,
+    )
+    if negation is None:
+        return False
+    if _spends(game, negation, effect, provenance):
+        spent.append(negation)
+    return True
 
 
 def strips_interrupt(game: GameState, replacement: Effect, provenance: Provenance) -> bool:
