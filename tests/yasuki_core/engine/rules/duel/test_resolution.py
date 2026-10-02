@@ -321,8 +321,15 @@ def test_the_duel_stat_comes_from_the_ruleset(monkeypatch):
 
 def _resume_next(game, step: type) -> None:
     """Run the next queued duel step, asserting it is the one the CR puts here. Named rather than
-    popped blind, so a change to the push order fails on the step it reordered."""
+    popped blind, so a change to the push order fails on the step it reordered.
+
+    A duel window queued in front of the step is run on the way past: no seat on a bare game holds
+    a Response, so it opens nothing.
+    """
     item = game.stack.pop()
+    if isinstance(item, procedure.OpenDuelWindow):
+        item.resume(game)
+        item = game.stack.pop()
     assert isinstance(item, step)
     item.resume(game)
 
@@ -478,7 +485,8 @@ def test_a_duelist_leaving_after_the_duel_is_decided_leaves_the_outcome_standing
     enforce_state_based_actions(game)
 
     assert game.duel.outcome == outcome
-    assert isinstance(game.stack[-1], resolution.EndTheDuel)
+    assert isinstance(game.stack[-1], procedure.OpenDuelWindow)
+    assert isinstance(game.stack[-2], resolution.EndTheDuel)
 
 
 def test_a_duel_that_ends_without_resolving_drops_what_it_scoped():

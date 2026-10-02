@@ -92,9 +92,9 @@ def declare_duel(
     ops.create_focus_area(game.table, challenged)
     challenger_stat = duel_stat(game, game.table.cards_by_id[challenger_duelist])
     challenged_stat = duel_stat(game, game.table.cards_by_id[challenged_duelist])
-    # The option is queued before the window is announced, so that work a card does in the window
-    # sits above it and resolves before the first seat is asked.
-    game.stack.append(OfferFocusOrStrike(challenged))
+    # Queued before the declaration is announced, so that work a card does in reaction to it sits
+    # above the duel's own steps and resolves before the first seat is asked.
+    queue_duel_steps(game, OfferFocusOrStrike(challenged))
     return [
         _declaration(duel, Boundary.BEGINNING, challenger_stat, challenged_stat),
         _declaration(duel, Boundary.END, challenger_stat, challenged_stat),
@@ -115,6 +115,35 @@ def _declaration(
         challenger_stat=challenger_stat,
         challenged_stat=challenged_stat,
     )
+
+
+@dataclass(frozen=True, slots=True)
+class OpenDuelWindow(DuelWork):
+    """Offer every seat the Responses the duel's last step announced, before its next step runs.
+
+    A step of the duel's own, so a duel that ends early drops the windows it had queued along with
+    the steps they stood in front of. Does nothing where no seat holds a Response, which is a window
+    nobody needs to be asked to pass.
+    """
+
+    def resume(self, game: GameState) -> None:
+        # The window is a round, and rounds belong to the turn sequence, which already imports this
+        # module for the duel's work items and for whether a duel is being fought.
+        from yasuki_core.engine.rules.turn.sequence import open_duel_window
+
+        open_duel_window(game)
+
+
+def queue_duel_steps(game: GameState, *steps: DuelWork) -> None:
+    """Queue ``steps`` to run in the order given, each behind a window for the Responses the step
+    before it announced.
+
+    Every time point a duel names is a point a card may react at, so queueing a step is what puts
+    the window in front of it (CR, Duel: the sequence of steps; the window at each is an inference).
+    """
+    for step in reversed(steps):
+        game.stack.append(step)
+        game.stack.append(OpenDuelWindow())
 
 
 @dataclass(frozen=True, slots=True)
@@ -162,7 +191,7 @@ def apply_focus_or_strike(
         return
     # Queued before the focus, so that what a card does in reaction to the focus resolves before
     # the other duelist is asked.
-    game.stack.append(OfferFocusOrStrike(duel.opponent_of(request.seat)))
+    queue_duel_steps(game, OfferFocusOrStrike(duel.opponent_of(request.seat)))
     focus(game, request.seat, token)
 
 
@@ -201,17 +230,16 @@ def strike(game: GameState, seat: PlayerId) -> None:
     )
 
     duel_in_progress(game)
-    # Pushed in reverse, so they run in the CR's order: the reveal, the Focus Effects it queues, the
-    # outcome, the duel's end, the consequences that wait for it, then the discard. One step per
-    # announcement, so a question asked on one is answered before the next is made.
-    game.stack.extend(
-        (
-            DiscardFocusedCards(),
-            ApplyDuelConsequences(),
-            EndTheDuel(),
-            DecideTheDuel(),
-            AnnounceFocusEffectsResolved(),
-            RevealFocusedCards(),
-        )
+    # The CR's order: the reveal, the Focus Effects it queues, the outcome, the duel's end, the
+    # consequences that wait for it, then the discard. One step per announcement, so a question
+    # asked on one is answered before the next is made.
+    queue_duel_steps(
+        game,
+        RevealFocusedCards(),
+        AnnounceFocusEffectsResolved(),
+        DecideTheDuel(),
+        EndTheDuel(),
+        ApplyDuelConsequences(),
+        DiscardFocusedCards(),
     )
     triggers.fire(game, StrikeDeclared(seat=seat))

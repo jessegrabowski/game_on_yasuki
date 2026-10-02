@@ -23,10 +23,11 @@ yasuki_core.engine.rules.turn.sequence
     advance
     begin_game
     begin_next_turn
-    close_interrupt_window
     close_response_window
+    close_step_over_held_work
     forget_action
     next_phase
+    open_duel_window
     open_response_window
     open_round
     open_turn
