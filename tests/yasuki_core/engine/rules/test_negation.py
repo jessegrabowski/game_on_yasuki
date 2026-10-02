@@ -1,11 +1,15 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.effects import (
     Ask,
     Bow,
     DiscardFromHand,
-    RecruitCard,
     Effect,
+    GrantModifier,
     Negated,
+    RecruitCard,
+    SpendOncePerTurn,
     Straighten,
     Then,
 )
@@ -28,7 +32,7 @@ from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE, END_OF_TURN
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -368,3 +372,21 @@ def test_a_once_negation_of_recruiting_waits_for_a_card_that_may_enter_play():
     resolve_effects(game, [RecruitCard(target.id)])
 
     assert game.ongoing == [negation]
+
+
+@pytest.mark.parametrize(
+    ("effect", "negated"),
+    [
+        (Bow("hero"), True),
+        (GrantModifier("src", "hero", Stat.FORCE, 2, Duration.UNTIL_END_OF_TURN), True),
+        (SpendOncePerTurn("hero", "tag"), False),
+    ],
+    ids=["acts on its card_id", "acts on its target_id", "card memory acts on no card"],
+)
+def test_a_negation_naming_a_card_reaches_what_acts_on_that_card(effect, negated):
+    game = two_seat_game()
+    game.ongoing.append(Negation("any", END_OF_TURN, subject_id="hero"))
+
+    committed = negate_committed(game, effect, FROM_NO_ACTION)
+
+    assert (committed == Negated(effect)) is negated
