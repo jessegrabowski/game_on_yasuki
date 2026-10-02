@@ -349,7 +349,7 @@ class Negation:
         forgotten when that card leaves the table (CR, Card Memory Rule). Default None.
     once : bool, optional
         Whether the negation is spent by the first effect it negates, as "his next straightening"
-        is. Only one naming no source may be spent this way. Default False.
+        is. Default False.
     """
 
     source_id: str
@@ -361,12 +361,9 @@ class Negation:
     once: bool = False
 
     def __post_init__(self) -> None:
-        """Raise ValueError for a negation naming nothing it negates, or one naming a source that
-        is spent by its first use."""
+        """Raise ValueError for a negation naming nothing it negates."""
         if not self.names_a_source and self.effect_kind is None and self.subject_id is None:
             raise ValueError("a negation names what it negates")
-        if self.names_a_source and self.once:
-            raise ValueError("only a negation naming no source is spent by its first use")
 
     @property
     def names_a_source(self) -> bool:

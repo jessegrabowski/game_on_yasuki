@@ -132,6 +132,20 @@ def test_a_once_negation_is_spent_by_the_first_effect_it_negates():
     assert negate_committed(game, Bow("farm"), FROM_NO_ACTION) == Bow("farm")
 
 
+def test_a_once_negation_naming_a_source_is_spent_by_that_sources_first_action():
+    game = two_seat_game()
+    plan = _card(game, ActionPrint)
+    farm = put_in_play(game, holding("farm"))
+    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint, once=True))
+
+    resolve_action_effects(game, [Bow(farm.id)], acting=plan.id)
+    assert not farm.bowed
+
+    game.interrupts_offered = False
+    resolve_action_effects(game, [Bow(farm.id)], acting=plan.id)
+    assert farm.bowed
+
+
 def test_a_once_negation_of_bowing_waits_for_a_bow_that_would_happen():
     game = two_seat_game()
     farm = put_in_play(game, holding("farm"))

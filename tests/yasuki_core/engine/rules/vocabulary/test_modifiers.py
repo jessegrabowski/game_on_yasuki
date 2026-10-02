@@ -179,14 +179,9 @@ def test_a_negation_names_a_source_only_when_it_gives_a_kind_or_a_title():
     assert not Negation("ring", END_OF_TURN, effect_kind=Bow).names_a_source
 
 
-@pytest.mark.parametrize(
-    "criteria",
-    [{}, {"source_kind": ActionPrint, "once": True}],
-    ids=["names nothing", "a source spent by its first use"],
-)
-def test_a_negation_that_cannot_be_honored_is_refused(criteria):
-    with pytest.raises(ValueError):
-        Negation("ring", END_OF_TURN, **criteria)
+def test_a_negation_naming_nothing_it_negates_is_refused():
+    with pytest.raises(ValueError, match="names what it negates"):
+        Negation("ring", END_OF_TURN)
 
 
 def test_the_sweep_keeps_a_negation_naming_no_card_and_forgets_one_naming_a_departed_card():
