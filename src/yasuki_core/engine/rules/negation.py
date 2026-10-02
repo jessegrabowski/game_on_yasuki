@@ -53,6 +53,8 @@ def negates_interrupt(game: GameState, card: L5RCard, replacement: Effect) -> bo
 
 def _negating(game: GameState, effect: Effect, acting: str | None) -> Negation | None:
     """The first negation in force that negates ``effect`` from an action of ``acting``."""
+    if not effect.is_negatable(game):
+        return None
     source = game.table.cards_by_id.get(acting) if acting is not None else None
     for negation in _negations(game):
         if not _matches_effect(negation, effect):

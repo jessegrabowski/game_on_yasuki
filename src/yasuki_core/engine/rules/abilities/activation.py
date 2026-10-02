@@ -156,6 +156,11 @@ class ResolveAbility(Effect):
         _record_targets(game, (self.target_id,))
         return []
 
+    def is_negatable(self, game: GameState) -> bool:
+        """False: targeting is no effect (CR, Action Sequence step C), so the action still targets
+        what it targeted, and only the ability's effects behind it are negated as they commit."""
+        return False
+
     def follow_on(self, game: GameState) -> tuple[Effect, ...]:
         return self.effects if self.effects is not None else self._build(game)
 
