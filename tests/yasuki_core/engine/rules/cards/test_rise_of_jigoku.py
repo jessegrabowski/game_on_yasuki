@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     ChoosePayment,
     DecisionResponse,
+    focus_token,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.rise_of_jigoku import CAVALRY_FOLLOWER, MISHIMES_ONI
@@ -31,7 +32,13 @@ from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, SenseiPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import (
+    FatePrint,
+    HoldingPrint,
+    RingPrint,
+    SenseiPrint,
+    StrongholdPrint,
+)
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import legality
@@ -52,11 +59,14 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.prints import ActionPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.duel.conftest import CHALLENGE_ABILITY, CHALLENGE_PROBE
 from tests.yasuki_core.engine.builders import (
     attachment,
+    combat_segment,
     end_phase,
     fate_card,
     end_turn,
+    focus_card,
     holding,
     pay,
     personality,
@@ -1229,3 +1239,97 @@ def test_i_do_not_forget_costs_at_least_one():
     session.submit(P1, DecisionResponse(("disgraced",)))
 
     assert session.game.table.seats[PlayerId.P2].honor == -1
+
+
+# --- Seven Heavens Strike ---
+
+
+def _seven_heavens_ring(card_id: str, *, fire: bool) -> L5RCard:
+    return L5RCard.of(
+        RingPrint,
+        id=card_id,
+        printed_id=card_id,
+        name=card_id,
+        side=Side.FATE,
+        owner=P1,
+        keywords=(keywords.FIRE,) if fire else (),
+    )
+
+
+def _seven_heavens_battle(*, fire_ring: bool) -> EngineSession:
+    """P1's Fire Monk against P2's 3F guard at the battlefield, two Rings in P1's play, one of
+    them Fire when ``fire_ring``, and Seven Heavens Strike in P1's hand."""
+    session = combat_segment(
+        [
+            personality("monk", keywords=(keywords.MONK, keywords.FIRE)),
+            personality("guard", owner=P2, force=3),
+            _seven_heavens_ring("first_ring", fire=fire_ring),
+            _seven_heavens_ring("second_ring", fire=False),
+        ],
+        {"monk": 0},
+        {"guard": 0},
+    )
+    table = session.game.table
+    strike = focus_card("strike", P1, 3, printed_id="seven_heavens_strike")
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(table, strike))
+    return session
+
+
+def test_seven_heavens_strike_bows_only_your_fire_personality_or_fire_ring():
+    session = _seven_heavens_battle(fire_ring=True)
+
+    session.act(P1, PlayStrategy("strike"))
+
+    assert set(session.game.pending.candidates) == {"monk", "first_ring"}
+
+
+def test_seven_heavens_strike_makes_a_ranged_of_twice_your_rings_then_gives_a_fire_token():
+    session = _seven_heavens_battle(fire_ring=True)
+    monk = session.game.table.cards_by_id["monk"]
+
+    session.act(P1, PlayStrategy("strike"))
+    session.submit(P1, DecisionResponse(("first_ring",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    session.submit(P1, DecisionResponse(("monk",)))
+
+    discard = session.game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)]
+    assert "guard" in {card.id for card in discard.cards}
+    assert session.game.table.cards_by_id["first_ring"].bowed
+    assert effective_force(session.game, monk) == 2 + 1
+
+
+def test_seven_heavens_strike_gives_no_fire_token_without_a_fire_ring():
+    session = _seven_heavens_battle(fire_ring=False)
+    monk = session.game.table.cards_by_id["monk"]
+
+    session.act(P1, PlayStrategy("strike"))
+    session.submit(P1, DecisionResponse(("monk",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert session.game.pending is None
+    assert effective_force(session.game, monk) == 2
+
+
+@pytest.mark.parametrize(("challenger_chi", "bonus"), [(5, 1), (1, 0)], ids=["won", "lost"])
+def test_seven_heavens_strike_focus_effect_gives_your_winning_personality_force(
+    challenger_chi, bonus
+):
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state, personality("challenger", owner=P1, chi=challenger_chi, printed_id=CHALLENGE_PROBE)
+    )
+    put_in_play(state, personality("rival", owner=P2, chi=3))
+    for card in (
+        focus_card("strike", P1, 3, printed_id="seven_heavens_strike"),
+        focus_card("P2-plain", P2, 3),
+    ):
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        session = EngineSession.start(state, P1)
+        session.act(P1, ActivateAbility("challenger"))
+        session.submit(P1, DecisionResponse(("rival",)))
+        session.submit(P2, DecisionResponse((focus_token("P2-plain"),)))
+        session.submit(P1, DecisionResponse((focus_token("strike"),)))
+
+        challenger = session.game.table.cards_by_id["challenger"]
+        assert effective_force(session.game, challenger) == 2 + bonus

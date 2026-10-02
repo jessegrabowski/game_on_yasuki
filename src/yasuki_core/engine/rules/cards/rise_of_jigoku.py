@@ -10,7 +10,9 @@ from yasuki_core.engine.rules.board.queries import (
     has_keyword,
     owned_holdings,
     owned_personalities,
+    opposed_units_in_battle,
     personalities_in_play,
+    rings_in_play,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
@@ -28,14 +30,17 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     CreateToken,
+    DelayedEffect,
     Destroy,
     Effect,
+    Evaluate,
     GainHonor,
     GrantKeyword,
     GrantModifier,
     IgnoreHonorRequirements,
     MeleeAttack,
     PayGold,
+    RangedAttack,
     RecruitCard,
     register_honor_loss_shield,
     Straighten,
@@ -48,7 +53,11 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.rulebook.kharmic import is_kharmic_action
+from yasuki_core.engine.rules.board.counts_as import Asking
+from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
+from yasuki_core.game_pieces.counters import counter_from_key
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import province_holdings
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -569,6 +578,106 @@ def _sapphire_mine_entered_play(ctx: TriggerContext) -> list[Effect]:
     if ctx.card.counters.get(SINCERITY.key, 0) < 2:
         return []
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+# --- Seven Heavens Strike ---
+
+SEVEN_HEAVENS_FOCUS_BONUS = 1
+SEVEN_HEAVENS_RANGED_PER_RING = 2
+FIRE_TOKEN = counter_from_key("fire")
+
+
+@focus_effect("seven_heavens_strike")
+def _seven_heavens_strike_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
+    """ "If your Personality wins this duel": read once the duel is decided, as it ends."""
+    evaluation = Evaluate("seven_heavens_strike_won", card.id, card.owner)
+    return [DelayedEffect(evaluation, DUEL_CONSEQUENCES)]
+
+
+@choice_resolver("seven_heavens_strike_won")
+def _resolve_seven_heavens_strike_won(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "Give them +1F", to your Personality when it won."""
+    duel = game.duel
+    if duel is None or duel.outcome is None or seat not in duel.outcome.winners:
+        return []
+    yours = duel.challenger_duelist if duel.challenger is seat else duel.challenged_duelist
+    bonus = GrantModifier(
+        source_id, yours, Stat.FORCE, SEVEN_HEAVENS_FOCUS_BONUS, Duration.UNTIL_END_OF_TURN
+    )
+    return [bonus]
+
+
+def _seven_heavens_strike_fire_rings(game: GameState, source: L5RCard) -> list[L5RCard]:
+    return [
+        ring
+        for ring in rings_in_play(game, source.owner, Asking.action(source))
+        if has_keyword(game, ring, keywords.FIRE)
+    ]
+
+
+def _seven_heavens_strike_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your unbowed Fire Personalities and Fire Rings."""
+    fire_personalities = [
+        card
+        for card in owned_personalities(game, source.owner)
+        if has_keyword(game, card, keywords.FIRE)
+    ]
+    candidates = [*fire_personalities, *_seven_heavens_strike_fire_rings(game, source)]
+    return [card.id for card in candidates if not card.bowed]
+
+
+def _seven_heavens_strike_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Bow the target, then the Ranged attack. Its strength counts the Rings once it resolves."""
+    reachable = tuple(attack_targets(game, source))
+    if not reachable:
+        return [Bow(target.id)]
+    return [
+        Bow(target.id),
+        Choose(source.owner, reachable, 1, 1, "seven_heavens_strike_ranged", source.id),
+    ]
+
+
+@choice_resolver("seven_heavens_strike_ranged", prompt="Target of the Ranged attack")
+def _resolve_seven_heavens_strike_ranged(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "Ranged equal to twice the number of Rings you control. If you control a Fire Ring, give
+    your target opposed Personality a +1F Fire token." """
+    source = game.table.cards_by_id[source_id]
+    rings = rings_in_play(game, seat, Asking.action(source))
+    ranged = RangedAttack(SEVEN_HEAVENS_RANGED_PER_RING * len(rings), chosen[0], seat)
+    opposed = opposed_units_in_battle(game, seat)
+    if not _seven_heavens_strike_fire_rings(game, source) or not opposed:
+        return [ranged]
+    token = Choose(seat, opposed, 1, 1, "seven_heavens_strike_token", source_id)
+    return [ranged, token]
+
+
+@choice_resolver(
+    "seven_heavens_strike_token", prompt="Give your target opposed Personality a +1F Fire token"
+)
+def _resolve_seven_heavens_strike_token(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [AdjustCounter(chosen[0], FIRE_TOKEN, 1)]
+
+
+register_ability(
+    "seven_heavens_strike",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        keywords=frozenset({keywords.KIHO}),
+        cost=no_cost,
+        targets=_seven_heavens_strike_targets,
+        targeting_message="your unbowed Fire Personality or Fire Ring",
+        effects=_seven_heavens_strike_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
 
 
 # --- Shinjo Fields ---
