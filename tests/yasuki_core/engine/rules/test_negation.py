@@ -3,6 +3,7 @@ from yasuki_core.engine.rules.effects import (
     Ask,
     Bow,
     DiscardFromHand,
+    RecruitCard,
     Effect,
     Negated,
     Straighten,
@@ -26,6 +27,7 @@ from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE, END_OF_TURN
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.game_pieces.cards import L5RCard
@@ -36,6 +38,7 @@ from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
 from tests.yasuki_core.engine.builders import (
     fate_card,
     holding,
+    province_card,
     put_in_play,
     register,
     two_seat_game,
@@ -351,5 +354,17 @@ def test_a_once_negation_of_discarding_waits_for_a_discard_that_would_happen():
     game.ongoing.append(negation)
 
     resolve_effects(game, [DiscardFromHand(PlayerId.P1, 1, PlayerId.P1, None)])
+
+    assert game.ongoing == [negation]
+
+
+def test_a_once_negation_of_recruiting_waits_for_a_card_that_may_enter_play():
+    game = two_seat_game()
+    put_in_play(game, holding("P2-shrine", owner=PlayerId.P2, printed_id="shrine"))
+    target = province_card(game, "P1-shrine", printed_id="shrine", keywords=(keywords.SINGULAR,))
+    negation = Negation("any", END_OF_TURN, effect_kind=RecruitCard, once=True)
+    game.ongoing.append(negation)
+
+    resolve_effects(game, [RecruitCard(target.id)])
 
     assert game.ongoing == [negation]

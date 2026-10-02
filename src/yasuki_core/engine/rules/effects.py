@@ -2150,10 +2150,14 @@ class RecruitCard(InterruptingEffect):
     def is_negatable(self, game: GameState) -> bool:
         return True
 
-    def pauses(self, game: GameState) -> bool:
-        """No payment is asked for a card Unique or Singular keeps out of play."""
+    def would_happen(self, game: GameState) -> bool:
+        """Whether the card may enter play: Unique and Singular can keep it out."""
         card = game.table.cards_by_id[self.card_id]
         return copy_may_enter(game, card.owner, card)
+
+    def pauses(self, game: GameState) -> bool:
+        """No payment is asked for a card Unique or Singular keeps out of play."""
+        return self.would_happen(game)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         return []
