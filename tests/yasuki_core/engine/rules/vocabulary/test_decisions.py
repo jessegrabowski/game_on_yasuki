@@ -169,6 +169,15 @@ def test_the_target_prompt_names_the_condition_and_the_card():
     assert unworded.prompt() == "Target a card for Millet Farm"
 
 
+def test_a_target_choice_of_several_takes_that_many_distinct_candidates():
+    request = ChooseAbilityTarget(PlayerId.P1, ("a", "b", "c"), "spell", count=2)
+
+    assert request.accepts(DecisionResponse(("a", "b")))
+    assert not request.accepts(DecisionResponse(("a",)))
+    assert not request.accepts(DecisionResponse(("a", "a")))
+    assert not request.accepts(DecisionResponse(("a", "d")))
+
+
 def test_payment_prompt_counts_down_as_producers_are_picked():
     request = _payment(amount=5, available=1, produced=(("a", 2), ("b", 2)))
     assert request.prompt() == "Pay 4 gold for Mine"

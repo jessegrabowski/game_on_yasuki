@@ -648,3 +648,13 @@ def test_it_bins_exactly_the_barren_cards_when_asked_what_to_cycle():
     response = GoldRushPolicy().decide(request, _opening_view(session))
 
     assert response.choices == ("pv0", "pv2")
+
+
+def test_it_answers_a_choice_of_several_targets_with_that_many():
+    request = ChooseAbilityTarget(
+        seat=P1, candidates=("a", "b", "c"), source_card_id="spell", count=2
+    )
+
+    answer = GoldRushPolicy().decide(request, view=None)
+
+    assert request.accepts(answer)
