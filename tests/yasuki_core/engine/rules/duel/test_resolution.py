@@ -8,20 +8,23 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focus_effects, focusing, procedure, resolution
+from yasuki_core.engine.rules.duel.records import DuelWork
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.effects import (
     Ask,
+    Discard,
     GrantDuelStat,
     GrantMinimum,
     GrantModifier,
     StartDuel,
 )
 from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
-from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
+from yasuki_core.engine.rules.turn.sequence import run_stack
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_TURN
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, DuelResolved
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -355,6 +358,25 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     assert focusing.focused_cards(game, P2) == ()
 
 
+def test_a_negation_of_discarding_reaches_the_duels_focused_cards():
+    game = _duel_on_a_bare_game()
+    card = register(game.table, focus_card("P2-fv1", P2, 1))
+    game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(card)
+    procedure.focus(game, P2, focus_token("P2-fv1"))
+    procedure.strike(game, P2)
+    _resume_next(game, resolution.RevealFocusedCards)
+    _resume_next(game, focus_effects.ResolveFocusEffects)
+    _resume_next(game, resolution.AnnounceFocusEffectsResolved)
+    _resume_next(game, resolution.DecideTheDuel)
+    _resume_next(game, resolution.EndTheDuel)
+    _resume_next(game, resolution.ApplyDuelConsequences)
+    game.ongoing.append(Negation("any", END_OF_TURN, effect_kind=Discard, subject_id="P2-fv1"))
+
+    _resume_next(game, resolution.DiscardFocusedCards)
+
+    assert [held.id for held in focusing.focused_cards(game, P2)] == ["P2-fv1"]
+
+
 def test_the_strike_reveals_both_stacks_before_they_are_discarded():
     with probe_ability(DUEL_PROBE, DUEL_ABILITY):
         session = _duel_game(
@@ -409,6 +431,7 @@ def test_a_duelist_off_the_board_ends_the_duel_without_resolution():
     ops.remove_card(game.table, game.table.cards_by_id["rival"])
 
     enforce_state_based_actions(game)
+    run_stack(game)
 
     duel = game.duel
     assert duel.step is DuelStep.ENDED
@@ -496,7 +519,8 @@ def test_a_duel_that_ended_early_drops_its_own_steps_and_nothing_else():
 
         resolution.end_without_resolution(session.game)
 
-        assert session.game.stack == [marker]
+        assert session.game.stack[0] is marker
+        assert not [item for item in session.game.stack if isinstance(item, DuelWork)]
 
 
 def _accept_the_challenge(game, source_id, chosen, seat):
