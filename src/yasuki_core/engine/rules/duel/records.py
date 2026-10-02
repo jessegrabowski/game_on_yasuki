@@ -1,12 +1,15 @@
 from dataclasses import dataclass, field
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 
+if TYPE_CHECKING:
+    from yasuki_core.engine.rules.state import GameState
+
 
 class DuelWork:
-    """Marker for a work item that is a step of the duel's own procedure.
+    """Base class for a work item that is a step of the duel's own procedure.
 
     A duel that ends before its steps run drops them off the stack, so what is the duel's own has to
     be distinguishable from the work of whatever created it. Carried as a base class rather than
@@ -14,6 +17,9 @@ class DuelWork:
     """
 
     __slots__ = ()
+
+    def resume(self, game: "GameState") -> None:
+        raise NotImplementedError
 
 
 class DuelOutcome(NamedTuple):

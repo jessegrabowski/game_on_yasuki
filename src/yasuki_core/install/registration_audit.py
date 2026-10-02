@@ -561,6 +561,8 @@ NOT_KEYED_BY_CARD = {
     "_ACTION_WORDING",  # keyed by action type, for describe_action
     "_RULEBOOK_TRIGGERS",  # keyed by event type: the rulebook's own triggers, no card behind them
     "WINDOWS",  # the event types a step fires before committing
+    "STEP_ROUNDS",  # the round kinds that are a step inside a resolving action
+    "ROUNDS_OVER_HELD_WORK",  # the round kinds that close into work held beneath them
     "_CONDITIONS",  # keyed by Condition: what a conditional modifier asks of a card
     "KEYWORD_ABILITIES",  # keyed by keyword: the abilities one confers on every card carrying it
     "LOCATION_ABILITIES",  # keyed by location: the abilities it confers on every card sitting there

@@ -67,7 +67,7 @@ from yasuki_core.engine.rules.turn.sequence import (
     yield_after_action,
     yield_priority,
 )
-from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.turn.structure import STEP_ROUNDS
 
 # Imported for the registrations it performs: every entry point reaches the engine through
 # this dispatcher, and a registry read before the card modules load is silently empty.
@@ -101,10 +101,7 @@ def perform(game: GameState, action: Action) -> None:
     # `game.round`, and the round to hand on from is the one the action was taken in.
     acted_in = game.round
     # An Interrupt or a Response answers "the action", which stays the one it answers.
-    if not isinstance(action, Pass) and game.round.kind not in (
-        RoundKind.RESPONSE,
-        RoundKind.INTERRUPT,
-    ):
+    if not isinstance(action, Pass) and game.round.kind not in STEP_ROUNDS:
         game.action_events.clear()
         game.action_resolved = False
         game.action_taken = describe_action(game, action)

@@ -80,6 +80,18 @@ class RoundKind(Enum):
     INTERRUPT = "interrupt"
     RESPONSE = "response"
     BATTLE_SEGMENT = "battle_segment"
+    DUEL_WINDOW = "duel_window"
+
+
+# The rounds that are a step inside an action that is still resolving, rather than a round of play in
+# their own right. An action taken in one of these answers the action the step was opened over and
+# does not become the action the table is resolving, and none of them opens a step of its own.
+STEP_ROUNDS = frozenset({RoundKind.INTERRUPT, RoundKind.RESPONSE, RoundKind.DUEL_WINDOW})
+
+# The rounds whose closing resumes work held beneath them: the action an Interrupt step suspended,
+# and the remaining steps of a duel. The action they belong to has not finished resolving, so each
+# hands the opportunity on from the round it suspended rather than yielding priority in it.
+ROUNDS_OVER_HELD_WORK = frozenset({RoundKind.INTERRUPT, RoundKind.DUEL_WINDOW})
 
 
 @dataclass(frozen=True, slots=True)

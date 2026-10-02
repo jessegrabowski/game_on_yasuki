@@ -8,6 +8,7 @@ yasuki_core.engine.rules.duel.procedure
 .. autosummary::
 
     OfferFocusOrStrike
+    OpenDuelWindow
 
 .. rubric:: Functions
 
@@ -16,11 +17,11 @@ yasuki_core.engine.rules.duel.procedure
     apply_focus_or_strike
     challenge_is_legal
     declare_duel
-    duel_being_fought
     duel_in_progress
     duel_stat
     focus
     offer_focus_or_strike
+    queue_duel_steps
     strike
 
 .. automodule:: yasuki_core.engine.rules.duel.procedure

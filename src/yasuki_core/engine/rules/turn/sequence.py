@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.action_record import is_printed_action
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.battle import resolution
+from yasuki_core.engine.rules.duel.records import DuelWork
 from yasuki_core.engine.rules.vocabulary.decisions import LeaveBowed
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -40,6 +41,8 @@ from yasuki_core.engine.rules.turn.structure import (
     Phase,
     PHASE_TIMINGS,
     RESPONSE_TIMINGS,
+    ROUNDS_OVER_HELD_WORK,
+    STEP_ROUNDS,
     RoundKind,
     TURN_PHASES,
 )
@@ -82,14 +85,15 @@ def begin_game(game: GameState) -> None:
 
 def _waits_beneath_its_round(game: GameState) -> bool:
     """Whether the top of the stack is held beneath the round open over it until every seat has
-    passed: an action beneath its Interrupt round, or a battle's After Resolution beneath the
-    Response Step its resolution opened."""
+    passed: an action beneath its Interrupt round, a battle's After Resolution beneath the Response
+    Step its resolution opened, or a duel's next step beneath a duel window."""
     top = game.stack[-1]
     held = game.round.kind is RoundKind.INTERRUPT and isinstance(top, triggers.HeldAction)
     resolving = game.round.kind is RoundKind.RESPONSE and isinstance(
         top, resolution.AfterResolution
     )
-    return held or resolving
+    dueling = game.round.kind is RoundKind.DUEL_WINDOW and isinstance(top, DuelWork)
+    return held or resolving or dueling
 
 
 def run_stack(game: GameState) -> None:
@@ -250,8 +254,8 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
             game.round = replace(game.round, priority=seat, passes=passes)
             return
         passes += 1
-    if game.round.kind is RoundKind.INTERRUPT:
-        close_interrupt_window(game)
+    if game.round.kind in ROUNDS_OVER_HELD_WORK:
+        close_step_over_held_work(game)
         return
     if game.round.kind is RoundKind.RESPONSE:
         close_response_window(game)
@@ -458,8 +462,9 @@ def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
         raise RuntimeError("the action ended with a look still open")
     # An Interrupt bound to an effect the action never produced, a negation on the outcome of an
     # attack that then missed, is spent with the action and must not answer a Response's effect.
-    # Inside the Interrupt step the action has not resolved yet, and what was just bound waits.
-    if game.round.kind is not RoundKind.INTERRUPT:
+    # Not where the action is still resolving: the Interrupt step holds it, and a duel window is a
+    # round it opened mid-resolution, so what was bound waits for it either way.
+    if game.round.kind not in ROUNDS_OVER_HELD_WORK:
         game.modifications.clear()
     if game.round is not acted_in:
         return
@@ -478,7 +483,7 @@ def _announce_resolution(game: GameState) -> None:
     action record names the action it answers."""
     if game.action_resolved or game.action is None or game.action_seat is None:
         return
-    if game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+    if game.round.kind in STEP_ROUNDS:
         return
     game.action_resolved = True
     # A resolved action is past unwinding, so what it showed cannot bar a Response's own cancel.
@@ -500,10 +505,14 @@ def _holds_response(game: GameState, seat: PlayerId) -> bool:
 
 
 def _holds_a_step_action(game: GameState, seat: PlayerId) -> bool:
-    """Whether ``seat`` holds an action the open Interrupt or Response step exists to offer. True in
-    any other round, which is nobody's to hold."""
+    """Whether ``seat`` holds an action the open step exists to offer. True in any other round,
+    which is nobody's to hold."""
     if game.round.kind is RoundKind.INTERRUPT:
         return bool(interrupt_actions(game, seat))
+    if game.round.kind is RoundKind.DUEL_WINDOW:
+        # A duel that ended while its window stood open has no step left for a Response to answer,
+        # so the window drains instead of offering one.
+        return game.duel_being_fought is not None and _holds_response(game, seat)
     if game.round.kind is RoundKind.RESPONSE:
         return _holds_response(game, seat)
     return True
@@ -519,9 +528,27 @@ def open_response_window(game: GameState) -> bool:
     is the one it belongs to. An Interrupt is not responded to either (ShE datasheet, Response):
     none opens inside the Interrupt step.
     """
+    return _open_window_for_responses(game, RoundKind.RESPONSE)
+
+
+def open_duel_window(game: GameState) -> bool:
+    """Open a round for the Responses the duel's last step announced, over the round the duel is
+    being fought in, and report whether it opened.
+
+    The duel's remaining steps wait beneath it, so a card played here acts where the duel stands.
+    This is the window Concede Defeat's "after a strike is declared, but before focused cards are
+    revealed" names. It permits Responses alone, because a duel's steps are not an Action Round of
+    their own and the CR gives no other designator a turn inside one.
+    """
+    return _open_window_for_responses(game, RoundKind.DUEL_WINDOW)
+
+
+def _open_window_for_responses(game: GameState, kind: RoundKind) -> bool:
+    """Open a round of ``kind`` over the open one for a seat that holds a Response, and report
+    whether it opened. The first seat in turn order holding one acts first."""
     if game.game_over:
         return False
-    if game.round.kind in (RoundKind.RESPONSE, RoundKind.INTERRUPT):
+    if game.round.kind in STEP_ROUNDS:
         return False
     # Cleared before the seats are polled, not after: a card still marked from the last Step would
     # not count as a responder, and so could never open another one.
@@ -531,7 +558,7 @@ def open_response_window(game: GameState) -> bool:
     if first is None:
         return False
     game.round_stack.append(game.round)
-    game.round = ActionRound(timings=RESPONSE_TIMINGS, priority=first, kind=RoundKind.RESPONSE)
+    game.round = ActionRound(timings=RESPONSE_TIMINGS, priority=first, kind=kind)
     return True
 
 
@@ -548,10 +575,20 @@ def close_response_window(game: GameState) -> None:
     yield_priority(game, passed=False)
 
 
-def close_interrupt_window(game: GameState) -> None:
-    """Close the Interrupt step once every seat has passed: restore the round the action was taken
-    in and resolve the action held beneath the step, then hand the opportunity on from that round
-    unless the action paused for a decision, in which case the answer hands it on."""
-    game.round = game.round_stack.pop()
+def close_step_over_held_work(game: GameState) -> None:
+    """Close a step whose closing resumes the work held beneath it, once every seat has passed:
+    restore the round the action was taken in, run what the step suspended, then hand the
+    opportunity on from that round unless the work paused for a decision, in which case the answer
+    hands it on.
+
+    The Interrupt step holds the action it was opened over, and a duel window holds the duel's
+    remaining steps. The action both belong to is still resolving, so each hands on from the round
+    it suspended.
+    """
+    suspended = game.round_stack.pop()
+    game.round = suspended
+    # Read before the work runs, not after: a duel's next step opens a window of its own, and
+    # `game.round` would then name that window rather than the round to hand on from, taking the
+    # opportunity straight back off the seat the window just named.
     run_stack(game)
-    yield_after_action(game, game.round)
+    yield_after_action(game, suspended)

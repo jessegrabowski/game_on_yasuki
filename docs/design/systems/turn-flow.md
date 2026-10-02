@@ -9,7 +9,10 @@ where players take actions, and closes when every seat passes consecutively.
 
 `RoundKind` says what kind of round is open. `PHASE` is the ordinary one a phase opens. `RESPONSE`
 is the window that opens over an action just taken, and over a battle just resolved.
-`BATTLE_SEGMENT` is one step of a battle.
+`BATTLE_SEGMENT` is one step of a battle. `DUEL_WINDOW` is the window a duel opens at each of its
+own time points. `STEP_ROUNDS` names the three that are a step inside an action still resolving: an
+action taken in one answers the action the step was opened over, never becoming the action the table
+is resolving, and none of them opens a step of its own.
 
 A battle's resolution opens a Response Step of its own. {class}`~.AnnounceResolution` records the
 outcome and announces `BattleResolved` once the resolution's own cascade has settled, including any
@@ -35,8 +38,8 @@ player finishing is not what ends a round.
 
 A seat the round permits nothing is skipped and counts as having passed. Permitted-but-idle is not:
 whether to decline a window is the seat's own call, and auto-passing on its behalf is a strategy a
-policy owns rather than a rule of the round. The two steps are the exception, because each opened
-only because some seat held an Interrupt or a Response, so a seat holding none is skipped there too.
+policy owns rather than a rule of the round. A step is the exception, because each one opened only
+because some seat held an Interrupt or a Response, so a seat holding none is skipped there too.
 
 The Action Sequence's two windows are rounds over the round the action was taken in.
 {func}`~yasuki_core.engine.rules.interrupts.open_interrupt_window` opens the Interrupt step (D)
@@ -51,6 +54,24 @@ Nobody is asked to pass a step with nothing left in it. {func}`~.close_response_
 whatever waited beneath the step before handing the opportunity on, since the step closes on a
 Response taken as readily as on a pass, and a battle's After Resolution waits there.
 
+A duel opens a third kind of window. Every time point its procedure announces is a point a card may
+react at, so each of the duel's steps is queued behind an {class}`~.OpenDuelWindow`, and
+{func}`~.open_duel_window` opens a round of kind `DUEL_WINDOW` there for a seat that holds a
+Response. The duel's remaining steps wait beneath it, which is how Concede Defeat's "after a strike
+is declared, but before focused cards are revealed" has a place to be played from.
+
+`ROUNDS_OVER_HELD_WORK` names the two kinds whose closing resumes the work held beneath them, and
+{func}`~.close_step_over_held_work` closes both: the Interrupt step holds the
+action it was opened over, and a duel window holds the duel's remaining steps. Neither action has
+finished resolving, so each hands the opportunity on through {func}`~.yield_after_action` from the
+round it suspended. That round is read before the held work runs, because a duel step opens the next
+window as it goes, and handing on from the window just opened would take the opportunity straight
+back off the seat it named.
+
+A duel that ends while one of its windows is open drains that window: the duel has no step left for
+a Response to answer, so no seat holds anything the window exists to offer and it closes on the
+first poll. That is the one case where a seat holding a Response is not asked.
+
 ## What a designator means
 
 `ActionTiming` names the round a card's ability may be taken in, and who acts first.
@@ -59,7 +80,7 @@ Response taken as readily as on a pass, and a battle's After Resolution waits th
 - `DYNASTY` belongs to the Dynasty phase, active player only
 - `ATTACK` belongs to the Attack Phase's Declaration Segment
 - `ENGAGE` and `BATTLE` belong to a battle's Engage and Combat Segments, Defender acting first
-- `RESPONSE` belongs to the Response Step over another action
+- `RESPONSE` belongs to the Response Step over another action, and to a duel window
 - `INTERRUPT` belongs to the Interrupt step, a round of its own
 
 The Interrupt step is an `ActionRound` of kind `INTERRUPT`, pushed over the round an action was

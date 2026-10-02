@@ -556,6 +556,54 @@ def test_a_response_opens_under_a_suspended_round_that_is_not_a_response_step():
     assert len(game.round_stack) == 2  # the phase round and the segment round, both suspended
 
 
+class _BindsToNothing:
+    """What an Interrupt leaves on ``game.modifications`` for an effect that never comes up. It
+    answers no effect, so only the action finishing takes it off."""
+
+    def answers(self, effect) -> bool:
+        return False
+
+    def apply(self, game, effect):
+        return effect
+
+
+def test_a_resolved_response_spends_what_an_interrupt_bound_to_the_action():
+    # The action is over by the time a Response resolves, so a modification bound to it must not be
+    # left to answer the next Response's effects.
+    game = _responder_game(PlayerId.P1, PlayerId.P2)
+    sequence.open_response_window(game)
+    game.modifications.append(_BindsToNothing())
+
+    action_sequence.perform(game, ActivateAbility("caravansary-P1"))
+
+    assert game.round.kind is RoundKind.RESPONSE
+    assert game.round.priority is PlayerId.P2
+    assert game.modifications == []
+
+
+def test_a_duel_window_is_a_round_over_the_one_the_duel_is_being_fought_in():
+    # It permits what a Response Step permits, because a duel's steps are not an Action Round of
+    # their own and the CR gives no other designator a turn inside one.
+    game = _responder_game()
+    suspended = game.round
+
+    assert sequence.open_duel_window(game) is True
+
+    assert game.round.kind is RoundKind.DUEL_WINDOW
+    assert game.round.timings == RESPONSE_TIMINGS
+    assert game.round_stack == [suspended]
+
+
+def test_a_duel_window_opens_no_step_of_its_own():
+    # Neither another window nor a Response Step: a Response taken in the window belongs to the
+    # window already open.
+    game = _responder_game()
+    sequence.open_duel_window(game)
+
+    assert sequence.open_duel_window(game) is False
+    assert sequence.open_response_window(game) is False
+
+
 def test_a_response_step_opens_no_step_of_its_own():
     """A Response is an action, and one taken inside the Step belongs to the window already open."""
     game = _responder_game()

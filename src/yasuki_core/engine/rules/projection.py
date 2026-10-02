@@ -159,9 +159,9 @@ class GameView:
         in the shuffle is the part it must not learn, which is what the sort strips. Never
         populated for the other seat.
     responding_to : str or None
-        The action or battle an open Response Step answers, worded for a player, or None when no
-        Step is open.
-        A seat holding no Response still sees it: the Step is the whole table's, and a seat is
+        The action, battle or duel an open window for Responses answers, worded for a player, or
+        None when no window is open.
+        A seat holding no Response still sees it: the window is the whole table's, and a seat is
         passing on something it should be told the name of.
     interrupting : str or None
         The action an open Interrupt step is held against, worded for a player, or None when no
@@ -224,8 +224,11 @@ def _identifiable_ids(table: ViewSnapshot) -> set[str]:
 
 
 def _responding_to(game: GameState) -> str | None:
-    """What the open Response Step answers: the battle's Resolution Segment when its resolution
-    opened the Step, the action taken otherwise, or None outside a Step."""
+    """What the open window for Responses answers: the duel in a duel window, the battle's
+    Resolution Segment when its resolution opened a Response Step, the action taken otherwise, or
+    None where no window is open."""
+    if game.round.kind is RoundKind.DUEL_WINDOW:
+        return "the duel"
     if game.round.kind is not RoundKind.RESPONSE:
         return None
     attack = game.attack
