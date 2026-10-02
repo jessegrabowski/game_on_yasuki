@@ -40,6 +40,7 @@ from yasuki_core.engine.rules.turn.structure import (
     Phase,
     PHASE_TIMINGS,
     RESPONSE_TIMINGS,
+    STEP_ROUNDS,
     RoundKind,
     TURN_PHASES,
 )
@@ -478,7 +479,7 @@ def _announce_resolution(game: GameState) -> None:
     action record names the action it answers."""
     if game.action_resolved or game.action is None or game.action_seat is None:
         return
-    if game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+    if game.round.kind in STEP_ROUNDS:
         return
     game.action_resolved = True
     # A resolved action is past unwinding, so what it showed cannot bar a Response's own cancel.
@@ -521,7 +522,7 @@ def open_response_window(game: GameState) -> bool:
     """
     if game.game_over:
         return False
-    if game.round.kind in (RoundKind.RESPONSE, RoundKind.INTERRUPT):
+    if game.round.kind in STEP_ROUNDS:
         return False
     # Cleared before the seats are polled, not after: a card still marked from the last Step would
     # not count as a responder, and so could never open another one.

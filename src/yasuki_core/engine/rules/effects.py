@@ -68,7 +68,7 @@ from yasuki_core.engine.rules.turn.structure import (
     END_OF_ACTION_PHASE,
     END_OF_TURN,
     Moment,
-    RoundKind,
+    STEP_ROUNDS,
     flow_resolves,
 )
 from yasuki_core.engine.table import (
@@ -1012,7 +1012,7 @@ class PayFavorCost(Effect):
         return "the action pays a Favor cost"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        if game.round.kind not in (RoundKind.INTERRUPT, RoundKind.RESPONSE):
+        if game.round.kind not in STEP_ROUNDS:
             game.action_is_favor = True
         return []
 

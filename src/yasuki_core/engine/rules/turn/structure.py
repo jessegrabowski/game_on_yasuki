@@ -82,6 +82,12 @@ class RoundKind(Enum):
     BATTLE_SEGMENT = "battle_segment"
 
 
+# The rounds that are a step inside an action that is still resolving, rather than a round of play in
+# their own right. An action taken in one of these answers the action the step was opened over and
+# does not become the action the table is resolving, and none of them opens a step of its own.
+STEP_ROUNDS = frozenset({RoundKind.INTERRUPT, RoundKind.RESPONSE})
+
+
 @dataclass(frozen=True, slots=True)
 class ActionRound:
     """The Action Round currently open: the CR's unit of "who may act now, and when this ends".

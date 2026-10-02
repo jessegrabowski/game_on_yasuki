@@ -26,7 +26,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.negation import negate_committed
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Moment, RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, STEP_ROUNDS, Moment
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     ConditionalModifier,
     Duration,
@@ -477,7 +477,7 @@ def _advance(
         # Kept for the Response Step, which asks what the action it follows actually did. What an
         # Interrupt or a Response does inside its own round is its doing, not the action's, and
         # the announcement that the action resolved is about it rather than by it.
-        inside_a_step = game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE)
+        inside_a_step = game.round.kind in STEP_ROUNDS
         if not inside_a_step and not isinstance(event, ActionResolved | ConditionFulfilled):
             game.action_events.append(event)
         _trace.append(type(event).__name__)

@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     recruit_timing_of,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
+from yasuki_core.engine.rules.turn.structure import STEP_ROUNDS, ActionRound
 from yasuki_core.engine.rules.vocabulary.actions import (
     ACTION_TIMINGS,
     Action,
@@ -21,7 +21,7 @@ from yasuki_core.game_pieces.prints import RulebookPrint
 def action_round(game: GameState) -> ActionRound:
     """The round the action now resolving was taken in: the one beneath an open Interrupt step or
     Response Step, else the round that is open."""
-    if game.round.kind in (RoundKind.INTERRUPT, RoundKind.RESPONSE) and game.round_stack:
+    if game.round.kind in STEP_ROUNDS and game.round_stack:
         return game.round_stack[-1]
     return game.round
 
