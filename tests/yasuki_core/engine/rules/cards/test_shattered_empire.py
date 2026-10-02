@@ -44,6 +44,7 @@ from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.players import Trait
 from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.rulebook.lobby import is_lobby, lobby_bonus
+from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import DeckKey
@@ -73,6 +74,7 @@ from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
     end_phase,
+    end_turn,
     fate_card,
     focus_card,
     holding,
@@ -531,6 +533,99 @@ def test_a_fortification_whose_bowing_way_of_the_crab_negates_still_bows_to_pay_
     pay_costs(game, [Bow("wall")])
 
     assert _bowed(game, "wall")
+
+
+# --- Way of the Dragon (Experienced) ---
+
+
+def _dragon_game() -> EngineSession:
+    """Way of the Dragon in play for P1, with "under" then "top" on P1's Fate deck. Starting the
+    session begins P1's turn, so the look is already waiting."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1, clan=ruleset.DRAGON)))
+    put_in_play(state, register(state, _edict("dragon", "way_of_the_dragon_experienced")))
+    for seat in (P1, P2):
+        state.decks[DeckKey(seat, Side.FATE)].cards = [
+            register(state, fate_card(f"{seat.name}-{card_id}", seat))
+            for card_id in ("bottom", "under", "top")
+        ]
+    return EngineSession.start(state, P1)
+
+
+def _fate_deck_ids(session: EngineSession, seat: PlayerId) -> list[str]:
+    return [card.id for card in session.game.table.decks[DeckKey(seat, Side.FATE)].cards]
+
+
+@pytest.mark.parametrize(
+    ("answer", "deck"),
+    [
+        ((), ["P1-bottom", "P1-under", "P1-top"]),
+        (("P1-top",), ["P1-top", "P1-bottom", "P1-under"]),
+    ],
+    ids=["kept", "bottomed"],
+)
+def test_way_of_the_dragon_looks_at_the_top_card_after_your_turn_begins(answer, deck):
+    session = _dragon_game()
+    assert session.game.look.card_ids == ("P1-top",)
+
+    session.submit(P1, DecisionResponse(answer))
+
+    assert session.game.look is None
+    assert _fate_deck_ids(session, P1) == deck
+
+
+def test_way_of_the_dragon_looks_only_when_its_controllers_turn_begins():
+    session = _dragon_game()
+    session.submit(P1, DecisionResponse(()))
+
+    end_turn(session)
+
+    assert session.game.active is P2
+    assert session.game.look is None
+    assert session.game.pending is None
+
+
+def _ring_card(card_id: str, owner: PlayerId) -> L5RCard:
+    return L5RCard.of(
+        RingPrint, id=card_id, printed_id=card_id, name=card_id, side=Side.FATE, owner=owner
+    )
+
+
+def test_way_of_the_dragon_lobby_bonus_counts_printed_rings_in_play_and_in_discard_piles():
+    game = two_seat_game()
+    put_in_play(game, _edict("dragon", "way_of_the_dragon_experienced"))
+    put_in_play(game, _ring_card("mine", P1))
+    put_in_play(game, _ring_card("theirs", P2))
+    put_in_play(game, holding("heart", printed_id="shinseis_heart"))
+    for seat, card in (
+        (P1, _ring_card("discarded", P1)),
+        (P2, _edict("other_dragon", "way_of_the_dragon_experienced")),
+    ):
+        game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].add(register(game.table, card))
+
+    assert lobby_bonus(game, P1) == 3
+
+
+def test_way_of_the_dragon_in_hand_counts_as_a_ring_for_an_action_but_not_a_trait():
+    game = two_seat_game()
+    held = _edict("dragon", "way_of_the_dragon_experienced")
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(game.table, held))
+    asker = put_in_play(game, holding("asker"))
+
+    assert counts_as(game, held, RingPrint, Asking.action(asker))
+    assert not counts_as(game, held, RingPrint, Asking.trait(asker))
+
+
+def test_way_of_the_dragon_looks_at_nothing_from_an_empty_fate_deck():
+    session = _dragon_game()
+    session.submit(P1, DecisionResponse(()))
+    session.game.table.decks[DeckKey(P1, Side.FATE)].cards = []
+
+    end_turn(session)
+    end_turn(session)
+
+    assert session.game.active is P1
+    assert session.game.look is None
 
 
 # --- Doji Yasuko, Soul of Doji Takeji ---

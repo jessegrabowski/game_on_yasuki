@@ -2,6 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.effects import (
     Ask,
@@ -24,13 +25,19 @@ from yasuki_core.game_pieces.prints import RingPrint
 # --- Wisdom Gained ---
 
 
-def _wisdom_gained_findable_rings(game: GameState, seat: PlayerId) -> tuple[str, ...]:
-    """The Rings in ``seat``'s Fate deck and Fate discard pile, both piles the search reaches."""
+def _wisdom_gained_findable_rings(
+    game: GameState, event_id: str, seat: PlayerId
+) -> tuple[str, ...]:
+    """The Rings in ``seat``'s Fate deck and Fate discard pile, both piles the search reaches, as
+    the Event's action counts them."""
+    asking = Asking.action(game.table.cards_by_id[event_id])
     piles = (
         game.table.decks[DeckKey(seat, Side.FATE)].cards,
         game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards,
     )
-    return tuple(card.id for pile in piles for card in pile if isinstance(card.printed, RingPrint))
+    return tuple(
+        card.id for pile in piles for card in pile if counts_as(game, card, RingPrint, asking)
+    )
 
 
 def _wisdom_gained_search_order(game: GameState, controller: PlayerId) -> tuple[PlayerId, ...]:
@@ -45,7 +52,7 @@ def _wisdom_gained_ask_to_search(
     rather than asked a question it cannot answer, and each answer asks the seat behind it. So
     the offer moves along one player at a time in the order the card names."""
     for seat in seats:
-        if _wisdom_gained_findable_rings(game, seat):
+        if _wisdom_gained_findable_rings(game, event_id, seat):
             question = "Search your discard pile and Fate deck for a Ring?"
             return [
                 Ask(
@@ -78,7 +85,7 @@ def _resolve_wisdom_gained_search(
         return _wisdom_gained_ask_to_search(
             game, source_id, _wisdom_gained_seats_behind(game, source_id, seat)
         )
-    rings = _wisdom_gained_findable_rings(game, seat)
+    rings = _wisdom_gained_findable_rings(game, source_id, seat)
     return [Choose(seat, rings, 1, 1, "wisdom_gained_ring", source_id)]
 
 

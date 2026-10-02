@@ -6,9 +6,9 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import RingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, RingPrint
 
-from tests.yasuki_core.engine.builders import holding, province_card, register
+from tests.yasuki_core.engine.builders import fate_card, holding, province_card, register
 
 P1 = PlayerId.P1
 
@@ -19,6 +19,18 @@ def _ring(state, card_id, seat):
         L5RCard.of(
             RingPrint, id=card_id, printed_id=card_id, name=card_id, side=Side.FATE, owner=seat
         ),
+    )
+
+
+def _way_of_the_dragon(card_id):
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        printed_id="way_of_the_dragon_experienced",
+        name="Way of the Dragon",
+        side=Side.FATE,
+        owner=P1,
+        keywords=("Edict",),
     )
 
 
@@ -65,6 +77,22 @@ def test_accepting_the_offer_searches_both_the_deck_and_the_discard():
     session.submit(P1, DecisionResponse(("wisdom",)))  # yes
 
     assert set(session.game.pending.candidates) == {"ring1", "ring-discarded"}
+
+
+def test_the_search_finds_way_of_the_dragon_in_the_deck_and_the_discard():
+    session = _wisdom_game(p1_deck=())
+    table = session.game.table
+    for card_id, pile in (
+        ("dragon-deck", table.decks[DeckKey(P1, Side.FATE)].cards),
+        ("dragon-discard", table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards),
+    ):
+        pile.append(register(table, _way_of_the_dragon(card_id)))
+    table.decks[DeckKey(P1, Side.FATE)].cards.append(register(table, fate_card("plain", P1)))
+
+    session.act(P1, ActivateAbility("wisdom"))
+    session.submit(P1, DecisionResponse(("wisdom",)))  # yes
+
+    assert set(session.game.pending.candidates) == {"dragon-deck", "dragon-discard"}
 
 
 def test_declining_passes_the_offer_on_without_touching_the_deck():

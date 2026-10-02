@@ -60,7 +60,8 @@ from yasuki_core.game_pieces.prints import ActionPrint
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
-from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
+from yasuki_core.engine.rules.board.queries import has_keyword, personalities_in_play
 from yasuki_core.engine.rules.turn.structure import Boundary, Moment, Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.rules.conftest import probe_ability
@@ -1376,6 +1377,17 @@ def test_master_your_thoughts_with_no_rings_looks_at_one_and_takes_it():
     assert session.log.replay() == session.game
 
 
+def test_master_your_thoughts_counts_shinseis_heart_among_the_rings_controlled():
+    session = _thoughts_game(rings=1)
+    put_in_play(
+        session.game, register(session.game.table, holding("heart", printed_id="shinseis_heart"))
+    )
+
+    _thoughts_on(session, "monk")
+
+    assert session.game.look.card_ids == ("a", "b", "c")
+
+
 def test_master_your_thoughts_on_a_bowed_target_looks_at_nothing():
     """ "Bow ... to look" makes the look contingent on the bow happening (CR, To). The target
     need not be unbowed, so a bowed Monk is legal and the action does nothing."""
@@ -1401,6 +1413,7 @@ def _ring_card(card_id: str, printed_id: str, element: Element, *, owner: Player
         side=Side.FATE,
         owner=owner,
         element=element,
+        keywords=(element.value,),
     )
 
 
@@ -1927,3 +1940,64 @@ def test_the_dark_water_starts_negating_strategies_for_the_current_phase():
         Negation("water", Moment(Phase.ACTION, Boundary.END), source_kind=ActionPrint)
     ]
     assert session.game.table.cards_by_id["water"].bowed
+
+
+# --- Shinsei's Heart ---
+
+
+def _heart_game(
+    *elements: Element, heart_in_play: bool = True, held: tuple[L5RCard, ...] = ()
+) -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    if heart_in_play:
+        put_in_play(state, register(state, holding("heart", printed_id="shinseis_heart")))
+    else:
+        province_card(state, "heart", printed_id="shinseis_heart")
+    for element in elements:
+        put_in_play(state, register(state, _ring_card(element.name, "generic_ring", element)))
+    for card in held:
+        state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, card))
+    return EngineSession.start(state, P1)
+
+
+def test_shinseis_heart_gives_itself_the_named_element_until_the_end_of_the_turn():
+    session = _heart_game()
+    heart = session.game.table.cards_by_id["heart"]
+
+    session.act(P1, ActivateAbility("heart"))
+    pending = session.game.pending
+    assert isinstance(pending, ChooseOption)
+    assert pending.candidates == ("Air", "Earth", "Fire", "Void", "Water")
+    session.submit(P1, DecisionResponse(("Fire",)))
+
+    assert has_keyword(session.game, heart, "Fire")
+    end_turn(session)
+    assert not has_keyword(session.game, heart, "Fire")
+
+
+@pytest.mark.parametrize("heart_in_play", [True, False])
+def test_shinseis_heart_counts_as_a_ring_for_actions_only_while_in_play(heart_in_play):
+    session = _heart_game(heart_in_play=heart_in_play)
+    heart = session.game.table.cards_by_id["heart"]
+
+    assert counts_as(session.game, heart, RingPrint, Asking.action(heart)) is heart_in_play
+
+
+def test_onyx_ring_of_the_void_counts_shinseis_heart_among_your_rings(monkeypatch):
+    monkeypatch.setattr(ruleset, "ACTIVE", ruleset.ONYX)
+    void = _ring_card("void", "ring_of_the_void", Element.VOID)
+    session = _heart_game(Element.AIR, Element.EARTH, held=(void,))
+
+    assert PlayStrategy("void", "enter") not in session.legal_actions(P1)
+
+
+def test_shinseis_heart_given_void_does_not_complete_an_enlightenment():
+    session = _heart_game(Element.AIR, Element.EARTH, Element.FIRE, Element.WATER)
+
+    session.act(P1, ActivateAbility("heart"))
+    session.submit(P1, DecisionResponse(("Void",)))
+    enforce_state_based_actions(session.game)
+
+    assert has_keyword(session.game, session.game.table.cards_by_id["heart"], "Void")
+    assert session.game.game_over is False

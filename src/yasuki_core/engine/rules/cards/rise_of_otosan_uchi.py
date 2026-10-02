@@ -24,6 +24,13 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
     register_invest,
 )
+from yasuki_core.engine.rules.board.counts_as import (
+    AskedBy,
+    Asking,
+    CountsAs,
+    register_counts_as,
+    while_in_play,
+)
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
@@ -33,6 +40,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     province_zones,
+    rings_in_play,
     top_of_deck,
     units_at,
 )
@@ -63,6 +71,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
+    GrantKeyword,
     GrantNegation,
     GrantProvinceStrength,
     LookAtTop,
@@ -1006,10 +1015,6 @@ def _master_your_thoughts_targets(game: GameState, source: L5RCard) -> list[str]
     ]
 
 
-def _master_your_thoughts_rings(game: GameState, seat: PlayerId) -> int:
-    return sum(isinstance(card.printed, RingPrint) for card in cards_in_play(game, seat))
-
-
 def _master_your_thoughts_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
@@ -1019,7 +1024,8 @@ def _master_your_thoughts_effects(
         return []
     seat = source.owner
     fate = DeckKey(seat, Side.FATE)
-    seen = top_of_deck(game, fate, _master_your_thoughts_rings(game, seat) + 1)
+    rings = rings_in_play(game, seat, Asking.action(source))
+    seen = top_of_deck(game, fate, len(rings) + 1)
     if not seen:
         return [Bow(target.id)]
     return [
@@ -1081,3 +1087,51 @@ def _shinjo_saeki_clan_champion_experienced_2_entered_play(ctx: TriggerContext) 
         CreateToken(CAVALRY_FOLLOWER, ctx.card.owner, ctx.card.id, attach_to=rider.id)
         for rider in creation_targets(ctx.game, ctx.card.owner, cavalry, keyword=keywords.CAVALRY)
     ]
+
+
+# --- Shinsei's Heart ---
+
+# "This Holding counts as a Ring for actions while in play."
+register_counts_as(
+    "shinseis_heart", CountsAs(RingPrint, frozenset({AskedBy.ACTION}), while_in_play)
+)
+
+# In the order the card names them.
+SHINSEIS_HEART_ELEMENTS = (
+    keywords.AIR,
+    keywords.EARTH,
+    keywords.FIRE,
+    keywords.VOID,
+    keywords.WATER,
+)
+
+
+def _shinseis_heart_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [
+        AskOption(
+            source.owner,
+            SHINSEIS_HEART_ELEMENTS,
+            "Give this Holding which element?",
+            "shinseis_heart",
+            source.id,
+        )
+    ]
+
+
+@choice_resolver("shinseis_heart")
+def _resolve_shinseis_heart(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [GrantKeyword(source_id, source_id, chosen[0], Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "shinseis_heart",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        hits_every_target=True,
+        effects=_shinseis_heart_effects,
+    ),
+)
