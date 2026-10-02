@@ -82,8 +82,13 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar, lobby_bonus_grant
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
-from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
+from yasuki_core.engine.rules.stats.card_values import (
+    effective_chi,
+    effective_force,
+    effective_personal_honor,
+)
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.calculation import unbounded_stat
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
@@ -629,6 +634,37 @@ register_ability(
         targets=attack_targets,
         targeting_message=ATTACK_TARGET,
         effects=_shinjo_mayuko_soul_of_shinjo_wei_effects,
+    ),
+)
+
+
+# --- Togashi Toyonobu, Soul of Togashi Binya ---
+
+
+def _togashi_toyonobu_soul_of_togashi_binya_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _togashi_toyonobu_soul_of_togashi_binya_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Set the target's Force to Toyonobu's with the bonus or penalty that reaches it, measured from
+    the target's Force before its minimum and maximum (CR, Setting Stats to Values). Equal Force
+    needs none, and a +0 would not count as a bonus anyway."""
+    change = effective_force(game, source) - unbounded_stat(game, target, Stat.FORCE)
+    if change == 0:
+        return []
+    return [GrantModifier(source.id, target.id, Stat.FORCE, change, Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "togashi_toyonobu_soul_of_togashi_binya",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_togashi_toyonobu_soul_of_togashi_binya_targets,
+        targeting_message="a Personality",
+        effects=_togashi_toyonobu_soul_of_togashi_binya_effects,
     ),
 )
 
