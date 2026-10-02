@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.board.counts_as import (
     AskedBy,
+    Asking,
     CountsAs,
     register_counts_as,
     while_in_play,
@@ -39,6 +40,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     province_zones,
+    rings_in_play,
     top_of_deck,
     units_at,
 )
@@ -1013,10 +1015,6 @@ def _master_your_thoughts_targets(game: GameState, source: L5RCard) -> list[str]
     ]
 
 
-def _master_your_thoughts_rings(game: GameState, seat: PlayerId) -> int:
-    return sum(isinstance(card.printed, RingPrint) for card in cards_in_play(game, seat))
-
-
 def _master_your_thoughts_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
@@ -1026,7 +1024,8 @@ def _master_your_thoughts_effects(
         return []
     seat = source.owner
     fate = DeckKey(seat, Side.FATE)
-    seen = top_of_deck(game, fate, _master_your_thoughts_rings(game, seat) + 1)
+    rings = rings_in_play(game, seat, Asking.action(source))
+    seen = top_of_deck(game, fate, len(rings) + 1)
     if not seen:
         return [Bow(target.id)]
     return [

@@ -1377,6 +1377,17 @@ def test_master_your_thoughts_with_no_rings_looks_at_one_and_takes_it():
     assert session.log.replay() == session.game
 
 
+def test_master_your_thoughts_counts_shinseis_heart_among_the_rings_controlled():
+    session = _thoughts_game(rings=1)
+    put_in_play(
+        session.game, register(session.game.table, holding("heart", printed_id="shinseis_heart"))
+    )
+
+    _thoughts_on(session, "monk")
+
+    assert session.game.look.card_ids == ("a", "b", "c")
+
+
 def test_master_your_thoughts_on_a_bowed_target_looks_at_nothing():
     """ "Bow ... to look" makes the look contingent on the bow happening (CR, To). The target
     need not be unbowed, so a bowed Monk is legal and the action does nothing."""
