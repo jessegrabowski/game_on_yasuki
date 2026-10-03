@@ -8,7 +8,7 @@ yasuki_core.engine.rules.abilities.invest
 .. autosummary::
 
     equip_invest_amount
-    finish_invest
+    invest_effects
 
 .. automodule:: yasuki_core.engine.rules.abilities.invest
     :members:

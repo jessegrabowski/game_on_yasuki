@@ -114,6 +114,7 @@ plain list, since effects "occur in the order they are written" (CR, Order of Ef
    PutIntoPlay
    ReshuffleFromHand
    RangedAttack
+   Recruit
    RecruitCard
    RefillProvince
    Rehonor
@@ -220,8 +221,6 @@ the action rather than by deserializing it.
    gold.payment.ContinuePayment
    gold.production.CompleteProduction
    rulebook.equip.SelectEquipTarget
-   rulebook.recruit.EnterPlay
-   rulebook.recruit.FinishRecruit
    rulebook.recruit.ResolveRecruit
    triggers.ResumeCascade
    turn.sequence.AccrueSincerity

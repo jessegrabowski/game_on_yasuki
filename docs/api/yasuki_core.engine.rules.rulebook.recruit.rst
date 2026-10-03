@@ -7,8 +7,6 @@ yasuki_core.engine.rules.rulebook.recruit
 
 .. autosummary::
 
-    EnterPlay
-    FinishRecruit
     ResolveRecruit
 
 .. rubric:: Functions
@@ -18,10 +16,12 @@ yasuki_core.engine.rules.rulebook.recruit
     announce_recruit
     apply_fortification_province
     apply_invest_amount
-    enter_play
-    finish_recruit
+    bring_into_play
+    effects_after_entering_play
     proclaim_gain_effects
+    proclamation_effects
     recruit
+    recruit_effects
     resolve_recruit
 
 .. automodule:: yasuki_core.engine.rules.rulebook.recruit

@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     ConditionFulfilled,
     Destroyed,
+    EnteredPlay,
     GameEvent,
     names_both_edges,
     opens_a_window,
@@ -17,7 +18,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     DelayedEffect,
-    FromAction,
+    Attributed,
     InterruptingEffect,
     Effect,
     Negated,
@@ -463,8 +464,8 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 _trace.append(f"    {effect.describe()}")
                 game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
                 continue
-            if isinstance(effect, FromAction):
-                # Stashed beneath it, so the effects held for the same moment keep their order.
+            if isinstance(effect, Attributed):
+                # Stashed beneath it, so the effects around it keep their order.
                 _stash(game, frames)
                 game.stack.append(ApplyEffects((effect.effect,), effect.provenance))
                 return
@@ -542,13 +543,13 @@ def _reacted_to(frame: _Events) -> GameEvent:
 
 
 def _held_from(effect: Effect, provenance: Provenance) -> Effect:
-    """``effect``, with the effect a delay holds wrapped in :class:`~.FromAction` when an action
+    """``effect``, with the effect a delay holds wrapped in :class:`~.Attributed` when an action
     from a card schedules it, so it resolves as that action's. Anything else is returned unchanged.
     """
     if not isinstance(effect, DelayedEffect) or provenance.acting is None:
         return effect
     action = Provenance(acting=provenance.acting, negations=provenance.negations)
-    return replace(effect, effect=FromAction(effect.effect, action))
+    return replace(effect, effect=Attributed(effect.effect, action))
 
 
 def _modified(game: GameState, effect: Effect) -> Effect:
@@ -1044,6 +1045,14 @@ def action_did[E: GameEvent](game: GameState, kind: type[E]) -> tuple[E, ...]:
     Holding" are facts about the action rather than about the board it leaves behind.
     """
     return tuple(event for event in game.action_events if isinstance(event, kind))
+
+
+def action_recruited(game: GameState, card_id: str) -> bool:
+    """Whether the action now resolving Recruited ``card_id``, as "after the action Recruits X"
+    reads, rather than putting it into play some other way."""
+    return any(
+        event.recruited and event.card_id == card_id for event in action_did(game, EnteredPlay)
+    )
 
 
 def resolve_delayed(game: GameState, moment: Moment) -> None:

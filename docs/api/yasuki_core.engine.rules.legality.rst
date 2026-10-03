@@ -24,7 +24,6 @@ yasuki_core.engine.rules.legality
     permitted_timings
     permitted_timings_in
     playable
-    proclaim_key
     recruit_cost
     recruit_timings
     seat_cards

@@ -572,17 +572,22 @@ class DelayedEffect(Effect):
 
 
 @dataclass(frozen=True, slots=True)
-class FromAction(Effect):
-    """``effect``, held until a later moment, resolving as an effect of the action that scheduled
-    it. A delayed effect stays that action's, so a negation of the action's effects in force when
-    it resolves still reaches it (CR, Delayed Effects).
+class Attributed(Effect):
+    """``effect``, resolving as the effect of whatever ``provenance`` names instead of as one of
+    the effects around it, with those effects stashed so their order holds.
+
+    A delayed effect stays the effect of the action that scheduled it, so a negation of the
+    action's effects in force when it resolves still reaches it (CR, Delayed Effects). A card's own
+    effects before it enters play are its trait's even among the Recruit's, so the Interrupt step
+    does not offer them (CR, Traits).
 
     Attributes
     ----------
     effect : Effect
         What resolves.
     provenance : Provenance
-        The scheduling action's acting card and the negations it spent.
+        Whose effect it is: the scheduling action's acting card and the negations it spent, or no
+        action's at all.
     """
 
     effect: Effect
@@ -594,13 +599,17 @@ class FromAction(Effect):
     def narrate(self, game: GameState) -> str:
         return self.effect.narrate(game)
 
+    def is_interruptible(self, game: GameState) -> bool:
+        """False: whether ``effect`` is open to the Interrupt step is ``provenance``'s to say."""
+        return False
+
     def is_negatable(self, game: GameState) -> bool:
         """False: ``effect`` is checked when it resolves under ``provenance``."""
         return False
 
     def perform(self, game: GameState) -> list[GameEvent]:
         """Never reached: the cascade resolves ``effect`` under ``provenance`` instead."""
-        raise RuntimeError("an effect held from an action is resolved by the cascade")
+        raise RuntimeError("an attributed effect is resolved by the cascade")
 
 
 @dataclass(frozen=True, slots=True)
@@ -2375,6 +2384,82 @@ class RecruitCard(InterruptingEffect):
 
         card = game.table.cards_by_id[self.card_id]
         return announce_recruit(game, card, card.owner, invest_amount=None, renew=self.renew)
+
+
+@dataclass(frozen=True, slots=True)
+class Recruit(Effect):
+    """Bring ``card_id`` into play as a Recruit, in its entry state and with a Fortification
+    attached to a Province (CR, Recruit). What its arrival is followed by resolves behind the
+    reactions to it: its Sincerity tokens are removed, its Invest resolves, a Proclaim adds its
+    Personal Honor, and the Province it left is refilled.
+
+    A card put into play is not Recruited, and only this effect's arrival reports ``recruited``.
+
+    Attributes
+    ----------
+    card_id : str
+        The card being Recruited.
+    from_province : ZoneKey or None
+        The Province the card is Recruited from, or None for a card Recruited from anywhere else,
+        which leaves no Province to refill.
+    fortifies : ZoneKey or None, optional
+        The Province a Fortification Recruited from anywhere else attaches to, as its controller
+        chose (CR, Fortification). Default None.
+    invest_amount : int or None, optional
+        The Gold Invested while recruiting, or None when the Recruit took no Invest. A free Invest is
+        an amount of zero. Default None.
+    renew : bool, optional
+        Whether the vacated Province refills face-up whatever the card's own Renew keyword says.
+        Default False.
+    proclaim : bool, optional
+        Whether the Recruit is Proclaimed. Default False.
+    """
+
+    card_id: str
+    from_province: ZoneKey | None
+    fortifies: ZoneKey | None = None
+    invest_amount: int | None = None
+    renew: bool = False
+    proclaim: bool = False
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
+    def describe(self) -> str:
+        return f"recruit {self.card_id}"
+
+    def would_happen(self, game: GameState) -> bool:
+        """Whether the card may enter play: Unique and Singular can keep it out, and so can its own
+        "May only be Recruited by" text."""
+        card = game.table.cards_by_id[self.card_id]
+        return copy_may_enter(game, card.owner, card) and may_recruit(game, card.owner, card)
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        # The Recruit procedure imports this module for the effects it resolves, so importing it
+        # here would close that cycle.
+        from yasuki_core.engine.rules.rulebook.recruit import bring_into_play
+
+        if not self.would_happen(game):
+            return []
+        return bring_into_play(game, self)
+
+    def proclamation(self, game: GameState) -> tuple[Effect, ...]:
+        """The Proclaim's Honor gain, the one part of what follows the arrival that is the Recruit
+        action's own (CR, Proclaim), read on the board as it stands. Empty without a Proclaim."""
+        from yasuki_core.engine.rules.rulebook.recruit import proclamation_effects
+
+        return tuple(proclamation_effects(game, self))
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        """What the arrival is followed by, behind the reactions to it. Nothing when the card did
+        not arrive."""
+        from yasuki_core.engine.rules.rulebook.recruit import effects_after_entering_play
+
+        card = game.table.cards_by_id[self.card_id]
+        if not any(held is card for held in game.table.battlefield.cards):
+            return ()
+        return (Then(tuple(effects_after_entering_play(game, self))),)
 
 
 @dataclass(frozen=True, slots=True)

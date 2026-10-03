@@ -52,7 +52,10 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, AttachmentType, Side
 
 from yasuki_core.engine.rules import legality
-from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
+from yasuki_core.engine.rules.effects import Recruit as RecruitEffect
+from yasuki_core.engine.rules.interrupts import forecast
+from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain_effects, recruit_effects
+from yasuki_core.engine.rules.triggers import resolve_action_effects
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
@@ -740,7 +743,7 @@ def test_proclaiming_meiji_asks_whether_to_gain_his_chi_instead():
     game = two_seat_game()
     meiji = put_in_play(game, _meiji())
 
-    finish_recruit(game, meiji.id, None, proclaim=True)
+    resolve_action_effects(game, proclaim_gain_effects(game, meiji))
 
     assert isinstance(game.pending, Confirm)
     assert game.pending.prompt() == "Gain 5 Honor from Proclaiming instead of 2?"
@@ -880,6 +883,14 @@ def test_gonshiros_own_trait_is_not_his_controllers_action():
     assert game.pending is None
     assert game.table.cards_by_id["gonshiro"].dishonorable
     assert effective_force(game, game.table.cards_by_id["gihei"]) == 3
+
+
+def test_gonshiros_dishonoring_is_not_offered_at_the_recruits_interrupt_step():
+    session = _gonshiro_in_a_province()
+    game = session.game
+    arrival = RecruitEffect("gonshiro", from_province=ZoneKey(P1, ZoneRole.PROVINCE, 0))
+
+    assert forecast(game, tuple(recruit_effects(game, arrival))) == (arrival,)
 
 
 def _gonshiro_attacking(*, dishonored: bool = True) -> EngineSession:

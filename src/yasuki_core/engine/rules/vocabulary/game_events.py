@@ -153,10 +153,14 @@ class EnteredPlay:
         Equip and from anywhere else by an effect that attaches it, and cards distinguish the two:
         "after this Follower enters play from your hand". Default False, which is what everything
         arriving from a Province reports.
+    recruited : bool
+        Whether a Recruit brought it into play, which "after the action Recruits X" reads, rather
+        than an effect that puts it into play. Default False.
     """
 
     card_id: str
     from_hand: bool = False
+    recruited: bool = False
 
 
 @dataclass(frozen=True, slots=True)

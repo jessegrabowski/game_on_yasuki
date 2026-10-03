@@ -21,7 +21,7 @@ from yasuki_core.engine.rules.effects import (
     AttachCard,
     Banish,
     DelayedEffect,
-    FromAction,
+    Attributed,
     Evaluate,
     Arrange,
     BanishTopFate,
@@ -79,6 +79,7 @@ from yasuki_core.engine.rules.effects import (
     MoveToDeck,
     PlaceOnDeck,
     PlaceInProvince,
+    Recruit,
     RecruitCard,
     RevealProvinces,
     Show,
@@ -269,6 +270,7 @@ EFFECTS = [
         MoveToDeck("farm_1", DeckKey(PlayerId.P2, Side.FATE), from_top=3),
         "move farm_1 into P2's fate deck, 3 from top",
     ),
+    (Recruit("holding_1", ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)), "recruit holding_1"),
     (RecruitCard("holding_1"), "recruit holding_1 out of sequence"),
     (
         RecruitCard("holding_1", renew=True),
@@ -304,7 +306,7 @@ EFFECTS = [
         DelayedEffect(Banish("oni"), END_OF_TURN),
         "banish oni at the end of the turn",
     ),
-    (FromAction(Bow("farm"), Provenance(acting="plan")), "bow farm"),
+    (Attributed(Bow("farm"), Provenance(acting="plan")), "bow farm"),
     (PayGold(PlayerId.P2, 3, "Colonial Farm"), "P2 pays 3 gold for Colonial Farm"),
     (CounterOnAttachedProvince("wall", WALL, 1), "+1 Wall on wall's province"),
     (
