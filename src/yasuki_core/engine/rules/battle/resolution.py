@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GainHonor,
     Rehonor,
+    Simultaneously,
 )
 from yasuki_core.engine.rules.board.queries import terrains_at, units_at
 from yasuki_core.engine.rules.units.composition import unit_force
@@ -209,7 +210,7 @@ def _cards_in(game: GameState, army: list[L5RCard]) -> int:
     return sum(1 + len(attachments_of(game, personality)) for personality in army)
 
 
-def _destroy_army(army: list[L5RCard]) -> list[Effect]:
+def _destroy_army(army: list[L5RCard]) -> list[Destroy]:
     """Destroy every unit in ``army``. Each Personality takes his whole unit with him."""
     return [Destroy(personality.id, Rulebook.BATTLE_RESOLUTION) for personality in army]
 
@@ -222,7 +223,10 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     on zero Force where either side is empty has no outcome, which is not the same as a tie that
     destroys nothing. The winner gains twice the cards it destroyed, and on a tie both do, except
     that an army holding a dishonorable Personality rehonors him in place of its gain (CR,
-    Rehonoring 0.3), in a tie before it is destroyed.
+    Rehonoring 0.3), in a tie before it is destroyed. An army is destroyed at once, and in a tie
+    both are ("the Attacker and Defender each destroy all units in the enemy army"). An army's
+    dishonorable Personalities are rehonored at once ("all such dishonorable Personalities are
+    rehonored").
     """
     attack = _declared_attack(game)
     attacking = units_at(game, battlefield, attack.attacker)
@@ -232,8 +236,8 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
 
     if attacking_force > defending_force:
         effects = [
-            *_destroy_army(defending),
-            *_rehonored(attacking),
+            Simultaneously(tuple(_destroy_army(defending))),
+            Simultaneously(tuple(_rehonored(attacking))),
             *_spoils(game, attack.attacker, attacking, defending),
         ]
         province = attack.battlefields[battlefield].province
@@ -242,23 +246,21 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
         return effects
     if defending_force > attacking_force:
         return [
-            *_destroy_army(attacking),
-            *_rehonored(defending),
+            Simultaneously(tuple(_destroy_army(attacking))),
+            Simultaneously(tuple(_rehonored(defending))),
             *_spoils(game, attack.defender, defending, attacking),
         ]
     if not (attacking and defending):
         return []  # tied on zero Force with a side empty: no outcome
     return [
-        *_rehonored(attacking),
-        *_rehonored(defending),
-        *_destroy_army(defending),
-        *_destroy_army(attacking),
+        Simultaneously((*_rehonored(attacking), *_rehonored(defending))),
+        Simultaneously((*_destroy_army(defending), *_destroy_army(attacking))),
         *_spoils(game, attack.attacker, attacking, defending),
         *_spoils(game, attack.defender, defending, attacking),
     ]
 
 
-def _rehonored(army: list[L5RCard]) -> list[Effect]:
+def _rehonored(army: list[L5RCard]) -> list[Rehonor]:
     return [Rehonor(personality.id) for personality in army if personality.dishonorable]
 
 
@@ -281,8 +283,8 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     resolution does not bow its player's units. Once the Attack Phase's last
     battle is over, defending units return home without bowing. Every one of them, at every
     battlefield, holds the ground they defended until then. Last, every Terrain at this battlefield
-    is discarded. The bows and the discards resolve as one instant once the units are home, so each
-    is announced like any other bow or discard.
+    is discarded. Once the units are home, the bows happen at once, then the discards at once (CR,
+    After Resolution 0.1 and 0.3), each announced like any other bow or discard.
     """
     attack = _declared_attack(game)
     exempt = attack.battlefields[battlefield].bow_exempt
@@ -304,7 +306,9 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
         Discard(terrain.id, Rulebook.AFTER_RESOLUTION) for terrain in terrains_at(game, battlefield)
     ]
     if bows or discards:
-        triggers.resolve_effects(game, bows + discards)
+        triggers.resolve_effects(
+            game, [Simultaneously(tuple(bows)), Simultaneously(tuple(discards))]
+        )
 
 
 @dataclass(frozen=True, slots=True)
