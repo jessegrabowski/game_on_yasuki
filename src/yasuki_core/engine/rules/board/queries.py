@@ -33,6 +33,13 @@ def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Z
         yield key, game.table.zones[key]
 
 
+def rightmost_province(game: GameState, seat: PlayerId) -> ZoneKey | None:
+    """``seat``'s rightmost Province, the one an effect destroying a Province without saying which
+    destroys (ShE datasheet), or None once it has none."""
+    keys = province_keys(game.table, seat)
+    return keys[-1] if keys else None
+
+
 def rulebook_proxy_id(seat: PlayerId, printed_id: str) -> str:
     """The card id of ``seat``'s proxy of ``printed_id``, fixed by seat and print."""
     return f"{seat.name}-{printed_id}"

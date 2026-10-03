@@ -25,6 +25,7 @@ yasuki_core.engine.rules.board.queries
     province_key_of
     province_zones
     remaining_look
+    rightmost_province
     rings_in_play
     rulebook_proxy
     rulebook_proxy_id

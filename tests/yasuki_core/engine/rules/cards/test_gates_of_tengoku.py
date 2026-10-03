@@ -10,24 +10,26 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChoosePayment,
     DecisionResponse,
+    assignment_token,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.rules.triggers import fire
+from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of, province_keys
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import ActionPrint, EventPrint, PersonalityPrint, WindPrint
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.board.seats import has_compassion
+from yasuki_core.engine.rules.board.seats import has_compassion, province_count
 from yasuki_core.engine.rules.effects import (
     Bow,
     Destroy,
+    DestroyProvince,
     Effect,
     PutIntoPlay,
     RangedAttack,
@@ -50,6 +52,7 @@ from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
@@ -70,6 +73,166 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1 = PlayerId.P1
+
+
+# --- Decree of the Hantei ---
+
+
+def _decree_game(*, p1_provinces: int, p2_provinces: int, kanpeki: bool = False) -> GameState:
+    """P1 has Decree of the Hantei in play and holds the Imperial Favor."""
+    game = two_seat_game()
+    put_in_play(
+        game,
+        L5RCard.of(
+            EventPrint,
+            id="decree",
+            printed_id="decree_of_the_hantei",
+            name="Decree of the Hantei",
+            side=Side.DYNASTY,
+            owner=P1,
+        ),
+    )
+    if kanpeki:
+        put_in_play(
+            game,
+            L5RCard.of(
+                WindPrint,
+                id="kanpeki",
+                printed_id="the_kanpeki_dynasty_hantei_xl",
+                name="The Kanpeki Dynasty",
+                side=Side.FATE,
+                owner=P1,
+            ),
+        )
+    for seat, count in ((P1, p1_provinces), (PlayerId.P2, p2_provinces)):
+        for index in range(count):
+            province_card(game, f"{seat.name}-prov{index}", seat=seat, index=index)
+    game.favor_holder = P1
+    return game
+
+
+def _destroy_p1_province(game: GameState) -> None:
+    resolve_effects(game, [DestroyProvince(PlayerId.P2, ZoneKey(P1, ZoneRole.PROVINCE, 0))])
+
+
+def test_decree_of_the_hantei_destroys_the_chosen_players_rightmost_province():
+    game = _decree_game(p1_provinces=2, p2_provinces=3)
+
+    _destroy_p1_province(game)
+    assert game.pending.candidates == ("P1", "P2")
+    submit(game, DecisionResponse(("P2",)))
+
+    p2_provinces = sorted(
+        key.idx
+        for key in game.table.zones
+        if key.owner is PlayerId.P2 and key.role is ZoneRole.PROVINCE
+    )
+    assert p2_provinces == [0, 1]
+    p2_discard = game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.DYNASTY_DISCARD)].cards
+    assert [card.id for card in p2_discard] == ["P2-prov2"]
+    assert "decree" not in {card.id for card in game.table.battlefield.cards}
+    assert game.pending is None
+
+
+def test_decree_of_the_hantei_waits_while_its_owner_lacks_compassion():
+    game = _decree_game(p1_provinces=3, p2_provinces=2)
+
+    _destroy_p1_province(game)
+
+    assert game.pending is None
+    assert "decree" in {card.id for card in game.table.battlefield.cards}
+
+
+@pytest.mark.parametrize(
+    ("kanpeki", "favor_holder"),
+    [(False, P1), (True, PlayerId.P2)],
+    ids=["another_wind", "favor_held_elsewhere"],
+)
+def test_decree_of_the_hantei_offers_no_favor_trade_unless_both_hold(kanpeki, favor_holder):
+    game = _decree_game(p1_provinces=2, p2_provinces=3, kanpeki=kanpeki)
+    game.favor_holder = favor_holder
+    _destroy_p1_province(game)
+
+    submit(game, DecisionResponse(("P2",)))
+
+    assert game.pending is None
+
+
+def test_decree_of_the_hantei_keeps_the_favor_when_the_trade_is_declined():
+    game = _decree_game(p1_provinces=2, p2_provinces=3, kanpeki=True)
+    _destroy_p1_province(game)
+    submit(game, DecisionResponse(("P2",)))
+
+    submit(game, DecisionResponse(()))
+
+    assert game.favor_holder is P1
+    assert province_count(game, P1) == 1
+
+
+def test_decree_of_the_hantei_under_the_kanpeki_dynasty_trades_the_favor_for_a_province():
+    game = _decree_game(p1_provinces=2, p2_provinces=3, kanpeki=True)
+    _destroy_p1_province(game)
+    submit(game, DecisionResponse(("P2",)))
+
+    submit(game, DecisionResponse(("decree",)))
+
+    assert game.favor_holder is None
+    assert province_count(game, P1) == 2
+
+
+def test_decree_of_the_hantei_answers_a_province_lost_in_battle_without_renaming_it():
+    state = TableState.empty_two_seat()
+    for index in range(2):
+        province_card(state, f"P2-prov{index}", seat=PlayerId.P2, index=index)
+    for index in range(3):
+        province_card(state, f"P1-prov{index}", seat=P1, index=index)
+    put_in_play(state, personality("attacker", owner=P1, force=5))
+    for card in (
+        L5RCard.of(
+            EventPrint,
+            id="decree",
+            printed_id="decree_of_the_hantei",
+            name="Decree of the Hantei",
+            side=Side.DYNASTY,
+            owner=PlayerId.P2,
+        ),
+        L5RCard.of(
+            WindPrint,
+            id="kanpeki",
+            printed_id="the_kanpeki_dynasty_hantei_xl",
+            name="The Kanpeki Dynasty",
+            side=Side.FATE,
+            owner=PlayerId.P2,
+        ),
+    ):
+        put_in_play(state, card)
+    session = EngineSession.start(state, P1)
+    session.game.favor_holder = PlayerId.P2
+    end_phase(session)  # Action -> Battle
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse((assignment_token("attacker", 0),)))
+    session.submit(PlayerId.P2, DecisionResponse())
+    fought_at = session.game.attack.battlefields[0].province
+    answers = {
+        "decree_of_the_hantei": ("P1",),
+        "decree_of_the_hantei_favor": ("decree",),
+    }
+
+    for _ in range(30):
+        pending = session.game.pending
+        if session.game.attack.battlefields[0].outcome is not None and pending is None:
+            break
+        if pending is None:
+            session.act(session.game.round.priority, Pass())
+            continue
+        answer = answers.get(getattr(pending, "resolver", None), (pending.candidates[0],))
+        session.submit(pending.seat, DecisionResponse(answer))
+
+    game = session.game
+    assert game.attack.battlefields[0].outcome.province_destroyed
+    assert fought_at not in game.table.zones
+    assert [key.idx for key in province_keys(game.table, PlayerId.P2)] == [2, 1]
+    assert [key.idx for key in province_keys(game.table, P1)] == [0, 1]
 
 
 # --- Sasada, Pearl Champion ---
