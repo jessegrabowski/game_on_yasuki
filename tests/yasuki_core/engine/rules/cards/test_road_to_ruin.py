@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     DeclareAttack,
+    Equip,
     Pass,
     PlayInterrupt,
     PlayStrategy,
@@ -37,10 +38,10 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MINUS_1F
-from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint, RingPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
@@ -755,3 +756,78 @@ def test_rumiko_is_withheld_on_the_other_seats_turn():
     end_turn(session)
 
     assert ActivateAbility("rumiko") not in session.legal_actions(P1)
+
+
+# --- Tao Defenders ---
+
+
+def _tao_defenders(*, owner=P1):
+    return attachment(
+        "defenders",
+        owner=owner,
+        printed_id="tao_defenders",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=2,
+        gold_cost=4,
+        keywords=("Monk",),
+    )
+
+
+def _ring(card_id, *, ring_keywords=()):
+    return L5RCard.of(
+        RingPrint,
+        id=card_id,
+        printed_id=card_id,
+        name=card_id,
+        side=Side.FATE,
+        owner=P1,
+        keywords=ring_keywords,
+    )
+
+
+def test_tao_defenders_return_a_non_shadowlands_ring_to_hand_and_are_destroyed():
+    # Way of the Dragon counts as a Ring for actions wherever it is.
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("hero"))
+    attached(state, _tao_defenders(), "hero")
+    discard = state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    discard.add(register(state, _ring("ring_of_water")))
+    discard.add(register(state, _ring("dark_ring", ring_keywords=(keywords.SHADOWLANDS,))))
+    discard.add(
+        register(
+            state,
+            L5RCard.of(
+                ActionPrint,
+                id="way",
+                printed_id="way_of_the_dragon_experienced",
+                name="Way of the Dragon",
+                side=Side.FATE,
+                owner=P1,
+            ),
+        )
+    )
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, ActivateAbility("defenders"))
+    assert session.game.pending.candidates == ("ring_of_water", "way")
+    session.submit(P1, DecisionResponse(("ring_of_water",)))
+
+    zones = session.game.table.zones
+    assert [card.id for card in zones[ZoneKey(P1, ZoneRole.HAND)].cards] == ["ring_of_water"]
+    assert "defenders" in {card.id for card in zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards}
+
+
+@pytest.mark.parametrize(
+    ("p1_provinces", "offered"), [(3, True), (4, False)], ids=["compassion", "no_compassion"]
+)
+def test_tao_defenders_may_be_equipped_from_the_discard_pile_with_compassion(p1_provinces, offered):
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("hero"))
+    put_in_play(state, holding("mine", gold_production=4))
+    for seat, count in ((P1, p1_provinces), (PlayerId.P2, 4)):
+        for index in range(count):
+            state.zones[ZoneKey(seat, ZoneRole.PROVINCE, index)] = ProvinceZone(owner=seat)
+    state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(register(state, _tao_defenders()))
+    session = EngineSession.start(state, P1)
+
+    assert (Equip("defenders") in session.legal_actions(P1)) is offered

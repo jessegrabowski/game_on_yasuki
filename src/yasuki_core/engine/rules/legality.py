@@ -33,7 +33,7 @@ from yasuki_core.engine.rules.board.queries import (
     province_cards,
     units_at,
 )
-from yasuki_core.engine.rules.rulebook.equip import equip_gold, equip_targets
+from yasuki_core.engine.rules.rulebook.equip import equip_gold, equip_targets, equippable
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -45,7 +45,7 @@ from yasuki_core.engine.rules.gold.producers import gold_reach
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
-from yasuki_core.engine.table import DeckKey, location_of, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, location_of, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -272,18 +272,16 @@ def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> li
 
 
 def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """The Equip actions ``seat`` can take: each attachment in hand it can afford that some
-    Personality it controls would accept.
+    """The Equip actions ``seat`` can take: each attachment Equip may reach, in hand or in a discard
+    pile its own text opens, that it can afford and some Personality it controls would accept.
 
-    An attachment enters play only by attaching, so hand is a hard filter. The Personality is chosen
-    through the decision the action raises, and the action is withheld unless at least one would
-    take the card. ``only`` narrows to a single card."""
+    The Personality is chosen through the decision the action raises, and the action is withheld
+    unless at least one would take the card. ``only`` narrows to a single card."""
     if not permits(game, seat, ACTION_TIMINGS[Equip]):
         return []
-    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
     reach = gold_reach(game, seat)
     equips: list[Action] = []
-    for card in hand:
+    for card in equippable(game, seat):
         if only is not None and card.id != only:
             continue
         if not isinstance(card.printed, AttachmentPrint):

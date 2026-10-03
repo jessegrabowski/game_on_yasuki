@@ -48,6 +48,18 @@ def went_second(game: GameState, seat: PlayerId) -> bool:
     return seat is not game.first_player
 
 
+def province_count(game: GameState, seat: PlayerId) -> int:
+    """How many Provinces ``seat`` has left. A destroyed Province leaves no zone behind."""
+    return sum(1 for key in game.table.zones if key.owner is seat and key.role is ZoneRole.PROVINCE)
+
+
+def has_compassion(game: GameState, seat: PlayerId) -> bool:
+    """Whether ``seat`` has Compassion, which it has while it has fewer Provinces than anyone else
+    (ShE datasheet, Traits; the reminder Doji Hoshihana prints)."""
+    own = province_count(game, seat)
+    return all(own < province_count(game, other) for other in opposing_seats(game, seat))
+
+
 def seat_controls_printed(
     game: GameState, seat: PlayerId, keyword: str, *, other_than: L5RCard | None = None
 ) -> bool:

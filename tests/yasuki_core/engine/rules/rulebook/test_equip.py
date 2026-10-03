@@ -1,9 +1,14 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
 from yasuki_core.engine.rules.effects import AttachCard
+from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.rulebook.equip import (
+    EQUIPS_FROM_DISCARD,
     creation_targets,
+    equips_from_discard,
     has_caster,
     is_spell,
     may_cast_spells,
@@ -12,8 +17,12 @@ from yasuki_core.engine.rules.rulebook.equip import (
     may_attach_weapon,
     weapons_on,
 )
+from yasuki_core.engine.rules.vocabulary.actions import Equip
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint
@@ -21,8 +30,11 @@ from yasuki_core.game_pieces.prints import AttachmentPrint
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    holding,
+    pay,
     personality,
     put_in_play,
+    register,
     two_seat_game,
 )
 
@@ -374,3 +386,53 @@ def test_a_spell_has_a_caster_only_while_it_hangs_on_one():
     assert has_caster(game, cast)
     assert not has_caster(game, stray)
     assert not has_caster(game, unattached)
+
+
+OPEN_PROBE = "equips_from_discard_open_probe"
+SHUT_PROBE = "equips_from_discard_shut_probe"
+
+
+@pytest.fixture
+def discard_permissions():
+    equips_from_discard(OPEN_PROBE)(lambda game, card: True)
+    equips_from_discard(SHUT_PROBE)(lambda game, card: False)
+    yield
+    EQUIPS_FROM_DISCARD.pop(OPEN_PROBE)
+    EQUIPS_FROM_DISCARD.pop(SHUT_PROBE)
+
+
+def _follower_in_the_discard_pile(printed_id: str) -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("hero"))
+    put_in_play(state, holding("mine", gold_production=2))
+    follower = attachment(
+        "monks", printed_id=printed_id, attachment_type=AttachmentType.FOLLOWER, gold_cost=2
+    )
+    state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(register(state, follower))
+    return EngineSession.start(state, P1)
+
+
+@pytest.mark.usefixtures("discard_permissions")
+@pytest.mark.parametrize(
+    ("printed_id", "offered"),
+    [(OPEN_PROBE, True), (SHUT_PROBE, False), ("plain_follower", False)],
+    ids=["its_text_opens_the_pile", "its_text_holds_it_shut", "no_such_text"],
+)
+def test_equip_reaches_the_discard_pile_only_where_the_card_says_so(printed_id, offered):
+    session = _follower_in_the_discard_pile(printed_id)
+
+    assert (Equip("monks") in session.legal_actions(P1)) is offered
+
+
+@pytest.mark.usefixtures("discard_permissions")
+def test_equipping_from_the_discard_pile_pays_and_attaches_but_is_not_from_hand():
+    session = _follower_in_the_discard_pile(OPEN_PROBE)
+
+    session.act(P1, Equip("monks"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    game = session.game
+    assert attached_to(game, game.table.cards_by_id["monks"]).id == "hero"
+    assert game.table.cards_by_id["mine"].bowed
+    assert EnteredPlay("monks", from_hand=False) in game.turn_events

@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId, Trait
-from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named
+from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
+from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named, has_compassion
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_event_entry
 from yasuki_core.engine.rules.abilities.model import (
@@ -25,13 +26,14 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantModifier,
     MeleeAttack,
+    MoveToHand,
     Negated,
     PlaceInProvince,
     RangedAttack,
     Straighten,
     seppuku,
 )
-from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets, equips_from_discard
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     Dishonored,
@@ -59,7 +61,7 @@ from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import MINUS_1F
-from yasuki_core.game_pieces.prints import HoldingPrint
+from yasuki_core.game_pieces.prints import HoldingPrint, RingPrint
 
 
 # --- Dull Tanto ---
@@ -267,6 +269,42 @@ register_ability(
 # --- Siege of the Great Wall ---
 
 register_event_entry("siege_of_the_great_wall")
+
+
+# --- Tao Defenders ---
+
+
+@equips_from_discard("tao_defenders")
+def _tao_defenders_equips_from_discard(game: GameState, card: L5RCard) -> bool:
+    """Compassion: The rulebook Equip ability may target this Follower in the discard pile."""
+    return has_compassion(game, card.owner)
+
+
+def _tao_defenders_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The non-Shadowlands Rings in your discard pile, as the Follower's action counts them."""
+    asking = Asking.action(source)
+    return [
+        card.id
+        for card in game.table.zones[ZoneKey(source.owner, ZoneRole.FATE_DISCARD)].cards
+        if counts_as(game, card, RingPrint, asking)
+        and keywords.SHADOWLANDS not in effective_keywords(game, card)
+    ]
+
+
+def _tao_defenders_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [MoveToHand(target.id, source.owner), Destroy(source.id, source.owner)]
+
+
+register_ability(
+    "tao_defenders",
+    Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        cost=no_cost,
+        targets=_tao_defenders_targets,
+        targeting_message="a non-Shadowlands Ring in your discard pile",
+        effects=_tao_defenders_effects,
+    ),
+)
 
 
 # --- The Forgotten ---
