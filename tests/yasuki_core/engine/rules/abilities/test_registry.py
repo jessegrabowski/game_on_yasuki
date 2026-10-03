@@ -32,7 +32,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt, Interruption
-from yasuki_core.engine.rules.effects import Fear
+from yasuki_core.engine.rules.effects import Bow, Destroy, Fear, Simultaneously
 from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_INTERRUPT
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules import cards  # noqa: F401
@@ -373,6 +373,24 @@ def test_an_ability_builds_its_effects_one_way():
         replace(plain, effects_for_targets=over_the_set, target_count=lambda game, source: 2)
     with pytest.raises(ValueError, match="counts its targets"):
         replace(plain, effects=None, effects_for_targets=over_the_set)
+
+
+def test_an_ability_against_several_targets_takes_each_step_on_all_of_them_at_once():
+    ability = replace(
+        _ABILITIES["millet_farm"][0],
+        effects=lambda game, source, target: [Bow(target.id), Destroy(target.id, source.owner)],
+    )
+    game = two_seat_game()
+    source, first, second = (
+        put_in_play(game, personality(card_id)) for card_id in ("source", "first", "second")
+    )
+
+    effects = ability.effects_against(game, source, (first, second))
+
+    assert effects == [
+        Simultaneously((Bow("first"), Bow("second"))),
+        Simultaneously((Destroy("first", PlayerId.P1), Destroy("second", PlayerId.P1))),
+    ]
 
 
 def test_a_keyword_may_not_confer_two_abilities_under_one_key():

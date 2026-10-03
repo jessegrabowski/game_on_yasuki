@@ -1,11 +1,12 @@
 from collections.abc import Callable
+from itertools import zip_longest
 from dataclasses import dataclass
 from enum import Enum
 from types import UnionType
 
 from yasuki_core.engine.rules.abilities.costs import Cost, no_cost, priced_cost
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
-from yasuki_core.engine.rules.effects import Effect
+from yasuki_core.engine.rules.effects import Effect, Simultaneously
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.gold.discounts import Purchase
 from yasuki_core.engine.rules.state import GameState
@@ -302,12 +303,20 @@ class Ability:
         self, game: GameState, source: L5RCard, targets: tuple[L5RCard, ...]
     ) -> list[Effect]:
         """The effects the ability emits against ``targets``: built over the set where it sets
-        ``effects_for_targets``, otherwise against each target in turn."""
+        ``effects_for_targets``, otherwise against each target. Against several, one text acts on
+        them all at once, so each step happens to every target together before the next (CR, Timing
+        Conflicts: "each step of each procedure takes place simultaneously, in parallel")."""
         if self.effects_for_targets is not None:
             return self.effects_for_targets(game, source, targets)
         if self.effects is None:
             raise ValueError("an ability builds its effects per target or over the set")
-        return [effect for target in targets for effect in self.effects(game, source, target)]
+        per_target = [self.effects(game, source, target) for target in targets]
+        if len(per_target) == 1:
+            return per_target[0]
+        steps = zip_longest(*per_target)
+        return [
+            Simultaneously(tuple(effect for effect in step if effect is not None)) for step in steps
+        ]
 
     @property
     def acts_from_its_card(self) -> bool:
