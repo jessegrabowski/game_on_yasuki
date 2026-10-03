@@ -90,6 +90,21 @@ placed:
 :language: python
 ```
 
+## One effect that depends on another
+
+"Effects linked by the word "to" mean that the second effect depends on the first effect actually
+happening" (CR, Independence of Effects). "Bow your Samurai to draw two cards" draws nothing if the
+Samurai was already bowed or something prevented the bow. {class}`~.To` writes that link: its
+`contingent` effects apply only if its `first` raised an event, which an effect that happens always
+does. What reacts to `first` resolves before `contingent` applies. The Courage rulebook Interrupt
+discards its card to adjust a Fear, so a negated discard keeps the card in hand and adjusts
+nothing:
+
+```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/courage_and_honor.py
+:pyobject: _discard_and_adjust
+:language: python
+```
+
 ## Effects that happen at once
 
 Effects in a list happen in the order they are written (CR, Order of Effects). Some happen at once:
