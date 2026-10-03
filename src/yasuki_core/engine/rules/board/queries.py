@@ -6,7 +6,15 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, GameEvent, PhaseStarted
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.table import DeckKey, Zone, ZoneKey, ZoneRole, location_of, province_holding
+from yasuki_core.engine.table import (
+    DeckKey,
+    Zone,
+    ZoneKey,
+    ZoneRole,
+    location_of,
+    province_holding,
+    province_keys,
+)
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -20,10 +28,9 @@ from yasuki_core.game_pieces.prints import (
 
 
 def province_zones(game: GameState, seat: PlayerId) -> Iterator[tuple[ZoneKey, Zone]]:
-    """Each of ``seat``'s Province zones with its key, in table order."""
-    for key, zone in game.table.zones.items():
-        if key.owner is seat and key.role is ZoneRole.PROVINCE:
-            yield key, zone
+    """Each of ``seat``'s Province zones with its key, left to right."""
+    for key in province_keys(game.table, seat):
+        yield key, game.table.zones[key]
 
 
 def rulebook_proxy_id(seat: PlayerId, printed_id: str) -> str:

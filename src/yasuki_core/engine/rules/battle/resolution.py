@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.battle.presence import place_unit
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.table import Location, location_of
+from yasuki_core.engine.table import Location, location_of, province_keys
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
@@ -26,7 +26,6 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.board.queries import terrains_at, units_at
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.abilities.registry import may_attack
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
@@ -92,13 +91,8 @@ def declare_attack(game: GameState, attacker: PlayerId | None = None) -> None:
     """
     attacker = game.active if attacker is None else attacker
     defender = defender_of(game, attacker)
-    # By Province index rather than by the order the zones were created in: a destroyed Province is
-    # replaced at the lowest free index, and the CR makes battlefields at adjacent Provinces
-    # adjacent to each other.
-    provinces = sorted(
-        (key for key, _ in province_zones(game, defender)),
-        key=lambda province: province.idx,
-    )
+    # Left to right, since the CR makes battlefields at adjacent Provinces adjacent to each other.
+    provinces = province_keys(game.table, defender)
     game.attack = AttackPhase(
         attacker=attacker,
         defender=defender,

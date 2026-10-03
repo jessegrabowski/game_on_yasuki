@@ -984,8 +984,6 @@ class FieldView(tk.Canvas):
         for key in self._zone_keys():
             if key.role is ZoneRole.PROVINCE:
                 by_owner.setdefault(key.owner, []).append(key)
-        for keys in by_owner.values():
-            keys.sort(key=lambda k: k.idx or 0)
         return by_owner
 
     def _canvas_size(self) -> tuple[int, int]:
