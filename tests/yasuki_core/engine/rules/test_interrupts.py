@@ -33,7 +33,6 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     RevokeGrants,
     Straighten,
-    Then,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
@@ -1021,15 +1020,6 @@ def test_a_cost_is_not_open_to_the_interrupt_step_but_the_effect_is():
     assert _asked_seat(game) is P2
 
 
-def test_a_then_among_the_actions_effects_is_still_the_actions():
-    game = _inside_an_action()
-
-    resolve_action_effects(game, [Then((GainHonor(P1, 2),))])
-    sequence.run_stack(game)
-
-    assert _asked_seat(game) is P2
-
-
 def test_a_delayed_change_at_the_end_of_the_turn_asks_nobody():
     game = GameState.start(dealt_table(hand=0), P1)
     _honor_card(game.table, "P2-honor0", P2)
@@ -1308,26 +1298,12 @@ def test_backing_out_of_which_effect_unwinds_the_interrupt():
     assert session.game.pending is None and _asked(session) is P2
 
 
-def test_a_deferred_step_of_the_action_opens_no_second_interrupt_step():
-    game = _inside_an_action()
-
-    resolve_action_effects(game, [GainHonor(P1, 1), Then((GainHonor(P1, 2),))])
-    assert _asked_seat(game) is P2
-    action_sequence.perform(game, Pass())
-    sequence.run_stack(game)
-
-    assert game.pending is None
-    assert game.table.seats[P1].honor == 3
-
-
-def test_the_forecast_reads_through_an_attacks_outcome_and_a_deferred_step():
+def test_the_forecast_reads_through_an_attacks_outcome():
     game = _inside_an_action()
     guard = put_in_play(game, personality("P1-guard", force=2))
     farm = put_in_play(game, holding("P1-farm"))
 
-    foreseen = interrupts.forecast(
-        game, (Fear(FEAR, guard.id, P2), Then((Bow(farm.id),)), GainHonor(P1, 0))
-    )
+    foreseen = interrupts.forecast(game, (Fear(FEAR, guard.id, P2), Bow(farm.id), GainHonor(P1, 0)))
 
     assert foreseen == (Fear(FEAR, guard.id, P2), Bow(guard.id), Bow(farm.id))
 

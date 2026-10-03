@@ -163,8 +163,8 @@ holding none is skipped, as is a seat with no unit at the battlefield while a ba
 fought (CR, Actions in Battle: the Rule of Presence applies to Interrupts), a seat that took an
 Interrupt is offered again when the opportunity comes round, and consecutive passes close the
 step and resolve the held action. What the action is about
-to do is the {func}`~yasuki_core.engine.rules.interrupts.forecast`: the effects in order, a
-`Then`'s contents, an ability's built effects behind the
+to do is the {func}`~yasuki_core.engine.rules.interrupts.forecast`: the effects in order, the
+members of a group or a `To`, an ability's built effects behind the
 {class}`~yasuki_core.engine.rules.abilities.activation.ResolveAbility` that targets them, and an
 attack's outcome when the attack reaches on the board as it stands. An Interrupt taken is stored
 as a modification bound to the effect it answered and applied when that effect comes up to

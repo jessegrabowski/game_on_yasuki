@@ -2534,7 +2534,7 @@ class Recruit(Effect):
         card = game.table.cards_by_id[self.card_id]
         if not any(held is card for held in game.table.battlefield.cards):
             return ()
-        return (Then(tuple(effects_after_entering_play(game, self))),)
+        return tuple(effects_after_entering_play(game, self))
 
 
 @dataclass(frozen=True, slots=True)
@@ -2640,9 +2640,8 @@ class Unpayable(Effect):
 
 @dataclass(frozen=True, slots=True)
 class ApplyEffects:
-    """Resolve ``effects`` once the current step finishes. The generic deferral: an effect that must
-    wait for what precedes it to resolve fully, including any cascade it raises, is queued here
-    rather than placed inline, where it would run ahead of the events already in flight.
+    """Resolve ``effects`` once the work queued above it on the stack has finished, such as a step
+    of a procedure that follows the one under way, or an Interrupt's effects behind its payment.
 
     Attributes
     ----------
@@ -2665,27 +2664,6 @@ class ApplyEffects:
             triggers.resolve_action_effects(game, list(self.effects), provenance=self.provenance)
         else:
             triggers.resolve_effects(game, list(self.effects), provenance=self.provenance)
-
-
-@dataclass(frozen=True, slots=True)
-class Then(Effect):
-    """Defer ``effects`` until the current step has fully resolved, cascade included.
-
-    Effects placed inline run before the events already queued behind them, so a step that must
-    follow another card's reaction to what just happened belongs here instead.
-    """
-
-    effects: tuple[Effect, ...]
-
-    def describe(self) -> str:
-        return f"then: {len(self.effects)} deferred"
-
-    def perform(self, game: GameState) -> list[GameEvent]:
-        """Defer the effects with no Interrupt step open on them. The cascade handles a ``Then``
-        itself, carrying the provenance of the effects around it, so this runs only when a ``Then``
-        is applied outside the cascade."""
-        game.stack.append(ApplyEffects(self.effects))
-        return []
 
 
 @dataclass(frozen=True, slots=True)
@@ -2745,7 +2723,7 @@ class To(Effect):
     contingent: tuple[Effect, ...]
 
     def __post_init__(self) -> None:
-        if isinstance(self.first, InterruptingEffect | Simultaneously | Then | To | Attributed):
+        if isinstance(self.first, InterruptingEffect | Simultaneously | To | Attributed):
             raise TypeError(f"{type(self.first).__name__} cannot be what another effect depends on")
 
     def describe(self) -> str:

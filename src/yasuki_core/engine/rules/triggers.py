@@ -23,7 +23,6 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Negated,
     Simultaneously,
-    Then,
     To,
 )
 from yasuki_core.engine.rules import state_based_actions
@@ -426,32 +425,31 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
     beneath the group, which fires once every member has happened. An events frame fires its next
     trigger as a new effects frame, or pops its next queued event and collects that event's
     triggers. A frame with nothing left is dropped, and the walk ends with the stack. An
-    :class:`~.InterruptingEffect` pauses the walk: it stashes the exact remainder (every frame, the paused one holding the effects
-    after the one that asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
-    :func:`~.resume_cascade` continues from precisely here once the seat answers. An effect with
-    nothing to ask leaves the stash to drain behind the work it queued.
+    :class:`~.InterruptingEffect` pauses the walk: it stashes the exact remainder (every frame, the
+    paused one holding the effects after the one that asked) as a :class:`~.ResumeCascade` and
+    records that effect's decision, so :func:`~.resume_cascade` continues from precisely here once
+    the seat answers. An effect with nothing to ask leaves the stash to drain behind the work it
+    queued.
 
     Each effects frame carries the provenance of its effects. Its ``interruptible`` says they are an
     action's own, the only ones an Interrupt may modify (ShE datasheet, Interrupt). Each is checked
     against the modifications the action's :class:`~.InterruptWindow` collected before it is
     applied, and resolves as what the Interrupt made of it. What a trigger returns is a trait's or
-    the rulebook's, never the action's, so it is applied as returned, and a ``Then`` among the
-    action's effects carries the flag to the deferred step.
+    the rulebook's, never the action's, so it is applied as returned.
 
     Every effect, an action's or not, is checked against the negations in force as it commits,
     whatever produced it, since a negation makes an effect fail to happen whenever it would occur
     (CR, Prevention). The check comes before an effect pauses, so a negated discard asks nothing.
     The provenance's ``acting`` names the card whose action produced the effects in hand, which a
-    negation naming a source reads, and its ``negations`` are the ones that action spent. A
-    ``Then``, a pause and what an effect produces keep both, and a trigger's effects carry
-    neither. The provenance's ``paying`` says the effects in hand are a
-    cost's payments instead, which are no effects (CR, Effects), so no negation reaches them. What
-    reacts to them is effects again, and so is what a ``Then`` among them defers.
+    negation naming a source reads, and its ``negations`` are the ones that action spent. A pause
+    and what an effect produces keep both, and a trigger's effects carry neither. The provenance's
+    ``paying`` says the effects in hand are a cost's payments instead, which are no effects (CR,
+    Effects), so no negation reaches them. What reacts to them is effects again.
 
     The provenance's ``triggered`` says the effects in hand are a trigger's, so a decision among
     them is marked as the trigger's question, one that cannot be backed out of. The walk sets it on
-    the effects frame of each trigger it fires for an event that has happened, and a stash or a
-    ``Then`` carries it on to the effects that follow. A trigger firing in a window a step opens
+    the effects frame of each trigger it fires for an event that has happened, and a stash carries
+    it on to the effects that follow. A trigger firing in a window a step opens
     before committing asks on the step's behalf, and its question stays the step's own."""
     resolved = 0
     while frames:
@@ -475,10 +473,6 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 else:
                     frames.append(_Events([]))
                     frames.append(_Effects(list(effect.effects), provenance, simultaneous=True))
-                continue
-            if isinstance(effect, Then):
-                _trace.append(f"    {effect.describe()}")
-                game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
                 continue
             if isinstance(effect, Attributed):
                 # Stashed beneath it, so the effects around it keep their order.
@@ -1018,8 +1012,7 @@ def resolve_effects(
     triggered reaction to those effects still resolves. The effects are not an action's own, so
     none is held at the Interrupt step: a rulebook procedure's effects, a trait's, and an
     Interrupt's own effects all come through here, and a cost through :func:`~.pay_costs`.
-    ``provenance`` says where they came from, as a ``Then`` deferring a trigger's effects keeps
-    them the trigger's.
+    ``provenance`` says where they came from.
 
     Raise ``ValueError`` if ``provenance`` names an action's own effects, which
     :func:`~.resolve_action_effects` resolves, and ``RuntimeError`` if a decision is pending.
@@ -1047,8 +1040,8 @@ def resolve_action_effects(
     """Apply ``effects`` as an action's own, which is what step E of the Action Sequence hands
     over. The first effects an action hands over are held beneath an Interrupt round first (CR,
     Action Sequence step D), when any seat holds an Interrupt to take, and every effect resolves
-    as the Interrupts taken there make of it. What the action defers behind them through a
-    ``Then`` opens no second round. The derived-event cascade runs as in
+    as the Interrupts taken there make of it. What the action hands over after that round, such as
+    an effect a delay held, opens no second one. The derived-event cascade runs as in
     :func:`~.resolve_effects`. ``provenance`` says whose action this is, as
     :func:`~.action_provenance` builds it, and an action from no card by default.
 

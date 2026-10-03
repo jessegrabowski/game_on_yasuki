@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, Ente
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DecisionResponse
-from yasuki_core.engine.rules.effects import AdjustCounter, RecruitCard, Then
+from yasuki_core.engine.rules.effects import AdjustCounter, RecruitCard
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules import triggers
@@ -137,29 +137,6 @@ def test_a_triggers_reactions_resolve_before_its_sibling_trigger_fires():
         ("watcher", "P1-a-source", {"wealth": 1, "sincerity": 1}),
         ("recorder", "P1-b-recorder"),
     ]
-
-
-def test_then_defers_its_effects_until_the_cascade_has_finished_reacting():
-    # An effect placed inline runs before the events already queued behind it. Then exists for the
-    # step that must follow another card's reaction to what just happened.
-    game = two_seat_game()
-    source = put_in_play(game, holding("P1-source"))
-    put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
-
-    resolve_effects(
-        game,
-        [
-            AdjustCounter(source.id, WEALTH, 1),
-            Then((AdjustCounter(source.id, SINCERITY, 1),)),
-        ],
-    )
-
-    assert FIRING_ORDER == [("watcher", "P1-source", {"wealth": 1})]  # reacted already
-    assert source.counters.get("sincerity") is None  # deferred effect has not run
-
-    run_stack(game)
-
-    assert source.counters["sincerity"] == 1
 
 
 def test_recruit_card_pauses_for_payment_and_brings_the_card_in():

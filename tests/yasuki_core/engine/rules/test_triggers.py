@@ -60,7 +60,6 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     PutIntoPlay,
     Simultaneously,
-    Then,
     To,
 )
 from yasuki_core.engine.rules.triggers import (
@@ -1029,22 +1028,6 @@ def test_only_the_opening_edge_of_a_duels_declaration_is_a_window(reacting, boun
     )
 
     assert isinstance(game.pending, ChooseCards) and game.pending.triggered is marked
-
-
-def test_the_mark_follows_a_triggers_effects_through_a_then(reacting):
-    game = two_seat_game()
-    asker = holding("P1-later", printed_id="then_probe")
-    put_in_play(game, asker)
-    reacting(
-        EnteredPlay,
-        "then_probe",
-        lambda ctx: [Then((Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),))],
-    )
-
-    fire(game, EnteredPlay(asker.id))
-    sequence.run_stack(game)
-
-    assert isinstance(game.pending, ChooseCards) and game.pending.triggered
 
 
 # A test-only trigger asking twice, so the second question is raised from the stash the first

@@ -220,8 +220,7 @@ first effects an action hands over are held on the stack as a `HeldAction` benea
 round before any resolves, once per action and only when some seat holds an Interrupt, and every
 one of the action's effects is checked against the modifications the step collected before it is
 applied, while what a trigger returns inside that cascade is a trait's or the rulebook's and is
-applied as returned. A `Then` among the action's effects carries that provenance to the deferred
-step, which opens no second round. The provenance also names the card whose action it is, which a
+applied as returned. The provenance also names the card whose action it is, which a
 {class}`~.Negation` naming a source reads as each effect commits. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
 effects held until a given moment. An effect an action holds stays that action's: the walk wraps it
 in a {class}`~.Attributed` carrying the action's provenance as the delay commits, and resolves it

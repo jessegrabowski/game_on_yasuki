@@ -57,8 +57,8 @@ What is on the stack, and what each continues:
 - `ResumeCascade` in `triggers.py`: the remainder of a walk an interrupting effect paused.
   `AnnounceEvent` there is an event announced once the settling queued above it has run, as a
   card's entry into play is.
-- `ApplyEffects` in `effects.py`: the generic deferral, which {class}`~.Then` and the rulebook
-  costs push.
+- `ApplyEffects` in `effects.py`: effects held until the work above them has run, which the rulebook
+  procedures and an Interrupt's effects behind its payment push.
 - `AccrueSincerity`, `EnforceMaximumHandSize`, `BeginNextTurn`, `OpenNextTurn`, `OpenFirstTurn` and
   `OpenRound` in `turn/sequence.py`: the turn boundary. The end of the turn resolves the effects held
   for it, accrues Sincerity and announces the turn's end, then the rulebook's draw resolves as an

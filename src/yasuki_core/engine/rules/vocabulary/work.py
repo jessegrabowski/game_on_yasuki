@@ -38,7 +38,7 @@ class Modification(Protocol):
 @dataclass(frozen=True, slots=True)
 class Provenance:
     """Where the effects a cascade holds came from, which decides what may reach them. The cascade
-    carries it across every pause and deferral, so an effect a question or a ``Then`` holds back
+    carries it across every pause and deferral, so an effect a question or a delay holds back
     resolves as what it was.
 
     Attributes

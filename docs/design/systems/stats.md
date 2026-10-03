@@ -126,8 +126,8 @@ Honor loss.
 {class}`~.Negation` changes no stat. It negates the effects that match it (CR, Prevention): those of
 actions from a kind or title of card, or those of an effect class or acting on one card. Every
 negation is read as each effect commits. The cascade carries the card whose action produced the
-effects, as the `acting` of its {class}`~.Provenance`, through a `Then`, a pause and what a
-question's answer produces, so one naming a source reaches all of them. A trait or a rulebook
+effects, as the `acting` of its {class}`~.Provenance`, through a pause and what a question's
+answer produces, so one naming a source reaches all of them. A trait or a rulebook
 ability is no action from its card and carries none. One naming no source reaches every matching
 effect, a trait's, a rulebook procedure's and a delayed one's as much as an action's. Neither
 reaches a cost, which is no effect (CR, Effects), or an action's targeting, which is none either and

@@ -36,7 +36,7 @@ closed, and [Card Vocabulary](../card_vocabulary.md) names every one, with
 
 Some write engine bookkeeping and touch no card at all. The `Grant` effects append to
 `game.ongoing`, which is the list the `effective_*` read path consults.
-{class}`~.DelayedEffect` appends to `game.delayed`. {class}`~.Then` pushes onto `game.stack`.
+{class}`~.DelayedEffect` appends to `game.delayed`.
 {class}`~.GrantPriority` replaces `game.round`, {class}`~.DelayStraighten` writes
 `game.straighten_delayed`, and {class}`~.PayFavorCost` sets one flag.
 
@@ -76,32 +76,18 @@ This is worth knowing in both directions. A card that should provoke a reaction 
 the effect that raises the event, and a card that quietly does something no opponent may answer is
 often correct rather than incomplete.
 
-## Making an effect wait
+## Effects in order
 
-An effect returned inline runs before the events already queued behind it. When a step has to
-follow another card's reaction to what just happened, it goes inside a `Then`:
+Effects in a list happen in the order they are written (CR, Order of Effects), and everything an
+effect sets off resolves before the next one applies (CR 20F, Timing). A step that follows another
+card's reaction to what just happened is therefore the next effect in the list. {card}`Agasha
+Beiru` recruits a Fortification out of the discard pile and then walls the Province it landed on.
+The recruit asks where the Fortification goes, and its entry resolves, before the counter is
+placed:
 
-```python
-@dataclass(frozen=True, slots=True)
-class Then(Effect):
-    """Defer ``effects`` until the current step has fully resolved, cascade included.
-
-    Effects placed inline run before the events already queued behind them, so a step that must
-    follow another card's reaction to what just happened belongs here instead.
-    """
-
-    effects: tuple[Effect, ...]
-```
-
-{card}`Agasha Beiru` needs it. She recruits a Fortification out of the discard pile and then walls
-the Province it landed on, and she cannot know which Province that is until the recruit has
-finished asking:
-
-```python
-return [
-    RecruitCard(target.id),
-    Then((CounterOnAttachedProvince(target.id, WALL, 1),)),
-]
+```{literalinclude} ../../../src/yasuki_core/engine/rules/cards/a_line_in_the_sand.py
+:pyobject: _agasha_beiru_effects
+:language: python
 ```
 
 ## Effects that happen at once
