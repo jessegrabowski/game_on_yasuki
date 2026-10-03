@@ -77,12 +77,14 @@ deferred through `Then` instead.
    Fear
    GainGold
    GainHonor
+   GainProvince
    LookAtHand
    LookAtTop
    EndLook
    LoseGame
    WinGame
    MeleeAttack
+   GrantCompassion
    GrantNegation
    Negated
    AdditionalAction
@@ -150,6 +152,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    PhaseStarted
    ProducedGold
    ProducingGold
+   ProvinceDestroyed
    Rehonored
    Revealed
    Straightened

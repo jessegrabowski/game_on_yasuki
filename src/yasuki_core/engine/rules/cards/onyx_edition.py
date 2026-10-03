@@ -91,7 +91,7 @@ from yasuki_core.engine.rules.board.queries import (
     top_of_deck,
     units_at,
 )
-from yasuki_core.engine.rules.board.seats import cards_in_hand, cards_in_play
+from yasuki_core.engine.rules.board.seats import cards_in_hand, cards_in_play, has_compassion
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import register_recruit_restriction
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.stats.card_values import (
@@ -180,6 +180,29 @@ register_terrain(
     "fields_of_slaughter",
     timings=(ActionTiming.BATTLE, ActionTiming.ENGAGE),
     ability_keywords=frozenset({keywords.POLITICAL, keywords.TERRAIN}),
+)
+
+
+# --- Imperial Treasurer's Outpost ---
+
+
+def _imperial_treasurers_outpost_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """If you have Compassion, draw a card. Read as the action resolves, so Compassion an
+    Interrupt grants while it resolves counts."""
+    return [DrawCard(source.owner)] if has_compassion(game, source.owner, source) else []
+
+
+register_ability(
+    "imperial_treasurers_outpost",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        effects=_imperial_treasurers_outpost_effects,
+        hits_every_target=True,
+    ),
 )
 
 

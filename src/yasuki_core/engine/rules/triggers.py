@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.negation import negate_committed, spend_once
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, STEP_ROUNDS, Moment
 from yasuki_core.engine.rules.vocabulary.modifiers import (
+    CompassionGrant,
     ConditionalModifier,
     Duration,
     Lifetime,
@@ -619,6 +620,8 @@ def _names_no_card_off(record: Ongoing, on_table: set[str]) -> bool:
             return True
         case Negation(subject_id=subject_id):
             return subject_id is None or subject_id in on_table
+        case CompassionGrant(card_id=card_id):
+            return card_id is None or card_id in on_table
         case _:
             return record.target_id in on_table
 

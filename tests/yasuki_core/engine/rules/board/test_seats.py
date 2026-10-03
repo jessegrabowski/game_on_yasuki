@@ -16,6 +16,9 @@ from yasuki_core.engine.rules.board.seats import (
 
 from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence, sequence
+from yasuki_core.engine.rules.effects import Destroy, GrantCompassion
+from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.vocabulary.modifiers import CompassionGrant, Duration
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
@@ -164,3 +167,33 @@ def test_seat_controls_reads_printed_keywords_and_not_granted_ones():
         assert seat_controls_printed(game, PlayerId.P1, "Port") is False
     finally:
         KEYWORD_GRANTS.pop("seat_probe", None)
+
+
+def test_a_grant_naming_a_card_gives_compassion_only_to_that_cards_effects():
+    game = two_seat_game()
+    granted = put_in_play(game, holding("granted"))
+    other = put_in_play(game, holding("other"))
+
+    resolve_effects(
+        game,
+        [
+            GrantCompassion(
+                CompassionGrant("shrine", PlayerId.P1, Duration.UNTIL_END_OF_TURN, "granted")
+            )
+        ],
+    )
+
+    assert has_compassion(game, PlayerId.P1, granted) is True
+    assert has_compassion(game, PlayerId.P1, other) is False
+    assert has_compassion(game, PlayerId.P1) is False
+    assert has_compassion(game, PlayerId.P2, granted) is False
+
+
+def test_a_grant_naming_a_card_is_forgotten_when_the_card_leaves_the_table():
+    game = two_seat_game()
+    granted = put_in_play(game, holding("granted"))
+    grant = CompassionGrant("shrine", PlayerId.P1, Duration.UNTIL_END_OF_TURN, "granted")
+
+    resolve_effects(game, [GrantCompassion(grant), Destroy("granted", PlayerId.P2)])
+
+    assert has_compassion(game, PlayerId.P1, granted) is False

@@ -35,6 +35,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Dishonored,
     EnteredPlay,
     FavorDiscarded,
+    ProvinceDestroyed,
     GameEvent,
     HonorChanged,
     Rehonored,
@@ -43,6 +44,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
+    CompassionGrant,
     Condition,
     ConditionalModifier,
     DuelStatOverride,
@@ -80,6 +82,7 @@ from yasuki_core.engine.table import (
     ZoneKey,
     ZoneRole,
     location_of,
+    province_keys,
 )
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
@@ -252,6 +255,24 @@ class GrantNegation(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(self.negation)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantCompassion(Effect):
+    """Record ``grant``, treating its seat as having Compassion while it lasts."""
+
+    grant: CompassionGrant
+
+    def describe(self) -> str:
+        covered = "" if self.grant.card_id is None else f" for {self.grant.card_id}"
+        lifetime = describe_lifetime(self.grant.duration)
+        return (
+            f"{self.grant.source_id} gives {self.grant.seat.name} Compassion{covered} ({lifetime})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(self.grant)
         return []
 
 
@@ -625,8 +646,8 @@ class Evaluate(Effect):
 
 @dataclass(frozen=True, slots=True)
 class DestroyProvince(Effect):
-    """Destroy ``seat``'s Province ``zone``: its contents go to the discard face-up and the Province
-    itself leaves the board. A Province already gone is a no-op.
+    """Destroy the Province ``zone``: its contents go face-up to its owner's discard pile and the
+    Province itself leaves the board. A Province already gone is a no-op.
 
     Attributes
     ----------
@@ -645,9 +666,35 @@ class DestroyProvince(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         if self.zone not in game.table.zones:
             return []
-        moved = ops.destroy_province(game.table, self.seat, self.zone)
-        cards = game.table.cards_by_id
-        return [CardDiscarded(card_id, cards[card_id].side, self.seat) for card_id in moved]
+        # Its cards reach the discard pile without being discarded (CR, Provinces), so only the
+        # Province's destruction is announced.
+        ops.destroy_province(game.table, self.seat, self.zone)
+        return [ProvinceDestroyed(self.zone)]
+
+
+@dataclass(frozen=True, slots=True)
+class GainProvince(Effect):
+    """``seat`` gains a Province, created to the left of its leftmost and then refilled (ShE
+    datasheet). It takes a fresh id, so no record naming another Province changes meaning.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat gaining the Province.
+    """
+
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} gains a province"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        ops.gain_province(game.table, self.seat)
+        return []
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        """Refill the gained Province, which is now the leftmost."""
+        return (RefillProvince(province_keys(game.table, self.seat)[0]),)
 
 
 @dataclass(frozen=True, slots=True)

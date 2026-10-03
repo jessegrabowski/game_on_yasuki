@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from dataclasses import replace
 
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import state_based_actions, triggers
@@ -489,6 +490,11 @@ def _announce_resolution(game: GameState) -> None:
     game.action_resolved = True
     # A resolved action is past unwinding, so what it showed cannot bar a Response's own cancel.
     game.hidden_card_shown = False
+    game.ongoing = [
+        recorded
+        for recorded in game.ongoing
+        if recorded.duration is not Duration.UNTIL_ACTION_RESOLVES
+    ]
     resolved = ActionResolved(
         seat=game.action_seat,
         card_id=getattr(game.action, "card_id", None),

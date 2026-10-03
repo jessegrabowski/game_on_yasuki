@@ -19,6 +19,7 @@ yasuki_core.engine.ops
     discard_province
     draw_to_hand
     fill_province
+    gain_province
     move_card
     move_unit
     remove_card
@@ -26,6 +27,7 @@ yasuki_core.engine.ops
     remove_from_location
     reorder_in_hand
     reorder_in_pile
+    retire_province_id
     return_home
     reveal_provinces
     set_honor

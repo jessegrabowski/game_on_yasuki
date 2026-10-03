@@ -138,7 +138,10 @@ class TableState:
     seats : dict mapping PlayerId to SeatInfo
         The two seats and their public status (name, honor, ready, connected).
     zones : dict mapping ZoneKey to Zone
-        Owned, role-keyed zones (hands, discards, banishes, provinces).
+        Owned, role-keyed zones (hands, discards, banishes, provinces). A Province's ``idx`` is its
+        id, never reused or changed, so a key naming a destroyed Province names nothing. A seat's
+        Provinces stand left to right in the order this mapping holds them, which
+        :func:`province_keys` reads.
     decks : dict mapping DeckKey to Deck
         Each seat's fate and dynasty decks.
     battlefield : BattlefieldZone
@@ -171,6 +174,10 @@ class TableState:
         Counters resting on a Province rather than on a card, keyed by the Province's zone key. A
         Province is a slot rather than a card, so a "+1 strength Wall token" has nowhere else to
         live. The card sitting in the slot is refilled and destroyed independently of it.
+    next_province_id : dict mapping PlayerId to int
+        The least id a seat's next Province may take: past every id it has held, live or destroyed,
+        so a new Province never reuses a destroyed one's key. A seat absent here has had no Province
+        destroyed or created since setup.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
     creatable_tokens : dict mapping str to CardPrint
@@ -198,6 +205,7 @@ class TableState:
     units: dict[str, str] = field(default_factory=dict)
     province_attachments: dict[str, ZoneKey] = field(default_factory=dict)
     province_counters: dict["ZoneKey", dict[str, int]] = field(default_factory=dict)
+    next_province_id: dict[PlayerId, int] = field(default_factory=dict)
     cards_by_id: dict[str, L5RCard] = field(default_factory=dict)
     # A SpawnCard naming a token_id copies the matching template onto the battlefield, so spawning a
     # creatable token needs no live database call.
@@ -372,6 +380,11 @@ def unit_members(state: TableState, card: L5RCard) -> list[L5RCard]:
         if personality_id == card.id
     )
     return members
+
+
+def province_keys(state: TableState, seat: PlayerId) -> tuple[ZoneKey, ...]:
+    """``seat``'s Provinces, left to right."""
+    return tuple(key for key in state.zones if key.owner is seat and key.role is ZoneRole.PROVINCE)
 
 
 def province_holding(state: TableState, seat: PlayerId, card_id: str) -> ZoneKey | None:

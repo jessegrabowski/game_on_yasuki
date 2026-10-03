@@ -282,19 +282,17 @@ def test_the_attackers_own_provinces_are_not_battlefields():
     assert [info.province for info in attack.battlefields] == [_province(PlayerId.P2, 0)]
 
 
-def test_battlefields_are_ordered_by_province_index_not_creation_order():
-    # A destroyed Province is replaced at the lowest free index, so the zone dict's insertion order
-    # stops matching the left-to-right order the CR calls adjacency.
+def test_battlefields_follow_the_provinces_left_to_right_under_fresh_ids():
     session = _to_battle(_session(defender_provinces=3))
     game = session.game
     ops.destroy_province(game.table, PlayerId.P2, _province(PlayerId.P2, 1))
-    recreated = ops.create_province(game.table, PlayerId.P2)
-    assert recreated == _province(PlayerId.P2, 1)  # reused the hole, and so sits last in the dict
+    created = ops.create_province(game.table, PlayerId.P2)
+    gained = ops.gain_province(game.table, PlayerId.P2)
 
     session.act(PlayerId.P1, DeclareAttack())
 
-    assert game.attack is not None
-    assert [info.province.idx for info in game.attack.battlefields] == [0, 1, 2]
+    assert (created.idx, gained.idx) == (3, 4)  # the destroyed Province's id is never reused
+    assert [info.province.idx for info in game.attack.battlefields] == [4, 0, 2, 3]
 
 
 def test_a_passed_attack_phase_declares_nothing():

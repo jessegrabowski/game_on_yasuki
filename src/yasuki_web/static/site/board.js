@@ -330,8 +330,7 @@ export function renderTableau(container, seatName, snapshot, imgBase) {
 // reconcile each slot's cards (keyed by id) so a province card keeps its element across renders.
 function renderProvinces(frame, seatName, zones, imgBase) {
   const keys = Object.keys(zones)
-    .filter((key) => key.startsWith(`${seatName}:province:`))
-    .sort();
+    .filter((key) => key.startsWith(`${seatName}:province:`));
   const slotViews = keys.map((key) => ({ id: key, idx: key.split(':')[2] }));
   reconcile(frame.provinces, slotViews, frame.slots, {
     create: (slot) => {

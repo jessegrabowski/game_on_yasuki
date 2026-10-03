@@ -219,6 +219,9 @@ class Ability:
         The Repeatable modifier: the ability may be used more than once per turn in an arc whose
         ruleset makes abilities once per turn (CR, Using Abilities 0.3). Default False. The
         registration audit checks it against the printed text.
+    uses_per_turn : callable, optional
+        Maps ``(game, source_card)`` to how many times the ability may be used this turn, for a
+        card whose text allows "an additional time per turn". Default None, once.
     trait : bool, optional
         Whether this is a trait worded "after X, you may ..." rather than an action: offered in the
         Response Step, so its controller orders it among the Responses to the same action and may
@@ -271,6 +274,7 @@ class Ability:
     tireless: bool = False
     keywords: frozenset[str] = frozenset()
     repeatable: bool = False
+    uses_per_turn: Callable[[GameState, L5RCard], int] | None = None
     unstoppable: bool = False
     trait: bool = False
     targeting_message: str | None = None
@@ -353,6 +357,14 @@ def _purchase(
 def once_tag(ability: Ability) -> str:
     """The once-per-turn tag an ability's use is claimed under, distinct per keyed ability."""
     return f"ability:{ability.key or ''}"
+
+
+def use_tags(game: GameState, card: L5RCard, ability: Ability) -> tuple[str, ...]:
+    """The tags ``ability``'s uses this turn are claimed under, one per use allowed: its
+    once-per-turn tag, then one more for each further use ``uses_per_turn`` allows."""
+    tag = once_tag(ability)
+    uses = 1 if ability.uses_per_turn is None else ability.uses_per_turn(game, card)
+    return (tag, *(f"{tag}:{use}" for use in range(2, uses + 1)))
 
 
 @dataclass(frozen=True, slots=True)

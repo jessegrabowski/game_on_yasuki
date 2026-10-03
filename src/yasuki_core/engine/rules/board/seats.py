@@ -1,8 +1,9 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.modifiers import CompassionGrant
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint, WindPrint
 
 
 def cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
@@ -22,6 +23,18 @@ def cards_in_hand(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
         card
         for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
         if card.id not in game.announced_from_hand and isinstance(card.printed, FatePrint)
+    )
+
+
+def seat_wind(game: GameState, seat: PlayerId) -> L5RCard | None:
+    """``seat``'s Wind, or None when it has none in play: what a card means by "your Wind"."""
+    return next(
+        (
+            card
+            for card in game.table.battlefield.cards
+            if card.owner is seat and isinstance(card.printed, WindPrint)
+        ),
+        None,
     )
 
 
@@ -53,11 +66,30 @@ def province_count(game: GameState, seat: PlayerId) -> int:
     return sum(1 for key in game.table.zones if key.owner is seat and key.role is ZoneRole.PROVINCE)
 
 
-def has_compassion(game: GameState, seat: PlayerId) -> bool:
-    """Whether ``seat`` has Compassion, which it has while it has fewer Provinces than anyone else
-    (ShE datasheet, Traits; the reminder Doji Hoshihana prints)."""
+def has_compassion(game: GameState, seat: PlayerId, card: L5RCard | None = None) -> bool:
+    """Whether ``seat`` has Compassion for an effect from or upon ``card``: while it has fewer
+    Provinces than anyone else (ShE datasheet, Traits; the reminder Doji Hoshihana prints), or while
+    a :class:`~.CompassionGrant` covers it.
+
+    Parameters
+    ----------
+    game : GameState
+        The live game.
+    seat : PlayerId
+        The player asked about.
+    card : L5RCard, optional
+        The card whose effect asks, so a grant naming that card counts. Default None, which counts
+        only a grant covering every effect.
+    """
     own = province_count(game, seat)
-    return all(own < province_count(game, other) for other in opposing_seats(game, seat))
+    if all(own < province_count(game, other) for other in opposing_seats(game, seat)):
+        return True
+    return any(
+        isinstance(recorded, CompassionGrant)
+        and recorded.seat is seat
+        and (recorded.card_id is None or (card is not None and recorded.card_id == card.id))
+        for recorded in game.ongoing
+    )
 
 
 def seat_controls_printed(

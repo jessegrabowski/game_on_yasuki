@@ -553,12 +553,14 @@ def test_verdant_wilds_cannot_straighten_a_card_forbidden_to_straighten():
 # --- Kakita Harudei, Drunkard ---
 
 
-def _harudei_in_battle(*, guard_chi: int = 2) -> EngineSession:
+def _harudei_in_battle(*, guard_chi: int = 2, compassion: bool = False) -> EngineSession:
     """P1 attacks with Harudei (Chi 3). P2 defends with a guard of ``guard_chi`` and a sage of
-    Chi 4."""
+    Chi 4. With ``compassion``, P2 holds a second Province, so P1 has fewer."""
     state = TableState.empty_two_seat()
     province_card(state, "atk-prov0", seat=P1, index=0)
     province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    if compassion:
+        province_card(state, "def-prov1", seat=PlayerId.P2, index=1)
     put_in_play(state, personality("harudei", printed_id="kakita_harudei_drunkard", chi=3))
     put_in_play(state, personality("guard", owner=PlayerId.P2, chi=guard_chi))
     put_in_play(state, personality("sage", owner=PlayerId.P2, chi=4))
@@ -588,6 +590,27 @@ def test_harudei_bows_an_opposed_personality_with_lower_chi():
 
 def test_harudei_is_withheld_when_no_opposed_personality_has_lower_chi():
     session = _harudei_in_battle(guard_chi=3)  # equal Chi is not lower
+
+    assert ActivateAbility("harudei") not in session.legal_actions(P1)
+
+
+@pytest.mark.parametrize(("compassion", "again"), [(True, True), (False, False)])
+def test_harudei_may_act_a_second_time_in_a_turn_only_with_compassion(compassion, again):
+    session = _harudei_in_battle(compassion=compassion)
+    session.act(P1, ActivateAbility("harudei"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    session.act(PlayerId.P2, Pass())
+
+    assert (ActivateAbility("harudei") in session.legal_actions(P1)) is again
+
+
+def test_harudei_acts_no_third_time_with_compassion():
+    session = _harudei_in_battle(compassion=True)
+    for _ in range(2):
+        session.act(P1, ActivateAbility("harudei"))
+        session.submit(P1, DecisionResponse(("guard",)))
+        session.act(PlayerId.P2, Pass())
 
     assert ActivateAbility("harudei") not in session.legal_actions(P1)
 
@@ -726,11 +749,14 @@ def test_rumiko_commits_seppuku_when_dishonored():
     assert game.table.seats[P1].honor == 0
 
 
-def _rumiko_session(*, beiko: bool = False) -> EngineSession:
+def _rumiko_session(*, beiko: bool = False, compassion: bool = False) -> EngineSession:
+    """With ``compassion``, P2 holds a Province and P1 none, so P1 has fewer."""
     state = TableState.empty_two_seat()
     put_in_play(state, personality("rumiko", printed_id="kitsune_rumiko"))
     if beiko:
         put_in_play(state, sensei(P1, printed_id="beiko_sensei"))
+    if compassion:
+        province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
     return EngineSession.start(state, P1)
 
 
@@ -741,6 +767,15 @@ def test_rumiko_bows_to_gain_an_honor_on_her_controllers_turn():
 
     assert session.game.table.seats[P1].honor == 1
     assert session.game.table.cards_by_id["rumiko"].bowed
+
+
+def test_rumiko_stays_unbowed_with_compassion():
+    session = _rumiko_session(compassion=True)
+
+    session.act(P1, ActivateAbility("rumiko"))
+
+    assert session.game.table.seats[P1].honor == 1
+    assert not session.game.table.cards_by_id["rumiko"].bowed
 
 
 def test_rumiko_gains_two_with_beiko_sensei():

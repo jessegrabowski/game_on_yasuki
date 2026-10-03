@@ -18,39 +18,100 @@ from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.gold.production import gold_handler
-from yasuki_core.engine.rules.board.seats import went_second
+from yasuki_core.engine.rules.board.seats import (
+    cards_in_play,
+    has_compassion,
+    seat_named,
+    seat_wind,
+    went_second,
+)
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Ask,
     AskOption,
     Banish,
     Bow,
     CreateToken,
     DelayedEffect,
     Destroy,
+    DestroyProvince,
+    DiscardFavor,
     Effect,
+    GainProvince,
+    GrantCompassion,
     Move,
     MoveToDeck,
     Negated,
     ShuffleDeck,
     Unpayable,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, ProvinceDestroyed
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
-from yasuki_core.engine.rules.board.queries import sincerity_seed_targets
+from yasuki_core.engine.rules.board.queries import rightmost_province, sincerity_seed_targets
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.modifiers import CompassionGrant, Duration
 from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import EventPrint
 from yasuki_core.game_pieces.counters import FIRE, SINCERITY, Counter, counter_from_key
 
 
 # --- Decree of the Hantei ---
 
+KANPEKI_DYNASTY = "the_kanpeki_dynasty_hantei_xl"
+
 register_event_entry("decree_of_the_hantei", ability_keywords=frozenset({keywords.POLITICAL}))
+
+
+@on(ProvinceDestroyed, "decree_of_the_hantei")
+def _decree_of_the_hantei_province_destroyed(ctx: TriggerContext) -> list[Effect]:
+    """Compassion: After your Province is destroyed, banish this Event from play to destroy a target
+    player's rightmost Province. The trait names the player, so the owner is asked whose."""
+    event = ctx.event
+    if not isinstance(event, ProvinceDestroyed) or event.province.owner is not ctx.card.owner:
+        return []
+    if not has_compassion(ctx.game, ctx.card.owner, ctx.card):
+        return []
+    players = tuple(
+        info.name
+        for seat, info in ctx.game.table.seats.items()
+        if rightmost_province(ctx.game, seat) is not None
+    )
+    if not players:
+        return []
+    question = "Destroy whose rightmost Province?"
+    return [AskOption(ctx.card.owner, players, question, "decree_of_the_hantei", ctx.card.id)]
+
+
+@choice_resolver("decree_of_the_hantei")
+def _resolve_decree_of_the_hantei(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Banish the Event to destroy the chosen player's rightmost Province, then, under The Kanpeki
+    Dynasty, offer the Imperial Favor for a Province."""
+    province = rightmost_province(game, seat_named(game, chosen[0]))
+    destroyed = [] if province is None else [DestroyProvince(seat, province)]
+    wind = seat_wind(game, seat)
+    under_kanpeki = wind is not None and wind.printed_id == KANPEKI_DYNASTY
+    offer = under_kanpeki and game.favor_holder is seat
+    question = "Discard the Imperial Favor to gain a Province?"
+    favor = [Ask(seat, question, "decree_of_the_hantei_favor", subjects=(source_id,))]
+    return [Banish(source_id), *destroyed, *(favor if offer else [])]
+
+
+@choice_resolver("decree_of_the_hantei_favor")
+def _resolve_decree_of_the_hantei_favor(
+    game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """You may discard the Imperial Favor to gain a Province."""
+    if not chosen:
+        return []
+    return [DiscardFavor(seat), GainProvince(seat)]
 
 
 # --- Ninube Aitso, "Doji Yeiko" (Experienced) ---
@@ -107,6 +168,73 @@ def _sasada_pearl_champion_experienced_entered_play(ctx: TriggerContext) -> list
     if ctx.event.card_id != ctx.card.id:
         return []
     return [CreateToken(SASADAS_OROCHI, ctx.card.owner, ctx.card.id, attach_to=ctx.card.id)]
+
+
+# --- Shrine of Compassion (Experienced) ---
+
+SHRINE_OF_COMPASSION_GOLD = 1
+
+
+@gold_handler("shrine_of_compassion_experienced")
+def _shrine_of_compassion_experienced_gold(
+    card: L5RCard, game: GameState, seat: PlayerId, targets: tuple[L5RCard, ...]
+) -> int:
+    """Compassion: This Holding has +1GP."""
+    bonus = SHRINE_OF_COMPASSION_GOLD if has_compassion(game, card.owner, card) else 0
+    return card.gold_production + bonus
+
+
+def _shrine_of_compassion_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The non-Event cards you control."""
+    return [
+        card.id
+        for card in cards_in_play(game, source.owner)
+        if not isinstance(card.printed, EventPrint)
+    ]
+
+
+def _shrine_of_compassion_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Effects from or upon the target are treated as if you have Compassion."""
+    grant = CompassionGrant(source.id, source.owner, Duration.UNTIL_END_OF_TURN, target.id)
+    return [GrantCompassion(grant)]
+
+
+register_ability(
+    "shrine_of_compassion_experienced",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        targets=_shrine_of_compassion_experienced_targets,
+        targeting_message="a non-Event card you control",
+        effects=_shrine_of_compassion_experienced_effects,
+    ),
+)
+
+
+def _shrine_of_compassion_experienced_interrupt(
+    game: GameState, source: L5RCard, effect: Effect
+) -> Interruption:
+    """You have Compassion while the action is resolving and, if it brings any cards into play,
+    until after they enter."""
+    grant = CompassionGrant(source.id, source.owner, Duration.UNTIL_ACTION_RESOLVES)
+    return Interruption(replacement=effect, effects=(GrantCompassion(grant),))
+
+
+# The Interrupt answers the action rather than one of its effects, so it is taken against every
+# effect at once and asks the seat to pick none of them.
+register_interrupt(
+    "shrine_of_compassion_experienced",
+    Interrupt(
+        answers=Effect,
+        interrupt=_shrine_of_compassion_experienced_interrupt,
+        located_at=(CardLocation.BATTLEFIELD,),
+        cost=bow_cost,
+        answers_every=True,
+        printed_index=1,
+    ),
+)
 
 
 # --- Shrine of Courtesy ---

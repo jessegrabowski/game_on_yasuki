@@ -14,6 +14,7 @@ from yasuki_core.engine.table import (
     ZoneKey,
     ZoneRole,
     location_of,
+    province_keys,
     unit_members,
 )
 from yasuki_core.engine.zones import FocusZone, ProvinceZone
@@ -346,13 +347,13 @@ def draw_to_hand(state: TableState, seat: PlayerId) -> L5RCard | None:
 
 
 def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> list[str]:
-    """Discard a province's contents face-up and remove the province, then send each card
-    attached to it (fortifications, regions) to its own side's discard, using the owner's pile if
-    it has one and the destroying seat's pile otherwise. A card with no discard for its side (a
-    pregame permanent) is detached in place.
+    """Send a province's contents face-up to its owner's Dynasty discard pile and remove the
+    province, then send each card attached to it (fortifications, regions) to its own side's
+    discard, using the card owner's pile if it has one and ``seat``'s, the destroying seat's,
+    otherwise. A card with no discard for its side (a pregame permanent) is detached in place.
     Returns the moved card ids."""
     zone = state.zones[zone_key]
-    discard = state.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)]
+    discard = state.zones[ZoneKey(zone_key.owner, ZoneRole.DYNASTY_DISCARD)]
     moved = []
     while zone.cards:
         card = zone.cards.pop()
@@ -360,6 +361,7 @@ def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> li
         discard.add(card)
         moved.append(card.id)
     del state.zones[zone_key]
+    retire_province_id(state, zone_key)
     state.province_counters.pop(zone_key, None)  # the slot is gone; nothing rests on it
     # A card attached to the province follows it off the board into its own side's discard;
     # move_card turns it face up and clears the attachment. Only fate/dynasty cards have a
@@ -410,13 +412,43 @@ def discard_province(state: TableState, seat: PlayerId, zone: ProvinceZone) -> L
 
 
 def create_province(state: TableState, seat: PlayerId) -> ZoneKey:
-    """Add a fresh province zone for ``seat`` at the next free index. Returns its key."""
-    idx = 0
-    while ZoneKey(seat, ZoneRole.PROVINCE, idx) in state.zones:
-        idx += 1
-    key = ZoneKey(seat, ZoneRole.PROVINCE, idx)
+    """Add an empty Province to the right of ``seat``'s rightmost, under a fresh id. Returns its
+    key."""
+    key = ZoneKey(seat, ZoneRole.PROVINCE, _fresh_province_id(state, seat))
     state.zones[key] = ProvinceZone(owner=seat)
     return key
+
+
+def gain_province(state: TableState, seat: PlayerId) -> ZoneKey:
+    """Add an empty Province to the left of ``seat``'s leftmost, under a fresh id (ShE datasheet: a
+    gained Province is created to the left of the leftmost). No existing key changes. Returns its
+    key."""
+    key = ZoneKey(seat, ZoneRole.PROVINCE, _fresh_province_id(state, seat))
+    leftmost = next(iter(province_keys(state, seat)), None)
+    # Left to right is the order the zones mapping holds a seat's Provinces in, so the new one is
+    # inserted ahead of the leftmost by rebuilding the mapping around it.
+    zones = dict(state.zones)
+    state.zones.clear()
+    for existing, zone in zones.items():
+        if existing == leftmost:
+            state.zones[key] = ProvinceZone(owner=seat)
+        state.zones[existing] = zone
+    state.zones.setdefault(key, ProvinceZone(owner=seat))
+    return key
+
+
+def retire_province_id(state: TableState, key: ZoneKey) -> None:
+    """Keep ``key``'s id from being issued again, now its Province is gone."""
+    issued = state.next_province_id.get(key.owner, 0)
+    state.next_province_id[key.owner] = max(issued, (key.idx or 0) + 1)
+
+
+def _fresh_province_id(state: TableState, seat: PlayerId) -> int:
+    """An id past every one ``seat`` holds or has held, claimed for its next Province."""
+    held = [key.idx for key in province_keys(state, seat) if key.idx is not None]
+    fresh = max(state.next_province_id.get(seat, 0), max(held, default=-1) + 1)
+    state.next_province_id[seat] = fresh + 1
+    return fresh
 
 
 def create_focus_area(state: TableState, seat: PlayerId) -> ZoneKey:

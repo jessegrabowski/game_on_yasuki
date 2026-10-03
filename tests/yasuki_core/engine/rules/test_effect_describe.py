@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.turn.structure import (
     END_OF_TURN,
 )
 from yasuki_core.engine.rules.effects import (
+    GrantCompassion,
     GrantNegation,
     Negated,
     RefillProvince,
@@ -40,6 +41,7 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     Destroy,
     DestroyProvince,
+    GainProvince,
     DiscardFavor,
     DrawCard,
     Effect,
@@ -88,7 +90,13 @@ from yasuki_core.engine.rules.effects import (
     TurnOver,
     Then,
 )
-from yasuki_core.engine.rules.vocabulary.modifiers import Condition, Duration, Negation, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    CompassionGrant,
+    Condition,
+    Duration,
+    Negation,
+    Stat,
+)
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.game_pieces.prints import ActionPrint
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
@@ -118,6 +126,10 @@ EFFECTS = [
         "ring negates effects (at the end of the turn)",
     ),
     (RevokeGrants("ground"), "ground revokes its grants"),
+    (
+        GrantCompassion(CompassionGrant("shrine", PlayerId.P1, Duration.UNTIL_END_OF_TURN, "hero")),
+        "shrine gives P1 Compassion for hero (UNTIL_END_OF_TURN)",
+    ),
     (Rehonor("hero_1"), "rehonor hero_1"),
     (BanishTopFate(PlayerId.P2), "banish the top of P2's fate deck"),
     (
@@ -150,6 +162,7 @@ EFFECTS = [
         DestroyProvince(PlayerId.P1, ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 2)),
         "destroy P1's province 2",
     ),
+    (GainProvince(PlayerId.P1), "P1 gains a province"),
     (Show("a"), "show a"),
     (MoveToHand("a", PlayerId.P1), "a to P1's hand"),
     (Move("shiba", Location.home(PlayerId.P2)), "move shiba to P2's home"),

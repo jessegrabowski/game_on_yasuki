@@ -56,6 +56,13 @@ class CardDiscarded:
 
 
 @dataclass(frozen=True, slots=True)
+class ProvinceDestroyed:
+    """A Province was destroyed and left the board. Its owner is ``province.owner``."""
+
+    province: ZoneKey
+
+
+@dataclass(frozen=True, slots=True)
 class FavorDiscarded:
     """The Imperial Favor left ``seat``'s control for nobody's.
 
@@ -547,6 +554,7 @@ GameEvent = (
     | TurnStarted
     | CardDiscarded
     | CounterChanged
+    | ProvinceDestroyed
     | Destroyed
     | Dishonored
     | DuelDeclared

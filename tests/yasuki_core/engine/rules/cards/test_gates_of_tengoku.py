@@ -10,21 +10,33 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChoosePayment,
     DecisionResponse,
+    assignment_token,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.rules.triggers import fire
+from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of, province_keys
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import ActionPrint, EventPrint, PersonalityPrint, WindPrint
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Destroy, RangedAttack
+from yasuki_core.engine.rules.board.seats import has_compassion, province_count
+from yasuki_core.engine.rules.effects import (
+    Bow,
+    Destroy,
+    DestroyProvince,
+    Effect,
+    PutIntoPlay,
+    RangedAttack,
+)
+from yasuki_core.engine.rules.gold.production import effective_gold_production
+from yasuki_core.engine.rules.triggers import TriggerContext
+from yasuki_core.engine.rules.vocabulary.game_events import Bowed
 from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
@@ -40,6 +52,7 @@ from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
@@ -48,6 +61,7 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     province_card,
     end_turn,
+    fate_card,
     holding,
     pay,
     personality,
@@ -59,6 +73,166 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1 = PlayerId.P1
+
+
+# --- Decree of the Hantei ---
+
+
+def _decree_game(*, p1_provinces: int, p2_provinces: int, kanpeki: bool = False) -> GameState:
+    """P1 has Decree of the Hantei in play and holds the Imperial Favor."""
+    game = two_seat_game()
+    put_in_play(
+        game,
+        L5RCard.of(
+            EventPrint,
+            id="decree",
+            printed_id="decree_of_the_hantei",
+            name="Decree of the Hantei",
+            side=Side.DYNASTY,
+            owner=P1,
+        ),
+    )
+    if kanpeki:
+        put_in_play(
+            game,
+            L5RCard.of(
+                WindPrint,
+                id="kanpeki",
+                printed_id="the_kanpeki_dynasty_hantei_xl",
+                name="The Kanpeki Dynasty",
+                side=Side.FATE,
+                owner=P1,
+            ),
+        )
+    for seat, count in ((P1, p1_provinces), (PlayerId.P2, p2_provinces)):
+        for index in range(count):
+            province_card(game, f"{seat.name}-prov{index}", seat=seat, index=index)
+    game.favor_holder = P1
+    return game
+
+
+def _destroy_p1_province(game: GameState) -> None:
+    resolve_effects(game, [DestroyProvince(PlayerId.P2, ZoneKey(P1, ZoneRole.PROVINCE, 0))])
+
+
+def test_decree_of_the_hantei_destroys_the_chosen_players_rightmost_province():
+    game = _decree_game(p1_provinces=2, p2_provinces=3)
+
+    _destroy_p1_province(game)
+    assert game.pending.candidates == ("P1", "P2")
+    submit(game, DecisionResponse(("P2",)))
+
+    p2_provinces = sorted(
+        key.idx
+        for key in game.table.zones
+        if key.owner is PlayerId.P2 and key.role is ZoneRole.PROVINCE
+    )
+    assert p2_provinces == [0, 1]
+    p2_discard = game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.DYNASTY_DISCARD)].cards
+    assert [card.id for card in p2_discard] == ["P2-prov2"]
+    assert "decree" not in {card.id for card in game.table.battlefield.cards}
+    assert game.pending is None
+
+
+def test_decree_of_the_hantei_waits_while_its_owner_lacks_compassion():
+    game = _decree_game(p1_provinces=3, p2_provinces=2)
+
+    _destroy_p1_province(game)
+
+    assert game.pending is None
+    assert "decree" in {card.id for card in game.table.battlefield.cards}
+
+
+@pytest.mark.parametrize(
+    ("kanpeki", "favor_holder"),
+    [(False, P1), (True, PlayerId.P2)],
+    ids=["another_wind", "favor_held_elsewhere"],
+)
+def test_decree_of_the_hantei_offers_no_favor_trade_unless_both_hold(kanpeki, favor_holder):
+    game = _decree_game(p1_provinces=2, p2_provinces=3, kanpeki=kanpeki)
+    game.favor_holder = favor_holder
+    _destroy_p1_province(game)
+
+    submit(game, DecisionResponse(("P2",)))
+
+    assert game.pending is None
+
+
+def test_decree_of_the_hantei_keeps_the_favor_when_the_trade_is_declined():
+    game = _decree_game(p1_provinces=2, p2_provinces=3, kanpeki=True)
+    _destroy_p1_province(game)
+    submit(game, DecisionResponse(("P2",)))
+
+    submit(game, DecisionResponse(()))
+
+    assert game.favor_holder is P1
+    assert province_count(game, P1) == 1
+
+
+def test_decree_of_the_hantei_under_the_kanpeki_dynasty_trades_the_favor_for_a_province():
+    game = _decree_game(p1_provinces=2, p2_provinces=3, kanpeki=True)
+    _destroy_p1_province(game)
+    submit(game, DecisionResponse(("P2",)))
+
+    submit(game, DecisionResponse(("decree",)))
+
+    assert game.favor_holder is None
+    assert province_count(game, P1) == 2
+
+
+def test_decree_of_the_hantei_answers_a_province_lost_in_battle_without_renaming_it():
+    state = TableState.empty_two_seat()
+    for index in range(2):
+        province_card(state, f"P2-prov{index}", seat=PlayerId.P2, index=index)
+    for index in range(3):
+        province_card(state, f"P1-prov{index}", seat=P1, index=index)
+    put_in_play(state, personality("attacker", owner=P1, force=5))
+    for card in (
+        L5RCard.of(
+            EventPrint,
+            id="decree",
+            printed_id="decree_of_the_hantei",
+            name="Decree of the Hantei",
+            side=Side.DYNASTY,
+            owner=PlayerId.P2,
+        ),
+        L5RCard.of(
+            WindPrint,
+            id="kanpeki",
+            printed_id="the_kanpeki_dynasty_hantei_xl",
+            name="The Kanpeki Dynasty",
+            side=Side.FATE,
+            owner=PlayerId.P2,
+        ),
+    ):
+        put_in_play(state, card)
+    session = EngineSession.start(state, P1)
+    session.game.favor_holder = PlayerId.P2
+    end_phase(session)  # Action -> Battle
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse((assignment_token("attacker", 0),)))
+    session.submit(PlayerId.P2, DecisionResponse())
+    fought_at = session.game.attack.battlefields[0].province
+    answers = {
+        "decree_of_the_hantei": ("P1",),
+        "decree_of_the_hantei_favor": ("decree",),
+    }
+
+    for _ in range(30):
+        pending = session.game.pending
+        if session.game.attack.battlefields[0].outcome is not None and pending is None:
+            break
+        if pending is None:
+            session.act(session.game.round.priority, Pass())
+            continue
+        answer = answers.get(getattr(pending, "resolver", None), (pending.candidates[0],))
+        session.submit(pending.seat, DecisionResponse(answer))
+
+    game = session.game
+    assert game.attack.battlefields[0].outcome.province_destroyed
+    assert fought_at not in game.table.zones
+    assert [key.idx for key in province_keys(game.table, PlayerId.P2)] == [2, 1]
+    assert [key.idx for key in province_keys(game.table, P1)] == [0, 1]
 
 
 # --- Sasada, Pearl Champion ---
@@ -543,3 +717,129 @@ def test_togashi_noritada_pays_by_moving_home_or_destroying_a_token(paid, home, 
     assert table.cards_by_id["lesser"].bowed
     assert location_of(table, noritada).is_home is home
     assert noritada.counters.get("fire", 0) == fire_left
+
+
+# --- Shrine of Compassion (Experienced) ---
+
+SHRINE = "shrine_of_compassion_experienced"
+BOW_PROBE = "probe_open_bow_an_enemy_personality"
+
+
+def _shrine_table(*, p1_provinces: int, p2_provinces: int) -> TableState:
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("shrine", printed_id=SHRINE, gold_production=2))
+    for seat, count in ((P1, p1_provinces), (PlayerId.P2, p2_provinces)):
+        for index in range(count):
+            province_card(state, f"{seat.name}-prov{index}", seat=seat, index=index)
+    return state
+
+
+@pytest.mark.parametrize(("p2_provinces", "produced"), [(1, 3), (0, 2)])
+def test_shrine_of_compassion_has_1gp_more_with_compassion(p2_provinces, produced):
+    state = _shrine_table(p1_provinces=0, p2_provinces=p2_provinces)
+    session = EngineSession.start(state, P1)
+
+    shrine = session.game.table.cards_by_id["shrine"]
+    assert effective_gold_production(session.game, shrine) == produced
+
+
+def test_shrine_of_compassion_gives_its_target_compassion_and_nothing_else():
+    state = _shrine_table(p1_provinces=1, p2_provinces=1)
+    put_in_play(state, holding("outpost", printed_id="imperial_treasurers_outpost"))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("drawn", P1))]
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, ActivateAbility("shrine"))
+    session.submit(P1, DecisionResponse(("outpost",)))
+    session.act(PlayerId.P2, Pass())
+    session.act(P1, ActivateAbility("outpost"))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["drawn"]
+    assert has_compassion(session.game, P1) is False
+
+
+def test_shrine_of_compassion_gives_compassion_while_the_action_resolves(reacting):
+    seen: list[bool] = []
+
+    def _saw_compassion(ctx: TriggerContext) -> list[Effect]:
+        if ctx.event.card_id == "hero":
+            seen.append(has_compassion(ctx.game, P1))
+        return []
+
+    reacting(Bowed, "compassion_witness", _saw_compassion)
+    bow_ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: bow a target enemy Personality",
+        cost=no_cost,
+        targets=lambda game, source: [
+            card.id for card in personalities_in_play(game) if card.owner is not source.owner
+        ],
+        effects=lambda game, source, target: [Bow(target.id)],
+    )
+    with probe_ability(BOW_PROBE, bow_ability):
+        state = _shrine_table(p1_provinces=1, p2_provinces=1)
+        put_in_play(state, personality("hero"))
+        put_in_play(state, holding("witness", printed_id="compassion_witness"))
+        put_in_play(state, personality("courtier", owner=PlayerId.P2, printed_id=BOW_PROBE))
+        session = EngineSession.start(state, PlayerId.P2)
+        session.act(PlayerId.P2, ActivateAbility("courtier"))
+        session.submit(PlayerId.P2, DecisionResponse(("hero",)))
+
+        session.act(P1, PlayInterrupt("shrine"))
+
+        assert seen == [True]
+        assert has_compassion(session.game, P1) is False
+
+
+def test_shrine_of_compassions_interrupt_lapses_with_an_action_that_destroys_the_shrine():
+    destroy_ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: destroy a target enemy Holding",
+        cost=no_cost,
+        targets=lambda game, source: ["shrine"],
+        effects=lambda game, source, target: [Destroy(target.id, source.owner)],
+    )
+    with probe_ability(BOW_PROBE, destroy_ability):
+        state = _shrine_table(p1_provinces=1, p2_provinces=1)
+        put_in_play(state, personality("courtier", owner=PlayerId.P2, printed_id=BOW_PROBE))
+        session = EngineSession.start(state, PlayerId.P2)
+        session.act(PlayerId.P2, ActivateAbility("courtier"))
+        session.submit(PlayerId.P2, DecisionResponse(("shrine",)))
+
+        session.act(P1, PlayInterrupt("shrine"))
+
+        assert "shrine" not in {card.id for card in session.game.table.battlefield.cards}
+        assert has_compassion(session.game, P1) is False
+
+
+def test_shrine_of_compassions_interrupt_lasts_until_the_cards_the_action_brings_enter(reacting):
+    seen: list[bool] = []
+
+    def _saw_compassion(ctx: TriggerContext) -> list[Effect]:
+        if ctx.event.card_id == "arrival":
+            seen.append(has_compassion(ctx.game, P1))
+        return []
+
+    reacting(EnteredPlay, "compassion_witness", _saw_compassion)
+    arrive_ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: put a card into play",
+        cost=no_cost,
+        targets=lambda game, source: [source.id],
+        effects=lambda game, source, target: [PutIntoPlay("arrival")],
+    )
+    with probe_ability(BOW_PROBE, arrive_ability):
+        state = _shrine_table(p1_provinces=1, p2_provinces=1)
+        put_in_play(state, holding("witness", printed_id="compassion_witness"))
+        put_in_play(state, personality("courtier", owner=PlayerId.P2, printed_id=BOW_PROBE))
+        hand = state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
+        hand.add(register(state, fate_card("arrival", PlayerId.P2)))
+        session = EngineSession.start(state, PlayerId.P2)
+        session.act(PlayerId.P2, ActivateAbility("courtier"))
+        session.submit(PlayerId.P2, DecisionResponse(("courtier",)))
+
+        session.act(P1, PlayInterrupt("shrine"))
+
+        assert seen == [True]
+        assert has_compassion(session.game, P1) is False
