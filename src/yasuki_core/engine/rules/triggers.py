@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.effects import (
     InterruptingEffect,
     Effect,
     Negated,
+    Simultaneously,
     Then,
 )
 from yasuki_core.engine.rules import state_based_actions
@@ -453,6 +454,11 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 continue
             effect = top.pending.pop(0)
             provenance = top.provenance
+            if isinstance(effect, Simultaneously):
+                # A frame of its own, so its members finish before the rest of this frame.
+                _trace.append(f"    {effect.describe()}")
+                frames.append(_Effects(list(effect.effects), provenance))
+                continue
             if isinstance(effect, Then):
                 _trace.append(f"    {effect.describe()}")
                 game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
