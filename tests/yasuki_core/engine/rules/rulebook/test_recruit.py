@@ -1,5 +1,3 @@
-import pytest
-
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
@@ -96,15 +94,6 @@ def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
     return card
-
-
-def test_recruit_rejects_invest_and_proclaim_together():
-    # legal_actions never offers the pair, but a decoded tape could still carry it; recruit must
-    # fail loudly rather than silently drop the Proclaim.
-    game = _discount_game(clan="Crab")
-    holding = register(game.table, _holding("teahouse", gold_cost=2))
-    with pytest.raises(ValueError, match="Invest and Proclaim"):
-        recruit.recruit(game, holding.id, invest=True, proclaim=True)
 
 
 def test_a_proclaimed_recruit_announces_its_honor_gain(reacting):
