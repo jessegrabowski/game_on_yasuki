@@ -1,3 +1,5 @@
+import tkinter as tk
+
 import pytest
 
 from yasuki_core.engine.players import PlayerId
@@ -5,7 +7,7 @@ from yasuki_core.engine.rules.projection import DuelistView, DuelView
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine.redaction import HiddenCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.ui.duel_view import _outcome_text, _sides, _source_to_draw
+from yasuki_gui.ui.duel_view import DuelPanel, _outcome_text, _panel_title, _sides, _source_to_draw
 
 from tests.yasuki_core.engine.builders import personality
 
@@ -109,3 +111,61 @@ def _with(*, source, duelist) -> DuelView:
         losers=(),
         decided=False,
     )
+
+
+@pytest.mark.parametrize(
+    "duel, titled",
+    [
+        (_duel(), "Duel: Sanctioned Duel"),
+        (None, "Duel"),
+    ],
+)
+def test_the_panel_is_named_after_the_card_that_created_the_duel(duel, titled):
+    # The duel's source is drawn beside it only when it is not one of the duelists, so the title is
+    # the one place the card is always named.
+    assert _panel_title(duel) == titled
+
+
+@pytest.fixture
+def panel():
+    root = tk.Tk()
+    root.withdraw()
+    built = DuelPanel(root)
+    try:
+        yield built
+    finally:
+        root.destroy()
+
+
+def _with_option(seat, step=DuelStep.FOCUSING) -> DuelView:
+    duel = _duel(step=step)
+    return DuelView(
+        challenger=duel.challenger,
+        challenged=duel.challenged,
+        step=duel.step,
+        option=seat,
+        ordinal=1,
+        source_name="Sanctioned Duel",
+        source=None,
+        winners=duel.winners,
+        losers=duel.losers,
+        decided=duel.decided,
+    )
+
+
+def test_the_duelist_holding_the_option_is_marked(panel):
+    # Which duelist is being asked is the one thing an alternating focusing loop does not show on
+    # the cards, and both sides are drawn the same way.
+    panel.refresh(_with_option(P1), viewer=P1)
+    near = panel.canvas.bbox("duel-option")
+    panel.refresh(_with_option(P2), viewer=P1)
+    far = panel.canvas.bbox("duel-option")
+
+    assert near is not None and far is not None
+    assert near[1] > far[1]
+
+
+def test_nothing_holds_the_option_once_the_focusing_is_over(panel):
+    panel.refresh(_with_option(P1, step=DuelStep.REVEAL), viewer=P1)
+
+    assert panel.canvas.bbox("duel-option") is None

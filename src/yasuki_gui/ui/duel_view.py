@@ -22,8 +22,12 @@ _TOTAL_TAG = "duel-total"
 _OUTCOME_TAG = "duel-outcome"
 # The button that dismisses a decided duel, tagged so a click can find it and a test can read it.
 _CONTINUE_TAG = "duel-continue"
+# The line marking which duelist has the option to focus or strike.
+_OPTION_TAG = "duel-option"
 # How far a side's number sits in from the corner it marks, matching the battle panel's Force.
 TOTAL_INSET = 12
+# How far below its side's number the option line sits.
+OPTION_DROP = 20
 # How far a focused card steps from the one before it: half a card, so the stack fans rather than
 # hiding itself, and grows wider than the Personality as the count climbs.
 FOCUS_STEP = CARD_W // 2
@@ -77,6 +81,7 @@ class DuelPanel(CardPanel):
         viewer: PlayerId | None = None,
     ) -> None:
         """Redraw for ``duel``, or empty the panel when there is none."""
+        self.set_title(_panel_title(duel))
         self._duel = duel
         self._stats = stats or {}
         self._viewer = viewer
@@ -121,6 +126,7 @@ class DuelPanel(CardPanel):
                 to_render_card(card), x, fan_y, stats=self._stats, pickable=True, peeked=peeked
             )
         self._draw_total(side, TOTAL_INSET, center_y)
+        self._draw_option(side, TOTAL_INSET, center_y + OPTION_DROP)
 
     def _draw_source(self, duel: DuelView, height: int) -> None:
         """The card that created the duel, drawn beside it.
@@ -154,6 +160,22 @@ class DuelPanel(CardPanel):
             fill=theme.GOLD,
             font=theme.serif(22, "bold"),
             tags=(_TOTAL_TAG,),
+        )
+
+    def _draw_option(self, side: DuelistView, x: int, y: int) -> None:
+        """Mark the duelist holding the option, which is the one thing a player watching an
+        alternating focusing loop cannot read off the cards."""
+        duel = self._duel
+        if duel is None or duel.step is not DuelStep.FOCUSING or side.seat is not duel.option:
+            return
+        self.canvas.create_text(
+            x,
+            y,
+            text="the option",
+            anchor="w",
+            fill=theme.INK,
+            font=theme.serif(10),
+            tags=(_OPTION_TAG,),
         )
 
     def _draw_outcome(self, duel: DuelView, width: int, height: int) -> None:
@@ -211,6 +233,14 @@ class DuelPanel(CardPanel):
         card_id = self.card_at(event)
         if card_id is not None and self.on_card_menu is not None:
             self.on_card_menu(card_id)
+
+
+def _panel_title(duel: DuelView | None) -> str:
+    """The panel's own name, carrying the card that created the duel. A duel whose source has no
+    name to read is titled plainly rather than with an empty tail."""
+    if duel is None or not duel.source_name:
+        return "Duel"
+    return f"Duel: {duel.source_name}"
 
 
 def _source_to_draw(duel: DuelView) -> RenderCard | None:
