@@ -109,13 +109,13 @@ class DiscardFocusedCards(DuelWork):
     CR's DUEL entry, after the duel has ended and its consequences have applied."""
 
     def resume(self, game: GameState) -> None:
-        game.stack.append(RemoveFocusAreas())
+        game.stack.append(RemoveFocusAreas(_decided_duel(game)))
         triggers.resolve_effects(game, duel_cleanup(game))
 
 
 @dataclass(frozen=True, slots=True)
 class RemoveFocusAreas:
-    """Take both focusing areas off the table once the duel's cleanup has resolved, cascade
+    """Take ``duel``'s focusing areas off the table once its cleanup has resolved, cascade
     included. Not a step of the duel's own, so a duel ending early does not drop it.
 
     A temporary area ceases to exist once it has served its purpose (CR, Areas of the Game), so a
@@ -123,11 +123,10 @@ class RemoveFocusAreas:
     discard pile. The move is not an effect, so no negation reaches it.
     """
 
+    duel: DuelRecord
+
     def resume(self, game: GameState) -> None:
-        duel = game.duel
-        if duel is None:
-            raise RuntimeError("the focusing areas are being removed with no duel on the game")
-        for seat in (duel.challenger, duel.challenged):
+        for seat in (self.duel.challenger, self.duel.challenged):
             for card in focused_cards(game, seat):
                 ops.move_card(game.table, card, pile_for(card))
             ops.remove_focus_area(game.table, seat)
@@ -163,11 +162,7 @@ def duel_cleanup(game: GameState) -> list[Effect]:
     Raise ``RuntimeError`` where the duel has no outcome, which is a step that cleared up after a
     duel nothing ever decided.
     """
-    # Read straight off the game rather than through `duel_in_progress`, since the duel has ended
-    # by the time its focused cards are discarded.
-    duel = game.duel
-    if duel is None or duel.outcome is None:
-        raise RuntimeError("the duel's focused cards are being discarded before it was decided")
+    duel = _decided_duel(game)
     # Built while the focused cards are still in their areas, since a procedure's cleanup may read
     # them, and listed ahead of the discards so it resolves while they are still there.
     discards = [
@@ -199,9 +194,18 @@ def end_without_resolution(game: GameState) -> list[GameEvent]:
     triggers.lapse_ongoing(game, DUEL_CONSEQUENCES)
     triggers.discard_delayed(game, DUEL_CONSEQUENCES)
     duel.outcome = DuelOutcome(winners=(), losers=(), totals={})
-    game.stack.append(RemoveFocusAreas())
+    game.stack.append(RemoveFocusAreas(duel))
     game.stack.append(ApplyEffects(tuple(duel_cleanup(game))))
     return [DuelEnded(resolved=False, source_card_id=duel.source)]
+
+
+def _decided_duel(game: GameState) -> DuelRecord:
+    """The duel on the game, read off it directly because :func:`~.duel_in_progress` refuses one
+    that has ended. Raise ``RuntimeError`` where there is no duel or it has no outcome."""
+    duel = game.duel
+    if duel is None or duel.outcome is None:
+        raise RuntimeError("the duel's focused cards are being discarded before it was decided")
+    return duel
 
 
 def _is_duelist(game: GameState, card: L5RCard) -> bool:
