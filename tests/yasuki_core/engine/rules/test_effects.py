@@ -46,6 +46,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Bowed,
     CardDiscarded,
+    CounterChanged,
     Dishonored,
     FavorDiscarded,
     HonorChanged,
@@ -271,6 +272,14 @@ def test_removing_a_counter_needs_enough_of_it():
     card = put_in_play(game, holding("P1-h", counters={"wealth": 1}))
     assert AdjustCounter(card.id, WEALTH, -1).is_payable(game) is True
     assert AdjustCounter(card.id, WEALTH, -2).is_payable(game) is False
+
+
+def test_removing_a_counter_announces_what_it_actually_removed():
+    game = two_seat_game()
+    card = put_in_play(game, holding("P1-h", counters={"wealth": 2}))
+
+    assert AdjustCounter(card.id, WEALTH, -3).perform(game) == [CounterChanged(card.id, WEALTH, -2)]
+    assert AdjustCounter(card.id, WEALTH, -1).perform(game) == []
 
 
 def test_granting_a_counter_always_applies():

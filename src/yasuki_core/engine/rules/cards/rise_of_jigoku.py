@@ -57,7 +57,7 @@ from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
-from yasuki_core.game_pieces.counters import counter_from_key
+from yasuki_core.game_pieces.counters import FIRE
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import province_holdings
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -584,7 +584,6 @@ def _sapphire_mine_entered_play(ctx: TriggerContext) -> list[Effect]:
 
 SEVEN_HEAVENS_FOCUS_BONUS = 1
 SEVEN_HEAVENS_RANGED_PER_RING = 2
-FIRE_TOKEN = counter_from_key("fire")
 
 
 @focus_effect("seven_heavens_strike")
@@ -663,7 +662,7 @@ def _resolve_seven_heavens_strike_ranged(
 def _resolve_seven_heavens_strike_token(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    return [AdjustCounter(chosen[0], FIRE_TOKEN, 1)]
+    return [AdjustCounter(chosen[0], FIRE, 1)]
 
 
 register_ability(

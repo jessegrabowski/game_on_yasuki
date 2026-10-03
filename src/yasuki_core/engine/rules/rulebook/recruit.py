@@ -20,7 +20,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, EnteredPlay
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -357,8 +357,9 @@ def finish_recruit(
 
 
 def _clear_sincerity(game: GameState, card: L5RCard) -> None:
-    """Remove a card's Sincerity tokens once it has entered play, because its trait has already
-    read them during the ``EnteredPlay`` cascade (Sincerity keyword)."""
+    """Remove a card's Sincerity tokens once it has entered play (Sincerity keyword), and announce
+    the removal, which is when a Sincerity trait "for each token removed" resolves."""
     held = card.counters.get(SINCERITY.key, 0)
     if held:
         card.adjust_counter(SINCERITY.key, -held)
+        game.stack.append(triggers.AnnounceEvent(CounterChanged(card.id, SINCERITY, -held)))

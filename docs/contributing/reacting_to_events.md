@@ -88,7 +88,7 @@ Seventeen events:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Dishonored`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Rehonored`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.CardDiscarded`
-- {class}`~yasuki_core.engine.rules.vocabulary.game_events.CounterGained`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.CounterChanged`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Revealed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.TurnStarted`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.PhaseStarted`

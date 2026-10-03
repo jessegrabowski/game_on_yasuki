@@ -12,7 +12,9 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.replay.game_log import game_log_from_dict, game_log_to_dict
+from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.game_pieces.counters import SINCERITY
 
 from tests.yasuki_core.engine.builders import end_phase, pay, put_in_play, register
 
@@ -84,6 +86,14 @@ def test_sincerity_tokens_are_removed_when_the_card_enters_play():
     session = _recruit_game("s", "plain_sincerity", sincerity=2)  # no payoff trait of its own
     _recruit(session, "s")
     assert session.game.table.cards_by_id["s"].counters == {}  # tokens cleared on entry
+
+
+def test_recruiting_announces_the_sincerity_tokens_it_clears():
+    session = _recruit_game("s", "plain_sincerity", sincerity=2)
+
+    _recruit(session, "s")
+
+    assert CounterChanged("s", SINCERITY, -2) in session.game.turn_events
 
 
 def test_pawnbroker_turns_each_sincerity_token_into_a_wealth_token():

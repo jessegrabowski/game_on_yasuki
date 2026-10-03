@@ -2,14 +2,14 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.effects import AdjustCounter, Effect
-from yasuki_core.engine.rules.vocabulary.game_events import CounterGained, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, fire, on
 from yasuki_core.game_pieces.counters import WEALTH
 
 from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 
 
-@on(CounterGained, "loop_forever")
+@on(CounterChanged, "loop_forever")
 def _loop_forever(ctx: TriggerContext) -> list[Effect]:
     """Reacts to its own wealth by granting itself more, the card-logic bug the guard exists for."""
     if ctx.event.card_id != ctx.card.id:
@@ -33,7 +33,7 @@ def test_a_non_converging_cascade_names_its_repeating_cycle():
 
     message = str(raised.value)
 
-    assert "CounterGained" in message
+    assert "CounterChanged" in message
     assert "loop_forever (loop) reacts" in message
     assert "+1 Wealth on loop" in message
     assert "repeating" in message

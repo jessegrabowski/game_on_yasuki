@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.rules.units.membership import attachments_of
@@ -13,7 +15,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
@@ -40,11 +43,13 @@ from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
+    combat_segment,
     dealt_table,
     end_phase,
     province_card,
     end_turn,
     holding,
+    pay,
     personality,
     put_in_play,
     register,
@@ -430,3 +435,111 @@ def test_declining_the_alternative_proclaims_aitso_for_her_personal_honor():
     submit(game, DecisionResponse())
 
     assert game.table.seats[P1].honor == 4
+
+
+# --- Togashi Noritada, Defender of the High House (Experienced) ---
+
+NORITADA = "togashi_noritada_defender_of_the_high_house_experienced"
+
+
+def test_togashi_noritada_gains_a_fire_token_for_each_sincerity_token_removed():
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, gold_production=8))
+    noritada = register(
+        state,
+        L5RCard.of(
+            PersonalityPrint,
+            id="noritada",
+            printed_id=NORITADA,
+            name="Togashi Noritada",
+            side=Side.DYNASTY,
+            owner=P1,
+            force=2,
+            chi=4,
+            gold_cost=7,
+            keywords=("Sincerity",),
+            counters={"sincerity": 2},
+        ),
+    )
+    noritada.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(noritada)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+
+    session.act(P1, Recruit("noritada"))
+    pay(session, P1)
+
+    recruited = session.game.table.cards_by_id["noritada"]
+    assert recruited.counters == {"fire": 2}
+    assert effective_force(session.game, recruited) == 2 + 2
+
+
+def test_togashi_noritada_ignores_another_cards_sincerity_tokens():
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, gold_production=8))
+    put_in_play(state, register(state, personality("noritada", printed_id=NORITADA)))
+    shrine = register(
+        state,
+        holding("shrine", keywords=("Sincerity",), gold_cost=2, counters={"sincerity": 2}),
+    )
+    shrine.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(shrine)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+
+    session.act(P1, Recruit("shrine"))
+    pay(session, P1)
+
+    assert session.game.table.cards_by_id["noritada"].counters == {}
+
+
+def _noritada_battle() -> EngineSession:
+    noritada = personality("noritada", printed_id=NORITADA, chi=4)
+    noritada.adjust_counter("fire", 1)
+    return combat_segment(
+        [
+            noritada,
+            personality("lesser", owner=PlayerId.P2, chi=3),
+            personality("greater", owner=PlayerId.P2, chi=5),
+        ],
+        {"noritada": 0},
+        {"lesser": 0, "greater": 0},
+    )
+
+
+def test_togashi_noritada_bows_only_an_enemy_with_lower_chi():
+    session = _noritada_battle()
+
+    session.act(P1, ActivateAbility("noritada"))
+    session.submit(P1, DecisionResponse(("Destroy one of his Fire tokens",)))
+
+    assert session.game.pending.candidates == ("lesser",)
+
+
+@pytest.mark.parametrize(
+    ("paid", "home", "fire_left"),
+    [("Move Noritada home", True, 1), ("Destroy one of his Fire tokens", False, 0)],
+    ids=["moved_home", "destroyed_a_token"],
+)
+def test_togashi_noritada_pays_by_moving_home_or_destroying_a_token(paid, home, fire_left):
+    session = _noritada_battle()
+
+    session.act(P1, ActivateAbility("noritada"))
+    assert set(session.game.pending.candidates) == {
+        "Move Noritada home",
+        "Destroy one of his Fire tokens",
+    }
+    session.submit(P1, DecisionResponse((paid,)))
+    session.submit(P1, DecisionResponse(("lesser",)))
+
+    table = session.game.table
+    noritada = table.cards_by_id["noritada"]
+    assert table.cards_by_id["lesser"].bowed
+    assert location_of(table, noritada).is_home is home
+    assert noritada.counters.get("fire", 0) == fire_left

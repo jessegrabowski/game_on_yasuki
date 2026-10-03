@@ -48,7 +48,7 @@ from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
     Bowed,
-    CounterGained,
+    CounterChanged,
     Destroyed,
     EnteredPlay,
     TurnStarted,
@@ -282,10 +282,10 @@ def _rice_farm_turn_started(ctx: TriggerContext) -> list[Effect]:
 # --- Shosuro Aoki / Yoritomo Kayoko (Experienced) ---
 
 
-@on(CounterGained, "shosuro_aoki_yoritomo_kayoko_experienced")
-def _shosuro_aoki_yoritomo_kayoko_experienced_counter_gained(ctx: TriggerContext) -> list[Effect]:
+@on(CounterChanged, "shosuro_aoki_yoritomo_kayoko_experienced")
+def _shosuro_aoki_yoritomo_kayoko_experienced_counter_changed(ctx: TriggerContext) -> list[Effect]:
     """After your Holding gains any Wealth tokens, once per turn, draw a card."""
-    if ctx.event.counter is not WEALTH:
+    if ctx.event.counter is not WEALTH or ctx.event.amount <= 0:
         return []
     gainer = ctx.game.table.cards_by_id[ctx.event.card_id]
     if not isinstance(gainer.printed, HoldingPrint) or gainer.owner is not ctx.card.owner:

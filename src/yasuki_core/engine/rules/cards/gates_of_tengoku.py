@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.abilities.model import (
 )
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import owned_personalities, personalities_in_play
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
@@ -20,27 +21,31 @@ from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import went_second
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    AskOption,
     Banish,
+    Bow,
     CreateToken,
     DelayedEffect,
     Destroy,
     Effect,
+    Move,
     MoveToDeck,
     Negated,
     ShuffleDeck,
+    Unpayable,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
-from yasuki_core.engine.rules.triggers import TriggerContext, on
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import sincerity_seed_targets
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.counters import SINCERITY
+from yasuki_core.game_pieces.counters import FIRE, SINCERITY, Counter, counter_from_key
 
 
 # --- Decree of the Hantei ---
@@ -218,5 +223,85 @@ register_ability(
         located_at=(CardLocation.HAND,),
         targeting_message="a Personality to banish at the end of the turn",
         targets_after_cost=True,
+    ),
+)
+
+
+# --- Togashi Noritada, Defender of the High House (Experienced) ---
+
+NORITADA_MOVE_HOME = "Move Noritada home"
+
+
+@on(EnteredPlay, "togashi_noritada_defender_of_the_high_house_experienced")
+def _togashi_noritada_defender_of_the_high_house_experienced_entered_play(
+    ctx: TriggerContext,
+) -> list[Effect]:
+    """Sincerity: Give Noritada a +1F Fire token for each token removed."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    sincerity = ctx.card.counters.get(SINCERITY.key, 0)
+    if sincerity == 0:
+        return []
+    return [AdjustCounter(ctx.card.id, FIRE, sincerity)]
+
+
+def _togashi_noritada_defender_of_the_high_house_experienced_destroy_options(
+    noritada: L5RCard,
+) -> dict[str, Counter]:
+    """Each token Noritada holds, keyed by the option that destroys one of it."""
+    held = (counter_from_key(key) for key, count in sorted(noritada.counters.items()) if count > 0)
+    return {f"Destroy one of his {counter.name} tokens": counter for counter in held}
+
+
+def _togashi_noritada_defender_of_the_high_house_experienced_cost(
+    game: GameState, source: L5RCard
+) -> list[Effect]:
+    """Ask to move Noritada home or destroy one of his tokens, offering only what he can pay."""
+    options = list(_togashi_noritada_defender_of_the_high_house_experienced_destroy_options(source))
+    if not location_of(game.table, source).is_home:
+        options.insert(0, NORITADA_MOVE_HOME)
+    if not options:
+        return [Unpayable("Noritada is home and holds no tokens")]
+    question = "Move Noritada home, or destroy one of his tokens?"
+    return [AskOption(source.owner, tuple(options), question, "togashi_noritada_cost", source.id)]
+
+
+@choice_resolver("togashi_noritada_cost")
+def _resolve_togashi_noritada_cost(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    noritada = game.table.cards_by_id[source_id]
+    if chosen[0] == NORITADA_MOVE_HOME:
+        return [Move(source_id, Location.home(noritada.owner))]
+    options = _togashi_noritada_defender_of_the_high_house_experienced_destroy_options(noritada)
+    return [AdjustCounter(source_id, options[chosen[0]], -1)]
+
+
+def _togashi_noritada_defender_of_the_high_house_experienced_targets(
+    game: GameState, source: L5RCard
+) -> list[str]:
+    """Enemy Personalities with lower Chi than Noritada."""
+    chi = effective_chi(game, source)
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if card.owner is not source.owner and effective_chi(game, card) < chi
+    ]
+
+
+def _togashi_noritada_defender_of_the_high_house_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [Bow(target.id)]
+
+
+register_ability(
+    "togashi_noritada_defender_of_the_high_house_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=_togashi_noritada_defender_of_the_high_house_experienced_cost,
+        targets=_togashi_noritada_defender_of_the_high_house_experienced_targets,
+        targeting_message="an enemy Personality with lower Chi",
+        effects=_togashi_noritada_defender_of_the_high_house_experienced_effects,
     ),
 )

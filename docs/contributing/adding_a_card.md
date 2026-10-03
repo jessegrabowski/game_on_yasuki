@@ -56,7 +56,7 @@ id no card has and tells you the nearest real one.
 exists.
 
 These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straightened`,
-`Dishonored`, `Rehonored`, `CardDiscarded`, `CounterGained`, `Revealed`, `TurnStarted`,
+`Dishonored`, `Rehonored`, `CardDiscarded`, `CounterChanged`, `Revealed`, `TurnStarted`,
 `ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose moment is not one of them needs a new event,
 which is a core change.
 
@@ -205,7 +205,7 @@ role is one of `cost`, `targets`, `effects`, `interrupt`, an entry point of a re
 `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`, `entry_state`,
 `before_entering_play`), or the event a
 trigger answers (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`,
-`turn_started`, `counter_gained`, `card_discarded`, `producing_gold`, `produced_gold`,
+`turn_started`, `counter_changed`, `card_discarded`, `producing_gold`, `produced_gold`,
 `entered_play_or_destroyed`). A card printing
 several abilities qualifies the role with that ability's key, as in
 `_incendiary_archers_fear_effects`, since one name per role would collide between them, and the key

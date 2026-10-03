@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.game_events import CounterGained, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, EnteredPlay
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DecisionResponse
@@ -29,7 +29,7 @@ FIRING_ORDER: list[str] = []
 
 @on(EnteredPlay, "order_two_effects")
 def _two_effects(ctx):
-    """Emit two counter adjustments. The first raises a CounterGained that has its own
+    """Emit two counter adjustments. The first raises a CounterChanged that has its own
     subscriber."""
     return [
         AdjustCounter(ctx.card.id, WEALTH, 1),
@@ -37,7 +37,7 @@ def _two_effects(ctx):
     ]
 
 
-@on(CounterGained, "order_watcher")
+@on(CounterChanged, "order_watcher")
 def _watch_counter_gain(ctx):
     gainer = ctx.game.table.cards_by_id[ctx.event.card_id]
     FIRING_ORDER.append(("watcher", gainer.id, dict(gainer.counters)))
@@ -113,7 +113,7 @@ def test_a_second_subscriber_still_fires_after_the_first_ones_effects_resolve():
 
     fire(game, EnteredPlay(source.id))
 
-    # Every EnteredPlay subscriber runs before the derived CounterGained events are dequeued.
+    # Every EnteredPlay subscriber runs before the derived CounterChanged events are dequeued.
     both_counters = ("watcher", "P1-a-source", {"wealth": 1, "sincerity": 1})
     assert FIRING_ORDER == [("recorder", "P1-b-recorder"), both_counters, both_counters]
 
