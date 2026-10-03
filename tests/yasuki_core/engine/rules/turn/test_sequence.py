@@ -91,9 +91,11 @@ from tests.yasuki_core.engine.builders import (
     end_turn,
     fate_card,
     holding,
+    province_card,
     put_in_play,
     register,
 )
+from tests.yasuki_core.engine.rules.conftest import probe_resolver
 from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 
 
@@ -160,6 +162,45 @@ def test_advance_past_dynasty_draws_fate_and_passes_the_turn():
     assert len(game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards) == 1
     # Only the active player draws at their turn-end; the opponent's hand is untouched.
     assert game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards == []
+
+
+def test_the_turns_end_is_announced_after_sincerity_accrues_and_before_its_draw(reacting):
+    game = _game(hand=0, fate_deck=1)
+    sincere = province_card(game, "sincere", keywords=("Sincerity",))
+    put_in_play(game, holding("witness", printed_id="end_of_turn_witness"))
+    seen: list[tuple[int, int]] = []
+
+    def _saw_the_moment(ctx):
+        hand = ctx.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
+        seen.append((len(hand), sincere.counters.get("sincerity", 0)))
+        return []
+
+    reacting(TurnBoundary, "end_of_turn_witness", _saw_the_moment, boundary=Boundary.END)
+
+    _advance_to_end_of_turn(game)
+
+    assert seen == [(0, 1)]
+    assert len(game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards) == 1
+
+
+def test_a_question_asked_at_the_turns_end_is_answered_before_its_draw(reacting):
+    game = _game(hand=0, fate_deck=1)
+    put_in_play(game, holding("witness", printed_id="end_of_turn_witness"))
+
+    def _ask(ctx):
+        return [Ask(PlayerId.P1, "Before you draw?", "end_of_turn_probe", subjects=("witness",))]
+
+    reacting(TurnBoundary, "end_of_turn_witness", _ask, boundary=Boundary.END)
+    with probe_resolver("end_of_turn_probe", lambda game, source_id, chosen, seat: []):
+        _advance_to_end_of_turn(game)
+        hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
+        assert isinstance(game.pending, Confirm)
+        assert hand == []
+
+        submit(game, DecisionResponse(("witness",)))
+
+        assert len(hand) == 1
+        assert game.turn == 2
 
 
 def test_empty_fate_deck_draws_nothing_and_still_passes_the_turn():

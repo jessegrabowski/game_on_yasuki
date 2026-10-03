@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     ApplyEffects,
     DiscardFromHand,
+    DrawCard,
     RevealProvinces,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -47,8 +48,8 @@ from yasuki_core.engine.rules.turn.structure import (
     RoundKind,
     TURN_PHASES,
 )
+from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.board.seats import cards_in_hand
-from yasuki_core.engine.table import ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint, WindPrint
@@ -273,9 +274,13 @@ def _end_turn(game: GameState) -> None:
     # Ending the turn is not an action, so a delayed effect resolving here has nothing to
     # interrupt and nobody to respond to.
     forget_action(game)
-    # The rest of the end of the turn is queued beneath the delayed effects, so one that asks a
-    # question, or changes what a card watches, is answered before the turn goes on.
-    game.stack.append(DrawAtEndOfTurn(seat))
+    # Queued beneath the delayed effects, in reverse: what happens "before the turn ends", the
+    # Sincerity tokens and every trigger on the turn's end, then the rulebook's draw and the
+    # discard down to the maximum hand size (CR, Drawing and Discarding Fate Cards).
+    game.stack.append(EnforceMaximumHandSize(seat))
+    game.stack.append(ApplyEffects((DrawCard(seat),)))
+    game.stack.append(triggers.AnnounceEvent(TurnBoundary(seat, Boundary.END)))
+    game.stack.append(AccrueSincerity(seat))
     triggers.resolve_delayed(game, END_OF_TURN)
     # Reached inside an action's own drain, after that drain has emptied the stack, so this nested
     # one runs only what the turn boundary queues.
@@ -283,9 +288,10 @@ def _end_turn(game: GameState) -> None:
 
 
 @dataclass(frozen=True, slots=True)
-class DrawAtEndOfTurn:
-    """Accrue Sincerity and draw the Fate card that ends ``seat``'s turn, then check its hand
-    against the maximum hand size.
+class AccrueSincerity:
+    """Give each face-up Sincerity card in ``seat``'s Provinces a Sincerity token, before its turn
+    ends (Sincerity keyword). A card recruited, discarded or refilled face-down this turn is not
+    face-up in a Province, so it accrues nothing.
 
     Attributes
     ----------
@@ -296,12 +302,13 @@ class DrawAtEndOfTurn:
     seat: PlayerId
 
     def resume(self, game: GameState) -> None:
-        _accrue_sincerity(game, self.seat)
-        ops.draw_to_hand(game.table, self.seat)
-        # Queued before the board settles, so a condition the draw fulfills is announced, and a
-        # card in hand watching it offered, before the hand is checked against the limit.
-        game.stack.append(EnforceMaximumHandSize(self.seat))
-        triggers.enforce_state_based_actions(game)
+        grants = [
+            AdjustCounter(card.id, SINCERITY, 1)
+            for _, zone in province_zones(game, self.seat)
+            for card in zone.cards
+            if card.face_up and keywords.SINCERITY in effective_keywords(game, card)
+        ]
+        triggers.resolve_effects(game, grants)
 
 
 @dataclass(frozen=True, slots=True)
@@ -330,20 +337,6 @@ class EnforceMaximumHandSize:
             triggers.resolve_effects(
                 game, [DiscardFromHand(self.seat, excess, Rulebook.MAXIMUM_HAND_SIZE, self.seat)]
             )
-
-
-def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
-    """Before ``seat``'s turn ends, give each face-up Sincerity card lingering in its Provinces a
-    Sincerity token. A card that flushed (was recruited or discarded) or arrived face-down as a
-    refill this turn is not face-up in a Province, so it does not accrue."""
-    grants = [
-        AdjustCounter(card.id, SINCERITY, 1)
-        for key, zone in game.table.zones.items()
-        if key.owner is seat and key.role is ZoneRole.PROVINCE
-        for card in zone.cards
-        if card.face_up and keywords.SINCERITY in effective_keywords(game, card)
-    ]
-    triggers.resolve_effects(game, grants)
 
 
 @dataclass(frozen=True, slots=True)

@@ -218,6 +218,7 @@ the action rather than by deserializing it.
    rulebook.recruit.FinishRecruit
    rulebook.recruit.ResolveRecruit
    triggers.ResumeCascade
+   turn.sequence.AccrueSincerity
    turn.sequence.BeginNextTurn
    turn.sequence.OpenFirstTurn
    turn.sequence.OpenRound

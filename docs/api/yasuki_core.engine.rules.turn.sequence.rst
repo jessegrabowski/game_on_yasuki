@@ -7,8 +7,8 @@ yasuki_core.engine.rules.turn.sequence
 
 .. autosummary::
 
+    AccrueSincerity
     BeginNextTurn
-    DrawAtEndOfTurn
     EnforceMaximumHandSize
     LiftStraightenDelays
     OpenFirstTurn
