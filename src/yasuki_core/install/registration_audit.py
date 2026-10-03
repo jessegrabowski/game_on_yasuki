@@ -287,14 +287,10 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
     printed = printed_ability_counts(cards_dir)
     problems = []
     abilities = registry.ability_registrations()
-    registering = set(abilities) | set(registry._INTERRUPTS) | set(registry.RECRUIT_TIMINGS)
+    registering = set(abilities) | set(registry._INTERRUPTS)
     for card_id in sorted(registering):
         shows = printed.get(card_id, 0)
-        registered = (
-            len(abilities.get(card_id, ()))
-            + (card_id in registry._INTERRUPTS)
-            + (card_id in registry.RECRUIT_TIMINGS)
-        )
+        registered = len(abilities.get(card_id, ())) + (card_id in registry._INTERRUPTS)
         if shows > registered:
             problems.append(
                 f"abilities: {card_id} registers {registered} of the {shows} "

@@ -2,6 +2,7 @@ import json
 
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -10,9 +11,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.abilities.model import InvestAbility
 from yasuki_core.engine.rules.abilities.registry import _INVEST, register_invest
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseInvestAmount,
+    ChooseAmount,
     ChoosePayment,
     DecisionResponse,
 )
@@ -96,13 +97,13 @@ def _invest_game(holding_id: str, printed_id: str, gold_cost: int, producer_gp: 
 def test_questionable_market_offers_recruit_and_invest_options():
     session = _invest_game("qm", "questionable_market", gold_cost=1)
     actions = session.legal_actions(PlayerId.P1)
-    assert Recruit("qm") in actions  # the plain recruit
-    assert Recruit("qm", invest=True) in actions  # the Invest second option
+    assert ActivateAbility("qm", RECRUIT) in actions  # the plain recruit
+    assert ActivateAbility("qm", RECRUIT_WITH_INVEST) in actions  # the Invest second option
 
 
 def test_investing_in_questionable_market_pays_the_invest_cost_for_two_tokens():
     session = _invest_game("qm", "questionable_market", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("qm", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("qm", RECRUIT_WITH_INVEST))
 
     pending = session.game.pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 3  # base 1 + Invest 2
@@ -116,22 +117,22 @@ def test_investing_in_questionable_market_pays_the_invest_cost_for_two_tokens():
 def test_invest_is_not_offered_when_only_the_base_cost_is_affordable():
     session = _invest_game("qm", "questionable_market", gold_cost=1, producer_gp=2)
     actions = session.legal_actions(PlayerId.P1)
-    assert Recruit("qm") in actions  # base 1 fits in 2 gold
-    assert Recruit("qm", invest=True) not in actions  # base 1 + Invest 2 does not
+    assert ActivateAbility("qm", RECRUIT) in actions  # base 1 fits in 2 gold
+    assert ActivateAbility("qm", RECRUIT_WITH_INVEST) not in actions  # base 1 + Invest 2 does not
 
 
 def test_rebuilt_harbor_asks_how_much_to_invest():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("rh", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("rh", RECRUIT_WITH_INVEST))
 
     pending = session.game.pending
-    assert isinstance(pending, ChooseInvestAmount)
+    assert isinstance(pending, ChooseAmount)
     assert pending.candidates == ("1", "2", "3")  # 8 gold covers base 1 + up to 3
 
 
 def test_rebuilt_harbor_grants_wealth_tokens_equal_to_the_amount_invested():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("rh", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("rh", RECRUIT_WITH_INVEST))
     session.submit(PlayerId.P1, DecisionResponse(("3",)))
 
     pending = session.game.pending
@@ -143,31 +144,23 @@ def test_rebuilt_harbor_grants_wealth_tokens_equal_to_the_amount_invested():
 def test_a_variable_invest_recruit_is_priced_at_every_amount_the_payer_may_choose():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
 
-    assert action_gold(session.game, Recruit("rh", invest=True)) == (2, 3, 4)
-    assert action_gold(session.game, Recruit("rh")) == (1,)
-
-
-def test_a_recruit_with_invest_on_a_card_printing_none_has_no_price():
-    session = _invest_game("farm", "millet_farm", gold_cost=1)
-
-    with pytest.raises(ValueError, match="prints no Invest"):
-        action_gold(session.game, Recruit("farm", invest=True))
+    assert action_gold(session.game, ActivateAbility("rh", RECRUIT_WITH_INVEST)) == (2, 3, 4)
+    assert action_gold(session.game, ActivateAbility("rh", RECRUIT)) == (1,)
 
 
 def test_variable_invest_amounts_are_capped_by_affordable_gold():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1, producer_gp=3)
-    session.act(PlayerId.P1, Recruit("rh", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("rh", RECRUIT_WITH_INVEST))
     assert session.game.pending.candidates == ("1", "2")  # base 1 + 3 = 4 is out of reach with 3
 
 
 def test_cancelling_the_invest_amount_leaves_the_holding_in_its_province():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("rh", invest=True))
-    assert isinstance(session.game.pending, ChooseInvestAmount)
+    session.act(PlayerId.P1, ActivateAbility("rh", RECRUIT_WITH_INVEST))
+    assert isinstance(session.game.pending, ChooseAmount)
 
     session.cancel(PlayerId.P1)
     assert session.game.pending is None
-    assert session.game.stack == []  # the recruit was never announced
     assert session.game.table.cards_by_id["rh"] not in session.game.table.battlefield.cards
 
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
@@ -179,7 +172,7 @@ def test_training_court_invests_for_one_token():
     # tested with the card rather than here, where the fixture loads no token templates.
     session = _invest_game("tc", "training_court", gold_cost=1)
 
-    session.act(PlayerId.P1, Recruit("tc", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("tc", RECRUIT_WITH_INVEST))
     pay(session, PlayerId.P1)
 
     assert session.game.table.cards_by_id["tc"].counters == {"wealth": 1}
@@ -187,7 +180,7 @@ def test_training_court_invests_for_one_token():
 
 def test_fixed_invest_recruit_replays_and_round_trips():
     session = _invest_game("qm", "questionable_market", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("qm", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("qm", RECRUIT_WITH_INVEST))
     pay(session, PlayerId.P1)
 
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
@@ -196,7 +189,7 @@ def test_fixed_invest_recruit_replays_and_round_trips():
 
 def test_variable_invest_recruit_replays_and_round_trips():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("rh", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("rh", RECRUIT_WITH_INVEST))
     session.submit(PlayerId.P1, DecisionResponse(("2",)))
     pay(session, PlayerId.P1)
 
@@ -208,7 +201,7 @@ def test_investing_permanently_raises_the_holdings_gold_cost():
     """ "Entering play, permanently increase the Gold Cost by the Invest cost to get the effect."
     The rise is what pays for the effect, so a card that got the effect must show it."""
     session = _invest_game("qm", "questionable_market", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("qm", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("qm", RECRUIT_WITH_INVEST))
     pay(session, PlayerId.P1)
 
     qm = session.game.table.cards_by_id["qm"]
@@ -218,7 +211,7 @@ def test_investing_permanently_raises_the_holdings_gold_cost():
 
 def test_recruiting_without_investing_leaves_the_gold_cost_alone():
     session = _invest_game("qm", "questionable_market", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("qm"))
+    session.act(PlayerId.P1, ActivateAbility("qm", RECRUIT))
     pay(session, PlayerId.P1)
 
     qm = session.game.table.cards_by_id["qm"]
@@ -227,7 +220,7 @@ def test_recruiting_without_investing_leaves_the_gold_cost_alone():
 
 def test_a_variable_invest_raises_the_cost_by_what_was_actually_paid():
     session = _invest_game("rh", "rebuilt_harbor", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("rh", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("rh", RECRUIT_WITH_INVEST))
     session.submit(PlayerId.P1, DecisionResponse(("3",)))
     pay(session, PlayerId.P1)
 
@@ -238,7 +231,7 @@ def test_a_variable_invest_raises_the_cost_by_what_was_actually_paid():
 def test_the_invest_rise_survives_the_turn_that_bought_it():
     """Permanent, not until-end-of-turn: the modifier has to still be there next turn."""
     session = _invest_game("qm", "questionable_market", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("qm", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("qm", RECRUIT_WITH_INVEST))
     pay(session, PlayerId.P1)
     bought_on = session.game.turn
     for _ in range(4):
@@ -260,7 +253,7 @@ def test_a_free_invest_still_buys_what_the_invest_buys():
         return []
 
     session = _invest_game("fi", "free_invest_probe", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("fi", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("fi", RECRUIT_WITH_INVEST))
     pay(session, PlayerId.P1)
 
     assert invested == [0]
@@ -276,7 +269,7 @@ def test_a_recruit_without_the_option_runs_no_invest_at_all():
         return []
 
     session = _invest_game("fi", "free_invest_probe", gold_cost=1)
-    session.act(PlayerId.P1, Recruit("fi"))
+    session.act(PlayerId.P1, ActivateAbility("fi", RECRUIT))
     pay(session, PlayerId.P1)
 
     assert invested == []

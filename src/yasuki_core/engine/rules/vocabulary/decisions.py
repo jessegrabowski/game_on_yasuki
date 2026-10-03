@@ -249,32 +249,6 @@ def _chooses_exactly_one(request: "DecisionRequest", response: DecisionResponse)
 
 
 @dataclass(frozen=True, slots=True)
-class ChooseInvestAmount(DecisionRequest):
-    """The seat must choose how much to Invest while recruiting a variable-Invest holding. The
-    candidates are the affordable amounts rendered as strings. The chosen amount is added to the
-    recruit payment and drives the Invest effect. Cancellable, since nothing is committed until the
-    payment that follows.
-
-    Attributes
-    ----------
-    source_card_id : str
-        The holding being recruited with Invest.
-    """
-
-    source_card_id: str
-
-    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        return "Choose how much to Invest"
-
-    def accepts(self, response: DecisionResponse) -> bool:
-        return _chooses_exactly_one(self, response)
-
-    @property
-    def cancellable(self) -> bool:
-        return True
-
-
-@dataclass(frozen=True, slots=True)
 class ChooseAmount(DecisionRequest):
     """The seat must say how much Gold to spend on an action whose cost block prints a variable
     amount: the ``:X:`` whose effects scale with what is paid (CR, Costs).

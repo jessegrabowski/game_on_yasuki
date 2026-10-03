@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.action_record import resolving_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.effects import (
     AskOption,
@@ -91,9 +92,13 @@ def is_favor_action(game: GameState) -> bool:
     """
     if game.action_is_favor:
         return True
-    # The keyword designates an ability, so it is read only off the actions taken from one. A card
-    # carrying it is not turned into a Favor action by being recruited, equipped, or spent.
+    # The keyword designates an ability, so it is read only off the actions taken from the card's
+    # own. A card carrying it is not turned into a Favor action by being recruited, equipped, or
+    # spent, all of which are the rulebook's abilities.
     if not isinstance(game.action, ActivateAbility | PlayStrategy):
+        return False
+    ability = resolving_ability(game)
+    if ability is not None and ability.from_rulebook:
         return False
     card = game.table.cards_by_id.get(game.action.card_id)
     return card is not None and keywords.FAVOR in effective_keywords(game, card)

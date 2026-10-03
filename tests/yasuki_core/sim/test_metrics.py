@@ -1,9 +1,10 @@
 import numpy as np
 from numpy.random import default_rng
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
@@ -68,7 +69,7 @@ def test_a_producer_bowed_to_pay_stops_counting():
     province_card(session.game, "target", seat=P1, gold_cost=3)
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     agent = AutoAgent()
     while session.game.pending is not None:
         seat = session.game.pending.seat

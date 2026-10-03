@@ -1,7 +1,8 @@
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.bots.agents import AutoAgent, PayingAgent
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseDiscard, ChoosePayment
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.bots.policies import EconomicPolicy
 from yasuki_core.engine.driver import Controls, play_game
 from yasuki_core.engine.session import EngineSession
@@ -110,7 +111,7 @@ def test_a_grant_is_declined_when_plain_production_covers_the_cost():
     province_card(session.game, "target", seat=P1, gold_cost=2)
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
 
     pay(session, P1)
 
@@ -130,7 +131,7 @@ def test_it_keeps_answering_until_the_cost_is_met():
     province_card(session.game, "target", seat=P1, gold_cost=3)
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
 
     pay(session, P1)
 
@@ -149,7 +150,7 @@ def test_it_stops_as_soon_as_the_pool_covers_the_cost():
     province_card(session.game, "target", seat=P1, gold_cost=5)
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.game.gold[P1] = 2  # left over from an earlier payment this phase
 
     pay(session, P1)
@@ -170,7 +171,7 @@ def test_it_takes_the_grant_on_a_later_round_when_the_smallest_producer_cannot()
     province_card(session.game, "target", seat=P1, gold_cost=5)
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
 
     pay(session, P1)
 

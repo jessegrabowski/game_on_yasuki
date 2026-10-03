@@ -56,27 +56,6 @@ class Pass:
 
 
 @dataclass(frozen=True, slots=True)
-class Recruit:
-    """Bring a face-up card from a province into play, paying its gold cost.
-
-    Attributes
-    ----------
-    card_id : str
-        The province card to recruit.
-    invest : bool
-        Whether to also pay the card's Invest cost for its one-time enter-play effect, the
-        kicker-style second purchase option. Default False.
-    proclaim : bool
-        Whether to Proclaim the recruit (once per turn, own-clan Personalities only), adding the
-        Personality's Personal Honor to the seat's Family Honor after it enters play. Default False.
-    """
-
-    card_id: str
-    invest: bool = False
-    proclaim: bool = False
-
-
-@dataclass(frozen=True, slots=True)
 class PlayStrategy:
     """Play a Strategy from hand for its Gold Cost, resolve its ability, and discard it.
 
@@ -111,7 +90,7 @@ class Equip:
     invest : bool
         Whether to pay the card's Invest cost on top of its Gold Cost. Invest belongs to a card
         entering play rather than to the action that brought it, so Equip offers it exactly as
-        Recruit does. Default False.
+        a Recruit does. Default False.
     """
 
     card_id: str
@@ -166,13 +145,12 @@ class DeclareAttack:
 
 
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
-Action = Pass | Recruit | PlayStrategy | Equip | ActivateAbility | DeclareAttack | PlayInterrupt
+Action = Pass | PlayStrategy | Equip | ActivateAbility | DeclareAttack | PlayInterrupt
 
 # The designator each rulebook action is taken under. Pass is absent because it is the alternative
 # to taking an action rather than one, and ActivateAbility because it reads its designator off the
 # card. The same action is Open on one Holding and Dynasty on another.
 ACTION_TIMINGS: dict[type, ActionTiming] = {
-    Recruit: ActionTiming.DYNASTY,
     # Repeatable Open, not Dynasty (CR, Equip). It is taken in the Action phase like Kharmic.
     Equip: ActionTiming.OPEN,
     DeclareAttack: ActionTiming.ATTACK,

@@ -1,7 +1,8 @@
 from dataclasses import replace
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.bots.agents import LegacyAgent, PayingAgent
 from yasuki_core.engine.rules.rulebook.legacy import (
     BANISH_RESOLVER,
@@ -95,7 +96,7 @@ def test_it_buys_like_the_economic_policy_when_it_does_not_take_legacy():
     session = _dynasty_phase()
     province_card(session.game, "affordable", seat=P1, gold_cost=3, gold_production=4)
 
-    assert _choose(session, []) == Recruit("affordable")
+    assert _choose(session, []) == ActivateAbility("affordable", RECRUIT)
 
 
 # --- how the agent answers the decisions Legacy raises --------------------------------------------

@@ -2,6 +2,7 @@ from dataclasses import replace
 
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT_AND_PROCLAIM, is_recruit
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules import interrupts, legality
@@ -58,7 +59,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseBattlefield,
@@ -470,7 +470,7 @@ def _proclaim_session(
     proclaim = next(
         action
         for action in session.legal_actions(P1)
-        if isinstance(action, Recruit) and action.proclaim
+        if is_recruit(action) and action.ability_key == RECRUIT_AND_PROCLAIM
     )
     session.act(P1, proclaim)
     return session

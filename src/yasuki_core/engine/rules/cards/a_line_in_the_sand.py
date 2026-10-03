@@ -2,10 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import (
-    RecruitTiming,
     register_ability,
     register_invest,
-    register_recruit_timing,
 )
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
@@ -16,6 +14,11 @@ from yasuki_core.engine.rules.board.queries import (
     top_of_deck,
 )
 from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
+from yasuki_core.engine.rules.rulebook.recruit import (
+    recruit_from_its_province,
+    recruit_gold,
+    recruitable,
+)
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.units.membership import shares_unit
@@ -250,6 +253,25 @@ def _resolve_the_ivory_courtroom(
     return [Rehonor(chosen[0])] if chosen else []
 
 
+THE_IVORY_COURTROOM_RECRUIT = "recruit_it"
+THE_IVORY_COURTROOM_FAVOR = "take_the_favor"
+
+# "Political Open, :gstar:: If this Holding is in your Province, Recruit it." The Gold it pays is
+# the Holding's Gold Cost (CR, Gold). Its bow for 2 Gold is printed gold production and needs no
+# handler.
+register_ability(
+    "the_ivory_courtroom",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        keywords=frozenset({keywords.POLITICAL}),
+        cost=recruit_gold,
+        targets=recruitable,
+        effects=recruit_from_its_province,
+        hits_every_target=True,
+        located_at=(CardLocation.PROVINCE,),
+        key=THE_IVORY_COURTROOM_RECRUIT,
+    ),
+)
 register_ability(
     "the_ivory_courtroom",
     Ability(
@@ -260,13 +282,6 @@ register_ability(
         effects=_the_ivory_courtroom_effects,
         hits_every_target=True,
         tireless=True,
+        key=THE_IVORY_COURTROOM_FAVOR,
     ),
-)
-
-
-# "Political Open, :gstar:: If this Holding is in your Province, Recruit it." Its bow for 2 Gold
-# is printed gold production and needs no handler.
-register_recruit_timing(
-    "the_ivory_courtroom",
-    RecruitTiming(ActionTiming.OPEN, keywords=frozenset({keywords.POLITICAL})),
 )

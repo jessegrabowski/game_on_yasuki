@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.registry import ability_for
@@ -8,7 +9,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Pass,
     PlayInterrupt,
-    Recruit,
 )
 from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     CAVALRY_FOLLOWER,
@@ -485,7 +485,7 @@ def test_recruiting_the_courts_opens_a_response_step_rather_than_acting():
     to the Courtier until the seat takes it."""
     session = _courts_with_an_envoy()
 
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
 
     assert session.game.pending is None
@@ -498,7 +498,7 @@ def test_the_response_step_names_the_recruit_that_opened_it():
     Step is declined with a button, so it has to say what is being declined."""
     session = _courts_with_an_envoy()
 
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
 
     for seat in PlayerId:
@@ -508,7 +508,7 @@ def test_the_response_step_names_the_recruit_that_opened_it():
 def test_bowing_the_courtier_costs_a_player_an_honor():
     session = _courts_with_an_envoy()
 
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
@@ -525,7 +525,7 @@ def test_the_swing_is_asked_as_two_questions_the_way_the_card_reads_it():
     """ "Make a target player gain or lose 1 Honor" is asked as a player and then a direction, and
     the direction is asked about the player the first question named."""
     session = _courts_with_an_envoy()
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
 
@@ -543,7 +543,7 @@ def test_the_players_are_offered_by_the_names_they_chose():
     session = _courts_with_an_envoy()
     session.game.table.seats[P1].name = "Ada"
     session.game.table.seats[P2].name = "Crab"
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
@@ -561,7 +561,7 @@ def test_the_swing_may_favour_you_instead():
     """ "Gain or lose" and "a target player" are both the controller's call."""
     session = _courts_with_an_envoy()
 
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
@@ -575,7 +575,7 @@ def test_passing_the_response_step_leaves_the_courtier_standing():
     """A missed Response is a missed Response: passing the Step declines the swing."""
     session = _courts_with_an_envoy()
 
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
     session.act(P1, Pass())
 
@@ -587,7 +587,7 @@ def test_passing_the_response_step_leaves_the_courtier_standing():
 def test_a_bowed_courtier_is_no_courtier_to_spend():
     session = _courts_with_an_envoy(bowed=True)
 
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
 
     assert ActivateAbility("courts") not in session.legal_actions(P1)
@@ -598,7 +598,7 @@ def test_the_courtier_the_invest_buys_can_be_bowed_by_the_response():
     so the Holding pays for its own Response with the Courtier it just bought."""
     session = _courts_game()  # no Courtier in play beforehand
 
-    session.act(P1, Recruit("courts", invest=True))
+    session.act(P1, ActivateAbility("courts", RECRUIT_WITH_INVEST))
     pay(session, P1)
     courtier = _courtier_of(session)
     session.act(P1, ActivateAbility("courts"))
@@ -613,7 +613,7 @@ def test_the_courtier_the_invest_buys_can_be_bowed_by_the_response():
 
 def test_the_courts_response_replays_to_the_same_board():
     session = _courts_with_an_envoy()
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
     session.act(P1, ActivateAbility("courts"))
     session.submit(P1, DecisionResponse(("envoy",)))
@@ -626,7 +626,7 @@ def test_the_courts_response_replays_to_the_same_board():
 def test_the_courts_invest_buys_a_wealth_token_and_a_courtier():
     session = _courts_game()
 
-    session.act(P1, Recruit("courts", invest=True))
+    session.act(P1, ActivateAbility("courts", RECRUIT_WITH_INVEST))
     pay(session, P1)
 
     game = session.game
@@ -640,7 +640,7 @@ def test_the_courtier_joins_the_clan_his_patron_plays():
     so. The template carries no clan at all."""
     session = _courts_game(clan="Lion")
 
-    session.act(P1, Recruit("courts", invest=True))
+    session.act(P1, ActivateAbility("courts", RECRUIT_WITH_INVEST))
     pay(session, P1)
 
     courtier = _courtier_of(session)
@@ -654,7 +654,7 @@ def test_an_unaligned_patron_has_no_alignment_to_give():
     the template printed him."""
     session = _courts_game(clan="Ninja")
 
-    session.act(P1, Recruit("courts", invest=True))
+    session.act(P1, ActivateAbility("courts", RECRUIT_WITH_INVEST))
     pay(session, P1)
 
     courtier = _courtier_of(session)
@@ -666,7 +666,7 @@ def test_the_courts_invest_replays_to_the_same_board():
     """The Courtier's id is minted as it is created, so a tape that replayed to a differently named
     board would not resolve the ids its own log carries."""
     session = _courts_game()
-    session.act(P1, Recruit("courts", invest=True))
+    session.act(P1, ActivateAbility("courts", RECRUIT_WITH_INVEST))
     pay(session, P1)
 
     assert replay(session.log).table == session.game.table
@@ -675,7 +675,7 @@ def test_the_courts_invest_replays_to_the_same_board():
 def test_recruiting_the_courts_without_investing_buys_neither():
     session = _courts_game()
 
-    session.act(P1, Recruit("courts"))
+    session.act(P1, ActivateAbility("courts", RECRUIT))
     pay(session, P1)
 
     game = session.game
@@ -1334,7 +1334,7 @@ def test_gakuya_enters_play_dishonorable_without_being_dishonored(reacting):
     end_phase(session)
     end_phase(session)
 
-    session.act(P1, Recruit("gakuya"))
+    session.act(P1, ActivateAbility("gakuya", RECRUIT))
     pay(session, P1)
 
     game = session.game

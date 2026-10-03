@@ -2,6 +2,7 @@ from dataclasses import replace
 
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -12,7 +13,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
@@ -404,7 +404,7 @@ def test_recruiting_a_renew_keyword_card_refills_its_province_face_up():
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty
 
-    session.act(P1, Recruit("warrens"))
+    session.act(P1, ActivateAbility("warrens", RECRUIT))
     pay(session, P1)
     refill = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)].cards[-1]
     assert refill.face_up
@@ -893,7 +893,7 @@ def test_makeshift_fortifications_walls_the_province_it_was_recruited_from():
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty
 
-    session.act(P1, Recruit("wall"))
+    session.act(P1, ActivateAbility("wall", RECRUIT))
     pay(session, P1)
 
     assert session.game.table.province_attachments == {"wall": first}
@@ -996,7 +996,9 @@ def test_the_chi_penalty_kills_a_one_chi_personality_with_no_minimum():
 
 
 @pytest.mark.parametrize(
-    "action", [None, Recruit("shiba")], ids=["outside any action", "during another action"]
+    "action",
+    [None, ActivateAbility("shiba", RECRUIT)],
+    ids=["outside any action", "during another action"],
 )
 def test_discarding_it_any_other_way_gives_no_penalty(action):
     """The card names a Kharmic action, so reaching the discard by another route, or during an

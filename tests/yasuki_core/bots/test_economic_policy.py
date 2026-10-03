@@ -1,5 +1,6 @@
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST, is_recruit
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Action, Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Action, Pass
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import EconomicPolicy, PassPolicy
 from yasuki_core.engine.driver import Controls, play_game
@@ -43,7 +44,7 @@ def test_it_recruits_when_it_can_afford_to():
     session = _dynasty_phase()
     province_card(session.game, "affordable", seat=P1, gold_cost=3)
 
-    assert _choice(session) == Recruit("affordable")
+    assert _choice(session) == ActivateAbility("affordable", RECRUIT)
 
 
 def test_it_passes_when_nothing_is_affordable():
@@ -52,7 +53,7 @@ def test_it_passes_when_nothing_is_affordable():
     session = _dynasty_phase(production=1)
     province_card(session.game, "dear", seat=P1, gold_cost=9)
 
-    assert not [a for a in session.legal_actions(P1) if isinstance(a, Recruit)]
+    assert not [a for a in session.legal_actions(P1) if is_recruit(a)]
     assert _choice(session) == Pass()
 
 
@@ -62,7 +63,7 @@ def test_it_takes_the_dearer_of_two_it_can_afford():
     province_card(session.game, "cheap", seat=P1, gold_cost=2, index=0)
     province_card(session.game, "dear", seat=P1, gold_cost=5, index=1)
 
-    assert _choice(session) == Recruit("dear")
+    assert _choice(session) == ActivateAbility("dear", RECRUIT)
 
 
 def test_a_producer_beats_a_dearer_card_that_produces_nothing():
@@ -72,7 +73,7 @@ def test_a_producer_beats_a_dearer_card_that_produces_nothing():
     province_card(session.game, "barren", seat=P1, gold_cost=6, index=0)
     province_card(session.game, "farm", seat=P1, gold_cost=3, index=1, gold_production=2)
 
-    assert _choice(session) == Recruit("farm")
+    assert _choice(session) == ActivateAbility("farm", RECRUIT)
 
 
 def test_it_takes_the_plain_purchase_over_the_invest_variant():
@@ -82,8 +83,12 @@ def test_it_takes_the_plain_purchase_over_the_invest_variant():
     province_card(session.game, "court", seat=P1, printed_id="training_court", gold_cost=3)
     offered = session.legal_actions(P1)
 
-    assert Recruit("court", invest=True) in offered  # the variant is genuinely on the table
-    assert EconomicPolicy().choose(session.project(P1), offered) == Recruit("court")
+    assert (
+        ActivateAbility("court", RECRUIT_WITH_INVEST) in offered
+    )  # the variant is genuinely on the table
+    assert EconomicPolicy().choose(session.project(P1), offered) == ActivateAbility(
+        "court", RECRUIT
+    )
 
 
 def test_the_id_breaks_a_tie_rather_than_zone_order():
@@ -93,7 +98,7 @@ def test_the_id_breaks_a_tie_rather_than_zone_order():
     province_card(session.game, "twin_b", seat=P1, gold_cost=3, index=0)
     province_card(session.game, "twin_a", seat=P1, gold_cost=3, index=1)
 
-    assert _choice(session) == Recruit("twin_a")
+    assert _choice(session) == ActivateAbility("twin_a", RECRUIT)
 
 
 def _buyable_game() -> EngineSession:
@@ -135,7 +140,7 @@ def test_a_face_down_province_neighbor_does_not_stop_it_choosing():
     province_card(session.game, "refilled", seat=P1, gold_cost=2, index=0, face_up=False)
     province_card(session.game, "visible", seat=P1, gold_cost=3, index=1)
 
-    assert _choice(session) == Recruit("visible")
+    assert _choice(session) == ActivateAbility("visible", RECRUIT)
 
 
 def test_a_personality_is_ranked_without_gold_production():
@@ -162,7 +167,7 @@ def test_a_personality_is_ranked_without_gold_production():
     province_card(session.game, "farm", seat=P1, gold_cost=3, index=1, gold_production=1)
 
     assert not hasattr(hero, "gold_production")  # the premise the ranking has to survive
-    assert _choice(session) == Recruit("farm")
+    assert _choice(session) == ActivateAbility("farm", RECRUIT)
 
 
 def test_a_card_printed_with_a_dash_cost_ranks_as_free():
@@ -172,7 +177,7 @@ def test_a_card_printed_with_a_dash_cost_ranks_as_free():
     province_card(session.game, "dash", seat=P1, gold_cost=None, index=0)
     province_card(session.game, "priced", seat=P1, gold_cost=4, index=1)
 
-    assert _choice(session) == Recruit("priced")
+    assert _choice(session) == ActivateAbility("priced", RECRUIT)
 
 
 def test_a_province_card_is_ranked_on_what_it_produces_now_not_what_it_printed():
@@ -184,4 +189,6 @@ def test_a_province_card_is_ranked_on_what_it_produces_now_not_what_it_printed()
     province_card(session.game, "plain", seat=P1, gold_cost=2, gold_production=2, index=1)
     session.game.table.cards_by_id["boosted"].adjust_counter("wealth", 3)
 
-    assert _choice(session) == Recruit("boosted")  # 1 printed + 3 Wealth beats a printed 2
+    assert _choice(session) == ActivateAbility(
+        "boosted", RECRUIT
+    )  # 1 printed + 3 Wealth beats a printed 2

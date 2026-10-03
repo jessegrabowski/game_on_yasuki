@@ -25,7 +25,6 @@ yasuki_core.engine.rules.legality
     permitted_timings_in
     playable
     recruit_cost
-    recruit_timings
     seat_cards
     strategy_gold
     timings_of

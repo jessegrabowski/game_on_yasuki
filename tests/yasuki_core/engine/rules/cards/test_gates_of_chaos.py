@@ -1,5 +1,6 @@
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import ArrangeCards, DecisionResponse
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production, untaken_self_grant
 from yasuki_core.engine.rules.vocabulary.game_events import ProducingGold
@@ -69,7 +70,7 @@ def _next_turn(session):
 
 def test_jade_mine_offers_its_grant_on_the_production_window():
     session = _mine_game()
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
 
     session.submit(P1, DecisionResponse(("jm",)))
 
@@ -80,7 +81,7 @@ def test_jade_mine_offers_its_grant_on_the_production_window():
 
 def test_a_granted_jade_mine_does_not_straighten_next_turn():
     session = _mine_game()
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("jm",)))
     session.submit(P1, DecisionResponse(("jm",)))  # yes: 3 gold covers the cost
 
@@ -97,7 +98,7 @@ def test_a_granted_jade_mine_does_not_straighten_next_turn():
 def test_the_jade_mine_grant_replays_to_the_same_state():
     """The delay is state the tape has to reproduce, not a fact about the board it can read back."""
     session = _mine_game()
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("jm",)))
     session.submit(P1, DecisionResponse(("jm",)))
 
@@ -107,7 +108,7 @@ def test_the_jade_mine_grant_replays_to_the_same_state():
 
 def test_a_declined_jade_mine_straightens_as_usual():
     session = _mine_game(target_cost=2)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("jm",)))
     session.submit(P1, DecisionResponse(()))  # no
 
@@ -121,7 +122,7 @@ def test_a_producer_asked_once_a_turn_is_not_asked_again():
     """The window's own once-per-turn guard, which needs a card that survives its own price to be
     reachable at all. Outlying Farms is destroyed for taking its grant and never gets here."""
     session = _mine_game(target_cost=2)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("jm",)))
     session.submit(P1, DecisionResponse(("jm",)))  # yes, claiming the turn's use
     mine = session.game.table.cards_by_id["jm"]
@@ -144,7 +145,7 @@ def _window_effects(game, producer):
 
 def test_slave_pits_offers_its_grant_on_the_production_window():
     session = _pits_game()
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
 
     session.submit(P1, DecisionResponse(("sp",)))
 
@@ -154,7 +155,7 @@ def test_slave_pits_offers_its_grant_on_the_production_window():
 def test_taking_the_slave_pits_grant_loses_two_honor():
     session = _pits_game()
     before = session.game.table.seats[P1].honor
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("sp",)))
 
     session.submit(P1, DecisionResponse(("sp",)))  # yes
@@ -167,7 +168,7 @@ def test_taking_the_slave_pits_grant_loses_two_honor():
 def test_declining_the_slave_pits_grant_keeps_the_honor():
     session = _pits_game(target_cost=2)
     before = session.game.table.seats[P1].honor
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("sp",)))
 
     session.submit(P1, DecisionResponse(()))  # no
@@ -179,7 +180,7 @@ def test_declining_the_slave_pits_grant_keeps_the_honor():
 def test_slave_pits_does_not_trigger_for_the_first_player():
     """Courtesy traits do not take effect if you went first, so the window opens and passes over."""
     session = _pits_game(target_cost=2, went_second=False)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
 
     session.submit(P1, DecisionResponse(("sp",)))
 
@@ -195,11 +196,11 @@ def test_the_first_player_is_not_offered_a_recruit_only_courtesy_could_pay_for()
 
     pits = going_first.game.table.cards_by_id["sp"]
     assert maximum_gold_production(going_first.game, pits) == 2
-    assert Recruit("target") not in going_first.legal_actions(P1)
+    assert ActivateAbility("target", RECRUIT) not in going_first.legal_actions(P1)
 
     pits = going_second.game.table.cards_by_id["sp"]
     assert maximum_gold_production(going_second.game, pits) == 3
-    assert Recruit("target") in going_second.legal_actions(P1)
+    assert ActivateAbility("target", RECRUIT) in going_second.legal_actions(P1)
 
 
 # --- Divination Bowl ---

@@ -1,5 +1,10 @@
 import pytest
 
+from yasuki_core.engine.rules.cards.a_line_in_the_sand import (
+    THE_IVORY_COURTROOM_FAVOR,
+    THE_IVORY_COURTROOM_RECRUIT,
+)
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.action_record import action_keywords
@@ -9,7 +14,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Equip,
     Pass,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
@@ -322,12 +326,12 @@ def test_the_courtroom_responds_to_its_own_recruit_by_taking_the_favor():
     session = _courtroom_in_province(dishonorable=("shamed", "disgraced"))
     end_phase(session)
     end_phase(session)  # through the Battle phase into the Dynasty phase
-    session.act(P1, Recruit("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", RECRUIT))
     pay(session, P1)
     assert session.game.favor_holder is None, "nothing happens until the Response is taken"
-    assert ActivateAbility("courtroom") in session.legal_actions(P1)
+    assert ActivateAbility("courtroom", THE_IVORY_COURTROOM_FAVOR) in session.legal_actions(P1)
 
-    session.act(P1, ActivateAbility("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", THE_IVORY_COURTROOM_FAVOR))
     assert session.game.favor_holder is P1
     assert set(session.game.pending.candidates) == {"shamed", "disgraced"}
     session.submit(P1, DecisionResponse(("shamed",)))
@@ -341,9 +345,9 @@ def test_the_courtroom_rehonor_may_be_declined():
     session = _courtroom_in_province(dishonorable=("shamed",))
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", RECRUIT))
     pay(session, P1)
-    session.act(P1, ActivateAbility("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", THE_IVORY_COURTROOM_FAVOR))
 
     session.submit(P1, DecisionResponse(()))
 
@@ -355,10 +359,10 @@ def test_the_courtroom_asks_nothing_with_nobody_to_rehonor():
     session = _courtroom_in_province()
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", RECRUIT))
     pay(session, P1)
 
-    session.act(P1, ActivateAbility("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", THE_IVORY_COURTROOM_FAVOR))
 
     assert session.game.favor_holder is P1
     assert session.game.pending is None
@@ -368,13 +372,13 @@ def test_passing_the_response_leaves_the_favor_uncontrolled():
     session = _courtroom_in_province()
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", RECRUIT))
     pay(session, P1)
 
     session.act(P1, Pass())
 
     assert session.game.favor_holder is None
-    assert ActivateAbility("courtroom") not in session.legal_actions(P1)
+    assert ActivateAbility("courtroom", THE_IVORY_COURTROOM_FAVOR) not in session.legal_actions(P1)
 
 
 def test_the_courtroom_in_play_does_not_respond_to_another_cards_recruit():
@@ -389,22 +393,22 @@ def test_the_courtroom_in_play_does_not_respond_to_another_cards_recruit():
     end_phase(session)
     end_phase(session)
 
-    session.act(P1, Recruit("farm"))
+    session.act(P1, ActivateAbility("farm", RECRUIT))
     pay(session, P1)
 
     assert session.game.round_stack == []
-    assert ActivateAbility("courtroom") not in session.legal_actions(P1)
+    assert ActivateAbility("courtroom", THE_IVORY_COURTROOM_FAVOR) not in session.legal_actions(P1)
 
 
 def test_the_courtroom_may_be_recruited_in_the_action_phase_as_a_political_action():
     # "Political Open, :gstar:: If this Holding is in your Province, Recruit it."
     session = _courtroom_in_province()
 
-    assert Recruit("courtroom") in session.legal_actions(P1)
-    session.act(P1, Recruit("courtroom"))
+    assert ActivateAbility("courtroom", THE_IVORY_COURTROOM_RECRUIT) in session.legal_actions(P1)
+    session.act(P1, ActivateAbility("courtroom", THE_IVORY_COURTROOM_RECRUIT))
     assert action_keywords(session.game) == {keywords.POLITICAL}
     pay(session, P1)
-    session.act(P1, ActivateAbility("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", THE_IVORY_COURTROOM_FAVOR))
 
     assert session.game.favor_holder is P1
 
@@ -414,7 +418,7 @@ def test_the_courtroom_recruited_in_the_dynasty_phase_is_not_a_political_action(
     end_phase(session)
     end_phase(session)
 
-    session.act(P1, Recruit("courtroom"))
+    session.act(P1, ActivateAbility("courtroom", RECRUIT))
 
     assert action_keywords(session.game) == frozenset()
 
@@ -425,7 +429,7 @@ def test_a_plain_holding_is_not_recruited_in_the_action_phase():
     province_card(state, "farm", printed_id="rice_farm", gold_cost=2)
     session = EngineSession.start(state, P1)
 
-    assert Recruit("farm") not in session.legal_actions(P1)
+    assert ActivateAbility("farm", RECRUIT) not in session.legal_actions(P1)
 
 
 # --- Beset from All Sides ---

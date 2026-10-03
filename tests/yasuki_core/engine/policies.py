@@ -1,9 +1,9 @@
+from yasuki_core.engine.rules.rulebook.recruit import is_recruit
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Pass,
-    Recruit,
 )
 from yasuki_core.engine.rules.projection import GameView
 
@@ -14,7 +14,7 @@ class RecruitFirst:
     name = "recruit-first"
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
-        return next((a for a in actions if isinstance(a, Recruit)), Pass())
+        return next((a for a in actions if is_recruit(a)), Pass())
 
 
 class DiscardFirst:
@@ -33,7 +33,7 @@ class RecruitElseDiscard:
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
         return next(
-            (a for a in actions if isinstance(a, Recruit)),
+            (a for a in actions if is_recruit(a)),
             next((a for a in actions if is_dynasty_discard(a)), Pass()),
         )
 

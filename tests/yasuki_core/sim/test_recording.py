@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, is_recruit
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, is_dynasty_discard
@@ -7,7 +8,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Pass,
-    Recruit,
 )
 from yasuki_core.engine.replay.game_log import Act, Cancel
 from yasuki_core.bots.agents import AutoAgent
@@ -182,7 +182,7 @@ def test_recording_no_end_of_turn_metrics_leaves_the_samples_alone():
 
 
 def _is_recruit(action: Action) -> bool:
-    return isinstance(action, Recruit)
+    return is_recruit(action)
 
 
 def _counting(session: EngineSession) -> TurnRecorder:
@@ -299,7 +299,7 @@ def test_a_cancelled_recruit_is_not_counted_as_a_purchase():
     recorder.turn_began(session.game)
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("prov0"))
+    session.act(P1, ActivateAbility("prov0", RECRUIT))
     session.cancel(P1)
     recorder.turn_ended(session.game, P1)
 
@@ -326,7 +326,9 @@ def test_a_cancellation_only_undoes_a_counted_action_when_one_preceded_it():
     session = _buyable(provinces=1)
     recorder = _counting(session)
     recorder.turn_began(session.game)
-    session.log.entries.extend([Act(P1, Recruit("prov0")), Act(P1, Pass()), Cancel(P1)])
+    session.log.entries.extend(
+        [Act(P1, ActivateAbility("prov0", RECRUIT)), Act(P1, Pass()), Cancel(P1)]
+    )
     recorder.turn_ended(session.game, P1)
 
     assert recorder.samples[0].values["bought"] == 1

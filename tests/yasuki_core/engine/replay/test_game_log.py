@@ -3,6 +3,11 @@ import typing
 
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import (
+    RECRUIT,
+    RECRUIT_AND_PROCLAIM,
+    RECRUIT_WITH_INVEST,
+)
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
@@ -18,7 +23,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.replay.game_log import (
@@ -129,7 +133,7 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
     act_and_log(game, log, Pass())  # P1 declines the Action phase
     act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
-    act_and_log(game, log, Recruit("P1-buy"))  # pauses for payment
+    act_and_log(game, log, ActivateAbility("P1-buy", RECRUIT))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))
 
     assert game.table.cards_by_id["P1-buy"] in game.table.battlefield.cards
@@ -184,7 +188,7 @@ def test_proclaimed_recruit_replays_and_round_trips():
     act_and_log(game, log, Pass())  # P1 declines the Action phase
     act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
-    act_and_log(game, log, Recruit("P1-person", proclaim=True))  # pauses for payment
+    act_and_log(game, log, ActivateAbility("P1-person", RECRUIT_AND_PROCLAIM))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))
 
     assert game.table.seats[PlayerId.P1].honor == 2
@@ -241,7 +245,7 @@ def test_a_grant_taken_in_a_production_window_round_trips_through_the_codec():
     act_and_log(game, log, Pass())  # P1 declines the Action phase
     act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
-    act_and_log(game, log, Recruit("P1-buy"))
+    act_and_log(game, log, ActivateAbility("P1-buy", RECRUIT))
     submit_and_log(game, log, DecisionResponse(("P1-of",)))  # bow Outlying Farms
     submit_and_log(game, log, DecisionResponse(("P1-of",)))  # take its grant in the window
 
@@ -316,7 +320,7 @@ def test_triggered_choice_replays_and_round_trips():
     act_and_log(game, log, Pass())  # P1 declines the Action phase
     act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
-    act_and_log(game, log, Recruit("P1-wheat"))  # pauses for payment
+    act_and_log(game, log, ActivateAbility("P1-wheat", RECRUIT))  # pauses for payment
     submit_and_log(game, log, DecisionResponse(("P1-SH",)))  # pays, then pauses for the choice
     submit_and_log(game, log, DecisionResponse(("P1-other",)))  # give the other Farm a token
 
@@ -358,7 +362,7 @@ def test_cancelled_recruit_payment_replays_and_round_trips():
     act_and_log(game, log, Pass())  # P1 declines the Action phase
     act_and_log(game, log, Pass())  # P2 declines its Open window: Action -> Battle
     act_and_log(game, log, Pass())  # Battle -> Dynasty
-    act_and_log(game, log, Recruit("P1-buy"))  # pauses for payment
+    act_and_log(game, log, ActivateAbility("P1-buy", RECRUIT))  # pauses for payment
     cancel_and_log(game, log)  # backs out
 
     assert log.entries[-1] == Cancel(PlayerId.P1)
@@ -407,9 +411,9 @@ def test_decode_action_rejects_an_unknown_kind():
 
 ROUND_TRIPPED_ACTIONS = [
     Pass(),
-    Recruit("card"),
-    Recruit("card", invest=True),
-    Recruit("card", proclaim=True),
+    ActivateAbility("card", RECRUIT),
+    ActivateAbility("card", RECRUIT_WITH_INVEST),
+    ActivateAbility("card", RECRUIT_AND_PROCLAIM),
     Equip("card"),
     Equip("card", invest=True),
     ActivateAbility("card"),

@@ -1,12 +1,13 @@
 import json
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     DecisionResponse,
@@ -78,7 +79,7 @@ def _recruit_game(
 
 
 def _recruit(session, holding_id):
-    session.act(PlayerId.P1, Recruit(holding_id))
+    session.act(PlayerId.P1, ActivateAbility(holding_id, RECRUIT))
     pay(session, PlayerId.P1)  # bow the stronghold to pay
 
 
@@ -218,7 +219,7 @@ def test_training_court_seeds_a_sincerity_token_on_a_province_card():
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("tc"))
+    session.act(PlayerId.P1, ActivateAbility("tc", RECRUIT))
     pay(session, PlayerId.P1)  # pay the base cost
 
     session.act(PlayerId.P1, ActivateAbility("tc"))
@@ -245,7 +246,7 @@ def test_training_court_seeds_nothing_without_a_token_less_sincerity_card():
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("tc"))
+    session.act(PlayerId.P1, ActivateAbility("tc", RECRUIT))
     pay(session, PlayerId.P1)
     # The only Sincerity card already has a token, so the Response is never offered.
     assert ActivateAbility("tc") not in session.legal_actions(PlayerId.P1)
@@ -265,7 +266,7 @@ def test_training_court_seed_offers_every_token_less_sincerity_card():
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("tc"))
+    session.act(PlayerId.P1, ActivateAbility("tc", RECRUIT))
     pay(session, PlayerId.P1)
     session.act(PlayerId.P1, ActivateAbility("tc"))
     assert set(session.game.pending.candidates) == {"a", "b"}  # both token-less cards offered
@@ -284,7 +285,7 @@ def test_training_court_invest_lands_before_its_response_is_offered():
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("tc", invest=True))
+    session.act(PlayerId.P1, ActivateAbility("tc", RECRUIT_WITH_INVEST))
     pay(session, PlayerId.P1)  # pay base + Invest 1
     assert session.game.table.cards_by_id["tc"].counters == {"wealth": 1}  # Invest already landed
 
@@ -304,7 +305,7 @@ def test_training_court_seed_replays_and_round_trips():
     )
     session = EngineSession.start(state, PlayerId.P1)
     _to_dynasty(session)
-    session.act(PlayerId.P1, Recruit("tc"))
+    session.act(PlayerId.P1, ActivateAbility("tc", RECRUIT))
     pay(session, PlayerId.P1)
     session.act(PlayerId.P1, ActivateAbility("tc"))
     session.submit(PlayerId.P1, DecisionResponse(("target",)))
@@ -341,6 +342,40 @@ def test_shrine_of_sincerity_bows_to_seed_a_province_sincerity_card():
 
     assert session.game.table.cards_by_id["target"].counters == {"sincerity": 1}
     assert session.game.table.cards_by_id["shrine"].bowed  # the bow cost was paid
+
+
+def test_shrine_of_sincerity_raises_a_recruit_only_its_bonus_reaches():
+    state = _base_state()
+    put_in_play(
+        state,
+        L5RCard.of(
+            HoldingPrint,
+            id="shrine",
+            name="Shrine",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="shrine_of_sincerity",
+            keywords=("Temple",),
+            gold_production=1,
+        ),
+    )
+    province_card(
+        state,
+        "seeded",
+        printed_id="plain_sincerity",
+        keywords=("Sincerity",),
+        index=0,
+        gold_cost=2,
+        counters={"sincerity": 1},
+    )
+    session = EngineSession.start(state, PlayerId.P1)
+    _to_dynasty(session)
+    session.game.table.cards_by_id["SH"].bow()  # the Shrine is left to pay alone
+
+    session.act(PlayerId.P1, ActivateAbility("seeded", RECRUIT))
+    pay(session, PlayerId.P1)
+
+    assert session.game.table.cards_by_id["seeded"] in session.game.table.battlefield.cards
 
 
 def test_shrine_is_not_activatable_without_a_token_less_sincerity_card():

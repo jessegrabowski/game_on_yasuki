@@ -1,5 +1,6 @@
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -60,7 +61,7 @@ def _recruit_the_bazaar(*, printed_keywords: tuple[str, ...]) -> EngineSession:
     session = EngineSession.start(state, P1)
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty
-    session.act(P1, Recruit("bazaar"))
+    session.act(P1, ActivateAbility("bazaar", RECRUIT))
     pay(session, P1)
     return session
 

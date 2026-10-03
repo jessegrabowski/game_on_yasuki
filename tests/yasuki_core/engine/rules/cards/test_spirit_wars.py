@@ -1,5 +1,6 @@
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -44,7 +45,7 @@ def _garden_game(printed_id: str = "poorly_placed_garden") -> EngineSession:
     session = EngineSession.start(state, P1)
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty
-    session.act(P1, Recruit("garden"))
+    session.act(P1, ActivateAbility("garden", RECRUIT))
     pay(session, P1)
     return session
 

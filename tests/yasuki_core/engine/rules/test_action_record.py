@@ -2,6 +2,7 @@ from dataclasses import replace
 
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import (
@@ -19,7 +20,6 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     PlayInterrupt,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Duration
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -75,7 +75,7 @@ def test_the_datasheet_favor_abilities_are_political(monkeypatch, arc, key):
 
 def test_a_recruit_carries_no_keywords():
     game = two_seat_game()
-    game.action = Recruit("anything")
+    game.action = ActivateAbility("anything", RECRUIT)
 
     assert action_keywords(game) == frozenset()
 

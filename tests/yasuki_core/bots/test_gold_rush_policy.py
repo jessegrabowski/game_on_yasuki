@@ -1,5 +1,6 @@
 from dataclasses import replace
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.cycle import is_cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD, is_dynasty_discard
@@ -8,7 +9,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
     ActivateAbility,
     Pass,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, ChooseCards
 from yasuki_core.bots.policies import GoldRushPolicy
@@ -50,7 +50,7 @@ def test_it_buys_when_it_can_afford_to():
     session = _dynasty_phase()
     province_card(session.game, "farm", seat=P1, gold_cost=3, gold_production=2)
 
-    assert _choice(session) == Recruit("farm")
+    assert _choice(session) == ActivateAbility("farm", RECRUIT)
 
 
 def test_it_flushes_a_card_that_produces_nothing_when_it_cannot_buy():
@@ -77,7 +77,7 @@ def test_it_buys_before_it_flushes():
     province_card(session.game, "barren", seat=P1, gold_cost=2, index=0)
     province_card(session.game, "farm", seat=P1, gold_cost=3, index=1, gold_production=2)
 
-    assert _choice(session) == Recruit("farm")
+    assert _choice(session) == ActivateAbility("farm", RECRUIT)
 
 
 def test_it_flushes_the_lowest_id_when_several_are_barren():
@@ -116,7 +116,7 @@ def test_it_declines_legacy_the_board_already_beats():
     province_card(session.game, "onboard", seat=P1, gold_cost=3, gold_production=5)
     buried = holding("buried", owner=P1, keywords=("Legacy",), gold_production=2, gold_cost=3)
 
-    assert _choice(session, [buried]) == Recruit("onboard")
+    assert _choice(session, [buried]) == ActivateAbility("onboard", RECRUIT)
 
 
 def test_it_passes_when_its_provinces_hold_nothing_it_can_read():
@@ -150,7 +150,7 @@ def test_it_buys_a_personality_when_no_holding_is_on_offer():
     session = _dynasty_phase()
     _personality(session, "hero", gold_cost=4)
 
-    assert _choice(session) == Recruit("hero")
+    assert _choice(session) == ActivateAbility("hero", RECRUIT)
 
 
 def test_a_holding_still_outranks_an_affordable_personality():
@@ -158,7 +158,7 @@ def test_a_holding_still_outranks_an_affordable_personality():
     _personality(session, "hero", gold_cost=5, index=0)
     province_card(session.game, "farm", seat=P1, gold_cost=3, index=1, gold_production=1)
 
-    assert _choice(session) == Recruit("farm")
+    assert _choice(session) == ActivateAbility("farm", RECRUIT)
 
 
 def test_it_flushes_every_barren_card_it_could_not_buy():

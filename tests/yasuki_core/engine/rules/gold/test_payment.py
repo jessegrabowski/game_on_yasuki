@@ -1,10 +1,11 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
@@ -171,7 +172,7 @@ def test_a_payment_stranded_by_its_own_answer_raises():
             ],
             cost=7,
         )
-        session.act(PlayerId.P1, Recruit("tgt"))
+        session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
 
         with pytest.raises(RuntimeError, match="cannot make up the difference"):
             session.submit(PlayerId.P1, DecisionResponse(("sd",)))
@@ -215,7 +216,7 @@ def test_a_price_that_asks_a_question_keeps_its_decision():
             [holding("ap", owner=PlayerId.P1, printed_id="asking_probe", gold_production=2)],
             cost=4,
         )
-        session.act(PlayerId.P1, Recruit("tgt"))
+        session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
         session.submit(PlayerId.P1, DecisionResponse(("ap",)))
 
         assert isinstance(session.game.pending, Confirm)
@@ -249,7 +250,7 @@ def test_a_producer_that_grants_itself_nothing_is_not_made_to_pay():
             [holding("fg", owner=PlayerId.P1, printed_id="free_grant_probe", gold_production=2)],
             cost=5,
         )
-        session.act(PlayerId.P1, Recruit("tgt"))
+        session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
         session.submit(PlayerId.P1, DecisionResponse(("fg",)))
 
         probe = session.game.table.cards_by_id["fg"]
@@ -305,7 +306,7 @@ def test_producing_gold_fires_before_the_yield_is_read():
             [holding("gp", owner=PlayerId.P1, printed_id="granting_probe", gold_production=2)],
             cost=2,
         )
-        session.act(PlayerId.P1, Recruit("tgt"))
+        session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
         session.submit(PlayerId.P1, DecisionResponse(("gp",)))
 
         assert session.game.table.cards_by_id["tgt"] in session.game.table.battlefield.cards
@@ -343,7 +344,7 @@ def test_a_price_on_produced_gold_resolves_after_the_bow():
             [holding("sp", owner=PlayerId.P1, printed_id="self_pricing_probe", gold_production=2)],
             cost=2,
         )
-        session.act(PlayerId.P1, Recruit("tgt"))
+        session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
         session.submit(PlayerId.P1, DecisionResponse(("sp",)))
 
         table = session.game.table
@@ -383,7 +384,7 @@ def test_production_raises_its_events_once_per_producer():
             ],
             cost=5,
         )
-        session.act(PlayerId.P1, Recruit("tgt"))
+        session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
         session.submit(PlayerId.P1, DecisionResponse(("c1",)))
         session.submit(PlayerId.P1, DecisionResponse(("c2",)))
 
@@ -396,7 +397,7 @@ def test_production_raises_its_events_once_per_producer():
 
 def test_a_producer_announces_its_bow_alongside_its_yield():
     session = _dynasty_phase([holding("a", owner=PlayerId.P1, gold_production=5)], cost=5)
-    session.act(PlayerId.P1, Recruit("tgt"))
+    session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
     session.submit(PlayerId.P1, DecisionResponse(("a",)))
 
     announced = [
@@ -413,7 +414,7 @@ def test_a_single_producer_that_covers_the_cost_pays_in_one_step():
     """One answer is still enough when one producer covers the whole cost. The payment only comes
     back round while something is still owed."""
     session = _dynasty_phase([holding("a", owner=PlayerId.P1, gold_production=5)], cost=5)
-    session.act(PlayerId.P1, Recruit("tgt"))
+    session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
     session.submit(PlayerId.P1, DecisionResponse(("a",)))
 
     assert session.game.pending is None
@@ -428,7 +429,7 @@ def test_a_partial_payment_re_raises_for_the_remainder():
         ],
         cost=5,
     )
-    session.act(PlayerId.P1, Recruit("tgt"))
+    session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
     session.submit(PlayerId.P1, DecisionResponse(("a",)))
 
     again = session.game.pending
@@ -492,7 +493,7 @@ def test_a_trigger_fired_by_the_first_producer_changes_the_second_yield():
             # Inside the printed 2 + 1, because affordability cannot see what the window would give.
             cost=3,
         )
-        session.act(PlayerId.P1, Recruit("tgt"))
+        session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
         session.submit(PlayerId.P1, DecisionResponse(("a",)))  # a's window raises b to 4
 
         again = session.game.pending
@@ -529,7 +530,7 @@ def test_a_production_window_trigger_may_pause_for_a_decision():
             [holding("aw", owner=PlayerId.P1, printed_id="asking_window_probe", gold_production=2)],
             cost=2,
         )
-        session.act(PlayerId.P1, Recruit("tgt"))
+        session.act(PlayerId.P1, ActivateAbility("tgt", RECRUIT))
         session.submit(PlayerId.P1, DecisionResponse(("aw",)))
 
         asked = session.game.pending

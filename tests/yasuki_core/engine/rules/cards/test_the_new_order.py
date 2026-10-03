@@ -1,7 +1,8 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.session import EngineSession
@@ -61,7 +62,7 @@ def test_recruiting_plain_library_offers_its_look_as_a_response_rather_than_taki
     """The after-Recruit text is a Response the seat takes or declines, as with Courts of Otosan
     Uchi. Nothing has been looked at until it is taken."""
     session = _library_game()
-    session.act(P1, Recruit("library"))
+    session.act(P1, ActivateAbility("library", RECRUIT))
 
     pay(session, P1)
 
@@ -72,7 +73,7 @@ def test_recruiting_plain_library_offers_its_look_as_a_response_rather_than_taki
 
 
 def _recruit_and_respond(session: EngineSession) -> None:
-    session.act(P1, Recruit("library"))
+    session.act(P1, ActivateAbility("library", RECRUIT))
     pay(session, P1)
     session.act(P1, ActivateAbility("library"))
 
@@ -112,7 +113,7 @@ def test_plain_library_may_place_nothing():
 
 def test_plain_library_is_not_offered_for_an_arrival_no_recruit_brought():
     session = _library_game()
-    session.act(P1, Recruit("library"))
+    session.act(P1, ActivateAbility("library", RECRUIT))
     pay(session, P1)
 
     session.game.action_events[:] = [EnteredPlay("library")]
@@ -122,7 +123,7 @@ def test_plain_library_is_not_offered_for_an_arrival_no_recruit_brought():
 
 def test_plain_library_is_not_offered_after_another_recruit():
     session = _library_game()
-    session.act(P1, Recruit("library"))
+    session.act(P1, ActivateAbility("library", RECRUIT))
     pay(session, P1)
     session.act(P1, ActivateAbility("library"))
     session.submit(P1, DecisionResponse(()))

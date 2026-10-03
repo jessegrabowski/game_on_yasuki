@@ -3,6 +3,7 @@ import re
 
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
@@ -17,7 +18,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     Pass,
-    Recruit,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.modifiers import (
@@ -765,7 +765,7 @@ def test_an_action_is_worded_for_the_seat_that_must_answer_it():
     game = _responder_game()
 
     assert (
-        action_sequence.describe_action(game, Recruit("caravansary-P1"))
+        action_sequence.describe_action(game, ActivateAbility("caravansary-P1", RECRUIT))
         == "the Recruit of Caravansary"
     )
     assert (

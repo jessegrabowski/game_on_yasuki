@@ -3,17 +3,14 @@ from yasuki_core.engine.rules.abilities.registry import (
     ability_for,
     interrupt_for,
     is_printed_ability,
-    recruit_timing_of,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import STEP_ROUNDS, ActionRound
 from yasuki_core.engine.rules.vocabulary.actions import (
-    ACTION_TIMINGS,
     Action,
     ActivateAbility,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.game_pieces.prints import RulebookPrint
 
@@ -28,7 +25,7 @@ def action_round(game: GameState) -> ActionRound:
 
 def resolving_ability(game: GameState) -> Ability | None:
     """The ability the action now resolving was taken from, or None for an action taken from none:
-    a Recruit, a rulebook action, or no action at all."""
+    a rulebook action, or no action at all."""
     match game.action:
         case (
             ActivateAbility(card_id=card_id, ability_key=key)
@@ -73,17 +70,12 @@ def action_is_unstoppable(game: GameState) -> bool:
 def action_keywords(game: GameState) -> frozenset[str]:
     """The ability keywords of the action now resolving, such as Political, or none outside one.
 
-    A card's ability carries the keywords its registration declares, and so does a rulebook ability
-    on a proxy, so Lobby is Political. A rulebook action carries what the arc's ruleset says it is
-    designated.
+    A card's ability carries the keywords its registration declares, and so does a rulebook ability,
+    so Lobby is Political.
     """
     match game.action:
         case ActivateAbility() | PlayStrategy():
             ability = resolving_ability(game)
             return frozenset() if ability is None else ability.keywords
-        case Recruit(card_id=card_id):
-            added = recruit_timing_of(game, card_id)
-            as_rulebook = ACTION_TIMINGS[Recruit] in game.round.timings.active
-            return frozenset() if added is None or as_rulebook else added.keywords
         case _:
             return frozenset()

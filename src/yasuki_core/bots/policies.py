@@ -8,12 +8,12 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     Equip,
     Pass,
-    Recruit,
 )
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE, is_cycle
 from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.rulebook.legacy import is_legacy
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, is_recruit
 from yasuki_core.bots.agents import PayingAgent
 from yasuki_core.bots.hints import ABILITY_HINTS, optional_cost_answer
 from yasuki_core.bots.queries import (
@@ -118,9 +118,7 @@ class EconomicPolicy:
 
     def choose(self, view: GameView, actions: list[Action]) -> Action:
         purchases = [
-            action
-            for action in actions
-            if isinstance(action, Recruit) and not action.invest and not action.proclaim
+            action for action in actions if is_recruit(action) and action.ability_key == RECRUIT
         ]
         if not purchases:
             return next((action for action in actions if isinstance(action, Pass)), actions[0])
@@ -610,13 +608,15 @@ def _fewest_reaching(unspent: set[str], needed: int, view: GameView) -> set[str]
 def _worthwhile_ability(view: GameView, actions: list[Action]) -> ActivateAbility | None:
     """The lowest-id activation among ``actions`` whose hint says it is worth taking now, or None
     when none of them is modelled or any modelled one declines. A hint speaks for the card's own
-    ability, so the Dynasty Discard every Province card carries is left to :func:`~._flushable`."""
+    ability, so the Dynasty Discard every Province card carries is left to :func:`~._flushable` and
+    its Recruit to the purchase."""
     cards = identifiable(view)
     worthwhile = [
         action
         for action in actions
         if isinstance(action, ActivateAbility)
         and not is_dynasty_discard(action)
+        and not is_recruit(action)
         and (card := cards.get(action.card_id)) is not None
         and (hint := ABILITY_HINTS.get(card.printed_id)) is not None
         and hint.worth_activating(view, card)

@@ -1,8 +1,9 @@
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.idioms import register_entry, register_event_entry
 from yasuki_core.engine.rules.effects import PutIntoPlay, Recruit as RecruitEffect, RecruitCard
 from yasuki_core.engine.rules.triggers import resolve_effects
-from yasuki_core.engine.rules.vocabulary.actions import Equip, PlayStrategy, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Equip, PlayStrategy
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -95,14 +96,14 @@ def _dynasty_phase(*in_play: L5RCard, province: L5RCard) -> EngineSession:
 def test_a_second_unique_card_of_one_title_is_not_offered_for_recruit():
     session = _dynasty_phase(_titled_personality("held"), province=_titled_personality("dup"))
 
-    assert Recruit("dup") not in session.legal_actions(P1)
+    assert ActivateAbility("dup", RECRUIT) not in session.legal_actions(P1)
 
 
 def test_a_non_unique_card_in_play_withholds_nothing():
     in_play = _titled_personality("held", is_unique=False)
     session = _dynasty_phase(in_play, province=_titled_personality("dup"))
 
-    assert Recruit("dup") in session.legal_actions(P1)
+    assert ActivateAbility("dup", RECRUIT) in session.legal_actions(P1)
 
 
 def test_a_unique_card_of_another_title_is_offered():
@@ -110,7 +111,7 @@ def test_a_unique_card_of_another_title_is_offered():
         _titled_personality("held"), province=_titled_personality("other", title="probe_toshimoko")
     )
 
-    assert Recruit("other") in session.legal_actions(P1)
+    assert ActivateAbility("other", RECRUIT) in session.legal_actions(P1)
 
 
 def test_the_opponents_copy_withholds_nothing():
@@ -118,7 +119,7 @@ def test_the_opponents_copy_withholds_nothing():
         _titled_personality("theirs", owner=P2), province=_titled_personality("dup")
     )
 
-    assert Recruit("dup") in session.legal_actions(P1)
+    assert ActivateAbility("dup", RECRUIT) in session.legal_actions(P1)
 
 
 def test_an_experienced_version_is_refused_until_overlaying_exists():
@@ -129,7 +130,7 @@ def test_an_experienced_version_is_refused_until_overlaying_exists():
     )
     session = _dynasty_phase(_titled_personality("held"), province=experienced)
 
-    assert Recruit("hitomi_x") not in session.legal_actions(P1)
+    assert ActivateAbility("hitomi_x", RECRUIT) not in session.legal_actions(P1)
 
 
 def test_a_unique_experienced_version_may_join_a_non_unique_base():
@@ -139,7 +140,7 @@ def test_a_unique_experienced_version_may_join_a_non_unique_base():
     )
     session = _dynasty_phase(_titled_personality("held", is_unique=False), province=experienced)
 
-    assert Recruit("hitomi_x") in session.legal_actions(P1)
+    assert ActivateAbility("hitomi_x", RECRUIT) in session.legal_actions(P1)
 
 
 def test_a_unique_attachment_beside_its_copy_is_not_offered_to_equip():
@@ -217,7 +218,7 @@ def _singular(card_id: str, *, owner: PlayerId = P1, title: str = "probe_shadow"
 def test_a_singular_card_is_withheld_while_any_seat_has_a_copy_in_play():
     session = _dynasty_phase(_singular("theirs", owner=P2), province=_singular("dup"))
 
-    assert Recruit("dup") not in session.legal_actions(P1)
+    assert ActivateAbility("dup", RECRUIT) not in session.legal_actions(P1)
 
 
 def test_a_singular_card_of_another_title_is_offered():
@@ -225,7 +226,7 @@ def test_a_singular_card_of_another_title_is_offered():
         _singular("theirs", owner=P2), province=_singular("other", title="probe_truth")
     )
 
-    assert Recruit("other") in session.legal_actions(P1)
+    assert ActivateAbility("other", RECRUIT) in session.legal_actions(P1)
 
 
 def test_a_singular_event_is_not_offered_beside_its_copy():

@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from typing import get_args
 
@@ -20,7 +21,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Pass,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
@@ -76,7 +76,7 @@ def test_each_rulebook_action_reports_the_designator_the_cr_prints():
 
     assert legality.timings_of(game, cycle) == {ActionTiming.LIMITED}
     assert legality.timings_of(game, lobby) == {ActionTiming.OPEN}
-    assert legality.timings_of(game, Recruit("x")) == {ActionTiming.DYNASTY}
+    assert legality.timings_of(game, ActivateAbility("x", RECRUIT)) == {ActionTiming.DYNASTY}
     assert legality.timings_of(game, ActivateAbility("x", DYNASTY_DISCARD)) == {
         ActionTiming.DYNASTY
     }

@@ -2,8 +2,8 @@ import csv
 
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import is_recruit
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
 from yasuki_core.bots.agents import PayingAgent
 from yasuki_core.bots.policies import EconomicPolicy, PassPolicy
 from yasuki_core.sim.harness import Game, run_games, sample_rows, write_csv, write_rows
@@ -191,7 +191,7 @@ def test_a_run_records_the_metrics_it_was_given():
         turn_limit=3,
         seed=9,
         end_of_turn={"cleared": provinces_cleared},
-        actions={"bought": lambda action: isinstance(action, Recruit)},
+        actions={"bought": lambda action: is_recruit(action)},
     )
 
     assert played

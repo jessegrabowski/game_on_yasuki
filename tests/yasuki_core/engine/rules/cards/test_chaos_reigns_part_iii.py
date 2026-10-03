@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.costs import no_cost
@@ -13,7 +14,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     Pass,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
@@ -210,7 +210,7 @@ def _ikarichi_game(*, wind: str | None = None):
 def test_ikarichi_invests_two_gold_for_an_undead_outrider():
     session = _ikarichi_game()
 
-    session.act(P1, Recruit("ikarichi", invest=True))
+    session.act(P1, ActivateAbility("ikarichi", RECRUIT_WITH_INVEST))
     payment = session.game.pending
     pay(session, P1)
 
@@ -225,7 +225,7 @@ def test_the_kanpeki_dynasty_rides_him_in_for_nothing():
     the Invest reads the board rather than a printed number alone."""
     session = _ikarichi_game(wind=KANPEKI_DYNASTY)
 
-    session.act(P1, Recruit("ikarichi", invest=True))
+    session.act(P1, ActivateAbility("ikarichi", RECRUIT_WITH_INVEST))
     payment = session.game.pending
     pay(session, P1)
 
@@ -238,17 +238,17 @@ def test_the_kanpeki_dynasty_rides_him_in_for_nothing():
 def test_another_wind_leaves_the_invest_at_its_printed_price():
     session = _ikarichi_game(wind="some_other_wind")
 
-    session.act(P1, Recruit("ikarichi", invest=True))
+    session.act(P1, ActivateAbility("ikarichi", RECRUIT_WITH_INVEST))
 
     assert session.game.pending.amount == 7
 
 
-@pytest.mark.parametrize("invest", [False, True], ids=["plain", "invested"])
-def test_ikarichi_costs_two_honor_however_he_arrives(invest):
+@pytest.mark.parametrize("key", [RECRUIT, RECRUIT_WITH_INVEST], ids=["plain", "invested"])
+def test_ikarichi_costs_two_honor_however_he_arrives(key):
     """The Honor is his entry's price, not the Invest's, so it is charged once either way."""
     session = _ikarichi_game()
 
-    session.act(P1, Recruit("ikarichi", invest=invest))
+    session.act(P1, ActivateAbility("ikarichi", key))
     pay(session, P1)
 
     assert session.game.table.seats[P1].honor == -2
@@ -257,7 +257,7 @@ def test_ikarichi_costs_two_honor_however_he_arrives(invest):
 def test_ikarichi_replays_to_the_same_board():
     """His Invest mints a card mid-recruit, and a replayed game has to mint the same one."""
     session = _ikarichi_game()
-    session.act(P1, Recruit("ikarichi", invest=True))
+    session.act(P1, ActivateAbility("ikarichi", RECRUIT_WITH_INVEST))
     pay(session, P1)
 
     assert replay(session.log).table == session.game.table
@@ -485,7 +485,7 @@ def test_mayas_invest_refills_the_province_she_left_with_what_it_found():
     face-up." The Province she vacated is the one still short when the Invest resolves."""
     session = _maya_game()
 
-    session.act(P1, Recruit("maya", invest=True))
+    session.act(P1, ActivateAbility("maya", RECRUIT_WITH_INVEST))
     pay(session, P1)
     session.submit(P1, DecisionResponse(("kakita",)))
 
@@ -501,7 +501,7 @@ def test_mayas_invest_offers_only_the_personalities_her_card_names():
     to the ordinary refill rather than putting the wrong card in it."""
     session = _maya_game(courtier=False)
 
-    session.act(P1, Recruit("maya", invest=True))
+    session.act(P1, ActivateAbility("maya", RECRUIT_WITH_INVEST))
     pay(session, P1)
 
     assert session.game.pending is None
@@ -513,7 +513,7 @@ def test_mayas_invest_shuffles_the_dynasty_deck_it_read():
     session = _maya_game(filler=8)
     before = [card.id for card in session.game.table.decks[DeckKey(P1, Side.DYNASTY)].cards]
 
-    session.act(P1, Recruit("maya", invest=True))
+    session.act(P1, ActivateAbility("maya", RECRUIT_WITH_INVEST))
     pay(session, P1)
     session.submit(P1, DecisionResponse(("kakita",)))
 

@@ -15,13 +15,15 @@ yasuki_core.engine.rules.rulebook.recruit
 
     announce_recruit
     apply_fortification_province
-    apply_invest_amount
     bring_into_play
     effects_after_entering_play
+    is_recruit
     proclaim_gain_effects
     proclamation_effects
-    recruit
     recruit_effects
+    recruit_from_its_province
+    recruit_gold
+    recruitable
     resolve_recruit
 
 .. automodule:: yasuki_core.engine.rules.rulebook.recruit

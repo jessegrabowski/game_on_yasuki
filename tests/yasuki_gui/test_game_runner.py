@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT_WITH_INVEST, is_recruit
 from yasuki_core.engine.players import PlayerId
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_INTERRUPT, COURAGE_LABEL
@@ -50,7 +51,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
@@ -858,7 +858,7 @@ def test_a_decision_over_amounts_is_not_mistaken_for_a_search():
     """A variable Invest asks for a number, so its candidates are amounts rather than card ids.
     Looking them up as cards would raise instead of leaving the prompt to answer itself."""
     runner_ = _dynasty_runner_with_producer("rh", "rebuilt_harbor", gold_cost=1)
-    runner_.act(Recruit("rh", invest=True))
+    runner_.act(ActivateAbility("rh", RECRUIT_WITH_INVEST))
 
     assert runner_.pending.candidates == ("1", "2", "3")  # amounts, not cards
     assert runner_.search_view() is None
@@ -1039,7 +1039,7 @@ class _AlwaysRecruits:
     name = "always-recruits"
 
     def choose(self, view, actions):
-        return next((action for action in actions if isinstance(action, Recruit)), PASS)
+        return next((action for action in actions if is_recruit(action)), PASS)
 
 
 class _NeverPasses:

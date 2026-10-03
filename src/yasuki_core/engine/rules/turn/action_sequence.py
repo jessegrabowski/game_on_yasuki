@@ -17,7 +17,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.action_record import is_printed_action
 from yasuki_core.engine.rules.battle import resolution
@@ -39,7 +38,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseFortificationProvince,
     ChooseInterruptEffect,
     ChooseInterruptTarget,
-    ChooseInvestAmount,
     ChooseOption,
     ChoosePayment,
     Confirm,
@@ -48,11 +46,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, equip
 from yasuki_core.engine.rules.gold.production import produce_gold
-from yasuki_core.engine.rules.rulebook.recruit import (
-    apply_fortification_province,
-    apply_invest_amount,
-    recruit,
-)
+from yasuki_core.engine.rules.rulebook.recruit import apply_fortification_province, is_recruit
 from yasuki_core.engine.rules.interrupts import (
     apply_interrupt_effect,
     apply_interrupt_target,
@@ -79,7 +73,6 @@ from yasuki_core.engine.rules.rulebook import courage_and_honor, dishonor, dynas
 # How each action reads when a Response Step names the thing it answers. A Response is taken against
 # an action, so the wording is the action's rather than any one effect it had.
 _ACTION_WORDING: dict[type, str] = {
-    Recruit: "the Recruit of",
     Equip: "the Equip of",
     ActivateAbility: "the ability on",
     PlayStrategy: "the Strategy",
@@ -89,7 +82,10 @@ _ACTION_WORDING: dict[type, str] = {
 
 def describe_action(game: GameState, action: Action) -> str:
     """``action`` worded for a player: "the Recruit of Courts of Otosan Uchi"."""
-    wording = _ACTION_WORDING.get(type(action), type(action).__name__)
+    if is_recruit(action):
+        wording = "the Recruit of"
+    else:
+        wording = _ACTION_WORDING.get(type(action), type(action).__name__)
     card = game.table.cards_by_id.get(getattr(action, "card_id", ""))
     return f"{wording} {card.name}" if card is not None else wording
 
@@ -121,8 +117,6 @@ def perform(game: GameState, action: Action) -> None:
     match action:
         case Pass():
             yield_priority(game, passed=True)
-        case Recruit(card_id=card_id, invest=invest, proclaim=proclaim):
-            recruit(game, card_id, invest, proclaim=proclaim)
         case Equip(card_id=card_id, invest=invest):
             equip(game, card_id, invest=invest)
         case ActivateAbility(card_id=card_id, ability_key=ability_key):
@@ -198,8 +192,6 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_card_choice(game, request, response)
         case Confirm():
             _apply_card_choice(game, request, response)
-        case ChooseInvestAmount():
-            apply_invest_amount(game, request, response)
         case AssignUnits():
             resolution.apply_assignment(game, request, response)
         case ChooseBattlefield():
@@ -239,16 +231,14 @@ def cancel(game: GameState) -> None:
         case ChoosePayment(target_id=target_id):
             game.announced_from_hand -= {target_id}
             _cancel_payment(game)
-        case ChooseInvestAmount():
-            pass  # the recruit is not yet announced; nothing to undo
         case _:
             raise ValueError(f"{type(request).__name__} cannot be canceled")
     game.pending = None
 
 
 def _cancel_payment(game: GameState) -> None:
-    """Drop the work the canceled payment stands in front of, whatever queued it: a Recruit's
-    :class:`~.ResolveRecruit` or a rulebook cost's :class:`~.ApplyEffects`.
+    """Drop the work the canceled payment stands in front of, whatever queued it: a Recruit
+    effect's :class:`~.ResolveRecruit` or a rulebook cost's :class:`~.ApplyEffects`.
 
     The item is always the top of the stack: announcing a cost pushes exactly one, and the engine is
     paused on the payment from that moment until it is answered or canceled, so nothing can have
