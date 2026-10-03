@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     crimson_and_jade,
     dawn_of_the_empire,
     embers_of_war,
+    emperor_edition,
     empire_at_war,
     evil_portents,
     gates_of_chaos,
