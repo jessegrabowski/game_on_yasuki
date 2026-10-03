@@ -197,6 +197,36 @@ def test_fields_of_slaughter_enters_play_in_the_engage_segment():
     assert location_of(game.table, game.table.cards_by_id["fields"]).battlefield == 0
 
 
+# --- Imperial Treasurer's Outpost ---
+
+
+def _treasurers_outpost(*, p2_provinces: int) -> EngineSession:
+    """P1 holds the Outpost and no Province, beside P2's ``p2_provinces``."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("outpost", printed_id="imperial_treasurers_outpost"))
+    for index in range(p2_provinces):
+        province_card(state, f"def-prov{index}", seat=P2, index=index)
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("drawn", P1))]
+    return EngineSession.start(state, P1)
+
+
+def test_imperial_treasurers_outpost_draws_a_card_with_compassion():
+    session = _treasurers_outpost(p2_provinces=1)
+
+    session.act(P1, ActivateAbility("outpost"))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["drawn"]
+
+
+def test_imperial_treasurers_outpost_draws_nothing_without_compassion():
+    session = _treasurers_outpost(p2_provinces=0)
+
+    session.act(P1, ActivateAbility("outpost"))
+
+    assert session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards == []
+
+
 # --- Kitsu Hayako ---
 
 
