@@ -40,9 +40,10 @@ end in a question of its own: `SelectAbilityTarget` resumes by setting `pending`
 
 What is on the stack, and what each continues:
 
-- `ResolveRecruit`, `EnterPlay` and `FinishRecruit` in `rulebook/recruit.py`: the three parts of
-  a Recruit after its payment, the card's before-entry effects, its entry, and what follows the
-  entry. `SelectEquipTarget` in `rulebook/equip.py` is an Equip's target choice, deferred behind
+- `ResolveRecruit` in `rulebook/recruit.py`: a Recruit after its payment, which hands the card's
+  before-entry effects and a {class}`~.effects.Recruit` effect to the action's Interrupt step. The
+  effect's arrival is followed by its Sincerity tokens removed, its Invest, a Proclaim's gain and
+  the refill. `SelectEquipTarget` in `rulebook/equip.py` is an Equip's target choice, deferred behind
   its payment, and `FinishInvest` its Invest, deferred behind the announcement that it entered
   play.
 - `ResolveStrategy` and `DiscardPlayed` in `abilities/strategy.py`: a played Strategy's ability,
@@ -87,8 +88,9 @@ effect is how a card borrows the whole sequence.
 ## The modules
 
 `rulebook/recruit.py` is the longest and the one to read first: {func}`~.recruit`,
-{func}`~.announce_recruit`, {func}`~.apply_invest_amount`, {func}`~.resolve_recruit`,
-{func}`~.apply_fortification_province` and {func}`~.finish_recruit` are the steps in order.
+{func}`~.announce_recruit`, {func}`~.apply_invest_amount`, {func}`~.resolve_recruit` and
+{func}`~.apply_fortification_province` are the steps in order, and {func}`~.bring_into_play` and
+{func}`~.effects_after_entering_play` are what the {class}`~.effects.Recruit` effect does.
 
 `rulebook/equip.py` carries the attachment rules, including {func}`~.may_attach`,
 {func}`~.equip_targets` and {func}`~.creation_targets`, which judges a token template rather than

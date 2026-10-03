@@ -490,6 +490,19 @@ def test_the_opponent_is_offered_the_honor_interrupt_and_the_gain_shrinks():
     assert [card.id for card in discard.cards] == ["P2-honor0"]
 
 
+def test_the_recruits_interrupt_step_opens_before_the_card_enters_play():
+    session = _proclaim_session({P2: 1})
+
+    samurai = session.game.table.cards_by_id["P1-samurai"]
+    assert _asked(session) is P2
+    assert samurai not in session.game.table.battlefield.cards
+
+    session.act(P2, Pass())
+
+    assert samurai in session.game.table.battlefield.cards
+    assert _honor(session, P1) == PERSONAL_HONOR
+
+
 def test_naming_the_card_asks_for_the_adjustment_before_anything_moves():
     session = _proclaim_session({P2: 1})
 

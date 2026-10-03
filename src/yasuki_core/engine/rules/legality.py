@@ -42,7 +42,7 @@ from yasuki_core.engine.rules.gold.discounts import (
     effective_recruit_discount,
 )
 from yasuki_core.engine.rules.gold.producers import gold_reach
-from yasuki_core.engine.rules.state import GameState, used_this_turn
+from yasuki_core.engine.rules.state import GameState, seat_once_key, used_this_turn
 from yasuki_core.engine.rules.turn.structure import ActionRound
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
 from yasuki_core.engine.table import DeckKey, location_of, ZoneRole
@@ -360,10 +360,7 @@ def recruit_cost(game: GameState, card: L5RCard) -> int:
     return max(0, cost)
 
 
-def proclaim_key(seat: PlayerId, turn: int) -> str:
-    """The once-per-turn usage key for a seat's Proclaim, scoped to the turn so it resets each turn
-    without clearing ``GameState.once_per``."""
-    return f"proclaim:{seat.name}:{turn}"
+PROCLAIM = "proclaim"
 
 
 def can_proclaim(game: GameState, card: L5RCard) -> bool:
@@ -376,7 +373,7 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
         return False
     if seat_alignments(game, seat).isdisjoint(card_alignments(card)):
         return False
-    return not game.has_used(proclaim_key(seat, game.turn))
+    return not game.has_used(seat_once_key(seat, PROCLAIM, game.turn))
 
 
 def is_legacy_card(game: GameState, card: L5RCard) -> bool:

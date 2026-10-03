@@ -465,7 +465,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
                 continue
             if isinstance(effect, Attributed):
-                # Stashed beneath it, so the effects held for the same moment keep their order.
+                # Stashed beneath it, so the effects around it keep their order.
                 _stash(game, frames)
                 game.stack.append(ApplyEffects((effect.effect,), effect.provenance))
                 return

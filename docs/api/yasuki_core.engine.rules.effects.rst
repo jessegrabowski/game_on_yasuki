@@ -72,6 +72,7 @@ yasuki_core.engine.rules.effects
     PlaceOnDeck
     PutIntoPlay
     RangedAttack
+    Recruit
     RecruitCard
     RefillProvince
     Rehonor

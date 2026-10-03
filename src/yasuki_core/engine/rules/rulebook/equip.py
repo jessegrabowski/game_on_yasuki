@@ -5,7 +5,7 @@ from collections.abc import Callable
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.invest import equip_invest_amount, finish_invest
+from yasuki_core.engine.rules.abilities.invest import equip_invest_amount, invest_effects
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseEquipTarget, DecisionResponse
@@ -265,7 +265,8 @@ class FinishInvest:
     invest_amount: int | None
 
     def resume(self, game: GameState) -> None:
-        finish_invest(game, game.table.cards_by_id[self.card_id], self.invest_amount)
+        card = game.table.cards_by_id[self.card_id]
+        triggers.resolve_effects(game, invest_effects(game, card, self.invest_amount))
 
 
 def is_spell(card: L5RCard) -> bool:

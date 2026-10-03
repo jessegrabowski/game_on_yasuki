@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     AttackEffect,
     Effect,
+    Recruit,
     SpendOncePerTurn,
     Simultaneously,
     Then,
@@ -51,7 +52,8 @@ def forecast(
     """What an action with ``provenance`` handing ``effects`` to step E is about to do, as the
     Interrupt step offers it: the effects in order, the contents of a ``Then`` or a
     :class:`~.Simultaneously` group where it stands, an ability's effects behind the
-    :class:`~.ResolveAbility` that targets them, and an attack's outcome behind the attack when it
+    :class:`~.ResolveAbility` that targets them, a Proclaim's Honor gain behind the
+    :class:`~.effects.Recruit` it follows, and an attack's outcome behind the attack when it
     reaches on the board as it stands. An effect that is nothing to interrupt, an Honor change of
     zero, a question the action asks or one a negation will negate, is left out, and what a choice
     resolver produces later is not foreseeable and is not offered. A ``once`` negation leaves out
@@ -71,6 +73,8 @@ def _foreseen(
         stands = as_modified(game, effect)
         if isinstance(stands, ResolveAbility | AttackEffect):
             yield from _foreseen(game, stands.follow_on(game), provenance, spent)
+        elif isinstance(stands, Recruit):
+            yield from _foreseen(game, stands.proclamation(game), provenance, spent)
 
 
 def as_modified(game: GameState, effect: Effect) -> Effect:

@@ -1,6 +1,6 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.idioms import register_entry, register_event_entry
-from yasuki_core.engine.rules.effects import PutIntoPlay, RecruitCard
+from yasuki_core.engine.rules.effects import PutIntoPlay, Recruit as RecruitEffect, RecruitCard
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.vocabulary.actions import Equip, PlayStrategy, Recruit
 from yasuki_core.engine.session import EngineSession
@@ -185,6 +185,17 @@ def test_recruit_card_of_a_duplicate_asks_no_payment():
 
     assert game.pending is None
     assert "dup" not in {card.id for card in game.table.battlefield.cards}
+
+
+def test_a_recruit_of_a_duplicate_neither_enters_nor_queues_what_follows_entry():
+    session = _dynasty_phase(_titled_personality("held"), province=_titled_personality("dup"))
+    game = session.game
+    province = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+
+    resolve_effects(game, [RecruitEffect("dup", from_province=province, proclaim=True)])
+
+    assert [card.id for card in game.table.zones[province].cards] == ["dup"]
+    assert not game.stack
 
 
 def test_an_entry_from_hand_is_withheld_beside_its_copy():

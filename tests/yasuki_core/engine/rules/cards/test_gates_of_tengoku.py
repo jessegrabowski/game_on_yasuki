@@ -37,7 +37,8 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.triggers import TriggerContext
 from yasuki_core.engine.rules.vocabulary.game_events import Bowed
-from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
+from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain_effects
+from yasuki_core.engine.rules.triggers import resolve_action_effects
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
@@ -549,7 +550,7 @@ def test_proclaiming_aitso_asks_whether_to_gain_three_instead():
     game = two_seat_game()
     aitso = put_in_play(game, personality("aitso", printed_id=AITSO, personal_honor=0))
 
-    finish_recruit(game, aitso.id, None, proclaim=True)
+    resolve_action_effects(game, proclaim_gain_effects(game, aitso))
 
     assert isinstance(game.pending, Confirm)
     assert game.pending.prompt() == "Gain 3 Honor from Proclaiming instead of 0?"
@@ -605,7 +606,7 @@ def test_declining_the_alternative_proclaims_aitso_for_her_personal_honor():
     game = two_seat_game()
     aitso = put_in_play(game, personality("aitso", printed_id=AITSO, personal_honor=4))
 
-    finish_recruit(game, aitso.id, None, proclaim=True)
+    resolve_action_effects(game, proclaim_gain_effects(game, aitso))
     submit(game, DecisionResponse())
 
     assert game.table.seats[P1].honor == 4

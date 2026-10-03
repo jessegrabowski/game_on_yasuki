@@ -11,6 +11,7 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.rulebook import recruit
+from yasuki_core.engine.rules.triggers import resolve_action_effects
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
@@ -113,7 +114,7 @@ def test_a_proclaimed_recruit_announces_its_honor_gain(reacting):
     seen: list[HonorChanged] = []
     reacting(HonorChanged, "honor_probe", lambda ctx: seen.append(ctx.event) or [])
 
-    recruit.finish_recruit(game, samurai.id, None, proclaim=True)
+    resolve_action_effects(game, recruit.proclaim_gain_effects(game, samurai))
 
     assert seen == [HonorChanged(PlayerId.P1, 3)]
 
@@ -126,7 +127,7 @@ def test_proclaiming_a_dishonorable_personality_for_his_capped_honor_rehonors_no
     samurai = put_in_play(game.table, personality("P1-samurai", personal_honor=3))
     samurai.dishonor()
 
-    recruit.finish_recruit(game, samurai.id, None, proclaim=True)
+    resolve_action_effects(game, recruit.proclaim_gain_effects(game, samurai))
 
     assert samurai.dishonorable
     assert game.table.seats[PlayerId.P1].honor == 0
@@ -142,7 +143,7 @@ def test_proclaiming_a_dishonorable_personality_for_another_amount_rehonors_him_
     samurai.dishonor()
     recruit.proclaim_gain("proclaim_probe")(lambda game, card: 3)
     try:
-        recruit.finish_recruit(game, samurai.id, None, proclaim=True)
+        resolve_action_effects(game, recruit.proclaim_gain_effects(game, samurai))
         submit(game, DecisionResponse((samurai.id,)))
     finally:
         recruit.PROCLAIM_GAINS.pop("proclaim_probe", None)

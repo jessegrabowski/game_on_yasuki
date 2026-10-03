@@ -5,7 +5,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.invest import finish_invest
+from yasuki_core.engine.rules.abilities.invest import invest_effects
 from yasuki_core.engine.rules.abilities.registry import (
     EntryState,
     effects_before_entering_play,
@@ -13,20 +13,29 @@ from yasuki_core.engine.rules.abilities.registry import (
     invest_amounts,
 )
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
-from yasuki_core.engine.rules.effects import Ask, Effect, GainHonor
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Ask,
+    Attributed,
+    Effect,
+    GainHonor,
+    Recruit,
+    RefillProvince,
+    SpendSeatOncePerTurn,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseFortificationProvince,
     ChooseInvestAmount,
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, GameEvent
 from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.legality import proclaim_key, recruit_cost
-from yasuki_core.engine.rules.turn.provinces import defer_refill
+from yasuki_core.engine.rules.legality import PROCLAIM, recruit_cost
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -147,47 +156,75 @@ def resolve_recruit(
     renew: bool = False,
     proclaim: bool = False,
 ) -> None:
-    """Resolve what the card does before entering play while it still stands in its Province, and
-    queue its entry behind that, so a question the cascade asks is answered before it arrives."""
+    """Hand the Recruit's effects to the action once its cost is paid, held at the Interrupt step
+    (CR, Action Sequence step D). A Fortification Recruited from anywhere but a Province asks its
+    controller which Province it will attach to first (CR, Fortification)."""
     card = game.table.cards_by_id[card_id]
-    game.stack.append(EnterPlay(seat, card_id, invest_amount, renew, proclaim))
-    triggers.resolve_effects(game, effects_before_entering_play(game, card))
-
-
-@dataclass(frozen=True, slots=True)
-class EnterPlay:
-    """Bring a Recruited card from its Province into play in its entry state and refill the vacated
-    Province. Queued by :func:`~.resolve_recruit` behind the card's before-entry effects.
-
-    Attributes
-    ----------
-    seat : PlayerId
-        The recruiting seat.
-    card_id : str
-        The card leaving its province for play.
-    invest_amount : int or None
-        The gold Invested while recruiting, or None when the recruit took no Invest.
-    renew : bool
-        Whether to refill the vacated province face-up on top of the card's own Renew keyword.
-    proclaim : bool
-        Whether the recruit is Proclaimed.
-    """
-
-    seat: PlayerId
-    card_id: str
-    invest_amount: int | None
-    renew: bool
-    proclaim: bool
-
-    def resume(self, game: GameState) -> None:
-        enter_play(
-            game,
-            seat=self.seat,
-            card_id=self.card_id,
-            invest_amount=self.invest_amount,
-            renew=self.renew,
-            proclaim=self.proclaim,
+    from_province = province_key_holding(game, seat, card_id)
+    if from_province is None and keywords.FORTIFICATION in effective_keywords(game, card):
+        game.pending = ChooseFortificationProvince(
+            seat=seat,
+            candidates=_province_slots(game, seat),
+            source_card_id=card_id,
+            invest_amount=invest_amount,
+            proclaim=proclaim,
         )
+        return
+    arrival = Recruit(
+        card_id,
+        from_province=from_province,
+        invest_amount=invest_amount,
+        renew=renew,
+        proclaim=proclaim,
+    )
+    triggers.resolve_action_effects(game, recruit_effects(game, arrival))
+
+
+def recruit_effects(game: GameState, arrival: Recruit) -> list[Effect]:
+    """What a Recruit resolves: the card's own effects before it enters play, while it still stands
+    where it is, then ``arrival`` once their cascade has settled. The card's own effects are its
+    trait's rather than the action's, so they are not open to the Interrupt step (CR, Traits)."""
+    card = game.table.cards_by_id[arrival.card_id]
+    before = effects_before_entering_play(game, card)
+    return [*(Attributed(effect, Provenance()) for effect in before), arrival]
+
+
+def _province_slots(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """Every one of ``seat``'s Provinces, named by slot. A Province is a slot rather than the card
+    standing in it, so an empty one is as attachable as any other (CR, Fortification)."""
+    return tuple(key.token for key, _ in province_zones(game, seat))
+
+
+def apply_fortification_province(
+    game: GameState, request: ChooseFortificationProvince, response: DecisionResponse
+) -> None:
+    """Recruit the waiting Fortification, attaching it to the Province the seat named."""
+    arrival = Recruit(
+        request.source_card_id,
+        from_province=None,
+        fortifies=ZoneKey.from_token(response.choices[0]),
+        invest_amount=request.invest_amount,
+        proclaim=request.proclaim,
+    )
+    triggers.resolve_action_effects(game, recruit_effects(game, arrival))
+
+
+def bring_into_play(game: GameState, arrival: Recruit) -> list[GameEvent]:
+    """Move the Recruited card into play in its entry state, a Fortification attached to its
+    Province, and announce that it was Recruited."""
+    card = game.table.cards_by_id[arrival.card_id]
+    # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
+    # rather than dropping it at the origin.
+    ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
+    _arrive(card, entry_state_of(game, card))
+    if keywords.FORTIFICATION in effective_keywords(game, card):
+        province = arrival.fortifies if arrival.from_province is None else arrival.from_province
+        if province is None:
+            raise ValueError(
+                f"{card.id} is a Fortification Recruited with no Province to attach to"
+            )
+        ops.attach_to_province(game.table, card, province)
+    return [EnteredPlay(card.id, recruited=True)]
 
 
 def _arrive(card: L5RCard, state: EntryState) -> None:
@@ -201,97 +238,34 @@ def _arrive(card: L5RCard, state: EntryState) -> None:
         card.rehonor()
 
 
-def enter_play(
-    game: GameState,
-    seat: PlayerId,
-    card_id: str,
-    invest_amount: int | None,
-    renew: bool,
-    proclaim: bool,
-) -> None:
-    card = game.table.cards_by_id[card_id]
-    # Read the Province before the move; afterwards no Province holds the card to look it up by.
-    province_key = province_key_holding(game, seat, card_id)
-    # Enter unplaced so the client clusters the new card into the seat's home row by the stronghold,
-    # rather than dropping it at the origin.
-    ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
-    _arrive(card, entry_state_of(game, card))
-    fortification = keywords.FORTIFICATION in effective_keywords(game, card)
-    if province_key is not None:
-        if fortification:
-            ops.attach_to_province(game.table, card, province_key)
-        # Renew is read once the card has entered play, which is when the keyword speaks.
-        renews = renew or keywords.RENEW in effective_keywords(game, card)
-        defer_refill(game, province_key, face_up=renews)
-    elif fortification:
-        # Brought in from somewhere other than a Province, so its controller picks one (CR,
-        # Fortification). Nothing is told it arrived until it has a Province to have arrived at.
-        game.pending = ChooseFortificationProvince(
-            seat=seat,
-            candidates=_province_slots(game, seat),
-            source_card_id=card_id,
-            invest_amount=invest_amount,
-            proclaim=proclaim,
-        )
-        return
-    _announce_entering_play(game, card_id, invest_amount, proclaim)
+def effects_after_entering_play(game: GameState, arrival: Recruit) -> list[Effect]:
+    """What a Recruited card's arrival is followed by: its Sincerity tokens removed (Sincerity
+    keyword), its Invest, a Proclaim's Honor gain, and the refill of the Province it left.
 
-
-def _province_slots(game: GameState, seat: PlayerId) -> tuple[str, ...]:
-    """Every one of ``seat``'s Provinces, named by slot. A Province is a slot rather than the card
-    standing in it, so an empty one is as attachable as any other (CR, Fortification)."""
-    return tuple(key.token for key, _ in province_zones(game, seat))
-
-
-def apply_fortification_province(
-    game: GameState, request: ChooseFortificationProvince, response: DecisionResponse
-) -> None:
-    """Attach the waiting Fortification to the Province the seat named, then let it arrive."""
-    card = game.table.cards_by_id[request.source_card_id]
-    province = ZoneKey.from_token(response.choices[0])
-    ops.attach_to_province(game.table, card, province)
-    _announce_entering_play(game, card.id, request.invest_amount, request.proclaim)
-
-
-@dataclass(frozen=True, slots=True)
-class FinishRecruit:
-    """The recruit steps that follow a card entering play: clearing its Sincerity tokens, resolving
-    a Proclaim's honor gain, and applying any Invest effect. Deferred behind the ``EnteredPlay``
-    cascade so a trait that pauses on entry (a Sincerity seed choice) resolves before them.
-
-    Attributes
-    ----------
-    card_id : str
-        The card that entered play.
-    invest_amount : int or None
-        The gold Invested while recruiting, driving the Invest effect, or None when the recruit took
-        no Invest. A free Invest is an amount of zero, not None.
-    proclaim : bool
-        Whether the recruit was Proclaimed, so entry claims the once-per-turn Proclaim and adds the
-        Personality's Personal Honor to its seat's Family Honor. Default False.
+    The Invest comes before the Proclaim's gain, which can pause for an Honor Interrupt. The two
+    never combine, since a Recruit cannot both Invest and Proclaim.
     """
+    card = game.table.cards_by_id[arrival.card_id]
+    effects: list[Effect] = []
+    held = card.counters.get(SINCERITY.key, 0)
+    if held:
+        effects.append(AdjustCounter(card.id, SINCERITY, -held))
+    effects.extend(invest_effects(game, card, arrival.invest_amount))
+    effects.extend(proclamation_effects(game, arrival))
+    if arrival.from_province is not None:
+        # Renew is read once the card has entered play, which is when the keyword speaks.
+        renews = arrival.renew or keywords.RENEW in effective_keywords(game, card)
+        effects.append(RefillProvince(arrival.from_province, face_up=renews))
+    return effects
 
-    card_id: str
-    invest_amount: int | None
-    proclaim: bool = False
 
-    def resume(self, game: GameState) -> None:
-        finish_recruit(game, self.card_id, self.invest_amount, proclaim=self.proclaim)
-
-
-def _announce_entering_play(
-    game: GameState, card_id: str, invest_amount: int, proclaim: bool
-) -> None:
-    """The tail every recruited card shares: make the board legal, queue the post-entry steps, and
-    announce the arrival."""
-    # A card reaching the battlefield can make the board illegal, and the board is made legal
-    # before anything is told the card arrived. A trigger that reads a state the rules say cannot
-    # exist is deciding on a board that never legally existed.
-    # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first,
-    # and the announcement so a question the settling asks is answered before it.
-    game.stack.append(FinishRecruit(card_id, invest_amount, proclaim))
-    game.stack.append(triggers.AnnounceEvent(EnteredPlay(card_id, recruited=True)))
-    triggers.enforce_state_based_actions(game)
+def proclamation_effects(game: GameState, arrival: Recruit) -> list[Effect]:
+    """A Proclaimed Recruit's claim on the seat's once-per-turn Proclaim and its Honor gain, or
+    nothing for a Recruit not Proclaimed."""
+    if not arrival.proclaim:
+        return []
+    card = game.table.cards_by_id[arrival.card_id]
+    return [SpendSeatOncePerTurn(card.owner, PROCLAIM), *proclaim_gain_effects(game, card)]
 
 
 ProclaimGain = Callable[[GameState, L5RCard], int]
@@ -340,26 +314,3 @@ def _resolve_proclaim_gain(
         else effective_personal_honor(game, card)
     )
     return [GainHonor(seat, amount, personalities=(card.id,))]
-
-
-def finish_recruit(
-    game: GameState, card_id: str, invest_amount: int | None, proclaim: bool = False
-) -> None:
-    card = game.table.cards_by_id[card_id]
-    _clear_sincerity(game, card)
-    # The Invest before the Proclaim: the Proclaim's gain can pause for an Honor Interrupt, and
-    # nothing may run behind a paused cascade. The two never combine, since ``recruit`` refuses
-    # Invest with Proclaim, so the order changes nothing a card can observe.
-    finish_invest(game, card, invest_amount)
-    if proclaim:
-        game.use_once(proclaim_key(card.owner, game.turn))
-        triggers.resolve_action_effects(game, proclaim_gain_effects(game, card))
-
-
-def _clear_sincerity(game: GameState, card: L5RCard) -> None:
-    """Remove a card's Sincerity tokens once it has entered play (Sincerity keyword), and announce
-    the removal, which is when a Sincerity trait "for each token removed" resolves."""
-    held = card.counters.get(SINCERITY.key, 0)
-    if held:
-        card.adjust_counter(SINCERITY.key, -held)
-        game.stack.append(triggers.AnnounceEvent(CounterChanged(card.id, SINCERITY, -held)))
