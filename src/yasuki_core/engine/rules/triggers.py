@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     ConditionFulfilled,
     Destroyed,
+    EnteredPlay,
     GameEvent,
     names_both_edges,
     opens_a_window,
@@ -1044,6 +1045,14 @@ def action_did[E: GameEvent](game: GameState, kind: type[E]) -> tuple[E, ...]:
     Holding" are facts about the action rather than about the board it leaves behind.
     """
     return tuple(event for event in game.action_events if isinstance(event, kind))
+
+
+def action_recruited(game: GameState, card_id: str) -> bool:
+    """Whether the action now resolving Recruited ``card_id``, as "after the action Recruits X"
+    reads, rather than putting it into play some other way."""
+    return any(
+        event.recruited and event.card_id == card_id for event in action_did(game, EnteredPlay)
+    )
 
 
 def resolve_delayed(game: GameState, moment: Moment) -> None:

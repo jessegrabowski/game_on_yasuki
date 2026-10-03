@@ -115,7 +115,13 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Straightened,
     TurnBoundary,
 )
-from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.triggers import (
+    TriggerContext,
+    action_did,
+    action_recruited,
+    choice_resolver,
+    on,
+)
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -332,7 +338,7 @@ def _courts_of_otosan_uchi_targets(game: GameState, source: L5RCard) -> list[str
     The Courtier this Holding's own Invest buys is among them: a Response is taken after the action
     has finished resolving, and the Invest resolves inside it.
     """
-    if not any(event.card_id == source.id for event in action_did(game, EnteredPlay)):
+    if not action_recruited(game, source.id):
         return []
     return list(_courts_of_otosan_uchi_courtiers(game, source.owner))
 

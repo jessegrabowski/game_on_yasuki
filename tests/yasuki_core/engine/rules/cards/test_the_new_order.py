@@ -3,6 +3,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -107,6 +108,16 @@ def test_plain_library_may_place_nothing():
 
     assert _fate_deck(session) == ["a", "b", "c", "d"]
     assert session.game.look is None
+
+
+def test_plain_library_is_not_offered_for_an_arrival_no_recruit_brought():
+    session = _library_game()
+    session.act(P1, Recruit("library"))
+    pay(session, P1)
+
+    session.game.action_events[:] = [EnteredPlay("library")]
+
+    assert ActivateAbility("library") not in session.legal_actions(P1)
 
 
 def test_plain_library_is_not_offered_after_another_recruit():

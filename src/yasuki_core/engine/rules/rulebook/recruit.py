@@ -290,7 +290,7 @@ def _announce_entering_play(
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first,
     # and the announcement so a question the settling asks is answered before it.
     game.stack.append(FinishRecruit(card_id, invest_amount, proclaim))
-    game.stack.append(triggers.AnnounceEvent(EnteredPlay(card_id)))
+    game.stack.append(triggers.AnnounceEvent(EnteredPlay(card_id, recruited=True)))
     triggers.enforce_state_based_actions(game)
 
 

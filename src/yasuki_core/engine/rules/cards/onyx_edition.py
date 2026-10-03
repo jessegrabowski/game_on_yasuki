@@ -78,7 +78,7 @@ from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
-from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.triggers import TriggerContext, action_recruited, choice_resolver, on
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import (
@@ -889,7 +889,7 @@ register_ability(
 def _training_court_targets(game: GameState, source: L5RCard) -> list[str]:
     """The controller's token-less Sincerity cards still in a Province, once the action just
     resolved was the one that Recruited this Holding."""
-    if not any(event.card_id == source.id for event in action_did(game, EnteredPlay)):
+    if not action_recruited(game, source.id):
         return []
     return sincerity_seed_targets(game, source.owner)
 

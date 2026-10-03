@@ -17,9 +17,8 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import action_did, choice_resolver
+from yasuki_core.engine.rules.triggers import action_recruited, choice_resolver
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -40,7 +39,7 @@ def _plain_library_targets(game: GameState, source: L5RCard) -> list[str]:
     """Itself, once the action just resolved was the one that Recruited it: the Response is offered
     in the Step that Recruit opens, and the seat takes it or declines, as with Courts of Otosan
     Uchi."""
-    if not any(event.card_id == source.id for event in action_did(game, EnteredPlay)):
+    if not action_recruited(game, source.id):
         return []
     return [source.id]
 
