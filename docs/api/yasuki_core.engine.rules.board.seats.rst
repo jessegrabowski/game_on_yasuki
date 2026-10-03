@@ -17,6 +17,7 @@ yasuki_core.engine.rules.board.seats
     seat_controls_printed
     seat_named
     seat_stronghold
+    seat_wind
     went_second
 
 .. automodule:: yasuki_core.engine.rules.board.seats

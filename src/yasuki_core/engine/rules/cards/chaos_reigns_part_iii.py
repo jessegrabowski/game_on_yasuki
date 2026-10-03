@@ -22,9 +22,9 @@ from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.clans import controlled_alignments
 from yasuki_core.engine.rules.board.seats import (
     cards_in_hand,
-    cards_in_play,
     seat_controls_printed,
     seat_named,
+    seat_wind,
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -475,11 +475,8 @@ def _moto_ikarichi_bloodseeker_invest_discount(
 ) -> int:
     """His Invest costs nothing under the Kanpeki Dynasty, and its printed two Gold under any other
     Wind."""
-    return (
-        IKARICHI_INVEST
-        if any(held.printed_id == KANPEKI_DYNASTY for held in cards_in_play(game, seat))
-        else 0
-    )
+    wind = seat_wind(game, seat)
+    return IKARICHI_INVEST if wind is not None and wind.printed_id == KANPEKI_DYNASTY else 0
 
 
 def _moto_ikarichi_bloodseeker_invest(

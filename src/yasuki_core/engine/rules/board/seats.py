@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.modifiers import CompassionGrant
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint, WindPrint
 
 
 def cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
@@ -23,6 +23,18 @@ def cards_in_hand(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
         card
         for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
         if card.id not in game.announced_from_hand and isinstance(card.printed, FatePrint)
+    )
+
+
+def seat_wind(game: GameState, seat: PlayerId) -> L5RCard | None:
+    """``seat``'s Wind, or None when it has none in play: what a card means by "your Wind"."""
+    return next(
+        (
+            card
+            for card in game.table.battlefield.cards
+            if card.owner is seat and isinstance(card.printed, WindPrint)
+        ),
+        None,
     )
 
 

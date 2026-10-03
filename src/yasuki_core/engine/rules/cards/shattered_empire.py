@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.board.seats import (
     cards_in_hand,
     cards_in_play,
     fate_cards_in_play,
+    seat_wind,
 )
 from yasuki_core.engine.rules.board.counts_as import (
     AskedBy,
@@ -117,7 +118,6 @@ from yasuki_core.game_pieces.prints import (
     FatePrint,
     PersonalityPrint,
     RingPrint,
-    WindPrint,
 )
 
 
@@ -180,18 +180,6 @@ def _doji_meiji_regent_experienced_proclaim_gain(game: GameState, card: L5RCard)
     return effective_chi(game, card)
 
 
-def _doji_meiji_regent_experienced_wind_of(game: GameState, seat: PlayerId) -> str | None:
-    """The printed id of the Wind ``seat`` has in play, or None without one."""
-    return next(
-        (
-            card.printed_id
-            for card in game.table.battlefield.cards
-            if card.owner is seat and isinstance(card.printed, WindPrint)
-        ),
-        None,
-    )
-
-
 @lobby_bar("doji_meiji_regent_experienced")
 def _doji_meiji_regent_experienced_lobby_bar(
     game: GameState, card: L5RCard, seat: PlayerId
@@ -205,9 +193,11 @@ def _doji_meiji_regent_experienced_lobby_bar(
     """
     if card.bowed or seat is card.owner:
         return False
-    wind_of = _doji_meiji_regent_experienced_wind_of
-    yours = wind_of(game, card.owner)
-    return yours is not None and wind_of(game, seat) != yours
+    yours = seat_wind(game, card.owner)
+    if yours is None:
+        return False
+    theirs = seat_wind(game, seat)
+    return theirs is None or theirs.printed_id != yours.printed_id
 
 
 # --- Doji Yasuko, Soul of Doji Takeji ---
