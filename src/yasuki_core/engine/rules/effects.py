@@ -43,6 +43,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
+    CompassionGrant,
     Condition,
     ConditionalModifier,
     DuelStatOverride,
@@ -252,6 +253,24 @@ class GrantNegation(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(self.negation)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantCompassion(Effect):
+    """Record ``grant``, treating its seat as having Compassion while it lasts."""
+
+    grant: CompassionGrant
+
+    def describe(self) -> str:
+        covered = "" if self.grant.card_id is None else f" for {self.grant.card_id}"
+        lifetime = describe_lifetime(self.grant.duration)
+        return (
+            f"{self.grant.source_id} gives {self.grant.seat.name} Compassion{covered} ({lifetime})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(self.grant)
         return []
 
 

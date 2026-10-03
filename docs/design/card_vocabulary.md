@@ -83,6 +83,7 @@ deferred through `Then` instead.
    LoseGame
    WinGame
    MeleeAttack
+   GrantCompassion
    GrantNegation
    Negated
    AdditionalAction

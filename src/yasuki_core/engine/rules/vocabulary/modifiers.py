@@ -320,6 +320,31 @@ class LobbyModifier:
 
 
 @dataclass(frozen=True, slots=True)
+class CompassionGrant:
+    """A continuous effect that has ``seat`` treated as having Compassion beyond the Province count
+    that gives it (ShE datasheet, Traits), as Shrine of Compassion grants it.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the grant comes from, used to attribute and to end it.
+    seat : PlayerId
+        The player treated as having Compassion.
+    duration : Duration or Moment
+        When the grant stops applying.
+    card_id : str, optional
+        The card whose effects, from it or upon it, are treated as if ``seat`` has Compassion. A
+        grant naming one is forgotten when that card leaves the table. Default None, for a grant
+        covering every effect while it stands.
+    """
+
+    source_id: str
+    seat: PlayerId
+    duration: Lifetime
+    card_id: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class Negation:
     """A continuous effect that negates the effects matching it while active (CR, Prevention), as
     "negate the effects of actions from Strategies until the end of the phase" or "negate its
@@ -376,9 +401,9 @@ class Negation:
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
 # Province's strength beside a stat change. Each is ongoing and lasts to the end of the turn
 # unless the card says otherwise. So they are recorded in one list and expire together (CR,
-# Duration of Effects). The four that name a card are forgotten when it leaves the table; the
-# five that name a condition, a Province slot, a player or what an effect matches are not, because
-# none of those is a card that can leave it.
+# Duration of Effects). A record naming a card is forgotten when it leaves the table. One naming a
+# condition, a Province slot, a player or what an effect matches is not, because none of those is a
+# card that can leave it.
 Ongoing = (
     Modifier
     | ConditionalModifier
@@ -389,5 +414,6 @@ Ongoing = (
     | Minimum
     | ProvinceModifier
     | LobbyModifier
+    | CompassionGrant
     | Negation
 )

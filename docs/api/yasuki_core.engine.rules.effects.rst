@@ -44,6 +44,7 @@ yasuki_core.engine.rules.effects
     GainGold
     GainHonor
     GrantAbility
+    GrantCompassion
     GrantConditionalModifier
     GrantDuelStat
     GrantKeyword

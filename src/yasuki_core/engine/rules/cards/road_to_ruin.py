@@ -277,7 +277,7 @@ register_event_entry("siege_of_the_great_wall")
 @equips_from_discard("tao_defenders")
 def _tao_defenders_equips_from_discard(game: GameState, card: L5RCard) -> bool:
     """Compassion: The rulebook Equip ability may target this Follower in the discard pile."""
-    return has_compassion(game, card.owner)
+    return has_compassion(game, card.owner, card)
 
 
 def _tao_defenders_targets(game: GameState, source: L5RCard) -> list[str]:
