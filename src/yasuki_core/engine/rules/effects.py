@@ -625,8 +625,8 @@ class Evaluate(Effect):
 
 @dataclass(frozen=True, slots=True)
 class DestroyProvince(Effect):
-    """Destroy ``seat``'s Province ``zone``: its contents go to the discard face-up and the Province
-    itself leaves the board. A Province already gone is a no-op.
+    """Destroy the Province ``zone``: its contents go face-up to its owner's discard pile and the
+    Province itself leaves the board. A Province already gone is a no-op.
 
     Attributes
     ----------
@@ -645,9 +645,10 @@ class DestroyProvince(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         if self.zone not in game.table.zones:
             return []
-        moved = ops.destroy_province(game.table, self.seat, self.zone)
-        cards = game.table.cards_by_id
-        return [CardDiscarded(card_id, cards[card_id].side, self.seat) for card_id in moved]
+        # Its cards reach the discard pile without being discarded (CR, Provinces), so nothing is
+        # announced as discarded.
+        ops.destroy_province(game.table, self.seat, self.zone)
+        return []
 
 
 @dataclass(frozen=True, slots=True)

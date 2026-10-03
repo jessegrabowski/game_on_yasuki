@@ -347,13 +347,13 @@ def draw_to_hand(state: TableState, seat: PlayerId) -> L5RCard | None:
 
 
 def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> list[str]:
-    """Discard a province's contents face-up and remove the province, then send each card
-    attached to it (fortifications, regions) to its own side's discard, using the owner's pile if
-    it has one and the destroying seat's pile otherwise. A card with no discard for its side (a
-    pregame permanent) is detached in place.
+    """Send a province's contents face-up to its owner's Dynasty discard pile and remove the
+    province, then send each card attached to it (fortifications, regions) to its own side's
+    discard, using the card owner's pile if it has one and ``seat``'s, the destroying seat's,
+    otherwise. A card with no discard for its side (a pregame permanent) is detached in place.
     Returns the moved card ids."""
     zone = state.zones[zone_key]
-    discard = state.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)]
+    discard = state.zones[ZoneKey(zone_key.owner, ZoneRole.DYNASTY_DISCARD)]
     moved = []
     while zone.cards:
         card = zone.cards.pop()
