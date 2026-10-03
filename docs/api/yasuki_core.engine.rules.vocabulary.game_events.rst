@@ -29,6 +29,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     PhaseStarted
     ProducedGold
     ProducingGold
+    ProvinceDestroyed
     Rehonored
     Revealed
     Straightened

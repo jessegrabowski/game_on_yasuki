@@ -78,7 +78,7 @@ when an `effective_*` function exists for it.
 
 ## What you can react to
 
-Seventeen events:
+The events a trigger can answer:
 
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.EnteredPlay`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Assigned`
@@ -89,6 +89,7 @@ Seventeen events:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Rehonored`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.CardDiscarded`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.CounterChanged`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProvinceDestroyed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Revealed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.TurnStarted`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.PhaseStarted`

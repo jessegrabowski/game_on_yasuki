@@ -56,10 +56,10 @@ id no card has and tells you the nearest real one.
 [Registration and the audit](../design/systems/registration-and-the-audit.md) is why that hook
 exists.
 
-These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straightened`,
-`Dishonored`, `Rehonored`, `CardDiscarded`, `CounterChanged`, `Revealed`, `TurnStarted`,
-`ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose moment is not one of them needs a new event,
-which is a core change.
+These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straightened`, `Dishonored`,
+`Rehonored`, `CardDiscarded`, `CounterChanged`, `ProvinceDestroyed`, `Revealed`, `TurnStarted`,
+`ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose moment is not one of them needs a
+new event, which is a core change.
 
 A card that fits no row is almost always several rows at once. Break its text into the rule-level
 verbs it prints and find each in this table and in [the card vocabulary](../design/card_vocabulary.md)
@@ -206,7 +206,7 @@ registry (`gold`, `invest`, `keywords`, `recruit_discount`, `invest_discount`, `
 `attach_restriction`, `equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`,
 `lobby_bar`, `favor_payer`, `entry_state`, `before_entering_play`), or the event a trigger answers
 (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`, `turn_started`,
-`counter_changed`, `card_discarded`, `producing_gold`, `produced_gold`,
+`counter_changed`, `province_destroyed`, `card_discarded`, `producing_gold`, `produced_gold`,
 `entered_play_or_destroyed`). A card printing several abilities qualifies the role with that
 ability's key, as in `_incendiary_archers_fear_effects`, since one name per role would collide
 between them, and the key has to be one the module really registers. A choice resolver is named for

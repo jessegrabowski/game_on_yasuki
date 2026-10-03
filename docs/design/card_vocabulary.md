@@ -152,6 +152,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    PhaseStarted
    ProducedGold
    ProducingGold
+   ProvinceDestroyed
    Rehonored
    Revealed
    Straightened

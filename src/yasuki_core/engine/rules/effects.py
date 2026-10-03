@@ -35,6 +35,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Dishonored,
     EnteredPlay,
     FavorDiscarded,
+    ProvinceDestroyed,
     GameEvent,
     HonorChanged,
     Rehonored,
@@ -665,10 +666,10 @@ class DestroyProvince(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         if self.zone not in game.table.zones:
             return []
-        # Its cards reach the discard pile without being discarded (CR, Provinces), so nothing is
-        # announced as discarded.
+        # Its cards reach the discard pile without being discarded (CR, Provinces), so only the
+        # Province's destruction is announced.
         ops.destroy_province(game.table, self.seat, self.zone)
-        return []
+        return [ProvinceDestroyed(self.zone)]
 
 
 @dataclass(frozen=True, slots=True)
