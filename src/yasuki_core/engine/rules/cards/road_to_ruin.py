@@ -96,10 +96,11 @@ register_ability(
 
 # --- Kakita Harudei, Drunkard ---
 
+HARUDEI_USES_WITH_COMPASSION = 2
+
 
 def _kakita_harudei_drunkard_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Enemy Personalities opposing Harudei with lower Chi than his. The Compassion rider, one
-    more use per turn, has no model for Bushido Virtues to read and is not written."""
+    """Enemy Personalities opposing Harudei with lower Chi than his."""
     own_chi = effective_chi(game, source)
     return [
         card_id
@@ -114,6 +115,11 @@ def _kakita_harudei_drunkard_effects(
     return [Bow(target.id)]
 
 
+def _kakita_harudei_drunkard_uses_per_turn(game: GameState, source: L5RCard) -> int:
+    """Compassion: You may use Harudei's printed ability an additional time per turn."""
+    return HARUDEI_USES_WITH_COMPASSION if has_compassion(game, source.owner, source) else 1
+
+
 register_ability(
     "kakita_harudei_drunkard",
     Ability(
@@ -123,6 +129,7 @@ register_ability(
         targets=_kakita_harudei_drunkard_targets,
         targeting_message="an enemy Personality with lower Chi",
         effects=_kakita_harudei_drunkard_effects,
+        uses_per_turn=_kakita_harudei_drunkard_uses_per_turn,
     ),
 )
 
@@ -143,13 +150,17 @@ def _kitsune_rumiko_dishonored(ctx: TriggerContext) -> list[Effect]:
     return seppuku(ctx.card.id, Trait(ctx.card.id))
 
 
+def _kitsune_rumiko_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Bow Rumiko, a cost Compassion has her ignore."""
+    return [] if has_compassion(game, source.owner, source) else bow_cost(game, source)
+
+
 def _kitsune_rumiko_targets(game: GameState, source: L5RCard) -> list[str]:
     return itself(game, source) if game.active is source.owner else []
 
 
 def _kitsune_rumiko_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Gain 1 Honor, or 2 Honor if your Sensei is Beiko Sensei. Compassion, which waives the bow
-    while her controller has fewer Provinces, is not modeled: nothing reads Bushido Virtues."""
+    """Gain 1 Honor, or 2 Honor if your Sensei is Beiko Sensei."""
     amount = (
         RUMIKO_HONOR_WITH_BEIKO if cards_named(game, source.owner, BEIKO_SENSEI) else RUMIKO_HONOR
     )
@@ -160,7 +171,7 @@ register_ability(
     "kitsune_rumiko",
     Ability(
         timings=(ActionTiming.OPEN,),
-        cost=bow_cost,
+        cost=_kitsune_rumiko_cost,
         targets=_kitsune_rumiko_targets,
         effects=_kitsune_rumiko_effects,
         hits_every_target=True,

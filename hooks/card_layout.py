@@ -259,6 +259,7 @@ ROLES = frozenset(
         "cost",
         "targets",
         "target_count",
+        "uses_per_turn",
         "effects",
         "interrupt",
         "applies",

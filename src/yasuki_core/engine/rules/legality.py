@@ -3,7 +3,7 @@ from collections.abc import Callable, Iterator
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import payable
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, once_tag
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, use_tags
 from yasuki_core.engine.rules.effects import PayGold
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
@@ -506,7 +506,7 @@ def _usable(
                 ruleset.ACTIVE.abilities_once_per_turn
                 and _activated(location, ability)
                 and not ability.repeatable
-                and used_this_turn(game, card, once_tag(ability))
+                and all(used_this_turn(game, card, tag) for tag in use_tags(game, card, ability))
             ):
                 continue
             # A card in a unit may only be acted from at the battlefield the battle is at (CR,
