@@ -1,4 +1,4 @@
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
@@ -17,6 +17,7 @@ from yasuki_core.engine.table import (
 )
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Element
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import (
@@ -181,6 +182,33 @@ def rings_in_play(game: GameState, seat: PlayerId, asking: Asking) -> tuple[L5RC
         for card in game.table.battlefield.cards
         if card.owner is seat and counts_as(game, card, RingPrint, asking)
     )
+
+
+def ring_elements(game: GameState, ring: L5RCard) -> frozenset[Element]:
+    """The elements ``ring``'s keywords name as they stand, granted ones included."""
+    carried = {keyword.lower() for keyword in effective_keywords(game, ring)}
+    return frozenset(element for element in Element if element.value.lower() in carried)
+
+
+def different_elements(rings: Sequence[frozenset[Element]]) -> int:
+    """How many of ``rings``, each given as the elements it carries, can stand for a different
+    element at once. A Ring with two element keywords stands for only one of them, so this is the
+    largest matching of Rings to elements."""
+    matched: dict[Element, int] = {}
+
+    def claim(index: int, tried: set[Element]) -> bool:
+        for element in rings[index]:
+            if element in tried:
+                continue
+            tried.add(element)
+            if element not in matched or claim(matched[element], tried):
+                matched[element] = index
+                return True
+        return False
+
+    for index in range(len(rings)):
+        claim(index, set())
+    return len(matched)
 
 
 def followers_in_play(game: GameState) -> tuple[L5RCard, ...]:

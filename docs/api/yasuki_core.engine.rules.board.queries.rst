@@ -10,6 +10,7 @@ yasuki_core.engine.rules.board.queries
     attack_targets
     attack_targets_at
     controls_terrain_at
+    different_elements
     favor_actions_this_turn
     followers_in_play
     has_keyword
@@ -26,6 +27,7 @@ yasuki_core.engine.rules.board.queries
     province_zones
     remaining_look
     rightmost_province
+    ring_elements
     rings_in_play
     rulebook_proxy
     rulebook_proxy_id

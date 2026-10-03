@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.board.counts_as import (
     while_in_play,
 )
 from yasuki_core.engine.rules.board.queries import (
+    different_elements,
     controls_terrain_at,
     has_keyword,
     owned_holdings,
@@ -23,6 +24,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, PhaseStarted
 from yasuki_core.engine.table import Location
+from yasuki_core.game_pieces.constants import Element
 from yasuki_core.game_pieces.prints import RingPrint
 
 from tests.yasuki_core.engine.builders import (
@@ -144,3 +146,21 @@ def test_rings_in_play_takes_a_card_counting_as_a_ring_for_the_asker():
         assert rings_in_play(game, PlayerId.P2, Asking.action(heart)) == ()
     finally:
         COUNTS_AS.pop("ring_probe")
+
+
+AIR, FIRE, VOID = Element.AIR, Element.FIRE, Element.VOID
+
+
+@pytest.mark.parametrize(
+    ("rings", "count"),
+    [
+        ([], 0),
+        ([{AIR}, {AIR}], 1),
+        ([{AIR}, {AIR, FIRE}], 2),
+        ([{AIR, FIRE}, {AIR, FIRE}, {AIR, FIRE}], 2),
+        ([{AIR, FIRE}, {FIRE}, {AIR, VOID}], 3),
+    ],
+    ids=["none", "same_element", "a_second_keyword_frees_one", "two_elements_three_rings", "chain"],
+)
+def test_different_elements_counts_rings_each_standing_for_a_different_element(rings, count):
+    assert different_elements([frozenset(elements) for elements in rings]) == count
