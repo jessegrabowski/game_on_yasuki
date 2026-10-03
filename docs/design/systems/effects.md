@@ -104,6 +104,28 @@ return [
 ]
 ```
 
+## Effects that happen at once
+
+Effects in a list happen in the order they are written (CR, Order of Effects). Some happen at once:
+"Two things in the game can happen at the same time (e.g., two Personalities being destroyed in
+battle resolution.)" (CR, Timing Conflicts). Those go inside a
+{class}`~yasuki_core.engine.rules.effects.Simultaneously`, which applies each member in turn,
+checked, modified and negated as it would be alone, and lets nothing react to any of them until all
+have happened. Battle resolution builds one for the army it destroys:
+
+```python
+effects = [
+    Simultaneously(tuple(_destroy_army(defending))),
+    Simultaneously(tuple(_rehonored(attacking))),
+    *_spoils(game, attack.attacker, attacking, defending),
+]
+```
+
+One text acting on several cards is one occurrence per step: "each step of each procedure takes
+place simultaneously, in parallel" (CR, Timing Conflicts). An ability that builds its effects per
+target and hits several targets returns one group for each step, every target's first effect
+together, then every target's second. Two sentences of one card are not a group, and stay in order.
+
 ## The half of the invariant that is not about cards
 
 No card module in the package calls the mutation layer. The flow does, in a handful of places where
