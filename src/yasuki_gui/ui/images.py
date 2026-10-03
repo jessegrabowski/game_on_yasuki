@@ -2,12 +2,19 @@ from pathlib import Path
 from typing import Any
 import tkinter as tk
 
-from PIL import Image, ImageTk
+from PIL import Image, ImageEnhance, ImageTk
 
 from yasuki_core.paths import FATE_BACK, DYNASTY_BACK, resolve_card_image_path
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.constants import CARD_W, CARD_H
 from functools import lru_cache
+
+
+# What a peeked card's face is dimmed by: a card only its owner may read is shown, and shown as not
+# public. The web client settled on these numbers so that stacked peeked cards still occlude, which
+# an opacity would not, and the desktop follows it rather than inventing a second cue.
+PEEK_BRIGHTNESS = 0.62
+PEEK_SATURATION = 0.6
 
 
 @lru_cache(maxsize=1024)
@@ -17,6 +24,7 @@ def load_image(
     dishonorable: bool,
     master: tk.Misc | None = None,
     target: tuple[int, int] | None = None,
+    peeked: bool = False,
 ) -> Any | None:
     """
     Returns a Tk PhotoImage (master-bound) for the given path.
@@ -38,6 +46,9 @@ def load_image(
             img = img.rotate(180, expand=True)
         resample = getattr(Image, "LANCZOS", None)
         img = img.resize(target) if resample is None else img.resize(target, resample)
+        if peeked:
+            img = ImageEnhance.Brightness(img).enhance(PEEK_BRIGHTNESS)
+            img = ImageEnhance.Color(img).enhance(PEEK_SATURATION)
 
         # PhotoImage is associated with the given master; callers should pass a stable master.
         photo = ImageTk.PhotoImage(img, master=master)
@@ -84,9 +95,13 @@ class ImageProvider:
         bowed: bool,
         dishonorable: bool,
         target: tuple[int, int] | None = None,
+        peeked: bool = False,
     ) -> Any | None:
-        """The card's front, at its board size unless ``target`` asks for another."""
-        return load_image(image_front, bowed, dishonorable, master=self.master, target=target)
+        """The card's front, at its board size unless ``target`` asks for another. ``peeked`` dims
+        it, for a face only its own controller may read."""
+        return load_image(
+            image_front, bowed, dishonorable, master=self.master, target=target, peeked=peeked
+        )
 
     def back(
         self,

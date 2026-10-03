@@ -98,7 +98,7 @@ class PreviewOnlyImages:
     def __init__(self, preview=None):
         self._preview = preview
 
-    def front(self, image_front, bowed, dishonorable, target=None):
+    def front(self, image_front, bowed, dishonorable, target=None, peeked=False):
         return self._preview if target else None
 
     def back(self, side, bowed, dishonorable, image_back, target=None):
