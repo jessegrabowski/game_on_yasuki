@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     DelayedEffect,
-    FromAction,
+    Attributed,
     InterruptingEffect,
     Effect,
     Negated,
@@ -463,7 +463,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 _trace.append(f"    {effect.describe()}")
                 game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
                 continue
-            if isinstance(effect, FromAction):
+            if isinstance(effect, Attributed):
                 # Stashed beneath it, so the effects held for the same moment keep their order.
                 _stash(game, frames)
                 game.stack.append(ApplyEffects((effect.effect,), effect.provenance))
@@ -542,13 +542,13 @@ def _reacted_to(frame: _Events) -> GameEvent:
 
 
 def _held_from(effect: Effect, provenance: Provenance) -> Effect:
-    """``effect``, with the effect a delay holds wrapped in :class:`~.FromAction` when an action
+    """``effect``, with the effect a delay holds wrapped in :class:`~.Attributed` when an action
     from a card schedules it, so it resolves as that action's. Anything else is returned unchanged.
     """
     if not isinstance(effect, DelayedEffect) or provenance.acting is None:
         return effect
     action = Provenance(acting=provenance.acting, negations=provenance.negations)
-    return replace(effect, effect=FromAction(effect.effect, action))
+    return replace(effect, effect=Attributed(effect.effect, action))
 
 
 def _modified(game: GameState, effect: Effect) -> Effect:

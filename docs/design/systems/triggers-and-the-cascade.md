@@ -224,7 +224,7 @@ applied as returned. A `Then` among the action's effects carries that provenance
 step, which opens no second round. The provenance also names the card whose action it is, which a
 {class}`~.Negation` naming a source reads as each effect commits. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
 effects held until a given moment. An effect an action holds stays that action's: the walk wraps it
-in a {class}`~.FromAction` carrying the action's provenance as the delay commits, and resolves it
+in a {class}`~.Attributed` carrying the action's provenance as the delay commits, and resolves it
 under that provenance when its moment comes, with the effects held beside it stashed so their order
 holds. {func}`~yasuki_core.engine.rules.triggers.reach_moment` is the
 same for a moment ongoing records also last until: it lapses them, settles the board their expiry

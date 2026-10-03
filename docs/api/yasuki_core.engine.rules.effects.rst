@@ -19,6 +19,7 @@ yasuki_core.engine.rules.effects
     AskOption
     AttachCard
     AttackEffect
+    Attributed
     Banish
     BanishTopFate
     Bow
@@ -40,7 +41,6 @@ yasuki_core.engine.rules.effects
     Evaluate
     ExemptFromResolutionBow
     Fear
-    FromAction
     GainGold
     GainHonor
     GainProvince

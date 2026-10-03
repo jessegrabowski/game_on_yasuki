@@ -572,7 +572,7 @@ class DelayedEffect(Effect):
 
 
 @dataclass(frozen=True, slots=True)
-class FromAction(Effect):
+class Attributed(Effect):
     """``effect``, held until a later moment, resolving as an effect of the action that scheduled
     it. A delayed effect stays that action's, so a negation of the action's effects in force when
     it resolves still reaches it (CR, Delayed Effects).
