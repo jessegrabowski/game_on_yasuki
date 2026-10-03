@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.stats.keyword_grants import KEYWORD_GRANTS, keyword_grant
@@ -8,12 +10,14 @@ from yasuki_core.engine.rules.board.seats import (
     opposing_seats,
     seat_controls_printed,
     seat_stronghold,
+    has_compassion,
     went_second,
 )
 
 from yasuki_core.engine.rules.rulebook import equip
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.prints import RulebookPrint
@@ -34,6 +38,23 @@ def test_went_second_is_true_only_for_the_non_first_player():
     game = two_seat_game()  # first_player is P1
     assert went_second(game, PlayerId.P1) is False
     assert went_second(game, PlayerId.P2) is True
+
+
+@pytest.mark.parametrize(
+    ("p1_provinces", "p2_provinces", "p1_has", "p2_has"),
+    [(3, 4, True, False), (4, 4, False, False), (0, 1, True, False)],
+    ids=["fewer", "tied", "none_left"],
+)
+def test_compassion_is_had_by_a_player_with_fewer_provinces_than_anyone_else(
+    p1_provinces, p2_provinces, p1_has, p2_has
+):
+    game = two_seat_game()
+    for seat, count in ((PlayerId.P1, p1_provinces), (PlayerId.P2, p2_provinces)):
+        for index in range(count):
+            game.table.zones[ZoneKey(seat, ZoneRole.PROVINCE, index)] = ProvinceZone(owner=seat)
+
+    assert has_compassion(game, PlayerId.P1) is p1_has
+    assert has_compassion(game, PlayerId.P2) is p2_has
 
 
 def test_seat_controls_matches_a_keyword_and_can_exclude_a_card():

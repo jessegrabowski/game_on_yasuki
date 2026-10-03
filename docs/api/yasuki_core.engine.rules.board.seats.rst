@@ -11,7 +11,9 @@ yasuki_core.engine.rules.board.seats
     cards_in_play
     cards_named
     fate_cards_in_play
+    has_compassion
     opposing_seats
+    province_count
     seat_controls_printed
     seat_named
     seat_stronghold

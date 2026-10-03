@@ -49,9 +49,9 @@ about a seat rather than about the board.
 single string, which is why these exist rather than a field comparison.
 
 `board/seats.py` has {func}`~.cards_in_play`, {func}`~.seat_stronghold`,
-{func}`~.seat_controls_printed`, {func}`~.cards_named`, {func}`~.opposing_seats` and
-{func}`~.went_second`. A card asking whether its controller has something in play wants one of
-these.
+{func}`~.seat_controls_printed`, {func}`~.cards_named`, {func}`~.opposing_seats`,
+{func}`~.went_second` and {func}`~.has_compassion`. A card asking whether its controller has
+something in play, or has a trait such as Courtesy or Compassion active, wants one of these.
 
 ## Where a card plugs in
 
