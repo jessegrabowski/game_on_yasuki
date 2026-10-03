@@ -1510,10 +1510,8 @@ class CreateToken(Effect):
 class PayGold(InterruptingEffect):
     """Pay gold, bowing producers to raise what the seat's pool does not already cover.
 
-    The cost a card charges in Gold, as opposed to the Gold a Recruit charges for the card itself:
-    both raise the same payment, and this one carries no card being paid for. It pauses the cascade
-    for the seat to pick which producers to bow, so it resolves before whatever an ability's text
-    sequences behind it.
+    It pauses the cascade for the seat to pick which producers to bow, so it resolves before
+    whatever an ability's text sequences behind it.
 
     Attributes
     ----------
@@ -1523,11 +1521,16 @@ class PayGold(InterruptingEffect):
         The gold to raise.
     label : str
         What the payment is for, shown in the prompt.
+    target_id : str or None, optional
+        The card the Gold pays for, as a Recruit's pays for the card it brings into play, for a
+        producer whose yield depends on what it pays for. Default None, for a cost that pays for no
+        card.
     """
 
     seat: PlayerId
     amount: int
     label: str
+    target_id: str | None = None
 
     def describe(self) -> str:
         return f"{self.seat.name} pays {self.amount} gold for {self.label}"
@@ -1537,12 +1540,17 @@ class PayGold(InterruptingEffect):
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         from yasuki_core.engine.rules.gold.payment import can_afford
 
-        return can_afford(game, self.seat, self.amount, bowed_by_cost=bowed_by_cost)
+        return can_afford(
+            game, self.seat, self.amount, target=self._target(game), bowed_by_cost=bowed_by_cost
+        )
 
     def request(self, game: GameState) -> DecisionRequest:
         from yasuki_core.engine.rules.gold.payment import payment_request
 
-        return payment_request(game, self.seat, self.amount, self.label)
+        return payment_request(game, self.seat, self.amount, self.label, target=self._target(game))
+
+    def _target(self, game: GameState) -> L5RCard | None:
+        return None if self.target_id is None else game.table.cards_by_id.get(self.target_id)
 
 
 @dataclass(frozen=True, slots=True)
