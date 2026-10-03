@@ -43,7 +43,7 @@ from yasuki_core.engine.rules.gold.discounts import (
 )
 from yasuki_core.engine.rules.gold.producers import gold_reach
 from yasuki_core.engine.rules.state import GameState, used_this_turn
-from yasuki_core.engine.rules.turn.structure import ActionRound, RoundKind
+from yasuki_core.engine.rules.turn.structure import ActionRound
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
 from yasuki_core.engine.table import DeckKey, location_of, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -114,15 +114,13 @@ def permitted_timings_in(
     """The designators ``round`` permits ``seat``, for a round other than the open one: what an
     Interrupt asks of the round its action was taken in.
 
-    None at all during a battle for a seat with no unit at the battlefield being fought, in a
-    battle segment and in the Interrupt step over one alike (CR, Actions in Battle: the Rule of
-    Presence applies to every action type, Interrupts included).
+    None at all for a seat with no unit at the battlefield being fought, whatever round is asking
+    (CR, Actions in Battle: the Rule of Presence applies to every action type). Whether a battle is
+    being fought is read off the attack rather than off the round, because an Interrupt, a Response
+    and a duel window all sit over a battle segment without being one.
     """
-    in_battle = round.kind is RoundKind.BATTLE_SEGMENT or (
-        round.kind is RoundKind.INTERRUPT
-        and game.attack is not None
-        and game.attack.current is not None
-    )
+    attack = game.attack
+    in_battle = attack is not None and attack.current is not None
     if in_battle and not has_presence(game, seat) and not has_absent_ability(game, seat):
         return frozenset()
     timings = round.timings

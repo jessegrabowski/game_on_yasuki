@@ -87,6 +87,9 @@ class PlayerInfoBox(tk.Frame):
 
     def __init__(self, master: tk.Misc, field: FieldView, owner: PlayerId):
         super().__init__(master, bg=theme.PANEL)
+        # What a click on one of this seat's decks offers. A deck is a place a card comes from, so
+        # an option that draws from one belongs on it rather than in the prompt box.
+        self.on_deck_click: Callable[[PlayerId, Side], None] | None = None
         self.field = field
         self.owner = owner
         # Set by whoever owns the board, since the pile is shown in a panel over it rather than in
@@ -193,11 +196,16 @@ class PlayerInfoBox(tk.Frame):
                 pass
         self._draw_avatar_circle()
 
+    def _deck_clicked(self, side: Side) -> None:
+        """Offer whatever this seat's ``side`` deck can do right now, which is nothing by default."""
+        if self.on_deck_click is not None:
+            self.on_deck_click(self.owner, side)
+
     # ----- the 3x3 pile grid -------------------------------------------------
 
     def _build_cells(self) -> None:
         for row, col, side, caption in _DECK_CELLS:
-            cell = _Cell(self._grid, caption)
+            cell = _Cell(self._grid, caption, on_click=partial(self._deck_clicked, side))
             cell.grid(row=row, column=col, padx=2, pady=2)
             self._deck_cells[side] = cell
         for row, col, role, caption, title in _PILE_CELLS:

@@ -6,8 +6,9 @@ import yasuki_gui.config as gui_config
 from yasuki_gui.config import load_hotkeys
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
-from yasuki_core.engine.rules.projection import AttackView
+from yasuki_core.engine.rules.projection import AttackView, DuelView
 from yasuki_core.engine.table import TableState
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
 from yasuki_gui.field_view import FieldView
@@ -15,6 +16,9 @@ from yasuki_gui.layout import divider_y
 from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.battle_view import BattleView, LaneButton, PendingArmy
+from yasuki_gui.ui.duel_view import PANEL_H as DUEL_PANEL_H
+from yasuki_gui.ui.duel_view import PANEL_W as DUEL_PANEL_W
+from yasuki_gui.ui.duel_view import DuelPanel
 from yasuki_gui.ui.card_panel import CardPanel
 from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.card_strip import CardStrip
@@ -35,6 +39,8 @@ class ClientBindings(Protocol):
 
     def refresh(self) -> None: ...
     def on_card_activated(self, card_id: str, /) -> None: ...
+
+    def on_deck_activated(self, seat: PlayerId, side: Side, /) -> None: ...
     def on_lane_card_clicked(self, card_id: str, /) -> None: ...
     def on_look_card_clicked(self, card_id: str, /) -> None: ...
     def on_board_menu(self) -> None: ...
@@ -143,6 +149,7 @@ class GameWindow:
         # Floats over the board rather than beside it, so it is built on the same parent and only
         # placed once there is an attack to show.
         self.battle_view = BattleView(self.field)
+        self.duel_view = DuelPanel(self.field)
         # One strip for every pile either player opens, retitled as it is reused, so a player who
         # has moved it finds it where they left it.
         self.card_strip = CardStrip(self.field, ImageProvider(self.field))
@@ -156,6 +163,7 @@ class GameWindow:
         # board answers for whatever the pointer is on when no panel is. Bound alongside the
         # board's own keys rather than through them, so reconfiguring those cannot drop it.
         self._card_panels: tuple[CardPanel, ...] = (
+            self.duel_view,
             self.look_view,
             self.battle_view,
             self.card_strip,
@@ -247,6 +255,29 @@ class GameWindow:
             attack, pending, buttons, selected=selected, stats=stats, viewer=self.field.seat
         )
 
+    def show_duel(
+        self,
+        duel: DuelView | None,
+        stats: dict[str, dict[Stat, int]] | None = None,
+    ) -> None:
+        """Float the duel over the board while one is on, and take it away when it is cleared.
+
+        It opens centered and over the battle panel, because a duel fought inside a battle is its
+        own procedure rather than a step of the Battle Sequence.
+        """
+        if duel is None:
+            self.duel_view.close()
+            return
+        board_w, board_h = widget_size(self.field)
+        self.duel_view.open_over(
+            (board_w - DUEL_PANEL_W) // 2,
+            (board_h - DUEL_PANEL_H) // 2,
+            DUEL_PANEL_W,
+            DUEL_PANEL_H,
+        )
+        self.duel_view.lift()
+        self.duel_view.refresh(duel, stats=stats, viewer=self.field.seat)
+
     def relayout_panels(self) -> None:
         """Move the seat being played to the bottom of the sidebar and resync both panels against
         the board. Driven by the debug seat toggle, and by a deck load, which changes the table the
@@ -291,6 +322,9 @@ class GameWindow:
         self.field.on_debug_spawn_personality = presenter.debug_spawn_personality
         self.battle_view.on_card_menu = presenter.on_card_activated
         self.battle_view.on_card_click = presenter.on_lane_card_clicked
+        self.duel_view.on_card_menu = presenter.on_card_activated
+        for panel in (self.opponent_panel, self.human_panel):
+            panel.on_deck_click = presenter.on_deck_activated
         self.look_view.on_card_click = presenter.on_look_card_clicked
         self.root.bind("<Control-z>", presenter.undo)
         self.root.bind("<Escape>", presenter.cancel_via_escape)

@@ -1,3 +1,15 @@
+from yasuki_core.engine.rules.cards.emperor_edition import (
+    SANCTIONED_DUEL_ACCEPT,
+    SANCTIONED_DUEL_REFUSE,
+    SANCTIONED_DUEL_RESOLVER,
+)
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    DECK_TOP,
+    STRIKE,
+    ChooseOption,
+    FocusOrStrike,
+    focus_token,
+)
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.battle import resolution
@@ -657,3 +669,28 @@ class TestEquipping:
         assert [card.id for card in unit_members(session.game.table, large)] == ["large", "banner"]
         assert project(session.game, ATTACKER).unit_force["large"] == 7
         assert sent == {0: {"large"}}  # the unit it built is the unit it spends
+
+
+def test_the_policy_accepts_a_challenge_rather_than_refusing_it():
+    # A placeholder so a duel is reachable at all: the generic agent takes the first candidate,
+    # which is the refusal, and a duel nobody accepts can never be played against this policy.
+    request = ChooseOption(
+        seat=PlayerId.P2,
+        candidates=(SANCTIONED_DUEL_REFUSE, SANCTIONED_DUEL_ACCEPT),
+        question="Is the challenge accepted?",
+        resolver=SANCTIONED_DUEL_RESOLVER,
+        source_id="duel",
+    )
+
+    answer = MilitaryPolicy().decide(request, None)
+
+    assert answer.choices == (SANCTIONED_DUEL_ACCEPT,)
+
+
+def test_the_policy_focuses_blind_off_its_deck_and_strikes_when_it_cannot():
+    policy = MilitaryPolicy()
+    offered = FocusOrStrike(seat=PlayerId.P2, candidates=(focus_token("a"), DECK_TOP, STRIKE))
+    spent = FocusOrStrike(seat=PlayerId.P2, candidates=(focus_token("a"), STRIKE))
+
+    assert policy.decide(offered, None).choices == (DECK_TOP,)
+    assert policy.decide(spent, None).choices == (STRIKE,)

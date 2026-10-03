@@ -18,11 +18,22 @@ from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.effects import Discard
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.stats.stat_grants import STAT_GRANTS, stat_grant
+from yasuki_core.engine.rules.duel.procedure import declare_duel
 from yasuki_core.engine.rules.projection import _identifiable_ids, project
+from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.turn.sequence import run_stack
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    STRIKE,
+    DecisionResponse,
+    focus_token,
+)
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    fate_card,
+    focus_card,
     holding,
     personality,
     province_card,
@@ -734,3 +745,139 @@ def test_a_response_step_over_a_battles_resolution_names_the_segment():
 
     assert project(game, PlayerId.P1).responding_to == "the battle's Resolution Segment"
     assert project(game, PlayerId.P2).responding_to == "the battle's Resolution Segment"
+
+
+def _duelling_game() -> GameState:
+    """P1's challenger and P2's rival in a declared duel, each holding one card to focus."""
+    game = two_seat_game()
+    put_in_play(game, personality("challenger", owner=PlayerId.P1, chi=3))
+    put_in_play(game, personality("rival", owner=PlayerId.P2, chi=4))
+    for seat in PlayerId:
+        card = register(game.table, focus_card(f"{seat.name}-fv", seat, 2))
+        game.table.zones[ZoneKey(seat, ZoneRole.HAND)].add(card)
+    declare_duel(
+        game,
+        challenger_duelist="challenger",
+        challenged_duelist="rival",
+        source="challenger",
+    )
+    return game
+
+
+def test_a_duel_reaches_both_seats_with_the_duel_stats_they_may_read():
+    game = _duelling_game()
+
+    for viewer in PlayerId:
+        duel = project(game, viewer).duel
+        assert duel is not None
+        assert (duel.challenger.seat, duel.challenged.seat) == (PlayerId.P1, PlayerId.P2)
+        assert (duel.challenger.duel_stat, duel.challenged.duel_stat) == (3, 4)
+        assert duel.source_name == "challenger"
+
+
+def test_a_focused_card_is_its_owners_to_read_and_a_back_to_the_other_seat():
+    game = _duelling_game()
+    run_stack(game)
+    submit(game, DecisionResponse((focus_token("P2-fv"),)))
+
+    mine = project(game, PlayerId.P2).duel.challenged.focused
+    theirs = project(game, PlayerId.P1).duel.challenged.focused
+
+    assert [card.id for card in mine] == ["P2-fv"]
+    assert [isinstance(card, HiddenCard) for card in theirs] == [True]
+
+
+def test_a_total_counts_only_the_focused_cards_its_reader_may_see():
+    # A seat reads its own focused cards, so its own total moves as it focuses. The other seat's
+    # moves only when a card is focused face up, which nothing does yet, so a face-down focus must
+    # not shift the number its opponent reads.
+    game = _duelling_game()
+    run_stack(game)
+    submit(game, DecisionResponse((focus_token("P2-fv"),)))
+
+    theirs = project(game, PlayerId.P1).duel
+    mine = project(game, PlayerId.P2).duel
+    # P2 entered on 4 and has focused one card worth 2. P1 sees the back and reads 4; P2 reads 6.
+    assert (theirs.challenger.total, theirs.challenged.total) == (3, 4)
+    assert (mine.challenger.total, mine.challenged.total) == (3, 6)
+
+    submit(game, DecisionResponse((STRIKE,)))
+
+    after = project(game, PlayerId.P1).duel
+    # Decided, so both totals come off the record and agree for either reader.
+    assert (after.challenger.total, after.challenged.total) == (3, 6)
+    assert after.winners == (PlayerId.P2,)
+    assert after.decided is True
+
+
+def test_a_duel_that_ended_without_resolution_shows_no_totals():
+    # Left unrun, because the state-based rules refuse to drive a cascade while the focus-or-strike
+    # question is pending, which a duel that has been offered always has.
+    game = _duelling_game()
+    ops.remove_card(game.table, game.table.cards_by_id["rival"])
+    triggers.enforce_state_based_actions(game)
+
+    duel = project(game, PlayerId.P1).duel
+
+    # No outcome to read, and the duelist that left publishes neither a stat nor a total.
+    assert duel.decided is True
+    assert (duel.winners, duel.losers) == ((), ())
+    assert duel.challenged.duelist is None
+    assert (duel.challenged.duel_stat, duel.challenged.total) == (None, None)
+    assert duel.challenger.total is None
+
+
+def test_the_duel_view_says_which_seat_is_being_asked_to_focus():
+    game = _duelling_game()
+    run_stack(game)
+
+    duel = project(game, PlayerId.P2).duel
+
+    assert duel.option is PlayerId.P2
+    assert duel.step is DuelStep.FOCUSING
+
+
+def test_a_decided_duel_still_shows_what_it_was_decided_on():
+    # The duel's last step discards the focused cards, which is exactly when a player is reading
+    # the result. The outcome records them, so the view can still show the duel it decided.
+    game = _duelling_game()
+    run_stack(game)
+    submit(game, DecisionResponse((focus_token("P2-fv"),)))
+    submit(game, DecisionResponse((STRIKE,)))
+
+    duel = project(game, PlayerId.P1).duel
+
+    assert game.table.zones.get(ZoneKey(PlayerId.P2, ZoneRole.FOCUS)) is None
+    assert [card.id for card in duel.challenged.focused] == ["P2-fv"]
+    # Face up in a public pile by now, so both seats read the same cards.
+    assert [card.id for card in project(game, PlayerId.P2).duel.challenged.focused] == ["P2-fv"]
+
+
+def test_a_card_announced_out_of_hand_is_not_projected_in_it():
+    # A Strategy played from hand sits in its resolution area until it lands (CR, Resolution Area),
+    # which is what `cards_in_hand` counts. The zone it was drawn from still holds it, so a client
+    # rendering that zone would show it sitting in the hand of the player resolving it.
+    game = two_seat_game()
+    card = register(game.table, fate_card("played", PlayerId.P1))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+
+    before = project(game, PlayerId.P1).table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    assert [held.id for held in before.cards] == ["played"]
+
+    game.announced_from_hand |= {"played"}
+
+    after = project(game, PlayerId.P1).table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    assert after.cards == ()
+    # And it is gone from the opponent's reading of that hand too, which is a count of backs.
+    theirs = project(game, PlayerId.P2).table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    assert theirs.cards == ()
+
+
+def test_a_duel_carries_the_card_that_created_it():
+    game = _duelling_game()
+
+    duel = project(game, PlayerId.P1).duel
+
+    assert duel.source is not None
+    assert duel.source.id == "challenger"
+    assert duel.source_name == "challenger"

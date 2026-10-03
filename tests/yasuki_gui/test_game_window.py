@@ -6,6 +6,8 @@ from numpy.random import default_rng
 import yasuki_gui.config as gui_config
 import yasuki_gui.ui.game_window as game_window_mod
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.projection import DuelistView, DuelView
+from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_gui.session import build_demo_state
 from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.game_window import GameWindow
@@ -159,6 +161,57 @@ def test_the_view_key_enlarges_a_strip_card_and_puts_it_away_again(window):
 
     _press_view_key(window, *point)
     assert not window.card_preview.showing
+
+
+def _duel(duelist=None):
+    return DuelView(
+        challenger=DuelistView(
+            seat=PlayerId.P1, duelist=duelist, focused=(), duel_stat=3, total=None
+        ),
+        challenged=DuelistView(seat=PlayerId.P2, duelist=None, focused=(), duel_stat=3, total=None),
+        step=DuelStep.FOCUSING,
+        option=None,
+        ordinal=1,
+        source_name="Sanctioned Duel",
+        source=None,
+        winners=(),
+        losers=(),
+        decided=False,
+    )
+
+
+def _duel_card_point(window):
+    window.show_duel(_duel(personality("hida", owner=PlayerId.P1)))
+    window.root.update_idletasks()
+    visual = window.duel_view._drawn["duel:hida"]
+    canvas = window.duel_view.canvas
+    return canvas.winfo_rootx() + visual.x, canvas.winfo_rooty() + visual.y
+
+
+def test_the_view_key_enlarges_a_card_in_the_duel_panel(window):
+    """The duel floats over every other panel, so the window has to ask it for the card under the
+    pointer like any other surface."""
+    art = tk.PhotoImage(master=window.root, width=1, height=1)
+    window.card_preview = CardPreview(window.root, PreviewOnlyImages(art))
+    point = _duel_card_point(window)
+
+    _press_view_key(window, *point)
+
+    assert window.card_preview.showing
+
+
+def test_the_duel_panel_stays_where_the_player_dragged_it(window):
+    """A duel refreshes on every focus, every window and every answer, and each one calls
+    ``show_duel`` again. The box it passes is a first-open default, not a dock."""
+    window.show_duel(_duel())
+    window.duel_view._panel_left, window.duel_view._panel_top = 7, 9
+    window.duel_view._apply()
+
+    window.show_duel(_duel())
+    window.root.update_idletasks()
+
+    placed = window.duel_view.place_info()
+    assert (int(placed["x"]), int(placed["y"])) == (7, 9)
 
 
 def test_the_view_key_over_a_panel_puts_away_a_preview_the_board_opened(window):

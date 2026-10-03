@@ -7,7 +7,13 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayStrategy,
 )
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseCards, DecisionResponse
+from yasuki_core.engine.rules.duel.records import DuelOutcome
+from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    STRIKE,
+    ChooseCards,
+    DecisionResponse,
+)
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
@@ -16,6 +22,8 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.game_pieces.prints import ActionPrint, AttachmentPrint, FatePrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.duel.conftest import CHALLENGE_ABILITY, CHALLENGE_PROBE
 from tests.yasuki_core.engine.builders import (
     attached,
     end_phase,
@@ -26,10 +34,11 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    stronghold,
     two_seat_game,
 )
 
-P1 = PlayerId.P1
+P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 # --- Fantastic Gardens ---
@@ -427,3 +436,100 @@ def test_touch_of_death_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("victim0",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Poisoned Weapon ---
+
+
+def _poisoned_weapon_duel(*, chi: int = 5) -> EngineSession:
+    """A duel P1's challenger starts against P2's rival, with Poisoned Weapon in P2's hand.
+
+    The duel is created by an ability rather than written onto the game, so every input is on the
+    tape and the whole thing replays.
+    """
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(
+        state, register(state, personality("mine", owner=P1, printed_id=CHALLENGE_PROBE, chi=chi))
+    )
+    put_in_play(state, register(state, personality("theirs", owner=P2, chi=3)))
+    weapon = register(
+        state,
+        L5RCard.of(
+            FatePrint,
+            id="poison",
+            printed_id="poisoned_weapon",
+            name="Poisoned Weapon",
+            side=Side.FATE,
+            owner=P2,
+            gold_cost=0,
+        ),
+    )
+    state.zones[ZoneKey(P2, ZoneRole.HAND)].add(weapon)
+    return EngineSession.start(state, P1)
+
+
+def _strike_the_duel(session: EngineSession) -> None:
+    """Challenge and strike, which runs the duel to the window after its Focus Effects resolve.
+
+    P2 is asked first, and strikes rather than focusing: Poisoned Weapon is the only card in that
+    hand, and focusing it would spend the card the duel is being fought to play.
+    """
+    session.act(P1, ActivateAbility("mine"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+    session.submit(P2, DecisionResponse((STRIKE,)))
+
+
+def test_poisoned_weapon_is_offered_only_after_focus_effects_resolve():
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        session = _poisoned_weapon_duel()
+        session.act(P1, ActivateAbility("mine"))
+        session.submit(P1, DecisionResponse(("theirs",)))
+
+        # The duel is being focused, which is earlier than the window the card names.
+        assert PlayStrategy("poison") not in session.legal_actions(P2)
+
+
+def test_poisoned_weapon_gives_the_facing_personality_minus_three_chi_and_costs_four_honor():
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        session = _poisoned_weapon_duel()
+        _strike_the_duel(session)
+
+        assert PlayStrategy("poison") in session.legal_actions(P2)
+        session.act(P2, PlayStrategy("poison"))
+
+        assert effective_chi(session.game, session.game.table.cards_by_id["mine"]) == 2
+        assert session.game.table.seats[P2].honor == -4
+        assert replay(session.log).table == session.game.table
+
+
+def test_poisoned_weapon_killing_a_duelist_ends_the_duel_without_resolution():
+    # The reminder in parentheses restates a rule the engine already has: a Personality the Chi
+    # loss destroys leaves play, and a duelist leaving ends the duel where it stands.
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        session = _poisoned_weapon_duel(chi=3)
+        _strike_the_duel(session)
+
+        session.act(P2, PlayStrategy("poison"))
+
+        assert "mine" not in {card.id for card in session.game.table.battlefield.cards}
+        assert session.game.duel.outcome == DuelOutcome(
+            winners=(), losers=(), totals={}, focused={}
+        )
+        assert replay(session.log).table == session.game.table
+
+
+def test_poisoned_weapon_is_no_longer_offered_once_the_duel_is_decided():
+    # The window the card names closes when the next duel step announces itself. That edge is the
+    # half of the reading most likely to rot, since the card stays legal for every window before it
+    # only by the latest duel event being the one it asks for.
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        session = _poisoned_weapon_duel()
+        _strike_the_duel(session)
+        assert PlayStrategy("poison") in session.legal_actions(P2)
+
+        # Decline the window after the Focus Effects, which lets the duel be decided.
+        session.act(P2, Pass())
+
+        assert session.game.duel.outcome is not None
+        assert PlayStrategy("poison") not in session.legal_actions(P2)

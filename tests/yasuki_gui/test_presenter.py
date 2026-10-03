@@ -11,13 +11,17 @@ from yasuki_core.engine.rules.effects import (
     Arrange,
     Choose,
     EndLook,
+    GrantModifier,
     LookAtTop,
     MoveToDeck,
     TakeFavor,
 )
 from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_LABEL
 from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.duel.procedure import declare_duel
+from yasuki_core.engine.rules.triggers import apply_effect, choice_resolver
+from yasuki_core.engine.rules.turn.action_sequence import submit
+from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
@@ -26,6 +30,11 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseInvestAmount,
     ChooseOption,
     Confirm,
+    DECK_TOP,
+    STRIKE,
+    DecisionResponse,
+    FocusOrStrike,
+    focus_token,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.gold.payment import payment_request
@@ -54,6 +63,7 @@ from tests.yasuki_core.engine.builders import (
     dealt_table,
     end_phase,
     fate_card,
+    focus_card,
     personality,
     holding,
     province_card,
@@ -1833,3 +1843,241 @@ def test_a_dynasty_debug_card_is_placed_on_the_board_like_a_legacy_card(board):
     assert session.game.pending is None
     assert [card.printed.name for card in session.game.table.zones[first].cards] == ["Debug Farm"]
     assert session.log.replay() == session.game
+
+
+def test_the_prompt_box_offers_only_the_strike_while_a_duel_asks_to_focus(board):
+    # An option belongs with the thing that produces it. The prompt box is for answers shaped like
+    # yes, no or pass, so every focus source is offered on its own card or deck and only the strike
+    # is left here.
+    presenter, window, session = board
+    card = register(session.game.table, focus_card("fv", P1, 2, name="Ancestral Sword"))
+    session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(card)
+    session.game.pending = FocusOrStrike(seat=P1, candidates=(focus_token("fv"), DECK_TOP, STRIKE))
+
+    presenter.present()
+
+    assert _status(window) == "Focus a card or strike"
+    assert _buttons(window) == ["Strike"]
+    assert not window.field.selecting
+
+
+def test_a_hand_card_offers_focusing_it_while_the_duel_asks(board):
+    presenter, window, session = board
+    card = register(session.game.table, focus_card("fv", P1, 2, name="Ancestral Sword"))
+    session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(card)
+    session.game.pending = FocusOrStrike(seat=P1, candidates=(focus_token("fv"), STRIKE))
+    presenter.present()
+
+    offered: list[list[str]] = []
+    window.popup_at_pointer = lambda entries: offered.append([label for label, *_ in entries])
+
+    presenter.on_card_activated("fv")
+
+    assert offered == [["Focus this card"]]
+
+
+def test_a_hand_card_the_duel_cannot_focus_offers_nothing(board):
+    presenter, window, session = board
+    card = register(session.game.table, focus_card("fv", P1, 2, name="Ancestral Sword"))
+    session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(card)
+    session.game.pending = FocusOrStrike(seat=P1, candidates=(DECK_TOP, STRIKE))
+    presenter.present()
+
+    offered: list[list[str]] = []
+    window.popup_at_pointer = lambda entries: offered.append([label for label, *_ in entries])
+
+    presenter.on_card_activated("fv")
+
+    assert offered == [[]]
+
+
+def test_the_fate_deck_offers_focusing_blind_off_its_top(board):
+    presenter, window, session = board
+    session.game.pending = FocusOrStrike(seat=P1, candidates=(DECK_TOP, STRIKE))
+    presenter.present()
+
+    offered: list[list[str]] = []
+    window.popup_at_pointer = lambda entries: offered.append([label for label, *_ in entries])
+
+    presenter.on_deck_activated(P1, Side.FATE)
+    # The Dynasty deck is not a focus source, and neither is the opponent's.
+    presenter.on_deck_activated(P1, Side.DYNASTY)
+    presenter.on_deck_activated(P2, Side.FATE)
+
+    assert offered == [["Focus from the top of the Fate deck"]]
+
+
+def test_pressing_a_focus_item_answers_with_that_source(board):
+    presenter, window, session = board
+    card = register(session.game.table, focus_card("fv", P1, 2, name="Ancestral Sword"))
+    session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(card)
+    session.game.pending = FocusOrStrike(seat=P1, candidates=(focus_token("fv"), STRIKE))
+    presenter.present()
+
+    answered: list[tuple[str, ...]] = []
+    presenter.submit_answer = lambda choices: answered.append(choices)
+    chosen: list = []
+    window.popup_at_pointer = lambda entries: chosen.extend(entries)
+
+    presenter.on_card_activated("fv")
+    for _label, run in chosen:
+        run()
+
+    assert answered == [(focus_token("fv"),)]
+
+
+def test_the_duel_panel_opens_on_a_duel_and_closes_when_it_is_cleared(board):
+    presenter, window, session = board
+    put_in_play(session.game, personality("mine", owner=P1, chi=3))
+    put_in_play(session.game, personality("theirs", owner=P2, chi=4))
+    declare_duel(
+        session.game,
+        challenger_duelist="mine",
+        challenged_duelist="theirs",
+        source="mine",
+    )
+
+    presenter.present()
+
+    assert window.duel_view.place_info()
+    totals = window.duel_view.canvas.find_withtag("duel-total")
+    # The opponent's side is drawn first, at the top, and the viewer's own below it.
+    assert [window.duel_view.canvas.itemcget(item, "text") for item in totals] == ["4", "3"]
+
+    session.game.duel = None
+    presenter.present()
+
+    assert not window.duel_view.place_info()
+
+
+def test_the_duel_panel_lays_each_focused_card_across_its_personality(board):
+    presenter, window, session = board
+    put_in_play(session.game, personality("mine", owner=P1, chi=3))
+    put_in_play(session.game, personality("theirs", owner=P2, chi=4))
+    # Two each, so the duel is still being focused after one focus apiece: a seat with nothing
+    # left to focus strikes without being asked, which ends the duel and discards the stacks.
+    for seat in (P1, P2):
+        for index in range(2):
+            card = register(session.game.table, focus_card(f"{seat.name}-fv{index}", seat, 2))
+            session.game.table.zones[ZoneKey(seat, ZoneRole.HAND)].add(card)
+    declare_duel(
+        session.game,
+        challenger_duelist="mine",
+        challenged_duelist="theirs",
+        source="mine",
+    )
+    run_stack(session.game)
+    submit(session.game, DecisionResponse((focus_token("P2-fv0"),)))
+    submit(session.game, DecisionResponse((focus_token("P1-fv0"),)))
+
+    presenter.present()
+
+    # The viewer is P1, so its own focused card is drawn by id and shares a center line with the
+    # Personality it lies across. The fan is centered on the Personality, so one card sits on it.
+    canvas = window.duel_view.canvas
+    duelist = canvas.bbox("duel:mine")
+    focused = canvas.bbox("duel:P1-fv0")
+    assert duelist is not None and focused is not None
+    # Centered on the Personality horizontally, and outboard of it vertically so the stack lies
+    # across its outer half rather than hiding the face underneath.
+    assert _center_x(duelist) == _center_x(focused)
+    assert _center_y(focused) > _center_y(duelist)
+    assert _center_y(focused) < duelist[3]
+
+
+def _center_x(box: tuple[int, int, int, int]) -> int:
+    return (box[0] + box[2]) // 2
+
+
+def _center_y(box: tuple[int, int, int, int]) -> int:
+    return (box[1] + box[3]) // 2
+
+
+def test_a_finished_duel_stays_up_until_the_player_presses_continue(board):
+    # The engine is done with the duel the moment it resolves, and the record outlives it. Without
+    # the pause the panel would vanish with the totals the strike had just revealed still unread.
+    presenter, window, session = board
+    put_in_play(session.game, personality("mine", owner=P1, chi=5))
+    put_in_play(session.game, personality("theirs", owner=P2, chi=2))
+    declare_duel(
+        session.game,
+        challenger_duelist="mine",
+        challenged_duelist="theirs",
+        source="mine",
+    )
+    run_stack(session.game)
+
+    presenter.present()
+    assert window.duel_view.place_info()
+
+    canvas = window.duel_view.canvas
+    # The opponent's side is drawn first, at the top, and the viewer's own below it.
+    totals = [canvas.itemcget(item, "text") for item in canvas.find_withtag("duel-total")]
+    assert totals == ["2", "5"]
+    assert canvas.find_withtag("duel-continue")
+    assert "You win the duel" in [
+        canvas.itemcget(item, "text") for item in canvas.find_withtag("duel-outcome")
+    ]
+
+    window.duel_view.on_continue()
+
+    assert not window.duel_view.place_info()
+
+
+def test_a_dismissed_duel_stays_dismissed_when_a_duelist_is_modified(board):
+    # A battle pumps Force and Chi constantly, and the panel shows a figure read live off the
+    # board. Keyed on anything that moves, a modifier landing on a Personality that duelled earlier
+    # in the turn brings a long-finished duel back on screen.
+    presenter, window, session = board
+    put_in_play(session.game, personality("mine", owner=P1, chi=5))
+    put_in_play(session.game, personality("theirs", owner=P2, chi=2))
+    declare_duel(
+        session.game, challenger_duelist="mine", challenged_duelist="theirs", source="mine"
+    )
+    run_stack(session.game)
+    presenter.present()
+    window.duel_view.on_continue()
+    assert not window.duel_view.place_info()
+
+    apply_effect(
+        session.game,
+        GrantModifier("pump", "mine", Stat.CHI, 2, Duration.UNTIL_END_OF_TURN),
+    )
+    presenter.present()
+
+    assert not window.duel_view.place_info()
+
+
+def test_a_second_duel_between_the_same_personalities_opens_the_panel_again(board):
+    presenter, window, session = board
+    put_in_play(session.game, personality("mine", owner=P1, chi=5))
+    put_in_play(session.game, personality("theirs", owner=P2, chi=2))
+    for _ in range(2):
+        declare_duel(
+            session.game, challenger_duelist="mine", challenged_duelist="theirs", source="mine"
+        )
+        run_stack(session.game)
+        presenter.present()
+        assert window.duel_view.place_info()
+        window.duel_view.on_continue()
+        assert not window.duel_view.place_info()
+
+
+def test_a_duel_still_being_focused_offers_no_continue(board):
+    presenter, window, session = board
+    put_in_play(session.game, personality("mine", owner=P1, chi=3))
+    put_in_play(session.game, personality("theirs", owner=P2, chi=3))
+    card = register(session.game.table, focus_card("P2-fv", P2, 1))
+    session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(card)
+    declare_duel(
+        session.game,
+        challenger_duelist="mine",
+        challenged_duelist="theirs",
+        source="mine",
+    )
+    run_stack(session.game)
+
+    presenter.present()
+
+    assert window.duel_view.place_info()
+    assert not window.duel_view.canvas.find_withtag("duel-continue")

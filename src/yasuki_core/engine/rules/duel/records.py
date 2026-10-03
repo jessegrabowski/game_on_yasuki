@@ -39,11 +39,16 @@ class DuelOutcome(NamedTuple):
         What each seat's Personality totalled: its duel stat plus the Focus Values of its focused
         cards. Empty for a duel that never reached the reveal, which is what tells that duel's
         outcome from a tie.
+    focused : dict mapping PlayerId to tuple of str
+        The cards each seat focused, by id, in the order it focused them. Recorded because the
+        duel's last step discards them, and what a duel was decided on outlives the duel. Empty for
+        a duel that never reached the reveal.
     """
 
     winners: tuple[PlayerId, ...]
     losers: tuple[PlayerId, ...]
     totals: dict[PlayerId, int]
+    focused: dict[PlayerId, tuple[str, ...]] = {}
 
 
 @dataclass(slots=True)

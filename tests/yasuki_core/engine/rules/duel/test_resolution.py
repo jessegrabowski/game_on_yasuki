@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel import focus_effects, focusing, procedure, resolution
-from yasuki_core.engine.rules.duel.records import DuelWork
+from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelWork
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import state_based_actions
@@ -449,7 +449,7 @@ def test_a_duelist_off_the_board_ends_the_duel_without_resolution():
 
     duel = game.duel
     assert duel.step is DuelStep.ENDED
-    assert duel.outcome == ((), (), {})
+    assert duel.outcome == DuelOutcome(winners=(), losers=(), totals={}, focused={})
     # The focusing loop does not pick up again on a duel that has ended.
     assert game.stack == []
     assert not [key for key in game.table.zones if key.role is ZoneRole.FOCUS]

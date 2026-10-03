@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Fear,
     GainHonor,
+    GrantModifier,
     GrantPriority,
     MoveToHand,
     Show,
@@ -28,6 +29,16 @@ from yasuki_core.engine.rules.effects import (
     Then,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    CardFocused,
+    DuelDeclared,
+    DuelEnded,
+    DuelResolved,
+    FocusedCardsRevealed,
+    FocusEffectsResolved,
+    StrikeDeclared,
+)
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
@@ -120,6 +131,73 @@ register_ability(
         effects=_imperial_gift_effects,
         hits_every_target=True,
         located_at=(CardLocation.PROVINCE,),
+    ),
+)
+
+
+# --- Poisoned Weapon ---
+
+POISONED_WEAPON_CHI = -3
+POISONED_WEAPON_HONOR = -4
+
+
+def _poisoned_weapon_after_focus_effects(game: GameState) -> bool:
+    """Whether the duel has announced its Focus Effects resolved and has not yet been decided.
+
+    The duel's steps announce themselves in order, so the latest one still standing in the turn's
+    history is which step the duel is on. A window carries no identity of its own.
+    """
+    steps = (
+        DuelDeclared,
+        CardFocused,
+        StrikeDeclared,
+        FocusedCardsRevealed,
+        FocusEffectsResolved,
+        DuelResolved,
+        DuelEnded,
+    )
+    latest = next((event for event in reversed(game.turn_events) if isinstance(event, steps)), None)
+    return isinstance(latest, FocusEffectsResolved)
+
+
+def _poisoned_weapon_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The Personality facing yours in the duel, which the card names as "the other Personality"."""
+    duel = game.duel_being_fought
+    if duel is None or not _poisoned_weapon_after_focus_effects(game):
+        return []
+    mine = next((seat for seat in (duel.challenger, duel.challenged) if seat is source.owner), None)
+    return [] if mine is None else [duel.duelist_of(duel.opponent_of(mine))]
+
+
+def _poisoned_weapon_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The text gives the Chi loss no duration, so it lasts until the end of the turn (CR, Ongoing).
+
+    Nothing here ends the duel. A Personality the Chi loss destroys leaves play, and the duel ends
+    without resolution because a duelist left it, which is the rule the card's reminder restates.
+    """
+    return [
+        GrantModifier(
+            source_id=source.id,
+            target_id=target.id,
+            stat=Stat.CHI,
+            amount=POISONED_WEAPON_CHI,
+            duration=Duration.UNTIL_END_OF_TURN,
+        ),
+        GainHonor(source.owner, POISONED_WEAPON_HONOR),
+    ]
+
+
+register_ability(
+    "poisoned_weapon",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=no_cost,
+        targets=_poisoned_weapon_targets,
+        effects=_poisoned_weapon_effects,
+        located_at=(CardLocation.HAND,),
+        # "The other Personality in the duel" is not a target the player picks: the duel decides
+        # which Personality it is, so the card hits it without asking.
+        hits_every_target=True,
     ),
 )
 

@@ -34,6 +34,21 @@ Rendering and card manipulation are hot paths: no redundant checks, no work insi
 be hoisted, and exceptions propagate rather than being swallowed. A silently eaten error around a
 state transition is a recurring source of bugs here.
 
+## Where an option goes
+
+An option belongs on the thing that produces or consumes it. A card's own choices are on that card's
+left-click menu, a deck's are on the deck, a battlefield's are on the lane. The player picks a card
+by pointing at the card.
+
+The prompt box takes answers shaped like yes, no, pass, or one of a few outcomes the card spells out
+in words. It is not a place to list cards. A decision whose candidates are cards or card sources is
+offered where those cards are drawn, and the prompt box keeps only what is left: in a duel that is
+the strike alone, with every focus source on the hand card or the Fate deck it comes from.
+
+The board's selection mode is the third surface, for a decision answered by picking cards already in
+play. A decision whose candidates are not card ids must never reach it: `begin_selection` would find
+nothing matching and leave the player stranded on a prompt with nothing to click.
+
 ## What checks it
 
 - The suite: GUI tests mock Tk rather than running the main loop, so they run headless in CI

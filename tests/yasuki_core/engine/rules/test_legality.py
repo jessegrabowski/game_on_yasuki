@@ -4,7 +4,7 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import CYCLE_PROXY_ID, LEGACY_PROXY_ID, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
@@ -25,6 +25,13 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.battle import resolution
+from yasuki_core.engine.rules.battle.presence import place_unit
+from yasuki_core.engine.rules.turn.structure import (
+    RESPONSE_TIMINGS,
+    ActionRound,
+    RoundKind,
+)
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
@@ -35,6 +42,7 @@ from tests.yasuki_core.engine.builders import (
     personality,
     put_in_play,
     register,
+    two_seat_game,
 )
 
 
@@ -1049,3 +1057,41 @@ def test_dynasty_discard_is_not_rationed_by_the_once_per_turn_rule():
     ops.move_card(session.game.table, junk, ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0))
 
     assert _dynasty_discards(session) == {"junk"}
+
+
+def _battle_with_one_seat_present() -> GameState:
+    """A battle at P2's Province with a unit of P1's at it and nothing of P2's, so P2 has no
+    presence there."""
+    game = two_seat_game()
+    province_card(game, "def-prov0", seat=PlayerId.P2, index=0)
+    put_in_play(game, personality("raider", owner=PlayerId.P1))
+    put_in_play(game, personality("guard", owner=PlayerId.P2))
+    resolution.declare_attack(game, PlayerId.P1)
+    place_unit(game, game.table.cards_by_id["raider"], Location.at_battlefield(0))
+    game.attack.current = 0
+    return game
+
+
+@pytest.mark.parametrize(
+    "kind",
+    [RoundKind.BATTLE_SEGMENT, RoundKind.INTERRUPT, RoundKind.RESPONSE, RoundKind.DUEL_WINDOW],
+)
+def test_a_seat_with_no_unit_at_the_battle_is_permitted_nothing_whatever_round_asks(kind):
+    """CR, Actions in Battle: the Rule of Presence applies to every action type. A Response and a
+    duel window sit over a battle segment without being one, so reading the round's kind to decide
+    whether a battle is being fought lets a seat with no presence act in them."""
+    game = _battle_with_one_seat_present()
+    round = ActionRound(timings=RESPONSE_TIMINGS, priority=PlayerId.P1, kind=kind)
+
+    assert legality.permitted_timings_in(game, round, PlayerId.P2) == frozenset()
+    assert legality.permitted_timings_in(game, round, PlayerId.P1)
+
+
+def test_a_round_between_battles_applies_no_presence_rule():
+    """The attack lives on past the battle at one battlefield, and ``current`` is None between
+    them, so nobody is held to a battlefield that is not being fought."""
+    game = _battle_with_one_seat_present()
+    game.attack.current = None
+    round = ActionRound(timings=RESPONSE_TIMINGS, priority=PlayerId.P1, kind=RoundKind.RESPONSE)
+
+    assert legality.permitted_timings_in(game, round, PlayerId.P2)

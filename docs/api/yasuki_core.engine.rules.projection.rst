@@ -9,6 +9,8 @@ yasuki_core.engine.rules.projection
 
     AttackView
     BattlefieldView
+    DuelView
+    DuelistView
     GameView
     UnitView
 

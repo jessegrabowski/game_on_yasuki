@@ -127,7 +127,9 @@ class TestImageProvider:
 
         provider.front(test_path, False, False)
 
-        mock_load.assert_called_once_with(test_path, False, False, master=root, target=None)
+        mock_load.assert_called_once_with(
+            test_path, False, False, master=root, target=None, peeked=False
+        )
 
     @patch("yasuki_gui.ui.images.load_back_image")
     def test_back_image(self, mock_load_back, root):
@@ -146,3 +148,20 @@ class TestImageProvider:
         provider.clear()
 
         mock_clear.assert_called_once()
+
+
+def test_a_peeked_face_is_dimmed_and_cached_apart_from_the_plain_one(root):
+    # A card only its owner may read is shown face up and dimmed, so the owner reads it and still
+    # sees that it is not public. The dim is a cache axis, or the two would share one image.
+    from yasuki_core.paths import FATE_BACK
+    from yasuki_gui.ui.images import load_image
+
+    plain = load_image(FATE_BACK, False, False, master=root)
+    peeked = load_image(FATE_BACK, False, False, master=root, peeked=True)
+
+    assert plain is not None and peeked is not None
+    # The same request is served from the cache, so a different object is the dim being a key of
+    # its own rather than two loads of the same file.
+    assert load_image(FATE_BACK, False, False, master=root) is plain
+    assert load_image(FATE_BACK, False, False, master=root, peeked=True) is peeked
+    assert plain is not peeked

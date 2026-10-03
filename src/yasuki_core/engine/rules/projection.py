@@ -1,10 +1,12 @@
 from collections.abc import Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
+from yasuki_core.engine.redaction import HiddenCard, ZoneView, redact, ViewSnapshot
 from yasuki_core.engine.rules.battle import resolution
+from yasuki_core.engine.rules.duel.procedure import duel_stat
+from yasuki_core.engine.rules.duel.records import DuelRecord
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat, is_modified
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
@@ -13,12 +15,12 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import BattleOutcome
 from yasuki_core.engine.rules.turn.structure import Phase, RoundKind
-from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
-from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, DuelStep, Segment
+from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest, FocusOrStrike
 from yasuki_core.engine.rules.legality import legacy_candidates
 from yasuki_core.engine.rules.board.queries import terrains_at, units_at
 from yasuki_core.engine.rules.units.composition import unit_force
-from yasuki_core.engine.table import DeckKey, ZoneKey
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
@@ -120,6 +122,84 @@ class AttackView:
 
 
 @dataclass(frozen=True, slots=True)
+class DuelistView:
+    """One side of a duel, as a seat sees it.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The Personality's controller.
+    duelist : L5RCard, HiddenCard or None
+        The Personality in the duel, or None once it has left play. A duelist leaving is what ends
+        a duel without resolution, and the record outlives it.
+    focused : tuple of L5RCard or HiddenCard
+        What this side has focused, in the order it focused. A card the viewer may not identify
+        arrives as a back, which is every card the other side focused before the reveal.
+    duel_stat : int or None
+        The stat this duel compares for the Personality, which both seats may read. None once the
+        Personality has left play, which is what ends a duel without resolution.
+    total : int or None
+        The duel stat plus the Focus Values of the focused cards this viewer may read, so a seat's
+        own total moves as it focuses and the other's moves only for a card focused face up. Taken
+        from the outcome once the duel is decided, since the duel's last step discards the cards a
+        live total is summed from. None where the duel ended before reaching one.
+    """
+
+    seat: PlayerId
+    duelist: L5RCard | HiddenCard | None
+    focused: tuple[L5RCard | HiddenCard, ...]
+    duel_stat: int | None
+    total: int | None
+
+
+@dataclass(frozen=True, slots=True)
+class DuelView:
+    """The duel on the game, as a seat sees it.
+
+    Stays non-None after the duel has ended, because the record does: a client showing the result
+    needs it after the engine has moved on.
+
+    Attributes
+    ----------
+    challenger : DuelistView
+        The side that issued the challenge.
+    challenged : DuelistView
+        The side that was challenged.
+    step : DuelStep
+        Which step of the procedure the duel reached.
+    option : PlayerId or None
+        The seat being asked to focus or strike, or None when no such question is open.
+    source_name : str
+        The name of the card that created the duel.
+    ordinal : int
+        Which duel of the game this is, counting from one. Two duels running the same Personalities
+        to the same result are still two duels, and this is what tells them apart.
+    source : L5RCard, HiddenCard or None
+        The card that created the duel, where the table still holds it. A Strategy that created one
+        sits in its resolution area until the duel is over, so this is where it is drawn.
+    winners : tuple of PlayerId
+        The seats whose Personalities won. Empty on a duel both lost, and on one not yet decided.
+    losers : tuple of PlayerId
+        The seats whose Personalities lost, which is both of them on a tie and neither on a duel
+        that ended without resolution.
+    decided : bool
+        Whether the duel reached an outcome. ``winners`` is empty both for a duel nobody won and for
+        one not yet decided, so this is what tells those apart.
+    """
+
+    challenger: DuelistView
+    challenged: DuelistView
+    step: DuelStep
+    option: PlayerId | None
+    ordinal: int
+    source_name: str
+    source: L5RCard | HiddenCard | None
+    winners: tuple[PlayerId, ...]
+    losers: tuple[PlayerId, ...]
+    decided: bool
+
+
+@dataclass(frozen=True, slots=True)
 class GameView:
     """A per-seat projection of a :class:`~.GameState`. This includes everything one seat is
     entitled to see.
@@ -170,6 +250,9 @@ class GameView:
         The attack in progress, or None outside one. Public to both seats: who is attacking
         whom, and which units stand where, is on the table for everyone to see. A Province's
         occupant is redacted like any other card.
+    duel : DuelView or None
+        The duel on the game, or None where none has been declared this turn. Non-None after a
+        duel has ended, for a client showing its result.
     stats : dict mapping str to dict
         Each modified card's effective stats by id, the inner dict keyed by :class:`~.Stat`. Read it
         through :meth:`stat` rather than directly. A card no modifier reaches is absent, and the
@@ -196,6 +279,7 @@ class GameView:
     legacy_pool: tuple[L5RCard, ...]
     dynasty_deck: tuple[L5RCard, ...]
     attack: AttackView | None
+    duel: DuelView | None
     stats: dict[str, dict[Stat, int]]
     unit_force: dict[str, int]
 
@@ -262,7 +346,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
     viewer's own Legacy pool and remaining dynasty deck, and the effective stats of every card
     carrying a modifier."""
     pending = game.pending if game.pending is not None and game.pending.seat is viewer else None
-    table = redact(game.table, viewer)
+    table = _without_the_resolution_area(game, redact(game.table, viewer))
     attack = _project_attack(game, table)
     return GameView(
         viewer=viewer,
@@ -281,6 +365,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
             sorted(game.table.decks[DeckKey(viewer, Side.DYNASTY)].cards, key=lambda card: card.id)
         ),
         attack=attack,
+        duel=_project_duel(game, table),
         stats={
             card.id: {stat: effective_stat(game, card, stat) for stat in Stat}
             for card in _modified_cards(game, _identifiable_ids(table))
@@ -341,8 +426,128 @@ def _as_seen(table: ViewSnapshot, card_ids: list[str]) -> tuple[L5RCard | Hidden
         card = placed.card
         # A card the viewer cannot identify keeps its id under a different name, and it still has to
         # be found here: an unidentifiable card in play reaches the client as a back, not as a gap.
-        in_play[card.card_id if isinstance(card, HiddenCard) else card.id] = card
+        in_play[_card_id(card)] = card
     return tuple(in_play[card_id] for card_id in card_ids if card_id in in_play)
+
+
+def _without_the_resolution_area(game: GameState, table: ViewSnapshot) -> ViewSnapshot:
+    """``table`` with every card announced out of a hand taken out of it.
+
+    A card played from hand sits in a resolution area until it lands (CR, Resolution Area), which is
+    what :func:`~yasuki_core.engine.rules.board.seats.cards_in_hand` already counts. The zone it is
+    drawn from still holds it, so a client rendering that zone shows a Strategy sitting in the hand
+    of the player resolving it. The projection is where the two are reconciled, once, rather than in
+    each client.
+    """
+    announced = game.announced_from_hand
+    if not announced:
+        return table
+    zones = {
+        key: ZoneView(tuple(card for card in zone.cards if _card_id(card) not in announced))
+        if key.role is ZoneRole.HAND
+        else zone
+        for key, zone in table.zones.items()
+    }
+    return replace(table, zones=zones)
+
+
+def _card_id(card: L5RCard | HiddenCard) -> str:
+    """A card's id, whether or not the viewer may identify it."""
+    return card.card_id if isinstance(card, HiddenCard) else card.id
+
+
+def _project_duel(game: GameState, table: ViewSnapshot) -> DuelView | None:
+    """The duel on the game as ``table``'s viewer sees it, or None where none has been declared.
+
+    Each side's focused cards are pulled through the snapshot, so the other side's arrive as backs
+    until the strike turns them face up. The totals follow the same line: they stay None until the
+    reveal, because a total is the Focus Values added up.
+    """
+    duel = game.duel
+    if duel is None:
+        return None
+    option = game.pending.seat if isinstance(game.pending, FocusOrStrike) else None
+    outcome = duel.outcome
+    return DuelView(
+        challenger=_project_duelist(game, table, duel, duel.challenger),
+        challenged=_project_duelist(game, table, duel, duel.challenged),
+        step=duel.step,
+        option=option,
+        ordinal=game.duels_begun,
+        source_name=_card_name(game, duel.source),
+        source=game.table.cards_by_id.get(duel.source),
+        winners=() if outcome is None else outcome.winners,
+        losers=() if outcome is None else outcome.losers,
+        decided=outcome is not None,
+    )
+
+
+def _project_duelist(
+    game: GameState, table: ViewSnapshot, duel: DuelRecord, seat: PlayerId
+) -> DuelistView:
+    """One side of ``duel`` as the snapshot's viewer sees it."""
+    wanted = duel.duelist_of(seat)
+    # Off the battlefield rather than `cards_by_id`, which indexes the discard piles: a destroyed
+    # duelist would otherwise keep publishing a stat for a Personality the view says is gone.
+    duelist = next((card for card in game.table.battlefield.cards if card.id == wanted), None)
+    seen = _focused_as_seen(game, table, duel, seat)
+    return DuelistView(
+        seat=seat,
+        duelist=_as_seen(table, [wanted])[0] if duelist is not None else None,
+        focused=seen,
+        duel_stat=duel_stat(game, duelist) if duelist is not None else None,
+        total=_duel_total(game, duel, seat, duelist, seen),
+    )
+
+
+def _duel_total(
+    game: GameState,
+    duel: DuelRecord,
+    seat: PlayerId,
+    duelist: L5RCard | None,
+    seen: tuple[L5RCard | HiddenCard, ...],
+) -> int | None:
+    """The number this side shows: its duel stat plus the Focus Values of the focused cards this
+    viewer may read.
+
+    A seat reads its own focused cards, so its own total moves as it focuses, while the other's
+    moves only for a card focused face up. A decided duel's own record is preferred, because the
+    last step of a duel discards the cards a live total is summed from. An outcome carrying no
+    totals is a duel that ended before the reveal, which has no total to show.
+    """
+    outcome = duel.outcome
+    if outcome is not None:
+        return outcome.totals.get(seat)
+    if duelist is None:
+        return None
+    read = (card for card in seen if isinstance(card, L5RCard))
+    return duel_stat(game, duelist) + sum(effective_stat(game, card, Stat.FOCUS) for card in read)
+
+
+def _focused_as_seen(
+    game: GameState, table: ViewSnapshot, duel: DuelRecord, seat: PlayerId
+) -> tuple[L5RCard | HiddenCard, ...]:
+    """What ``seat`` has focused, in order, as the snapshot's viewer may see it.
+
+    A card the viewer cannot identify is a back, which is how a seat reads its opponent's face-down
+    focus stack. Once the duel's last step has discarded them the areas are gone, so the cards come
+    from the outcome's own record instead: a decided duel can still be read for as long as the
+    record stands, and by then every one of them is face up in a public pile.
+    """
+    zone = table.zones.get(ZoneKey(seat, ZoneRole.FOCUS))
+    if zone is not None:
+        return tuple(zone.cards)
+    outcome = duel.outcome
+    if outcome is None:
+        return ()
+    by_id = game.table.cards_by_id
+    return tuple(by_id[card_id] for card_id in outcome.focused.get(seat, ()) if card_id in by_id)
+
+
+def _card_name(game: GameState, card_id: str) -> str:
+    """The name of ``card_id``, or the id itself for a card the table no longer holds."""
+    card = game.table.cards_by_id.get(card_id)
+    return card.name if card is not None else card_id
 
 
 def _destroyed_names(game: GameState, outcome: BattleOutcome | None) -> tuple[str, ...]:

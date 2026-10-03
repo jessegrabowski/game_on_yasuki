@@ -44,6 +44,7 @@ yasuki_gui
     yasuki_gui.ui.deck_builder.filter_dialog <yasuki_gui.ui.deck_builder.filter_dialog>
     yasuki_gui.ui.deck_builder.search_help <yasuki_gui.ui.deck_builder.search_help>
     yasuki_gui.ui.dialogs <yasuki_gui.ui.dialogs>
+    yasuki_gui.ui.duel_view <yasuki_gui.ui.duel_view>
     yasuki_gui.ui.floating_panel <yasuki_gui.ui.floating_panel>
     yasuki_gui.ui.game_window <yasuki_gui.ui.game_window>
     yasuki_gui.ui.geometry <yasuki_gui.ui.geometry>

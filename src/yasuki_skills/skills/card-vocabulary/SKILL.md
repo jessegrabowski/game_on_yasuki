@@ -6,11 +6,12 @@ description: >
   computed. Fires on "add an effect", "what effect do I return", "the vocabulary cannot express
   this", "add a new game event", "how do costs work", "why is this card's Force wrong", "add a
   keyword", and on any engine change under rules/vocabulary, rules/abilities, rules/stats,
-  rules/gold, rules/units or rules/battle. Read it before inventing a way to say something, because
-  the vocabulary is a closed set of dataclasses that the effect applier and the projection layer
-  both have to understand, and a handler that mutates the board instead of returning an effect
-  breaks undo. This skill covers what a handler may return; writing the handler for a printed card
-  is implementing-a-card, and the turn machine that calls it is turns-and-actions.
+  rules/gold, rules/units, rules/battle or rules/duel. Read it before inventing a way to say
+  something, because the vocabulary is a closed set of dataclasses that the effect applier and the
+  projection layer both have to understand, and a handler that mutates the board instead of
+  returning an effect breaks undo. This skill covers what a handler may return; writing the handler
+  for a printed card is implementing-a-card, and the turn machine that calls it is
+  turns-and-actions.
 ---
 
 # The card vocabulary
@@ -27,6 +28,8 @@ description: >
   `costs.py`, `invest.py`, `strategy.py`, `idioms.py`
 - `src/yasuki_core/engine/rules/stats/` and `rules/gold/`: effective values and the gold economy
 - `src/yasuki_core/engine/rules/units/`, `rules/battle/`: unit composition and battle records
+- `src/yasuki_core/engine/rules/duel/`: the duel procedure, its focusing seam and the Focus Effect
+  registry
 
 ## What it does
 
@@ -61,8 +64,8 @@ in the data.
 
 `docs/design/card_vocabulary.md` lists the vocabulary itself. Then one page per system:
 `effects.md`, `triggers-and-the-cascade.md`, `abilities-and-costs.md`, `stats.md`, `gold.md`,
-`decisions-and-resumption.md`, `looking-at-cards.md`, `units-and-attachments.md`, `battle.md` and
-`the-imperial-favor.md`, all under `docs/design/systems/`.
+`decisions-and-resumption.md`, `looking-at-cards.md`, `units-and-attachments.md`, `battle.md`,
+`duels.md` and `the-imperial-favor.md`, all under `docs/design/systems/`.
 
 Handlers for printed cards are the `implementing-a-card` skill. The turn machine that fires events
 and offers actions is `turns-and-actions`.

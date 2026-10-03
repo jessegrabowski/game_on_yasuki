@@ -25,6 +25,8 @@ from yasuki_core.bots.queries import (
     spendable,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    DECK_TOP,
+    STRIKE,
     AssignUnits,
     ChooseBattlefield,
     assignment,
@@ -32,8 +34,14 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     ChooseCards,
     ChooseEquipTarget,
+    ChooseOption,
     DecisionRequest,
     DecisionResponse,
+    FocusOrStrike,
+)
+from yasuki_core.engine.rules.cards.emperor_edition import (
+    SANCTIONED_DUEL_ACCEPT,
+    SANCTIONED_DUEL_RESOLVER,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, GameView
@@ -326,7 +334,22 @@ class MilitaryPolicy:
             return DecisionResponse((_best_battlefield(request, view.attack),))
         if isinstance(request, ChooseEquipTarget) and request.candidates:
             return DecisionResponse((_best_equip_target(request, view),))
+        if isinstance(request, FocusOrStrike):
+            return DecisionResponse(_duel_focus(request))
+        if isinstance(request, ChooseOption) and request.resolver == SANCTIONED_DUEL_RESOLVER:
+            return DecisionResponse((SANCTIONED_DUEL_ACCEPT,))
         return self._playing.decide(request, view)
+
+
+def _duel_focus(request: FocusOrStrike) -> tuple[str, ...]:
+    """Focus blind off the deck while the duel still offers it, and strike once it does not.
+
+    A placeholder, so a duel can be played against this policy at all. It prices nothing: focusing
+    is a bid under hidden information and accepting a challenge is a comparison this policy cannot
+    yet make, and both belong to the learned policy the plan is heading for rather than to a
+    hand-fitted rule. Until then the duel procedure is at least reachable.
+    """
+    return (DECK_TOP,) if DECK_TOP in request.candidates else (STRIKE,)
 
 
 def _holds_the_initiative(view: GameView) -> bool:

@@ -36,6 +36,10 @@ class CardSpriteVisual(Visual):
     # game is driving the board. The card's live Force and Chi are stamped from it over the numerals
     # it prints them in; the sandbox has no engine to ask and so stamps nothing.
     stats: dict[str, dict[Stat, int]] | None = None
+    # Whether this viewer may read a card that is lying face down: a focused card is its owner's to
+    # look at and nobody else's (CR, Focusing Area). Drawn face up and dimmed, so the owner reads it
+    # and still sees at a glance that it is not public.
+    peeked: bool = False
     # Keep a strong reference to the last PhotoImage used when drawing art
     _last_image: object | None = None
 
@@ -71,7 +75,9 @@ class CardSpriteVisual(Visual):
         w, h = self.size
         bowed = self._bowed
         dishonorable = self.card.dishonorable
-        face_up = self.card.face_up
+        # A peeked card shows its face to the one seat entitled to it, dimmed to say it is not
+        # public. Everyone else was handed a back by redaction and never reaches here.
+        face_up = self.card.face_up or self.peeked
 
         # The presented art is the active face: a double-faced card flipped to its back shows that
         # back's front art, while a single-faced card is its own active face.
@@ -79,13 +85,13 @@ class CardSpriteVisual(Visual):
         img = None
         if self.images is not None:
             if face_up:
-                img = self.images.front(front_art, bowed, dishonorable)
+                img = self.images.front(front_art, bowed, dishonorable, peeked=self.peeked)
             else:
                 img = self.images.back(self.card.side, bowed, dishonorable, self.card.image_back)
         else:
             # fallback no-cache path
             img = (
-                load_image(front_art, bowed, dishonorable, master=canvas)
+                load_image(front_art, bowed, dishonorable, master=canvas, peeked=self.peeked)
                 if face_up
                 else load_back_image(
                     self.card.side, bowed, dishonorable, self.card.image_back, master=canvas
