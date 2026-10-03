@@ -219,14 +219,19 @@ def _outcome_on_totals(game: GameState, duel: DuelRecord) -> DuelOutcome:
     is won by a Duelist against a non-Duelist, and any other tie is lost by both (CR, Duel)."""
     challenger, challenged = duel.challenger, duel.challenged
     totals = {seat: duel_total(game, duel, seat) for seat in (challenger, challenged)}
+    # Read while the cards are still in their areas, since the duel's last step discards them.
+    focused = {
+        seat: tuple(card.id for card in focused_cards(game, seat))
+        for seat in (challenger, challenged)
+    }
     if totals[challenger] != totals[challenged]:
         winner = max(totals, key=lambda seat: totals[seat])
-        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals)
+        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals, focused)
     duelists = {
         seat: _is_duelist(game, game.table.cards_by_id[duel.duelist_of(seat)])
         for seat in (challenger, challenged)
     }
     if duelists[challenger] != duelists[challenged]:
         winner = challenger if duelists[challenger] else challenged
-        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals)
-    return DuelOutcome((), (challenger, challenged), totals)
+        return DuelOutcome((winner,), (duel.opponent_of(winner),), totals, focused)
+    return DuelOutcome((), (challenger, challenged), totals, focused)
