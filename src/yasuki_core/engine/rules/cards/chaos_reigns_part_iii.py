@@ -49,6 +49,7 @@ from yasuki_core.engine.rules.effects import (
     Rehonor,
     Show,
     ShuffleDeck,
+    Simultaneously,
 )
 from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
@@ -207,9 +208,9 @@ def _resolve_comprehensive_education_take(
 def _resolve_comprehensive_education_discard(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    discarded: list[Effect] = [Discard(card_id, seat) for card_id in chosen]
+    discarded = Simultaneously(tuple(Discard(card_id, seat) for card_id in chosen))
     rest = tuple(card_id for card_id in remaining_look(game) if card_id not in chosen)
-    return [*discarded, _comprehensive_education_bottom(seat, rest, source_id)]
+    return [discarded, _comprehensive_education_bottom(seat, rest, source_id)]
 
 
 def _comprehensive_education_bottom(

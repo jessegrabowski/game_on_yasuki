@@ -37,6 +37,9 @@ from yasuki_core.engine.rules.effects import (
     Move,
     Straighten,
     TakeFavor,
+    DrawCard,
+    GainHonor,
+    Simultaneously,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import enforce_state_based_actions, fire, resolve_effects
@@ -131,6 +134,17 @@ def _honor(session, seat) -> int:
 def test_it_is_offered_from_its_province():
     session = _panda_game()
     assert ActivateAbility("panda") in session.legal_actions(P1)
+
+
+def test_every_seat_gains_at_once_then_every_seat_draws_at_once():
+    # CR, Timing Conflicts: "each step of each procedure takes place simultaneously, in parallel".
+    game = _panda_game().game
+    panda = game.table.cards_by_id["panda"]
+
+    gains, draws, _ = ability_for(game, panda, None).effects(game, panda, panda)
+
+    assert gains == Simultaneously((GainHonor(P1, 1), GainHonor(P2, 1)))
+    assert draws == Simultaneously((DrawCard(P1), DrawCard(P2)))
 
 
 def test_every_seat_gains_honor_and_draws_not_just_the_controller():

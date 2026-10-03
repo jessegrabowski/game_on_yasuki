@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Effect,
     GainHonor,
+    Simultaneously,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState
@@ -63,10 +64,10 @@ def _resolve_suiteiru_no_oni(
 ) -> list[Effect]:
     """Create one Podling per name in ``chosen``, so a Personality named twice carries two, and pay
     for the lot in Honor."""
-    return [
-        *(CreateToken(SUITEIRUS_PODLING, seat, source_id, attach_to=bearer) for bearer in chosen),
-        GainHonor(seat, -len(chosen), source_id=source_id),
-    ]
+    podlings = (
+        CreateToken(SUITEIRUS_PODLING, seat, source_id, attach_to=bearer) for bearer in chosen
+    )
+    return [Simultaneously(tuple(podlings)), GainHonor(seat, -len(chosen), source_id=source_id)]
 
 
 register_ability(

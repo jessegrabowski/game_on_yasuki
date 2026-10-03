@@ -2,7 +2,13 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.effects import DestroyProvince, Dishonor, DrawCard, Effect
+from yasuki_core.engine.rules.effects import (
+    DestroyProvince,
+    Dishonor,
+    DrawCard,
+    Effect,
+    Simultaneously,
+)
 from yasuki_core.engine.rules.board.queries import (
     has_keyword,
     owned_personalities,
@@ -32,7 +38,7 @@ def _harsh_choices_effects(game: GameState, source: L5RCard, target: L5RCard) ->
         return []
     return [
         DestroyProvince(source.owner, province),
-        *(DrawCard(source.owner) for _ in range(3)),
+        Simultaneously(tuple(DrawCard(source.owner) for _ in range(3))),
     ]
 
 

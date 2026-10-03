@@ -147,6 +147,24 @@ and replay the whole game from its inputs.
 Returning an empty list is normal and is how a trigger declines. Most of the body of a real trigger
 is deciding whether to.
 
+Effects in the list you return happen in the order you write them, one sentence of the card after
+another. Text that acts on several cards at once is one occurrence, and its effects go inside a
+{class}`~yasuki_core.engine.rules.effects.Simultaneously` so nothing reacts to any of them until all
+have happened. {card}`Shinjo Saeki, Clan Champion (Experienced 2)` reads "After Saeki enters play,
+create and Equip a 1F Cavalry Follower to each of your Cavalry Personalities":
+
+```python
+riders = creation_targets(ctx.game, ctx.card.owner, cavalry, keyword=keywords.CAVALRY)
+followers = (
+    CreateToken(CAVALRY_FOLLOWER, ctx.card.owner, ctx.card.id, attach_to=rider.id)
+    for rider in riders
+)
+return [Simultaneously(tuple(followers))]
+```
+
+Drawing works the same way: "Draw three cards" is three draws at once (CR, "Effects that draw more
+than one card at the same time ... occur simultaneously").
+
 For what happens after you return, including the order several cards react in and what happens when
 an effect has to stop and ask a player a question, see
 [Triggers and the cascade](../design/systems/triggers-and-the-cascade.md).

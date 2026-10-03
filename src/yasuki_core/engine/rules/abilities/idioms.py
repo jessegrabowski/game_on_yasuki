@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantModifier,
     PutIntoPlay,
+    Simultaneously,
 )
 from yasuki_core.engine.rules.gold.discounts import unspent_action_discount
 from yasuki_core.engine.rules.gold.producers import reachable_gold
@@ -133,7 +134,9 @@ def register_entry(
     def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
         return [
             PutIntoPlay(source.id),
-            *(Discard(card_id, source.owner) for card_id in cleared(game, source)),
+            Simultaneously(
+                tuple(Discard(card_id, source.owner) for card_id in cleared(game, source))
+            ),
             *(extra_effects(game, source) if extra_effects is not None else ()),
         ]
 
