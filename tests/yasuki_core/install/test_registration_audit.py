@@ -61,7 +61,7 @@ def test_card_keyed_data_is_validated_but_kept_out_of_the_layout_scan():
 # emptiness guard below meaningful for every other registry; drop an entry when its first card
 # lands. "no enlightenment" waits on the Dark Rings and Legacy of Fudo, the Rings that do not
 # count toward Enlightenment.
-KNOWINGLY_EMPTY: set[str] = {"no enlightenment", "equips from discard"}
+KNOWINGLY_EMPTY: set[str] = {"no enlightenment"}
 
 
 def test_no_registry_reports_as_empty():

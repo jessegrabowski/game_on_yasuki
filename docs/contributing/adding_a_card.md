@@ -35,6 +35,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
 | Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |
 | Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |
+| "The rulebook Equip ability may target this Follower in the discard pile" | `@equips_from_discard(id)` | {card}`Tao Defenders` |
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
 | Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
 | Changes a Province's strength | `@province_strength_grant(id)` | {card}`Defensive Memorial` |
