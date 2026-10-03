@@ -37,11 +37,15 @@ class Duration(Enum):
     PERMANENT
         Outlives its source leaving play. Like every modifier it ends when its *target* leaves the
         table, because a card that leaves play ceases to exist.
+    UNTIL_ACTION_RESOLVES
+        Lasts while the action now resolving resolves, including the cards it brings into play
+        entering, and lapses as that action is announced resolved, whatever became of its source.
     """
 
     UNTIL_END_OF_TURN = "until_end_of_turn"
     WHILE_SOURCE_IN_PLAY = "while_source_in_play"
     PERMANENT = "permanent"
+    UNTIL_ACTION_RESOLVES = "until_action_resolves"
 
 
 # How long an ongoing record lasts: a Duration, or a Moment it lapses at the first time the flow

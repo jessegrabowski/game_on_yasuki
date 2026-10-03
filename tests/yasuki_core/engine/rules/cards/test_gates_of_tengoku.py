@@ -24,7 +24,17 @@ from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Destroy, RangedAttack
+from yasuki_core.engine.rules.board.seats import has_compassion
+from yasuki_core.engine.rules.effects import (
+    Bow,
+    Destroy,
+    Effect,
+    PutIntoPlay,
+    RangedAttack,
+)
+from yasuki_core.engine.rules.gold.production import effective_gold_production
+from yasuki_core.engine.rules.triggers import TriggerContext
+from yasuki_core.engine.rules.vocabulary.game_events import Bowed
 from yasuki_core.engine.rules.rulebook.recruit import finish_recruit
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
@@ -48,6 +58,7 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     province_card,
     end_turn,
+    fate_card,
     holding,
     pay,
     personality,
@@ -543,3 +554,129 @@ def test_togashi_noritada_pays_by_moving_home_or_destroying_a_token(paid, home, 
     assert table.cards_by_id["lesser"].bowed
     assert location_of(table, noritada).is_home is home
     assert noritada.counters.get("fire", 0) == fire_left
+
+
+# --- Shrine of Compassion (Experienced) ---
+
+SHRINE = "shrine_of_compassion_experienced"
+BOW_PROBE = "probe_open_bow_an_enemy_personality"
+
+
+def _shrine_table(*, p1_provinces: int, p2_provinces: int) -> TableState:
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("shrine", printed_id=SHRINE, gold_production=2))
+    for seat, count in ((P1, p1_provinces), (PlayerId.P2, p2_provinces)):
+        for index in range(count):
+            province_card(state, f"{seat.name}-prov{index}", seat=seat, index=index)
+    return state
+
+
+@pytest.mark.parametrize(("p2_provinces", "produced"), [(1, 3), (0, 2)])
+def test_shrine_of_compassion_has_1gp_more_with_compassion(p2_provinces, produced):
+    state = _shrine_table(p1_provinces=0, p2_provinces=p2_provinces)
+    session = EngineSession.start(state, P1)
+
+    shrine = session.game.table.cards_by_id["shrine"]
+    assert effective_gold_production(session.game, shrine) == produced
+
+
+def test_shrine_of_compassion_gives_its_target_compassion_and_nothing_else():
+    state = _shrine_table(p1_provinces=1, p2_provinces=1)
+    put_in_play(state, holding("outpost", printed_id="imperial_treasurers_outpost"))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("drawn", P1))]
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, ActivateAbility("shrine"))
+    session.submit(P1, DecisionResponse(("outpost",)))
+    session.act(PlayerId.P2, Pass())
+    session.act(P1, ActivateAbility("outpost"))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["drawn"]
+    assert has_compassion(session.game, P1) is False
+
+
+def test_shrine_of_compassion_gives_compassion_while_the_action_resolves(reacting):
+    seen: list[bool] = []
+
+    def _saw_compassion(ctx: TriggerContext) -> list[Effect]:
+        if ctx.event.card_id == "hero":
+            seen.append(has_compassion(ctx.game, P1))
+        return []
+
+    reacting(Bowed, "compassion_witness", _saw_compassion)
+    bow_ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: bow a target enemy Personality",
+        cost=no_cost,
+        targets=lambda game, source: [
+            card.id for card in personalities_in_play(game) if card.owner is not source.owner
+        ],
+        effects=lambda game, source, target: [Bow(target.id)],
+    )
+    with probe_ability(BOW_PROBE, bow_ability):
+        state = _shrine_table(p1_provinces=1, p2_provinces=1)
+        put_in_play(state, personality("hero"))
+        put_in_play(state, holding("witness", printed_id="compassion_witness"))
+        put_in_play(state, personality("courtier", owner=PlayerId.P2, printed_id=BOW_PROBE))
+        session = EngineSession.start(state, PlayerId.P2)
+        session.act(PlayerId.P2, ActivateAbility("courtier"))
+        session.submit(PlayerId.P2, DecisionResponse(("hero",)))
+
+        session.act(P1, PlayInterrupt("shrine"))
+
+        assert seen == [True]
+        assert has_compassion(session.game, P1) is False
+
+
+def test_shrine_of_compassions_interrupt_lapses_with_an_action_that_destroys_the_shrine():
+    destroy_ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: destroy a target enemy Holding",
+        cost=no_cost,
+        targets=lambda game, source: ["shrine"],
+        effects=lambda game, source, target: [Destroy(target.id, source.owner)],
+    )
+    with probe_ability(BOW_PROBE, destroy_ability):
+        state = _shrine_table(p1_provinces=1, p2_provinces=1)
+        put_in_play(state, personality("courtier", owner=PlayerId.P2, printed_id=BOW_PROBE))
+        session = EngineSession.start(state, PlayerId.P2)
+        session.act(PlayerId.P2, ActivateAbility("courtier"))
+        session.submit(PlayerId.P2, DecisionResponse(("shrine",)))
+
+        session.act(P1, PlayInterrupt("shrine"))
+
+        assert "shrine" not in {card.id for card in session.game.table.battlefield.cards}
+        assert has_compassion(session.game, P1) is False
+
+
+def test_shrine_of_compassions_interrupt_lasts_until_the_cards_the_action_brings_enter(reacting):
+    seen: list[bool] = []
+
+    def _saw_compassion(ctx: TriggerContext) -> list[Effect]:
+        if ctx.event.card_id == "arrival":
+            seen.append(has_compassion(ctx.game, P1))
+        return []
+
+    reacting(EnteredPlay, "compassion_witness", _saw_compassion)
+    arrive_ability = Ability(
+        timings=(ActionTiming.OPEN,),
+        label="Open: put a card into play",
+        cost=no_cost,
+        targets=lambda game, source: [source.id],
+        effects=lambda game, source, target: [PutIntoPlay("arrival")],
+    )
+    with probe_ability(BOW_PROBE, arrive_ability):
+        state = _shrine_table(p1_provinces=1, p2_provinces=1)
+        put_in_play(state, holding("witness", printed_id="compassion_witness"))
+        put_in_play(state, personality("courtier", owner=PlayerId.P2, printed_id=BOW_PROBE))
+        hand = state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
+        hand.add(register(state, fate_card("arrival", PlayerId.P2)))
+        session = EngineSession.start(state, PlayerId.P2)
+        session.act(PlayerId.P2, ActivateAbility("courtier"))
+        session.submit(PlayerId.P2, DecisionResponse(("courtier",)))
+
+        session.act(P1, PlayInterrupt("shrine"))
+
+        assert seen == [True]
+        assert has_compassion(session.game, P1) is False
