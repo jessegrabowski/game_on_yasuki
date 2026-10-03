@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pytest
 
 from yasuki_core.engine.players import PlayerId
@@ -8,6 +10,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     Equip,
     Pass,
+    PlayInterrupt,
     PlayStrategy,
     Recruit,
 )
@@ -25,7 +28,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as 
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.gold.production import effective_gold_production
-from yasuki_core.engine.rules.effects import Destroy, Discard, GainHonor, PayGold
+from yasuki_core.engine.rules.effects import Destroy, Discard, GainHonor, PayGold, RangedAttack
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -42,7 +45,10 @@ from yasuki_core.game_pieces.prints import (
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules import legality
+from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.rulebook.equip import may_attach
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.state import GameState
@@ -60,7 +66,9 @@ from yasuki_core.game_pieces.prints import ActionPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.rules.duel.conftest import CHALLENGE_ABILITY, CHALLENGE_PROBE
+from tests.yasuki_core.engine.rules.test_interrupts import _strategy
 from tests.yasuki_core.engine.builders import (
+    attached,
     attachment,
     combat_segment,
     end_phase,
@@ -1333,3 +1341,132 @@ def test_seven_heavens_strike_focus_effect_gives_your_winning_personality_force(
 
         challenger = session.game.table.cards_by_id["challenger"]
         assert effective_force(session.game, challenger) == 2 + bonus
+
+
+# --- Worn Jingasa ---
+
+TARGETING_PROBE = "probe_open_target_a_personality"
+RANGED_PROBE = "probe_open_ranged_3_an_enemy"
+
+TARGETING_ABILITY = Ability(
+    timings=(ActionTiming.OPEN,),
+    label="Open: target a Personality",
+    cost=no_cost,
+    targets=lambda game, source: [card.id for card in personalities_in_play(game)],
+    effects=lambda game, source, target: [],
+)
+KIHO_ABILITY = replace(TARGETING_ABILITY, keywords=frozenset({keywords.KIHO}))
+RANGED_ABILITY = Ability(
+    timings=(ActionTiming.OPEN,),
+    label="Open: Ranged 3 Attack a target enemy Personality",
+    cost=no_cost,
+    targets=lambda game, source: [
+        card.id for card in personalities_in_play(game) if card.owner is not source.owner
+    ],
+    effects=lambda game, source, target: [RangedAttack(3, target.id, source.owner)],
+)
+
+
+def _worn_jingasa():
+    return attachment(
+        "jingasa",
+        printed_id="worn_jingasa",
+        attachment_type=AttachmentType.ITEM,
+        keywords=(keywords.JINGASA,),
+    )
+
+
+def test_a_personality_wearing_a_jingasa_may_not_attach_worn_jingasa():
+    game = GameState.start(TableState.empty_two_seat(), P1)
+    hatted = put_in_play(game, personality("hatted"))
+    bare = put_in_play(game, personality("bare"))
+    attached(game, attachment("straw", keywords=(keywords.JINGASA,)), "hatted")
+
+    assert may_attach(game, bare, _worn_jingasa()) is True
+    assert may_attach(game, hatted, _worn_jingasa()) is False
+
+
+@pytest.mark.parametrize(
+    ("ability", "actor", "target", "force_gained"),
+    [
+        (KIHO_ABILITY, P1, "wearer", 1),
+        (KIHO_ABILITY, P1, "other", 0),
+        (TARGETING_ABILITY, P1, "wearer", 0),
+        (KIHO_ABILITY, P2, "wearer", 0),
+    ],
+    ids=["your_kiho_targeting_the_wearer", "targeting_another", "not_a_kiho", "enemy_kiho"],
+)
+def test_worn_jingasa_gives_its_wearer_1f_after_your_kiho_targets_them(
+    ability, actor, target, force_gained
+):
+    with probe_ability(TARGETING_PROBE, ability):
+        state = TableState.empty_two_seat()
+        put_in_play(state, personality("wearer", force=2))
+        put_in_play(state, personality("other"))
+        put_in_play(state, personality("monk", owner=actor, printed_id=TARGETING_PROBE))
+        attached(state, _worn_jingasa(), "wearer")
+        session = EngineSession.start(state, actor)
+
+        session.act(actor, ActivateAbility("monk"))
+        session.submit(actor, DecisionResponse((target,)))
+
+        wearer = session.game.table.cards_by_id["wearer"]
+        assert effective_force(session.game, wearer) == 2 + force_gained
+
+
+@pytest.mark.parametrize(
+    ("wearer_keywords", "force"),
+    [((), 3), ((keywords.MONK,), 2), ((keywords.SHUGENJA,), 2)],
+    ids=["minus_1", "monk_minus_2", "shugenja_minus_2"],
+)
+def test_worn_jingasa_weakens_a_ranged_attack_on_its_wearer_enough_to_survive(
+    wearer_keywords, force
+):
+    with probe_ability(RANGED_PROBE, RANGED_ABILITY):
+        state = TableState.empty_two_seat()
+        put_in_play(state, personality("wearer", force=force, keywords=wearer_keywords))
+        attached(state, _worn_jingasa(), "wearer")
+        put_in_play(state, personality("archer", owner=P2, printed_id=RANGED_PROBE))
+        session = EngineSession.start(state, P2)
+        session.act(P2, ActivateAbility("archer"))
+        session.submit(P2, DecisionResponse(("wearer",)))
+
+        session.act(P1, PlayInterrupt("jingasa"))
+
+        table = session.game.table
+        assert "wearer" in {card.id for card in table.battlefield.cards}
+        assert table.cards_by_id["jingasa"].bowed
+
+
+def test_worn_jingasa_is_not_offered_against_a_ranged_attack_on_another_personality():
+    with probe_ability(RANGED_PROBE, RANGED_ABILITY):
+        state = TableState.empty_two_seat()
+        put_in_play(state, personality("wearer"))
+        put_in_play(state, personality("bystander"))
+        attached(state, _worn_jingasa(), "wearer")
+        put_in_play(state, personality("archer", owner=P2, printed_id=RANGED_PROBE))
+        session = EngineSession.start(state, P2)
+        session.act(P2, ActivateAbility("archer"))
+
+        session.submit(P2, DecisionResponse(("bystander",)))
+
+        assert PlayInterrupt("jingasa") not in session.legal_actions(P1)
+
+
+def test_worn_jingasa_is_not_offered_once_the_action_targets_another_instead():
+    with probe_ability(RANGED_PROBE, RANGED_ABILITY):
+        state = TableState.empty_two_seat()
+        put_in_play(state, personality("wearer"))
+        put_in_play(state, personality("yojimbo", keywords=(keywords.YOJIMBO,)))
+        attached(state, _worn_jingasa(), "wearer")
+        _strategy(state, "sacrifice", "final_sacrifice", P1)
+        put_in_play(state, personality("archer", owner=P2, printed_id=RANGED_PROBE))
+        session = EngineSession.start(state, P2)
+        session.act(P2, ActivateAbility("archer"))
+        session.submit(P2, DecisionResponse(("wearer",)))
+        assert PlayInterrupt("jingasa") in session.legal_actions(P1)
+
+        session.act(P1, PlayInterrupt("sacrifice"))
+        session.submit(P1, DecisionResponse(("yojimbo",)))
+
+        assert PlayInterrupt("jingasa") not in session.legal_actions(P1)
