@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.effects import (
     Arrange,
     Choose,
     EndLook,
+    GrantModifier,
     LookAtTop,
     MoveToDeck,
     TakeFavor,
@@ -18,7 +19,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_LABEL
 from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
 from yasuki_core.engine.rules.duel.procedure import declare_duel
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.triggers import apply_effect, choice_resolver
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -2021,6 +2022,45 @@ def test_a_finished_duel_stays_up_until_the_player_presses_continue(board):
     window.duel_view.on_continue()
 
     assert not window.duel_view.place_info()
+
+
+def test_a_dismissed_duel_stays_dismissed_when_a_duelist_is_modified(board):
+    # A battle pumps Force and Chi constantly, and the panel shows a figure read live off the
+    # board. Keyed on anything that moves, a modifier landing on a Personality that duelled earlier
+    # in the turn brings a long-finished duel back on screen.
+    presenter, window, session = board
+    put_in_play(session.game, personality("mine", owner=P1, chi=5))
+    put_in_play(session.game, personality("theirs", owner=P2, chi=2))
+    declare_duel(
+        session.game, challenger_duelist="mine", challenged_duelist="theirs", source="mine"
+    )
+    run_stack(session.game)
+    presenter.present()
+    window.duel_view.on_continue()
+    assert not window.duel_view.place_info()
+
+    apply_effect(
+        session.game,
+        GrantModifier("pump", "mine", Stat.CHI, 2, Duration.UNTIL_END_OF_TURN),
+    )
+    presenter.present()
+
+    assert not window.duel_view.place_info()
+
+
+def test_a_second_duel_between_the_same_personalities_opens_the_panel_again(board):
+    presenter, window, session = board
+    put_in_play(session.game, personality("mine", owner=P1, chi=5))
+    put_in_play(session.game, personality("theirs", owner=P2, chi=2))
+    for _ in range(2):
+        declare_duel(
+            session.game, challenger_duelist="mine", challenged_duelist="theirs", source="mine"
+        )
+        run_stack(session.game)
+        presenter.present()
+        assert window.duel_view.place_info()
+        window.duel_view.on_continue()
+        assert not window.duel_view.place_info()
 
 
 def test_a_duel_still_being_focused_offers_no_continue(board):

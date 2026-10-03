@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     focus_token,
     assignment_token,
 )
-from yasuki_core.engine.rules.projection import DuelView, GameView, unit_view
+from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import build_print, side_of_record
@@ -69,10 +69,10 @@ class Presenter:
     def __init__(self, host: GameHost, window: GameWindow) -> None:
         self.host = host
         self.window = window
-        # The duel the player has read and dismissed. Held as the view itself rather than a flag,
-        # because a duel neither seat can focus in runs to its end inside one cascade and never
-        # pauses on DuelStep.FOCUSING, so a flag cleared only there would swallow the next one.
-        self._duel_read: DuelView | None = None
+        # Which duel the player has read and dismissed. Held as the duel's ordinal rather than as
+        # the view, which carries live figures: a modifier landing on a Personality that duelled
+        # earlier in the turn changes the view and would bring a finished duel back on screen.
+        self._duel_read: int | None = None
         window.duel_view.on_continue = self._continue_past_duel
 
     def present(self) -> None:
@@ -480,14 +480,15 @@ class Presenter:
         is hidden, so the next one opens the panel again however briefly it runs.
         """
         duel = view.duel
-        if duel is None or duel == self._duel_read:
+        if duel is None or duel.ordinal == self._duel_read:
             self.window.show_duel(None)
             return
         self.window.show_duel(duel, view.stats)
 
     def _continue_past_duel(self) -> None:
         """Dismiss a finished duel's panel, which the player has now read."""
-        self._duel_read = self.host.runner.view().duel
+        duel = self.host.runner.view().duel
+        self._duel_read = None if duel is None else duel.ordinal
         self.present()
 
     def _focus_items(self, token: str) -> list[tuple[str, Callable[[], None]]]:

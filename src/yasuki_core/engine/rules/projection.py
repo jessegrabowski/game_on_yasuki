@@ -171,6 +171,9 @@ class DuelView:
         The seat being asked to focus or strike, or None when no such question is open.
     source_name : str
         The name of the card that created the duel.
+    ordinal : int
+        Which duel of the game this is, counting from one. Two duels running the same Personalities
+        to the same result are still two duels, and this is what tells them apart.
     source : L5RCard, HiddenCard or None
         The card that created the duel, where the table still holds it. A Strategy that created one
         sits in its resolution area until the duel is over, so this is where it is drawn.
@@ -188,6 +191,7 @@ class DuelView:
     challenged: DuelistView
     step: DuelStep
     option: PlayerId | None
+    ordinal: int
     source_name: str
     source: L5RCard | HiddenCard | None
     winners: tuple[PlayerId, ...]
@@ -469,6 +473,7 @@ def _project_duel(game: GameState, table: ViewSnapshot) -> DuelView | None:
         challenged=_project_duelist(game, table, duel, duel.challenged),
         step=duel.step,
         option=option,
+        ordinal=game.duels_begun,
         source_name=_card_name(game, duel.source),
         source=game.table.cards_by_id.get(duel.source),
         winners=() if outcome is None else outcome.winners,

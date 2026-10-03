@@ -96,6 +96,10 @@ class GameState:
     attack : AttackPhase or None
         The attack declared in the Attack Phase now open: None outside that phase and inside it
         until the active player declares. Ephemeral and rebuilt by replay. Default None.
+    duels_begun : int
+        How many duels have begun this game, counting from one once the first is declared. Two
+        duels are never the same duel, and nothing else on the record says so, which is what a
+        client needs to tell a duel it has already shown from the next one. Default 0.
     duel : DuelRecord or None
         The duel being fought, or the last one fought once it has ended, so what resolves after a
         duel can still read how it went. None until the first one. A duel happens inside a battle
@@ -241,6 +245,7 @@ class GameState:
     active_rules: dict[PlayerId, frozenset[VictoryRule]] = field(default_factory=dict)
     attack: AttackPhase | None = None
     duel: DuelRecord | None = None
+    duels_begun: int = 0
     once_per: set[str] = field(default_factory=set)
     straighten_delayed: dict[str, StraightenDelay] = field(default_factory=dict)
     seed: int = 0
@@ -361,6 +366,7 @@ class GameState:
         if self.duel_being_fought is not None:
             raise RuntimeError("a duel is already being fought")
         self.duel = duel
+        self.duels_begun += 1
 
     def add_gold(self, seat: PlayerId, amount: int) -> None:
         """Add ``amount`` produced gold to ``seat``'s pool."""
