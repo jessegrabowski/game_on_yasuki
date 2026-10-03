@@ -200,6 +200,20 @@ def test_the_view_key_enlarges_a_card_in_the_duel_panel(window):
     assert window.card_preview.showing
 
 
+def test_the_duel_panel_stays_where_the_player_dragged_it(window):
+    """A duel refreshes on every focus, every window and every answer, and each one calls
+    ``show_duel`` again. The box it passes is a first-open default, not a dock."""
+    window.show_duel(_duel())
+    window.duel_view._panel_left, window.duel_view._panel_top = 7, 9
+    window.duel_view._apply()
+
+    window.show_duel(_duel())
+    window.root.update_idletasks()
+
+    placed = window.duel_view.place_info()
+    assert (int(placed["x"]), int(placed["y"])) == (7, 9)
+
+
 def test_the_view_key_over_a_panel_puts_away_a_preview_the_board_opened(window):
     art = tk.PhotoImage(master=window.root, width=1, height=1)
     window.card_preview = CardPreview(window.root, PreviewOnlyImages(art))
