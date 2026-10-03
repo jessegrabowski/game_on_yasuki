@@ -81,6 +81,7 @@ from yasuki_core.engine.table import (
     ZoneKey,
     ZoneRole,
     location_of,
+    province_keys,
 )
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
@@ -668,6 +669,31 @@ class DestroyProvince(Effect):
         # announced as discarded.
         ops.destroy_province(game.table, self.seat, self.zone)
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class GainProvince(Effect):
+    """``seat`` gains a Province, created to the left of its leftmost and then refilled (ShE
+    datasheet). It takes a fresh id, so no record naming another Province changes meaning.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat gaining the Province.
+    """
+
+    seat: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.seat.name} gains a province"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        ops.gain_province(game.table, self.seat)
+        return []
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        """Refill the gained Province, which is now the leftmost."""
+        return (RefillProvince(province_keys(game.table, self.seat)[0]),)
 
 
 @dataclass(frozen=True, slots=True)

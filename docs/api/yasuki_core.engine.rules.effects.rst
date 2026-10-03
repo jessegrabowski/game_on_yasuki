@@ -43,6 +43,7 @@ yasuki_core.engine.rules.effects
     FromAction
     GainGold
     GainHonor
+    GainProvince
     GrantAbility
     GrantCompassion
     GrantConditionalModifier

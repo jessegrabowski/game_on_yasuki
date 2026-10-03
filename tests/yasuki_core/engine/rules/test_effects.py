@@ -28,8 +28,10 @@ from yasuki_core.engine.rules.effects import (
     DiscardFavor,
     DiscardFromHand,
     Dishonor,
+    DestroyProvince,
     Evaluate,
     GainHonor,
+    GainProvince,
     PlaceInProvince,
     Effect,
     Rehonor,
@@ -57,10 +59,11 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
     Duration,
     Modifier,
+    ProvinceModifier,
     SeatAbilityGrant,
     Stat,
 )
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, province_keys
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint
 from yasuki_core.game_pieces.counters import WEALTH
@@ -72,6 +75,7 @@ from tests.yasuki_core.engine.builders import (
     personality,
     province_card,
     put_in_play,
+    register,
     two_seat_game,
 )
 
@@ -839,3 +843,23 @@ def test_discarding_cards_as_a_cost_needs_enough_of_them_in_hand():
 
     assert DiscardFromHand(PlayerId.P2, 1, PlayerId.P2, PlayerId.P2).is_payable(game)
     assert not DiscardFromHand(PlayerId.P2, 2, PlayerId.P2, PlayerId.P2).is_payable(game)
+
+
+def test_gaining_a_province_creates_it_leftmost_under_an_id_no_province_has_held():
+    game = two_seat_game()
+    for index, card_id in enumerate(("left", "middle", "right")):
+        province_card(game, card_id, index=index)
+    game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        register(game.table, holding("refill"))
+    ]
+    middle = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 1)
+    game.ongoing.append(ProvinceModifier("wall", middle, 5, Duration.UNTIL_END_OF_TURN))
+
+    resolve_effects(game, [DestroyProvince(PlayerId.P2, middle), GainProvince(PlayerId.P1)])
+
+    provinces = [
+        (key.idx, [card.id for card in game.table.zones[key].cards])
+        for key in province_keys(game.table, PlayerId.P1)
+    ]
+    assert provinces == [(3, ["refill"]), (0, ["left"]), (2, ["right"])]
+    assert middle not in game.table.zones  # the destroyed Province's key still names nothing
