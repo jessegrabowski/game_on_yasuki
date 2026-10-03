@@ -26,15 +26,10 @@ class Interruption:
     effects : tuple of Effect, optional
         What else the Interrupt does, resolved as the Strategy's own effects before the
         replacement returns. Default none.
-    costs : tuple of Effect, optional
-        What taking the Interrupt costs beyond its ``cost``, for a price that depends on the effect
-        it answers, which ``cost`` never sees. Paid with ``cost``, so no negation reaches it, and
-        only by an Interrupt that pays its own cost rather than playing its card. Default none.
     """
 
     replacement: Effect
     effects: tuple[Effect, ...] = ()
-    costs: tuple[Effect, ...] = ()
 
 
 class InterruptLimit(Enum):
