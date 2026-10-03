@@ -109,8 +109,8 @@ Interrupt step.
 `_advance` is a worklist run to a fixpoint. The whole machine is its loop body:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/triggers.py
-:start-at: while True:
-:end-at: firing = _collect(game, event)
+:start-at: while frames:
+:end-at: top.firing = _collect(game, event)
 :language: python
 ```
 

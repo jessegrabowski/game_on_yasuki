@@ -1,7 +1,7 @@
 import collections
 from typing import NamedTuple
 from collections.abc import Callable, Iterator, Sequence
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -376,26 +376,52 @@ def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
     return (card.owner.name if card.owner else "", card.id)
 
 
-def _advance(
+@dataclass(slots=True)
+class _Effects:
+    """Effects a walk still has to apply, in order, and where they came from."""
+
+    pending: list[Effect]
+    provenance: Provenance
+
+
+@dataclass(slots=True)
+class _Events:
+    """Events a walk still has to fire to the triggered traits that answer them: the one in hand,
+    the triggers still to fire for it, and the events queued behind it."""
+
+    queue: list[GameEvent]
+    event: GameEvent | None = None
+    firing: list[tuple[L5RCard, Trigger]] = field(default_factory=list)
+
+
+_Frame = _Effects | _Events
+
+
+def _begin(
     game: GameState,
-    effects: tuple[Effect, ...],
-    firing: list[tuple[L5RCard, Trigger]],
-    event: GameEvent | None,
-    queue: list[GameEvent],
+    effects: Sequence[Effect] = (),
+    queue: Sequence[GameEvent] = (),
     provenance: Provenance = Provenance(),
 ) -> None:
-    """Run the effect-and-trigger cascade to a fixpoint from an arbitrary resume point.
+    """Walk a cascade from ``effects`` to apply and ``queue`` to react to."""
+    _advance(game, [_Events(list(queue)), _Effects(list(effects), provenance)])
 
-    One resumable worklist machine, in three repeating steps: apply the ``effects`` in hand (each
-    committing at once, its derived events joining ``queue``), then fire the next trigger still
-    ``firing`` for ``event``, whose effects become the next ``effects`` in hand, then pop the next
-    event off ``queue`` and collect its triggers. An :class:`~.InterruptingEffect` among the effects
-    pauses the machine: it stashes the exact remainder (the effects after it, the triggers not yet
-    fired, the event, and the queue) as a :class:`~.ResumeCascade` and records that effect's
-    decision, so :func:`~.resume_cascade` continues from precisely here once the seat answers. An
-    effect with nothing to ask leaves the stash to drain behind the work it queued.
 
-    ``provenance`` says where the effects in hand came from. Its ``interruptible`` says they are an
+def _advance(game: GameState, frames: list[_Frame]) -> None:
+    """Run the effect-and-trigger cascade to a fixpoint over ``frames``, the stack of work it still
+    holds, bottom first.
+
+    An effects frame applies its next effect, which commits at once. Every event the walk raises, an
+    effect's or a state-based action's, joins the queue of the events frame at the bottom of the
+    stack, so it waits behind those already queued. An events frame fires its next trigger as a new
+    effects frame, or pops its next queued event and collects that event's triggers. A frame with
+    nothing left is dropped, and the walk ends with the stack. An :class:`~.InterruptingEffect`
+    pauses the walk: it stashes the exact remainder (every frame, the paused one holding the effects
+    after the one that asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
+    :func:`~.resume_cascade` continues from precisely here once the seat answers. An effect with
+    nothing to ask leaves the stash to drain behind the work it queued.
+
+    Each effects frame carries the provenance of its effects. Its ``interruptible`` says they are an
     action's own, the only ones an Interrupt may modify (ShE datasheet, Interrupt). Each is checked
     against the modifications the action's :class:`~.InterruptWindow` collected before it is
     applied, and resolves as what the Interrupt made of it. What a trigger returns is a trait's or
@@ -413,23 +439,26 @@ def _advance(
     reacts to them is effects again, and so is what a ``Then`` among them defers.
 
     The provenance's ``triggered`` says the effects in hand are a trigger's, so a decision among
-    them is marked as the trigger's question, one that cannot be backed out of. The machine sets it
-    itself once it fires a trigger for an event that has happened, and a stash or a ``Then``
-    carries it on to the effects that follow. A trigger firing in a window a step opens before
-    committing asks on the step's behalf, and its question stays the step's own."""
+    them is marked as the trigger's question, one that cannot be backed out of. The walk sets it on
+    the effects frame of each trigger it fires for an event that has happened, and a stash or a
+    ``Then`` carries it on to the effects that follow. A trigger firing in a window a step opens
+    before committing asks on the step's behalf, and its question stays the step's own."""
     resolved = 0
-    firing = list(firing)
-    while True:
-        pending = list(effects)
-        while pending:
-            effect = pending.pop(0)
+    while frames:
+        top = frames[-1]
+        if isinstance(top, _Effects):
+            if not top.pending:
+                frames.pop()
+                continue
+            effect = top.pending.pop(0)
+            provenance = top.provenance
             if isinstance(effect, Then):
                 _trace.append(f"    {effect.describe()}")
                 game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
                 continue
             if isinstance(effect, FromAction):
                 # Stashed beneath it, so the effects held for the same moment keep their order.
-                _stash(game, tuple(pending), firing, event, queue, provenance)
+                _stash(game, frames)
                 game.stack.append(ApplyEffects((effect.effect,), effect.provenance))
                 return
             if provenance.interruptible and not isinstance(effect, InterruptingEffect):
@@ -441,7 +470,7 @@ def _advance(
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
-                _stash(game, tuple(pending), firing, event, queue, provenance)
+                _stash(game, frames)
                 request = effect.request(game)
                 if request is not None:
                     game.pending = (
@@ -449,30 +478,33 @@ def _advance(
                     )
                 return
             _trace.append(f"    {effect.describe()}")
+            queue = _bottom_events(frames).queue
             queue.extend(apply_effect(game, effect))
             # What the effect produced goes next, ahead of the rest, so an attack's outcome resolves
             # where the attack stood and passes through the Interrupt step on its own.
-            pending[:0] = effect.follow_on(game)
+            top.pending[:0] = effect.follow_on(game)
             _settle_state_based_actions(game, queue)
-        effects = ()
-        if firing:
-            card, trigger = firing.pop(0)
-            _trace.append(f"  {card.printed_id} ({card.id}) reacts")
-            effects = tuple(trigger(TriggerContext(game, card, event)))
-            provenance = Provenance(triggered=not opens_a_window(event))
             continue
-        if not queue:
+        if top.firing:
+            card, trigger = top.firing.pop(0)
+            _trace.append(f"  {card.printed_id} ({card.id}) reacts")
+            event = _reacted_to(top)
+            effects = list(trigger(TriggerContext(game, card, event)))
+            frames.append(_Effects(effects, Provenance(triggered=not opens_a_window(event))))
+            continue
+        if not top.queue:
             # The walk can be entered on a board something else already made illegal, and with
             # nothing to commit the per-effect check never runs. Judge it before returning.
-            _settle_state_based_actions(game, queue)
-            if not queue:
-                return
+            _settle_state_based_actions(game, _bottom_events(frames).queue)
+            if not top.queue:
+                frames.pop()
+                continue
         resolved += 1
         if resolved > _MAX_CASCADE:
             raise RuntimeError(
                 f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
             )
-        event = queue.pop(0)
+        event = top.queue.pop(0)
         game.turn_events += (event,)
         # Kept for the Response Step, which asks what the action it follows actually did. What an
         # Interrupt or a Response does inside its own round is its doing, not the action's, and
@@ -481,7 +513,25 @@ def _advance(
         if not inside_a_step and not isinstance(event, ActionResolved | ConditionFulfilled):
             game.action_events.append(event)
         _trace.append(type(event).__name__)
-        firing = _collect(game, event)
+        top.event = event
+        top.firing = _collect(game, event)
+
+
+def _bottom_events(frames: list[_Frame]) -> _Events:
+    """The events frame at the bottom of the stack, whose queue every event the walk raises
+    joins."""
+    bottom = frames[0]
+    if not isinstance(bottom, _Events):
+        raise RuntimeError("a cascade's frames have no events frame at the bottom")
+    return bottom
+
+
+def _reacted_to(frame: _Events) -> GameEvent:
+    """The event ``frame``'s triggers are firing for. Raise ``RuntimeError`` where it has none,
+    which no trigger can be collected without."""
+    if frame.event is None:
+        raise RuntimeError("a trigger is firing for no event")
+    return frame.event
 
 
 def _held_from(effect: Effect, provenance: Provenance) -> Effect:
@@ -534,7 +584,7 @@ def enforce_state_based_actions(game: GameState) -> None:
     queue: list[GameEvent] = []
     _settle_state_based_actions(game, queue)
     if queue:
-        _advance(game, (), [], None, queue)
+        _begin(game, queue=queue)
 
 
 def lapse_ongoing(game: GameState, moment: Moment) -> None:
@@ -566,7 +616,7 @@ def reach_moment(game: GameState, moment: Moment, *announcing: GameEvent) -> Non
     queue: list[GameEvent] = []
     _settle_state_based_actions(game, queue)
     queue.extend(announcing)
-    _advance(game, tuple(held), [], None, queue)
+    _begin(game, held, queue=queue)
 
 
 def _lapse(game: GameState, moment: Moment) -> bool:
@@ -731,32 +781,60 @@ def _render_trace() -> str:
 
 
 @dataclass(frozen=True, slots=True)
-class ResumeCascade:
-    """The exact remainder of an effect-and-trigger cascade a choice paused: the effects still to
-    apply, then the ``(card_id, trigger)`` pairs still to fire for ``event``, then the events still
-    queued behind them. The answered choice's own effects splice in ahead of these. It is ephemeral
-    like the rest of the stack, since its effects and triggers are value-equal and stable
-    module-level functions, so it rebuilds and compares equal under replay.
+class EffectsFrame:
+    """Effects a paused cascade still has to apply, and where they came from.
 
     Attributes
     ----------
     effects : tuple of Effect
-        The effects still to apply for the paused trigger, after the one that raised the choice.
-    firing : tuple of (str, callable)
-        The card id and trigger of each subscriber still to fire for ``event``.
-    event : GameEvent or None
-        The event those triggers are firing for, or None when the pause held only loose effects.
-    queue : tuple of GameEvent
-        The events still waiting behind ``event`` in the paused worklist.
+        The effects still to apply, in order.
     provenance : Provenance, optional
-        Where the effects still to apply came from. Default a rulebook procedure's.
+        Where they came from. Default a rulebook procedure's.
     """
 
     effects: tuple[Effect, ...]
-    firing: tuple[tuple[str, Trigger], ...]
-    event: GameEvent | None
-    queue: tuple[GameEvent, ...]
     provenance: Provenance = Provenance()
+
+
+@dataclass(frozen=True, slots=True)
+class EventsFrame:
+    """Events a paused cascade still has to fire to the triggered traits that answer them.
+
+    Attributes
+    ----------
+    queue : tuple of GameEvent
+        The events still waiting behind ``event``.
+    event : GameEvent or None, optional
+        The event triggers are firing for, or None before the first is popped. Default None.
+    firing : tuple of (str, callable), optional
+        The card id and trigger of each subscriber still to fire for ``event``. Default none.
+    """
+
+    queue: tuple[GameEvent, ...]
+    event: GameEvent | None = None
+    firing: tuple[tuple[str, Trigger], ...] = ()
+
+    def __post_init__(self) -> None:
+        """Raise ValueError for triggers firing with no event to fire for."""
+        if self.firing and self.event is None:
+            raise ValueError("an events frame's triggers fire for an event")
+
+
+@dataclass(frozen=True, slots=True)
+class ResumeCascade:
+    """The exact remainder of an effect-and-trigger cascade a choice paused, as the stack of frames
+    it still held, bottom first. The top frame holds the effects after the one that raised the
+    choice, and the answered choice's own effects splice in ahead of them. It is ephemeral like the
+    rest of the stack, since its effects and triggers are value-equal and stable module-level
+    functions, so it rebuilds and compares equal under replay.
+
+    Attributes
+    ----------
+    frames : tuple of EffectsFrame or EventsFrame
+        The paused cascade's frames, bottom first.
+    """
+
+    frames: tuple[EffectsFrame | EventsFrame, ...]
 
     def resume(self, game: GameState) -> None:
         # An interrupting effect whose answer produces no effects of its own, a payment, say, leaves
@@ -765,35 +843,45 @@ class ResumeCascade:
         resume_cascade(game, self, [])
 
 
-def _stash(
-    game: GameState,
-    effects: tuple[Effect, ...],
-    firing: list[tuple[L5RCard, Trigger]],
-    event: GameEvent | None,
-    queue: list[GameEvent],
-    provenance: Provenance,
-) -> None:
-    remaining = tuple((card.id, trigger) for card, trigger in firing)
-    game.stack.append(ResumeCascade(effects, remaining, event, tuple(queue), provenance))
+def _stash(game: GameState, frames: list[_Frame]) -> None:
+    game.stack.append(ResumeCascade(tuple(_frozen(frame) for frame in frames)))
+
+
+def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
+    if isinstance(frame, _Effects):
+        return EffectsFrame(tuple(frame.pending), frame.provenance)
+    firing = tuple((card.id, trigger) for card, trigger in frame.firing)
+    return EventsFrame(tuple(frame.queue), frame.event, firing)
+
+
+def _thawed(game: GameState, frame: EffectsFrame | EventsFrame) -> _Frame:
+    """``frame`` for the walk to resume, dropping the triggers whose card has left the table."""
+    if isinstance(frame, EffectsFrame):
+        return _Effects(list(frame.effects), frame.provenance)
+    firing = [
+        (game.table.cards_by_id[card_id], trigger)
+        for card_id, trigger in frame.firing
+        if card_id in game.table.cards_by_id
+    ]
+    return _Events(list(frame.queue), frame.event, firing)
 
 
 def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:
     """Continue a cascade an interrupting effect paused, splicing ``produced`` (the effects the
     answer produced) in where that effect stood, ahead of the effects, triggers, and events the
-    pause stashed. Triggers whose card has since left play are dropped."""
-    firing = [
-        (game.table.cards_by_id[card_id], trigger)
-        for card_id, trigger in item.firing
-        if card_id in game.table.cards_by_id
-    ]
-    _advance(
-        game,
-        tuple(produced) + item.effects,
-        firing,
-        item.event,
-        list(item.queue),
-        item.provenance,
-    )
+    pause stashed. Triggers whose card has since left play are dropped.
+
+    Raise ``RuntimeError`` if the stash has no events frame at its bottom or no effects frame on
+    top, which every pause leaves, before anything resumes.
+    """
+    frames = [_thawed(game, frame) for frame in item.frames]
+    if not isinstance(frames[0], _Events):
+        raise RuntimeError("a paused cascade resumed with no events frame at the bottom")
+    top = frames[-1]
+    if not isinstance(top, _Effects):
+        raise RuntimeError("a paused cascade resumed with no effects frame on top")
+    top.pending[:0] = produced
+    _advance(game, frames)
 
 
 @dataclass(frozen=True, slots=True)
@@ -832,7 +920,7 @@ class HeldAction:
     provenance: Provenance
 
     def resume(self, game: GameState) -> None:
-        _advance(game, self.effects, [], None, [], self.provenance)
+        _begin(game, self.effects, provenance=self.provenance)
 
 
 def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
@@ -856,7 +944,7 @@ def fire(game: GameState, event: GameEvent) -> None:
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "fire")
-    _advance(game, (), [], None, [event])
+    _begin(game, queue=(event,))
 
 
 def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
@@ -869,7 +957,7 @@ def fire_all(game: GameState, events: Sequence[GameEvent]) -> None:
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "fire_all")
-    _advance(game, (), [], None, list(events))
+    _begin(game, queue=events)
 
 
 def resolve_effects(
@@ -888,7 +976,7 @@ def resolve_effects(
     if provenance.interruptible:
         raise ValueError("an action's own effects resolve through resolve_action_effects")
     _refuse_mid_decision(game, "resolve_effects")
-    _advance(game, tuple(effects), [], None, [], provenance)
+    _begin(game, effects, provenance=provenance)
 
 
 def pay_costs(game: GameState, costs: list[Effect]) -> None:
@@ -899,7 +987,7 @@ def pay_costs(game: GameState, costs: list[Effect]) -> None:
     Raise ``RuntimeError`` if a decision is pending.
     """
     _refuse_mid_decision(game, "pay_costs")
-    _advance(game, tuple(costs), [], None, [], Provenance(paying=True))
+    _begin(game, costs, provenance=Provenance(paying=True))
 
 
 def resolve_action_effects(
@@ -922,7 +1010,7 @@ def resolve_action_effects(
     _refuse_mid_decision(game, "resolve_action_effects")
     provenance = replace(provenance, interruptible=True)
     if game.interrupts_offered:
-        _advance(game, tuple(effects), [], None, [], provenance)
+        _begin(game, effects, provenance=provenance)
         return
     game.interrupts_offered = True
     held = HeldAction(tuple(effects), provenance)
