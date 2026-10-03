@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.effects import (
     SpendOncePerTurn,
     Simultaneously,
     Then,
+    To,
 )
 from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
@@ -50,8 +51,9 @@ def forecast(
     game: GameState, effects: tuple[Effect, ...], provenance: Provenance = Provenance()
 ) -> tuple[Effect, ...]:
     """What an action with ``provenance`` handing ``effects`` to step E is about to do, as the
-    Interrupt step offers it: the effects in order, the contents of a ``Then`` or a
-    :class:`~.Simultaneously` group where it stands, an ability's effects behind the
+    Interrupt step offers it: the effects in order, the contents of a ``Then``, a
+    :class:`~.Simultaneously` group or a :class:`~.To` where it stands, with a ``To``'s dependent
+    effects only when its first will happen, an ability's effects behind the
     :class:`~.ResolveAbility` that targets them, a Proclaim's Honor gain behind the
     :class:`~.effects.Recruit` it follows, and an attack's outcome behind the attack when it
     reaches on the board as it stands. An effect that is nothing to interrupt, an Honor change of
@@ -67,6 +69,14 @@ def _foreseen(
     for effect in effects:
         if isinstance(effect, Then | Simultaneously):
             yield from _foreseen(game, effect.effects, provenance, spent)
+            continue
+        if isinstance(effect, To):
+            first = effect.first
+            happens = triggers.happens_as(game, first, as_modified(game, first))
+            negated = would_negate(game, first, provenance, list(spent))
+            yield from _foreseen(game, (first,), provenance, spent)
+            if happens and not negated:
+                yield from _foreseen(game, effect.contingent, provenance, spent)
             continue
         if effect.is_interruptible(game) and not would_negate(game, effect, provenance, spent):
             yield effect

@@ -2722,6 +2722,53 @@ class Simultaneously(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class To(Effect):
+    """Apply ``first``, then ``contingent`` only if ``first`` actually happened: "effects linked by
+    the word "to" mean that the second effect depends on the first effect actually happening" (CR,
+    Independence of Effects). ``first`` happened when it would change something as it commits
+    (:meth:`~.Effect.would_happen`) and commits as itself: one negated, or replaced by an Interrupt
+    with a different effect or the same effect on a different card, did not. One an Interrupt only
+    adjusted did. What reacts to ``first`` resolves before ``contingent`` applies.
+
+    Raise ``TypeError`` if ``first`` asks a question or holds other effects, which the walk could
+    not tell happened.
+
+    Attributes
+    ----------
+    first : Effect
+        The effect the rest depends on, such as the discard in "discard a card to draw a card".
+    contingent : tuple of Effect
+        What applies once ``first`` has happened, in order.
+    """
+
+    first: Effect
+    contingent: tuple[Effect, ...]
+
+    def __post_init__(self) -> None:
+        if isinstance(self.first, InterruptingEffect | Simultaneously | Then | To | Attributed):
+            raise TypeError(f"{type(self.first).__name__} cannot be what another effect depends on")
+
+    def describe(self) -> str:
+        return f"{self.first.describe()} to: {len(self.contingent)} effects"
+
+    def is_interruptible(self, game: GameState) -> bool:
+        return False
+
+    def is_negatable(self, game: GameState) -> bool:
+        return False
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Apply ``first`` and, if it would change something, ``contingent``. The cascade handles
+        the link itself, applying each effect through the checks any effect meets, so this runs
+        only when it is applied outside it."""
+        happens = self.first.would_happen(game)
+        raised = self.first.perform(game)
+        if not happens:
+            return raised
+        return [*raised, *(event for effect in self.contingent for event in effect.perform(game))]
+
+
+@dataclass(frozen=True, slots=True)
 class Ask(InterruptingEffect):
     """Put a yes/no question to a seat, and hand ``subjects`` to the resolver if it answers yes.
 

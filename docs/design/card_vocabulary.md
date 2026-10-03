@@ -129,6 +129,7 @@ plain list, since effects "occur in the order they are written" (CR, Order of Ef
    Straighten
    TakeFavor
    Then
+   To
    TurnOver
    Unpayable
 ```

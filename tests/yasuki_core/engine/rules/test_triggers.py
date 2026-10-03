@@ -46,7 +46,9 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.effects import (
     Ask,
     AdjustCounter,
+    Adjustment,
     ApplyEffects,
+    Banish,
     Choose,
     Destroy,
     Discard,
@@ -59,6 +61,7 @@ from yasuki_core.engine.rules.effects import (
     PutIntoPlay,
     Simultaneously,
     Then,
+    To,
 )
 from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
@@ -321,6 +324,111 @@ def test_a_reaction_to_an_answer_inside_a_group_waits_for_the_rest_of_the_group(
     action_sequence.submit(game, DecisionResponse(()))
 
     assert other_bowed == [True]
+
+
+def test_what_depends_on_an_effect_applies_after_the_reactions_to_it(reacting):
+    game = two_seat_game()
+    put_in_play(game, personality("probe", printed_id="bow_probe"))
+    samurai = put_in_play(game, personality("samurai"))
+    honor_when_bowed: list[int] = []
+
+    def _record_honor(ctx):
+        honor_when_bowed.append(ctx.game.table.seats[PlayerId.P1].honor)
+        return []
+
+    reacting(Bowed, "bow_probe", _record_honor)
+
+    resolve_effects(game, [To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),))])
+
+    assert honor_when_bowed == [0]
+    assert game.table.seats[PlayerId.P1].honor == 2
+
+
+def test_what_depends_on_a_banish_applies_though_nothing_reacts_to_it():
+    game = two_seat_game()
+    card = register(game.table, _fate("held", printed_id="held"))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+
+    resolve_effects(game, [To(Banish(card.id), (GainHonor(PlayerId.P1, 2),))])
+
+    assert game.table.seats[PlayerId.P1].honor == 2
+
+
+def test_discarding_a_card_already_in_the_discard_pile_is_nothing_to_depend_on():
+    game = two_seat_game()
+    card = register(game.table, _fate("gone", printed_id="gone"))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].add(card)
+
+    resolve_effects(game, [To(Discard(card.id, PlayerId.P1), (GainHonor(PlayerId.P1, 2),))])
+
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+
+def test_an_effect_an_interrupt_substituted_did_not_happen():
+    # CR, Independence of Effects: no draw "if something prevented him from bowing".
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai"))
+    other = put_in_play(game, personality("other"))
+    game.modifications.append(
+        Replacement(bound=Bow(samurai.id), card_id="ward", replacement=Bow(other.id))
+    )
+    game.interrupts_offered = True
+
+    resolve_action_effects(game, [To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),))])
+
+    assert other.bowed
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+
+def test_an_effect_an_interrupt_adjusted_still_happened():
+    game = two_seat_game()
+    gain = GainHonor(PlayerId.P1, 1)
+    game.modifications.append(Adjustment(gain, 1))
+    game.interrupts_offered = True
+
+    resolve_action_effects(game, [To(gain, (GainHonor(PlayerId.P1, 2),))])
+
+    assert game.table.seats[PlayerId.P1].honor == 4
+
+
+def test_the_interrupt_step_does_not_foresee_what_depends_on_a_negated_effect():
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai"))
+    game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=Bow))
+
+    assert forecast(game, (To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),)),)) == ()
+
+
+def test_the_interrupt_step_does_not_foresee_what_depends_on_a_substituted_effect():
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai"))
+    other = put_in_play(game, personality("other"))
+    game.modifications.append(
+        Replacement(bound=Bow(samurai.id), card_id="ward", replacement=Bow(other.id))
+    )
+
+    foreseen = forecast(game, (To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),)),))
+
+    assert foreseen == (Bow(samurai.id),)
+
+
+def test_a_question_cannot_be_what_another_effect_depends_on():
+    asking = Choose(PlayerId.P1, (), 0, 0, "test_sandwich", "asker")
+
+    with pytest.raises(TypeError, match="cannot be what another effect depends on"):
+        To(asking, (Bow("other"),))
+
+
+def test_what_depends_on_an_effect_that_did_not_happen_does_not_apply():
+    # CR, Independence of Effects: "Bow your Samurai to draw two cards" means the player doesn't draw
+    # the cards if the Samurai was already bowed at the time.
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai"))
+    samurai.bow()
+
+    resolve_effects(game, [To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),))])
+
+    assert game.table.seats[PlayerId.P1].honor == 0
 
 
 def test_a_group_inside_a_group_is_one_occurrence_with_it(reacting):

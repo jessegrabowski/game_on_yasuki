@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     Simultaneously,
     Then,
+    To,
 )
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.negation import negate_committed, spend_once
@@ -461,6 +462,12 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 continue
             effect = top.pending.pop(0)
             provenance = top.provenance
+            contingent: tuple[Effect, ...] = ()
+            if isinstance(effect, To):
+                _trace.append(f"    {effect.describe()}")
+                contingent = effect.contingent
+                effect = effect.first
+            first = effect
             if isinstance(effect, Simultaneously):
                 _trace.append(f"    {effect.describe()}")
                 if top.simultaneous:
@@ -495,10 +502,11 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                     )
                 return
             _trace.append(f"    {effect.describe()}")
+            happens = bool(contingent) and happens_as(game, first, effect)
             raised = apply_effect(game, effect)
             # What the effect produced goes next, ahead of the rest, so an attack's outcome resolves
             # where the attack stood and passes through the Interrupt step on its own.
-            top.pending[:0] = effect.follow_on(game)
+            top.pending[:0] = (*effect.follow_on(game), *(contingent if happens else ()))
             _settle_state_based_actions(game, raised)
             if top.simultaneous:
                 _group_events(frames).queue.extend(raised)
@@ -535,6 +543,15 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
         _trace.append(type(event).__name__)
         top.event = event
         top.firing = _collect(game, event)
+
+
+def happens_as(game: GameState, first: Effect, committing: Effect) -> bool:
+    """Whether ``committing``, what the checks made of ``first``, is ``first`` actually happening:
+    the same kind of effect on the same card, which an Interrupt's adjustment leaves it and a
+    negation or substitution does not, and one that would change something."""
+    if type(committing) is not type(first) or committing.subject_id != first.subject_id:
+        return False
+    return committing.would_happen(game)
 
 
 def _group_events(frames: list[_Frame]) -> _Events:
