@@ -60,17 +60,34 @@ def order_log():
     FIRING_ORDER.clear()
 
 
-def test_every_effect_from_one_trigger_applies_before_its_derived_events_fire():
-    # The worklist drains the effects in hand before popping the event queue, so the subscriber sees
-    # both adjustments already committed, and each gain raises its own event, so it fires twice.
+def test_each_effect_of_a_trigger_is_reacted_to_before_the_next_applies():
+    # CR 20F, Timing: "Once a triggered trait starts, activate all its costs, targeting, and effects
+    # in sequence before proceeding, even if another action or triggered trait is under way."
     game = two_seat_game()
     source = put_in_play(game, holding("P1-source", printed_id="order_two_effects"))
     put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
 
     fire(game, EnteredPlay(source.id))
 
-    both_counters = ("watcher", "P1-source", {"wealth": 1, "sincerity": 1})
-    assert FIRING_ORDER == [both_counters, both_counters]
+    assert FIRING_ORDER == [
+        ("watcher", "P1-source", {"wealth": 1}),
+        ("watcher", "P1-source", {"wealth": 1, "sincerity": 1}),
+    ]
+
+
+def test_each_effect_is_reacted_to_before_the_next_effect_in_its_list_applies():
+    game = two_seat_game()
+    source = put_in_play(game, holding("P1-source"))
+    put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
+
+    resolve_effects(
+        game, [AdjustCounter(source.id, WEALTH, 1), AdjustCounter(source.id, SINCERITY, 1)]
+    )
+
+    assert FIRING_ORDER == [
+        ("watcher", "P1-source", {"wealth": 1}),
+        ("watcher", "P1-source", {"wealth": 1, "sincerity": 1}),
+    ]
 
 
 def test_triggers_for_one_event_fire_in_canonical_owner_then_id_order():
@@ -105,7 +122,9 @@ def test_a_rulebook_trigger_fires_after_every_card_trigger_on_the_card_the_event
     assert FIRING_ORDER == [("recorder", "P1-a"), ("recorder", "P2-z"), ("rulebook", "P1-a")]
 
 
-def test_a_second_subscriber_still_fires_after_the_first_ones_effects_resolve():
+def test_a_triggers_reactions_resolve_before_its_sibling_trigger_fires():
+    # CR 20F, Timing: a triggered trait resolves "even if another action or triggered trait is
+    # under way", so the watcher answers the first subscriber's gains before the recorder fires.
     game = two_seat_game()
     source = put_in_play(game, holding("P1-a-source", printed_id="order_two_effects"))
     put_in_play(game, holding("P1-b-recorder", printed_id="order_recorder"))
@@ -113,9 +132,11 @@ def test_a_second_subscriber_still_fires_after_the_first_ones_effects_resolve():
 
     fire(game, EnteredPlay(source.id))
 
-    # Every EnteredPlay subscriber runs before the derived CounterChanged events are dequeued.
-    both_counters = ("watcher", "P1-a-source", {"wealth": 1, "sincerity": 1})
-    assert FIRING_ORDER == [("recorder", "P1-b-recorder"), both_counters, both_counters]
+    assert FIRING_ORDER == [
+        ("watcher", "P1-a-source", {"wealth": 1}),
+        ("watcher", "P1-a-source", {"wealth": 1, "sincerity": 1}),
+        ("recorder", "P1-b-recorder"),
+    ]
 
 
 def test_then_defers_its_effects_until_the_cascade_has_finished_reacting():

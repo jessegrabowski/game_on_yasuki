@@ -27,8 +27,10 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    Bowed,
     CardDiscarded,
     ConditionFulfilled,
+    CounterChanged,
     Destroyed,
     DuelDeclared,
     EnteredPlay,
@@ -277,6 +279,66 @@ def test_a_question_inside_a_group_resumes_the_rest_of_the_group():
 
     assert game.table.cards_by_id["asker"].counters == {"wealth": 1}
     assert game.table.cards_by_id["other"].bowed
+
+
+def test_a_groups_members_all_happen_before_anything_reacts_to_one(reacting):
+    # CR, Timing Conflicts: "two Personalities being destroyed in battle resolution" happen at the
+    # same time, so neither's destruction is reacted to while the other is still in play.
+    game = two_seat_game()
+    put_in_play(game, personality("probe", printed_id="destroyed_probe"))
+    first = put_in_play(game, personality("first"))
+    second = put_in_play(game, personality("second"))
+    still_in_play: list[bool] = []
+
+    def _record_the_pair(ctx):
+        battlefield = ctx.game.table.battlefield.cards
+        still_in_play.append(first in battlefield or second in battlefield)
+        return []
+
+    reacting(Destroyed, "destroyed_probe", _record_the_pair)
+
+    resolve_effects(
+        game, [Simultaneously((Destroy(first.id, PlayerId.P2), Destroy(second.id, PlayerId.P2)))]
+    )
+
+    assert still_in_play == [False, False]
+
+
+def test_a_reaction_to_an_answer_inside_a_group_waits_for_the_rest_of_the_group(reacting):
+    game = two_seat_game()
+    put_in_play(game, personality("asker", printed_id="counter_probe"))
+    put_in_play(game, personality("other"))
+    other_bowed: list[bool] = []
+
+    def _record_other(ctx):
+        other_bowed.append(ctx.game.table.cards_by_id["other"].bowed)
+        return []
+
+    reacting(CounterChanged, "counter_probe", _record_other)
+    asking = Choose(PlayerId.P1, (), 0, 0, "test_sandwich", "asker")
+
+    resolve_effects(game, [Simultaneously((asking, Bow("other")))])
+    action_sequence.submit(game, DecisionResponse(()))
+
+    assert other_bowed == [True]
+
+
+def test_a_group_inside_a_group_is_one_occurrence_with_it(reacting):
+    game = two_seat_game()
+    put_in_play(game, personality("probe", printed_id="bowed_probe"))
+    for card_id in ("a", "b", "c"):
+        put_in_play(game, personality(card_id))
+    all_bowed: list[bool] = []
+
+    def _record_all_bowed(ctx):
+        all_bowed.append(all(ctx.game.table.cards_by_id[card_id].bowed for card_id in "abc"))
+        return []
+
+    reacting(Bowed, "bowed_probe", _record_all_bowed)
+
+    resolve_effects(game, [Simultaneously((Simultaneously((Bow("a"), Bow("b"))), Bow("c")))])
+
+    assert all_bowed == [True, True, True]
 
 
 def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():
@@ -1221,7 +1283,9 @@ def test_a_watched_condition_is_answered_before_the_rest_of_the_text_that_fulfil
 def test_a_watch_is_not_answered_once_its_card_has_left_where_it_watches(watching):
     game, told = _watcher_game(watching)
 
-    resolve_effects(game, [PutIntoPlay("marker0"), Discard("watcher", PlayerId.P1)])
+    resolve_effects(
+        game, [Simultaneously((PutIntoPlay("marker0"), Discard("watcher", PlayerId.P1)))]
+    )
 
     assert told == []
 

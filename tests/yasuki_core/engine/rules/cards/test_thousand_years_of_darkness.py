@@ -60,7 +60,9 @@ def test_ashura_destroyed_at_a_battlefield_reaches_followers_and_unguarded_perso
         game.table.cards_by_id["guard"]
         in game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards
     )
-    assert seen == [P2, Trait("ashura")]
+    # Ashura's trait destroys the Follower, and the probe answers that, before the probe's own
+    # reaction to Ashura (CR 20F, Timing).
+    assert seen == [Trait("ashura"), P2]
 
 
 def test_ashura_destroyed_at_home_reaches_nothing():

@@ -381,10 +381,12 @@ def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
 
 @dataclass(slots=True)
 class _Effects:
-    """Effects a walk still has to apply, in order, and where they came from."""
+    """Effects a walk still has to apply, in order, and where they came from. A ``simultaneous``
+    frame is a group's, whose events gather in the events frame beneath it."""
 
     pending: list[Effect]
     provenance: Provenance
+    simultaneous: bool = False
 
 
 @dataclass(slots=True)
@@ -414,12 +416,16 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
     """Run the effect-and-trigger cascade to a fixpoint over ``frames``, the stack of work it still
     holds, bottom first.
 
-    An effects frame applies its next effect, which commits at once. Every event the walk raises, an
-    effect's or a state-based action's, joins the queue of the events frame at the bottom of the
-    stack, so it waits behind those already queued. An events frame fires its next trigger as a new
-    effects frame, or pops its next queued event and collects that event's triggers. A frame with
-    nothing left is dropped, and the walk ends with the stack. An :class:`~.InterruptingEffect`
-    pauses the walk: it stashes the exact remainder (every frame, the paused one holding the effects
+    An effects frame applies its next effect, which commits at once. The events it raised, with
+    those of the state-based actions it demanded, become an events frame on top, so every trait they
+    trigger resolves, nested triggers included, before the next effect applies (CR 20F, Timing:
+    "Once a triggered trait starts, activate all its costs, targeting, and effects in sequence
+    before proceeding, even if another action or triggered trait is under way"). A
+    :class:`~.Simultaneously` group is the exception: its members' events gather in one events frame
+    beneath the group, which fires once every member has happened. An events frame fires its next
+    trigger as a new effects frame, or pops its next queued event and collects that event's
+    triggers. A frame with nothing left is dropped, and the walk ends with the stack. An
+    :class:`~.InterruptingEffect` pauses the walk: it stashes the exact remainder (every frame, the paused one holding the effects
     after the one that asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
     :func:`~.resume_cascade` continues from precisely here once the seat answers. An effect with
     nothing to ask leaves the stash to drain behind the work it queued.
@@ -456,9 +462,12 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             effect = top.pending.pop(0)
             provenance = top.provenance
             if isinstance(effect, Simultaneously):
-                # A frame of its own, so its members finish before the rest of this frame.
                 _trace.append(f"    {effect.describe()}")
-                frames.append(_Effects(list(effect.effects), provenance))
+                if top.simultaneous:
+                    top.pending[:0] = effect.effects
+                else:
+                    frames.append(_Events([]))
+                    frames.append(_Effects(list(effect.effects), provenance, simultaneous=True))
                 continue
             if isinstance(effect, Then):
                 _trace.append(f"    {effect.describe()}")
@@ -486,12 +495,15 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                     )
                 return
             _trace.append(f"    {effect.describe()}")
-            queue = _bottom_events(frames).queue
-            queue.extend(apply_effect(game, effect))
+            raised = apply_effect(game, effect)
             # What the effect produced goes next, ahead of the rest, so an attack's outcome resolves
             # where the attack stood and passes through the Interrupt step on its own.
             top.pending[:0] = effect.follow_on(game)
-            _settle_state_based_actions(game, queue)
+            _settle_state_based_actions(game, raised)
+            if top.simultaneous:
+                _group_events(frames).queue.extend(raised)
+            elif raised:
+                frames.append(_Events(raised))
             continue
         if top.firing:
             card, trigger = top.firing.pop(0)
@@ -503,7 +515,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
         if not top.queue:
             # The walk can be entered on a board something else already made illegal, and with
             # nothing to commit the per-effect check never runs. Judge it before returning.
-            _settle_state_based_actions(game, _bottom_events(frames).queue)
+            _settle_state_based_actions(game, top.queue)
             if not top.queue:
                 frames.pop()
                 continue
@@ -525,13 +537,13 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
         top.firing = _collect(game, event)
 
 
-def _bottom_events(frames: list[_Frame]) -> _Events:
-    """The events frame at the bottom of the stack, whose queue every event the walk raises
-    joins."""
-    bottom = frames[0]
-    if not isinstance(bottom, _Events):
-        raise RuntimeError("a cascade's frames have no events frame at the bottom")
-    return bottom
+def _group_events(frames: list[_Frame]) -> _Events:
+    """The events frame beneath the group on top of the stack, which gathers what its members
+    raise."""
+    beneath = frames[-2]
+    if not isinstance(beneath, _Events):
+        raise RuntimeError("a group's effects frame has no events frame beneath it")
+    return beneath
 
 
 def _reacted_to(frame: _Events) -> GameEvent:
@@ -808,10 +820,14 @@ class EffectsFrame:
         The effects still to apply, in order.
     provenance : Provenance, optional
         Where they came from. Default a rulebook procedure's.
+    simultaneous : bool, optional
+        Whether they are the rest of a :class:`~.Simultaneously` group, whose events gather in the
+        events frame beneath. Default False.
     """
 
     effects: tuple[Effect, ...]
     provenance: Provenance = Provenance()
+    simultaneous: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -867,7 +883,7 @@ def _stash(game: GameState, frames: list[_Frame]) -> None:
 
 def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
     if isinstance(frame, _Effects):
-        return EffectsFrame(tuple(frame.pending), frame.provenance)
+        return EffectsFrame(tuple(frame.pending), frame.provenance, frame.simultaneous)
     firing = tuple((card.id, trigger) for card, trigger in frame.firing)
     return EventsFrame(tuple(frame.queue), frame.event, firing)
 
@@ -875,7 +891,7 @@ def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
 def _thawed(game: GameState, frame: EffectsFrame | EventsFrame) -> _Frame:
     """``frame`` for the walk to resume, dropping the triggers whose card has left the table."""
     if isinstance(frame, EffectsFrame):
-        return _Effects(list(frame.effects), frame.provenance)
+        return _Effects(list(frame.effects), frame.provenance, frame.simultaneous)
     firing = [
         (game.table.cards_by_id[card_id], trigger)
         for card_id, trigger in frame.firing

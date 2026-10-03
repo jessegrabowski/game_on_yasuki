@@ -905,11 +905,11 @@ def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
 
     session.act(DEFENDER, PlayInterrupt("okura"))
 
-    # The replacement resolves where the Fear stood, so the ability's next effect applies before
-    # a reaction to what the replacement did fires, the same as after a rulebook discard. Okura's
-    # own discard happened inside the step and is not among the action's events.
+    # The replacement resolves where the Fear stood, and a reaction to what it did resolves before
+    # the ability's next effect (CR 20F, Timing). Okura's own discard happened inside the step and
+    # is not among the action's events.
     assert _event_names(session) == ["Bowed", "Destroyed", "HonorChanged"]
-    assert honor_seen == [1]
+    assert honor_seen == [0]
 
 
 def test_a_played_interrupts_own_effects_resolve_inside_the_step_and_are_not_the_actions():
