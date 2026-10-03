@@ -17,7 +17,6 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Ongoing, SeatAbilityGrant
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.text_split import split_text_box
@@ -121,37 +120,6 @@ def effects_before_entering_play(game: GameState, card: L5RCard) -> list[Effect]
     """The effects ``card``'s own text resolves before it enters play, or none."""
     handler = BEFORE_ENTERING_PLAY.get(card.printed_id)
     return [] if handler is None else handler(game, card)
-
-
-@dataclass(frozen=True, slots=True)
-class RecruitTiming:
-    """A designator a card lets itself be Recruited under besides the rulebook's Dynasty, with the
-    ability keywords that Recruit then carries ("You may Recruit this Holding as a Political Open
-    action").
-
-    Attributes
-    ----------
-    timing : ActionTiming
-        The designator the Recruit may be taken under.
-    keywords : frozenset of str, optional
-        The ability keywords that Recruit carries. Default empty.
-    """
-
-    timing: ActionTiming
-    keywords: frozenset[str] = frozenset()
-
-
-RECRUIT_TIMINGS: HandlerRegistry[RecruitTiming] = HandlerRegistry(
-    "recruit timings", "already names a Recruit timing"
-)
-register_recruit_timing = RECRUIT_TIMINGS.make_register()
-
-
-def recruit_timing_of(game: GameState, card_id: str) -> RecruitTiming | None:
-    """The Recruit timing ``card_id``'s text adds, or None when it Recruits only as the rulebook
-    allows or is no longer on the table."""
-    card = game.table.cards_by_id.get(card_id)
-    return None if card is None else RECRUIT_TIMINGS.get(card.printed_id)
 
 
 # Cards in play that give another card's abilities Tireless ("Your Stronghold's printed abilities

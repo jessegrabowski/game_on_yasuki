@@ -189,7 +189,6 @@ Legality with respect to game state is checked separately.
    ChooseFortificationProvince
    ChooseInterruptEffect
    ChooseInterruptTarget
-   ChooseInvestAmount
    ChooseOption
    LeaveBowed
    ChoosePayment

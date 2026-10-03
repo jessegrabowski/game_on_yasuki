@@ -2,6 +2,7 @@ from dataclasses import replace
 
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
@@ -36,7 +37,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.board.queries import has_keyword, rulebook_proxy
 from yasuki_core.engine.rules.rulebook.lobby import LOBBY
@@ -62,7 +62,7 @@ from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     ChooseDiscard,
-    ChooseInvestAmount,
+    ChooseAmount,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
@@ -265,16 +265,16 @@ def test_the_offer_names_the_two_prices_and_nothing_between():
     """ "Invest :g2: or :g6:" is a pair of prices, not a span: three, four and five buy nothing."""
     session = _hayako_game()
 
-    session.act(P1, Recruit("hayako", invest=True))
+    session.act(P1, ActivateAbility("hayako", RECRUIT_WITH_INVEST))
 
-    assert isinstance(session.game.pending, ChooseInvestAmount)
+    assert isinstance(session.game.pending, ChooseAmount)
     assert session.game.pending.candidates == ("2", "6")
 
 
 def test_two_gold_raises_one_ancestor():
     session = _hayako_game()
 
-    session.act(P1, Recruit("hayako", invest=True))
+    session.act(P1, ActivateAbility("hayako", RECRUIT_WITH_INVEST))
     session.submit(P1, DecisionResponse(("2",)))
     payment = session.game.pending
     pay(session, P1)
@@ -286,7 +286,7 @@ def test_two_gold_raises_one_ancestor():
 def test_six_gold_raises_two_of_them():
     session = _hayako_game()
 
-    session.act(P1, Recruit("hayako", invest=True))
+    session.act(P1, ActivateAbility("hayako", RECRUIT_WITH_INVEST))
     session.submit(P1, DecisionResponse(("6",)))
     payment = session.game.pending
     pay(session, P1)
@@ -316,7 +316,7 @@ def test_a_discount_moves_both_prices_and_takes_the_second_ancestor_with_it(_dis
     hayako = session.game.table.cards_by_id["hayako"]
     assert invest_amounts(session.game, hayako) == (0, 4)
 
-    session.act(P1, Recruit("hayako", invest=True))
+    session.act(P1, ActivateAbility("hayako", RECRUIT_WITH_INVEST))
     session.submit(P1, DecisionResponse(("4",)))
     pay(session, P1)
 
@@ -326,7 +326,7 @@ def test_a_discount_moves_both_prices_and_takes_the_second_ancestor_with_it(_dis
 def test_a_discount_still_leaves_the_cheaper_price_buying_one(_discounted_hayako):
     session = _hayako_game()
 
-    session.act(P1, Recruit("hayako", invest=True))
+    session.act(P1, ActivateAbility("hayako", RECRUIT_WITH_INVEST))
     session.submit(P1, DecisionResponse(("0",)))
     pay(session, P1)
 
@@ -337,7 +337,7 @@ def test_the_higher_price_is_not_offered_out_of_reach():
     """With only the cheaper price payable there is nothing to choose, so nothing is asked."""
     session = _hayako_game(gold_production=6)  # four for Hayako leaves two, not six
 
-    session.act(P1, Recruit("hayako", invest=True))
+    session.act(P1, ActivateAbility("hayako", RECRUIT_WITH_INVEST))
 
     assert session.game.pending.amount == 6  # straight to paying his cost plus the two
 
@@ -345,13 +345,13 @@ def test_the_higher_price_is_not_offered_out_of_reach():
 def test_hayako_is_not_offered_an_invest_he_cannot_pay_for():
     session = _hayako_game(gold_production=5)  # four for Hayako leaves one
 
-    assert Recruit("hayako", invest=True) not in session.legal_actions(P1)
-    assert Recruit("hayako") in session.legal_actions(P1)
+    assert ActivateAbility("hayako", RECRUIT_WITH_INVEST) not in session.legal_actions(P1)
+    assert ActivateAbility("hayako", RECRUIT) in session.legal_actions(P1)
 
 
 def test_kitsu_hayako_replays_to_the_same_board():
     session = _hayako_game()
-    session.act(P1, Recruit("hayako", invest=True))
+    session.act(P1, ActivateAbility("hayako", RECRUIT_WITH_INVEST))
     session.submit(P1, DecisionResponse(("6",)))
     pay(session, P1)
 
@@ -1748,7 +1748,7 @@ def test_togashis_library_may_only_be_recruited_by_a_dragon_clan_player(clan, of
     end_phase(session)
     end_phase(session)
 
-    assert (Recruit("library") in session.legal_actions(P1)) is offered
+    assert (ActivateAbility("library", RECRUIT) in session.legal_actions(P1)) is offered
 
 
 @pytest.mark.parametrize(

@@ -15,7 +15,6 @@ yasuki_core.engine.rules.vocabulary.actions
     Pass
     PlayInterrupt
     PlayStrategy
-    Recruit
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.actions
     :members:

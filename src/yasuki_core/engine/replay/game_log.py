@@ -24,7 +24,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.turn import action_sequence, sequence
@@ -278,8 +277,6 @@ def _encode_action(action: Action) -> dict:
     match action:
         case Pass():
             return {"kind": "pass"}
-        case Recruit(card_id=card_id, invest=invest, proclaim=proclaim):
-            return {"kind": "recruit", "card_id": card_id, "invest": invest, "proclaim": proclaim}
         case Equip(card_id=card_id, invest=invest):
             return {"kind": "equip", "card_id": card_id, "invest": invest}
         case ActivateAbility(card_id=card_id, ability_key=key):
@@ -297,12 +294,6 @@ def _decode_action(payload: dict) -> Action:
     kind = payload["kind"]
     if kind == "pass":
         return Pass()
-    if kind == "recruit":
-        return Recruit(
-            payload["card_id"],
-            invest=payload.get("invest", False),
-            proclaim=payload.get("proclaim", False),
-        )
     if kind == "equip":
         return Equip(payload["card_id"], invest=payload.get("invest", False))
     if kind == "activate_ability":

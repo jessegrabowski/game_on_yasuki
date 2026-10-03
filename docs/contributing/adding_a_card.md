@@ -30,7 +30,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "Interrupt: ..." on an Event in a Province | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.PROVINCE,)))` | none yet |
 | "Unstoppable Battle: ..." | `Ability(..., unstoppable=True)` | none yet |
 | May Proclaim for an amount other than Personal Honor | `@proclaim_gain(id)` | {card}`Ninube Aitso, "Doji Yeiko" (Experienced)` |
-| "You may Recruit this Holding as a Political Open action" | `register_recruit_timing(id, RecruitTiming(...))` | {card}`The Ivory Courtroom` |
+| "Political Open, :gstar:: If this Holding is in your Province, Recruit it." | `Ability(cost=recruit_gold, targets=recruitable, effects=recruit_from_its_province, located_at=(CardLocation.PROVINCE,))` | {card}`The Ivory Courtroom` |
 | Gives another card's abilities Tireless | `@tireless_grant(id)` | {card}`Shrine to Inari` |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
 | Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |

@@ -1,8 +1,9 @@
 from dataclasses import replace
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.cycle import is_cycle
-from yasuki_core.engine.rules.vocabulary.actions import Pass, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass
 from yasuki_core.bots.policies import EconomicCyclePolicy, cards_to_cycle
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
@@ -168,7 +169,7 @@ def test_it_buys_like_the_economic_policy_when_cycle_is_not_on_offer():
 
     chosen = EconomicCyclePolicy().choose(session.project(P1), session.legal_actions(P1))
 
-    assert chosen == Recruit("buyme")
+    assert chosen == ActivateAbility("buyme", RECRUIT)
 
 
 def test_it_answers_its_own_choice_with_the_cards_it_chose_over():

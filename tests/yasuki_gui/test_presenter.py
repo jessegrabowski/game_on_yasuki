@@ -1,8 +1,9 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.debug import ChooseDebugSeat, PlaceDebugCard
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import remaining_look, top_of_deck
@@ -27,7 +28,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseAmount,
     ChooseCards,
-    ChooseInvestAmount,
     ChooseOption,
     Confirm,
     DECK_TOP,
@@ -156,7 +156,7 @@ def paying():
     presenter = Presenter(FakeHost(runner), window)
     window.field.on_selection_changed = presenter.refresh
     try:
-        runner.act(Recruit("target"))
+        runner.act(ActivateAbility("target", RECRUIT))
         presenter.present()
         yield presenter, window
     finally:
@@ -267,17 +267,6 @@ def test_a_yes_no_question_is_asked_by_its_buttons(board):
 
     assert _status(window) == "Destroy the Farm?"
     assert _buttons(window) == ["Yes", "No", "Cancel"]
-
-
-def test_an_invest_decision_offers_a_button_per_affordable_amount(board):
-    presenter, window, session = board
-    session.game.pending = ChooseInvestAmount(
-        seat=P1, candidates=("1", "2", "3"), source_card_id="of"
-    )
-
-    presenter.refresh()
-
-    assert _buttons(window) == ["Invest 1", "Invest 2", "Invest 3", "Cancel"]
 
 
 def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
@@ -427,7 +416,7 @@ def two_producers():
     presenter = Presenter(FakeHost(runner), window)
     window.field.on_selection_changed = presenter.refresh
     try:
-        runner.act(Recruit("tgt"))
+        runner.act(ActivateAbility("tgt", RECRUIT))
         presenter.present()
         yield presenter, window, session
     finally:
@@ -549,7 +538,7 @@ def farm_and_a_helper():
     presenter = Presenter(FakeHost(runner), window)
     window.field.on_selection_changed = presenter.refresh
     try:
-        runner.act(Recruit("tgt"))
+        runner.act(ActivateAbility("tgt", RECRUIT))
         presenter.present()
         yield presenter, window, session
     finally:
@@ -610,7 +599,7 @@ def test_a_producer_queued_behind_a_grant_that_covered_the_cost_never_bows():
     presenter = Presenter(FakeHost(runner), window)
     window.field.on_selection_changed = presenter.refresh
     try:
-        runner.act(Recruit("tgt"))
+        runner.act(ActivateAbility("tgt", RECRUIT))
         presenter.present()
         window.field.toggle_selection("of")
         window.field.toggle_selection("spare")
@@ -643,12 +632,12 @@ def gold_already_in_the_pool():
     presenter = Presenter(FakeHost(runner), window)
     window.field.on_selection_changed = presenter.refresh
     try:
-        runner.act(Recruit("first"))
+        runner.act(ActivateAbility("first", RECRUIT))
         presenter.present()
         window.field.toggle_selection("big")
         presenter.confirm()  # bows the 8-producer for a 3 cost, leaving 5 in the pool
         assert session.game.gold[P1] == 5
-        runner.act(Recruit("second"))
+        runner.act(ActivateAbility("second", RECRUIT))
         presenter.present()
         yield presenter, window, session
     finally:

@@ -2,6 +2,7 @@ import pytest
 
 from tests.yasuki_core.engine.builders import end_phase, pay
 from tests.yasuki_core.engine.rules.cards.test_rise_of_jigoku import _modest_farm_game
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_AND_PROCLAIM
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.engine.zones import ProvinceZone
@@ -20,7 +21,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     Equip,
     Pass,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.battle.resolution import FightNextBattle
@@ -158,9 +158,11 @@ def test_recruit_is_offered_only_in_dynasty_for_an_affordable_face_up_holding():
     _holding_in_province(state, "P1-buy", gold_cost=5)
     session = EngineSession.start(state, PlayerId.P1)
 
-    assert Recruit("P1-buy") not in session.legal_actions(PlayerId.P1)  # Action phase
+    assert ActivateAbility("P1-buy", RECRUIT) not in session.legal_actions(
+        PlayerId.P1
+    )  # Action phase
     _in_dynasty(session)
-    assert Recruit("P1-buy") in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-buy", RECRUIT) in session.legal_actions(PlayerId.P1)
 
 
 def test_recruit_is_withheld_when_the_seat_cannot_cover_the_cost():
@@ -169,7 +171,7 @@ def test_recruit_is_withheld_when_the_seat_cannot_cover_the_cost():
     _holding_in_province(state, "P1-buy", gold_cost=5)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
-    assert Recruit("P1-buy") not in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-buy", RECRUIT) not in session.legal_actions(PlayerId.P1)
 
 
 def _personality_in_province(
@@ -230,7 +232,7 @@ def test_recruiting_a_card_that_costs_nothing_asks_no_payment():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("P1-person"))
+    session.act(PlayerId.P1, ActivateAbility("P1-person", RECRUIT))
 
     assert session.game.pending is None
     assert session.game.table.cards_by_id["P1-person"] in session.game.table.battlefield.cards
@@ -255,9 +257,11 @@ def test_recruit_pays_then_brings_the_personality_into_play_unbowed_and_refills(
     _personality_in_province(state, "P1-person", gold_cost=5, personal_honor=2)
     session = EngineSession.start(state, PlayerId.P1)
 
-    assert Recruit("P1-person") not in session.legal_actions(PlayerId.P1)  # Action phase
+    assert ActivateAbility("P1-person", RECRUIT) not in session.legal_actions(
+        PlayerId.P1
+    )  # Action phase
     _in_dynasty(session)
-    session.act(PlayerId.P1, Recruit("P1-person"))
+    session.act(PlayerId.P1, ActivateAbility("P1-person", RECRUIT))
     pending = session.project(PlayerId.P1).pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 5
     pay(session, PlayerId.P1)
@@ -284,8 +288,8 @@ def test_recruit_is_withheld_for_a_personality_above_the_seats_family_honor():
     _in_dynasty(session)
 
     actions = session.legal_actions(PlayerId.P1)
-    assert Recruit("P1-proud") not in actions  # HR 3 > Family Honor 2
-    assert Recruit("P1-humble") in actions  # HR at the seat's honor is met
+    assert ActivateAbility("P1-proud", RECRUIT) not in actions  # HR 3 > Family Honor 2
+    assert ActivateAbility("P1-humble", RECRUIT) in actions  # HR at the seat's honor is met
 
 
 def test_dash_honor_requirement_recruits_at_negative_family_honor():
@@ -300,8 +304,8 @@ def test_dash_honor_requirement_recruits_at_negative_family_honor():
     _in_dynasty(session)
 
     actions = session.legal_actions(PlayerId.P1)
-    assert Recruit("P1-dash") in actions  # dash is always below any Family Honor
-    assert Recruit("P1-zero") not in actions  # HR 0 still needs Family Honor >= 0
+    assert ActivateAbility("P1-dash", RECRUIT) in actions  # dash is always below any Family Honor
+    assert ActivateAbility("P1-zero", RECRUIT) not in actions  # HR 0 still needs Family Honor >= 0
 
 
 def test_ignoring_honor_requirements_waives_the_gate_for_every_personality():
@@ -314,7 +318,7 @@ def test_ignoring_honor_requirements_waives_the_gate_for_every_personality():
     _in_dynasty(session)
 
     # An HR-5 Personality is recruitable at -2 Family Honor because the seat ignores requirements.
-    assert Recruit("P1-proud") in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-proud", RECRUIT) in session.legal_actions(PlayerId.P1)
 
 
 def test_proclaim_is_offered_only_for_an_own_clan_personality():
@@ -328,11 +332,13 @@ def test_proclaim_is_offered_only_for_an_own_clan_personality():
     _in_dynasty(session)
 
     actions = session.legal_actions(PlayerId.P1)
-    assert Recruit("P1-crab", proclaim=True) in actions
-    assert Recruit("P1-crane") in actions  # off-clan recruits fine, at the surcharge
-    assert Recruit("P1-crane", proclaim=True) not in actions
-    assert Recruit("P1-ronin") in actions
-    assert Recruit("P1-ronin", proclaim=True) not in actions
+    assert ActivateAbility("P1-crab", RECRUIT_AND_PROCLAIM) in actions
+    assert (
+        ActivateAbility("P1-crane", RECRUIT) in actions
+    )  # off-clan recruits fine, at the surcharge
+    assert ActivateAbility("P1-crane", RECRUIT_AND_PROCLAIM) not in actions
+    assert ActivateAbility("P1-ronin", RECRUIT) in actions
+    assert ActivateAbility("P1-ronin", RECRUIT_AND_PROCLAIM) not in actions
 
 
 def test_proclaim_adds_personal_honor_and_is_once_per_turn():
@@ -344,15 +350,17 @@ def test_proclaim_adds_personal_honor_and_is_once_per_turn():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("P1-first", proclaim=True))
+    session.act(PlayerId.P1, ActivateAbility("P1-first", RECRUIT_AND_PROCLAIM))
     pay(session, PlayerId.P1)
 
     game = session.game
     assert game.table.cards_by_id["P1-first"] in game.table.battlefield.cards
     assert game.table.seats[PlayerId.P1].honor == 2  # Personal Honor added to Family Honor
     actions = session.legal_actions(PlayerId.P1)
-    assert Recruit("P1-second") in actions  # still recruitable plain
-    assert Recruit("P1-second", proclaim=True) not in actions  # the turn's Proclaim is spent
+    assert ActivateAbility("P1-second", RECRUIT) in actions  # still recruitable plain
+    assert (
+        ActivateAbility("P1-second", RECRUIT_AND_PROCLAIM) not in actions
+    )  # the turn's Proclaim is spent
 
 
 def test_proclaim_is_available_again_on_the_seats_next_turn():
@@ -363,8 +371,10 @@ def test_proclaim_is_available_again_on_the_seats_next_turn():
     _personality_in_province(state, "P1-second", clan="Crab", personal_honor=1, idx=1)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
-    session.act(PlayerId.P1, Recruit("P1-first", proclaim=True))
-    assert Recruit("P1-second", proclaim=True) not in session.legal_actions(PlayerId.P1)
+    session.act(PlayerId.P1, ActivateAbility("P1-first", RECRUIT_AND_PROCLAIM))
+    assert ActivateAbility("P1-second", RECRUIT_AND_PROCLAIM) not in session.legal_actions(
+        PlayerId.P1
+    )
 
     end_phase(session)  # end P1's turn; the full hand + fate draw forces a discard
     discard = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
@@ -373,7 +383,7 @@ def test_proclaim_is_available_again_on_the_seats_next_turn():
         end_phase(session)
     _in_dynasty(session)
 
-    assert Recruit("P1-second", proclaim=True) in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-second", RECRUIT_AND_PROCLAIM) in session.legal_actions(PlayerId.P1)
 
 
 def test_cancel_of_a_proclaim_payment_leaves_the_proclaim_available():
@@ -384,12 +394,12 @@ def test_cancel_of_a_proclaim_payment_leaves_the_proclaim_available():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("P1-person", proclaim=True))
+    session.act(PlayerId.P1, ActivateAbility("P1-person", RECRUIT_AND_PROCLAIM))
     session.cancel(PlayerId.P1)
 
     game = session.game
     assert game.table.seats[PlayerId.P1].honor == 0
-    assert Recruit("P1-person", proclaim=True) in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-person", RECRUIT_AND_PROCLAIM) in session.legal_actions(PlayerId.P1)
 
 
 def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
@@ -412,7 +422,7 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("P1-buy"))
+    session.act(PlayerId.P1, ActivateAbility("P1-buy", RECRUIT))
     pending = session.project(PlayerId.P1).pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 5
     assert pending.label == "Holding"  # the prompt names the card being bought
@@ -428,7 +438,7 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     refilled = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
     assert [card.id for card in refilled] == ["P1-refill"] and not refilled[0].face_up
     # The face-down refill is not recruitable until it is revealed next turn.
-    assert Recruit("P1-refill") not in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-refill", RECRUIT) not in session.legal_actions(PlayerId.P1)
     assert game.pending is None and not game.stack
 
 
@@ -464,7 +474,7 @@ def test_dynasty_discard_is_offered_for_any_face_up_province_card_in_dynasty():
 
     assert discard_junk in actions  # a Holding too expensive to recruit is still discardable
     assert discard_person in actions  # a recruitable Personality is also discardable
-    assert Recruit("P1-person") in actions
+    assert ActivateAbility("P1-person", RECRUIT) in actions
 
 
 def test_dynasty_discard_moves_the_card_to_the_discard_and_refills():
@@ -541,9 +551,9 @@ def test_jade_works_funds_and_pays_a_jade_recruit_at_its_premium_rate():
     _in_dynasty(session)
 
     # Affordability counts Jade Works as 5 toward a Jade card, so the 5-cost recruit is offered.
-    assert Recruit("P1-jade") in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-jade", RECRUIT) in session.legal_actions(PlayerId.P1)
 
-    session.act(PlayerId.P1, Recruit("P1-jade"))
+    session.act(PlayerId.P1, ActivateAbility("P1-jade", RECRUIT))
     pending = session.project(PlayerId.P1).pending
     assert isinstance(pending, ChoosePayment)
     assert dict(pending.produced)["P1-jadeworks"] == 5  # the premium 5, not the printed 3
@@ -561,7 +571,7 @@ def test_cancel_backs_out_of_a_recruit_payment_committing_nothing():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("P1-buy"))
+    session.act(PlayerId.P1, ActivateAbility("P1-buy", RECRUIT))
     assert isinstance(session.game.pending, ChoosePayment)
 
     session.cancel(PlayerId.P1)
@@ -576,7 +586,7 @@ def test_cancel_backs_out_of_a_recruit_payment_committing_nothing():
     assert game.gold[PlayerId.P1] == 0
     assert not game.table.cards_by_id["P1-SH"].bowed
     # The holding can be recruited again, and the logged cancel replays to the same live state.
-    assert Recruit("P1-buy") in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("P1-buy", RECRUIT) in session.legal_actions(PlayerId.P1)
     replayed = session.log.replay()
     assert replayed.pending is None and not replayed.stack
 
@@ -587,7 +597,7 @@ def test_cancel_rejects_a_seat_that_is_not_being_asked():
     _holding_in_province(state, "P1-buy", gold_cost=5)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
-    session.act(PlayerId.P1, Recruit("P1-buy"))
+    session.act(PlayerId.P1, ActivateAbility("P1-buy", RECRUIT))
 
     with pytest.raises(ValueError):
         session.cancel(PlayerId.P2)
@@ -767,7 +777,7 @@ def test_undo_last_does_not_reverse_a_recruit():
     _holding_in_province(state, "P1-buy", gold_cost=5)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
-    session.act(PlayerId.P1, Recruit("P1-buy"))
+    session.act(PlayerId.P1, ActivateAbility("P1-buy", RECRUIT))
     pay(session, PlayerId.P1)  # pay -> the holding enters play
 
     assert session.undo_last(PlayerId.P1) is False  # undo only reverses a Dynasty Discard
@@ -813,7 +823,7 @@ def test_proclaim_gains_the_honor_the_personality_is_worth_now():
     _in_dynasty(session)
     before = session.game.table.seats[PlayerId.P1].honor
 
-    session.act(PlayerId.P1, Recruit("P1-person", proclaim=True))
+    session.act(PlayerId.P1, ActivateAbility("P1-person", RECRUIT_AND_PROCLAIM))
 
     assert session.game.table.seats[PlayerId.P1].honor == before + 4
 
@@ -1033,7 +1043,7 @@ def test_recruiting_a_fortification_attaches_it_to_the_province_it_came_from():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("P1-wall"))
+    session.act(PlayerId.P1, ActivateAbility("P1-wall", RECRUIT))
     pay(session, PlayerId.P1)
 
     game = session.game
@@ -1052,7 +1062,7 @@ def test_a_plain_holding_is_not_attached_to_its_province():
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("P1-farm"))
+    session.act(PlayerId.P1, ActivateAbility("P1-farm", RECRUIT))
     pay(session, PlayerId.P1)
 
     assert session.game.table.province_attachments == {}
@@ -1080,7 +1090,7 @@ def test_a_fortification_stays_on_its_province_when_the_slot_refills_behind_it()
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    session.act(PlayerId.P1, Recruit("P1-wall"))
+    session.act(PlayerId.P1, ActivateAbility("P1-wall", RECRUIT))
     pay(session, PlayerId.P1)
 
     game = session.game

@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_AND_PROCLAIM, is_recruit
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.rules.units.membership import attachments_of
@@ -45,7 +46,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     Pass,
     PlayInterrupt,
-    Recruit,
 )
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, RoundKind
 from yasuki_core.engine.rules.vocabulary.modifiers import Negation
@@ -590,7 +590,7 @@ def test_proclaiming_a_dishonored_aitso_for_three_rehonors_her_instead():
     proclaim = next(
         action
         for action in session.legal_actions(P1)
-        if isinstance(action, Recruit) and action.proclaim
+        if is_recruit(action) and action.ability_key == RECRUIT_AND_PROCLAIM
     )
     session.act(P1, proclaim)
     assert isinstance(session.game.pending, Confirm)
@@ -644,7 +644,7 @@ def test_togashi_noritada_gains_a_fire_token_for_each_sincerity_token_removed():
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty
 
-    session.act(P1, Recruit("noritada"))
+    session.act(P1, ActivateAbility("noritada", RECRUIT))
     pay(session, P1)
 
     recruited = session.game.table.cards_by_id["noritada"]
@@ -668,7 +668,7 @@ def test_togashi_noritada_ignores_another_cards_sincerity_tokens():
     end_phase(session)  # Action -> Battle
     end_phase(session)  # Battle -> Dynasty
 
-    session.act(P1, Recruit("shrine"))
+    session.act(P1, ActivateAbility("shrine", RECRUIT))
     pay(session, P1)
 
     assert session.game.table.cards_by_id["noritada"].counters == {}

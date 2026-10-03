@@ -8,9 +8,9 @@ only then does a card reach the table. Each multi-step action lives in its own m
 
 An action that costs something splits into three parts.
 
-Announcing queues the work and builds the question the seat has to answer.
-{func}`~.announce_recruit` does this for a Recruit, and an ability's cost effects do it for an
-activated ability, including the rulebook Kharmic abilities on the card they spend.
+Announcing queues the work and builds the question the seat has to answer. An ability's cost
+effects do it for an activated ability, including the rulebook Recruit on a Province card and the
+Kharmic abilities on the card they spend.
 
 The pause is a pending decision on `GameState`. Nothing further happens until a seat answers,
 which is what lets a human, a bot and a replayed tape all drive the same machine.
@@ -87,10 +87,12 @@ effect is how a card borrows the whole sequence.
 
 ## The modules
 
-`rulebook/recruit.py` is the longest and the one to read first: {func}`~.recruit`,
-{func}`~.announce_recruit`, {func}`~.apply_invest_amount`, {func}`~.resolve_recruit` and
-{func}`~.apply_fortification_province` are the steps in order, and {func}`~.bring_into_play` and
-{func}`~.effects_after_entering_play` are what the {class}`~.effects.Recruit` effect does.
+`rulebook/recruit.py` is the longest and the one to read first. It registers the rulebook Recruit
+as three abilities every face-up Province card carries, plain, Proclaimed and Invested, paid by
+{func}`~.recruit_gold` and resolved by {func}`~.recruit_effects`. {func}`~.bring_into_play` and
+{func}`~.effects_after_entering_play` are what the {class}`~.effects.Recruit` effect does. A card
+that Recruits through {class}`~.RecruitCard` goes by {func}`~.announce_recruit`,
+{func}`~.resolve_recruit` and {func}`~.apply_fortification_province`.
 
 `rulebook/equip.py` carries the attachment rules, including {func}`~.may_attach`,
 {func}`~.equip_targets` and {func}`~.creation_targets`, which judges a token template rather than

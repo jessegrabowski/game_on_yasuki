@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Enter
 from yasuki_core.engine.rules.turn.action_sequence import run_stack
 from yasuki_core.engine.rules.abilities.activation import activate
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
-from yasuki_core.engine.rules.rulebook.recruit import recruit
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
@@ -79,7 +79,7 @@ def test_a_reaction_to_entering_play_sees_the_province_still_empty(reacting):
     game = two_seat_game()  # not _game(): its watcher would react to this card entering too
     province_card(game, "P1-bought", seat=P1, printed_id="entering_probe", gold_cost=0)
 
-    recruit(game, "P1-bought")
+    activate(game, "P1-bought", RECRUIT)
     run_stack(game)
 
     assert seen == [0]

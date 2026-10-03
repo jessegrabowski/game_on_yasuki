@@ -20,7 +20,12 @@ from yasuki_core.engine.rules.rulebook.dynasty_discard import is_dynasty_discard
 from yasuki_core.engine.rules.rulebook.favor_abilities import is_favor_ability
 from yasuki_core.engine.rules.rulebook.inheritance import is_inheritance
 from yasuki_core.engine.rules.rulebook.legacy import FIND_RESOLVER
-from yasuki_core.engine.rules.rulebook.recruit import PROCLAIM_GAINS
+from yasuki_core.engine.rules.rulebook.recruit import (
+    PROCLAIM_GAINS,
+    RECRUIT_AND_PROCLAIM,
+    RECRUIT_WITH_INVEST,
+    is_recruit,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
@@ -30,7 +35,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Equip,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
@@ -107,11 +111,11 @@ class GameRunner:
         for action in self.legal_actions():
             if getattr(action, "card_id", None) != card_id:
                 continue
-            if isinstance(action, Recruit):
+            if is_recruit(action):
                 pay = _pay(legality.action_gold(game, action))
-                if action.invest:
+                if action.ability_key == RECRUIT_WITH_INVEST:
                     items.append((f"Invest: {pay}", action))
-                elif action.proclaim:
+                elif action.ability_key == RECRUIT_AND_PROCLAIM:
                     items.append((self._proclaim_label(game, card, pay), action))
                 else:
                     items.append((f"Recruit: {pay}", action))
@@ -154,7 +158,7 @@ class GameRunner:
     def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """Every activated-ability action offered for an in-play card the human controls, each
         labelled with its own ability's description, when it is legal to use now. Empty
-        otherwise. A Dynasty Discard is left to :meth:`province_menu`."""
+        otherwise. A Recruit and a Dynasty Discard are left to :meth:`province_menu`."""
         card = self.session.game.table.cards_by_id[card_id]
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
@@ -162,6 +166,7 @@ class GameRunner:
                 isinstance(action, ActivateAbility)
                 and action.card_id == card_id
                 and not is_dynasty_discard(action)
+                and not is_recruit(action)
             ):
                 items.append((self._ability_label(card, action), action))
         return items

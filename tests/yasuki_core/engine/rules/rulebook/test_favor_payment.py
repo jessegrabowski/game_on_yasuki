@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.favor_payment import (
     _resolve_favor_payment,
@@ -10,7 +11,7 @@ from yasuki_core.engine.rules.rulebook.favor_payment import (
 )
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import can_pay
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.turn.sequence import forget_action
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.effects import (
@@ -27,7 +28,7 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
 from yasuki_core.game_pieces.prints import RulebookPrint
 
-from tests.yasuki_core.engine.builders import personality, put_in_play
+from tests.yasuki_core.engine.builders import personality, province_card, put_in_play
 
 FREE_PAYER = "free_payer"
 BOWING_PAYER = "bowing_payer"
@@ -180,8 +181,8 @@ def test_the_next_action_is_not_a_favor_action_by_inheritance(game):
 def test_recruiting_a_favor_designated_card_is_not_a_favor_action(game):
     """The designator is on the ability, not on the card carrying it. Read off any action naming a
     card, buying that card would announce a Favor action and fire every trigger watching for one."""
-    source = put_in_play(game, personality("actor", keywords=(keywords.FAVOR,)))
+    source = province_card(game, "actor", seat=PlayerId.P1, keywords=(keywords.FAVOR,))
 
-    _resolve(game, Recruit(source.id), [])
+    _resolve(game, ActivateAbility(source.id, RECRUIT), [])
 
     assert not is_favor_action(game)

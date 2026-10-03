@@ -1,7 +1,8 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
@@ -26,7 +27,7 @@ def _recruit_pending(cost: int, production: int, seat: PlayerId = P1) -> EngineS
     province_card(session.game, "target", seat=seat, gold_cost=cost)
     end_phase(session)
     end_phase(session)
-    session.act(seat, Recruit("target"))
+    session.act(seat, ActivateAbility("target", RECRUIT))
     return session
 
 

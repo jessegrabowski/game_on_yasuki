@@ -1,6 +1,7 @@
 import dataclasses
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_AND_PROCLAIM
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
@@ -18,7 +19,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     Pass,
-    Recruit,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -78,7 +78,6 @@ from yasuki_core.bots.agents import make_agent
 from yasuki_core.bots.policies import make_policy
 from yasuki_core.engine.driver import Controls, run_game
 from yasuki_core.game_setup import build_state_from_deck
-from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 
@@ -109,14 +108,17 @@ def _dynasty(session):
 
 # Well-formed actions naming a card no board holds. Never legal anywhere.
 UNKNOWN_CARD = (
-    Recruit("nonexistent"),
+    ActivateAbility("nonexistent", RECRUIT),
     ActivateAbility("nonexistent"),
     ActivateAbility("nonexistent", DYNASTY_DISCARD),
 )
 
 # Plus one that names a real card in a mode it does not offer. Tied to _board's ids, so it only
 # means anything against that fixture.
-NEVER_LEGAL = (*UNKNOWN_CARD, Recruit("cheap", proclaim=True))  # a Holding cannot be Proclaimed
+NEVER_LEGAL = (
+    *UNKNOWN_CARD,
+    ActivateAbility("cheap", RECRUIT_AND_PROCLAIM),
+)  # a Holding cannot be Proclaimed
 
 
 @pytest.mark.parametrize(
@@ -148,11 +150,11 @@ def test_is_legal_rejects_an_action_belonging_to_another_phase():
     action_phase = _board()
     dynasty = _dynasty(_board())
 
-    assert not legality.is_legal(action_phase.game, PlayerId.P1, Recruit("cheap"))
+    assert not legality.is_legal(action_phase.game, PlayerId.P1, ActivateAbility("cheap", RECRUIT))
     assert not legality.is_legal(
         action_phase.game, PlayerId.P1, ActivateAbility("cheap", DYNASTY_DISCARD)
     )
-    assert legality.is_legal(dynasty.game, PlayerId.P1, Recruit("cheap"))
+    assert legality.is_legal(dynasty.game, PlayerId.P1, ActivateAbility("cheap", RECRUIT))
     cycle = ActivateAbility(rulebook_proxy(dynasty.game, PlayerId.P1, CYCLE_PROXY_ID).id, CYCLE)
     assert not legality.is_legal(dynasty.game, PlayerId.P1, cycle)
 
@@ -161,7 +163,7 @@ def test_is_legal_rejects_every_action_from_the_seat_that_is_not_active():
     session = _dynasty(_board())
 
     assert not legality.is_legal(session.game, PlayerId.P2, Pass())
-    assert not legality.is_legal(session.game, PlayerId.P2, Recruit("cheap"))
+    assert not legality.is_legal(session.game, PlayerId.P2, ActivateAbility("cheap", RECRUIT))
 
 
 def test_is_legal_rejects_every_action_while_a_decision_is_pending():
@@ -260,7 +262,7 @@ def test_a_recruit_reachable_only_by_a_self_grant_is_still_offered():
     end_phase(session)
 
     # Printed 2 against a cost of 4; only the grant reaches it.
-    assert Recruit("target") in session.legal_actions(PlayerId.P1)
+    assert ActivateAbility("target", RECRUIT) in session.legal_actions(PlayerId.P1)
 
 
 # An ability that acts from a Province rather than from play: the shape every Event needs. It
@@ -949,15 +951,6 @@ def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
     )  # off-clan from the Crab stronghold
     # Both apply and sum: +2 off-clan surcharge, -1 Merchant Caravan discount.
     assert legality.recruit_cost(game, traders) == 5 + ruleset.ACTIVE.off_clan_surcharge - 1
-
-
-def test_recruit_rejects_invest_and_proclaim_together():
-    # legal_actions never offers the pair, but a decoded tape could still carry it; recruit must
-    # fail loudly rather than silently drop the Proclaim.
-    game = _discount_game(clan="Crab")
-    holding = register(game.table, _holding("teahouse", gold_cost=2))
-    with pytest.raises(ValueError, match="Invest and Proclaim"):
-        recruit.recruit(game, holding.id, invest=True, proclaim=True)
 
 
 def _use(session: EngineSession, card_id: str) -> None:

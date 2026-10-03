@@ -13,7 +13,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseBattlefield,
     ChooseDistribution,
-    ChooseInvestAmount,
     ChooseOption,
     ChoosePayment,
     Confirm,
@@ -107,7 +106,6 @@ class Presenter:
         elif pending is not None and not isinstance(
             pending,
             ChooseAmount
-            | ChooseInvestAmount
             | ChooseOption
             | Confirm
             | ChooseBattlefield
@@ -298,13 +296,6 @@ class Presenter:
                 (seats[PlayerId[name]].name, lambda n=name: self.submit_answer((n,)), True)
                 for name in pending.candidates
             ]
-        if isinstance(pending, ChooseInvestAmount):
-            # An amount, not a board card. Answered by one button per affordable amount.
-            amounts: list[ButtonSpec] = [
-                (f"Invest {amount}", lambda a=amount: self.submit_invest(a), True)
-                for amount in pending.candidates
-            ]
-            return pending.prompt(), [*amounts, ("Cancel", self.cancel, True)]
         if isinstance(pending, ChooseAmount):
             # The seat names its own amount for a variable Gold cost, so the panel carries a spinner
             # over the amounts and one button that spends what it reads.
@@ -425,7 +416,7 @@ class Presenter:
             field.drop_committed()
 
     def cancel(self) -> None:
-        """Back out of a pending payment: drop the announced Recruit and clear the gold
+        """Back out of a pending payment: drop the announced action and clear the gold
         selection."""
         self.host.runner.cancel()
         self.window.field.drop_committed()
@@ -538,11 +529,6 @@ class Presenter:
     def submit_answer(self, choices: tuple[str, ...]) -> None:
         """Answer a yes/no question with the cards it settled on, or nothing for no."""
         self.host.runner.submit(DecisionResponse(choices))
-        self.present()
-
-    def submit_invest(self, amount: str) -> None:
-        """Answer an Invest decision with the amount the seat picked."""
-        self.host.runner.submit(DecisionResponse((amount,)))
         self.present()
 
     def submit_amount(self) -> None:

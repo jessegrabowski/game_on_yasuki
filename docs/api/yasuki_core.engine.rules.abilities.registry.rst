@@ -8,7 +8,6 @@ yasuki_core.engine.rules.abilities.registry
 .. autosummary::
 
     EntryState
-    RecruitTiming
 
 .. rubric:: Functions
 
@@ -31,7 +30,6 @@ yasuki_core.engine.rules.abilities.registry
     may_attack
     may_stay_bowed
     printed_ability_line
-    recruit_timing_of
     register_ability
     register_interrupt
     register_invest

@@ -117,7 +117,11 @@ def priced_cost(game: GameState, purchase: Purchase, effects: list[Effect]) -> l
         replace(
             effect,
             discount=discount,
-            amounts=tuple(amount for amount in effect.amounts if amount - discount <= budget),
+            amounts=tuple(
+                amount
+                for amount in effect.amounts
+                if max(0, amount - discount) + effect.alongside <= budget
+            ),
         )
         if isinstance(effect, AskAmount)
         else effect

@@ -1,4 +1,5 @@
 import pytest
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
 from yasuki_core import ruleset
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
@@ -19,7 +20,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     DeclareAttack,
     Equip,
     Pass,
-    Recruit,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
@@ -229,7 +229,7 @@ def test_hida_sanjiro_invests_in_his_own_armour():
     """The Invest resolves as he arrives, so the Armor is on him the moment he is in play."""
     session = _sanjiro_game()
 
-    session.act(P1, Recruit("sanjiro", invest=True))
+    session.act(P1, ActivateAbility("sanjiro", RECRUIT_WITH_INVEST))
     pay(session, P1)
 
     game = session.game
@@ -244,7 +244,7 @@ def test_hida_sanjiro_recruited_plainly_wears_nothing():
     """The Armor is the Invest's payoff, not part of him arriving."""
     session = _sanjiro_game()
 
-    session.act(P1, Recruit("sanjiro"))
+    session.act(P1, ActivateAbility("sanjiro", RECRUIT))
     pay(session, P1)
 
     assert attachments_of(session.game, session.game.table.cards_by_id["sanjiro"]) == ()
@@ -840,7 +840,7 @@ def test_gonshiro_is_dishonored_before_he_enters_play(reacting):
     session = _gonshiro_in_a_province()
     put_in_play(session.game, personality("probe", printed_id="entry_probe"))
 
-    session.act(P1, Recruit("gonshiro"))
+    session.act(P1, ActivateAbility("gonshiro", RECRUIT))
     pay(session, P1)
 
     assert seen == [True]
@@ -856,7 +856,7 @@ def test_the_dishonoring_is_reacted_to_while_gonshiro_still_stands_in_his_provin
     session = _gonshiro_in_a_province()
     put_in_play(session.game, personality("probe", printed_id="dishonor_probe"))
 
-    session.act(P1, Recruit("gonshiro"))
+    session.act(P1, ActivateAbility("gonshiro", RECRUIT))
     pay(session, P1)
 
     game = session.game
@@ -876,7 +876,7 @@ def test_gonshiros_own_trait_is_not_his_controllers_action():
     session = _gonshiro_in_a_province()
     put_in_play(session.game, personality("gihei", printed_id="bayushi_gihei", force=3))
 
-    session.act(P1, Recruit("gonshiro"))
+    session.act(P1, ActivateAbility("gonshiro", RECRUIT))
     pay(session, P1)
 
     game = session.game

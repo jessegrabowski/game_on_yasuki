@@ -1,8 +1,9 @@
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import can_pay
 from yasuki_core.engine.rules.abilities.registry import ability_for
-from yasuki_core.engine.rules.vocabulary.actions import Recruit
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
 from yasuki_core.engine.rules.gold.production import effective_gold_production
@@ -75,7 +76,7 @@ def test_defensive_memorial_adds_two_to_the_province_it_defends():
     session = _memorial_game()
     assert effective_province_strength(session.game, FIRST) == 3
 
-    session.act(P1, Recruit("memorial"))
+    session.act(P1, ActivateAbility("memorial", RECRUIT))
     pay(session, P1)
 
     assert session.game.table.province_attachments == {"memorial": FIRST}
@@ -87,7 +88,7 @@ def test_defensive_memorial_enters_bowed_and_still_produces_its_gold():
     ":bow:: Produce 2 Gold" is the Gold Production it prints."""
     session = _memorial_game()
 
-    session.act(P1, Recruit("memorial"))
+    session.act(P1, ActivateAbility("memorial", RECRUIT))
     pay(session, P1)
 
     memorial = session.game.table.cards_by_id["memorial"]

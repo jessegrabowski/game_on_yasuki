@@ -20,7 +20,6 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseFortificationProvince
     ChooseInterruptEffect
     ChooseInterruptTarget
-    ChooseInvestAmount
     ChooseOption
     ChoosePayment
     Confirm

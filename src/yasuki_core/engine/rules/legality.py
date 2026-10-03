@@ -4,14 +4,12 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import payable
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, use_tags
-from yasuki_core.engine.rules.effects import PayGold
+from yasuki_core.engine.rules.effects import AskAmount, PayGold
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
     ability_for,
     fixed_invest_amount,
     granted_tireless,
-    invest_amounts,
-    recruit_timing_of,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,
@@ -24,7 +22,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
 from yasuki_core.engine.rules.units.composition import in_a_unit
@@ -35,7 +32,6 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.rulebook.equip import equip_gold, equip_targets, equippable
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
-from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import (
     discounted_gold_cost,
@@ -51,7 +47,6 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
-    HoldingPrint,
     PersonalityPrint,
     WindPrint,
 )
@@ -79,21 +74,10 @@ def timings_of(game: GameState, action: Action) -> frozenset[ActionTiming]:
         if ability is None:
             raise ValueError(f"card {action.card_id} has no activated ability to time")
         return frozenset(ability.timings)
-    if isinstance(action, Recruit):
-        return recruit_timings(game, action.card_id)
     timing = ACTION_TIMINGS.get(type(action))
     if timing is None:
         raise ValueError(f"no designator for action {type(action).__name__}")
     return frozenset({timing})
-
-
-def recruit_timings(game: GameState, card_id: str) -> frozenset[ActionTiming]:
-    """The designators ``card_id`` may be Recruited under: the rulebook's Dynasty, plus any its own
-    text adds ("You may Recruit this Holding as a Political Open action")."""
-    added = recruit_timing_of(game, card_id)
-    if added is None:
-        return frozenset({ACTION_TIMINGS[Recruit]})
-    return frozenset({ACTION_TIMINGS[Recruit], added.timing})
 
 
 def permitted_timings(game: GameState, seat: PlayerId) -> frozenset[ActionTiming]:
@@ -138,14 +122,13 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
     pending and for any seat but the active one.
 
     Gold is not a free action: it is produced only while paying a cost (rules-skeleton section 7),
-    so it surfaces through the Recruit's ``ChoosePayment``, never here.
+    so it surfaces through a cost's ``ChoosePayment``, never here.
     """
     if not _may_act(game, seat):
         return []
     return [
         Pass(),
         *_abilities(game, seat),
-        *_recruits(game, seat),
         *_equips(game, seat),
         *_strategies(game, seat),
         *_declare_attack(game, seat),
@@ -166,8 +149,6 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
             return True
         case ActivateAbility(card_id=card_id):
             return action in _abilities(game, seat, only=card_id)
-        case Recruit(card_id=card_id):
-            return action in _recruits(game, seat, only=card_id)
         case Equip(card_id=card_id):
             return action in _equips(game, seat, only=card_id)
         case PlayStrategy(card_id=card_id):
@@ -227,48 +208,6 @@ def _declare_attack(game: GameState, seat: PlayerId) -> list[Action]:
     return [DeclareAttack()]
 
 
-def _recruits(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """The Recruit actions ``seat`` can afford: each face-up Holding or Personality in its provinces
-    whose cost its pool plus its unbowed producers' gold could cover. A Personality is withheld
-    while its Honor Requirement is above the seat's Family Honor (a dash ``None`` never withholds,
-    and the check is skipped entirely when the seat ignores Honor Requirements), and adds a Proclaim
-    variant when it is own-clan and the seat has not Proclaimed this turn. A Holding adds an Invest
-    variant when the seat could also cover the card's Invest cost. ``only`` narrows to a
-    single card."""
-    permitted = permitted_timings(game, seat)
-    recruits: list[Action] = []
-    seat_info = game.table.seats[seat]
-    honor = seat_info.honor
-    enforce_honor = not seat_info.ignores_honor_requirements
-    reach = gold_reach(game, seat)
-    for card in province_cards(game, seat):
-        if only is not None and card.id != only:
-            continue
-        if not (isinstance(card.printed, (HoldingPrint, PersonalityPrint)) and card.face_up):
-            continue
-        if permitted.isdisjoint(recruit_timings(game, card.id)):
-            continue
-        if not copy_may_enter(game, seat, card) or not may_recruit(game, seat, card):
-            continue
-        if (
-            enforce_honor
-            and isinstance(card.printed, PersonalityPrint)
-            and card.honor_requirement is not None
-            and honor < card.honor_requirement
-        ):
-            continue
-        affordable = reach.for_card(game, card)
-        base = recruit_cost(game, card)
-        if base <= affordable:
-            recruits.append(Recruit(card.id))
-            if can_proclaim(game, card):
-                recruits.append(Recruit(card.id, proclaim=True))
-        invest = invest_amounts(game, card)
-        if invest is not None and base + min(invest) <= affordable:
-            recruits.append(Recruit(card.id, invest=True))
-    return recruits
-
-
 def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
     """The Equip actions ``seat`` can take: each attachment Equip may reach, in hand or in a discard
     pile its own text opens, that it can afford and some Personality it controls would accept.
@@ -312,31 +251,38 @@ def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> 
     ]
 
 
-def action_gold(game: GameState, action: Recruit | Equip | PlayStrategy) -> tuple[int, ...]:
-    """The Gold ``action`` charges in all, discounts included, least first: one amount, or several
-    for a Recruit whose Invest amount the payer picks. A Strategy whose ability charges Gold as well
+def action_gold(game: GameState, action: ActivateAbility | Equip | PlayStrategy) -> tuple[int, ...]:
+    """The Gold ``action`` charges in all, discounts included, least first: one amount, or one for
+    each amount a variable cost lets the payer pick. A Strategy whose ability charges Gold as well
     pays its Gold Cost and that Gold as two payments, and the amount is their sum.
 
-    Raise ``ValueError`` for an Invest the card does not print, or a Strategy ability the card
-    does not have.
+    Raise ``ValueError`` for an ability the card does not have.
     """
     card = game.table.cards_by_id[action.card_id]
     match action:
-        case Recruit(invest=True):
-            amounts = invest_amounts(game, card)
-            if amounts is None:
-                raise ValueError(f"{card.id} prints no Invest to recruit with")
-            base = recruit_cost(game, card)
-            return tuple(base + amount for amount in amounts)
-        case Recruit():
-            return (recruit_cost(game, card),)
         case Equip(invest=invest):
             return (equip_gold(game, card, invest=invest),)
+        case ActivateAbility(ability_key=key):
+            return _ability_gold(game, card, _ability_named(game, card, key))
         case PlayStrategy(ability_key=key):
-            ability = ability_for(game, card, key)
-            if ability is None:
-                raise ValueError(f"{card.id} has no ability keyed {key!r} to play")
-            return (strategy_gold(game, card, ability),)
+            return (strategy_gold(game, card, _ability_named(game, card, key)),)
+
+
+def _ability_named(game: GameState, card: L5RCard, key: str | None) -> Ability:
+    ability = ability_for(game, card, key)
+    if ability is None:
+        raise ValueError(f"{card.id} has no ability keyed {key!r}")
+    return ability
+
+
+def _ability_gold(game: GameState, card: L5RCard, ability: Ability) -> tuple[int, ...]:
+    costs = ability.discounted_cost(game, card, plays_card=False)
+    fixed = sum(cost.amount for cost in costs if isinstance(cost, PayGold))
+    declared = next((cost for cost in costs if isinstance(cost, AskAmount)), None)
+    if declared is None:
+        return (fixed,)
+    paid = fixed + declared.alongside
+    return tuple(paid + max(0, amount - declared.discount) for amount in declared.amounts)
 
 
 def strategy_gold(game: GameState, card: L5RCard, ability: Ability) -> int:

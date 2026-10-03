@@ -1,11 +1,17 @@
 from collections.abc import Callable
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.battle.resolution import army_force
 from yasuki_core.engine.rules.stats.calculation import effective_stat
-from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass, PlayStrategy, Recruit
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActivateAbility,
+    DeclareAttack,
+    Pass,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     DecisionResponse,
@@ -219,7 +225,7 @@ def test_a_producers_yield_at_resolution_still_depends_on_what_it_pays_for():
     session = EngineSession.start(state, P1)
     end_phase(session)
     end_phase(session)
-    session.act(P1, Recruit("jade"))
+    session.act(P1, ActivateAbility("jade", RECRUIT))
     # The offer quotes 4, base 2 plus the Jade bonus, and bowing it alone must cover the cost.
     pay(session, P1)
 

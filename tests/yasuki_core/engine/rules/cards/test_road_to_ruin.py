@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -11,7 +12,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
     PlayStrategy,
-    Recruit,
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
@@ -261,7 +261,7 @@ def test_the_payment_quotes_outlying_farms_at_its_plain_yield_and_its_ceiling():
     """The payment carries the extra separately from what the Farm makes now, because the seat has
     not been asked yet. The question comes in the window, as it bows."""
     session = _outlying_game()
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
 
     pending = session.game.pending
     assert dict(pending.produced)["of"] == 2
@@ -270,7 +270,7 @@ def test_the_payment_quotes_outlying_farms_at_its_plain_yield_and_its_ceiling():
 
 def test_bowing_outlying_farms_opens_its_window_before_the_yield_is_read():
     session = _outlying_game(with_producer=False)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
 
     session.submit(P1, DecisionResponse(("of",)))
 
@@ -284,7 +284,7 @@ def test_a_grant_the_payment_cannot_do_without_refuses_no_as_an_answer():
     """Affordability counted the grant to offer the recruit, so announcing it commits the seat. The
     question stops saying no is an option, leaving cancelling as the way out."""
     session = _outlying_game(target_cost=4, with_producer=False)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("of",)))
 
     pending = session.game.pending
@@ -297,7 +297,7 @@ def test_a_grant_the_payment_does_not_need_can_still_be_declined():
     """Nothing is committed when another producer covers the cost, so the Farm's window is the plain
     optional question the card prints."""
     session = _outlying_game(target_cost=10)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("of",)))
 
     assert session.game.pending.accepts(DecisionResponse(()))
@@ -307,7 +307,7 @@ def test_backing_out_at_the_window_leaves_the_board_as_it_was():
     """The seat announced a Recruit and only then learned the price was the Farm. Cancelling has to
     put back everything the announcement moved, not just the question."""
     session = _outlying_game(target_cost=4, with_producer=False)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("of",)))
 
     session.cancel(P1)
@@ -324,9 +324,9 @@ def test_the_grant_makes_the_extra_gold_needed_to_afford_a_recruit():
     # The whole point: Outlying Farms alone (base 2) covers a cost-4 recruit only if it grants
     # itself. The recruit is offered, bowing it opens the window, and yes pays and destroys it.
     session = _outlying_game(target_cost=4, with_producer=False)
-    assert Recruit("target") in session.legal_actions(P1)
+    assert ActivateAbility("target", RECRUIT) in session.legal_actions(P1)
 
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("of",)))
     session.submit(P1, DecisionResponse(("of",)))  # yes
 
@@ -337,7 +337,7 @@ def test_the_grant_makes_the_extra_gold_needed_to_afford_a_recruit():
 
 def test_the_grant_is_banked_and_outlying_farms_destroyed_even_when_unneeded():
     session = _outlying_game(target_cost=2, with_producer=False)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("of",)))
     session.submit(P1, DecisionResponse(("of",)))  # yes, though 2 already covers
 
@@ -348,7 +348,7 @@ def test_the_grant_is_banked_and_outlying_farms_destroyed_even_when_unneeded():
 
 def test_declining_bows_outlying_farms_for_its_plain_yield():
     session = _outlying_game(target_cost=2, with_producer=False)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("of",)))
     session.submit(P1, DecisionResponse(()))  # no
 
@@ -362,7 +362,7 @@ def test_the_price_is_not_paid_by_a_farm_that_was_never_asked():
     """The destruction is the price of the grant, not of bowing. A Farm bowed while some other
     producer covers the cost keeps its window, answers no, and lives."""
     session = _outlying_game(target_cost=10)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("of",)))
     session.submit(P1, DecisionResponse(()))  # no
     session.submit(P1, DecisionResponse(("sh",)))
@@ -373,7 +373,7 @@ def test_the_price_is_not_paid_by_a_farm_that_was_never_asked():
 
 def test_the_outlying_farms_grant_replays_to_the_same_state():
     session = _outlying_game(target_cost=4, with_producer=False)
-    session.act(P1, Recruit("target"))
+    session.act(P1, ActivateAbility("target", RECRUIT))
     session.submit(P1, DecisionResponse(("of",)))
     session.submit(P1, DecisionResponse(("of",)))
     assert replay(session.log) == session.game

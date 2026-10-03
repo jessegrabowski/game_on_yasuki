@@ -145,7 +145,12 @@ def payment_request(
 
 
 def can_afford(
-    game: GameState, seat: PlayerId, amount: int, *, bowed_by_cost: frozenset[str] = frozenset()
+    game: GameState,
+    seat: PlayerId,
+    amount: int,
+    *,
+    target: L5RCard | None = None,
+    bowed_by_cost: frozenset[str] = frozenset(),
 ) -> bool:
     """Whether ``seat`` could cover ``amount``: its pool plus the most every unbowed producer it
     controls could make. Answered before a payment is offered, so an ability whose gold cost the
@@ -153,13 +158,16 @@ def can_afford(
 
     Parameters
     ----------
+    target : L5RCard, optional
+        The card the Gold pays for, for a producer whose yield depends on it. Default None.
     bowed_by_cost : frozenset of str, optional
         Producers this same cost bows, which cannot also bow to produce for it. Default empty.
     """
+    targets = () if target is None else (target,)
     return (
         game.gold[seat]
         + sum(
-            maximum_gold_production(game, producer)
+            maximum_gold_production(game, producer, targets=targets)
             for producer in gold_producers(game, seat)
             if producer.id not in bowed_by_cost
         )
