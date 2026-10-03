@@ -34,7 +34,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     Revealed
     Straightened
     StrikeDeclared
-    TurnStarted
+    TurnBoundary
 
 .. rubric:: Functions
 

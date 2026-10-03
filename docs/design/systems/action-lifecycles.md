@@ -58,13 +58,14 @@ What is on the stack, and what each continues:
   card's entry into play is.
 - `ApplyEffects` in `effects.py`: the generic deferral, which {class}`~.Then` and the rulebook
   costs push.
-- `DrawAtEndOfTurn`, `EnforceMaximumHandSize`, `BeginNextTurn`, `OpenNextTurn`, `OpenFirstTurn`,
-  `AnnounceTurnStart` and `OpenRound` in `turn/sequence.py`: the turn boundary. The draw waits
-  behind the delayed effects the end of the turn resolves, the hand-size check behind whatever the
-  draw fulfilled, the next turn behind the end-of-turn discard and what dropping the expiring
-  modifiers fulfilled, and a turn's
-  opening is three instants queued in order, straighten, reveal and announcement, with the round
-  opening last so that a question asked while opening resolves into the previous round.
+- `AccrueSincerity`, `EnforceMaximumHandSize`, `BeginNextTurn`, `OpenNextTurn`, `OpenFirstTurn` and
+  `OpenRound` in `turn/sequence.py`: the turn boundary. The end of the turn resolves the effects held
+  for it, accrues Sincerity and announces the turn's end, then the rulebook's draw resolves as an
+  ordinary `DrawCard` and the hand-size check waits behind whatever it fulfilled. The next turn
+  waits behind the end-of-turn discard and what dropping the expiring modifiers fulfilled, and a
+  turn's opening is three instants queued in order, straighten, reveal and the turn's beginning,
+  with the round opening last so that a question asked while opening resolves into the previous
+  round.
 
 The stack is last in, first out. A procedure that needs two steps in order pushes the later one
 first. A cascade that pauses pushes its stash on top of whatever was already queued, which is why

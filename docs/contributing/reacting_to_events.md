@@ -16,12 +16,13 @@ turn begins, give this Holding a +1GP Wealth token."* Two sentences, and the who
 lines, in `src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py`:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_ii.py
-:pyobject: _rice_farm_turn_started
+:pyobject: _rice_farm_turn_boundary
 :language: python
 ```
 
-Read it against the card. `@on(TurnStarted, "rice_farm")` is "after your turn begins", keyed to the
-card's database id. The guard is the rest of the text: `ctx.card.owner is not ctx.event.seat` is the
+Read it against the card. `@on(TurnBoundary, "rice_farm", boundary=Boundary.BEGINNING)` is "after
+your turn begins", keyed to the card's database id. The turn is announced at both of its edges, so
+the registration names the beginning. The guard is the rest of the text: `ctx.card.owner is not ctx.event.seat` is the
 word *your*, because the event fires at the start of every turn including your opponent's, and
 {func}`~yasuki_core.engine.rules.triggers.at_cap` is the first sentence, the four-token
 ceiling. Then one effect.
@@ -91,7 +92,7 @@ The events a trigger can answer:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.CounterChanged`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProvinceDestroyed`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.Revealed`
-- {class}`~yasuki_core.engine.rules.vocabulary.game_events.TurnStarted`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.TurnBoundary`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.PhaseStarted`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.HonorChanged`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducingGold`

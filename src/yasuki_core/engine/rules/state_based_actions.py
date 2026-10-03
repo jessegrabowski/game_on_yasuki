@@ -4,8 +4,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import Rulebook
 from yasuki_core.engine.registrar import FlagRegistry
 from yasuki_core.engine.rules.board.counts_as import RULEBOOK
-from yasuki_core.engine.rules.board.queries import rings_in_play
-from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.board.queries import different_elements, ring_elements, rings_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.negation import continuously_negated
@@ -142,24 +141,6 @@ NO_ENLIGHTENMENT = FlagRegistry("no enlightenment", "already does not count towa
 register_no_enlightenment = NO_ENLIGHTENMENT.make_register()
 
 
-def _ring_elements(game: GameState, ring: L5RCard) -> frozenset[Element]:
-    carried = {keyword.lower() for keyword in effective_keywords(game, ring)}
-    return frozenset(element for element in Element if element.value.lower() in carried)
-
-
-def _five_different_elements(rings: list[frozenset[Element]]) -> bool:
-    """Whether each element can be matched to a different Ring carrying its keyword, so a Ring
-    with two element keywords stands for only one of them."""
-
-    def match(elements: tuple[Element, ...], free: frozenset[int]) -> bool:
-        if not elements:
-            return True
-        first, rest = elements[0], elements[1:]
-        return any(match(rest, free - {index}) for index in free if first in rings[index])
-
-    return match(tuple(Element), frozenset(range(len(rings))))
-
-
 def enlightenment(game: GameState) -> list[Effect]:
     """Win the game for a seat controlling "five Rings with five different element keywords"
     (CR, Enlightenment Victory).
@@ -175,11 +156,11 @@ def enlightenment(game: GameState) -> list[Effect]:
         if VictoryRule.ENLIGHTENMENT not in rules:
             continue
         rings = [
-            _ring_elements(game, card)
+            ring_elements(game, card)
             for card in rings_in_play(game, seat, RULEBOOK)
             if card.printed_id not in NO_ENLIGHTENMENT
         ]
-        if _five_different_elements(rings):
+        if different_elements(rings) == len(Element):
             return [WinGame(seat, "Enlightenment Victory with Rings of all five elements")]
     return []
 

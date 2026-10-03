@@ -45,13 +45,14 @@ from yasuki_core.engine.rules.legality import location_permits
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.units.membership import attached_to
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
     Bowed,
     CounterChanged,
     Destroyed,
     EnteredPlay,
-    TurnStarted,
+    TurnBoundary,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -271,8 +272,8 @@ register_ability(
 # --- Rice Farm ---
 
 
-@on(TurnStarted, "rice_farm")
-def _rice_farm_turn_started(ctx: TriggerContext) -> list[Effect]:
+@on(TurnBoundary, "rice_farm", boundary=Boundary.BEGINNING)
+def _rice_farm_turn_boundary(ctx: TriggerContext) -> list[Effect]:
     """After your turn begins, give this Holding a +1GP Wealth token (max four)."""
     if ctx.card.owner is not ctx.event.seat or at_cap(ctx.card, WEALTH, 4):
         return []

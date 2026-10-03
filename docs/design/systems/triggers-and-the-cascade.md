@@ -340,7 +340,8 @@ game = session.game
 **The turn ends.** Four passes play P1's turn out. A round closes once every seat entitled to
 act in it has passed in a row, and only the Action Phase admits the other seat, so it takes two
 passes where the Battle and Dynasty Phases take one. The last pass ends the turn: `_end_turn`
-draws, and `EnforceMaximumHandSize` finds the hand two over. It queues `BeginNextTurn`, then
+announces the turn's end, the rulebook's `DrawCard` resolves, and `EnforceMaximumHandSize` finds the
+hand two over. It queues `BeginNextTurn`, then
 resolves a `DiscardFromHand` for two cards that P1 picks. That is an interrupting effect, so the
 walk stashes a `ResumeCascade` above the next turn and puts a `ChooseDiscard` on `pending`. The
 round is still P1's.
@@ -427,7 +428,7 @@ assert list(triggers._trace) == [
     "EnteredPlay",
     "EnteredPlay",
     "    reveal P2's provinces",
-    "TurnStarted",
+    "TurnBoundary",
     "PhaseStarted",
 ]
 banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)]

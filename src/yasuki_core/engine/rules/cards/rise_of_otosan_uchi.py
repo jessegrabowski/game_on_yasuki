@@ -35,12 +35,14 @@ from yasuki_core.engine.rules.board.counts_as import (
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
+    different_elements,
     phase_history,
     has_keyword,
     owned_holdings,
     owned_personalities,
     personalities_in_play,
     province_zones,
+    ring_elements,
     rings_in_play,
     top_of_deck,
     units_at,
@@ -51,11 +53,12 @@ from yasuki_core.engine.rules.board.seats import (
     opposing_seats,
     seat_named,
 )
-from yasuki_core.engine.rules.rulebook.looks import TAKE_ONE_AND_SHUFFLE
+from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM, TAKE_ONE_AND_SHUFFLE
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    Arrange,
     Ask,
     AskOption,
     AttackEffect,
@@ -69,9 +72,11 @@ from yasuki_core.engine.rules.effects import (
     DiscardFromHand,
     DrawCard,
     Effect,
+    EndLook,
     Fear,
     GainHonor,
     GrantKeyword,
+    GrantModifier,
     GrantNegation,
     GrantProvinceStrength,
     LookAtTop,
@@ -82,6 +87,7 @@ from yasuki_core.engine.rules.effects import (
     ReshuffleFromHand,
     ShuffleDeck,
     SpendOncePerTurn,
+    Straighten,
     Then,
     Unpayable,
 )
@@ -106,6 +112,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
     EnteredPlay,
     Straightened,
+    TurnBoundary,
 )
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
@@ -1128,5 +1135,124 @@ register_ability(
         targets=itself,
         hits_every_target=True,
         effects=_shinseis_heart_effects,
+    ),
+)
+
+
+# --- Togashi Higaru, Clan Champion (Experienced 3) ---
+
+HIGARU_STRAIGHTEN = "Straighten it"
+
+
+def _togashi_higaru_clan_champion_experienced_3_look_size(game: GameState, higaru: L5RCard) -> int:
+    """Your Rings plus 1, as his trait counts them."""
+    return len(rings_in_play(game, higaru.owner, Asking.trait(higaru))) + 1
+
+
+@on(TurnBoundary, "togashi_higaru_clan_champion_experienced_3", boundary=Boundary.END)
+def _togashi_higaru_clan_champion_experienced_3_turn_boundary(
+    ctx: TriggerContext,
+) -> list[Effect]:
+    """Before you draw a card at the end of your turn, you may look at a number of cards on the
+    top of your Fate deck equal to your Rings plus 1. The turn's end is announced before its draw
+    (CR, Drawing and Discarding Fate Cards)."""
+    event = ctx.event
+    seat = ctx.card.owner
+    if not isinstance(event, TurnBoundary) or event.seat is not seat:
+        return []
+    count = _togashi_higaru_clan_champion_experienced_3_look_size(ctx.game, ctx.card)
+    if not top_of_deck(ctx.game, DeckKey(seat, Side.FATE), count):
+        return []
+    question = f"Look at the top {count} cards of your Fate deck?"
+    return [
+        Ask(seat, question, "togashi_higaru_look", subjects=(ctx.card.id,), source_id=ctx.card.id)
+    ]
+
+
+@choice_resolver("togashi_higaru_look")
+def _resolve_togashi_higaru_look(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    if not chosen:
+        return []
+    higaru = game.table.cards_by_id[source_id]
+    fate = DeckKey(seat, Side.FATE)
+    count = _togashi_higaru_clan_champion_experienced_3_look_size(game, higaru)
+    seen = top_of_deck(game, fate, count)
+    return [
+        LookAtTop(seat, fate, len(seen)),
+        Choose(seat, seen, 0, len(seen), "togashi_higaru_bottom", source_id),
+    ]
+
+
+@choice_resolver("togashi_higaru_bottom", prompt="Put any of them on the bottom of your deck")
+def _resolve_togashi_higaru_bottom(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Then put any of them at the bottom of the deck in any order."""
+    if not chosen:
+        return [EndLook()]
+    return [Arrange(seat, chosen, PUT_ON_BOTTOM, source_id, to_bottom=True)]
+
+
+def _togashi_higaru_clan_champion_experienced_3_bonus(game: GameState, higaru: L5RCard) -> int:
+    """+1F/+1C for each of your Rings with different element keywords."""
+    rings = rings_in_play(game, higaru.owner, Asking.action(higaru))
+    return different_elements([ring_elements(game, ring) for ring in rings])
+
+
+def _togashi_higaru_clan_champion_experienced_3_targets(
+    game: GameState, source: L5RCard
+) -> list[str]:
+    return [card.id for card in game.table.battlefield.cards]
+
+
+def _togashi_higaru_clan_champion_experienced_3_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Straighten a target card, or give it +1F/+1C for each of your Rings with different element
+    keywords. With no such Ring the bonus is nothing, so the straightening is all there is."""
+    bonus = _togashi_higaru_clan_champion_experienced_3_bonus(game, source)
+    if bonus == 0:
+        return [Straighten(target.id)]
+    return [
+        AskOption(
+            source.owner,
+            (HIGARU_STRAIGHTEN, f"Give it +{bonus}F/+{bonus}C"),
+            f"Straighten {target.name}, or give it +{bonus}F/+{bonus}C?",
+            "togashi_higaru_open",
+            source.id,
+            resolver_context=(target.id,),
+        )
+    ]
+
+
+@choice_resolver("togashi_higaru_open")
+def _resolve_togashi_higaru_open(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...],
+) -> list[Effect]:
+    (target_id,) = resolver_context
+    if chosen[0] == HIGARU_STRAIGHTEN:
+        return [Straighten(target_id)]
+    higaru = game.table.cards_by_id[source_id]
+    bonus = _togashi_higaru_clan_champion_experienced_3_bonus(game, higaru)
+    return [
+        GrantModifier(source_id, target_id, stat, bonus, Duration.UNTIL_END_OF_TURN)
+        for stat in (Stat.FORCE, Stat.CHI)
+    ]
+
+
+register_ability(
+    "togashi_higaru_clan_champion_experienced_3",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=_togashi_higaru_clan_champion_experienced_3_targets,
+        targeting_message="a card",
+        effects=_togashi_higaru_clan_champion_experienced_3_effects,
     ),
 )

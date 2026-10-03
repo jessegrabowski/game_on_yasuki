@@ -156,7 +156,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    Rehonored
    Revealed
    Straightened
-   TurnStarted
+   TurnBoundary
 ```
 
 ## Decisions
@@ -218,7 +218,7 @@ the action rather than by deserializing it.
    rulebook.recruit.FinishRecruit
    rulebook.recruit.ResolveRecruit
    triggers.ResumeCascade
-   turn.sequence.AnnounceTurnStart
+   turn.sequence.AccrueSincerity
    turn.sequence.BeginNextTurn
    turn.sequence.OpenFirstTurn
    turn.sequence.OpenRound
