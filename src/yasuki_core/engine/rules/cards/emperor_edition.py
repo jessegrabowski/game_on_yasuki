@@ -26,6 +26,10 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 SANCTIONED_DUEL_REFUSAL_HONOR = 2
 
+# The refusal resolver's key, named so the bot policy and the card cannot drift apart. The
+# decorator below spells it out, because the card-layout hook reads that argument statically.
+SANCTIONED_DUEL_RESOLVER = "sanctioned_duel_refusal"
+
 SANCTIONED_DUEL_REFUSE = "Refuse the challenge"
 SANCTIONED_DUEL_ACCEPT = "Accept the challenge"
 
@@ -73,7 +77,7 @@ def _resolve_sanctioned_duel_challenge(
             seat=challenged.owner,
             options=(SANCTIONED_DUEL_REFUSE, SANCTIONED_DUEL_ACCEPT),
             question=f"{challenged.name} is challenged to a duel",
-            resolver="sanctioned_duel_refusal",
+            resolver=SANCTIONED_DUEL_RESOLVER,
             source_id=_sanctioned_duel_card(game),
             resolver_context=(source_id, challenged.id),
         )
