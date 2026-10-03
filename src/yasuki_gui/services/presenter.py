@@ -1,9 +1,12 @@
+from collections.abc import Callable
 from typing import TypeGuard
 
 from yasuki_core.engine.debug import ChooseDebugSeat
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import Action, DeclareAttack, Pass
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    DECK_TOP,
+    STRIKE,
     ArrangeCards,
     AssignUnits,
     ChooseCards,
@@ -16,10 +19,12 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     DecisionRequest,
     DecisionResponse,
+    FocusOrStrike,
     assignment,
+    focus_token,
     assignment_token,
 )
-from yasuki_core.engine.rules.projection import GameView, unit_view
+from yasuki_core.engine.rules.projection import DuelView, GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import build_print, side_of_record
@@ -64,6 +69,11 @@ class Presenter:
     def __init__(self, host: GameHost, window: GameWindow) -> None:
         self.host = host
         self.window = window
+        # The duel the player has read and dismissed. Held as the view itself rather than a flag,
+        # because a duel neither seat can focus in runs to its end inside one cascade and never
+        # pauses on DuelStep.FOCUSING, so a flag cleared only there would swallow the next one.
+        self._duel_read: DuelView | None = None
+        window.duel_view.on_continue = self._continue_past_duel
 
     def present(self) -> None:
         """Set the client up for whatever the engine wants next: the dialog or selection mode the
@@ -101,7 +111,8 @@ class Presenter:
             | ChooseOption
             | Confirm
             | ChooseBattlefield
-            | ChooseDebugSeat,
+            | ChooseDebugSeat
+            | FocusOrStrike,
         ):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
             # amount is named on the prompt's spinner and a yes/no question on its buttons, so
@@ -204,6 +215,7 @@ class Presenter:
                 selected=frozenset(window.field.selection),
                 stats=view.stats,
             )
+        self._show_duel(view)
         self._show_look()
         window.opponent_panel.refresh()
         window.human_panel.refresh()
@@ -274,6 +286,11 @@ class Presenter:
             if runner.can_cancel():
                 options.append(("Cancel", self.cancel, True))
             return pending.prompt(), options
+        if isinstance(pending, FocusOrStrike):
+            # Only the strike. Every focus source is offered on the card or the deck it comes from,
+            # because an option belongs with the thing that produces it, and the prompt box is for
+            # answers shaped like yes, no or pass.
+            return pending.prompt(), [("Strike", lambda: self.submit_answer((STRIKE,)), True)]
         if isinstance(pending, ChooseDebugSeat):
             # A seat is not a board card, so the answer is a button each, worded by the seat's name.
             seats = self.host.session.game.table.seats
@@ -455,6 +472,43 @@ class Presenter:
         pending = self.host.runner.pending
         return pending.candidates if isinstance(pending, ChooseAmount) else None
 
+    def _show_duel(self, view: GameView) -> None:
+        """Float the duel while one is worth looking at.
+
+        A duel the engine has finished stays up until the player presses Continue, so the totals
+        the strike revealed can be read before the board moves on. Only the duel that was dismissed
+        is hidden, so the next one opens the panel again however briefly it runs.
+        """
+        duel = view.duel
+        if duel is None or duel == self._duel_read:
+            self.window.show_duel(None)
+            return
+        self.window.show_duel(duel, view.stats)
+
+    def _continue_past_duel(self) -> None:
+        """Dismiss a finished duel's panel, which the player has now read."""
+        self._duel_read = self.host.runner.view().duel
+        self.present()
+
+    def _focus_items(self, token: str) -> list[tuple[str, Callable[[], None]]]:
+        """The focus offered for one source, or nothing when the duel is not asking for one.
+
+        A focus is offered on the card or the deck it comes from rather than in the prompt box, so
+        the player picks the card by pointing at it.
+        """
+        pending = self.host.runner.pending
+        if not isinstance(pending, FocusOrStrike) or token not in pending.candidates:
+            return []
+        label = "Focus from the top of the Fate deck" if token == DECK_TOP else "Focus this card"
+        return [(label, lambda: self.submit_answer((token,)))]
+
+    def on_deck_activated(self, seat: PlayerId, side: Side) -> None:
+        """Offer what a left-clicked deck can do: focus blind off the top of your own Fate deck
+        while a duel is asking you to focus or strike."""
+        if seat is not self.host.human_seat or side is not Side.FATE:
+            return
+        self.window.popup_at_pointer(self._focus_items(DECK_TOP))
+
     def _assignment_prompt(self) -> str:
         """The next thing to do, not a description of the state - this is the step the player has no
         other guide through."""
@@ -525,13 +579,14 @@ class Presenter:
                 self.refresh()
             self.window.popup_at_pointer(self._assignment_menu())
             return
-        self._offer(
+        self._offer_with(
+            self._focus_items(focus_token(card_id)),
             runner.province_menu(card_id)
             + runner.hand_menu(card_id)
             + runner.ability_menu(card_id)
             + runner.interrupt_menu(card_id)
             + runner.inheritance_menu(card_id)
-            + runner.favor_menu(card_id)
+            + runner.favor_menu(card_id),
         )
 
     def on_lane_card_clicked(self, card_id: str) -> None:
@@ -637,8 +692,19 @@ class Presenter:
 
     def _offer(self, items: list[tuple[str, Action]]) -> None:
         """Put a click's available actions in a pointer menu, each entry taking its own action."""
+        self._offer_with([], items)
+
+    def _offer_with(
+        self, answers: list[tuple[str, Callable[[], None]]], items: list[tuple[str, Action]]
+    ) -> None:
+        """A pointer menu of ``answers`` to the open decision followed by ``items``, the actions the
+        click makes available. The answers lead, because a question the engine is waiting on is
+        what the player came to the card for."""
         self.window.popup_at_pointer(
-            (label, lambda chosen=action: self.act(chosen)) for label, action in items
+            [
+                *answers,
+                *((label, lambda chosen=action: self.act(chosen)) for label, action in items),
+            ]
         )
 
     def _open_search(self, search: SearchView) -> None:
