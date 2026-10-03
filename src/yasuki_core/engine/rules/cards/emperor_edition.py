@@ -3,6 +3,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.duel.procedure import duel_decided_by
 from yasuki_core.engine.rules.effects import (
     AskOption,
     Choose,
@@ -129,9 +130,10 @@ def _resolve_sanctioned_duel_loser(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """The loser is only known once the duel is decided, so the destruction is delayed to the
-    duel's end and reads the outcome there. A duel both Personalities lost destroys both."""
-    duel = game.duel
-    if duel is None or duel.outcome is None:
+    duel's end and reads the outcome there. A duel both Personalities lost destroys both, and a
+    challenge that did not happen destroys nobody rather than reading off the next duel to end."""
+    duel = duel_decided_by(game, source_id)
+    if duel is None:
         return []
     return [Destroy(duel.duelist_of(loser), seat) for loser in duel.outcome.losers]
 

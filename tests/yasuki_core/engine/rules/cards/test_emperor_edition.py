@@ -20,6 +20,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
+from yasuki_core.engine.rules.duel.procedure import declare_duel
+from yasuki_core.engine.rules.turn.sequence import run_stack
+
 from tests.yasuki_core.engine.builders import (
     focus_card,
     personality,
@@ -205,6 +208,31 @@ def test_sanctioned_duel_asks_nothing_when_the_last_rival_leaves_after_it_is_ann
     # "A challenge does not happen" (CR, Challenge), so the Strategy resolves having done nothing.
     assert session.game.pending is None
     assert session.game.duel is None
+
+
+def test_a_challenge_that_did_not_happen_destroys_nobody_in_the_next_duel():
+    """The destruction is delayed to a duel's end, and nothing discards it when the challenge turns
+    out not to happen. Read off ``game.duel`` alone it would fire on whatever duel ended next."""
+    session = _sanctioned_duel_game()
+    put_in_play(session.game, register(session.game.table, personality("second", owner=P1, chi=1)))
+    put_in_play(session.game, register(session.game.table, personality("other", owner=P2, chi=9)))
+    _challenge(session)
+    # The challenged Personality leaves between the challenge and the answer, so the challenge does
+    # not happen (CR, Challenge) and no duel is created for the destruction to read.
+    ops.remove_card(session.game.table, session.game.table.cards_by_id["theirs"])
+
+    session.submit(P2, DecisionResponse((SANCTIONED_DUEL_ACCEPT,)))
+    assert session.game.duel is None
+
+    declare_duel(
+        session.game, challenger_duelist="second", challenged_duelist="other", source="second"
+    )
+    run_stack(session.game)
+    # Both seats hold a card to focus, so the second duel pauses until one of them strikes.
+    session.submit(session.game.pending.seat, DecisionResponse((STRIKE,)))
+
+    assert session.game.duel.outcome.losers == (P1,)
+    assert "second" in _in_play(session)
 
 
 def test_sanctioned_duel_destroys_both_personalities_when_neither_wins():
