@@ -49,10 +49,16 @@ def _sanctioned_duel_targets(game: GameState, source: L5RCard) -> list[str]:
 
 def _sanctioned_duel_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Having targeted the challenger, pick whom it challenges. One ability takes one target, so
-    the challenged Personality is a pick of its own."""
+    the challenged Personality is a pick of its own.
+
+    Nothing at all where the last opposing Personality left between the announcement and here: the
+    challenge does not happen, and a ``Choose`` of one from none would pend unanswerably.
+    """
     challenged = tuple(
         card.id for card in personalities_in_play(game) if card.owner is not source.owner
     )
+    if not challenged:
+        return []
     return [
         Choose(
             seat=source.owner,

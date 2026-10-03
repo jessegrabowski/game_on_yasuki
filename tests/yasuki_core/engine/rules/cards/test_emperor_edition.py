@@ -193,6 +193,20 @@ def test_sanctioned_duel_challenges_only_another_players_personality():
     assert session.game.pending.candidates == ("theirs",)
 
 
+def test_sanctioned_duel_asks_nothing_when_the_last_rival_leaves_after_it_is_announced():
+    # The candidates are recomputed when the target is answered, which is after the board could
+    # have changed. A `Choose` of one from none would pend with no answer that satisfies it.
+    session = _sanctioned_duel_game()
+
+    session.act(P1, PlayStrategy("duel"))
+    ops.remove_card(session.game.table, session.game.table.cards_by_id["theirs"])
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    # "A challenge does not happen" (CR, Challenge), so the Strategy resolves having done nothing.
+    assert session.game.pending is None
+    assert session.game.duel is None
+
+
 def test_sanctioned_duel_destroys_both_personalities_when_neither_wins():
     # Equal totals that the Duelist tiebreak cannot separate are lost by both (CR, Duel), and the
     # card destroys the loser rather than a single loser.
