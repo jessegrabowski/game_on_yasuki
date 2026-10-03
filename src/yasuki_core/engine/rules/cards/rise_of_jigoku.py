@@ -2,8 +2,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, register_event_entry
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
-from yasuki_core.engine.rules.abilities.registry import register_ability
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt, Interruption
+from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
@@ -20,12 +20,15 @@ from yasuki_core.engine.rules.stats.province_strength import province_strength_g
 from yasuki_core.engine.rules.gold.discounts import Purchase, action_discount
 from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler
 from yasuki_core.engine.rules.gold.producers import reachable_gold
-from yasuki_core.engine.rules.action_record import action_round
+from yasuki_core.engine.rules.interrupts import held_action_targets
+from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in, recruit_cost
-from yasuki_core.engine.rules.rulebook.equip import is_spell
+from yasuki_core.engine.rules.rulebook.equip import attach_restriction, is_spell
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
+    AdjustPending,
     Ask,
     Bow,
     Choose,
@@ -46,7 +49,12 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
     Then,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    ActionResolved,
+    CardDiscarded,
+    Destroyed,
+    EnteredPlay,
+)
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
@@ -727,5 +735,67 @@ register_ability(
         targets=_shinjo_fields_targets,
         targeting_message="your Personality",
         effects=_shinjo_fields_effects,
+    ),
+)
+
+
+# --- Worn Jingasa ---
+
+JINGASA_KIHO_FORCE = 1
+JINGASA_RANGED_PENALTY = 1
+JINGASA_RANGED_PENALTY_FOR_MONKS_AND_SHUGENJA = 2
+
+
+@attach_restriction("worn_jingasa")
+def _worn_jingasa_attach_restriction(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
+    """A Personality may only attach one Jingasa."""
+    return not any(
+        keywords.JINGASA in effective_keywords(game, attached)
+        for attached in attachments_of(game, personality)
+    )
+
+
+@on(ActionResolved, "worn_jingasa")
+def _worn_jingasa_action_resolved(ctx: TriggerContext) -> list[Effect]:
+    """After your Kiho resolves that targeted this Personality, give them +1F."""
+    wearer = attached_to(ctx.game, ctx.card)
+    if wearer is None or ctx.event.seat is not ctx.card.owner:
+        return []
+    if keywords.KIHO not in action_keywords(ctx.game) or wearer.id not in ctx.game.action_targets:
+        return []
+    bonus = GrantModifier(
+        ctx.card.id, wearer.id, Stat.FORCE, JINGASA_KIHO_FORCE, Duration.UNTIL_END_OF_TURN
+    )
+    return [bonus]
+
+
+def _worn_jingasa_applies(game: GameState, source: L5RCard, effect: RangedAttack) -> bool:
+    """A Ranged Attack from an action targeting the Personality wearing it."""
+    wearer = attached_to(game, source)
+    return wearer is not None and wearer.id in held_action_targets(game)
+
+
+def _worn_jingasa_interrupt(game: GameState, source: L5RCard, effect: RangedAttack) -> Interruption:
+    """Give the Ranged Attack -1 strength, or -2 if the wearer is a Monk or Shugenja."""
+    wearer = attached_to(game, source)
+    monk_or_shugenja = wearer is not None and (
+        has_keyword(game, wearer, keywords.MONK) or has_keyword(game, wearer, keywords.SHUGENJA)
+    )
+    penalty = (
+        JINGASA_RANGED_PENALTY_FOR_MONKS_AND_SHUGENJA
+        if monk_or_shugenja
+        else JINGASA_RANGED_PENALTY
+    )
+    return Interruption(replacement=effect, effects=(AdjustPending(effect, -penalty),))
+
+
+register_interrupt(
+    "worn_jingasa",
+    Interrupt(
+        answers=RangedAttack,
+        interrupt=_worn_jingasa_interrupt,
+        applies=_worn_jingasa_applies,
+        located_at=(CardLocation.BATTLEFIELD,),
+        cost=bow_cost,
     ),
 )
