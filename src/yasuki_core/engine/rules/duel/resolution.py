@@ -12,7 +12,7 @@ from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.procedure import duel_in_progress, duel_stat
 from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelWork
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
-from yasuki_core.engine.rules.effects import ApplyEffects, Discard, Effect
+from yasuki_core.engine.rules.effects import ApplyEffects, Discard, Effect, pile_for
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -118,7 +118,9 @@ class RemoveFocusAreas:
     """Take both focusing areas off the table once the duel's cleanup has resolved, cascade
     included. Not a step of the duel's own, so a duel ending early does not drop it.
 
-    Raise ``RuntimeError`` if an area still holds a card, as one whose discard was negated would.
+    A temporary area ceases to exist once it has served its purpose (CR, Areas of the Game), so a
+    card still in one, such as a focused card whose discard was negated, goes to its owner's
+    discard pile. The move is not an effect, so no negation reaches it.
     """
 
     def resume(self, game: GameState) -> None:
@@ -126,11 +128,9 @@ class RemoveFocusAreas:
         if duel is None:
             raise RuntimeError("the focusing areas are being removed with no duel on the game")
         for seat in (duel.challenger, duel.challenged):
-            left = ops.remove_focus_area(game.table, seat)
-            if left:
-                raise RuntimeError(
-                    f"{seat.name}'s focusing area still held {[card.id for card in left]}"
-                )
+            for card in focused_cards(game, seat):
+                ops.move_card(game.table, card, pile_for(card))
+            ops.remove_focus_area(game.table, seat)
 
 
 def reveal_focused_cards(game: GameState) -> None:

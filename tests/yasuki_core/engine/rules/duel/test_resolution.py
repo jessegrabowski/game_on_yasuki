@@ -365,7 +365,7 @@ def test_the_outcome_is_recorded_while_the_focused_cards_are_still_focused():
     assert focusing.focused_cards(game, P2) == ()
 
 
-def test_a_negation_of_discarding_reaches_the_duels_focused_cards():
+def test_a_focused_card_whose_discard_is_negated_is_discarded_with_its_area():
     game = _duel_on_a_bare_game()
     card = register(game.table, focus_card("P2-fv1", P2, 1))
     game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(card)
@@ -382,6 +382,13 @@ def test_a_negation_of_discarding_reaches_the_duels_focused_cards():
     _resume_next(game, resolution.DiscardFocusedCards)
 
     assert [held.id for held in focusing.focused_cards(game, P2)] == ["P2-fv1"]
+
+    _resume_next(game, resolution.RemoveFocusAreas)
+
+    assert ZoneKey(P2, ZoneRole.FOCUS) not in game.table.zones
+    assert [held.id for held in game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards] == [
+        "P2-fv1"
+    ]
 
 
 def test_the_strike_reveals_both_stacks_before_they_are_discarded():
