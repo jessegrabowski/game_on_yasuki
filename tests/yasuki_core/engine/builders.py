@@ -246,10 +246,16 @@ def combat_segment(
     defenders: dict[str, int],
     *,
     attacker: PlayerId = PlayerId.P1,
+    in_hand: list[L5RCard] | None = None,
 ) -> EngineSession:
     """The Combat Segment at battlefield 0 of ``attacker``'s attack, with ``cards`` in play and each
     seat's Personalities assigned by id to the battlefield index given, the defender passed, so the
-    attacker holds priority. A Province is created for every battlefield index named."""
+    attacker holds priority. A Province is created for every battlefield index named.
+
+    ``in_hand`` cards go to their own owner's hand before the game starts, which is where a battle
+    Strategy has to be for the tape to replay: a card put on the table afterwards is not in the
+    state the log was opened on.
+    """
     defender = PlayerId.P2 if attacker is PlayerId.P1 else PlayerId.P1
     state = TableState.empty_two_seat()
     for index in sorted({*attackers.values(), *defenders.values(), 0}):
@@ -257,6 +263,9 @@ def combat_segment(
         province_card(state, f"def-prov{index}", seat=defender, index=index)
     for card in cards:
         put_in_play(state, card)
+    for card in in_hand or []:
+        register(state, card)
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(card)
     session = EngineSession.start(state, attacker)
     end_phase(session)
     session.act(attacker, DeclareAttack())

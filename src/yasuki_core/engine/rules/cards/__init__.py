@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     rise_of_the_shogun,
     road_to_ruin,
     second_city,
+    shadowlands,
     shattered_empire,
     spirit_wars,
     the_blackest_storm,
