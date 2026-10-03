@@ -192,7 +192,7 @@ def test_a_resumed_cascade_drops_the_triggers_of_cards_gone_from_the_table():
         return []
 
     firing = (("gone", record), ("stayed", record))
-    events = EventsFrame((), TurnStarted(PlayerId.P1), firing)
+    events = EventsFrame((), TurnBoundary(PlayerId.P1, Boundary.BEGINNING), firing)
     game.stack.append(ResumeCascade((events, EffectsFrame(()))))
 
     resume_paused_cascade(game, [])

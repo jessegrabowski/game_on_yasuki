@@ -732,7 +732,15 @@ def _reading(watches: Sequence[Watch], location: CardLocation) -> Iterator[Watch
 
 def _newly_fulfilled(game: GameState) -> list[ConditionFulfilled]:
     """Record which watched conditions hold on the settled board, and announce each that did not
-    hold when the board last settled (CR, "If" Triggers)."""
+    hold when the board last settled (CR, "If" Triggers).
+
+    Nothing is judged while a card announced out of a hand waits in its entering-play or resolution
+    area: the board it leaves behind is mid-action, between the announcement and the card landing
+    or returning. The next settle after that compares against the board from before the
+    announcement, so a condition still fulfilled once the card has landed is announced then.
+    """
+    if game.announced_from_hand:
+        return []
     if not _WATCHES and not game.conditions_holding:
         return []
     holding = [

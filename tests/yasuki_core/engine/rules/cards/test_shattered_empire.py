@@ -1642,41 +1642,41 @@ _GAIN_HONOR = Ability(
 )
 
 
-@pytest.mark.parametrize(
-    ("announced", "action"),
-    [
-        (
-            attachment("played", attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
-            Equip("played"),
-        ),
-        (
-            L5RCard.of(
-                ActionPrint,
-                id="played",
-                name="Played",
-                printed_id="probe_gain_honor",
-                side=Side.FATE,
-                owner=P1,
-                gold_cost=1,
-            ),
-            PlayStrategy("played"),
-        ),
-    ],
-    ids=["equip", "strategy"],
-)
-def test_ring_of_the_void_is_offered_when_an_announcement_takes_the_hand_down_to_match(
-    announced, action
-):
-    # The card leaves the hand for its entering-play or resolution area when it is announced, so
-    # none in play and none in hand match before anything is paid (CR, Resolution Area).
-    session = _void_game(announced, in_play=0)
+def test_ring_of_the_void_is_not_offered_while_an_equipped_card_waits_to_enter():
+    # Announcing the Equip takes the Follower out of hand, so for a moment no Fate card is in play
+    # and none is in hand. The card is in its entering-play area, and once it lands one is in play
+    # against none in hand.
+    session = _void_game(
+        attachment("played", attachment_type=AttachmentType.FOLLOWER, gold_cost=1), in_play=0
+    )
+
+    session.act(P1, Equip("played"))
+    assert isinstance(session.game.pending, ChoosePayment)
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("bearer",)))
+
+    assert "played" in _in_play(session)
+    assert not _void_offered(session)
+
+
+def test_ring_of_the_void_is_offered_once_a_strategy_has_left_the_resolution_area():
+    played = L5RCard.of(
+        ActionPrint,
+        id="played",
+        name="Played",
+        printed_id="probe_gain_honor",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=1,
+    )
+    session = _void_game(played, in_play=0)
 
     with probe_ability("probe_gain_honor", _GAIN_HONOR):
-        session.act(P1, action)
+        session.act(P1, PlayStrategy("played"))
+        assert isinstance(session.game.pending, ChoosePayment)
+        pay(session, P1)
 
         assert _void_offered(session)
-        session.submit(P1, DecisionResponse(()))
-        assert isinstance(session.game.pending, ChoosePayment)
 
 
 @pytest.mark.parametrize(
