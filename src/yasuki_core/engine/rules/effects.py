@@ -1579,6 +1579,11 @@ class AskAmount(InterruptingEffect):
     discount : int, optional
         The Gold the action's discount takes off the declared amount: what is left of it once the
         cost's fixed Gold has taken its share. Default 0.
+    alongside : int, optional
+        Fixed Gold charged in the same payment as the declared amount, as a Recruit pays a card's
+        Gold Cost together with the Invest its payer sizes. Default 0.
+    target_id : str or None, optional
+        The card the payment is for, as :class:`~.PayGold` names it. Default None.
     """
 
     seat: PlayerId
@@ -1587,6 +1592,8 @@ class AskAmount(InterruptingEffect):
     resolver: str
     source_id: str
     discount: int = 0
+    alongside: int = 0
+    target_id: str | None = None
 
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
@@ -1594,6 +1601,28 @@ class AskAmount(InterruptingEffect):
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """Nothing to choose from is nothing to pay."""
         return bool(self.amounts)
+
+    def pauses(self, game: GameState) -> bool:
+        """One amount on offer is nothing to choose, so nothing is asked."""
+        return len(self.amounts) != 1
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.amount_paid = self.amounts[0]
+        return []
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        return tuple(
+            declared_amount_effects(
+                game,
+                self.seat,
+                self.amounts[0],
+                discount=self.discount,
+                alongside=self.alongside,
+                target_id=self.target_id,
+                resolver=self.resolver,
+                source_id=self.source_id,
+            )
+        )
 
     def request(self, game: GameState) -> DecisionRequest:
         return ChooseAmount(
@@ -1603,7 +1632,31 @@ class AskAmount(InterruptingEffect):
             resolver=self.resolver,
             source_id=self.source_id,
             discount=self.discount,
+            alongside=self.alongside,
+            target_id=self.target_id,
         )
+
+
+def declared_amount_effects(
+    game: GameState,
+    seat: PlayerId,
+    declared: int,
+    *,
+    discount: int,
+    alongside: int,
+    target_id: str | None,
+    resolver: str,
+    source_id: str,
+) -> list[Effect]:
+    """What declaring ``declared`` for a variable Gold cost resolves: the declared amount less
+    ``discount`` charged with ``alongside``, a charge of nothing not asked for, then what the
+    resolver makes of the amount."""
+    from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS
+
+    charged = max(0, declared - discount) + alongside
+    source = game.table.cards_by_id[source_id]
+    payment = [PayGold(seat, charged, source.name, target_id=target_id)] if charged else []
+    return [*payment, *CHOICE_RESOLVERS[resolver](game, source_id, (str(declared),), seat)]
 
 
 @dataclass(frozen=True, slots=True)

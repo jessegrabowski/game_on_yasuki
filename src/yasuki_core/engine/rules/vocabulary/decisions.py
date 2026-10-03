@@ -293,12 +293,18 @@ class ChooseAmount(DecisionRequest):
         The card charging the cost, handed to the resolver as its context.
     discount : int, optional
         The Gold taken off the declared amount when it is charged. Default 0.
+    alongside : int, optional
+        Fixed Gold charged in the same payment as the declared amount. Default 0.
+    target_id : str or None, optional
+        The card the payment is for. Default None.
     """
 
     question: str
     resolver: str
     source_id: str
     discount: int = 0
+    alongside: int = 0
+    target_id: str | None = None
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question

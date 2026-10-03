@@ -59,7 +59,7 @@ from yasuki_core.engine.rules.interrupts import (
     play_interrupt,
 )
 from yasuki_core.engine.rules.board.seats import cards_in_hand
-from yasuki_core.engine.rules.effects import DiscardFromHand, PayGold
+from yasuki_core.engine.rules.effects import DiscardFromHand, declared_amount_effects
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.sequence import (
     open_turn,
@@ -277,17 +277,21 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
 def _apply_amount_choice(
     game: GameState, request: ChooseAmount, response: DecisionResponse
 ) -> None:
-    """Charge the declared amount less the action's discount, record it as the action's
-    ``amount_paid``, then hand it to the card's resolver. A charge discounted to nothing is not
-    asked for."""
-    resolver = triggers.CHOICE_RESOLVERS[request.resolver]
+    """Record the declared amount as the action's ``amount_paid`` and resume with what declaring
+    it resolves."""
     declared = int(response.choices[0])
     game.amount_paid = declared
-    charged = max(0, declared - request.discount)
-    source = game.table.cards_by_id[request.source_id]
-    payment = [PayGold(request.seat, charged, source.name)] if charged else []
-    produced = resolver(game, request.source_id, response.choices, request.seat)
-    triggers.resume_paused_cascade(game, [*payment, *produced])
+    produced = declared_amount_effects(
+        game,
+        request.seat,
+        declared,
+        discount=request.discount,
+        alongside=request.alongside,
+        target_id=request.target_id,
+        resolver=request.resolver,
+        source_id=request.source_id,
+    )
+    triggers.resume_paused_cascade(game, produced)
     run_stack(game)
 
 
