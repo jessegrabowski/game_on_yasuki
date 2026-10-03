@@ -70,6 +70,9 @@ from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Enter
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.stats.ongoing_grants import named_duel_stat
+from yasuki_core.engine.rules.duel.procedure import declare_duel
+from yasuki_core.engine.rules.turn.sequence import run_stack
+from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C
 from yasuki_core.engine.rules.rulebook.kharmic import (
     KHARMIC_DRAW,
     KHARMIC_REFILL,
@@ -1831,5 +1834,111 @@ def test_haikerus_duel_stat_does_not_outlive_the_duel():
 
 def test_haikeru_replays_to_the_same_board():
     session = _duel_the_rival(_haikeru_in_combat(rival_force=1, rival_chi=9))
+
+    assert replay(session.log).table == session.game.table
+
+
+# --- Togashi Hiyoku ---
+
+
+def _hiyoku_in_combat(*, rival_chi: int, hiyoku_chi: int = 4) -> EngineSession:
+    """The Combat Segment of P1's attack, Hiyoku facing one enemy Personality.
+
+    Neither carries Duelist: the builder takes the printed id for the handler lookup and not the
+    printed keywords, so equal Chi is a tie the tiebreak cannot separate.
+    """
+    cards = [
+        personality("hiyoku", printed_id="togashi_hiyoku", force=2, chi=hiyoku_chi),
+        personality("rival", owner=P2, force=2, chi=rival_chi),
+    ]
+    return combat_segment(cards, {"hiyoku": 0}, {"rival": 0})
+
+
+def _duel_with_hiyoku(session: EngineSession) -> EngineSession:
+    session.act(P1, ActivateAbility("hiyoku"))
+    session.submit(P1, DecisionResponse(("rival",)))
+    return session
+
+
+def test_hiyoku_winning_a_duel_in_battle_takes_a_token_and_is_offered_the_action():
+    session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=1))
+
+    assert session.game.table.cards_by_id["hiyoku"].counters[PLUS_1F_PLUS_1C.key] == 1
+    pending = session.game.pending
+    assert isinstance(pending, Confirm)
+    assert pending.seat is P1
+    # The winning Personality is what a yes comes back as, so an empty subject would make yes
+    # indistinguishable from no.
+    assert pending.candidates == ("hiyoku",)
+
+    session.submit(P1, DecisionResponse(("hiyoku",)))
+
+    assert session.game.pending is None
+
+
+def test_the_additional_action_is_offered_to_the_opponent_who_won():
+    # "The winner may take an additional action" names the winner, not Hiyoku's controller, and the
+    # challenged seat can be the one who won.
+    session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=9))
+
+    assert isinstance(session.game.pending, Confirm)
+    assert session.game.pending.seat is P2
+    assert PLUS_1F_PLUS_1C.key not in session.game.table.cards_by_id["hiyoku"].counters
+
+
+def test_declining_the_additional_action_grants_nothing():
+    session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=1))
+
+    session.submit(P1, DecisionResponse(()))
+
+    # The resolver is called on either answer, so a no has to buy nothing of its own accord.
+    assert session.game.additional_action is None
+
+
+def test_a_duel_neither_personality_wins_offers_nothing():
+    # A tie the Duelist tiebreak cannot separate is lost by both, so there is no winner to ask.
+    session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=4))
+
+    assert session.game.pending is None
+    assert session.game.additional_action is None
+    assert PLUS_1F_PLUS_1C.key not in session.game.table.cards_by_id["hiyoku"].counters
+
+
+def test_hiyoku_takes_no_token_for_a_duel_won_outside_a_battle():
+    # "Wins a duel during battle" is the whole condition, and a duel can be fought with no attack
+    # on at all.
+    game = two_seat_game()
+    put_in_play(game, personality("hiyoku", printed_id="togashi_hiyoku", chi=9))
+    put_in_play(game, personality("rival", owner=P2, chi=1))
+
+    declare_duel(game, challenger_duelist="hiyoku", challenged_duelist="rival", source="hiyoku")
+    run_stack(game)
+
+    assert game.duel.outcome.winners == (P1,)
+    assert PLUS_1F_PLUS_1C.key not in game.table.cards_by_id["hiyoku"].counters
+
+
+def test_hiyoku_takes_no_token_for_a_duel_he_is_not_in():
+    # "Hiyoku wins a duel" is Hiyoku's own duel, and his seat winning another Personality's is not
+    # the same thing.
+    cards = [
+        personality("hiyoku", printed_id="togashi_hiyoku", force=2, chi=4),
+        personality("second", force=2, chi=9),
+        personality("rival", owner=P2, force=2, chi=1),
+    ]
+    session = combat_segment(cards, {"hiyoku": 0, "second": 0}, {"rival": 0})
+
+    declare_duel(
+        session.game, challenger_duelist="second", challenged_duelist="rival", source="second"
+    )
+    run_stack(session.game)
+
+    assert session.game.duel.outcome.winners == (P1,)
+    assert PLUS_1F_PLUS_1C.key not in session.game.table.cards_by_id["hiyoku"].counters
+
+
+def test_hiyoku_replays_to_the_same_board():
+    session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=1))
+    session.submit(P1, DecisionResponse(("hiyoku",)))
 
     assert replay(session.log).table == session.game.table

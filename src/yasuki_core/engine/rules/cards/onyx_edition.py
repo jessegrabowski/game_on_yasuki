@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesi
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
+    Ask,
     Banish,
     Bow,
     Choose,
@@ -74,6 +75,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     BattleResolved,
     CardDiscarded,
     Destroyed,
+    DuelResolved,
     EnteredPlay,
 )
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
@@ -116,7 +118,7 @@ from yasuki_core.game_pieces.prints import (
     StrongholdPrint,
 )
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.counters import SINCERITY
+from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY
 
 
 # --- Daytiba ---
@@ -899,6 +901,99 @@ def _the_sacred_ground_of_the_phoenix__back_granted_ability(
 ) -> Ability:
     """The back's "and": free on any card."""
     return _the_sacred_ground_of_the_phoenix_licensed(context, free=True)
+
+
+# --- Togashi Hiyoku ---
+
+HIYOKU_ADDITIONAL_ACTION = "Take an additional action?"
+
+
+@on(DuelResolved, "togashi_hiyoku")
+def _togashi_hiyoku_duel_resolved(ctx: TriggerContext) -> list[Effect]:
+    """ "After Hiyoku wins a duel during battle, give him a +1F/+1C token."
+
+    Any duel he wins, not only the one his own ability creates. Whether a battle is being fought is
+    read off the attack rather than off the open round, because a duel's steps stand over a battle
+    segment without being one. Both Personalities can win a duel, and Hiyoku is given his token on
+    either reading.
+    """
+    event = ctx.event
+    if not isinstance(event, DuelResolved):
+        return []
+    duel, attack = ctx.game.duel, ctx.game.attack
+    if duel is None or attack is None or attack.current is None:
+        return []
+    if ctx.card.id not in (duel.challenger_duelist, duel.challenged_duelist):
+        return []
+    if ctx.card.owner not in event.winners:
+        return []
+    return [AdjustCounter(ctx.card.id, PLUS_1F_PLUS_1C, 1)]
+
+
+def _togashi_hiyoku_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The enemy Personalities Hiyoku faces at the battle, which the card challenges."""
+    return list(opposing_units_in_battle(game, source.owner))
+
+
+def _togashi_hiyoku_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Hiyoku challenges a target enemy Personality. The winner may take an additional action."
+
+    The duel compares the arc's duel stat, since the card names none, and nothing happens to the
+    loser. Who won is known only once the duel is decided, so the offer waits for the duel's end.
+    """
+    return [
+        StartDuel(source.id, target.id, source.id),
+        DelayedEffect(
+            Evaluate("togashi_hiyoku_winner", source.id, source.owner), DUEL_CONSEQUENCES
+        ),
+    ]
+
+
+@choice_resolver("togashi_hiyoku_winner")
+def _resolve_togashi_hiyoku_winner(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Offer the additional action to whoever won, which may be the challenged seat.
+
+    Each winner is asked, because the CR lets both Personalities win a duel, and a tie neither won
+    asks nobody. The winning Personality is the question's subject, since a yes is read back as
+    whatever subjects the question carried.
+    """
+    duel = duel_decided_by(game, source_id)
+    if duel is None:
+        return []
+    return [
+        Ask(
+            winner,
+            HIYOKU_ADDITIONAL_ACTION,
+            "togashi_hiyoku_additional_action",
+            subjects=(duel.duelist_of(winner),),
+        )
+        for winner in duel.outcome.winners
+    ]
+
+
+@choice_resolver("togashi_hiyoku_additional_action")
+def _resolve_togashi_hiyoku_additional_action(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Give the seat that accepted the additional action it asked for.
+
+    The resolver is called on either answer, so a no arrives as no subjects and buys nothing.
+    """
+    return [AdditionalAction(seat)] if chosen else []
+
+
+register_ability(
+    "togashi_hiyoku",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_togashi_hiyoku_targets,
+        targeting_message="an enemy Personality",
+        effects=_togashi_hiyoku_effects,
+    ),
+)
 
 
 # --- Togashi's Library ---
