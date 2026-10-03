@@ -58,6 +58,9 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
+    EffectsFrame,
+    EventsFrame,
+    ResumeCascade,
     apply_effect,
     choice_resolver,
     enforce_state_based_actions,
@@ -161,6 +164,61 @@ def test_resuming_a_choice_without_its_stash_on_top_raises():
 
     with pytest.raises(RuntimeError, match="without its stashed cascade"):
         resume_paused_cascade(game, [])
+
+
+def test_each_paused_frame_resumes_under_its_own_provenance():
+    game = two_seat_game()
+    put_in_play(game, personality("paid"))
+    put_in_play(game, personality("struck"))
+    game.ongoing.append(Negation("ward", END_OF_TURN, effect_kind=Bow))
+    paying = EffectsFrame((Bow("paid"),), Provenance(paying=True))
+    triggered = EffectsFrame((Bow("struck"),), Provenance(triggered=True))
+    game.stack.append(ResumeCascade((EventsFrame(()), paying, triggered)))
+
+    resume_paused_cascade(game, [])
+
+    # A cost's payment is no effect, so the negation passes it by; the trigger's bowing is negated.
+    assert game.table.cards_by_id["paid"].bowed
+    assert not game.table.cards_by_id["struck"].bowed
+
+
+def test_a_resumed_cascade_drops_the_triggers_of_cards_gone_from_the_table():
+    game = two_seat_game()
+    put_in_play(game, personality("stayed"))
+    reacted = []
+
+    def record(ctx):
+        reacted.append(ctx.card.id)
+        return []
+
+    firing = (("gone", record), ("stayed", record))
+    events = EventsFrame((), TurnStarted(PlayerId.P1), firing)
+    game.stack.append(ResumeCascade((events, EffectsFrame(()))))
+
+    resume_paused_cascade(game, [])
+
+    assert reacted == ["stayed"]
+
+
+def test_resuming_a_stash_with_no_effects_frame_on_top_raises():
+    game = two_seat_game()
+    game.stack.append(ResumeCascade((EventsFrame(()),)))
+
+    with pytest.raises(RuntimeError, match="no effects frame on top"):
+        resume_paused_cascade(game, [])
+
+
+def test_resuming_a_stash_with_no_events_frame_at_the_bottom_raises():
+    game = two_seat_game()
+    game.stack.append(ResumeCascade((EffectsFrame((GainHonor(PlayerId.P1, 1),)),)))
+
+    with pytest.raises(RuntimeError, match="resumed with no events frame at the bottom"):
+        resume_paused_cascade(game, [])
+
+
+def test_an_events_frame_fires_its_triggers_for_an_event():
+    with pytest.raises(ValueError, match="fire for an event"):
+        EventsFrame((), None, (("card", lambda ctx: []),))
 
 
 def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():
@@ -631,6 +689,24 @@ def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
     assert other.counters == {"wealth": 1}  # the choice resolved
     assert probe.counters == {"wealth": 1}  # the stashed trigger resumed and applied its effect
     assert game.stack == []
+
+
+def test_a_trigger_that_asks_stashes_the_event_and_the_triggers_left_to_fire():
+    game = two_seat_game()
+    wheat = _wheat_farm(game, card_id="P1-a-wheat")
+    _keyworded_farm(game, card_id="P1-other-farm")
+    probe = _probe(game)
+
+    fire(game, EnteredPlay(wheat.id))
+
+    stash = game.stack[-1]
+    assert isinstance(stash, ResumeCascade)
+    events, effects = stash.frames
+    assert isinstance(events, EventsFrame) and isinstance(effects, EffectsFrame)
+    assert events.event == EnteredPlay(wheat.id)
+    assert events.queue == ()
+    assert [card_id for card_id, _ in events.firing] == [probe.id]
+    assert effects.provenance == Provenance(triggered=True)
 
 
 def test_a_triggers_question_is_marked_as_the_triggers_own():

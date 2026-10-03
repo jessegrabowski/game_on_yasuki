@@ -106,17 +106,25 @@ Interrupt step.
 
 ## The walk
 
-`_advance` is a worklist run to a fixpoint. The whole machine is its loop body:
+`_advance` is a worklist run to a fixpoint over a stack of frames, bottom first. An effects frame
+holds effects still to apply and the provenance they came with. An events frame holds the events
+still to react to: the one in hand, the triggers still to fire for it, and the queue behind it. The
+whole machine is its loop body:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/triggers.py
-:start-at: while True:
-:end-at: firing = _collect(game, event)
+:start-at: while frames:
+:end-at: top.firing = _collect(game, event)
 :language: python
 ```
 
-Three repeating steps. Apply the effects in hand, each committing at once with the events it raises
-joining the queue. Fire the next trigger still waiting on the current event, whose effects become
-the next effects in hand. Pop the next event and collect what answers it.
+The top frame decides each step. An effects frame applies its next effect, which commits at once
+with the events it raises joining the queue of the events frame at the bottom of the stack. An
+events frame fires its next trigger, whose effects become a new effects frame on top carrying the
+trigger's own provenance, or pops its next event and collects what answers it. A frame with nothing
+left is dropped, and the walk ends with the stack. Today the stack never holds more than the one
+events frame and an effects frame above it: every event the walk raises, an effect's or a
+state-based action's, joins the bottom frame's queue and waits behind those already queued, which is
+what keeps the order breadth-first.
 
 `_settle_state_based_actions` runs after every effect, not once at the end. That is the order the
 Comprehensive Rules give, and it is why a Personality who dies as he arrives is dead before his
@@ -132,17 +140,20 @@ The first branch in that loop handles a pause. An
 {class}`~yasuki_core.engine.rules.effects.InterruptingEffect` cannot resolve without an answer from
 a player. {card}`Wheat Farm` is one: entering play, it offers its controller a choice of up to two
 other Farms to give a token, and the cascade cannot go on until someone picks. The machine stops
-and `_stash` stores everything still outstanding:
+and `_stash` stores every frame still outstanding:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/triggers.py
 :pyobject: _stash
 :language: python
 ```
 
-The effects after this one, the triggers not yet fired, the event being processed, and the queue
-behind it. The order in the loop above matters: the stash happens *before* `effect.request` is
-called, because the work stack is last-in-first-out and an effect whose request queues its own work
-needs that work to run first.
+The paused frame keeps the effects after this one, and the frames beneath it keep the triggers not
+yet fired, the event being processed, and the queue behind it. Each frame is stored as a frozen
+{class}`~yasuki_core.engine.rules.triggers.EffectsFrame` or
+{class}`~yasuki_core.engine.rules.triggers.EventsFrame` naming its cards by id, so the stash
+compares equal under replay. The order in the loop above matters: the stash happens *before*
+`effect.request` is called, because the work stack is last-in-first-out and an effect whose request
+queues its own work needs that work to run first.
 
 When the seat answers, {func}`~yasuki_core.engine.rules.triggers.resume_cascade`
 picks up exactly where it stopped:
@@ -152,8 +163,9 @@ picks up exactly where it stopped:
 :language: python
 ```
 
-The answer's effects splice in where the interrupting effect stood. Triggers whose card has left
-play in the meantime are dropped, since a card off the battlefield reacts to nothing.
+The answer's effects splice into the top frame, where the interrupting effect stood, and every
+effects frame resumes under its own provenance. Triggers whose card has left play in the meantime
+are dropped, since a card off the battlefield reacts to nothing.
 
 This is also why a paused decision names its resolver with a string rather than holding the
 function. A stored closure would not rebuild to an equal object, and a pending decision has to
