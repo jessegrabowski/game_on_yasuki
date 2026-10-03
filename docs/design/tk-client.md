@@ -24,6 +24,21 @@ To be documented here:
 - How a drag gesture becomes an engine intent.
 - How the client consumes engine snapshots and redacted state.
 
+## Panels float over the board
+
+A panel that shows a procedure is a {class}`~.FloatingPanel` placed over the board rather than a
+region beside it: {class}`~.BattleView` for an attack, {class}`~.DuelPanel` for a duel,
+{class}`~.LookView` for the cards a look shows, and {class}`~.CardStrip` for any pile a player opens.
+Each one opens at a starting place the window computes and then stays wherever the player has dragged
+it, so the geometry is a first-open default and not a dock.
+
+A panel that draws cards subclasses {class}`~.CardPanel`, which gives it the sprite cache, hit
+testing and `card_under_pointer`. Two things have to be registered for a new panel to behave like the
+others. `GameWindow._card_panels` is the list the view key walks, topmost first, before falling back
+to the board, and a panel left out of it answers correctly while nothing asks. The enlarged card is
+one {class}`~.CardPreview` owned by the window and drawn on the root, so no panel can clip or hide
+another's.
+
 ## Where an option goes
 
 An option belongs on the thing that produces or consumes it, so the player picks a card by pointing

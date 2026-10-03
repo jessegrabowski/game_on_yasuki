@@ -22,6 +22,7 @@ systems/looking-at-cards
 systems/the-replay-log
 systems/units-and-attachments
 systems/battle
+systems/duels
 systems/the-imperial-favor
 systems/board-queries
 systems/game-state
