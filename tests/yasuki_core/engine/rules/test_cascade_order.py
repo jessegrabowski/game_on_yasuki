@@ -184,9 +184,9 @@ def _record_entry(ctx):
     return []
 
 
-def test_a_deferred_step_runs_after_the_recruited_cards_entry_trait():
-    # The interleaving the design mockup got wrong. Both the entry trait and the deferred step land
-    # in the same log, so this asserts their ORDER rather than merely that both happened.
+def test_the_next_effect_runs_after_the_recruited_cards_entry_trait():
+    # Both the entry trait and the next effect land in the same log, so this asserts their order
+    # rather than merely that both happened.
     game = two_seat_game()
     put_in_play(game, holding("P1-gold", gold_production=8))
     put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
@@ -196,7 +196,7 @@ def test_a_deferred_step_runs_after_the_recruited_cards_entry_trait():
         game,
         [
             RecruitCard(target.id),
-            Then((AdjustCounter("P1-watcher", WEALTH, 1),)),
+            AdjustCounter("P1-watcher", WEALTH, 1),
         ],
     )
     submit(game, DecisionResponse(("P1-gold",)))
@@ -218,7 +218,7 @@ def test_recruit_card_brings_in_a_card_that_costs_nothing_without_a_payment():
     assert target in game.table.battlefield.cards
 
 
-def test_a_deferred_step_runs_after_a_free_recruited_cards_entry_trait():
+def test_the_next_effect_runs_after_a_free_recruited_cards_entry_trait():
     game = two_seat_game()
     put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
     target = province_card(game, "P1-target", gold_cost=0, printed_id="order_on_entry")
@@ -227,7 +227,7 @@ def test_a_deferred_step_runs_after_a_free_recruited_cards_entry_trait():
         game,
         [
             RecruitCard(target.id),
-            Then((AdjustCounter("P1-watcher", WEALTH, 1),)),
+            AdjustCounter("P1-watcher", WEALTH, 1),
         ],
     )
     run_stack(game)

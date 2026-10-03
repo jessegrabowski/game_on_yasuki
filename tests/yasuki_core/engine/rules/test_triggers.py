@@ -1384,7 +1384,7 @@ def test_a_watched_card_arriving_where_it_watches_while_its_condition_holds_is_a
 
 
 def test_a_watched_condition_is_answered_before_the_rest_of_the_text_that_fulfilled_it(watching):
-    # "Then" defers the discard behind the cascade, where the watch answers with the marker in play.
+    # CR 20F, Timing: the watch answers the entry before the discard written after it.
     game, _ = _watcher_game(watching)
     in_play_when_answered: list[bool] = []
     watching(
@@ -1399,8 +1399,7 @@ def test_a_watched_condition_is_answered_before_the_rest_of_the_text_that_fulfil
         register(game.table, _fate("second", printed_id="order_probe"))
     )
 
-    resolve_effects(game, [PutIntoPlay("marker0"), Then((Discard("marker0", PlayerId.P1),))])
-    sequence.run_stack(game)
+    resolve_effects(game, [PutIntoPlay("marker0"), Discard("marker0", PlayerId.P1)])
 
     assert in_play_when_answered == [True]
 

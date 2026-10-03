@@ -12,7 +12,6 @@ from yasuki_core.engine.rules.effects import (
     RefillProvince,
     RevealProvinces,
     SpendSeatOncePerTurn,
-    Then,
 )
 from yasuki_core.engine.rules.state import GameState, seat_once_key
 from yasuki_core.engine.rules.vocabulary.actions import Action, ActionTiming, ActivateAbility
@@ -106,8 +105,8 @@ def _cycle_put_on_bottom(
     reveal them all.
 
     Each card goes under the one before it, in the order the rule gives the player, so the last pick
-    ends up at the very bottom. The refill and the reveal are deferred together because the rule
-    reveals *after* refilling, and both wait on the reactions to the cards leaving.
+    ends up at the very bottom. The rule reveals *after* refilling, and both follow the reactions
+    to the cards leaving.
     """
     seat = game.table.cards_by_id[chosen[0]].owner
     # Read the Provinces before anything moves; afterwards none of them holds the card to find.
@@ -115,4 +114,4 @@ def _cycle_put_on_bottom(
     deck = DeckKey(seat, Side.DYNASTY)
     put_back = [MoveToDeck(card_id, deck, from_bottom=0) for card_id in chosen]
     refills = tuple(RefillProvince(key) for key in vacated if key is not None)
-    return [*put_back, Then((*refills, RevealProvinces(seat)))]
+    return [*put_back, *refills, RevealProvinces(seat)]

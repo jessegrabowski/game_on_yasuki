@@ -43,7 +43,6 @@ from yasuki_core.engine.rules.effects import (
     Show,
     ShuffleDeck,
     TakeFavor,
-    Then,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import action_recruited, choice_resolver
@@ -72,7 +71,7 @@ def _agasha_beiru_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
     """
     return [
         RecruitCard(target.id),
-        Then((CounterOnAttachedProvince(target.id, WALL, 1),)),
+        CounterOnAttachedProvince(target.id, WALL, 1),
     ]
 
 

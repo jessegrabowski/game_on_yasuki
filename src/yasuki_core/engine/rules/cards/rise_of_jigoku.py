@@ -47,7 +47,6 @@ from yasuki_core.engine.rules.effects import (
     RecruitCard,
     register_honor_loss_shield,
     Straighten,
-    Then,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
@@ -458,20 +457,16 @@ def _modest_farm_targets(game: GameState, card: L5RCard) -> list[str]:
 
 def _modest_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Recruit the target out of sequence, then offer to destroy Modest Farm to straighten it. The
-    offer is deferred so it follows the recruit and anything the recruited card's entry causes."""
+    offer follows the recruit and anything the recruited card's entry causes."""
     question = f"Destroy {source.name} to straighten {target.name}?"
     return [
         RecruitCard(target.id, renew=keywords.FARM in target.keywords),
-        Then(
-            (
-                Ask(
-                    source.owner,
-                    question,
-                    "modest_farm_straighten",
-                    subjects=(source.id,),
-                    source_id=target.id,
-                ),
-            )
+        Ask(
+            source.owner,
+            question,
+            "modest_farm_straighten",
+            subjects=(source.id,),
+            source_id=target.id,
         ),
     ]
 

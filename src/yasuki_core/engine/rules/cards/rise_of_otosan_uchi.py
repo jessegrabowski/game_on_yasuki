@@ -89,7 +89,6 @@ from yasuki_core.engine.rules.effects import (
     Simultaneously,
     SpendOncePerTurn,
     Straighten,
-    Then,
     Unpayable,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -190,8 +189,8 @@ def _blessings_of_the_red_panda_spirit_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     """A gift to the table, then a question. Every seat gains at once, then every seat draws at once
-    ("each step of each procedure takes place simultaneously", CR, Timing Conflicts). The reshuffle
-    is deferred so it follows the draws, which is the order the card states."""
+    ("each step of each procedure takes place simultaneously", CR, Timing Conflicts). The question
+    follows the draws, which is the order the card states."""
     gifts = [
         Simultaneously(tuple(GainHonor(seat, 1) for seat in game.table.seats)),
         Simultaneously(tuple(DrawCard(seat) for seat in game.table.seats)),
@@ -199,16 +198,12 @@ def _blessings_of_the_red_panda_spirit_effects(
     question = f"Shuffle {source.name} into your Dynasty deck instead of discarding it?"
     return [
         *gifts,
-        Then(
-            (
-                Ask(
-                    source.owner,
-                    question,
-                    "red_panda_spirit_keep",
-                    subjects=(source.id,),
-                    source_id=source.id,
-                ),
-            )
+        Ask(
+            source.owner,
+            question,
+            "red_panda_spirit_keep",
+            subjects=(source.id,),
+            source_id=source.id,
         ),
     ]
 

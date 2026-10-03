@@ -1919,9 +1919,9 @@ class Rehonor(Effect):
 def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     """The effects of a Personality committing seppuku: rehonor him, then destroy him (CR,
     Seppuku). Two effects rather than one, so each passes through the Interrupt step on its own,
-    and the destruction is deferred through ``Then`` so the Personality's own reaction to his
-    rehonoring fires while he is still in play. The CR adds that neither can be negated, so both
-    are built not negatable, against a lasting negation and an Interrupt's alike.
+    and the Personality's own reaction to his rehonoring resolves while he is still in play. The CR
+    adds that neither can be negated, so both are built not negatable, against a lasting negation
+    and an Interrupt's alike.
 
     Parameters
     ----------
@@ -1932,7 +1932,7 @@ def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     """
     return [
         Rehonor(card_id, negatable=False),
-        Then((Destroy(card_id, cause, negatable=False),)),
+        Destroy(card_id, cause, negatable=False),
     ]
 
 

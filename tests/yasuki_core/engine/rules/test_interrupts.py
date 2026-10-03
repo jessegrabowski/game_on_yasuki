@@ -326,7 +326,7 @@ register_ability(
         ],
         effects=lambda game, source, target: [
             Bow(target.id),
-            Then((Destroy(target.id, source.owner),)),
+            Destroy(target.id, source.owner),
         ],
     ),
 )

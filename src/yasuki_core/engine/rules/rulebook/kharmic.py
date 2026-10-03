@@ -8,7 +8,6 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     PayGold,
     RefillProvince,
-    Then,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -70,12 +69,12 @@ def _kharmic_cost(game: GameState, source: L5RCard) -> list[Effect]:
 
 
 def _kharmic_draw_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [Discard(source.id, source.owner), Then((DrawCard(source.owner),))]
+    return [Discard(source.id, source.owner), DrawCard(source.owner)]
 
 
 def _kharmic_refill_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     vacated = province_key_of(game, source.owner, source.id)
-    return [Discard(source.id, source.owner), Then((RefillProvince(vacated, face_up=True),))]
+    return [Discard(source.id, source.owner), RefillProvince(vacated, face_up=True)]
 
 
 # The datasheet's two Kharmic abilities, conferred by the keyword on the card they spend and paid
