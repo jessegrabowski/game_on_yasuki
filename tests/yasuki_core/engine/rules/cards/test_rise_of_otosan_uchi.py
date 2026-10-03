@@ -2025,3 +2025,99 @@ def test_shinseis_heart_given_void_does_not_complete_an_enlightenment():
 
     assert has_keyword(session.game, session.game.table.cards_by_id["heart"], "Void")
     assert session.game.game_over is False
+
+
+# --- Togashi Higaru, Clan Champion (Experienced 3) ---
+
+HIGARU = "togashi_higaru_clan_champion_experienced_3"
+
+
+def _higaru_game(*, rings: tuple[Element, ...] = (), ally_bowed: bool = False) -> EngineSession:
+    """P1 has Higaru, an ally of 2F/2C, a Ring of each of ``rings``, and a Fate deck reading a, b,
+    c, d from the top."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("higaru", printed_id=HIGARU))
+    ally = put_in_play(state, personality("ally", force=2, chi=2))
+    if ally_bowed:
+        ally.bow()
+    for index, element in enumerate(rings):
+        put_in_play(state, register(state, _ring_card(f"ring{index}", f"ring{index}", element)))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(state, fate_card(card_id, P1)) for card_id in reversed(("a", "b", "c", "d"))
+    ]
+    return EngineSession.start(state, P1)
+
+
+def _fate_deck_top_first(session: EngineSession) -> list[str]:
+    return [card.id for card in reversed(session.game.table.decks[DeckKey(P1, Side.FATE)].cards)]
+
+
+@pytest.mark.parametrize(
+    ("rings", "seen"),
+    [((), ("a",)), ((Element.AIR,), ("a", "b")), ((Element.AIR, Element.AIR), ("a", "b", "c"))],
+    ids=["no_rings", "one_ring", "two_rings"],
+)
+def test_higaru_looks_at_one_more_card_than_rings_before_the_end_of_turn_draw(rings, seen):
+    session = _higaru_game(rings=rings)
+    end_turn(session)
+    assert isinstance(session.game.pending, Confirm)
+    assert session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards == []
+
+    session.submit(P1, DecisionResponse(("higaru",)))
+
+    assert session.game.pending.candidates == seen
+
+
+def test_higaru_puts_the_chosen_on_the_bottom_in_order_before_the_card_is_drawn():
+    session = _higaru_game(rings=(Element.AIR,))
+    end_turn(session)
+    session.submit(P1, DecisionResponse(("higaru",)))
+
+    session.submit(P1, DecisionResponse(("a", "b")))
+    session.submit(P1, DecisionResponse(("b", "a")))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["c"]
+    assert _fate_deck_top_first(session) == ["d", "b", "a"]
+    assert session.log.replay() == session.game
+
+
+def test_declining_higarus_look_draws_the_top_card():
+    session = _higaru_game()
+    end_turn(session)
+
+    session.submit(P1, DecisionResponse(()))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["a"]
+
+
+def test_higaru_gives_1f_1c_for_each_ring_with_a_different_element():
+    session = _higaru_game(rings=(Element.AIR, Element.AIR, Element.FIRE))
+    session.act(P1, ActivateAbility("higaru"))
+    session.submit(P1, DecisionResponse(("ally",)))
+
+    session.submit(P1, DecisionResponse(("Give it +2F/+2C",)))
+
+    ally = session.game.table.cards_by_id["ally"]
+    assert (effective_force(session.game, ally), effective_chi(session.game, ally)) == (4, 4)
+
+
+def test_higaru_straightens_his_target_when_that_is_chosen():
+    session = _higaru_game(rings=(Element.AIR,), ally_bowed=True)
+    session.act(P1, ActivateAbility("higaru"))
+    session.submit(P1, DecisionResponse(("ally",)))
+
+    session.submit(P1, DecisionResponse(("Straighten it",)))
+
+    assert not session.game.table.cards_by_id["ally"].bowed
+
+
+def test_higaru_with_no_ring_straightens_his_target_without_asking():
+    session = _higaru_game(ally_bowed=True)
+    session.act(P1, ActivateAbility("higaru"))
+
+    session.submit(P1, DecisionResponse(("ally",)))
+
+    assert session.game.pending is None
+    assert not session.game.table.cards_by_id["ally"].bowed
