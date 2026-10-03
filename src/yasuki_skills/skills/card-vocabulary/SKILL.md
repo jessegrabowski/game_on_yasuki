@@ -41,6 +41,11 @@ bespoke path that did its job. `docs/design/build_from_the_vocabulary.md` is the
 Legacy, Edict and duel-consequence cases worked through. Read it before adding an effect, decision,
 event, moment or registry.
 
+Effects in a returned list happen in the order they are written. Text that acts on several cards at
+once, one phrase over many cards, returns those effects inside a `Simultaneously`, so nothing reacts
+to any of them until all have happened. `docs/design/systems/effects.md` has the rule and the CR
+lines behind it.
+
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and
 modifiers layer over it. Gold is the same shape on the economy side. A card that appears to have the
 wrong number almost always has a handler contributing to the calculation rather than a wrong value

@@ -83,6 +83,7 @@ from yasuki_core.engine.rules.effects import (
     RevealProvinces,
     Show,
     ShuffleDeck,
+    Simultaneously,
     Rehonor,
     ReshuffleFromHand,
     RevokeGrants,
@@ -322,6 +323,7 @@ EFFECTS = [
     ),
     (RevealProvinces(PlayerId.P1), "reveal P1's provinces"),
     (Then((Bow("a"), Destroy("b", PlayerId.P1))), "then: 2 deferred"),
+    (Simultaneously((Bow("a"), Bow("b"))), "at once: 2 effects"),
     (
         Choose(PlayerId.P1, ("a", "b", "c"), 0, 2, "wheat_farm", "wheat_1"),
         "P1 chooses 0-2 of 3 for wheat_farm",

@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine import ops
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
@@ -26,7 +26,17 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
-from yasuki_core.engine.rules.effects import Ask, DelayedEffect, DestroyProvince, Discard, Move
+from yasuki_core.engine.rules.effects import (
+    Ask,
+    DelayedEffect,
+    Destroy,
+    DestroyProvince,
+    Discard,
+    GainHonor,
+    Move,
+    Rehonor,
+    Simultaneously,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.triggers import apply_effect, resolve_effects
@@ -721,6 +731,23 @@ def test_a_winner_with_a_dishonorable_personality_is_rehonored_instead_of_paid()
 
     assert not session.game.table.cards_by_id["b"].dishonorable
     assert session.game.table.seats[PlayerId.P1].honor == before
+
+
+def test_a_tie_rehonors_each_army_at_once_then_destroys_both_at_once():
+    # CR, Battle Resolution: "the Attacker and Defender each destroy all units in the enemy army";
+    # CR, Rehonoring 0.3: "all dishonorable Personalities in an army are rehonored before being
+    # destroyed".
+    session = _one_battlefield({"a": 3, "b": 1}, {"d": 4})
+    session.game.table.cards_by_id["b"].dishonor()
+
+    effects = resolution.resolution_effects(session.game, 0)
+
+    resolving = Rulebook.BATTLE_RESOLUTION
+    assert effects == [
+        Simultaneously((Rehonor("b"),)),
+        Simultaneously((Destroy("d", resolving), Destroy("a", resolving), Destroy("b", resolving))),
+        GainHonor(PlayerId.P2, 4),
+    ]
 
 
 def test_a_tied_armys_dishonorable_personality_is_rehonored_before_he_dies():

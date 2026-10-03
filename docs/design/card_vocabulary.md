@@ -44,6 +44,11 @@ negation and an Interrupt that negates both respect.
 queued behind it, so a step that must follow another card's reaction to what just happened is
 deferred through `Then` instead.
 
+`Simultaneously` is the counterpart for one occurrence. A piece of text or a rule that acts on
+several cards at once, as battle resolution destroying an army does, returns its effects inside a
+`Simultaneously`, so nothing reacts to any of them until all have happened. Several sentences stay a
+plain list, since effects "occur in the order they are written" (CR, Order of Effects).
+
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.effects
 
@@ -117,6 +122,7 @@ deferred through `Then` instead.
    RevealProvinces
    Show
    ShuffleDeck
+   Simultaneously
    SpendOncePerTurn
    SpendSeatOncePerTurn
    Straighten

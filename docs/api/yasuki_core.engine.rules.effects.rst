@@ -80,6 +80,7 @@ yasuki_core.engine.rules.effects
     RevokeGrants
     Show
     ShuffleDeck
+    Simultaneously
     SpendOncePerTurn
     SpendSeatOncePerGame
     SpendSeatOncePerTurn

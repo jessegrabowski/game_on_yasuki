@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.effects import (
     DiscardFromHand,
     DrawCard,
     RevealProvinces,
+    Simultaneously,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
@@ -289,9 +290,9 @@ def _end_turn(game: GameState) -> None:
 
 @dataclass(frozen=True, slots=True)
 class AccrueSincerity:
-    """Give each face-up Sincerity card in ``seat``'s Provinces a Sincerity token, before its turn
-    ends (Sincerity keyword). A card recruited, discarded or refilled face-down this turn is not
-    face-up in a Province, so it accrues nothing.
+    """Give each face-up Sincerity card in ``seat``'s Provinces a Sincerity token, all at once,
+    before its turn ends (Sincerity keyword). A card recruited, discarded or refilled face-down this
+    turn is not face-up in a Province, so it accrues nothing.
 
     Attributes
     ----------
@@ -308,7 +309,7 @@ class AccrueSincerity:
             for card in zone.cards
             if card.face_up and keywords.SINCERITY in effective_keywords(game, card)
         ]
-        triggers.resolve_effects(game, grants)
+        triggers.resolve_effects(game, [Simultaneously(tuple(grants))])
 
 
 @dataclass(frozen=True, slots=True)

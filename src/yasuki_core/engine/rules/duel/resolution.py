@@ -12,7 +12,13 @@ from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.procedure import duel_in_progress, duel_stat
 from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelWork
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
-from yasuki_core.engine.rules.effects import ApplyEffects, Discard, Effect, pile_for
+from yasuki_core.engine.rules.effects import (
+    ApplyEffects,
+    Discard,
+    Effect,
+    Simultaneously,
+    pile_for,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -152,9 +158,9 @@ def duel_total(game: GameState, duel: DuelRecord, seat: PlayerId) -> int:
 
 
 def duel_cleanup(game: GameState) -> list[Effect]:
-    """The effects that clear a duel away (CR, Duel): the focus procedure's own cleanup, then a
-    discard of each focused card. They resolve through the cascade like any rulebook procedure's,
-    and :class:`RemoveFocusAreas` follows them.
+    """The effects that clear a duel away (CR, Duel): the focus procedure's own cleanup, then the
+    discard of every focused card at once ("Discard all focused cards"). They resolve through the
+    cascade like any rulebook procedure's, and :class:`RemoveFocusAreas` follows them.
 
     The record stays on the game with its outcome, so what resolves after a duel can still read how
     it went. The next duel declared replaces it.
@@ -170,7 +176,7 @@ def duel_cleanup(game: GameState) -> list[Effect]:
         for seat in (duel.challenger, duel.challenged)
         for card in focused_cards(game, seat)
     ]
-    return [*ruleset.ACTIVE.focus_procedure.cleanup(game, duel), *discards]
+    return [*ruleset.ACTIVE.focus_procedure.cleanup(game, duel), Simultaneously(tuple(discards))]
 
 
 def end_without_resolution(game: GameState) -> list[GameEvent]:

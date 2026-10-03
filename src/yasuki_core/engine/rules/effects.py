@@ -2529,6 +2529,39 @@ class Then(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class Simultaneously(Effect):
+    """Apply ``effects`` as one occurrence, so nothing reacts until every one has happened.
+
+    For one piece of text, or one rule, acting on several cards at once: "the Attacker and
+    Defender each destroy all units in the enemy army" (CR, Battle Resolution), as against
+    sentences in sequence, which "occur in the order they are written" (CR, Order of Effects). Each
+    member is checked, modified and negated as it would be alone.
+
+    Attributes
+    ----------
+    effects : tuple of Effect
+        What happens at once, in the order they are applied.
+    """
+
+    effects: tuple[Effect, ...]
+
+    def describe(self) -> str:
+        return f"at once: {len(self.effects)} effects"
+
+    def is_interruptible(self, game: GameState) -> bool:
+        return False
+
+    def is_negatable(self, game: GameState) -> bool:
+        return False
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Apply every member in turn. The cascade handles a group itself, applying each member
+        through the checks any effect meets, so this runs only when a group is applied outside
+        it."""
+        return [event for effect in self.effects for event in effect.perform(game)]
+
+
+@dataclass(frozen=True, slots=True)
 class Ask(InterruptingEffect):
     """Put a yes/no question to a seat, and hand ``subjects`` to the resolver if it answers yes.
 

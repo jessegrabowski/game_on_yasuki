@@ -53,7 +53,9 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     IgnoreHonorRequirements,
     MoveToHand,
+    Negated,
     PutIntoPlay,
+    Simultaneously,
     Then,
 )
 from yasuki_core.engine.rules.triggers import (
@@ -70,9 +72,11 @@ from yasuki_core.engine.rules.triggers import (
     on,
     reach_moment,
     resolve_delayed,
+    resolve_action_effects,
     resolve_effects,
     resume_paused_cascade,
 )
+from yasuki_core.engine.rules.interrupts import Replacement, forecast
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
@@ -219,6 +223,60 @@ def test_resuming_a_stash_with_no_events_frame_at_the_bottom_raises():
 def test_an_events_frame_fires_its_triggers_for_an_event():
     with pytest.raises(ValueError, match="fire for an event"):
         EventsFrame((), None, (("card", lambda ctx: []),))
+
+
+def test_a_negation_reaches_one_member_of_a_group_as_it_would_alone():
+    game = two_seat_game()
+    put_in_play(game, personality("struck"))
+    put_in_play(game, personality("spared"))
+    game.ongoing.append(Negation("ward", END_OF_TURN, effect_kind=Bow, subject_id="spared"))
+
+    resolve_effects(game, [Simultaneously((Bow("struck"), Bow("spared")))])
+
+    assert game.table.cards_by_id["struck"].bowed
+    assert not game.table.cards_by_id["spared"].bowed
+
+
+def test_an_interrupt_answers_a_member_of_an_actions_group():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    put_in_play(game, personality("bystander"))
+    destroy = Destroy(hero.id, PlayerId.P1)
+    game.modifications.append(
+        Replacement(bound=destroy, card_id="ward", replacement=Negated(destroy))
+    )
+    game.interrupts_offered = True
+
+    resolve_action_effects(game, [Simultaneously((destroy, Bow("bystander")))])
+
+    assert hero in game.table.battlefield.cards
+    assert game.table.cards_by_id["bystander"].bowed
+    assert game.modifications == []
+
+
+def test_the_interrupt_step_foresees_each_member_of_a_group():
+    game = two_seat_game()
+    put_in_play(game, personality("a"))
+    put_in_play(game, personality("b"))
+
+    foreseen = forecast(game, (Simultaneously((Bow("a"), Bow("b"))),))
+
+    assert foreseen == (Bow("a"), Bow("b"))
+
+
+def test_a_question_inside_a_group_resumes_the_rest_of_the_group():
+    game = two_seat_game()
+    put_in_play(game, personality("asker"))
+    put_in_play(game, personality("other"))
+    asking = Choose(PlayerId.P1, (), 0, 0, "test_sandwich", "asker")
+
+    resolve_effects(game, [Simultaneously((asking, Bow("other")))])
+    assert not game.table.cards_by_id["other"].bowed
+
+    action_sequence.submit(game, DecisionResponse(()))
+
+    assert game.table.cards_by_id["asker"].counters == {"wealth": 1}
+    assert game.table.cards_by_id["other"].bowed
 
 
 def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():

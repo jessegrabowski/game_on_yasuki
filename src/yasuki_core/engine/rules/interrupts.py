@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.effects import (
     AttackEffect,
     Effect,
     SpendOncePerTurn,
+    Simultaneously,
     Then,
 )
 from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
@@ -48,12 +49,13 @@ def forecast(
     game: GameState, effects: tuple[Effect, ...], provenance: Provenance = Provenance()
 ) -> tuple[Effect, ...]:
     """What an action with ``provenance`` handing ``effects`` to step E is about to do, as the
-    Interrupt step offers it: the effects in order, a ``Then``'s contents where it stands, an
-    ability's effects behind the :class:`~.ResolveAbility` that targets them, and an attack's
-    outcome behind the attack when it reaches on the board as it stands. An effect that is nothing
-    to interrupt, an Honor change of zero, a question the action asks or one a negation will
-    negate, is left out, and what a choice resolver produces later is not foreseeable and is not
-    offered. A ``once`` negation leaves out only the first effect it will spend itself on."""
+    Interrupt step offers it: the effects in order, the contents of a ``Then`` or a
+    :class:`~.Simultaneously` group where it stands, an ability's effects behind the
+    :class:`~.ResolveAbility` that targets them, and an attack's outcome behind the attack when it
+    reaches on the board as it stands. An effect that is nothing to interrupt, an Honor change of
+    zero, a question the action asks or one a negation will negate, is left out, and what a choice
+    resolver produces later is not foreseeable and is not offered. A ``once`` negation leaves out
+    only the first effect it will spend itself on."""
     return tuple(_foreseen(game, effects, provenance, []))
 
 
@@ -61,7 +63,7 @@ def _foreseen(
     game: GameState, effects: tuple[Effect, ...], provenance: Provenance, spent: list[Negation]
 ) -> Iterator[Effect]:
     for effect in effects:
-        if isinstance(effect, Then):
+        if isinstance(effect, Then | Simultaneously):
             yield from _foreseen(game, effect.effects, provenance, spent)
             continue
         if effect.is_interruptible(game) and not would_negate(game, effect, provenance, spent):
