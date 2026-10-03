@@ -418,6 +418,13 @@ def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> t
     return unit
 
 
+def _leaves_for_pile(game: GameState, card_id: str, *, banished: bool) -> bool:
+    card = game.table.cards_by_id.get(card_id)
+    return (
+        card is not None and card not in game.table.zones[pile_for(card, banished=banished)].cards
+    )
+
+
 def _destroying_seat(game: GameState, cause: Cause) -> PlayerId | None:
     """The seat a destruction belongs to: the seat that acted, or the controller of the card whose
     trait did it. None for the rulebook, and for a trait whose card has left the table."""
@@ -501,11 +508,14 @@ class Discard(Effect):
     def describe(self) -> str:
         return f"{self.cause.name} discards {self.card_id}"
 
+    def would_happen(self, game: GameState) -> bool:
+        """False for a card already gone or already in its discard pile, which nothing moves."""
+        return _leaves_for_pile(game, self.card_id, banished=False)
+
     def perform(self, game: GameState) -> list[GameEvent]:
-        card = game.table.cards_by_id.get(self.card_id)
-        if card is None:
+        if not self.would_happen(game):
             return []
-        unit = _remove_unit(game, card)
+        unit = _remove_unit(game, game.table.cards_by_id[self.card_id])
         return [CardDiscarded(member.id, member.side, self.cause) for member in unit]
 
 
@@ -533,6 +543,10 @@ class Banish(Effect):
 
     def describe(self) -> str:
         return f"banish {self.card_id}"
+
+    def would_happen(self, game: GameState) -> bool:
+        """False for a card already gone or already banished, which nothing moves."""
+        return _leaves_for_pile(game, self.card_id, banished=True)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)

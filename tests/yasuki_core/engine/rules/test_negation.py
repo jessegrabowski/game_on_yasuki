@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     DelayedEffect,
     Destroy,
+    Discard,
     DiscardFromHand,
     Effect,
     GrantModifier,
@@ -213,6 +214,18 @@ def test_the_interrupt_step_offers_the_effects_a_once_negation_will_not_reach():
 
     assert forecast(game, (Bow("farm"), Bow("mine"))) == (Bow("mine"),)
     assert len(game.ongoing) == 1
+
+
+def test_discarding_a_card_already_in_the_discard_pile_spends_no_once_negation():
+    game = two_seat_game()
+    card = register(game.table, fate_card("gone", PlayerId.P1))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].add(card)
+    negation = Negation("ring", END_OF_TURN, effect_kind=Discard, once=True)
+    game.ongoing.append(negation)
+
+    negate_committed(game, Discard(card.id, PlayerId.P1), FROM_NO_ACTION)
+
+    assert game.ongoing == [negation]
 
 
 def test_an_effect_already_negated_spends_no_once_negation():

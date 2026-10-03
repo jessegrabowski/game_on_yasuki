@@ -341,6 +341,23 @@ def test_a_group_inside_a_group_is_one_occurrence_with_it(reacting):
     assert all_bowed == [True, True, True]
 
 
+def test_discarding_a_card_already_in_the_discard_pile_announces_nothing(reacting):
+    game = two_seat_game()
+    card = register(game.table, _fate("gone", printed_id="gone"))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].add(card)
+    told: list[str] = []
+
+    def _record_discard(ctx):
+        told.append(ctx.event.card_id)
+        return []
+
+    reacting(CardDiscarded, "gone", _record_discard)
+
+    resolve_effects(game, [Discard(card.id, PlayerId.P1)])
+
+    assert told == []
+
+
 def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():
     with pytest.raises(ValueError, match="resolve_action_effects"):
         resolve_effects(two_seat_game(), [], provenance=Provenance(interruptible=True))
