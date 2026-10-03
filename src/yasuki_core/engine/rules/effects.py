@@ -86,7 +86,7 @@ from yasuki_core.game_pieces.prints import PersonalityPrint
 from yasuki_core.game_pieces.counters import Counter
 
 
-def _pile(card: L5RCard, *, banished: bool = False) -> ZoneKey:
+def pile_for(card: L5RCard, *, banished: bool = False) -> ZoneKey:
     """The pile ``card`` belongs in when it leaves play: its owner's, on the card's own side,
     and its banish rather than its discard when ``banished``.
 
@@ -393,7 +393,7 @@ def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> t
     """
     unit = unit_of(game, card)
     for member in unit:
-        ops.move_card(game.table, member, _pile(member, banished=banished))
+        ops.move_card(game.table, member, pile_for(member, banished=banished))
     return unit
 
 
@@ -2656,7 +2656,7 @@ class DiscardFromHand(InterruptingEffect):
             by_id[card_id] for card_id in _at_random(game, self._eligible(game), self.count)
         ]
         for card in discarded:
-            ops.move_card(game.table, card, _pile(card))
+            ops.move_card(game.table, card, pile_for(card))
         return [
             CardDiscarded(card.id, card.side, self.cause, from_hand_or_deck=True)
             for card in discarded

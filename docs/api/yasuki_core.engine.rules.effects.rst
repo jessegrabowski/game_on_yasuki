@@ -94,6 +94,7 @@ yasuki_core.engine.rules.effects
 .. autosummary::
 
     adjusted_honor_change
+    pile_for
     seppuku
 
 .. automodule:: yasuki_core.engine.rules.effects
