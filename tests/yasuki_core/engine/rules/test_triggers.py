@@ -34,7 +34,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     EnteredPlay,
     HonorChanged,
     ProducingGold,
-    TurnStarted,
+    TurnBoundary,
 )
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
@@ -137,8 +137,8 @@ def _resolve_a_held_effect(game):
 @pytest.mark.parametrize(
     ("driver", "drive"),
     [
-        ("fire", lambda game: fire(game, TurnStarted(PlayerId.P1))),
-        ("fire_all", lambda game: fire_all(game, [TurnStarted(PlayerId.P1)])),
+        ("fire", lambda game: fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))),
+        ("fire_all", lambda game: fire_all(game, [TurnBoundary(PlayerId.P1, Boundary.BEGINNING)])),
         ("resolve_effects", lambda game: resolve_effects(game, [GainHonor(PlayerId.P1, 1)])),
         ("resolve_effects", _resolve_a_held_effect),
         ("enforce_state_based_actions", enforce_state_based_actions),
@@ -193,9 +193,18 @@ def test_turn_start_gives_the_rice_farm_a_wealth_token():
     game = two_seat_game()
     farm = _rice_farm(game)
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert farm.counters == {"wealth": 1}
+
+
+def test_the_end_of_the_turn_gives_the_rice_farm_nothing():
+    game = two_seat_game()
+    farm = _rice_farm(game)
+
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.END))
+
+    assert farm.counters == {}
 
 
 def test_the_same_card_awaiting_recruitment_in_a_province_does_not_react():
@@ -207,7 +216,7 @@ def test_the_same_card_awaiting_recruitment_in_a_province_does_not_react():
     in_play = _rice_farm(game, card_id="P1-farm")
     unbought = province_card(game, "P1-unbought", seat=PlayerId.P1, printed_id="rice_farm")
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert in_play.counters == {"wealth": 1}
     assert unbought.counters == {}
@@ -218,7 +227,7 @@ def test_wealth_accrues_each_turn_up_to_the_cap_of_four():
     farm = _rice_farm(game)
 
     for _ in range(6):
-        fire(game, TurnStarted(PlayerId.P1))
+        fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert farm.counters == {"wealth": 4}  # "will not have more than four Wealth tokens"
 
@@ -228,7 +237,7 @@ def test_one_event_fans_out_to_every_subscribed_card():
     first = _rice_farm(game, card_id="P1-farm-a")
     second = _rice_farm(game, card_id="P1-farm-b")
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert first.counters == {"wealth": 1} and second.counters == {"wealth": 1}
 
@@ -237,7 +246,9 @@ def test_the_token_only_lands_on_the_turn_players_own_farm():
     game = two_seat_game()
     farm = _rice_farm(game)  # owned by P1
 
-    fire(game, TurnStarted(PlayerId.P2))  # "after your turn begins": not P1's turn
+    fire(
+        game, TurnBoundary(PlayerId.P2, Boundary.BEGINNING)
+    )  # "after your turn begins": not P1's turn
 
     assert farm.counters == {}
 
@@ -247,14 +258,14 @@ def test_accrued_wealth_raises_the_farms_effective_gold_production():
     farm = _rice_farm(game)
     assert effective_gold_production(game, farm) == 0
 
-    fire(game, TurnStarted(PlayerId.P1))
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert effective_gold_production(game, farm) == 2  # printed 0 + two Wealth tokens
 
 
 def test_flow_emits_the_turn_start_event_from_begin_turn():
-    # The wiring test: begin_game runs _begin_turn, which must fire TurnStarted.
+    # The wiring test: begin_game runs _begin_turn, which must announce the turn's beginning.
     game = two_seat_game()
     farm = _rice_farm(game)
 
@@ -330,7 +341,7 @@ def test_gaining_wealth_cascades_into_aokis_draw():
     _seed_fate_deck(game, PlayerId.P1, 3)
     assert _hand_size(game, PlayerId.P1) == 0
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert _hand_size(game, PlayerId.P1) == 1
 
@@ -342,7 +353,7 @@ def test_aoki_draws_at_most_once_per_turn():
     _aoki(game)
     _seed_fate_deck(game, PlayerId.P1, 3)
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert _hand_size(game, PlayerId.P1) == 1  # two CounterChanged events, one draw
 
@@ -354,9 +365,9 @@ def test_aoki_draws_again_on_the_next_turn():
     _aoki(game)
     _seed_fate_deck(game, PlayerId.P1, 3)
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
     game.turn += 1
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert _hand_size(game, PlayerId.P1) == 2
 
@@ -367,7 +378,9 @@ def test_aoki_ignores_wealth_gained_on_an_opponents_holding():
     _rice_farm(game, seat=PlayerId.P2, card_id="P2-farm")
     _seed_fate_deck(game, PlayerId.P1, 3)
 
-    fire(game, TurnStarted(PlayerId.P2))  # P2's farm gains wealth: not Aoki's Holding
+    fire(
+        game, TurnBoundary(PlayerId.P2, Boundary.BEGINNING)
+    )  # P2's farm gains wealth: not Aoki's Holding
 
     assert _hand_size(game, PlayerId.P1) == 0
 
@@ -897,13 +910,14 @@ def test_a_trigger_registered_for_the_hand_fires_for_a_card_in_hand(reacting):
     put_in_play(game, holding("played", printed_id="hand_probe"))
     seen: list[str] = []
     reacting(
-        TurnStarted,
+        TurnBoundary,
         "hand_probe",
         lambda ctx: seen.append(ctx.card.id) or [],
         where=(CardLocation.HAND,),
+        boundary=Boundary.BEGINNING,
     )
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert seen == ["held"]
 
@@ -914,13 +928,14 @@ def test_a_registration_for_both_zones_fires_in_each(reacting):
     put_in_play(game, holding("played", printed_id="hand_probe"))
     seen: list[str] = []
     reacting(
-        TurnStarted,
+        TurnBoundary,
         "hand_probe",
         lambda ctx: seen.append(ctx.card.id) or [],
         where=(CardLocation.BATTLEFIELD, CardLocation.HAND),
+        boundary=Boundary.BEGINNING,
     )
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert sorted(seen) == ["held", "played"]
 
@@ -929,9 +944,14 @@ def test_a_battlefield_registration_does_not_hear_from_hand(reacting):
     game = two_seat_game()
     _held(game, "held")
     seen: list[str] = []
-    reacting(TurnStarted, "hand_probe", lambda ctx: seen.append(ctx.card.id) or [])
+    reacting(
+        TurnBoundary,
+        "hand_probe",
+        lambda ctx: seen.append(ctx.card.id) or [],
+        boundary=Boundary.BEGINNING,
+    )
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert seen == []
 
@@ -940,15 +960,16 @@ def test_a_hand_triggers_question_reaches_only_the_cards_owner(reacting):
     game = two_seat_game()
     _held(game, "held")
     reacting(
-        TurnStarted,
+        TurnBoundary,
         "hand_probe",
         lambda ctx: [
             Ask(ctx.card.owner, "Put it into play?", "hand_probe_answer", source_id=ctx.card.id)
         ],
         where=(CardLocation.HAND,),
+        boundary=Boundary.BEGINNING,
     )
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert isinstance(game.pending, Confirm) and game.pending.seat is PlayerId.P1
     assert project(game, PlayerId.P1).pending == game.pending
@@ -960,21 +981,23 @@ def test_a_trigger_registered_under_a_ruleset_fires_only_while_it_is_active(reac
     put_in_play(game, holding("played", printed_id="hand_probe"))
     seen: list[str] = []
     reacting(
-        TurnStarted,
+        TurnBoundary,
         "hand_probe",
         lambda ctx: seen.append("onyx") or [],
         ruleset=ruleset.ONYX.name,
+        boundary=Boundary.BEGINNING,
     )
     reacting(
-        TurnStarted,
+        TurnBoundary,
         "hand_probe",
         lambda ctx: seen.append("she") or [],
         ruleset=ruleset.SHATTERED_EMPIRE.name,
+        boundary=Boundary.BEGINNING,
     )
 
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
     monkeypatch.setattr(ruleset, "ACTIVE", ruleset.ONYX)
-    fire(game, TurnStarted(PlayerId.P1))
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
 
     assert seen == ["she", "onyx"]
 

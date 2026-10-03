@@ -9,17 +9,28 @@ from yasuki_core.game_pieces.counters import Counter
 
 
 @dataclass(frozen=True, slots=True)
-class TurnStarted:
-    """A seat's turn has begun (after straighten and province reveal)."""
+class TurnBoundary:
+    """``seat``'s turn reached one of its edges, announced at both.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat whose turn it is.
+    boundary : Boundary
+        Which edge: the beginning, once the seat's cards have straightened and its Provinces are
+        revealed, or the end, before the end-of-turn draw and discard, where the CR puts every
+        effect "before the turn ends" (CR, Drawing and Discarding Fate Cards).
+    """
 
     seat: PlayerId
+    boundary: Boundary
 
 
 @dataclass(frozen=True, slots=True)
 class PhaseStarted:
     """A phase of the active seat's turn has begun, before its first Action Round opens. The Action
-    Phase starts after :class:`~.TurnStarted`. A card reading "this phase" counts the turn's events
-    since the last of these.
+    Phase starts after the turn's beginning :class:`~.TurnBoundary`. A card reading "this phase"
+    counts the turn's events since the last of these.
 
     Attributes
     ----------
@@ -551,7 +562,7 @@ GameEvent = (
     | Bowed
     | CardFocused
     | ConditionFulfilled
-    | TurnStarted
+    | TurnBoundary
     | CardDiscarded
     | CounterChanged
     | ProvinceDestroyed

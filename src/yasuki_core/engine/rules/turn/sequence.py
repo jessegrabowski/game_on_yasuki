@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     EnteredPlay,
     PhaseStarted,
     Straightened,
-    TurnStarted,
+    TurnBoundary,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.interrupts import interrupt_actions
@@ -417,21 +417,12 @@ def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
     """
     _announce_phase(game)
     game.stack.append(LiftStraightenDelays(BEGINNING_OF_ACTION_PHASE))
-    game.stack.append(AnnounceTurnStart())
+    game.stack.append(triggers.AnnounceEvent(TurnBoundary(game.active, Boundary.BEGINNING)))
     game.stack.append(ApplyEffects((RevealProvinces(game.active),)))
     straightened = ops.straighten(
         game.table, game.active, staying_bowed | game.straighten_delayed.keys()
     )
     triggers.fire_all(game, [Straightened(card_id) for card_id in straightened])
-
-
-@dataclass(frozen=True, slots=True)
-class AnnounceTurnStart:
-    """Announce that the active seat's turn has begun, once its cards have straightened and its
-    Provinces are revealed."""
-
-    def resume(self, game: GameState) -> None:
-        triggers.fire(game, TurnStarted(game.active))
 
 
 @dataclass(frozen=True, slots=True)

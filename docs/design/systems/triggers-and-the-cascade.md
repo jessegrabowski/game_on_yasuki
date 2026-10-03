@@ -415,7 +415,7 @@ assert list(triggers._trace) == [
     "EnteredPlay",
     "EnteredPlay",
     "    reveal P2's provinces",
-    "TurnStarted",
+    "TurnBoundary",
     "PhaseStarted",
 ]
 banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)]

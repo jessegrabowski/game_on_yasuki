@@ -1,7 +1,8 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.effects import RefillProvince
-from yasuki_core.engine.rules.vocabulary.game_events import Revealed, TurnStarted
+from yasuki_core.engine.rules.vocabulary.game_events import Revealed, TurnBoundary
 from yasuki_core.engine.rules.turn.sequence import begin_game
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -90,7 +91,12 @@ def test_every_reveal_resolves_before_the_turn_has_started(reacting):
     # already under way. The last card turned still precedes the turn starting.
     order = []
     reacting(Revealed, "reveal_probe", lambda ctx: order.append("revealed") or [])
-    reacting(TurnStarted, "reveal_probe", lambda ctx: order.append("turn-started") or [])
+    reacting(
+        TurnBoundary,
+        "reveal_probe",
+        lambda ctx: order.append("turn-started") or [],
+        boundary=Boundary.BEGINNING,
+    )
     game = _watching_game()
     province_card(game, "P1-a", seat=P1, face_up=False, index=0)
     province_card(game, "P1-b", seat=P1, face_up=False, index=1)

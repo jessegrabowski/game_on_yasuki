@@ -98,6 +98,7 @@ from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE, END_OF_TURN
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
+from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
     BattleResolved,
@@ -106,7 +107,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     DuelResolved,
     FavorDiscarded,
     HonorChanged,
-    TurnStarted,
+    TurnBoundary,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
@@ -782,8 +783,8 @@ def _way_of_the_dragon_experienced_lobby_bonus(game: GameState, card: L5RCard) -
     )
 
 
-@on(TurnStarted, "way_of_the_dragon_experienced")
-def _way_of_the_dragon_experienced_turn_started(ctx: TriggerContext) -> list[Effect]:
+@on(TurnBoundary, "way_of_the_dragon_experienced", boundary=Boundary.BEGINNING)
+def _way_of_the_dragon_experienced_turn_boundary(ctx: TriggerContext) -> list[Effect]:
     """After your turn begins, look at the top card of your Fate deck. You may put it on the bottom
     of the deck."""
     seat = ctx.card.owner

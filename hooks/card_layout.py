@@ -295,7 +295,7 @@ ROLES = frozenset(
         "entered_play",
         "destroyed",
         "straightened",
-        "turn_started",
+        "turn_boundary",
         "phase_started",
         "counter_changed",
         "province_destroyed",

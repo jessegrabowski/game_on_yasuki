@@ -66,7 +66,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     PhaseStarted,
     Revealed,
     Straightened,
-    TurnStarted,
+    TurnBoundary,
 )
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
@@ -375,7 +375,12 @@ def test_a_reveal_that_pauses_is_answered_before_the_turn_starts(reacting):
         "pause_probe",
         lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)],
     )
-    reacting(TurnStarted, "pause_probe", lambda ctx: started.append(ctx.event.seat) or [])
+    reacting(
+        TurnBoundary,
+        "pause_probe",
+        lambda ctx: started.append(ctx.event.seat) or [],
+        boundary=Boundary.BEGINNING,
+    )
     game = GameState.start(state, PlayerId.P1)
 
     sequence.begin_game(game)
@@ -406,9 +411,10 @@ def test_a_pause_on_the_turn_starting_leaves_a_clean_record_for_the_first_action
     state = TableState.empty_two_seat()
     put_in_play(state, holding("P1-eyes", printed_id="pause_probe"))
     reacting(
-        TurnStarted,
+        TurnBoundary,
         "pause_probe",
         lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "pause_probe", ctx.card.id)],
+        boundary=Boundary.BEGINNING,
     )
     game = GameState.start(state, PlayerId.P1)
     game.action_taken = "the Recruit of something"
@@ -1073,10 +1079,12 @@ def test_each_phase_announces_its_start_and_the_action_phase_follows_the_turn():
     end_phase(session)
 
     opening = [
-        event for event in session.game.turn_events if isinstance(event, TurnStarted | PhaseStarted)
+        event
+        for event in session.game.turn_events
+        if isinstance(event, TurnBoundary | PhaseStarted)
     ]
     assert opening == [
-        TurnStarted(PlayerId.P1),
+        TurnBoundary(PlayerId.P1, Boundary.BEGINNING),
         PhaseStarted(Phase.ACTION),
         PhaseStarted(Phase.BATTLE),
         PhaseStarted(Phase.DYNASTY),
@@ -1090,7 +1098,7 @@ def test_the_turn_history_is_dropped_as_the_next_turn_begins():
     end_turn(session)
 
     assert _resolutions(session.game) == []
-    assert any(isinstance(event, TurnStarted) for event in session.game.turn_events)
+    assert any(isinstance(event, TurnBoundary) for event in session.game.turn_events)
 
 
 def _watching_the_hand_reach(game: GameState, size: int, watching) -> list[int]:

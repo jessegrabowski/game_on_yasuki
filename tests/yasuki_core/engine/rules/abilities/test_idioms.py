@@ -19,7 +19,7 @@ from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
-from yasuki_core.engine.rules.vocabulary.game_events import TurnStarted
+from yasuki_core.engine.rules.vocabulary.game_events import FavorDiscarded
 from yasuki_core.ruleset import RingEntry
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
@@ -66,7 +66,9 @@ RING_ABILITY = Ability(
 )
 register_ring("ring_probe", ability=RING_ABILITY, pitch=True)
 register_ring("ring_probe_unpitched", ability=RING_ABILITY, pitch=False)
-register_trait_entry("trait_entry_probe", TurnStarted, lambda ctx: ctx.event.seat is ctx.card.owner)
+register_trait_entry(
+    "trait_entry_probe", FavorDiscarded, lambda ctx: ctx.event.seat is ctx.card.owner
+)
 
 
 def _probe(
@@ -216,7 +218,7 @@ def _trait_probe_game():
 def test_a_trait_entry_asks_its_owner_alone_when_the_guard_holds():
     game = _trait_probe_game()
 
-    fire(game, TurnStarted(P1))
+    fire(game, FavorDiscarded(P1))
 
     assert isinstance(game.pending, Confirm) and game.pending.seat is P1
     assert project(game, P2).pending is None
@@ -225,19 +227,19 @@ def test_a_trait_entry_asks_its_owner_alone_when_the_guard_holds():
 def test_a_trait_entry_stays_quiet_when_the_guard_fails():
     game = _trait_probe_game()
 
-    fire(game, TurnStarted(P2))
+    fire(game, FavorDiscarded(P2))
 
     assert game.pending is None
 
 
 def test_declining_a_trait_entry_leaves_the_card_in_hand_for_the_next_time():
     game = _trait_probe_game()
-    fire(game, TurnStarted(P1))
+    fire(game, FavorDiscarded(P1))
 
     submit(game, DecisionResponse(()))
     assert "held" in {card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards}
 
-    fire(game, TurnStarted(P1))
+    fire(game, FavorDiscarded(P1))
     assert isinstance(game.pending, Confirm)
     submit(game, DecisionResponse(("held",)))
 
@@ -249,7 +251,7 @@ def test_a_ruleset_reading_the_trait_as_an_action_is_refused(monkeypatch):
     game = _trait_probe_game()
 
     with pytest.raises(NotImplementedError, match="AS_ACTION"):
-        fire(game, TurnStarted(P1))
+        fire(game, FavorDiscarded(P1))
 
 
 def _variable_cost_game(ability_keywords, fixed_gold):

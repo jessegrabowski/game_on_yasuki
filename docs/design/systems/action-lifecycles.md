@@ -58,8 +58,8 @@ What is on the stack, and what each continues:
   card's entry into play is.
 - `ApplyEffects` in `effects.py`: the generic deferral, which {class}`~.Then` and the rulebook
   costs push.
-- `DrawAtEndOfTurn`, `EnforceMaximumHandSize`, `BeginNextTurn`, `OpenNextTurn`, `OpenFirstTurn`,
-  `AnnounceTurnStart` and `OpenRound` in `turn/sequence.py`: the turn boundary. The draw waits
+- `DrawAtEndOfTurn`, `EnforceMaximumHandSize`, `BeginNextTurn`, `OpenNextTurn`, `OpenFirstTurn`
+  and `OpenRound` in `turn/sequence.py`: the turn boundary. The draw waits
   behind the delayed effects the end of the turn resolves, the hand-size check behind whatever the
   draw fulfilled, the next turn behind the end-of-turn discard and what dropping the expiring
   modifiers fulfilled, and a turn's
