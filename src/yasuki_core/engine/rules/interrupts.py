@@ -242,6 +242,16 @@ def foreseen_now(game: GameState) -> tuple[Effect, ...]:
     return forecast(game, held.effects, held.provenance)
 
 
+def held_action_targets(game: GameState) -> tuple[str, ...]:
+    """The cards the action held at the Interrupt step targets: those already recorded, and the
+    target of a targeting still waiting there to resolve, as an Interrupt substituting it leaves it
+    (CR, Action Sequence step D)."""
+    waiting = (as_modified(game, effect) for effect in foreseen_now(game))
+    return game.action_targets + tuple(
+        targeting.target_id for targeting in waiting if isinstance(targeting, ResolveAbility)
+    )
+
+
 def interrupt_actions(game: GameState, seat: PlayerId) -> list[Action]:
     """The Interrupts ``seat`` may take against the action held at the Interrupt step, as a
     :class:`~.PlayInterrupt` per card and Interrupt that answers the forecast."""
