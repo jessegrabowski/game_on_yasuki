@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    fate_card,
     focus_card,
     holding,
     personality,
@@ -850,6 +851,26 @@ def test_a_decided_duel_still_shows_what_it_was_decided_on():
     assert [card.id for card in duel.challenged.focused] == ["P2-fv"]
     # Face up in a public pile by now, so both seats read the same cards.
     assert [card.id for card in project(game, PlayerId.P2).duel.challenged.focused] == ["P2-fv"]
+
+
+def test_a_card_announced_out_of_hand_is_not_projected_in_it():
+    # A Strategy played from hand sits in its resolution area until it lands (CR, Resolution Area),
+    # which is what `cards_in_hand` counts. The zone it was drawn from still holds it, so a client
+    # rendering that zone would show it sitting in the hand of the player resolving it.
+    game = two_seat_game()
+    card = register(game.table, fate_card("played", PlayerId.P1))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+
+    before = project(game, PlayerId.P1).table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    assert [held.id for held in before.cards] == ["played"]
+
+    game.announced_from_hand |= {"played"}
+
+    after = project(game, PlayerId.P1).table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    assert after.cards == ()
+    # And it is gone from the opponent's reading of that hand too, which is a count of backs.
+    theirs = project(game, PlayerId.P2).table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    assert theirs.cards == ()
 
 
 def test_a_duel_carries_the_card_that_created_it():

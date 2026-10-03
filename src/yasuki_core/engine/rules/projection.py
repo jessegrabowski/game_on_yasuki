@@ -1,9 +1,9 @@
 from collections.abc import Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.redaction import HiddenCard, redact, ViewSnapshot
+from yasuki_core.engine.redaction import HiddenCard, ZoneView, redact, ViewSnapshot
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.duel.procedure import duel_stat
 from yasuki_core.engine.rules.duel.records import DuelRecord
@@ -342,7 +342,7 @@ def project(game: GameState, viewer: PlayerId) -> GameView:
     viewer's own Legacy pool and remaining dynasty deck, and the effective stats of every card
     carrying a modifier."""
     pending = game.pending if game.pending is not None and game.pending.seat is viewer else None
-    table = redact(game.table, viewer)
+    table = _without_the_resolution_area(game, redact(game.table, viewer))
     attack = _project_attack(game, table)
     return GameView(
         viewer=viewer,
@@ -422,8 +422,34 @@ def _as_seen(table: ViewSnapshot, card_ids: list[str]) -> tuple[L5RCard | Hidden
         card = placed.card
         # A card the viewer cannot identify keeps its id under a different name, and it still has to
         # be found here: an unidentifiable card in play reaches the client as a back, not as a gap.
-        in_play[card.card_id if isinstance(card, HiddenCard) else card.id] = card
+        in_play[_card_id(card)] = card
     return tuple(in_play[card_id] for card_id in card_ids if card_id in in_play)
+
+
+def _without_the_resolution_area(game: GameState, table: ViewSnapshot) -> ViewSnapshot:
+    """``table`` with every card announced out of a hand taken out of it.
+
+    A card played from hand sits in a resolution area until it lands (CR, Resolution Area), which is
+    what :func:`~yasuki_core.engine.rules.board.seats.cards_in_hand` already counts. The zone it is
+    drawn from still holds it, so a client rendering that zone shows a Strategy sitting in the hand
+    of the player resolving it. The projection is where the two are reconciled, once, rather than in
+    each client.
+    """
+    announced = game.announced_from_hand
+    if not announced:
+        return table
+    zones = {
+        key: ZoneView(tuple(card for card in zone.cards if _card_id(card) not in announced))
+        if key.role is ZoneRole.HAND
+        else zone
+        for key, zone in table.zones.items()
+    }
+    return replace(table, zones=zones)
+
+
+def _card_id(card: L5RCard | HiddenCard) -> str:
+    """A card's id, whether or not the viewer may identify it."""
+    return card.card_id if isinstance(card, HiddenCard) else card.id
 
 
 def _project_duel(game: GameState, table: ViewSnapshot) -> DuelView | None:
