@@ -109,10 +109,12 @@ stashes its remainder there as a {class}`~.ResumeCascade`:
 :language: python
 ```
 
-Everything the walk had in hand goes with it: the effects not yet committed, the triggers not yet
-fired, the event being answered, and the events still queued. {func}`~.resume_paused_cascade` pops
-that stash when a card choice is answered and splices the answer's effects in where the paused
-one stood, ahead of all of that, dropping any trigger whose card has left play in the meantime.
+Everything the walk had in hand goes with it, as the stack of frames it was walking: the effects not
+yet committed and the provenance they carry, the triggers not yet fired, the event being answered,
+and the events still queued. {func}`~.resume_paused_cascade` pops that stash when a card choice is
+answered and splices the answer's effects into the top frame, where the paused one stood, ahead of
+the rest of that frame and every frame beneath it, dropping any trigger whose card has left play in
+the meantime.
 The stash is always the top of the stack, because a choice pauses the walk the moment it is
 raised and nothing pushes between the pause and the answer.
 
