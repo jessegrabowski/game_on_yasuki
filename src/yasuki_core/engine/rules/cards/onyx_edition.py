@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
     Banish,
+    Bow,
     Choose,
     CreateToken,
     DelayedEffect,
@@ -47,6 +48,7 @@ from yasuki_core.engine.rules.effects import (
     Evaluate,
     Fear,
     GainHonor,
+    GrantDuelStat,
     GrantKeyword,
     GrantSeatAbility,
     Move,
@@ -55,6 +57,7 @@ from yasuki_core.engine.rules.effects import (
     RevokeGrants,
     Show,
     Simultaneously,
+    StartDuel,
     Straighten,
     TakeFavor,
 )
@@ -76,10 +79,11 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
-from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_BATTLE
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.triggers import TriggerContext, action_recruited, choice_resolver, on
 from yasuki_core.engine.rules.board.clans import card_alignments
+from yasuki_core.engine.rules.duel.procedure import duel_decided_by
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import (
     attack_targets,
@@ -181,6 +185,55 @@ register_terrain(
     "fields_of_slaughter",
     timings=(ActionTiming.BATTLE, ActionTiming.ENGAGE),
     ability_keywords=frozenset({keywords.POLITICAL, keywords.TERRAIN}),
+)
+
+
+# --- Hida Haikeru ---
+
+
+def _hida_haikeru_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The enemy Personalities Haikeru faces at the battle, which the card challenges."""
+    return list(opposing_units_in_battle(game, source.owner))
+
+
+def _hida_haikeru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Challenge the target to a duel of Force.
+
+    The CR names the duel stat per Personality rather than per duel, so a duel of Force is both
+    duelists being told to compare it (CR, Duel Stat). The overrides are bound ahead of the duel so
+    its declaration announces the stats it compares, and they lapse with the duel.
+    """
+    return [
+        *(
+            GrantDuelStat(source.id, duelist, Stat.FORCE, DUEL_CONSEQUENCES)
+            for duelist in (source.id, target.id)
+        ),
+        StartDuel(source.id, target.id, source.id),
+        DelayedEffect(Evaluate("hida_haikeru_loser", source.id, source.owner), DUEL_CONSEQUENCES),
+    ]
+
+
+@choice_resolver("hida_haikeru_loser")
+def _resolve_hida_haikeru_loser(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Bow the challenged Personality if it lost. A tie is lost by both, so it is bowed then too,
+    and nothing happens to Haikeru on any outcome."""
+    duel = duel_decided_by(game, source_id)
+    if duel is None or duel.challenged not in duel.outcome.losers:
+        return []
+    return [Bow(duel.challenged_duelist)]
+
+
+register_ability(
+    "hida_haikeru",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_hida_haikeru_targets,
+        targeting_message="an enemy Personality",
+        effects=_hida_haikeru_effects,
+    ),
 )
 
 

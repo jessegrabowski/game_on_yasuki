@@ -69,6 +69,7 @@ from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISC
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules.stats.ongoing_grants import named_duel_stat
 from yasuki_core.engine.rules.rulebook.kharmic import (
     KHARMIC_DRAW,
     KHARMIC_REFILL,
@@ -1764,3 +1765,71 @@ def test_togashis_library_draws_the_top_card_only_below_the_targets_chi(top_focu
     deck = [card.id for card in session.game.table.decks[DeckKey(P1, Side.FATE)].cards]
     assert ("top" in hand) is drawn
     assert deck == (["under"] if drawn else ["top", "under"])
+
+
+# --- Hida Haikeru ---
+
+
+def _haikeru_in_combat(*, rival_force: int, rival_chi: int) -> EngineSession:
+    """The Combat Segment of P1's attack, Haikeru facing one enemy Personality whose Force and Chi
+    are given, so a duel decided on the wrong stat picks the other winner."""
+    cards = [
+        personality("haikeru", printed_id="hida_haikeru", force=5, chi=2),
+        personality("rival", owner=P2, force=rival_force, chi=rival_chi),
+    ]
+    return combat_segment(cards, {"haikeru": 0}, {"rival": 0})
+
+
+def _duel_the_rival(session: EngineSession) -> EngineSession:
+    """Take Haikeru's ability against the rival and carry the duel to its end."""
+    session.act(P1, ActivateAbility("haikeru"))
+    session.submit(P1, DecisionResponse(("rival",)))
+    return session
+
+
+def test_haikerus_duel_compares_force_and_bows_the_loser():
+    # Chi is reversed against Force, so a duel decided on the arc's default stat gives the rival
+    # the win and leaves it unbowed.
+    session = _duel_the_rival(_haikeru_in_combat(rival_force=1, rival_chi=9))
+
+    duel = session.game.duel
+    assert duel.outcome.winners == (P1,)
+    assert duel.outcome.totals == {P1: 5, P2: 1}
+    assert session.game.table.cards_by_id["rival"].bowed
+
+
+def test_haikeru_losing_his_own_duel_bows_nobody():
+    # "Bow the target if they lose" is the only consequence the card carries, so a Haikeru who
+    # loses leaves both Personalities standing.
+    session = _duel_the_rival(_haikeru_in_combat(rival_force=9, rival_chi=1))
+
+    duel = session.game.duel
+    assert duel.outcome.losers == (P1,)
+    assert not session.game.table.cards_by_id["rival"].bowed
+    assert not session.game.table.cards_by_id["haikeru"].bowed
+
+
+def test_a_tie_on_force_bows_the_target_because_both_personalities_lose():
+    # A tie the Duelist tiebreak cannot separate is lost by both (CR, Duel), and the target losing
+    # is what the card reads.
+    session = _duel_the_rival(_haikeru_in_combat(rival_force=5, rival_chi=1))
+
+    duel = session.game.duel
+    assert duel.outcome.winners == ()
+    assert set(duel.outcome.losers) == {P1, P2}
+    assert session.game.table.cards_by_id["rival"].bowed
+
+
+def test_haikerus_duel_stat_does_not_outlive_the_duel():
+    # The override is scoped to the duel's end rather than the turn's, so a second duel between the
+    # same Personalities compares the arc's default again.
+    session = _duel_the_rival(_haikeru_in_combat(rival_force=1, rival_chi=9))
+
+    assert named_duel_stat(session.game, "haikeru") is None
+    assert named_duel_stat(session.game, "rival") is None
+
+
+def test_haikeru_replays_to_the_same_board():
+    session = _duel_the_rival(_haikeru_in_combat(rival_force=1, rival_chi=9))
+
+    assert replay(session.log).table == session.game.table
