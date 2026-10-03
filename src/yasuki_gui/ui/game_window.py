@@ -163,6 +163,7 @@ class GameWindow:
         # board answers for whatever the pointer is on when no panel is. Bound alongside the
         # board's own keys rather than through them, so reconfiguring those cannot drop it.
         self._card_panels: tuple[CardPanel, ...] = (
+            self.duel_view,
             self.look_view,
             self.battle_view,
             self.card_strip,
