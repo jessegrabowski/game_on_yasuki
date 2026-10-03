@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -67,24 +67,31 @@ def _sanctioned_duel_effects(game: GameState, source: L5RCard, target: L5RCard) 
             maximum=1,
             resolver="sanctioned_duel_challenge",
             source_id=target.id,
+            resolver_context=(source.id,),
         )
     ]
 
 
 @choice_resolver("sanctioned_duel_challenge", prompt="Choose the Personality to challenge")
 def _resolve_sanctioned_duel_challenge(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
 ) -> list[Effect]:
     """Put the challenge to the challenged Personality's controller, who may refuse it (CR,
-    Challenge). ``source_id`` is the challenger, picked as the card's target."""
+    Challenge). ``source_id`` is the challenger, picked as the card's target, and
+    ``resolver_context`` carries the Strategy that is asking."""
     challenged = game.table.cards_by_id[chosen[0]]
+    (strategy,) = resolver_context
     return [
         AskOption(
             seat=challenged.owner,
             options=(SANCTIONED_DUEL_REFUSE, SANCTIONED_DUEL_ACCEPT),
             question=f"{challenged.name} is challenged to a duel",
             resolver=SANCTIONED_DUEL_RESOLVER,
-            source_id=_sanctioned_duel_card(game),
+            source_id=strategy,
             resolver_context=(source_id, challenged.id),
         )
     ]
@@ -127,14 +134,6 @@ def _resolve_sanctioned_duel_loser(
     if duel is None or duel.outcome is None:
         return []
     return [Destroy(duel.duelist_of(loser), seat) for loser in duel.outcome.losers]
-
-
-def _sanctioned_duel_card(game: GameState) -> str:
-    """The Strategy's own id, which creates the duel and which no resolver argument carries."""
-    action = game.action
-    if not isinstance(action, PlayStrategy):
-        raise RuntimeError("Sanctioned Duel resolved outside the Strategy that plays it")
-    return action.card_id
 
 
 register_ability(
