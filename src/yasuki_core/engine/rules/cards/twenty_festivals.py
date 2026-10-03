@@ -2,7 +2,13 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.board.queries import has_keyword, opposed_units_in_battle, units_at
-from yasuki_core.engine.rules.effects import AdjustCounter, Effect, GrantModifier, Straighten
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Effect,
+    GrantModifier,
+    Simultaneously,
+    Straighten,
+)
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.membership import attachments_of
@@ -106,7 +112,8 @@ def _the_unassailable_fortress_of_the_crab_effects(
     outnumbered = len(own_army) < len(enemy_army)
     effects: list[Effect] = [Straighten(target.id)]
     if outnumbered:
-        effects.extend(Straighten(attached.id) for attached in attachments_of(game, target))
+        attachments = attachments_of(game, target)
+        effects.append(Simultaneously(tuple(Straighten(attached.id) for attached in attachments)))
     return effects
 
 

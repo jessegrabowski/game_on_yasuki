@@ -54,6 +54,7 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     RevokeGrants,
     Show,
+    Simultaneously,
     Straighten,
     TakeFavor,
 )
@@ -222,7 +223,8 @@ def _kitsu_hayako_invest(game: GameState, source: L5RCard, amount: int) -> list[
     Creates two separate Ancestor cards, not one counted twice.
     """
     ancestors = 2 if amount == max(invest_amounts(game, source)) else 1
-    return [CreateToken(LION_ANCESTOR, source.owner, source.id) for _ in range(ancestors)]
+    created = (CreateToken(LION_ANCESTOR, source.owner, source.id) for _ in range(ancestors))
+    return [Simultaneously(tuple(created))]
 
 
 register_invest(

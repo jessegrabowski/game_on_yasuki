@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.effects import (
     MoveToDeck,
     RangedAttack,
     ShuffleDeck,
+    Simultaneously,
     Straighten,
     Then,
 )
@@ -372,10 +373,11 @@ def _tetsuo_hiyamako_experienced_entered_play(ctx: TriggerContext) -> list[Effec
     """
     if ctx.event.card_id != ctx.card.id:
         return []
-    return [
+    claws = (
         CreateToken(HIYAMAKOS_CLAW, ctx.card.owner, ctx.card.id, attach_to=ctx.card.id)
         for _ in range(CLAW_COUNT)
-    ]
+    )
+    return [Simultaneously(tuple(claws))]
 
 
 # --- Togashi Bairei ---
@@ -503,7 +505,7 @@ def _wheat_farm_entered_play(ctx: TriggerContext) -> list[Effect]:
 def _resolve_wheat_farm(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
+    return [Simultaneously(tuple(AdjustCounter(card_id, WEALTH, 1) for card_id in chosen))]
 
 
 # --- Wrath of the Shattered Star ---

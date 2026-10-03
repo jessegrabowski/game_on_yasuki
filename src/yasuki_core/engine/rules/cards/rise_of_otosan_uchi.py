@@ -86,6 +86,7 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     ReshuffleFromHand,
     ShuffleDeck,
+    Simultaneously,
     SpendOncePerTurn,
     Straighten,
     Then,
@@ -182,12 +183,13 @@ def _blessings_of_the_red_panda_spirit_targets(game: GameState, card: L5RCard) -
 def _blessings_of_the_red_panda_spirit_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """A gift to the table, then a question. Every seat gains and draws in seat order. The reshuffle
+    """A gift to the table, then a question. Every seat gains at once, then every seat draws at once
+    ("each step of each procedure takes place simultaneously", CR, Timing Conflicts). The reshuffle
     is deferred so it follows the draws, which is the order the card states."""
-    gifts: list[Effect] = []
-    for seat in game.table.seats:
-        gifts.append(GainHonor(seat, 1))
-        gifts.append(DrawCard(seat))
+    gifts = [
+        Simultaneously(tuple(GainHonor(seat, 1) for seat in game.table.seats)),
+        Simultaneously(tuple(DrawCard(seat) for seat in game.table.seats)),
+    ]
     question = f"Shuffle {source.name} into your Dynasty deck instead of discarding it?"
     return [
         *gifts,
@@ -277,7 +279,8 @@ def _bound_in_blood_effects(
             (Stat.CHI, len(bound)),
         ),
     )
-    return [horror, *(Banish(card.id) for card in bound), Destroy(source.id, source.owner)]
+    banished = Simultaneously(tuple(Banish(card.id) for card in bound))
+    return [horror, banished, Destroy(source.id, source.owner)]
 
 
 register_ability(
@@ -525,14 +528,15 @@ def _dark_ring_of_earth_experienced_effects(
 ) -> list[Effect]:
     """Move home every unit in the attacking army, bowing every card in it as it moves (CR,
     Unit)."""
-    return [
+    sent_home = (
         effect
         for personality in _dark_ring_of_earth_experienced_army(game, source)
         for effect in (
             Move(personality.id, Location.home(personality.owner)),
             *(Bow(card.id) for card in unit_of(game, personality)),
         )
-    ]
+    )
+    return [Simultaneously(tuple(sent_home))]
 
 
 register_ring(
@@ -677,7 +681,7 @@ def _dark_ring_of_the_void_experienced_cost(game: GameState, source: L5RCard) ->
 def _resolve_dark_ring_of_the_void_experienced_banish(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    return [Banish(card_id) for card_id in chosen]
+    return [Simultaneously(tuple(Banish(card_id) for card_id in chosen))]
 
 
 def _dark_ring_of_the_void_experienced_effects(
@@ -938,7 +942,7 @@ def _resolve_legacy_of_fudo(
     named = seat_named(game, chosen[0])
     return [
         ReshuffleFromHand(named, FUDO_RESHUFFLED),
-        *(DrawCard(named) for _ in range(FUDO_DRAWN)),
+        Simultaneously(tuple(DrawCard(named) for _ in range(FUDO_DRAWN))),
     ]
 
 
@@ -1085,10 +1089,12 @@ def _shinjo_saeki_clan_champion_experienced_2_entered_play(ctx: TriggerContext) 
     if ctx.event.card_id != ctx.card.id:
         return []
     cavalry = ctx.game.table.creatable_tokens[CAVALRY_FOLLOWER]
-    return [
+    riders = creation_targets(ctx.game, ctx.card.owner, cavalry, keyword=keywords.CAVALRY)
+    followers = (
         CreateToken(CAVALRY_FOLLOWER, ctx.card.owner, ctx.card.id, attach_to=rider.id)
-        for rider in creation_targets(ctx.game, ctx.card.owner, cavalry, keyword=keywords.CAVALRY)
-    ]
+        for rider in riders
+    )
+    return [Simultaneously(tuple(followers))]
 
 
 # --- Shinsei's Heart ---
@@ -1240,10 +1246,11 @@ def _resolve_togashi_higaru_open(
         return [Straighten(target_id)]
     higaru = game.table.cards_by_id[source_id]
     bonus = _togashi_higaru_clan_champion_experienced_3_bonus(game, higaru)
-    return [
+    bonuses = (
         GrantModifier(source_id, target_id, stat, bonus, Duration.UNTIL_END_OF_TURN)
         for stat in (Stat.FORCE, Stat.CHI)
-    ]
+    )
+    return [Simultaneously(tuple(bonuses))]
 
 
 register_ability(
