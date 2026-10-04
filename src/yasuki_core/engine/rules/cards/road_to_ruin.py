@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.abilities.model import (
     CardLocation,
     Interrupt,
     Interruption,
+    TargetGroup,
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
@@ -67,8 +68,15 @@ from yasuki_core.engine.rules.board.queries import (
     personalities_in_play,
     province_key_holding,
 )
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    PickedTargets,
+    PickLimit,
+    TotalAtMost,
+)
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
@@ -80,6 +88,97 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import MINUS_1F
 from yasuki_core.game_pieces.prints import HoldingPrint, RingPrint
+
+
+# --- Desperate Melee ---
+
+DESPERATE_MELEE_MOST_FOLLOWERS = 2
+DESPERATE_MELEE_MOST_FOR_A_BERSERKER = 5
+
+
+def _desperate_melee_targets(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "Target your Personality": the one whose Gold Cost bounds what the melee reaches."""
+    return [card.id for card in owned_personalities(game, source.owner)]
+
+
+def _desperate_melee_followers(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """ "Target and destroy ... enemy Followers": the Followers carried by the units facing you."""
+    by_id = game.table.cards_by_id
+    return [
+        follower.id
+        for enemy_id in opposing_units_in_battle(game, source.owner)
+        for follower in followers_of(game, by_id[enemy_id])
+    ]
+
+
+def _desperate_melee_personality(game: GameState, picked: PickedTargets) -> L5RCard:
+    """The Personality the first phrase targeted, whose Berserker keyword and Gold Cost the second
+    phrase is read against."""
+    return game.table.cards_by_id[picked[0][0]]
+
+
+def _desperate_melee_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    """ "one to two enemy Followers, or one to five enemy Followers if your Personality is a
+    Berserker"."""
+    personality = _desperate_melee_personality(game, picked)
+    berserker = keywords.BERSERKER in effective_keywords(game, personality)
+    return 1, DESPERATE_MELEE_MOST_FOR_A_BERSERKER if berserker else DESPERATE_MELEE_MOST_FOLLOWERS
+
+
+def _desperate_melee_limits(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> tuple[PickLimit, ...]:
+    """ "with total Gold Cost less than your Personality's"."""
+    bound = effective_gold_cost(game, _desperate_melee_personality(game, picked)) - 1
+    weights = tuple(
+        (follower_id, effective_gold_cost(game, game.table.cards_by_id[follower_id]))
+        for follower_id in _desperate_melee_followers(game, source, picked)
+    )
+    return (TotalAtMost(weights, bound),)
+
+
+def _desperate_melee_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """The enemy Followers die together, and then your Personality's own, which the card destroys
+    whether or not the melee reached anything."""
+    (personality,), followers = groups
+    seat = source.owner
+    dying = (followers, followers_of(game, personality))
+    return [
+        Simultaneously(tuple(Destroy(follower.id, seat) for follower in dead))
+        for dead in dying
+        if dead
+    ]
+
+
+register_ability(
+    "desperate_melee",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_desperate_melee_targets,
+                targeting_message="your Personality",
+            ),
+            TargetGroup(
+                candidates=_desperate_melee_followers,
+                count=_desperate_melee_count,
+                limits=_desperate_melee_limits,
+                targeting_message=(
+                    "the enemy Followers with total Gold Cost less than your Personality's"
+                ),
+            ),
+        ),
+        effects_for_groups=_desperate_melee_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
 
 
 # --- Dull Tanto ---

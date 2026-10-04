@@ -27,15 +27,20 @@ yasuki_core.engine.rules.vocabulary.decisions
     DecisionResponse
     FocusOrStrike
     LeaveBowed
+    OneGroup
+    PickLimit
+    TotalAtMost
 
 .. rubric:: Functions
 
 .. autosummary::
 
+    answerable
     assignment
     assignment_token
     focus_source
     focus_token
+    within_reach
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.decisions
     :members:

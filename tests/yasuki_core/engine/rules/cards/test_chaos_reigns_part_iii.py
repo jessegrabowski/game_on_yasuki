@@ -973,3 +973,136 @@ def test_matsu_hanshiro_melees_again_only_after_his_deathseeker_falls_this_battl
     session.act(P2, Pass())
 
     assert (ActivateAbility("hanshiro") in session.legal_actions(P1)) is deathseeker_fell
+
+
+# --- With Regards ---
+
+
+def _with_regards_game(*, chi: int = 3, victim_cost: int = 5) -> EngineSession:
+    """P1 holding With Regards with two unbowed Merchants in play, and an enemy Personality whose
+    Gold Cost the Merchants' combined Chi is measured against."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(state, register(state, holding("mine", owner=P1, gold_production=4)))
+    for card_id in ("first", "second"):
+        # Priced out of the action's own reach, so only the enemy Personality is ever a victim.
+        put_in_play(state, personality(card_id, chi=chi, gold_cost=9, keywords=("Merchant",)))
+    put_in_play(state, personality("victim", owner=P2, gold_cost=victim_cost))
+    regards = L5RCard.of(
+        ActionPrint,
+        id="regards",
+        printed_id="with_regards",
+        name="With Regards",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, regards))
+    return EngineSession.start(state, P1)
+
+
+def test_with_regards_destroys_a_personality_under_the_targets_combined_chi():
+    session = _with_regards_game(chi=3, victim_cost=5)
+
+    session.act(P1, PlayStrategy("regards"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("first", "second")))
+    session.submit(P1, DecisionResponse(("victim",)))
+
+    discard = session.game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)]
+    assert "victim" in {card.id for card in discard.cards}
+    assert session.game.favor_holder is P1
+
+
+def test_with_regards_bows_its_merchants_when_taken_as_an_open():
+    session = _with_regards_game()
+
+    session.act(P1, PlayStrategy("regards"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("first", "second")))
+    session.submit(P1, DecisionResponse(("victim",)))
+
+    cards = session.game.table.cards_by_id
+    assert cards["first"].bowed and cards["second"].bowed
+
+
+def test_with_regards_offers_only_what_the_merchants_combined_chi_outreaches():
+    session = _with_regards_game(chi=2, victim_cost=5)
+
+    session.act(P1, PlayStrategy("regards"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("first", "second")))
+
+    # A combined Chi of 4 reaches nothing at Gold Cost 5, so the second phrase targets nothing and
+    # the action resolves having destroyed no one.
+    assert session.game.pending is None
+    assert "victim" in session.game.table.cards_by_id
+
+
+def test_with_regards_takes_at_least_two_merchants():
+    session = _with_regards_game()
+
+    session.act(P1, PlayStrategy("regards"))
+    pay(session, P1)
+
+    pending = session.game.pending
+    assert pending.minimum == 2
+    assert pending.accepts(DecisionResponse(("first",))) is False
+
+
+def test_with_regards_is_withheld_with_only_one_merchant():
+    session = _with_regards_game()
+    session.game.table.cards_by_id["second"].bow()
+
+    assert PlayStrategy("regards") not in session.legal_actions(P1)
+
+
+def test_with_regards_backs_out_of_its_second_phrase_to_its_first():
+    session = _with_regards_game()
+    session.act(P1, PlayStrategy("regards"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("first", "second")))
+    taped = len(session.log.entries)
+
+    assert session.abort(P1) is True
+
+    # Targeting changes nothing on the board, so only the answer that settled the first phrase
+    # comes off the tape and that phrase is asked again.
+    pending = session.game.pending
+    assert pending.settled == ()
+    assert set(pending.candidates) == {"first", "second"}
+    assert len(session.log.entries) == taped - 1
+
+
+def test_with_regards_leaves_its_merchants_unbowed_in_a_battle():
+    regards = L5RCard.of(
+        ActionPrint,
+        id="regards",
+        printed_id="with_regards",
+        name="With Regards",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    session = combat_segment(
+        [
+            personality("first", chi=3, gold_cost=9, keywords=("Merchant",)),
+            personality("second", chi=3, gold_cost=9, keywords=("Merchant",)),
+            personality("victim", owner=P2, gold_cost=5),
+            holding("mine", owner=P1, gold_production=4),
+        ],
+        {"first": 0, "second": 0},
+        {"victim": 0},
+        in_hand=[regards],
+    )
+
+    session.act(P1, PlayStrategy("regards"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("first", "second")))
+    session.submit(P1, DecisionResponse(("victim",)))
+
+    # "bow them if this is Open": taken as a Battle action, the Merchants stay standing.
+    cards = session.game.table.cards_by_id
+    assert not cards["first"].bowed and not cards["second"].bowed
+    discard = session.game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)]
+    assert "victim" in {card.id for card in discard.cards}

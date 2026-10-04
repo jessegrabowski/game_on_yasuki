@@ -10,6 +10,8 @@ yasuki_core.engine.rules.legality
     action_gold
     activatable
     can_proclaim
+    first_phrase_reachable
+    group_targets
     has_absent_ability
     has_presence
     has_wind

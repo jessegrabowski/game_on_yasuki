@@ -206,6 +206,11 @@ class Presenter:
         # repointed here rather than at each of those call sites. One of them used to forget.
         window.field.state = self.host.session.game.table
         window.field.gold = view.gold[view.viewer]
+        pending = self.host.runner.pending
+        if pending is not None and pending.limits:
+            # A limited choice narrows as it is answered: picking a card leaves only what the
+            # limits still permit selectable, and taking that pick back opens the board up again.
+            window.field.restrict_selection(pending.selectable(self._board_answer()))
         window.field.render_snapshot(view.table, self.host.human_seat, view.stats)
         window.refresh_pile()
         window.phase_bar.refresh(view)

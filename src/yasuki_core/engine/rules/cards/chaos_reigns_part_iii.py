@@ -7,16 +7,28 @@ from yasuki_core.engine.rules.abilities.idioms import (
     register_entry,
     register_yu,
 )
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    InvestAbility,
+    TargetGroup,
+    itself,
+)
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
     owned_holdings,
+    owned_personalities,
     personalities_in_play,
 )
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.action_record import action_round
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.legality import permitted_timings_in
+from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_discount
 from yasuki_core.engine.rules.gold.production import gold_handler
@@ -32,8 +44,10 @@ from yasuki_core.engine.rules.effects import (
     Arrange,
     Ask,
     AskOption,
+    Bow,
     Choose,
     CreateToken,
+    Destroy,
     Discard,
     DiscardFromHand,
     Dishonor,
@@ -53,6 +67,8 @@ from yasuki_core.engine.rules.effects import (
     Show,
     ShuffleDeck,
     Simultaneously,
+    PayGold,
+    TakeFavor,
 )
 from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
@@ -776,6 +792,88 @@ register_ability(
         targets=itself,
         effects=_walk_with_tengoku_effects,
         hits_every_target=True,
+    ),
+)
+
+
+# --- With Regards ---
+
+WITH_REGARDS_GOLD = 4
+WITH_REGARDS_FEWEST_TARGETED = 2
+
+
+def _with_regards_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [PayGold(source.owner, WITH_REGARDS_GOLD, source.name)]
+
+
+def _with_regards_targets(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "your unbowed Merchant or Ninja Personalities"."""
+    wanted = {keywords.MERCHANT, keywords.NINJA}
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if not card.bowed and wanted & effective_keywords(game, card)
+    ]
+
+
+def _with_regards_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    """ "two or more": every one on offer, if the seat likes, since each adds its Chi to what the
+    action can destroy."""
+    return WITH_REGARDS_FEWEST_TARGETED, len(offered)
+
+
+def _with_regards_victims(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "a target Personality with a lower Gold Cost than the combined Chi of your Personalities
+    this targeted": the first phrase settles the figure, so this one is read against it rather
+    than limited as a set."""
+    by_id = game.table.cards_by_id
+    combined = sum(effective_chi(game, by_id[card_id]) for card_id in picked[0])
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if effective_gold_cost(game, card) < combined
+    ]
+
+
+def _with_regards_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """Bow the Merchants for an Open, destroy the Personality, take the Favor."""
+    targeted, victims = groups
+    seat = source.owner
+    # Not a ``To``: that links one effect to one, and this sentence bows a whole phrase's worth of
+    # cards, so the bow and the destruction are applied in the order the card prints them.
+    taken_as_open = ActionTiming.BATTLE not in permitted_timings_in(game, action_round(game), seat)
+    effects: list[Effect] = []
+    if taken_as_open:
+        effects.append(Simultaneously(tuple(Bow(card.id) for card in targeted)))
+    effects.extend(Destroy(victim.id, seat) for victim in victims)
+    effects.append(TakeFavor(seat))
+    return effects
+
+
+register_ability(
+    "with_regards",
+    Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        cost=_with_regards_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_with_regards_targets,
+                count=_with_regards_count,
+                targeting_message="your unbowed Merchant or Ninja Personalities",
+            ),
+            TargetGroup(
+                candidates=_with_regards_victims,
+                targeting_message=(
+                    "a Personality with a lower Gold Cost than your Personalities' combined Chi"
+                ),
+            ),
+        ),
+        effects_for_groups=_with_regards_effects,
+        located_at=(CardLocation.HAND,),
     ),
 )
 

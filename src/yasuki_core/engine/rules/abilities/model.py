@@ -1,12 +1,13 @@
 from collections.abc import Callable
 from itertools import zip_longest
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from types import UnionType
 
 from yasuki_core.engine.rules.abilities.costs import Cost, no_cost, priced_cost
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.effects import Effect, Simultaneously
+from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets, PickLimit
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.gold.discounts import Purchase
 from yasuki_core.engine.rules.state import GameState
@@ -164,6 +165,59 @@ class Interrupt[T: Effect]:
 
 
 @dataclass(frozen=True, slots=True)
+class TargetGroup:
+    """One "target ..." phrase of an ability: the cards it offers, how many of them the seat takes
+    at once, and the conditions on the set it takes (CR, Action Sequence step C).
+
+    An ability printing two such phrases declares one group each, in print order. Desperate Melee
+    reads "Target your Personality. Target and destroy one to two enemy Followers ... with total
+    Gold Cost less than your Personality's": two groups, the second asked once the first is
+    settled, which is why a group is handed the picks already made and can work out its candidates,
+    its count and its limits from them.
+
+    Attributes
+    ----------
+    candidates : callable
+        Maps ``(game, source_card, picked)`` to the ids this phrase may be pointed at, where
+        ``picked`` is the groups already settled, in order. The Rules of Location are applied to
+        what it returns, as they are to a one-phrase ability's ``targets``.
+    count : callable, optional
+        Maps ``(game, source_card, picked, offered)`` to the fewest and the most targets this phrase
+        takes: ``(1, 2)`` for "one or two". ``offered`` is what the phrase may be pointed at once the
+        Rules of Location and its own limits have had their say, for a card whose count is "any
+        number of them" or as many as the board allows. The maximum is clamped to it. Default
+        exactly one.
+    limits : callable, optional
+        Maps ``(game, source_card, picked)`` to the
+        :class:`~yasuki_core.engine.rules.vocabulary.decisions.PickLimit` conditions the phrase
+        puts on the set, which narrow the board as the seat picks. Default none.
+    targeting_message : str, optional
+        What this phrase targets, worded as the card prints it. Default None, which asks for a
+        card.
+    """
+
+    candidates: Callable[[GameState, L5RCard, PickedTargets], list[str]]
+    count: (
+        Callable[[GameState, L5RCard, PickedTargets, tuple[str, ...]], tuple[int, int]] | None
+    ) = None
+    limits: Callable[[GameState, L5RCard, PickedTargets], tuple[PickLimit, ...]] | None = None
+    targeting_message: str | None = None
+
+    def wanted(
+        self, game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+    ) -> tuple[int, int]:
+        """The fewest and the most targets this phrase takes, given the picks already made and the
+        ids on offer."""
+        return (1, 1) if self.count is None else self.count(game, source, picked, offered)
+
+    def conditions(
+        self, game: GameState, source: L5RCard, picked: PickedTargets
+    ) -> tuple[PickLimit, ...]:
+        """The limits on this phrase's set, given the picks already made."""
+        return () if self.limits is None else self.limits(game, source, picked)
+
+
+@dataclass(frozen=True, slots=True)
 class Ability:
     """An activated ability, on a card in play or on one waiting face-up in a Province.
 
@@ -185,9 +239,11 @@ class Ability:
     cost : callable
         Maps ``(game, source_card)`` to the effects paid to activate, applied before the ability's
         own.
-    targets : callable
+    targets : callable, optional
         Maps ``(game, source_card)`` to the ids of the cards the ability may target, empty when
-        none are legal, which also means the ability can't be offered.
+        none are legal, which also means the ability can't be offered. The shorthand for a card
+        printing one "target" phrase that takes exactly one card, which is nearly all of them. Set
+        it or ``target_groups``, never both. Default None.
     targeting_message : str, optional
         What the ability targets, worded as the card prints it: "your Courtier at any location".
         The target prompt reads "Target your Courtier at any location for Inexplicable Challenge".
@@ -261,19 +317,21 @@ class Ability:
         reads from ``game.amount_declared`` (CR, Action Sequence steps B and C). The ability is offered
         whenever its cost is payable, and an amount that reaches no target targets nothing.
         Default False.
-    target_count : callable, optional
-        Maps ``(game, source_card)`` to how many targets the seat chooses at once, as "target a
-        number of your Personalities" reads, for an ability that sets ``effects_for_targets``.
-        Default None, one target.
-    effects_for_targets : callable, optional
-        Maps ``(game, source_card, target_cards)`` to the effects the ability emits against all of
-        its targets together, for one whose effects depend on the whole set. Set with
-        ``target_count`` and in place of ``effects``. Default None.
+    target_groups : tuple of :class:`~.TargetGroup`, optional
+        The ability's "target" phrases in print order, for one that targets a range of cards, puts
+        a condition on the set, or prints a second phrase whose targets depend on the first.
+        Set it or ``targets``, never both. Default empty.
+    effects_for_groups : callable, optional
+        Maps ``(game, source_card, groups)`` to the effects the ability emits against all of its
+        targets together, where ``groups`` is one tuple of cards per phrase, in print order. For an
+        ability whose effects read the whole set, or read one phrase against another. Required with
+        more than one group, since effects built per target could not tell the phrases apart. Set
+        it or ``effects``, never both. Default None.
     """
 
     timings: tuple[ActionTiming, ...]
     cost: Cost
-    targets: Callable[[GameState, L5RCard], list[str]]
+    targets: Callable[[GameState, L5RCard], list[str]] | None = None
     effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]] | None = None
     label: Label | None = None
     printed_index: int = 0
@@ -294,33 +352,58 @@ class Ability:
     from_keyword: str | None = None
     from_rulebook: bool = False
     targets_after_cost: bool = False
-    target_count: Callable[[GameState, L5RCard], int] | None = None
-    effects_for_targets: (
-        Callable[[GameState, L5RCard, tuple[L5RCard, ...]], list[Effect]] | None
+    target_groups: tuple[TargetGroup, ...] = ()
+    _phrases: tuple[TargetGroup, ...] = field(init=False, default=(), compare=False, repr=False)
+    effects_for_groups: (
+        Callable[[GameState, L5RCard, tuple[tuple[L5RCard, ...], ...]], list[Effect]] | None
     ) = None
 
     def __post_init__(self) -> None:
-        """Raise ValueError for a keyword's ability not marked ``from_rulebook``, one that gives
-        neither or both of ``effects`` and ``effects_for_targets``, or one that counts its targets
-        without building its effects over the set."""
+        """Raise ValueError for a keyword's ability not marked ``from_rulebook``, one that declares
+        neither or both of ``targets`` and ``target_groups``, one that gives neither or both of
+        ``effects`` and ``effects_for_groups``, or one printing several target phrases whose
+        effects are built per target, which could not tell the phrases apart."""
         if self.from_keyword is not None and not self.from_rulebook:
             raise ValueError(f"the {self.from_keyword} ability is a rulebook ability")
-        if (self.effects is None) == (self.effects_for_targets is None):
+        if (self.targets is None) == (not self.target_groups):
+            raise ValueError("an ability declares its targets in one phrase or in groups, not both")
+        if (self.effects is None) == (self.effects_for_groups is None):
             raise ValueError("an ability builds its effects per target or over the set, not both")
-        if (self.target_count is None) != (self.effects_for_targets is None):
-            raise ValueError("an ability that counts its targets builds its effects over the set")
+        if len(self.target_groups) > 1 and self.effects_for_groups is None:
+            raise ValueError("an ability targeting several phrases builds its effects over the set")
+        object.__setattr__(self, "_phrases", self.target_groups or self._sugar_phrase())
+
+    def _sugar_phrase(self) -> tuple[TargetGroup, ...]:
+        """The single group a ``targets`` predicate is shorthand for."""
+        targets = self.targets
+        if targets is None:
+            raise ValueError("an ability declares its targets in one phrase or in groups")
+        return (
+            TargetGroup(
+                candidates=lambda game, source, picked: targets(game, source),
+                targeting_message=self.targeting_message,
+            ),
+        )
+
+    @property
+    def phrases(self) -> tuple[TargetGroup, ...]:
+        """The ability's "target" phrases: the groups it declares, or the single one its ``targets``
+        is shorthand for. Built once, because legality reads it for every ability it offers."""
+        return self._phrases
 
     def effects_against(
-        self, game: GameState, source: L5RCard, targets: tuple[L5RCard, ...]
+        self, game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
     ) -> list[Effect]:
-        """The effects the ability emits against ``targets``: built over the set where it sets
-        ``effects_for_targets``, otherwise against each target. Against several, one text acts on
-        them all at once, so each step happens to every target together before the next (CR, Timing
-        Conflicts: "each step of each procedure takes place simultaneously, in parallel")."""
-        if self.effects_for_targets is not None:
-            return self.effects_for_targets(game, source, targets)
+        """The effects the ability emits against the cards each of its phrases targeted: built over
+        the whole set where it sets ``effects_for_groups``, otherwise against each target of its one
+        phrase. Against several, one text acts on them all at once, so each step happens to every
+        target together before the next (CR, Timing Conflicts: "each step of each procedure takes
+        place simultaneously, in parallel")."""
+        if self.effects_for_groups is not None:
+            return self.effects_for_groups(game, source, groups)
         if self.effects is None:
             raise ValueError("an ability builds its effects per target or over the set")
+        targets = tuple(card for group in groups for card in group)
         per_target = [self.effects(game, source, target) for target in targets]
         if len(per_target) == 1:
             return per_target[0]

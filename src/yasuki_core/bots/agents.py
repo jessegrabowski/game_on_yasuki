@@ -36,13 +36,21 @@ class Agent(Protocol):
 
 
 class AutoAgent:
-    """A placeholder bot standing in for the AI: answers any request with the shortest prefix of its
-    candidates that the request accepts (the whole list for an ordering). Generic by construction,
-    it leans on the request's own ``accepts`` rather than knowing the decision type.
+    """A placeholder bot standing in for the AI: answers any request with the fewest cards it
+    accepts, and among sets of that size the first in the order the request offers them. Generic by
+    construction, it leans on the request's own ``accepts`` and ``selectable`` rather than knowing
+    the decision type, so it answers a request whose limits narrow as it is answered without a
+    model of what they mean.
+
+    The search grows every answer of one size before trying any of the next, because growing one
+    answer as far as it goes would let an early pick rule out the rest: a pair whose total may not
+    exceed five is unreachable from the heaviest card, which a walk that never turns back would
+    take first. ``selectable`` keeps each step to what the limits still permit, so what is explored
+    is the set of answers that could still become legal.
 
     Two answers get a shape of their own. A division names one candidate several times, and is
     answered by heaping the whole of it onto the first. An ordering is answered with the order the
-    cards already had, since the whole list as a prefix would place them back reversed."""
+    cards already had, since taking them one at a time would place them back reversed."""
 
     name = "auto"
 
@@ -51,10 +59,21 @@ class AutoAgent:
             return DecisionResponse(request.candidates[:1] * request.count)
         if isinstance(request, ArrangeCards):
             return DecisionResponse(request.unchanged)
-        for size in range(len(request.candidates) + 1):
-            response = DecisionResponse(request.candidates[:size])
-            if request.accepts(response):
-                return response
+        trying = [DecisionResponse()]
+        seen: set[frozenset[str]] = {frozenset()}
+        while trying:
+            longer: list[DecisionResponse] = []
+            for answer in trying:
+                if request.accepts(answer):
+                    return answer
+                for candidate in request.selectable(answer):
+                    if candidate in answer.choices:
+                        continue
+                    grown = (*answer.choices, candidate)
+                    if frozenset(grown) not in seen:
+                        seen.add(frozenset(grown))
+                        longer.append(DecisionResponse(grown))
+            trying = longer
         raise ValueError(f"no auto-answer satisfies {type(request).__name__}")
 
 

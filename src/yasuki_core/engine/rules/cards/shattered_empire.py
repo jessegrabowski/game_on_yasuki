@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.abilities.model import (
     Interrupt,
     Interruption,
     InvestAbility,
+    TargetGroup,
     itself,
     once_tag,
 )
@@ -40,6 +41,11 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     BattleDesignator,
     PlayInterrupt,
     PlayStrategy,
+)
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    OneGroup,
+    PickedTargets,
+    PickLimit,
 )
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.seats import (
@@ -124,7 +130,7 @@ from yasuki_core.engine.rules.turn.structure import (
     END_OF_BATTLE,
     END_OF_TURN,
 )
-from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
@@ -356,38 +362,40 @@ register_trait_entry(
 )
 
 
-def _ring_of_air_unit(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
-    personality = card if isinstance(card.printed, PersonalityPrint) else attached_to(game, card)
-    return unit_of(game, personality) if personality is not None else (card,)
+RING_OF_AIR_MOST_STRAIGHTENED = 2
 
 
-def _ring_of_air_targets(game: GameState, source: L5RCard) -> list[str]:
-    return [
-        card.id
-        for card in cards_in_play(game, source.owner)
-        if card.bowed and isinstance(card.printed, PersonalityPrint | AttachmentPrint)
-    ]
+def _ring_of_air_units(game: GameState, source: L5RCard) -> tuple[tuple[str, ...], ...]:
+    """Your bowed Personalities and attachments, grouped by the unit each stands in."""
+    units: dict[str, list[str]] = {}
+    for card in cards_in_play(game, source.owner):
+        if card.bowed and isinstance(card.printed, PersonalityPrint | AttachmentPrint):
+            personality = attached_to(game, card) or card
+            units.setdefault(personality.id, []).append(card.id)
+    return tuple(tuple(unit) for unit in units.values())
+
+
+def _ring_of_air_targets(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    return [card_id for unit in _ring_of_air_units(game, source) for card_id in unit]
+
+
+def _ring_of_air_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    return 1, RING_OF_AIR_MOST_STRAIGHTENED
+
+
+def _ring_of_air_limits(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> tuple[PickLimit, ...]:
+    """ "in one unit": the first card targeted settles which unit the second may come from."""
+    return (OneGroup(_ring_of_air_units(game, source)),)
 
 
 def _ring_of_air_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """ "Straighten one or two of your target cards in one unit": the first is the target, and the
-    second is offered from the rest of that unit."""
-    others = tuple(
-        card.id for card in _ring_of_air_unit(game, target) if card.bowed and card is not target
-    )
-    if not others:
-        return [Straighten(target.id)]
-    return [
-        Straighten(target.id),
-        Choose(source.owner, others, 0, 1, "ring_of_air_second", source.id),
-    ]
-
-
-@choice_resolver("ring_of_air_second")
-def _resolve_ring_of_air_second(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [Straighten(card_id) for card_id in chosen]
+    """One straighten per target. Both are named by the one phrase, so the ability applies them at
+    once rather than one after the other."""
+    return [Straighten(target.id)]
 
 
 register_ring(
@@ -395,7 +403,14 @@ register_ring(
     ability=Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
         cost=bow_cost,
-        targets=_ring_of_air_targets,
+        target_groups=(
+            TargetGroup(
+                candidates=_ring_of_air_targets,
+                count=_ring_of_air_count,
+                limits=_ring_of_air_limits,
+                targeting_message="your bowed cards in one unit",
+            ),
+        ),
         effects=_ring_of_air_effects,
         key="air",
         repeatable=True,

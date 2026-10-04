@@ -2,7 +2,13 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, register_event_entry
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt, Interruption
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+    TargetGroup,
+)
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import (
     owned_carrying,
@@ -16,7 +22,11 @@ from yasuki_core.engine.rules.board.queries import (
     rings_in_play,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
-from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
+from yasuki_core.engine.rules.stats.card_values import (
+    effective_chi,
+    effective_force,
+    effective_personal_honor,
+)
 from yasuki_core.engine.rules.stats.checked import checked_stat
 from yasuki_core.engine.rules.stats.province_strength import province_strength_grant
 from yasuki_core.engine.rules.gold.discounts import Purchase, action_discount
@@ -50,6 +60,7 @@ from yasuki_core.engine.rules.effects import (
     PayGold,
     RangedAttack,
     register_honor_loss_shield,
+    Simultaneously,
     Straighten,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -61,6 +72,11 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
+)
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    PickedTargets,
+    PickLimit,
+    TotalAtMost,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.rulebook.kharmic import is_kharmic_action
@@ -337,6 +353,71 @@ register_ability(
         targeting_message="your Personality",
         effects=_heart_of_honor_effects,
         located_at=(CardLocation.HAND,),
+    ),
+)
+
+
+# --- Hida Zaiberu (Experienced) ---
+
+ZAIBERU_EXPERIENCED_MOST_BOWED = 2
+
+# "Will not attach Followers" has no handler: nothing yet models a Personality refusing a kind of
+# attachment, and the Equip restriction is the place it will go.
+
+
+def _hida_zaiberu_experienced_bound(game: GameState, source: L5RCard) -> int:
+    """ "with total Force less than Zaiberu's": the most the targets may total between them."""
+    return effective_force(game, source) - 1
+
+
+def _hida_zaiberu_experienced_targets(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """Every Personality in play. One whose own Force already breaks the total is dropped from the
+    offer by the limit, Zaiberu himself among them."""
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _hida_zaiberu_experienced_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    return 1, ZAIBERU_EXPERIENCED_MOST_BOWED
+
+
+def _hida_zaiberu_experienced_limits(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> tuple[PickLimit, ...]:
+    weights = tuple((card.id, effective_force(game, card)) for card in personalities_in_play(game))
+    return (TotalAtMost(weights, _hida_zaiberu_experienced_bound(game, source)),)
+
+
+def _hida_zaiberu_experienced_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """One phrase bows them, so they bow at once, and Zaiberu straightens for a single target
+    under half his Force."""
+    targets = groups[0]
+    effects: list[Effect] = [Simultaneously(tuple(Bow(card.id) for card in targets))]
+    half_his_force = (effective_force(game, source) + 1) // 2  # "rounded up"
+    if len(targets) == 1 and effective_force(game, targets[0]) < half_his_force:
+        effects.append(Straighten(source.id))
+    return effects
+
+
+register_ability(
+    "hida_zaiberu_experienced",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_hida_zaiberu_experienced_targets,
+                count=_hida_zaiberu_experienced_count,
+                limits=_hida_zaiberu_experienced_limits,
+                targeting_message="the Personalities with total Force less than Zaiberu's",
+            ),
+        ),
+        effects_for_groups=_hida_zaiberu_experienced_effects,
     ),
 )
 

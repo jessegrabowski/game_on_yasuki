@@ -317,6 +317,14 @@ class FieldView(tk.Canvas):
         self._selection_bows = render_bowed
         self._allocation = None
 
+    def restrict_selection(self, candidates: Iterable[str]) -> None:
+        """Narrow selection mode to ``candidates``, keeping the picks already made. For a choice
+        whose later picks are confined by its earlier ones, which re-reads what is still on offer
+        every time the selection changes. It does nothing outside selection mode."""
+        if self._selectable is None:
+            return
+        self._selectable = frozenset(candidates)
+
     def begin_allocation(self, candidates: Iterable[str], total: int) -> None:
         """Enter selection mode to divide ``total`` creations among ``candidates``: clicking one
         takes it into the division, and a spinner on each shows how many it carries."""

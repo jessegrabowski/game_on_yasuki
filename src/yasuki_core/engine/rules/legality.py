@@ -3,7 +3,12 @@ from collections.abc import Callable, Iterator
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import gold_charged, payable
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, use_tags
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, TargetGroup, use_tags
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    PickedTargets,
+    answerable,
+    within_reach,
+)
 from yasuki_core.engine.rules.effects import AskAmount
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
@@ -494,7 +499,7 @@ def _usable(
             costs = ability.discounted_cost(game, card, plays_card=_played(location, ability))
             if not payable(game, costs):
                 continue
-            if ability.targets_after_cost or legal_targets(game, card, ability):
+            if ability.targets_after_cost or first_phrase_reachable(game, card, ability):
                 ready.append((card, ability))
     return ready
 
@@ -532,23 +537,55 @@ def has_absent_ability(game: GameState, seat: PlayerId) -> bool:
     )
 
 
-def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]:
-    """The ids ``ability`` may target from ``card`` right now.
+def group_targets(
+    game: GameState,
+    card: L5RCard,
+    ability: Ability,
+    group: TargetGroup,
+    picked: PickedTargets = (),
+) -> list[str]:
+    """The ids ``group``, one "target" phrase of ``ability``, may be pointed at from ``card`` right
+    now, given the phrases already settled in ``picked``.
 
     Filtered centrally: during a battle, a card in a unit may only be targeted at the
     battlefield the battle is at (CR, Rules of Location), unless the ``Ability`` sets
     ``targets_any_location``.
     """
-    offered = ability.targets(game, card)
+    # Filtered against the limits here so the offering, the question and a substitution all agree
+    # on what is targetable, and a phrase whose limits leave nothing withholds the action.
+    offered = within_reach(
+        group.candidates(game, card, picked), group.conditions(game, card, picked)
+    )
     attack = game.attack
     if attack is None or attack.current is None or ability.targets_any_location:
-        return offered
+        return list(offered)
     by_id = game.table.cards_by_id
     return [
         target_id
         for target_id in offered
         if target_id not in by_id or location_permits(game, by_id[target_id])
     ]
+
+
+def first_phrase_reachable(game: GameState, card: L5RCard, ability: Ability) -> bool:
+    """Whether ``ability``'s first "target" phrase has a legal answer: enough cards on offer to
+    meet the fewest it takes, and limits that can seat that many of them. "Target two or more of
+    your unbowed Merchant or Ninja Personalities" is no action for a seat with one, and neither is
+    a phrase taking two cards whose total Force must stay under what no two of them can.
+    """
+    group = ability.phrases[0]
+    offered = tuple(group_targets(game, card, ability, group))
+    minimum, _ = group.wanted(game, card, (), offered)
+    return answerable(offered, minimum, group.conditions(game, card, ()))
+
+
+def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]:
+    """The ids ``ability``'s first "target" phrase may be pointed at from ``card`` right now.
+
+    Whether the ability can be taken at all is read off that phrase, since nothing later can be
+    reached without it, and so is what an Interrupt may substitute for a chosen target.
+    """
+    return group_targets(game, card, ability, ability.phrases[0])
 
 
 def has_presence(game: GameState, seat: PlayerId) -> bool:

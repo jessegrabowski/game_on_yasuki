@@ -896,6 +896,28 @@ class TestDecisionSelection:
         assert field.selecting is False
         assert field.selection == ()
 
+    def test_restricting_narrows_the_candidates_and_keeps_the_picks(self, loaded):
+        field, _ = loaded
+        field.begin_selection(["c1", "c2", "c3"])
+        field.toggle_selection("c1")
+
+        field.restrict_selection(["c1", "c2"])
+
+        field.toggle_selection("c3")  # out of the group the first pick settled
+        assert field.selection == ("c1",)
+        assert field.is_selectable("c3") is False
+        field.toggle_selection("c1")  # the pick itself stays selectable, so it can be taken back
+        assert field.selection == ()
+
+    def test_restricting_outside_selection_mode_does_nothing(self, loaded):
+        field, _ = loaded
+
+        field.restrict_selection(["c1"])
+
+        assert field.selecting is False
+        assert field.selection == ()
+        assert field.is_selectable("c1") is False
+
     def test_selection_keeps_the_order_the_player_picked(self, loaded):
         field, _ = loaded
         field.begin_selection(["c1", "c2", "c3"])

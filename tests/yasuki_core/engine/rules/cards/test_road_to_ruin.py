@@ -68,6 +68,7 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1 = PlayerId.P1
+P2 = PlayerId.P2
 
 
 def _ruins_game(*, in_deck=("mine",), in_discard=(), in_play=(), unique=()):
@@ -1040,3 +1041,138 @@ def test_a_negated_move_buys_neither_invest(expedition):
     assert location_of(expedition.game.table, cards["rider"]).is_home
     assert cards["rider"].bowed and cards["horse"].bowed
     assert expedition.game.round.follow_ups is None
+
+
+# --- Desperate Melee ---
+
+
+def _desperate_melee_game(*, berserker: bool = False, gold_cost: int = 5) -> EngineSession:
+    """A Combat Segment with P1's Personality facing two enemy Personalities, each carrying a
+    Follower, and Desperate Melee in P1's hand."""
+    mine = personality("mine", gold_cost=gold_cost, keywords=("Berserker",) if berserker else ())
+    theirs = personality("theirs", owner=P2)
+    other = personality("other", owner=P2)
+    melee = L5RCard.of(
+        ActionPrint,
+        id="melee",
+        printed_id="desperate_melee",
+        name="Desperate Melee",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    session = combat_segment(
+        [mine, theirs, other], {"mine": 0}, {"theirs": 0, "other": 0}, in_hand=[melee]
+    )
+    table = session.game.table
+    for follower_id, bearer, cost in (
+        ("cheap", "theirs", 2),
+        ("dear", "other", 3),
+        ("third", "other", 1),
+    ):
+        attached(
+            table,
+            attachment(
+                follower_id,
+                owner=P2,
+                attachment_type=AttachmentType.FOLLOWER,
+                gold_cost=cost,
+            ),
+            bearer,
+        )
+    return session
+
+
+def _enemy_fate_discard(session: EngineSession) -> set[str]:
+    return {card.id for card in session.game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards}
+
+
+def test_desperate_melee_destroys_two_enemy_followers_under_your_personalitys_gold_cost():
+    session = _desperate_melee_game(gold_cost=6)
+
+    session.act(P1, PlayStrategy("melee"))
+    session.submit(P1, DecisionResponse(("mine",)))
+    session.submit(P1, DecisionResponse(("cheap", "dear")))
+
+    assert {"cheap", "dear"} <= _enemy_fate_discard(session)
+
+
+def test_desperate_melee_will_not_take_a_pair_whose_total_gold_cost_reaches_yours():
+    session = _desperate_melee_game(gold_cost=5)
+
+    session.act(P1, PlayStrategy("melee"))
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    pending = session.game.pending
+    assert pending.accepts(DecisionResponse(("cheap", "dear"))) is False
+    assert pending.accepts(DecisionResponse(("dear",))) is True
+
+
+def test_desperate_melee_offers_a_berserker_more_followers():
+    plain = _desperate_melee_game()
+    plain.act(P1, PlayStrategy("melee"))
+    plain.submit(P1, DecisionResponse(("mine",)))
+
+    berserker = _desperate_melee_game(berserker=True)
+    berserker.act(P1, PlayStrategy("melee"))
+    berserker.submit(P1, DecisionResponse(("mine",)))
+
+    # Three enemy Followers are on offer, so the Berserker's five clamps to what is there.
+    assert plain.game.pending.maximum == 2
+    assert berserker.game.pending.maximum == 3
+
+
+def test_desperate_melee_destroys_your_own_personalitys_followers_too():
+    session = _desperate_melee_game(gold_cost=6)
+    attached(
+        session.game.table,
+        attachment("mine_own", attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
+        "mine",
+    )
+
+    session.act(P1, PlayStrategy("melee"))
+    session.submit(P1, DecisionResponse(("mine",)))
+    session.submit(P1, DecisionResponse(("cheap",)))
+
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    assert "mine_own" in {card.id for card in discard.cards}
+
+
+def test_desperate_melee_records_both_phrases_as_the_actions_targets():
+    session = _desperate_melee_game(gold_cost=6)
+
+    session.act(P1, PlayStrategy("melee"))
+    session.submit(P1, DecisionResponse(("mine",)))
+    session.submit(P1, DecisionResponse(("cheap",)))
+
+    assert set(session.game.action_targets) == {"mine", "cheap"}
+
+
+def test_desperate_melee_destroys_your_own_followers_when_the_melee_reaches_none():
+    mine = personality("mine", gold_cost=6)
+    melee = L5RCard.of(
+        ActionPrint,
+        id="melee",
+        printed_id="desperate_melee",
+        name="Desperate Melee",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    session = combat_segment(
+        [mine, personality("theirs", owner=P2)], {"mine": 0}, {"theirs": 0}, in_hand=[melee]
+    )
+    attached(
+        session.game.table,
+        attachment("mine_own", attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
+        "mine",
+    )
+
+    session.act(P1, PlayStrategy("melee"))
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    # The second phrase has nothing to point at, so it targets nothing and the sentence that
+    # destroys your Personality's own Followers still resolves.
+    assert session.game.pending is None
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    assert "mine_own" in {card.id for card in discard.cards}

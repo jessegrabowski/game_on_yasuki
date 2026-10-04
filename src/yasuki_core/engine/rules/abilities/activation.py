@@ -7,8 +7,14 @@ from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.negation import action_provenance
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget, DecisionResponse
-from yasuki_core.engine.rules.legality import legal_targets
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseAbilityTarget,
+    DecisionResponse,
+    PickedTargets,
+    answerable,
+    within_reach,
+)
+from yasuki_core.engine.rules.legality import group_targets, legal_targets
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.game_pieces.cards import L5RCard
@@ -44,37 +50,59 @@ def _claim_first_unused_use(game: GameState, card: L5RCard, ability: Ability) ->
 
 @dataclass(frozen=True, slots=True)
 class SelectAbilityTarget:
-    """Raise an activated ability's target choice once its cost has been paid. Deferred so a cost
-    whose own cascade pauses for a decision resolves fully before the target is chosen.
+    """Raise an activated ability's next target choice once its cost has been paid. Deferred so a
+    cost whose own cascade pauses for a decision resolves fully before the target is chosen.
+
+    An ability printing several "target" phrases comes back here once for each: ``picked`` carries
+    the phrases already settled, the phrase after them reads it for its candidates, and the
+    ability resolves against all of them once the last one is answered.
 
     Attributes
     ----------
     card_id : str
         The card whose ability is resolving.
     candidates : tuple of str or None
-        The ids the ability may target, fixed before paying so the choice is never left empty, or
-        None for an ability that targets after its cost, whose targets are read now. Such an
-        ability with nothing to target does nothing more.
+        The ids the ability's first phrase may target, fixed before paying so the choice is never
+        left empty, or None to read them now, for an ability that targets after its cost and for
+        every phrase after the first. Such an ability with nothing to target does nothing more.
     ability_key : str, optional
         Names the ability among the several the card prints, so the one announced is the one
         that resolves. Default None, the card's only ability.
+    picked : tuple of tuple of str, optional
+        The phrases already settled, in print order. Default none, the first phrase.
     """
 
     card_id: str
     candidates: tuple[str, ...] | None
     ability_key: str | None = None
+    picked: PickedTargets = ()
 
     def resume(self, game: GameState) -> None:
         source = game.table.cards_by_id[self.card_id]
         ability = ability_for(game, source, self.ability_key)
+        if ability is None:
+            return
+        group = ability.phrases[len(self.picked)]
+        limits = group.conditions(game, source, self.picked)
         candidates = self.candidates
         if candidates is None:
-            candidates = tuple(legal_targets(game, source, ability)) if ability is not None else ()
-        wanted = 1
-        if ability is not None and ability.target_count is not None:
-            wanted = ability.target_count(game, source)
-        count = min(wanted, len(candidates))
-        if count == 0:
+            candidates = tuple(group_targets(game, source, ability, group, self.picked))
+        else:
+            # The candidates were fixed before the cost was paid and the limits are read against
+            # the board the cost left, so a cost that moved a ceiling can shut one of them out.
+            candidates = within_reach(candidates, limits)
+        minimum, maximum = group.wanted(game, source, self.picked, candidates)
+        # Only the maximum bends to the board: a phrase cannot reach more cards than are there. The
+        # minimum is what the card asks for, and a phrase with no legal answer to give targets
+        # nothing rather than asking a question the seat cannot answer.
+        maximum = min(maximum, len(candidates))
+        if maximum == 0 or not answerable(candidates, minimum, limits):
+            if not self.picked:
+                # An ability that targets after its cost and found nothing does nothing more.
+                return
+            # A later phrase the earlier picks left short targets nothing, and what the card makes
+            # of that is the card's business.
+            _advance(game, self.card_id, self.ability_key, (*self.picked, ()))
             return
         game.pending = ChooseAbilityTarget(
             seat=source.owner,
@@ -82,8 +110,11 @@ class SelectAbilityTarget:
             source_card_id=self.card_id,
             ability_key=self.ability_key,
             source_name=source.name,
-            targeting_message=ability.targeting_message if ability is not None else None,
-            count=count,
+            targeting_message=group.targeting_message,
+            minimum=minimum,
+            maximum=maximum,
+            limits=limits,
+            settled=self.picked,
         )
 
 
@@ -109,7 +140,7 @@ class ApplyAbilityEffects:
     ability_key: str | None = None
 
     def resume(self, game: GameState) -> None:
-        _hit_every_target(game, self.card_id, self.target_ids, self.ability_key)
+        _hit_every_target(game, self.card_id, (self.target_ids,), self.ability_key)
 
 
 def defer_ability(game: GameState, card: L5RCard, ability: Ability, *, plays_card: bool) -> None:
@@ -189,35 +220,63 @@ class ResolveAbility(Effect):
     def _build(self, game: GameState) -> tuple[Effect, ...]:
         source = game.table.cards_by_id[self.card_id]
         ability = ability_for(game, source, self.ability_key)
-        return tuple(
-            ability.effects_against(game, source, (game.table.cards_by_id[self.target_id],))
-        )
+        target = game.table.cards_by_id[self.target_id]
+        return tuple(ability.effects_against(game, source, ((target,),)))
 
 
 def apply_ability_target(
     game: GameState, request: ChooseAbilityTarget, response: DecisionResponse
 ) -> None:
-    """Resolve the ability against the target the seat chose, held at the Interrupt step as its
-    targeting, or against every target of one that targets several at once."""
-    source = game.table.cards_by_id[request.source_card_id]
-    ability = ability_for(game, source, request.ability_key)
-    if ability is not None and ability.target_count is not None:
-        _hit_every_target(game, request.source_card_id, response.choices, request.ability_key)
+    """Take the targets the seat chose for this "target" phrase, and either ask the next phrase or
+    resolve the ability against all of them."""
+    _advance(
+        game,
+        request.source_card_id,
+        request.ability_key,
+        (*request.settled, response.choices),
+    )
+
+
+def _advance(
+    game: GameState,
+    card_id: str,
+    ability_key: str | None,
+    picked: PickedTargets,
+) -> None:
+    """Ask the ability's next "target" phrase, or resolve it once every phrase has one.
+
+    The next phrase goes on the work stack rather than asking from here, so the answer that
+    settled this one finishes resolving first (CR 20F, Timing).
+    """
+    source = game.table.cards_by_id[card_id]
+    ability = ability_for(game, source, ability_key)
+    if ability is not None and len(picked) < len(ability.phrases):
+        game.stack.append(SelectAbilityTarget(card_id, None, ability_key, picked))
         return
-    targeting = ResolveAbility(request.source_card_id, response.choices[0], request.ability_key)
-    _resolve(game, source, ability, [targeting.built(game)])
+    if ability is not None and len(picked) == 1 and len(picked[0]) == 1:
+        # One card targeted by one phrase, however that phrase was declared: held at the Interrupt
+        # step as the action's targeting, so an Interrupt may read it and substitute for it (CR,
+        # Substitution and Targets).
+        targeting = ResolveAbility(card_id, picked[0][0], ability_key)
+        _resolve(game, source, ability, [targeting.built(game)])
+        return
+    _hit_every_target(game, card_id, picked, ability_key)
 
 
 def _hit_every_target(
-    game: GameState, card_id: str, target_ids: tuple[str, ...], ability_key: str | None
+    game: GameState,
+    card_id: str,
+    picked: PickedTargets,
+    ability_key: str | None,
 ) -> None:
-    """Record ``target_ids`` as the action's and resolve the ability's effects against all of
-    them."""
+    """Record every phrase's targets as the action's and resolve the ability's effects against all
+    of them."""
     source = game.table.cards_by_id[card_id]
     ability = ability_for(game, source, ability_key)
-    _record_targets(game, target_ids)
-    targets = tuple(game.table.cards_by_id[target_id] for target_id in target_ids)
-    effects = ability.effects_against(game, source, targets) if ability is not None else []
+    _record_targets(game, tuple(card_id for group in picked for card_id in group))
+    by_id = game.table.cards_by_id
+    groups = tuple(tuple(by_id[target_id] for target_id in group) for group in picked)
+    effects = ability.effects_against(game, source, groups) if ability is not None else []
     _resolve(game, source, ability, effects)
 
 
