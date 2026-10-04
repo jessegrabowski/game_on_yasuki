@@ -11,3 +11,6 @@ class CardLocation(str, Enum):
     HAND = "hand"
     # A seat's rulebook zone, where a proxy card stands for abilities the rules give every player.
     RULEBOOK = "rulebook"
+    # Either of a seat's discard piles, which no printed ability acts from, but which an ability a
+    # card grants may ("from your target Ring in play or your discard pile").
+    DISCARD = "discard"

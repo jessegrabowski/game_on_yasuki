@@ -265,6 +265,29 @@ def test_a_seat_grant_reaches_every_card_its_seat_owns_and_none_of_the_opponents
         GRANTED_ABILITIES.pop("grant_probe", None)
 
 
+def test_a_seat_grant_reaches_only_the_cards_its_factory_gives_an_ability():
+    plain = _ABILITIES["millet_farm"][0]
+
+    def only_the_named_card(game, card, context):
+        return replace(plain, key="licensed") if card.id == context[0] else None
+
+    granted_ability("grant_probe")(only_the_named_card)
+
+    try:
+        game = two_seat_game()
+        granting = put_in_play(game, holding("granting", printed_id="grant_probe"))
+        named = put_in_play(game, holding("named"))
+        other = put_in_play(game, holding("other"))
+        game.ongoing.append(
+            SeatAbilityGrant(granting.id, PlayerId.P1, ("named",), Duration.UNTIL_END_OF_TURN)
+        )
+
+        assert [held.key for held in abilities_for(game, named)] == ["licensed"]
+        assert abilities_for(game, other) == ()
+    finally:
+        GRANTED_ABILITIES.pop("grant_probe", None)
+
+
 def test_a_keyword_ability_joins_every_card_carrying_the_keyword_after_its_own():
     plain = _ABILITIES["millet_farm"][0]
     register_keyword_ability(replace(plain, key="probe", from_keyword="Probe", from_rulebook=True))

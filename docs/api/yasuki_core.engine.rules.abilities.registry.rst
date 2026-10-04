@@ -17,10 +17,12 @@ yasuki_core.engine.rules.abilities.registry
     ability_for
     ability_label
     ability_registrations
+    acts_from_discard
     effects_before_entering_play
     entry_state_of
     fixed_invest_amount
     granted_tireless
+    holds_seat_grant
     interrupt_for
     interrupt_label
     interrupts_for
@@ -29,6 +31,7 @@ yasuki_core.engine.rules.abilities.registry
     is_printed_ability
     may_attack
     may_stay_bowed
+    printed_abilities
     printed_ability_line
     register_ability
     register_interrupt

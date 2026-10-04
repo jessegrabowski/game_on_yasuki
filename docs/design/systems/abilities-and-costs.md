@@ -78,7 +78,8 @@ audit holds every unlabeled index to the printing the registration models.
 prompt reads:
 "Target your Courtier at any location for Inexplicable Challenge".
 `tireless` lets an ability be used while its card is bowed. `located_at` says where the card must
-be, defaulting to the battlefield. `battle_designators` and `targets_any_location` govern what a
+be, defaulting to the battlefield. `CardLocation.DISCARD` names either discard pile, which no
+printed ability acts from but a granted copy may. `battle_designators` and `targets_any_location` govern what a
 battle ability can reach, and [Adding a Card](../../contributing/adding_a_card.md) explains both
 under attachments. `keywords` holds the ability keywords printed ahead of the designator, as in
 "Political Battle:", so a card asking whether the resolving action was Political has something to
@@ -114,6 +115,15 @@ activation menu all read
 `abilities_for`, so a granted ability answers to each of them through the same path a printed one
 does. The factory's `Ability` needs a `key` whenever its card could already hold one, since the
 two are told apart the way any two abilities on one card are.
+
+A factory may answer None for a card its grant does not reach. A {class}`~.SeatAbilityGrant` names
+a seat rather than a card, so it is never forgotten when a card leaves the table, and a factory that
+declines every card but one gives a single card an ability wherever that card is, its discard pile
+included. A copy of a printed ability granted that way takes a key of its own and sets `limit_key`
+to the printed one's, so using either spends the other's once-per-turn allowance.
+{func}`~.ignoring_bow_costs` wraps a cost for a copy taken "ignoring bow costs", dropping every bow
+and the waiver a bow cost would ask about. A grant meant for one follow-up alone lasts
+`Duration.FOR_ADDITIONAL_ACTION`, and lapses once the limited additional opportunity is spent.
 
 A keyword ability is one the rulebook attaches to a keyword rather than to a card, as the Kharmic
 abilities come with the Kharmic keyword (ShE datasheet). {func}`~.register_keyword_ability` files

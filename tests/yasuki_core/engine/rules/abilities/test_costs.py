@@ -1,5 +1,11 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import declare_amount
+from yasuki_core.engine.rules.abilities.costs import (
+    BOW_WAIVERS,
+    bow_cost,
+    declare_amount,
+    ignoring_bow_costs,
+    register_bow_waiver,
+)
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
@@ -9,7 +15,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter, AskAmount, Choose
+from yasuki_core.engine.rules.effects import AdjustCounter, AskAmount, Bow, Choose, PayGold
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
@@ -18,7 +24,14 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.counters import WEALTH
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
+    holding,
+    personality,
+    put_in_play,
+    two_seat_game,
+)
 
 
 @choice_resolver("test_cost_pauses")
@@ -98,3 +111,26 @@ def test_a_declared_amount_of_gold_is_charged():
 
     assert game.amount_declared == 2
     assert isinstance(game.pending, ChoosePayment) and game.pending.amount == 2
+
+
+def _bow_and_pay(game, source):
+    return [PayGold(source.owner, 2, source.name), Bow(source.id)]
+
+
+def test_ignoring_bow_costs_drops_the_bow_and_keeps_the_rest():
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm"))
+
+    assert ignoring_bow_costs(_bow_and_pay)(game, farm) == [PayGold(PlayerId.P1, 2, "farm")]
+
+
+def test_ignoring_bow_costs_drops_the_waiver_a_bow_would_ask_about():
+    game = two_seat_game()
+    monk = put_in_play(game, personality("monk"))
+    attached(game, attachment("waiver", printed_id="waiver_probe"), "monk")
+    register_bow_waiver("waiver_probe")
+    try:
+        assert len(bow_cost(game, monk)) == 1
+        assert ignoring_bow_costs(bow_cost)(game, monk) == []
+    finally:
+        BOW_WAIVERS.discard("waiver_probe")

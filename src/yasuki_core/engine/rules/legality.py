@@ -8,6 +8,8 @@ from yasuki_core.engine.rules.effects import AskAmount
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
     ability_for,
+    acts_from_discard,
+    holds_seat_grant,
     fixed_invest_amount,
     granted_tireless,
 )
@@ -381,6 +383,15 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
             yield from ((CardLocation.HAND, card) for card in zone.cards)
         elif key.role is ZoneRole.RULEBOOK:
             yield from ((CardLocation.RULEBOOK, card) for card in zone.cards)
+        elif key.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):
+            # A pile runs long and almost nothing acts from it, so it is read only for a card that
+            # prints such an ability, or while a grant could give one.
+            granted = holds_seat_grant(game, seat)
+            yield from (
+                (CardLocation.DISCARD, card)
+                for card in zone.cards
+                if granted or acts_from_discard(card)
+            )
 
 
 # Every place ``seat_cards`` yields a card from. A card's own ability in hand is *played* rather
@@ -391,6 +402,7 @@ ACTIVATED_FROM: tuple[CardLocation, ...] = (
     CardLocation.PROVINCE,
     CardLocation.RULEBOOK,
     CardLocation.HAND,
+    CardLocation.DISCARD,
 )
 
 

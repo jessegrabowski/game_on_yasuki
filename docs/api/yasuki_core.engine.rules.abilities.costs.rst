@@ -13,6 +13,7 @@ yasuki_core.engine.rules.abilities.costs
     declare_amount
     declared_gold_discount
     gold_charged
+    ignoring_bow_costs
     is_declared_gold
     no_cost
     payable

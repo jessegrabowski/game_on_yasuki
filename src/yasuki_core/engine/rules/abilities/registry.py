@@ -143,8 +143,10 @@ def granted_tireless(game: GameState, card: L5RCard) -> bool:
 
 # The ability a card grants, built for the card that holds it from the context its granting action
 # recorded ("While a target Personality opposes Kaede, she has 'Battle: Ranged 3'"). One per
-# granting card: the record names the card, and the card's factory says what it gives.
-AbilityFactory = Callable[[GameState, L5RCard, tuple[str, ...]], Ability]
+# granting card: the record names the card, and the card's factory says what it gives. A factory
+# answers None for a card its grant does not reach, as a grant to a seat that gives one of its cards
+# an ability answers for every other.
+AbilityFactory = Callable[[GameState, L5RCard, tuple[str, ...]], Ability | None]
 GRANTED_ABILITIES: HandlerRegistry[AbilityFactory] = HandlerRegistry(
     "granted abilities", "already grants an ability"
 )
@@ -195,6 +197,22 @@ def register_ability(printed_id: str, value: Ability) -> None:
     _ABILITIES[printed_id] = (*registered, value)
     if value.from_rulebook and value.key is not None:
         _RULEBOOK_KEYS.add(value.key)
+
+
+def acts_from_discard(card: L5RCard) -> bool:
+    """Whether ``card`` prints an ability acting from a discard pile."""
+    return any(
+        CardLocation.DISCARD in held.located_at for held in _ABILITIES.get(card.printed_id, ())
+    )
+
+
+def holds_seat_grant(game: GameState, seat: PlayerId) -> bool:
+    """Whether a grant reaching every card ``seat`` owns is in force, which can give a card in its
+    discard pile an ability."""
+    return any(
+        isinstance(recorded, SeatAbilityGrant) and recorded.seat is seat
+        for recorded in game.ongoing
+    )
 
 
 # The keys the rulebook's own abilities are registered under, wherever they sit. A printed card
@@ -372,17 +390,25 @@ def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     confer, then the ones the rulebook confers on every card where it sits. A conferred ability
     yields to a granted one under the same key, which is how a card changes a rulebook ability for
     a while."""
-    printed = tuple(held for held in _ABILITIES.get(card.printed_id, ()) if in_force(held))
-    granted = tuple(
+    printed = printed_abilities(card)
+    built = (
         GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](
             game, card, grant.context
         )
         for grant in game.ongoing
         if _grants_to(grant, card) and grant_applies(game, grant)
     )
+    granted = tuple(ability for ability in built if ability is not None)
     shadowed = {held.key for held in granted}
     conferred = tuple(held for held in _conferred(game, card) if held.key not in shadowed)
     return (*printed, *granted, *conferred)
+
+
+def printed_abilities(card: L5RCard) -> tuple[Ability, ...]:
+    """The abilities registered for ``card``'s printed id and in force under the active ruleset,
+    without what grants, keywords or the rulebook add: what a grant copying a card's own ability
+    reads, since reading every ability from inside a grant would read the grant again."""
+    return tuple(held for held in _ABILITIES.get(card.printed_id, ()) if in_force(held))
 
 
 def _grants_to(recorded: Ongoing, card: L5RCard) -> TypeGuard[AbilityGrant | SeatAbilityGrant]:
@@ -422,18 +448,19 @@ def _by_location(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
 
 
 _LOCATION_ZONE_ROLES = {
-    CardLocation.PROVINCE: ZoneRole.PROVINCE,
-    CardLocation.HAND: ZoneRole.HAND,
-    CardLocation.RULEBOOK: ZoneRole.RULEBOOK,
+    CardLocation.PROVINCE: (ZoneRole.PROVINCE,),
+    CardLocation.HAND: (ZoneRole.HAND,),
+    CardLocation.RULEBOOK: (ZoneRole.RULEBOOK,),
+    CardLocation.DISCARD: (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD),
 }
 
 
 def _sits_at(game: GameState, card: L5RCard, location: CardLocation) -> bool:
     if location is CardLocation.BATTLEFIELD:
         return any(held is card for held in game.table.battlefield.cards)
-    role = _LOCATION_ZONE_ROLES[location]
+    roles = _LOCATION_ZONE_ROLES[location]
     return any(
-        key.role is role and any(held is card for held in zone.cards)
+        key.role in roles and any(held is card for held in zone.cards)
         for key, zone in game.table.zones.items()
     )
 
