@@ -120,12 +120,11 @@ battle resolution.)" (CR, Timing Conflicts). Those go inside a
 checked, modified and negated as it would be alone, and lets nothing react to any of them until all
 have happened. Battle resolution builds one for the army it destroys:
 
-```python
-effects = [
-    Simultaneously(tuple(_destroy_army(defending))),
-    Simultaneously(tuple(_rehonored(attacking))),
-    *_spoils(game, attack.attacker, attacking, defending),
-]
+```{literalinclude} ../../../src/yasuki_core/engine/rules/battle/resolution.py
+:start-at: "if attacking_force > defending_force:"
+:end-before: province = attack.battlefields[battlefield].province
+:dedent: 4
+:language: python
 ```
 
 One text acting on several cards is one occurrence per step: "each step of each procedure takes
