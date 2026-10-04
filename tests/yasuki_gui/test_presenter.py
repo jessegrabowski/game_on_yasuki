@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
-from yasuki_core.engine.debug import ChooseDebugSeat, PlaceDebugCard
+from yasuki_core.engine.debug import ChooseDebugSeat, PlaceDebugCard, TokenTemplates
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.abilities.model import Ability, itself
@@ -97,6 +97,9 @@ class FakeHost:
     @property
     def session(self) -> EngineSession:
         return self.runner.session
+
+    def token_templates(self, card_id: str) -> TokenTemplates:
+        return ()
 
 
 def _grant_board() -> EngineSession:

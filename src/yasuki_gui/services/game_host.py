@@ -4,7 +4,10 @@ from pathlib import Path
 import psycopg
 from numpy.random import Generator
 
+from yasuki_core.database import get_creates_for_cards
+from yasuki_core.engine.debug import TokenTemplates
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.game_pieces.factory import build_token_templates
 from yasuki_core.engine.driver import Controls
 from yasuki_gui.services.game_runner import GameRunner
 from yasuki_core.bots.policies import MilitaryPolicy
@@ -71,6 +74,12 @@ class GameHost:
     def session(self) -> EngineSession:
         """The live session. Replaced with the runner whenever a new game starts."""
         return self.runner.session
+
+    def token_templates(self, card_id: str) -> TokenTemplates:
+        """The templates of the tokens the card ``card_id`` can create, which a deal fetches for
+        the cards it deals and a debug card brings with it."""
+        _, tokens = get_creates_for_cards([card_id])
+        return tuple(build_token_templates(tokens).items())
 
     def load_human_deck(self, path: Path | str) -> None:
         """Deal the decklist at ``path`` to the human and start a fresh game."""
