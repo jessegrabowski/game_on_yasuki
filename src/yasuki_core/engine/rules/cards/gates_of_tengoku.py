@@ -4,6 +4,7 @@ from yasuki_core.engine.rules.abilities.costs import declare_amount
 from yasuki_core.engine.rules.abilities.idioms import (
     declarable_gold,
     register_event_entry,
+    register_yu,
 )
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
@@ -433,3 +434,16 @@ register_ability(
         effects=_togashi_noritada_defender_of_the_high_house_experienced_effects,
     ),
 )
+
+
+# --- Veteran of Thunder ---
+
+THUNDER_VETERAN = "mantis_samurai_naval_personality_2_1_2"
+
+
+def _veteran_of_thunder_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Create a 2F/1C/2PH Samurai Naval Mantis Clan Personality." """
+    return [CreateToken(THUNDER_VETERAN, ctx.card.owner, ctx.card.id)]
+
+
+register_yu("veteran_of_thunder", _veteran_of_thunder_yu)

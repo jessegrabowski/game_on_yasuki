@@ -4,7 +4,10 @@ from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_AND_PROCL
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.rules.units.membership import attachments_of
-from yasuki_core.engine.rules.cards.gates_of_tengoku import SASADAS_OROCHI
+from yasuki_core.engine.rules.cards.gates_of_tengoku import (
+    SASADAS_OROCHI,
+    THUNDER_VETERAN,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     ChooseAbilityTarget,
@@ -20,7 +23,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of, province_keys
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import ActionPrint, EventPrint, PersonalityPrint, WindPrint
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
@@ -57,6 +60,8 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     combat_segment,
     dealt_table,
     end_phase,
@@ -844,3 +849,33 @@ def test_shrine_of_compassions_interrupt_lasts_until_the_cards_the_action_brings
 
         assert seen == [True]
         assert has_compassion(session.game, P1) is False
+
+
+# --- Veteran of Thunder ---
+
+
+def test_veteran_of_thunder_creates_a_mantis_samurai_as_it_dies():
+    units = [personality("attacker", force=5), personality("leader", owner=PlayerId.P2)]
+    game = combat_segment(units, {"attacker": 0}, {"leader": 0}).game
+    token_template(
+        game,
+        THUNDER_VETERAN,
+        name="Thunder Veteran",
+        card_type="Personality",
+        keywords=("Samurai", "Naval"),
+        force=2,
+        chi=1,
+    )
+    veteran = attachment(
+        "veteran",
+        owner=PlayerId.P2,
+        printed_id="veteran_of_thunder",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=2,
+    )
+    attached(game, veteran, "leader")
+
+    resolve_effects(game, [Destroy("veteran", P1)])
+
+    created = [card for card in personalities_in_play(game) if card.name == "Thunder Veteran"]
+    assert [card.owner for card in created] == [PlayerId.P2]
