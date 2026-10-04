@@ -49,13 +49,14 @@ An ability's whole price goes in its cost, the Favor and anything else it charge
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/favor_abilities.py
 :start-at: def _favor_cost(extra: SeatCost | None)
-:end-before: def _on_your_turn(
+:end-before: def _draw(
 :language: python
 ```
 
 A choice that names what the ability acts on is in the cost, so an ability with nothing to name is
 withheld. A Wind in play makes the cost unpayable, and no payer can answer it. "If it is your turn"
-is in the targets: the proxy targets itself only while its seat is active.
+is the Limited timing, as on any card that prints it (see
+[Reading card text](../../contributing/reading_card_text.md)).
 {func}`~.is_favor_ability` recognizes the actions by key and proxy, and the Tk client lists them on
 the Favor card in the holder's hand.
 

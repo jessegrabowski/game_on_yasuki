@@ -43,6 +43,18 @@ action reading "Open: Draw a card" prints as "Air Water Open: Draw a card".
 `Favor Limited` is the real exception. It is a genuine compound tied to the Imperial Favor, and the
 Comprehensive Rules give it its own entry.
 
+## "Open: If it is your turn" is a Limited ability
+
+Shattered Empire retires the Limited designator and prints its restriction as a condition instead.
+{card}`Poorly Placed Garden` reads *"Open, :bow:: If it is your turn, gain 2 Honor."* An Open action
+any player may take, whose text then allows only the active player, is the Limited action the older
+arcs print. Register it as `ActionTiming.LIMITED`, and leave the turn out of `targets`. The
+registration audit reads an Open ability whose text opens on "If it is your turn" as Limited, so an
+`OPEN` registration of it fails. A longer condition such as the Onyx Lobby's "If it is your turn and
+you have higher Family Honor" is Limited too, and only the part after "and" belongs in `targets`.
+
+"If it is not your turn" is the opposite restriction and stays Open.
+
 ## The bow icon bows the card the ability is on
 
 On an attachment it looks like the Personality pays. The Comprehensive Rules: "the bowing icon

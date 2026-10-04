@@ -332,6 +332,15 @@ def test_an_index_on_an_ability_of_another_designator_is_reported():
     ]
 
 
+def test_open_if_it_is_your_turn_is_registered_as_limited():
+    # Poorly Placed Garden prints "Open, :bow:: If it is your turn, gain 2 Honor."
+    assert _unprinted(poorly_placed_garden=[_unlabeled()]) == []
+    assert _unprinted(poorly_placed_garden=[_unlabeled(timings=(ActionTiming.OPEN,))]) == [
+        "abilities: poorly_placed_garden names printed ability 0, which is Limited where the "
+        "registration is Open"
+    ]
+
+
 def test_a_labeled_registration_names_no_printed_ability_and_is_not_judged():
     labeled = Ability(
         timings=(ActionTiming.OPEN,),

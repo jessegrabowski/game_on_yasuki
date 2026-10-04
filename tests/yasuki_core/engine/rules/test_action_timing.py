@@ -75,7 +75,7 @@ def test_each_rulebook_action_reports_the_designator_the_cr_prints():
     lobby = ActivateAbility(rulebook_proxy(game, PlayerId.P1, ONYX_LOBBY_PROXY_ID).id, LOBBY)
 
     assert legality.timings_of(game, cycle) == {ActionTiming.LIMITED}
-    assert legality.timings_of(game, lobby) == {ActionTiming.OPEN}
+    assert legality.timings_of(game, lobby) == {ActionTiming.LIMITED}
     assert legality.timings_of(game, ActivateAbility("x", RECRUIT)) == {ActionTiming.DYNASTY}
     assert legality.timings_of(game, ActivateAbility("x", DYNASTY_DISCARD)) == {
         ActionTiming.DYNASTY

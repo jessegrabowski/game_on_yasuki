@@ -17,12 +17,6 @@ def _poorly_placed_garden_entry_state(game: GameState, card: L5RCard) -> EntrySt
     return EntryState(bowed=False)
 
 
-def _poorly_placed_garden_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The Holding itself while it is its owner's turn. An Open designator lets any seat act, so
-    the printed "If it is your turn" has to close the ability on the other seats' turns."""
-    return itself(game, source) if game.active is source.owner else []
-
-
 def _poorly_placed_garden_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
@@ -32,9 +26,9 @@ def _poorly_placed_garden_effects(
 register_ability(
     "poorly_placed_garden",
     Ability(
-        timings=(ActionTiming.OPEN,),
+        timings=(ActionTiming.LIMITED,),
         cost=bow_cost,
-        targets=_poorly_placed_garden_targets,
+        targets=itself,
         effects=_poorly_placed_garden_effects,
         hits_every_target=True,
     ),
