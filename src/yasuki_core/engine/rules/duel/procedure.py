@@ -5,7 +5,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.focusing import focused_cards
-from yasuki_core.engine.rules.duel.records import DuelRecord, DuelWork
+from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelWork
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import effective_stat
@@ -34,18 +34,29 @@ def duel_in_progress(game: GameState) -> DuelRecord:
     return duel
 
 
+def decided_duel(game: GameState) -> DuelRecord | None:
+    """The duel on the game once it has an outcome, or None where there is none or it is still being
+    fought. What anything reading how a duel went checks before it acts."""
+    duel = game.duel
+    return None if duel is None or duel.outcome is None else duel
+
+
+def decided_outcome(game: GameState) -> DuelOutcome | None:
+    """How the duel on the game went, or None where there is none or it is still being fought. What
+    a card reading winners or losers wants, with no record to narrow."""
+    duel = decided_duel(game)
+    return None if duel is None else duel.outcome
+
+
 def duel_decided_by(game: GameState, source_id: str) -> DuelRecord | None:
     """The decided duel ``source_id`` created, or None where there is none.
 
-    What a consequence delayed to the duel's end reads before it acts. None covers the three states
-    it must not act on: no duel at all, a duel another card created, and a duel still being fought.
-    A challenge that did not happen leaves the consequence held, so matching the source is what
-    keeps it off the next duel to end (CR, Challenge).
+    What a consequence delayed to the duel's end reads before it acts. A challenge that did not
+    happen leaves the consequence held, so matching the source is what keeps it off the next duel
+    to end (CR, Challenge).
     """
-    duel = game.duel
-    if duel is None or duel.source != source_id or duel.outcome is None:
-        return None
-    return duel
+    duel = decided_duel(game)
+    return None if duel is None or duel.source != source_id else duel
 
 
 def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duelist: str) -> bool:

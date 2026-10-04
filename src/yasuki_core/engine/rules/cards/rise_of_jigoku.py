@@ -62,6 +62,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.rulebook.kharmic import is_kharmic_action
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
+from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcome
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.game_pieces.counters import FIRE
@@ -601,8 +602,9 @@ def _resolve_seven_heavens_strike_won(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """ "Give them +1F", to your Personality when it won."""
-    duel = game.duel
-    if duel is None or duel.outcome is None or seat not in duel.outcome.winners:
+    duel = decided_duel(game)
+    outcome = decided_outcome(game)
+    if duel is None or outcome is None or seat not in outcome.winners:
         return []
     yours = duel.challenger_duelist if duel.challenger is seat else duel.challenged_duelist
     bonus = GrantModifier(
