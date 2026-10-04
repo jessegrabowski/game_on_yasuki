@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseAmount,
     ChooseCards,
+    ChooseNextTrigger,
     ChooseOption,
     Confirm,
     DECK_TOP,
@@ -267,6 +268,21 @@ def test_a_yes_no_question_is_asked_by_its_buttons(board):
 
     assert _status(window) == "Destroy the Farm?"
     assert _buttons(window) == ["Yes", "No", "Cancel"]
+
+
+def test_the_order_of_triggers_on_the_board_is_picked_there_and_resolved_by_a_button(board):
+    presenter, window, session = board
+    session.game.pending = ChooseNextTrigger(seat=P1, candidates=("of", "target"))
+
+    presenter.present()
+    unpicked = _buttons(window), _primary_enabled(window)
+    window.field.toggle_selection("of")
+    presenter.refresh()
+
+    assert window.field.selecting
+    assert _status(window) == "Choose the next triggered ability to resolve"
+    assert unpicked == (["Resolve"], False)
+    assert _primary_enabled(window)
 
 
 def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
