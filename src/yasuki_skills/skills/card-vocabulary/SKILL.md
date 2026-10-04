@@ -54,8 +54,9 @@ in a group does not let both commit before the board is judged. Two effects the 
 into play, ..."), are a `To`, so the second applies only if the first actually happened.
 A trait acting before a card is destroyed ("before this card is destroyed", Yu) answers
 `Destroying`, which is announced before the destruction commits unless a negation in force will stop
-it. A group's destructions are announced together. `docs/design/systems/effects.md` has the rules
-and the CR lines behind them.
+it. A group's destructions are announced together. A printed Yu registers with `register_yu`, which
+applies the datasheet's conditions for when Yu resolves. `docs/design/systems/effects.md` has the
+rules and the CR lines behind them.
 
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and
 modifiers layer over it. Gold is the same shape on the economy side. A card that appears to have the
