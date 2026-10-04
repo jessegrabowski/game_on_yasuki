@@ -44,6 +44,7 @@ _DECORATORS = {
     "entry_state",
     "favor_payer",
     "granted_ability",
+    "granted_interrupt",
     "lobby_bar",
     "lobby_bonus_grant",
     "proclaim_gain",
@@ -256,7 +257,8 @@ def headers(module: pathlib.Path) -> tuple[str, ...]:
 # card's id and one of these, so a card's whole implementation answers a grep for its id and every
 # function of a kind answers a grep for its role. A card printing several abilities qualifies the
 # role with that ability's key, as in ``_incendiary_archers_fear_effects``, since one name per
-# role would collide between them.
+# role would collide between them. A card printing an ability that is also taken as an Interrupt
+# qualifies the Interrupt's parts with ``interrupt``, as in ``_x_interrupt_cost``.
 ROLES = frozenset(
     {
         # the parts of an activated ability
@@ -273,6 +275,7 @@ ROLES = frozenset(
         "proclaim_gain",
         "tireless_grant",
         "granted_ability",
+        "granted_interrupt",
         # the per-registry hooks
         "invest",
         "gold",
@@ -314,6 +317,9 @@ ROLES = frozenset(
 )
 
 
+INTERRUPT_QUALIFIER = "interrupt"
+
+
 def _named_conventionally(function: CardFunction, keys: frozenset[str]) -> bool:
     """A resolver is named for the choice it resolves, a handler for its card and its role, and a
     helper only has to carry its card's id. ``keys`` are the ability keys the module registers, each
@@ -326,7 +332,7 @@ def _named_conventionally(function: CardFunction, keys: frozenset[str]) -> bool:
     if not function.registered:
         return True
     suffix = function.name.removeprefix(prefix)
-    qualified = {f"{key}_{role}" for key in keys for role in ROLES}
+    qualified = {f"{key}_{role}" for key in (*keys, INTERRUPT_QUALIFIER) for role in ROLES}
     return suffix in ROLES or suffix in qualified
 
 
