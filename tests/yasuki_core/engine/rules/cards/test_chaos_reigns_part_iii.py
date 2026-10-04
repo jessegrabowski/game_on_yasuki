@@ -171,11 +171,11 @@ def test_giving_the_zombie_to_an_untainted_personality_costs_five_honor():
 
 
 def test_kengun_grounds_is_withheld_on_another_seats_turn():
-    """'If it is your turn'. Read before the ability is offered rather than resolving to nothing."""
     session = _kengun_game()
-    end_turn(session)  # hand the turn to P2; the Grounds is still P1's to bow
+    end_turn(session)
+    session.act(P2, Pass())
 
-    assert session.game.active is P2
+    assert session.game.round.priority is P1
     assert ActivateAbility("grounds") not in session.legal_actions(P1)
 
 
