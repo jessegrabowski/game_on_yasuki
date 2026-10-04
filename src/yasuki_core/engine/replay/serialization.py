@@ -371,6 +371,7 @@ def encode_seat(info: SeatInfo) -> dict:
         "name": info.name,
         "honor": info.honor,
         "ignores_honor_requirements": info.ignores_honor_requirements,
+        "lost_honor_from_elsewhere": info.lost_honor_from_elsewhere,
         "ready": info.ready,
         "connected": info.connected,
     }

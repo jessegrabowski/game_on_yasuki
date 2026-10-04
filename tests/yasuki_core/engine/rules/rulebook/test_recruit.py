@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
@@ -28,6 +30,7 @@ from tests.yasuki_core.engine.builders import (
     personality,
     put_in_play,
     register,
+    stronghold,
 )
 from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.game_pieces.prints import StrongholdPrint
@@ -98,6 +101,30 @@ def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
     card.turn_face_down()
     state.zones[ops.create_province(state, seat)].add(card)
     return card
+
+
+@pytest.mark.parametrize(
+    ("clans", "lost_honor", "recruitable_ids"),
+    [
+        (("Crab",), True, ["proud"]),
+        (("Crane",), True, []),
+        ((), True, []),
+        (("Crab",), False, []),
+    ],
+    ids=["own clan", "off clan", "unaligned", "no loss taken"],
+)
+def test_lost_honor_waives_the_requirement_of_the_seats_own_clan(
+    clans, lost_honor, recruitable_ids
+):
+    # CR, Honor Requirement: the waiver covers "Personalities with his or her Clan Alignment", so a
+    # Crab seat that has lost Honor elsewhere still cannot reach a Crane at HR 5.
+    game = two_seat_game()
+    put_in_play(game, stronghold(PlayerId.P1, clan="Crab"))
+    game.table.seats[PlayerId.P1].honor = -2
+    game.table.seats[PlayerId.P1].lost_honor_from_elsewhere = lost_honor
+    proud = register(game.table, personality("proud", clans=clans, honor_requirement=5))
+
+    assert recruit.recruitable(game, proud) == recruitable_ids
 
 
 def test_a_proclaimed_recruit_announces_its_honor_gain(reacting):

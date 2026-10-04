@@ -550,3 +550,13 @@ def set_ignore_honor_requirements(state: TableState, seat: PlayerId, value: bool
         return False
     info.ignores_honor_requirements = value
     return True
+
+
+def set_lost_honor_from_elsewhere(state: TableState, seat: PlayerId) -> bool:
+    """Record that something other than ``seat``'s own cards has cost it Honor. Returns whether it
+    changed."""
+    info = state.seats[seat]
+    if info.lost_honor_from_elsewhere:
+        return False
+    info.lost_honor_from_elsewhere = True
+    return True

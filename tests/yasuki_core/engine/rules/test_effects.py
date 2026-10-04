@@ -236,6 +236,24 @@ def test_a_loss_from_a_dishonorable_personality_is_still_lost():
     assert hero.dishonorable
 
 
+@pytest.mark.parametrize(
+    ("amount", "source_owner", "remembered"),
+    [(-2, PlayerId.P2, True), (-2, None, True), (-2, PlayerId.P1, False), (2, PlayerId.P2, False)],
+    ids=["opponent's card", "the rulebook", "own card", "a gain"],
+)
+def test_honor_lost_to_anything_but_a_seats_own_cards_is_remembered(
+    amount, source_owner, remembered
+):
+    # CR, Honor Requirement: a seat that loses Honor to another player's cards or to a rulebook
+    # loss ignores its own Clan Alignment's Honor Requirements for the rest of the game.
+    game = two_seat_game()
+    source = put_in_play(game, personality("src", owner=source_owner)) if source_owner else None
+
+    resolve_effects(game, [GainHonor(PlayerId.P1, amount, source_id=source.id if source else None)])
+
+    assert game.table.seats[PlayerId.P1].lost_honor_from_elsewhere is remembered
+
+
 def test_a_gain_reduced_to_nothing_rehonors_nobody():
     # CR, Rehonoring: "preventing the Honor gain also prevents its substituted rehonoring."
     game = two_seat_game()

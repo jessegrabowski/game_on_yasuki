@@ -120,6 +120,10 @@ class SeatInfo:
     # Whether this seat waives every Personality's Honor Requirement when recruiting. Granted by
     # cards' effects; false until one sets it.
     ignores_honor_requirements: bool = False
+    # Whether anything but this seat's own cards has caused it to lose Honor, which waives the
+    # Honor Requirement of its own Clan Alignment's Personalities for the rest of the game
+    # (CR, Honor Requirement). Latched: nothing clears it.
+    lost_honor_from_elsewhere: bool = False
     ready: bool = False
     connected: bool = False
     avatar: dict | None = None  # the user's avatar spec; None falls back to the name's initials

@@ -2332,13 +2332,20 @@ class GainHonor(Effect):
             return [Rehonored(card.id) for card in rehonored]
         if not ops.set_honor(game.table, self.seat, delta=amount):
             return []
+        if amount < 0 and not self._from_own_cards(game):
+            ops.set_lost_honor_from_elsewhere(game.table, self.seat)
         return [HonorChanged(self.seat, amount)]
+
+    def _from_own_cards(self, game: GameState) -> bool:
+        """Whether the change comes from a card ``seat`` controls. False for a rulebook change,
+        which is no card's effect (CR, Dishonorable)."""
+        source = game.table.cards_by_id.get(self.source_id) if self.source_id else None
+        return source is not None and source.owner is self.seat
 
     def _shielded(self, game: GameState) -> bool:
         """Whether the loss comes from a card ``seat`` controls while ``seat`` controls a card
         that says it does not lose Honor from its own cards' effects."""
-        source = game.table.cards_by_id.get(self.source_id) if self.source_id else None
-        if source is None or source.owner is not self.seat:
+        if not self._from_own_cards(game):
             return False
         return any(
             card.owner is self.seat and card.printed_id in HONOR_LOSS_SHIELDS

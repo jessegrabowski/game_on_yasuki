@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     invest_amounts,
     register_location_ability,
 )
+from yasuki_core.engine.rules.board.clans import shares_seat_alignment
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -214,7 +215,7 @@ def recruitable(game: GameState, source: L5RCard) -> list[str]:
     """Itself, when its controller may Recruit it (CR, Recruit): a Holding or a Personality that
     the limits on copies and its own "May only be Recruited by" text let into play, and a
     Personality whose Honor Requirement its controller's Family Honor meets. A dash never withholds,
-    and nothing does for a seat that ignores Honor Requirements."""
+    and neither does a requirement the seat may ignore for the Honor it has lost elsewhere."""
     seat = source.owner
     if not isinstance(source.printed, HoldingPrint | PersonalityPrint):
         return []
@@ -228,7 +229,19 @@ def recruitable(game: GameState, source: L5RCard) -> list[str]:
 def _meets_honor_requirement(game: GameState, personality: L5RCard) -> bool:
     seat = game.table.seats[personality.owner]
     required = personality.honor_requirement
-    return seat.ignores_honor_requirements or required is None or seat.honor >= required
+    if seat.ignores_honor_requirements or required is None or seat.honor >= required:
+        return True
+    return _waives_honor_requirement(game, personality)
+
+
+def _waives_honor_requirement(game: GameState, personality: L5RCard) -> bool:
+    """Whether Honor its controller lost to anything but its own cards waives ``personality``'s
+    Honor Requirement (CR, Honor Requirement). That waiver covers the seat's own Clan Alignment's
+    Personalities only.
+    """
+    if not game.table.seats[personality.owner].lost_honor_from_elsewhere:
+        return False
+    return shares_seat_alignment(game, personality)
 
 
 def recruit_gold(game: GameState, source: L5RCard, *, raised_by: int = 0) -> list[Effect]:

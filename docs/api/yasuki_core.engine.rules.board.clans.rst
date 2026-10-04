@@ -12,6 +12,7 @@ yasuki_core.engine.rules.board.clans
     is_clan
     seat_alignment_name
     seat_alignments
+    shares_seat_alignment
 
 .. automodule:: yasuki_core.engine.rules.board.clans
     :members:
