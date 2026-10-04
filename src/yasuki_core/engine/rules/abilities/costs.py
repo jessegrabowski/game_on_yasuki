@@ -83,6 +83,20 @@ def _resolve_bow_waiver(
     return []
 
 
+def ignoring_bow_costs(cost: Cost) -> Cost:
+    """``cost`` with every bow it charges ignored, as "ignoring bow costs" has it. What else it
+    charges still has to be paid, and a waiver a bow cost would ask about goes with the bow."""
+
+    def ignoring(game: GameState, source: L5RCard) -> list[Effect]:
+        return [effect for effect in cost(game, source) if not _bows(effect)]
+
+    return ignoring
+
+
+def _bows(effect: Effect) -> bool:
+    return isinstance(effect, Bow) or (isinstance(effect, Ask) and effect.resolver == WAIVER_TAG)
+
+
 def bow_parent_cost(game: GameState, source: L5RCard) -> list[Effect]:
     """Bow the Personality ``source`` is attached to. Unpayable while it is attached to none."""
     parent = attached_to(game, source)
