@@ -123,7 +123,7 @@ have happened. Battle resolution builds one for the army it destroys:
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/battle/resolution.py
 :start-at: "if attacking_force > defending_force:"
 :end-before: province = attack.battlefields[battlefield].province
-:dedent:
+:dedent: 4
 :language: python
 ```
 
