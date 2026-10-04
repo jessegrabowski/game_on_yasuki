@@ -157,6 +157,16 @@ def personalities_in_play(game: GameState) -> tuple[L5RCard, ...]:
     )
 
 
+def owned_carrying(game: GameState, owner: PlayerId, *carried: str) -> tuple[L5RCard, ...]:
+    """The cards ``owner`` has in play carrying any of ``carried``: the pool a card means by "your
+    target Monk or Shugenja", which names no card type, so a Follower carrying one is among them."""
+    return tuple(
+        card
+        for card in game.table.battlefield.cards
+        if card.owner is owner and any(has_keyword(game, card, keyword) for keyword in carried)
+    )
+
+
 def favor_actions_this_turn(game: GameState, seat: PlayerId) -> int:
     """How many Favor actions ``seat`` has resolved this turn, folded over the turn's events."""
     return sum(

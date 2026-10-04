@@ -16,6 +16,7 @@ yasuki_core.engine.rules.board.queries
     has_keyword
     opposed_units_in_battle
     opposing_units_in_battle
+    owned_carrying
     owned_holdings
     owned_personalities
     personalities_in_play

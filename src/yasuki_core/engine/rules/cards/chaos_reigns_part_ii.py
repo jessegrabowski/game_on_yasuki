@@ -11,13 +11,13 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
+    owned_carrying,
     ATTACK_TARGET,
     attack_targets,
     has_keyword,
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_holdings,
-    owned_personalities,
     personalities_in_play,
     rings_in_play,
     units_at,
@@ -161,11 +161,7 @@ def _burnt_offering_targets(game: GameState, source: L5RCard) -> list[str]:
     """Your unbowed Monks, once there is an enemy attachment to destroy."""
     if not _burnt_offering_attachments(game, source.owner):
         return []
-    return [
-        card.id
-        for card in owned_personalities(game, source.owner)
-        if not card.bowed and has_keyword(game, card, keywords.MONK)
-    ]
+    return [card.id for card in owned_carrying(game, source.owner, keywords.MONK) if not card.bowed]
 
 
 def _burnt_offering_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -502,14 +498,10 @@ def _togashi_bairei_bowed_an_enemy_here(game: GameState, source: L5RCard) -> boo
 
 
 def _togashi_bairei_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Your Monk Personalities, bowed or not: the text asks for no more."""
+    """Your Monks, Followers among them, bowed or not: the text asks for no more."""
     if not _togashi_bairei_bowed_an_enemy_here(game, source):
         return []
-    return [
-        card.id
-        for card in owned_personalities(game, source.owner)
-        if has_keyword(game, card, keywords.MONK)
-    ]
+    return [card.id for card in owned_carrying(game, source.owner, keywords.MONK)]
 
 
 def _togashi_bairei_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -633,11 +625,7 @@ def _wrath_of_the_shattered_star_targets(game: GameState, source: L5RCard) -> li
     """Your Monks, bowed or not, once either half of the text has something to act on."""
     if not _wrath_of_the_shattered_star_modes(game, source):
         return []
-    return [
-        card.id
-        for card in owned_personalities(game, source.owner)
-        if has_keyword(game, card, keywords.MONK)
-    ]
+    return [card.id for card in owned_carrying(game, source.owner, keywords.MONK)]
 
 
 def _wrath_of_the_shattered_star_effects(

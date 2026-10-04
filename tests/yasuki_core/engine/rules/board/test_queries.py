@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.board.queries import (
     different_elements,
     controls_terrain_at,
     has_keyword,
+    owned_carrying,
     owned_holdings,
     phase_history,
     province_key_of,
@@ -24,10 +25,12 @@ from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, PhaseStarted
 from yasuki_core.engine.table import Location
-from yasuki_core.game_pieces.constants import Element
+from yasuki_core.game_pieces.constants import AttachmentType, Element
 from yasuki_core.game_pieces.prints import RingPrint
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     doro_no_oni,
     holding,
     personality,
@@ -49,6 +52,19 @@ def test_owned_holdings_without_a_keyword_takes_them_all():
     put_in_play(game, stronghold(PlayerId.P1, gold_production=5))
 
     assert owned_holdings(game, PlayerId.P1) == [quay, plain]
+
+
+def test_owned_carrying_takes_followers_and_personalities_alike():
+    game = two_seat_game()
+    monk = put_in_play(game, personality("monk", keywords=("Monk",)))
+    put_in_play(game, personality("samurai"))
+    put_in_play(game, personality("theirs", owner=PlayerId.P2, keywords=("Shugenja",)))
+    follower = attachment(
+        "follower", attachment_type=AttachmentType.FOLLOWER, keywords=("Shugenja",)
+    )
+    attached(game.table, follower, "samurai")
+
+    assert owned_carrying(game, PlayerId.P1, "Monk", "Shugenja") == (monk, follower)
 
 
 def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():

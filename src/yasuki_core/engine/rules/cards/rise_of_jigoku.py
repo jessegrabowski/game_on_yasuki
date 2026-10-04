@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, reg
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt, Interruption
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import (
+    owned_carrying,
     ATTACK_TARGET,
     attack_targets,
     has_keyword,
@@ -136,10 +137,8 @@ def _blood_of_fu_leng_targets(game: GameState, source: L5RCard) -> list[str]:
     to target."""
     return [
         card.id
-        for card in cards_in_play(game, source.owner)
-        if not card.bowed
-        and (has_keyword(game, card, keywords.MONK) or has_keyword(game, card, keywords.SHUGENJA))
-        and _blood_of_fu_leng_lower(game, source, card)
+        for card in owned_carrying(game, source.owner, keywords.MONK, keywords.SHUGENJA)
+        if not card.bowed and _blood_of_fu_leng_lower(game, source, card)
     ]
 
 

@@ -3,8 +3,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
-    has_keyword,
-    owned_personalities,
+    owned_carrying,
     personalities_in_play,
 )
 from yasuki_core.engine.rules.effects import Bow, Choose, Effect, GrantModifier
@@ -28,15 +27,14 @@ def _chasing_osano_wo_recipients(game: GameState) -> tuple[str, ...]:
 
 
 def _chasing_osano_wo_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Your unbowed Monks and Shugenja at any location, once there is a Personality to give the
-    bonus to."""
+    """Your unbowed Monks and Shugenja, Followers among them, at any location, once there is a
+    Personality to give the bonus to."""
     if not _chasing_osano_wo_recipients(game):
         return []
     return [
         card.id
-        for card in owned_personalities(game, source.owner)
+        for card in owned_carrying(game, source.owner, keywords.MONK, keywords.SHUGENJA)
         if not card.bowed
-        and (has_keyword(game, card, keywords.MONK) or has_keyword(game, card, keywords.SHUGENJA))
     ]
 
 

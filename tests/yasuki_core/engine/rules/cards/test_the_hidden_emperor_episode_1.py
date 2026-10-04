@@ -6,10 +6,16 @@ from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import FatePrint
 
-from tests.yasuki_core.engine.builders import combat_segment, personality, register
+from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
+    combat_segment,
+    personality,
+    register,
+)
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -55,6 +61,23 @@ def test_chasing_osano_wo_bows_a_monk_at_home_and_gives_personal_honor_plus_his_
     table = session.game.table
     assert table.cards_by_id["monk"].bowed
     assert effective_force(session.game, table.cards_by_id["samurai"]) == 2 + 3 + 4
+
+
+def test_chasing_osano_wo_is_performed_by_a_monk_follower():
+    session = _chasing_battle()
+    session.game.table.cards_by_id["monk"].bow()
+    follower = attachment(
+        "follower", attachment_type=AttachmentType.FOLLOWER, force=2, keywords=(keywords.MONK,)
+    )
+    attached(session.game.table, follower, "samurai")
+
+    session.act(P1, PlayStrategy("chasing"))
+    session.submit(P1, DecisionResponse(("follower",)))
+    session.submit(P1, DecisionResponse(("samurai",)))
+
+    table = session.game.table
+    assert table.cards_by_id["follower"].bowed
+    assert effective_force(session.game, table.cards_by_id["samurai"]) == 2 + 2 + 4
 
 
 def test_chasing_osano_wo_does_not_offer_a_bowed_monk():
