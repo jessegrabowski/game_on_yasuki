@@ -5,13 +5,13 @@ description: >
   to, the decisions it can ask for, how costs are paid, and how a card's stats and gold are
   computed. Fires on "add an effect", "what effect do I return", "the vocabulary cannot express
   this", "add a new game event", "how do costs work", "why is this card's Force wrong", "add a
-  keyword", and on any engine change under rules/vocabulary, rules/abilities, rules/stats,
-  rules/gold, rules/units, rules/battle or rules/duel. Read it before inventing a way to say
-  something, because the vocabulary is a closed set of dataclasses that the effect applier and the
-  projection layer both have to understand, and a handler that mutates the board instead of
-  returning an effect breaks undo. This skill covers what a handler may return; writing the handler
-  for a printed card is implementing-a-card, and the turn machine that calls it is
-  turns-and-actions.
+  keyword", "why did my Focus Effect not resolve", "the duel does not end", and on any engine change
+  under rules/vocabulary, rules/abilities, rules/stats, rules/gold, rules/units, rules/battle or
+  rules/duel. Read it before inventing a way to say something, because the vocabulary is a closed
+  set of dataclasses that the effect applier and the projection layer both have to understand, and a
+  handler that mutates the board instead of returning an effect breaks undo. This skill covers what
+  a handler may return; writing the handler for a printed card is implementing-a-card, and the turn
+  machine that calls it is turns-and-actions.
 ---
 
 # The card vocabulary

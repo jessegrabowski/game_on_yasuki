@@ -137,6 +137,7 @@ reacting_to_events
 asking_a_question
 attachments
 battle_cards
+duel_cards
 cards_outside_play
 the_favor_and_the_court
 creating_cards

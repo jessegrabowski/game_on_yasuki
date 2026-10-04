@@ -4,13 +4,13 @@ description: >
   Use this when you are making a printed card work: choosing which hook its text wants, writing the
   trigger or activated ability, registering it, or editing anything under
   src/yasuki_core/engine/rules/cards/. Fires on "implement this card", "model this card", "why does
-  my handler never fire", "which hook does this wording want", "where does this card go", and on any
-  request naming a card title and asking for behavior. Read it before you write the handler: the
-  card id is derived rather than written down, the module a card belongs in is decided by its first
-  printing, and a handler keyed on a typo registers happily and never fires. This skill covers
-  writing the handler. The effects, triggers, costs and stat vocabulary a handler may return are the
-  card-vocabulary skill, the machinery that calls it is turns-and-actions, and the card's text,
-  stats and printings are card-data.
+  my handler never fire", "which hook does this wording want", "where does this card go", "as a
+  Focus Effect", "the winner of the duel", and on any request naming a card title and asking for
+  behavior. Read it before you write the handler: the card id is derived rather than written down,
+  the module a card belongs in is decided by its first printing, and a handler keyed on a typo
+  registers happily and never fires. This skill covers writing the handler. The effects, triggers,
+  costs and stat vocabulary a handler may return are the card-vocabulary skill, the machinery that
+  calls it is turns-and-actions, and the card's text, stats and printings are card-data.
 ---
 
 # Implementing a card
@@ -77,9 +77,9 @@ not, and `docs/contributing/reacting_to_events.md` for a worked trigger.
 
 Then by what the card does: `an_ability.md` and `several_abilities.md` for activated abilities,
 `asking_a_question.md` when the text says "choose" or "may", `holdings_and_gold.md` for a gold
-handler, and `stats_and_costs.md` for whether a number needs a handler at all. Five pages cover the
+handler, and `stats_and_costs.md` for whether a number needs a handler at all. Six pages cover the
 kinds of card that need something other than the common shape: `attachments.md`, `battle_cards.md`,
-`cards_outside_play.md`, `creating_cards.md` and `the_favor_and_the_court.md`.
+`duel_cards.md`, `cards_outside_play.md`, `creating_cards.md` and `the_favor_and_the_court.md`.
 
 Two pages are about what happens to a handler once it exists.
 `docs/design/systems/registration-and-the-audit.md` covers how it binds to its card, and

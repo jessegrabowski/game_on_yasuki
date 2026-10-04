@@ -6,4 +6,6 @@ docs/design/systems/action-lifecycles.md
 docs/design/systems/game-state.md
 docs/design/systems/board-queries.md
 docs/design/systems/the-replay-log.md
+docs/design/systems/decisions-and-resumption.md
+docs/design/systems/triggers-and-the-cascade.md
 docs/design/package_boundaries.md
