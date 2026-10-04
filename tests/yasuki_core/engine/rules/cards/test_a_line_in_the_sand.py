@@ -33,7 +33,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, AttachmentType, Side
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     FatePrint,
@@ -43,6 +43,9 @@ from yasuki_core.game_pieces.prints import (
 )
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
+    combat_segment,
     end_phase,
     fate_card,
     holding,
@@ -53,7 +56,7 @@ from tests.yasuki_core.engine.builders import (
     register,
 )
 
-P1 = PlayerId.P1
+P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 def _weapon(state, card_id: str) -> L5RCard:
@@ -595,3 +598,49 @@ def test_beset_on_an_empty_fate_deck_bows_the_courtier_and_asks_nothing():
     assert session.game.table.cards_by_id["courtier"].bowed
     assert session.game.pending is None
     assert session.game.look is None
+
+
+# --- Dragon Elite Inkyo ---
+
+
+def _inkyo_against(enemy_chi: int) -> EngineSession:
+    """Inkyo, a 0 Chi Monk Follower, on P1's 1 Chi Personality at the battlefield, against P2's
+    Personality there, with Blood of Fu Leng in P1's hand to check a card's Chi as a Kiho."""
+    blood = L5RCard.of(
+        FatePrint,
+        id="blood",
+        name="Blood of Fu Leng",
+        printed_id="blood_of_fu_leng",
+        side=Side.FATE,
+        owner=P1,
+    )
+    session = combat_segment(
+        [personality("bearer", chi=1), personality("enemy", owner=P2, chi=enemy_chi)],
+        {"bearer": 0},
+        {"enemy": 0},
+        in_hand=[blood],
+    )
+    inkyo = attachment(
+        "inkyo",
+        printed_id="dragon_elite_inkyo",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=3,
+        keywords=(keywords.MONK, keywords.ELITE),
+    )
+    attached(session.game.table, inkyo, "bearer")
+    return session
+
+
+def test_inkyo_performs_a_kiho_at_3_chi():
+    session = _inkyo_against(enemy_chi=2)
+
+    session.act(P1, PlayStrategy("blood"))
+    session.submit(P1, DecisionResponse(("inkyo",)))
+
+    assert session.game.pending.candidates == ("enemy",)
+
+
+def test_inkyo_cannot_perform_against_an_enemy_of_3_chi():
+    session = _inkyo_against(enemy_chi=3)
+
+    assert PlayStrategy("blood") not in session.legal_actions(P1)

@@ -100,6 +100,7 @@ yasuki_core
     yasuki_core.engine.rules.state_based_actions <yasuki_core.engine.rules.state_based_actions>
     yasuki_core.engine.rules.stats.calculation <yasuki_core.engine.rules.stats.calculation>
     yasuki_core.engine.rules.stats.card_values <yasuki_core.engine.rules.stats.card_values>
+    yasuki_core.engine.rules.stats.checked <yasuki_core.engine.rules.stats.checked>
     yasuki_core.engine.rules.stats.conditions <yasuki_core.engine.rules.stats.conditions>
     yasuki_core.engine.rules.stats.keyword_grants <yasuki_core.engine.rules.stats.keyword_grants>
     yasuki_core.engine.rules.stats.ongoing_grants <yasuki_core.engine.rules.stats.ongoing_grants>

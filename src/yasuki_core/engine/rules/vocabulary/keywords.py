@@ -27,6 +27,9 @@ FAVOR = "Favor"
 # picks if it came from elsewhere, and is destroyed with it (CR, Fortification).
 FORTIFICATION = "Fortification"
 
+# An Elite card contributes Force even if bowed during battle resolution (ShE datasheet, Elite).
+ELITE = "Elite"
+
 # A Kensai Personality may attach two Weapons rather than one (CR, Kensai).
 KENSAI = "Kensai"
 
