@@ -38,8 +38,8 @@ one:
    every registry.
 2. Where a term almost fits, the question is whether the difference is in the rules or only in the
    wording. A choice among cards is `Choose` whether the cards are in a hand, a deck or a province.
-   An effect that waits for a boundary of play is `DelayedEffect` whether the boundary is the end of
-   a battle or the end of a duel.
+   An effect that waits is `DelayedEffect` whether it waits for the end of a battle, the end of a
+   duel, or the next time a card is destroyed.
 3. Where nothing fits, look for the smallest missing piece. That is usually a parameter on an
    existing term, a new `Moment`, or a new board query, and rarely a new effect, decision or
    registry.

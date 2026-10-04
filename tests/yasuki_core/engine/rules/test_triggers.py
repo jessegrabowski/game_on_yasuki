@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     DuelDeclared,
     EnteredPlay,
     HonorChanged,
+    NextTime,
     ProducingGold,
     TurnBoundary,
 )
@@ -52,6 +53,7 @@ from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     Banish,
     Choose,
+    DelayedEffect,
     Destroy,
     Discard,
     DiscardFromHand,
@@ -1968,3 +1970,17 @@ def test_an_announced_destruction_is_not_among_what_the_action_did(reacting):
 
     assert any(isinstance(event, Destroying) for event in game.turn_events)
     assert not any(isinstance(event, Destroying) for event in game.action_events)
+
+
+def test_an_effect_delayed_to_a_cards_destruction_waits_for_that_card_and_resolves_once():
+    game = two_seat_game()
+    put_in_play(game, personality("waited"))
+    put_in_play(game, personality("other"))
+    held = DelayedEffect(GainHonor(PlayerId.P1, 1), NextTime(Destroyed, "waited"))
+
+    resolve_effects(game, [held, Destroy("other", PlayerId.P2)])
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+    resolve_effects(game, [Destroy("waited", PlayerId.P2)])
+    assert game.table.seats[PlayerId.P1].honor == 1
+    assert game.delayed == []

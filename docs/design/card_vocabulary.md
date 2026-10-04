@@ -141,7 +141,8 @@ further events are produced. `ProducingGold` is the exception to "already commit
 window *before* a producer's yield is read, so a trait firing there still counts toward the
 production it interrupts, and `ProducedGold` announces the result once the Gold has landed.
 `Destroying` is announced before a destruction commits, so a trait reading "before this card is
-destroyed" acts while the card still stands.
+destroyed" acts while the card still stands. `NextTime` is no event: it names the next time an
+event names a card, which a `DelayedEffect` waits for as "after this card is destroyed" reads.
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.vocabulary.game_events
@@ -159,6 +160,7 @@ destroyed" acts while the card still stands.
    EnteredPlay
    FavorDiscarded
    HonorChanged
+   NextTime
    PhaseStarted
    ProducedGold
    ProducingGold

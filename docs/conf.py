@@ -213,6 +213,7 @@ numpydoc_xref_aliases = {
     "Modifier": "yasuki_core.engine.rules.vocabulary.modifiers.Modifier",
     "Moment": "yasuki_core.engine.rules.turn.structure.Moment",
     "Negation": "yasuki_core.engine.rules.vocabulary.modifiers.Negation",
+    "NextTime": "yasuki_core.engine.rules.vocabulary.game_events.NextTime",
     "Node": "yasuki_core.search.boolean_query.Node",
     "PayingAgent": "yasuki_core.bots.agents.PayingAgent",
     "Phase": "yasuki_core.engine.rules.turn.structure.Phase",

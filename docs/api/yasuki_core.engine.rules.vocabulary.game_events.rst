@@ -28,6 +28,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     FocusedCardsRevealed
     HonorChanged
     Invested
+    NextTime
     PhaseStarted
     ProducedGold
     ProducingGold
