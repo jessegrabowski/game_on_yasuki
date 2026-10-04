@@ -5,6 +5,7 @@ from yasuki_core.engine.debug import (
     DebugGold,
     DebugPersonality,
     DebugStep,
+    TokenTemplates,
     apply_debug,
 )
 from yasuki_core.engine.players import PlayerId
@@ -244,10 +245,20 @@ def _encode_debug(step: DebugStep) -> dict:
     match step:
         case DebugGold(amount=amount):
             return {"kind": "gold", "amount": amount}
-        case DebugCard(card_id=card_id, printed=printed):
-            return {"kind": "card", "card_id": card_id, "printed": encode_print(printed)}
-        case DebugPersonality(card_id=card_id, printed=printed):
-            return {"kind": "personality", "card_id": card_id, "printed": encode_print(printed)}
+        case DebugCard(card_id=card_id, printed=printed, tokens=tokens):
+            return {
+                "kind": "card",
+                "card_id": card_id,
+                "printed": encode_print(printed),
+                "tokens": _encode_tokens(tokens),
+            }
+        case DebugPersonality(card_id=card_id, printed=printed, tokens=tokens):
+            return {
+                "kind": "personality",
+                "card_id": card_id,
+                "printed": encode_print(printed),
+                "tokens": _encode_tokens(tokens),
+            }
     raise ValueError(f"no encoding for debug step {type(step).__name__}")
 
 
@@ -256,10 +267,23 @@ def _decode_debug(seat: PlayerId, payload: dict) -> DebugStep:
         case "gold":
             return DebugGold(seat, payload["amount"])
         case "card":
-            return DebugCard(seat, payload["card_id"], decode_print(payload["printed"]))
+            printed = decode_print(payload["printed"])
+            return DebugCard(seat, payload["card_id"], printed, _decode_tokens(payload))
         case "personality":
-            return DebugPersonality(seat, payload["card_id"], decode_print(payload["printed"]))
+            printed = decode_print(payload["printed"])
+            return DebugPersonality(seat, payload["card_id"], printed, _decode_tokens(payload))
     raise ValueError(f"no debug step of kind {payload['kind']!r}")
+
+
+def _encode_tokens(tokens: TokenTemplates) -> list[list]:
+    return [[token_id, encode_print(printed)] for token_id, printed in tokens]
+
+
+def _decode_tokens(payload: dict) -> TokenTemplates:
+    """The token templates a debug card brought, none on a tape written before they were taped."""
+    return tuple(
+        (token_id, decode_print(printed)) for token_id, printed in payload.get("tokens", ())
+    )
 
 
 def _decode_input(payload: dict) -> GameInput:

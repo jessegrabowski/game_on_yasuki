@@ -117,6 +117,28 @@ def test_a_debug_personality_enters_play_under_the_chosen_player():
     assert restored.replay() == session.game
 
 
+def test_a_debug_personality_brings_the_templates_of_the_tokens_it_creates():
+    session = EngineSession.start(dealt_table(), P1)
+    oni = PersonalityPrint(name="Lesser Oni", printed_id="lesser_oni", side=Side.DYNASTY, force=2)
+
+    session.debug(DebugPersonality(P1, "dbg-1", A_PERSONALITY, (("lesser_oni", oni),)))
+    session.submit(P1, DecisionResponse(("P1",)))
+
+    assert session.game.table.creatable_tokens["lesser_oni"] == oni
+    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(session.log))))
+    assert restored.replay() == session.game
+
+
+def test_a_tape_taped_before_debug_cards_carried_token_templates_still_replays():
+    session = EngineSession.start(dealt_table(), P1)
+    session.debug(DebugCard(P1, "dbg-1", A_STRATEGY))
+    taped = game_log_to_dict(session.log)
+    for entry in taped["entries"]:
+        entry["step"].pop("tokens")
+
+    assert game_log_from_dict(json.loads(json.dumps(taped))).replay() == session.game
+
+
 def test_a_debug_personality_refuses_a_print_that_is_not_a_personality():
     game = two_seat_game()
 

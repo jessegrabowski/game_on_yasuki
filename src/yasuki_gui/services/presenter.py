@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from typing import TypeGuard
 
-from yasuki_core.engine.debug import ChooseDebugSeat
+from yasuki_core.engine.debug import ChooseDebugSeat, TokenTemplates
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import Action, DeclareAttack, Pass
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -27,7 +27,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.factory import build_print, side_of_record
+from yasuki_core.database import get_creates_for_cards
+from yasuki_core.game_pieces.factory import build_print, build_token_templates, side_of_record
 from yasuki_gui.services.game_runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.labels import turn_context
@@ -55,6 +56,13 @@ _ACTION_LABELS: dict[type, str] = {
 def _button_actions(actions: list[Action]) -> list[Action]:
     """The actions the prompt box offers, in the order it lists them."""
     return [action for action in actions if type(action) in _ACTION_LABELS]
+
+
+def _creatable_tokens(record: dict) -> TokenTemplates:
+    """The templates of the tokens the card ``record`` names can create, which a deck load fetches
+    for the cards it deals."""
+    _, tokens = get_creates_for_cards([record["card_id"]])
+    return tuple(build_token_templates(tokens).items())
 
 
 class Presenter:
@@ -682,11 +690,11 @@ class Presenter:
         )
 
     def _debug_card(self, record: dict) -> None:
-        self.host.runner.debug_card(build_print(record))
+        self.host.runner.debug_card(build_print(record), _creatable_tokens(record))
         self.present()
 
     def _debug_personality(self, record: dict) -> None:
-        self.host.runner.debug_personality(build_print(record))
+        self.host.runner.debug_personality(build_print(record), _creatable_tokens(record))
         self.present()
 
     def _dialogs(self) -> Dialogs:
