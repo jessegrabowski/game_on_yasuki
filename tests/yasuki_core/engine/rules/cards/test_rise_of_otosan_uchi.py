@@ -907,6 +907,14 @@ def test_culling_grounds_bows_for_a_personality_and_an_honor():
     assert session.game.table.seats[P1].honor == -1
 
 
+def test_the_servant_is_recruited():
+    session = _culling_game()
+
+    session.act(P1, ActivateAbility("grounds"))
+
+    assert EnteredPlay(_servant_of(session).id, recruited=True) in session.game.turn_events
+
+
 def test_culling_grounds_asks_nobody_to_pick_a_target():
     """The ability names no target, so announcing it resolves the whole thing."""
     session = _culling_game()

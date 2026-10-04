@@ -13,6 +13,7 @@ yasuki_core.engine.rules.vocabulary.modifiers
     ConditionalModifier
     DuelStatOverride
     Duration
+    EnlightenmentExclusion
     KeywordGrant
     LobbyModifier
     Minimum

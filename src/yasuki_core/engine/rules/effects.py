@@ -56,6 +56,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Minimum,
     Modifier,
     Negation,
+    Ongoing,
     ProvinceModifier,
     SeatAbilityGrant,
     Stat,
@@ -1465,10 +1466,15 @@ class PutIntoPlay(Effect):
     battlefield : int, optional
         The battlefield it enters play at, for a Terrain, which stands there in no unit (CR,
         Location). Default None, which puts it in its owner's home.
+    entering_under : tuple of Ongoing, optional
+        Ongoing records the card enters play under, as "if you put a Ring into play, while it
+        remains in play, it does not count towards an Enlightenment Victory" has it. Laid as the
+        card arrives, so no state-based action reads it without them. Default none.
     """
 
     card_id: str
     battlefield: int | None = None
+    entering_under: tuple[Ongoing, ...] = ()
 
     @property
     def subject_id(self) -> str:
@@ -1493,6 +1499,7 @@ class PutIntoPlay(Effect):
         if self.battlefield is not None:
             assert game.attack is not None and 0 <= self.battlefield < len(game.attack.battlefields)
             ops.set_location(game.table, card, Location.at_battlefield(self.battlefield))
+        game.ongoing.extend(self.entering_under)
         return [EnteredPlay(self.card_id, from_hand=from_hand)]
 
 
@@ -1531,6 +1538,11 @@ class CreateToken(Effect):
         Whether the created card is banished before the turn ends. A creation the card lends the
         player for a turn ("banish it unless you destroyed the target") is recorded as it is made,
         because by the time the turn ends there is nothing left to decide. Default False.
+    recruit : bool
+        Whether the created card enters play by being Recruited without further cost, as "create
+        and Recruit (without further cost)" has it, where the CR otherwise enters a created card
+        without being Recruited (CR, Created Cards). It waits out of play until the Recruit that
+        follows its creation. Default False.
     """
 
     token_id: str
@@ -1540,13 +1552,21 @@ class CreateToken(Effect):
     stats: tuple[tuple[Stat, int], ...] = ()
     clan: str | None = None
     banish_at_turn_end: bool = False
+    recruit: bool = False
+
+    def __post_init__(self) -> None:
+        """Raise ValueError for a Recruited creation that also attaches, since a Recruit brings a
+        card into play on its own."""
+        if self.recruit and self.attach_to is not None:
+            raise ValueError("a Recruited creation does not arrive attached")
 
     def describe(self) -> str:
         fixed = [self.clan] if self.clan else []
         fixed += [f"{stat.name} {value}" for stat, value in self.stats]
         where = "" if self.attach_to is None else f" on {self.attach_to}"
         given = f" with {', '.join(fixed)}" if fixed else ""
-        return f"{self.owner.name} creates {self.token_id}{where}{given}"
+        verb = "creates and Recruits" if self.recruit else "creates"
+        return f"{self.owner.name} {verb} {self.token_id}{where}{given}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         personality = None
@@ -1563,15 +1583,34 @@ class CreateToken(Effect):
             # Both fields: a reader of a card's clans takes the list when it has one, so leaving it
             # behind would keep the template aligned to whatever it was printed as.
             printed = replace(printed, clan=self.clan, clans=(self.clan,))
+        dest = None if self.recruit else BATTLEFIELD
         card = ops.spawn_token(
-            game.table, game.mint_token_id(), printed, self.owner, position=UNPLACED_BOARD_POS
+            game.table,
+            game.mint_token_id(),
+            printed,
+            self.owner,
+            dest=dest,
+            position=UNPLACED_BOARD_POS,
         )
         game.created_by[card.id] = self.creator_id
         if self.banish_at_turn_end:
             game.delayed.append((END_OF_TURN, Banish(card.id)))
+        if self.recruit:
+            return []
         if personality is not None:
             ops.attach_to_personality(game.table, card, personality)
         return [EnteredPlay(card.id, from_hand=False)]
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        """The Recruit of the card just created, when it is Recruited, at no Gold."""
+        if not self.recruit:
+            return ()
+        # The Recruit procedure imports this module for the effects it resolves, so importing it
+        # here would close that cycle.
+        from yasuki_core.engine.rules.rulebook.recruit import recruit_effects
+
+        arrival = Recruit(game.last_token_id, from_province=None)
+        return tuple(recruit_effects(game, arrival))
 
 
 @dataclass(frozen=True, slots=True)

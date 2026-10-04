@@ -366,6 +366,7 @@ def _bound_in_blood_effects(
             (Stat.FORCE, sum(effective_chi(game, card) for card in bound)),
             (Stat.CHI, len(bound)),
         ),
+        recruit=True,
     )
     banished = Simultaneously(tuple(Banish(card.id) for card in bound))
     return [horror, banished, Destroy(source.id, source.owner)]
@@ -476,7 +477,7 @@ def _culling_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) 
     """Create and Recruit the servant, ignoring Gold Cost. Nothing is paid for it, so there is no
     payment to raise. The Honor is the price."""
     return [
-        CreateToken(EXPENDABLE_SERVANT, source.owner, source.id),
+        CreateToken(EXPENDABLE_SERVANT, source.owner, source.id, recruit=True),
         GainHonor(source.owner, -1, source_id=source.id),
     ]
 

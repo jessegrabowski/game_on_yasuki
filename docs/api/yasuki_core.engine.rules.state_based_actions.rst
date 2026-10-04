@@ -8,6 +8,7 @@ yasuki_core.engine.rules.state_based_actions
 .. autosummary::
 
     chi_death
+    counts_towards_enlightenment
     demanded
     dishonor_loss
     duelist_left_play

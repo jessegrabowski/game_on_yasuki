@@ -392,6 +392,11 @@ class GameState:
         tokens the live game did and every id a projection or a log line carries still resolves.
         """
         self.tokens_created += 1
+        return self.last_token_id
+
+    @property
+    def last_token_id(self) -> str:
+        """The id :meth:`mint_token_id` claimed last."""
         return f"token-{self.tokens_created}"
 
     def creations_of(self, card_id: str) -> tuple[str, ...]:

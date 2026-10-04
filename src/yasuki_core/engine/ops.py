@@ -498,12 +498,13 @@ def spawn_token(
     printed: CardPrint,
     owner: PlayerId,
     *,
-    dest: ZoneKey | Literal["battlefield"] = BATTLEFIELD,
+    dest: ZoneKey | Literal["battlefield"] | None = BATTLEFIELD,
     position: BoardPos | None = None,
 ) -> L5RCard | None:
     """Place a fresh face-up token presenting ``printed`` at ``dest``, defaulting to the battlefield
     at ``position``. Returns None when a zone refuses the card for its side or capacity. A
-    battlefield spawn always succeeds.
+    battlefield spawn always succeeds, and so does a ``dest`` of None, which leaves the token out of
+    play in no zone, as a created card waits there to be Recruited (CR, Entering-Play Areas).
 
     The token carries the print's type, stats, keywords, and text under a new id, with no per-copy
     state. It is face up, so both seats see it. ``owner`` gates who may move or remove it, not who
@@ -516,7 +517,7 @@ def spawn_token(
     if dest == BATTLEFIELD:
         state.battlefield.add(card)
         state.positions[card.id] = DEFAULT_BOARD_POS if position is None else position
-    elif not state.zones[dest].add(card):
+    elif dest is not None and not state.zones[dest].add(card):
         return None
     state.cards_by_id[card.id] = card
     return card

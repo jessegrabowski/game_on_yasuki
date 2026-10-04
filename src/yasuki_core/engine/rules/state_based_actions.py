@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Element
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.modifiers import EnlightenmentExclusion
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
@@ -147,8 +148,8 @@ def enlightenment(game: GameState) -> list[Effect]:
 
     The CR wins "immediately", so this is a state-based rule rather than a check at a moment in
     the turn. The rulebook asks, so a card counting as a Ring only for actions or traits is left
-    out, and so is a Ring registered through ``register_no_enlightenment``. Elements are read from
-    keywords as they stand, granted ones included.
+    out, and so is a Ring that does not count towards an Enlightenment Victory. Elements are read
+    from keywords as they stand, granted ones included.
     """
     if game.game_over:
         return []
@@ -158,11 +159,22 @@ def enlightenment(game: GameState) -> list[Effect]:
         rings = [
             ring_elements(game, card)
             for card in rings_in_play(game, seat, RULEBOOK)
-            if card.printed_id not in NO_ENLIGHTENMENT
+            if counts_towards_enlightenment(game, card)
         ]
         if different_elements(rings) == len(Element):
             return [WinGame(seat, "Enlightenment Victory with Rings of all five elements")]
     return []
+
+
+def counts_towards_enlightenment(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` counts towards an Enlightenment Victory: neither its own text, through
+    ``register_no_enlightenment``, nor an :class:`~.EnlightenmentExclusion` on it says otherwise."""
+    if card.printed_id in NO_ENLIGHTENMENT:
+        return False
+    return not any(
+        isinstance(record, EnlightenmentExclusion) and record.target_id == card.id
+        for record in game.ongoing
+    )
 
 
 STATE_BASED_ACTIONS: tuple[StateBasedAction, ...] = (

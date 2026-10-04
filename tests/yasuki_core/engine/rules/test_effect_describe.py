@@ -299,6 +299,10 @@ EFFECTS = [
         CreateToken("oni", PlayerId.P2, "mishime", clan="Crab", stats=((Stat.FORCE, 4),)),
         "P2 creates oni with Crab, FORCE 4",
     ),
+    (
+        CreateToken("yojimbo", PlayerId.P1, "tsushima", recruit=True),
+        "P1 creates and Recruits yojimbo",
+    ),
     (Banish("oni"), "banish oni"),
     (
         DelayedEffect(Banish("oni"), END_OF_TURN),

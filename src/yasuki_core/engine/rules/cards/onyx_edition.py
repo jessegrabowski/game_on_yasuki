@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
     Ask,
+    AskOption,
     Banish,
     Bow,
     Choose,
@@ -55,6 +56,8 @@ from yasuki_core.engine.rules.effects import (
     Move,
     MoveToDeck,
     Negated,
+    PayGold,
+    PutIntoPlay,
     RevokeGrants,
     Show,
     Simultaneously,
@@ -108,7 +111,12 @@ from yasuki_core.engine.rules.stats.card_values import (
     effective_personal_honor,
 )
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, SeatAbilityGrant, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    Duration,
+    EnlightenmentExclusion,
+    SeatAbilityGrant,
+    Stat,
+)
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -602,6 +610,88 @@ def _resolve_spearmen_of_the_akasha(
     if not chosen:
         return []
     return [Banish(source_id), CreateToken(NAGA_FOLLOWER, seat, source_id, attach_to=chosen[0])]
+
+
+# --- Tamori Tsushima ---
+
+TAMORI_TSUSHIMA_GOLD = 3
+DRAGON_YOJIMBO = "dragon_yojimbo_personality_2_2_2"
+TAMORI_TSUSHIMA_CREATE = "Create and Recruit a Samurai Yojimbo"
+TAMORI_TSUSHIMA_RING = "Put a Ring from your hand into play"
+
+
+def _tamori_tsushima_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [PayGold(source.owner, TAMORI_TSUSHIMA_GOLD, source.name)]
+
+
+def _tamori_tsushima_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Himself, once the action just resolved Recruited him."""
+    return [source.id] if action_recruited(game, source.id) else []
+
+
+def _tamori_tsushima_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Create and Recruit (without further cost) a 2F/2C/3GC/2PH Samurai Yojimbo Dragon Clan
+    Personality, or put a Ring from your hand into play. With no Ring in hand there is nothing to
+    choose between."""
+    if not _tamori_tsushima_rings(game, source.id):
+        return [_tamori_tsushima_yojimbo(source.owner, source.id)]
+    return [
+        AskOption(
+            source.owner,
+            (TAMORI_TSUSHIMA_CREATE, TAMORI_TSUSHIMA_RING),
+            "Create and Recruit a Samurai Yojimbo, or put a Ring from your hand into play?",
+            "tamori_tsushima",
+            source.id,
+        )
+    ]
+
+
+def _tamori_tsushima_yojimbo(seat: PlayerId, source_id: str) -> CreateToken:
+    return CreateToken(DRAGON_YOJIMBO, seat, source_id, recruit=True)
+
+
+def _tamori_tsushima_rings(game: GameState, source_id: str) -> tuple[str, ...]:
+    """The cards in his controller's hand that are Rings for his action."""
+    source = game.table.cards_by_id[source_id]
+    asking = Asking.action(source)
+    return tuple(
+        card.id
+        for card in cards_in_hand(game, source.owner)
+        if counts_as(game, card, RingPrint, asking)
+    )
+
+
+@choice_resolver("tamori_tsushima")
+def _resolve_tamori_tsushima(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    if chosen[0] == TAMORI_TSUSHIMA_CREATE:
+        return [_tamori_tsushima_yojimbo(seat, source_id)]
+    rings = _tamori_tsushima_rings(game, source_id)
+    return [Choose(seat, rings, 1, 1, "tamori_tsushima_ring", source_id)]
+
+
+@choice_resolver("tamori_tsushima_ring", prompt="Choose a Ring to put into play")
+def _resolve_tamori_tsushima_ring(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """If the Ring enters play, while it remains in play it does not count towards an
+    Enlightenment Victory. It enters under the exclusion, so the victory never sees it without."""
+    (ring,) = chosen
+    excluded = EnlightenmentExclusion(source_id, ring, Duration.PERMANENT)
+    return [PutIntoPlay(ring, entering_under=(excluded,))]
+
+
+register_ability(
+    "tamori_tsushima",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=_tamori_tsushima_cost,
+        targets=_tamori_tsushima_targets,
+        effects=_tamori_tsushima_effects,
+        hits_every_target=True,
+    ),
+)
 
 
 # --- The Ancient Castle of the Lion ---
