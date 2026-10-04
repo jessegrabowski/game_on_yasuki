@@ -2,6 +2,7 @@ from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.membership import attachments_of
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.prints import PersonalityPrint
@@ -24,9 +25,9 @@ def unit_force(game: GameState, personality: L5RCard, *, in_battle_resolution: b
     """The total Force of ``personality``'s unit (CR, Unit and Army Force).
 
     Outside battle resolution the total counts every card in the unit, bowed or not. Inside it, a
-    bowed Personality and a bowed Follower contribute nothing, while a bowed Item still gives its
-    Force modifier to the Personality, so an Item's Force survives its own bowing but not its
-    Personality's, riding on him either way.
+    bowed Personality and a bowed Follower contribute nothing unless they are Elite (ShE datasheet,
+    Elite), while a bowed Item still gives its Force modifier to the Personality, so an Item's
+    Force survives its own bowing but not its Personality's, riding on him either way.
 
     Parameters
     ----------
@@ -45,10 +46,15 @@ def unit_force(game: GameState, personality: L5RCard, *, in_battle_resolution: b
         )
     # An Item's modifier is already inside the Personality's effective Force, so dropping him drops
     # what his Items lend him, which is what the rule says happens.
-    total = 0 if personality.bowed else effective_force(game, personality)
+    total = effective_force(game, personality) if _contributes(game, personality) else 0
     return total + sum(
-        effective_force(game, follower) for follower in followers if not follower.bowed
+        effective_force(game, follower) for follower in followers if _contributes(game, follower)
     )
+
+
+def _contributes(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` contributes its Force at battle resolution: unbowed, or Elite."""
+    return not card.bowed or keywords.ELITE in effective_keywords(game, card)
 
 
 def unit_keywords(game: GameState, personality: L5RCard) -> frozenset[str]:

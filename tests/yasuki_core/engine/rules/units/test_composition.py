@@ -3,6 +3,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.units.composition import followers_of, unit_force, unit_keywords
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.builders import (
@@ -73,6 +74,31 @@ def test_a_bowed_personality_takes_his_items_force_with_him():
     game, hero = _unit(hero_bowed=True, follower_bowed=False, item_bowed=False)
 
     assert unit_force(game, hero, in_battle_resolution=True) == 5
+
+
+@pytest.mark.parametrize(
+    ("hero_keywords", "follower_keywords", "in_battle"),
+    [
+        ((keywords.ELITE,), (), 3),
+        ((), (keywords.ELITE,), 5),
+    ],
+)
+def test_a_bowed_elite_card_still_contributes_its_force_in_battle(
+    hero_keywords, follower_keywords, in_battle
+):
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=3, keywords=hero_keywords))
+    follower = attached(
+        game,
+        attachment(
+            "foll", attachment_type=AttachmentType.FOLLOWER, force=5, keywords=follower_keywords
+        ),
+        "hero",
+    )
+    hero.bow()
+    follower.bow()
+
+    assert unit_force(game, hero, in_battle_resolution=True) == in_battle
 
 
 def test_a_personality_alone_is_a_unit_of_one():

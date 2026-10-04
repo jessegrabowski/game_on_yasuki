@@ -56,8 +56,8 @@ return total + sum(
 ```
 
 Outside resolution every card in the unit counts, bowed or not. Inside it a bowed Personality and a
-bowed Follower contribute nothing, while a bowed Item still lends its Force, because that Force is
-already the Personality's own.
+bowed Follower contribute nothing unless they are Elite (ShE datasheet, Elite), while a bowed Item
+still lends its Force, because that Force is already the Personality's own.
 
 {func}`~.unit_keywords` intersects: the unit has the keywords the Personality and every Follower
 share. Items and Spells take no part. Infantry is never a member of the set, being the absence of
