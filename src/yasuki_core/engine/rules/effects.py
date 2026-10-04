@@ -2413,52 +2413,6 @@ class IgnoreHonorRequirements(Effect):
 
 
 @dataclass(frozen=True, slots=True)
-class RecruitCard(InterruptingEffect):
-    """Bring a card into play from its controller's province, out of the normal recruit sequence.
-
-    Pauses for the payment its controller must cover, exactly as a Recruit action does. With
-    ``renew`` the vacated province refills face-up on top of whatever the card's own Renew keyword
-    grants.
-    """
-
-    card_id: str
-    renew: bool = False
-
-    @property
-    def subject_id(self) -> str:
-        return self.card_id
-
-    def describe(self) -> str:
-        renewed = ", renewing the province" if self.renew else ""
-        return f"recruit {self.card_id} out of sequence{renewed}"
-
-    def is_negatable(self, game: GameState) -> bool:
-        return True
-
-    def would_happen(self, game: GameState) -> bool:
-        """Whether the card may enter play: Unique and Singular can keep it out, and so can its own
-        "May only be Recruited by" text."""
-        card = game.table.cards_by_id[self.card_id]
-        return copy_may_enter(game, card.owner, card) and may_recruit(game, card.owner, card)
-
-    def pauses(self, game: GameState) -> bool:
-        """No payment is asked for a card that may not enter play."""
-        return self.would_happen(game)
-
-    def perform(self, game: GameState) -> list[GameEvent]:
-        return []
-
-    def request(self, game: GameState) -> DecisionRequest | None:
-        """The payment the recruit asks for, or None for a card that costs nothing."""
-        # Announcing a recruit builds a payment, and the payment loop is written in the effects
-        # this module defines -- so the entry point is reached lazily whatever module holds it.
-        from yasuki_core.engine.rules.rulebook.recruit import announce_recruit
-
-        card = game.table.cards_by_id[self.card_id]
-        return announce_recruit(game, card, card.owner, renew=self.renew)
-
-
-@dataclass(frozen=True, slots=True)
 class Recruit(Effect):
     """Bring ``card_id`` into play as a Recruit, in its entry state and with a Fortification
     attached to a Province (CR, Recruit). What its arrival is followed by resolves behind the

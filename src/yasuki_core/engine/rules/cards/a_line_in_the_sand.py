@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.rulebook.looks import PUT_BACK_ON_TOP
 from yasuki_core.engine.rules.rulebook.recruit import (
+    recruit_card,
     recruit_from_its_province,
     recruit_gold,
     recruitable,
@@ -38,7 +39,6 @@ from yasuki_core.engine.rules.effects import (
     MoveToHand,
     PayGold,
     RangedAttack,
-    RecruitCard,
     Rehonor,
     Show,
     ShuffleDeck,
@@ -70,7 +70,7 @@ def _agasha_beiru_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
     Province and reads the answer once the choice has been made.
     """
     return [
-        RecruitCard(target.id),
+        *recruit_card(game, target),
         CounterOnAttachedProvince(target.id, WALL, 1),
     ]
 

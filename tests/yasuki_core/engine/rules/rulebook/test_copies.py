@@ -1,7 +1,8 @@
+from yasuki_core.engine.rules.rulebook.recruit import recruit_card
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.idioms import register_entry, register_event_entry
-from yasuki_core.engine.rules.effects import PutIntoPlay, Recruit as RecruitEffect, RecruitCard
+from yasuki_core.engine.rules.effects import PutIntoPlay, Recruit as RecruitEffect
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Equip, PlayStrategy
 from yasuki_core.engine.session import EngineSession
@@ -182,7 +183,7 @@ def test_recruit_card_of_a_duplicate_asks_no_payment():
     session = _dynasty_phase(_titled_personality("held"), province=_titled_personality("dup"))
     game = session.game
 
-    resolve_effects(game, [RecruitCard("dup")])
+    resolve_effects(game, recruit_card(game, game.table.cards_by_id["dup"]))
 
     assert game.pending is None
     assert "dup" not in {card.id for card in game.table.battlefield.cards}

@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.idioms import clan_player
-from yasuki_core.engine.rules.effects import RecruitCard
+from yasuki_core.engine.rules.rulebook.recruit import recruit_card
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import (
     RECRUIT_RESTRICTIONS,
     register_recruit_restriction,
@@ -51,7 +51,9 @@ def test_a_restricted_card_is_offered_for_recruit_only_to_the_named_player(clan,
 def test_an_effect_cannot_recruit_a_restricted_card_for_another_player():
     session = _dynasty_phase(ruleset.DRAGON)
 
-    resolve_effects(session.game, [RecruitCard("school")])
+    resolve_effects(
+        session.game, recruit_card(session.game, session.game.table.cards_by_id["school"])
+    )
 
     school = session.game.table.cards_by_id["school"]
     assert school not in session.game.table.battlefield.cards

@@ -74,7 +74,6 @@ yasuki_core.engine.rules.effects
     PutIntoPlay
     RangedAttack
     Recruit
-    RecruitCard
     RefillProvince
     Rehonor
     ReshuffleFromHand

@@ -8,6 +8,8 @@ from yasuki_core.game_pieces.prints import (
     FatePrint,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.effects import Recruit
+from yasuki_core.engine.rules.interrupts import forecast
 from yasuki_core.engine.rules.rulebook import recruit
 from yasuki_core.engine.rules.triggers import resolve_action_effects
 from yasuki_core.engine.rules.turn import sequence
@@ -19,6 +21,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 
 from tests.yasuki_core.engine.builders import (
+    province_card,
+    two_seat_game,
     end_phase,
     holding,
     personality,
@@ -202,3 +206,12 @@ def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> L5RCar
         gold_cost=gold_cost,
         clan=clan,
     )
+
+
+def test_a_cards_recruit_is_open_to_its_actions_interrupt_step():
+    game = two_seat_game()
+    target = province_card(game, "P1-target", gold_cost=2)
+
+    foreseen = forecast(game, tuple(recruit.recruit_card(game, target)))
+
+    assert [effect.card_id for effect in foreseen if isinstance(effect, Recruit)] == [target.id]

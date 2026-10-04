@@ -40,11 +40,10 @@ end in a question of its own: `SelectAbilityTarget` resumes by setting `pending`
 
 What is on the stack, and what each continues:
 
-- `ResolveRecruit` in `rulebook/recruit.py`: a Recruit after its payment, which hands the card's
-  before-entry effects and a {class}`~.effects.Recruit` effect to the action's Interrupt step. The
-  effect's arrival is followed by its Sincerity tokens removed, a Proclaim's gain and the refill.
-  `SelectEquipTarget` in `rulebook/equip.py` is an Equip's target choice, deferred behind its
-  payment. An Invest needs no step of its own: it raises the card's Gold Cost before the payment,
+- `SelectEquipTarget` in `rulebook/equip.py`: an Equip's target choice, deferred behind its
+  payment. A Recruit needs no step of its own: it is an ability whose effects are the
+  {class}`~.effects.Recruit` effect, whose arrival is followed by its Sincerity tokens removed, a
+  Proclaim's gain and the refill. An Invest needs no step of its own: it raises the card's Gold Cost before the payment,
   and {func}`~.resolve_invest` answers the card's entry.
 - `ResolveStrategy` and `DiscardPlayed` in `abilities/strategy.py`: a played Strategy's ability,
   then its discard. `SelectAbilityTarget` and `ApplyAbilityEffects` in `abilities/activation.py`:
@@ -76,14 +75,12 @@ question has to resume that cascade before the next turn begins.
 Work items never reach the tape. Replay rebuilds the stack by re-running the procedures that push
 them, and [The replay log](the-replay-log.md) is why that is enough.
 
-## Why a card returns `RecruitCard`
+## How a card Recruits
 
-A card that brings another card into play does not put it there. It returns an effect, and the
-effect enters the same machine an ordinary Recruit does, so the payment, the Invest option and the
-enter-play triggers all happen the way they would otherwise.
-
-The effect vocabulary has an entry for each action with a machine behind it, and returning that
-effect is how a card borrows the whole sequence.
+A card whose text Recruits another card returns {func}`~.recruit_card`: the card's Gold Cost paid
+for it, then the same {class}`~.effects.Recruit` effect the rulebook Recruit resolves (CR,
+Recruit). The Recruit is part of the card's own action, so it passes through that action's
+Interrupt step, and the enter-play triggers happen the way they would otherwise.
 
 ## The modules
 
@@ -91,8 +88,7 @@ effect is how a card borrows the whole sequence.
 as three abilities every face-up Province card carries, plain, Proclaimed and Invested, paid by
 {func}`~.recruit_gold` and resolved by {func}`~.recruit_effects`. {func}`~.bring_into_play` and
 {func}`~.effects_after_entering_play` are what the {class}`~.effects.Recruit` effect does. A card
-that Recruits through {class}`~.RecruitCard` goes by {func}`~.announce_recruit`,
-{func}`~.resolve_recruit` and {func}`~.apply_fortification_province`.
+that Recruits calls {func}`~.recruit_card`.
 
 `rulebook/equip.py` carries the attachment rules, including {func}`~.may_attach`,
 {func}`~.equip_targets` and {func}`~.creation_targets`, which judges a token template rather than
@@ -131,5 +127,5 @@ hand instead of the board menu.
 ## Where a card plugs in
 
 Through the effect vocabulary, not these modules. A card that recruits returns
-`RecruitCard`. A card that equips returns the equip effect.
+{func}`~.recruit_card`. A card that equips returns the equip effect.
 [Abilities and costs](abilities-and-costs.md) covers what a card declares.

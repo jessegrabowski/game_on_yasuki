@@ -81,7 +81,6 @@ from yasuki_core.engine.rules.effects import (
     PlaceOnDeck,
     PlaceInProvince,
     Recruit,
-    RecruitCard,
     RevealProvinces,
     Show,
     ShuffleDeck,
@@ -273,11 +272,6 @@ EFFECTS = [
     ),
     (Recruit("holding_1", ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)), "recruit holding_1"),
     (Invest("holding_1", 2), "invest 2 in holding_1"),
-    (RecruitCard("holding_1"), "recruit holding_1 out of sequence"),
-    (
-        RecruitCard("holding_1", renew=True),
-        "recruit holding_1 out of sequence, renewing the province",
-    ),
     (RefillProvince(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 2)), "refill P1 province 2"),
     (
         RefillProvince(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), face_up=True),

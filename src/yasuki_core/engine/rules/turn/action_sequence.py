@@ -35,7 +35,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseDiscard,
     ChooseDistribution,
     ChooseEquipTarget,
-    ChooseFortificationProvince,
     ChooseInterruptEffect,
     ChooseInterruptTarget,
     ChooseOption,
@@ -46,7 +45,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.rulebook.equip import apply_equip_target, equip
 from yasuki_core.engine.rules.gold.production import produce_gold
-from yasuki_core.engine.rules.rulebook.recruit import apply_fortification_province, is_recruit
+from yasuki_core.engine.rules.rulebook.recruit import is_recruit
 from yasuki_core.engine.rules.interrupts import (
     apply_interrupt_effect,
     apply_interrupt_target,
@@ -174,8 +173,6 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             apply_ability_target(game, request, response)
         case ChooseEquipTarget():
             apply_equip_target(game, request, response)
-        case ChooseFortificationProvince():
-            apply_fortification_province(game, request, response)
         case ChooseInterruptTarget():
             apply_interrupt_target(game, request, response)
         case ChooseInterruptEffect():
@@ -237,8 +234,8 @@ def cancel(game: GameState) -> None:
 
 
 def _cancel_payment(game: GameState) -> None:
-    """Drop the work the canceled payment stands in front of, whatever queued it: a Recruit
-    effect's :class:`~.ResolveRecruit` or a rulebook cost's :class:`~.ApplyEffects`.
+    """Drop the work the canceled payment stands in front of, whatever queued it, such as a
+    rulebook cost's :class:`~.ApplyEffects`.
 
     The item is always the top of the stack: announcing a cost pushes exactly one, and the engine is
     paused on the payment from that moment until it is answered or canceled, so nothing can have

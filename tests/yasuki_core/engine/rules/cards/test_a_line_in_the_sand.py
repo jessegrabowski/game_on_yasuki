@@ -22,7 +22,6 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseAbilityTarget,
     ChooseCards,
-    ChooseFortificationProvince,
     ChoosePayment,
     DecisionResponse,
 )
@@ -264,7 +263,8 @@ def test_beiru_walls_the_province_he_attaches_the_fortification_to():
     session.submit(P1, DecisionResponse(("wall",)))  # the Fortification to recruit
     pay(session, P1)  # pay for it
     pending = session.project(P1).pending
-    assert isinstance(pending, ChooseFortificationProvince)
+    assert isinstance(pending, ChooseCards)
+    assert pending.prompt() == "Choose a Province for the Fortification"
     # Provinces are named by slot rather than by the card standing in one.
     assert pending.candidates == (ZoneKey(P1, ZoneRole.PROVINCE, 0).token,)
     session.submit(P1, DecisionResponse((ZoneKey(P1, ZoneRole.PROVINCE, 0).token,)))

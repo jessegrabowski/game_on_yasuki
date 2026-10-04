@@ -51,7 +51,7 @@ Unique and Singular are rules on every route into play rather than actions of th
 same title (CR, Unique), and a Singular card while a card with the same title is in play under
 any seat (ShE datasheet, Singular). It is asked by the Recruit and Equip offers, by the entry
 abilities {func}`~.register_entry` and {func}`~.register_event_entry` build, and by the
-`PutIntoPlay` and `RecruitCard` effects, so a card effect cannot bring a duplicate in either. The
+`PutIntoPlay` effect and {func}`~.recruit_card`, so a card effect cannot bring a duplicate in either. The
 CR's Experienced exception to Unique is overlaying, which is not modeled, so an Experienced
 version entering normally is refused like any other copy.
 
