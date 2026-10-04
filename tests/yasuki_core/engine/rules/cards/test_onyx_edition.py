@@ -62,6 +62,7 @@ from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     ChooseDiscard,
+    ChooseNextTrigger,
     ChooseAmount,
     DecisionResponse,
 )
@@ -438,6 +439,8 @@ def test_two_spearmen_discarded_together_are_each_offered_a_naga():
     session = EngineSession.start(state, P1)
 
     _trim_the_spearmen(session, ("spearmen", "spearmen2"))
+    assert isinstance(session.game.pending, ChooseNextTrigger)
+    session.submit(P1, DecisionResponse(("spearmen",)))
     session.submit(P1, DecisionResponse(("shahai",)))
     session.submit(P1, DecisionResponse(("shahai2",)))
 

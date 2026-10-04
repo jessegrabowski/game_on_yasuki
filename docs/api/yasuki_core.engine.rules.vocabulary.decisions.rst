@@ -19,6 +19,7 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseFocusEffect
     ChooseInterruptEffect
     ChooseInterruptTarget
+    ChooseNextTrigger
     ChooseOption
     ChoosePayment
     Confirm

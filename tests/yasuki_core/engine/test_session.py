@@ -1,6 +1,6 @@
 import pytest
 
-from tests.yasuki_core.engine.builders import end_phase, pay
+from tests.yasuki_core.engine.builders import end_phase, holding, pay, put_in_play
 from tests.yasuki_core.engine.rules.cards.test_rise_of_jigoku import _modest_farm_game
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_AND_PROCLAIM
 from yasuki_core.engine.players import PlayerId
@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseDiscard,
     ChooseEquipTarget,
+    ChooseNextTrigger,
     ChoosePayment,
     DecisionResponse,
 )
@@ -724,6 +725,18 @@ def test_submit_without_a_pending_decision_raises():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
     with pytest.raises(RuntimeError):
         session.submit(PlayerId.P1, DecisionResponse(()))
+
+
+def test_a_game_that_ordered_two_triggers_replays_to_the_live_game():
+    state = TableState.empty_two_seat()
+    for card_id in ("P1-farm-a", "P1-farm-b"):
+        put_in_play(state, _register(state, holding(card_id, printed_id="rice_farm")))
+    session = EngineSession.start(state, PlayerId.P1)
+    assert isinstance(session.game.pending, ChooseNextTrigger)
+
+    session.submit(PlayerId.P1, DecisionResponse(("P1-farm-b",)))
+
+    assert replay(session.log) == session.game
 
 
 def test_session_log_replays_to_the_live_game():

@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseBattlefield,
     ChooseFocusEffect,
+    ChooseNextTrigger,
     FocusOrStrike,
     ChooseCards,
     ChooseDiscard,
@@ -197,6 +198,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             duel_procedure.apply_focus_or_strike(game, request, response)
         case ChooseFocusEffect():
             focus_effects.apply_focus_effect_choice(game, request, response)
+        case ChooseNextTrigger():
+            triggers.resume_trigger_order(game, response.choices[0])
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
     # Symmetric with `perform`: an answered decision resolves fully before the next input. A

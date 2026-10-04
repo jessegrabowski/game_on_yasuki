@@ -77,6 +77,7 @@ from yasuki_core.engine.rules.effects import (
     MoveToDeck,
     Negated,
     Rehonor,
+    SpendOncePerTurn,
     Straighten,
     seppuku,
 )
@@ -110,7 +111,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     TurnBoundary,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
+from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -689,10 +690,14 @@ def _way_of_the_crab_experienced_bowed(ctx: TriggerContext) -> list[Effect]:
         ctx.game, bowed, keywords.FORTIFICATION
     ):
         return []
-    if not claim_once_per_turn(ctx.game, ctx.card, WAY_OF_THE_CRAB_TAG):
+    if used_this_turn(ctx.game, ctx.card, WAY_OF_THE_CRAB_TAG):
         return []
     negation = Negation(ctx.card.id, END_OF_TURN, effect_kind=Bow, subject_id=bowed.id)
-    return [Straighten(bowed.id), GrantNegation(negation)]
+    return [
+        SpendOncePerTurn(ctx.card.id, WAY_OF_THE_CRAB_TAG),
+        Straighten(bowed.id),
+        GrantNegation(negation),
+    ]
 
 
 # --- Way of the Crane (Experienced) ---

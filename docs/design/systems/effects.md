@@ -95,10 +95,11 @@ placed:
 "Effects linked by the word "to" mean that the second effect depends on the first effect actually
 happening" (CR, Independence of Effects). "Bow your Samurai to draw two cards" draws nothing if the
 Samurai was already bowed or something prevented the bow. {class}`~.To` writes that link: its
-`contingent` effects apply only if its `first` raised an event, which an effect that happens always
-does. What reacts to `first` resolves before `contingent` applies. The Courage rulebook Interrupt
-discards its card to adjust a Fear, so a negated discard keeps the card in hand and adjusts
-nothing:
+`contingent` effects apply only if its `first` actually happened: it commits as itself, perhaps
+adjusted by an Interrupt but not negated or substituted, and {meth}`~.Effect.would_happen` says it
+changes something. What reacts to `first` resolves before `contingent` applies. The Courage rulebook
+Interrupt discards its card to adjust a Fear, so a negated discard keeps the card in hand and
+adjusts nothing:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/courage_and_honor.py
 :pyobject: _discard_and_adjust

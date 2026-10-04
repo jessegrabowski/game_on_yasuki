@@ -58,6 +58,7 @@ from yasuki_core.engine.rules.effects import (
     RevokeGrants,
     Show,
     Simultaneously,
+    SpendOncePerTurn,
     StartDuel,
     Straighten,
     TakeFavor,
@@ -78,7 +79,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     DuelResolved,
     EnteredPlay,
 )
-from yasuki_core.engine.rules.state import GameState, claim_once_per_turn
+from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_BATTLE
@@ -302,9 +303,9 @@ def _mirumoto_higashi_entered_play(ctx: TriggerContext) -> list[Effect]:
         return []
     if not counts_as(ctx.game, entered, RingPrint, Asking.trait(ctx.card)):
         return []
-    if not claim_once_per_turn(ctx.game, ctx.card, MIRUMOTO_HIGASHI_TAG):
+    if used_this_turn(ctx.game, ctx.card, MIRUMOTO_HIGASHI_TAG):
         return []
-    return [DrawCard(ctx.card.owner)]
+    return [SpendOncePerTurn(ctx.card.id, MIRUMOTO_HIGASHI_TAG), DrawCard(ctx.card.owner)]
 
 
 # --- Ring of Air ---

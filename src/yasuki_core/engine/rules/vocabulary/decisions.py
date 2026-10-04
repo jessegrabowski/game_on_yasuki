@@ -607,6 +607,31 @@ class ChooseFocusEffect(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseNextTrigger(DecisionRequest):
+    """The active player must name the card whose triggered ability resolves next, when one
+    occurrence has triggered several: "If more than one of these things conflict, the active player
+    decides the order in which they happen" (CR, Timing Conflicts).
+
+    The candidates are the cards with a triggered ability still to resolve, whoever controls them,
+    and the card the event names for a rulebook effect. A card in a hand is never one, since naming
+    it would show what its owner holds, and its abilities resolve after the rest. The seat picks one
+    at a time and is asked again while two or more are left. Each ability's own questions stay its
+    controller's (CR, Choices). There is no answer that declines, and none that backs out, since
+    what triggered them has already happened.
+    """
+
+    def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        return "Choose the next triggered ability to resolve"
+
+    @property
+    def confirm_label(self) -> str:
+        return "Resolve"
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+
+@dataclass(frozen=True, slots=True)
 class Confirm(DecisionRequest):
     """The seat must answer a yes/no question naming what it is being asked to do.
 
