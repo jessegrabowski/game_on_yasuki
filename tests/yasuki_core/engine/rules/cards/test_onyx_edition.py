@@ -819,7 +819,7 @@ def test_the_capital_gives_an_enemy_shadowlands_and_keeps_the_opportunity_to_act
     assert game.additional_action is None
 
 
-def test_a_pass_at_the_additional_opportunity_does_not_count_toward_closing_the_round():
+def test_a_pass_at_the_additional_opportunity_starts_the_count_that_closes_the_round():
     session = _dark_capital_in_combat()
     session.act(P1, ActivateAbility("capital"))
     session.submit(P1, DecisionResponse(("guard",)))

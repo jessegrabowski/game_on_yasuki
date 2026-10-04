@@ -1391,8 +1391,9 @@ class GrantPriority(Effect):
 @dataclass(frozen=True, slots=True)
 class AdditionalAction(Effect):
     """Grant ``seat`` an additional action: once the action now resolving is done, the opportunity
-    to act stays with ``seat`` instead of passing on (CR, Additional Action). A pass taken at that
-    opportunity does not count toward closing the round.
+    to act stays with ``seat`` instead of passing on (CR, Additional Action). The consecutive-pass
+    count starts again there, so a pass taken at that opportunity is the first of the passes that
+    close the round, and a pass made before the action is not counted with it.
 
     Attributes
     ----------

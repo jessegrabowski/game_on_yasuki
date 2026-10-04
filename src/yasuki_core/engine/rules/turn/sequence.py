@@ -220,8 +220,8 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
             if recorded.duration is not Duration.FOR_ADDITIONAL_ACTION
         ]
     if reopened:
-        # The seat keeps the opportunity, and its consecutive-pass count starts again, so a pass
-        # taken at the additional opportunity does not count toward closing the round.
+        # The seat keeps the opportunity and the consecutive-pass count starts again, so a pass
+        # made before the action is not counted with one taken at the additional opportunity.
         game.round = replace(game.round, passes=0, follow_ups=game.additional_follow_ups)
         game.additional_action = None
         game.additional_follow_ups = None
