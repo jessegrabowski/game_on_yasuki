@@ -62,3 +62,24 @@ def test_attacking_fails_between_battles():
     game.attack.current = None
 
     assert condition_holds(game, game.table.cards_by_id["raider"], Condition.ATTACKING) is False
+
+
+def test_defending_holds_for_the_defenders_personality_at_the_battlefield():
+    game = _battle()
+
+    assert condition_holds(game, game.table.cards_by_id["guard"], Condition.DEFENDING) is True
+
+
+def test_defending_fails_for_the_attacker_and_for_anyone_at_home():
+    game = _battle()
+
+    for card_id in ("raider", "reserve", "courtier"):
+        card = game.table.cards_by_id[card_id]
+        assert condition_holds(game, card, Condition.DEFENDING) is False, card_id
+
+
+def test_defending_fails_between_battles():
+    game = _battle()
+    game.attack.current = None
+
+    assert condition_holds(game, game.table.cards_by_id["guard"], Condition.DEFENDING) is False
