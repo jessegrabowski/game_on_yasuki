@@ -14,8 +14,22 @@ from tests.yasuki_core.engine.builders import personality
 P1, P2 = PlayerId.P1, PlayerId.P2
 
 
-def _side(seat: PlayerId) -> DuelistView:
-    return DuelistView(seat=seat, duelist=None, focused=(), duel_stat=3, total=None)
+def _side(
+    seat: PlayerId,
+    *,
+    duelist=None,
+    attached=(),
+    focused=(),
+    total=None,
+) -> DuelistView:
+    return DuelistView(
+        seat=seat,
+        duelist=duelist,
+        attached=tuple(attached),
+        focused=tuple(focused),
+        duel_stat=3,
+        total=total,
+    )
 
 
 def _duel(
@@ -24,15 +38,19 @@ def _duel(
     winners: tuple[PlayerId, ...] = (),
     losers: tuple[PlayerId, ...] = (),
     decided: bool = False,
+    challenger: DuelistView | None = None,
+    challenged: DuelistView | None = None,
+    option: PlayerId | None = None,
+    source=None,
 ) -> DuelView:
     return DuelView(
-        challenger=_side(P1),
-        challenged=_side(P2),
+        challenger=challenger or _side(P1),
+        challenged=challenged or _side(P2),
         step=step,
-        option=None,
+        option=option,
         ordinal=1,
         source_name="Sanctioned Duel",
-        source=None,
+        source=source,
         winners=winners,
         losers=losers,
         decided=decided,
@@ -97,20 +115,7 @@ def test_a_duelist_that_also_created_the_duel_is_not_drawn_twice():
 
 def _with(*, source, duelist) -> DuelView:
     """A duel carrying ``source`` as its creator and ``duelist`` as the challenger's Personality."""
-    duel = _duel()
-    challenger = DuelistView(seat=P1, duelist=duelist, focused=(), duel_stat=3, total=3)
-    return DuelView(
-        challenger=challenger,
-        challenged=duel.challenged,
-        step=duel.step,
-        option=None,
-        ordinal=1,
-        source_name="whatever",
-        source=source,
-        winners=(),
-        losers=(),
-        decided=False,
-    )
+    return _duel(challenger=_side(P1, duelist=duelist, total=3), source=source)
 
 
 @pytest.mark.parametrize(
@@ -138,19 +143,7 @@ def panel():
 
 
 def _with_option(seat, step=DuelStep.FOCUSING) -> DuelView:
-    duel = _duel(step=step)
-    return DuelView(
-        challenger=duel.challenger,
-        challenged=duel.challenged,
-        step=duel.step,
-        option=seat,
-        ordinal=1,
-        source_name="Sanctioned Duel",
-        source=None,
-        winners=duel.winners,
-        losers=duel.losers,
-        decided=duel.decided,
-    )
+    return _duel(step=step, option=seat)
 
 
 def test_the_duelist_holding_the_option_is_marked(panel):
@@ -169,3 +162,45 @@ def test_nothing_holds_the_option_once_the_focusing_is_over(panel):
     panel.refresh(_with_option(P1, step=DuelStep.REVEAL), viewer=P1)
 
     assert panel.canvas.bbox("duel-option") is None
+
+
+def _unit(duelist, attached=()) -> DuelView:
+    """A focusing duel whose near side is ``duelist`` carrying ``attached``."""
+    return _duel(challenger=_side(P1, duelist=duelist, attached=attached, total=3))
+
+
+def test_a_duelist_is_drawn_with_the_cards_attached_to_him(panel):
+    # A duel is fought by the unit, so what is attached has to be on the panel and has to be
+    # hit-testable, not just the Personality.
+    blade = personality("blade", owner=P1)
+    panel.refresh(_unit(personality("hida", owner=P1), [blade]), viewer=P1)
+
+    assert panel.canvas.bbox("duel:hida") is not None
+    assert panel.canvas.bbox("duel:blade") is not None
+
+
+def test_an_attachment_rides_clear_of_the_personality_it_is_on(panel):
+    # Each card's title bar has to clear the one it rides, which is the whole point of the tower.
+    panel.refresh(_unit(personality("hida", owner=P1), [personality("blade", owner=P1)]), viewer=P1)
+
+    leader = panel.canvas.bbox("duel:hida")
+    attached = panel.canvas.bbox("duel:blade")
+
+    assert leader is not None and attached is not None
+    assert attached[1] < leader[1]
+
+
+def test_the_far_duelists_attachments_stay_on_the_panel(panel):
+    # The far side's stack grows toward the top edge, so it is anchored by its top rather than by
+    # the Personality: anchored the other way it climbs off the panel as the unit grows.
+    far = _side(
+        P2,
+        duelist=personality("rival", owner=P2),
+        attached=[personality(f"att{index}", owner=P2) for index in range(4)],
+    )
+    panel.refresh(_duel(challenged=far), viewer=P1)
+
+    tops = [panel.canvas.bbox(f"duel:att{index}") for index in range(4)]
+
+    assert all(box is not None for box in tops)
+    assert min(box[1] for box in tops) >= 0

@@ -132,6 +132,9 @@ class DuelistView:
     duelist : L5RCard, HiddenCard or None
         The Personality in the duel, or None once it has left play. A duelist leaving is what ends
         a duel without resolution, and the record outlives it.
+    attached : tuple of L5RCard or HiddenCard
+        The Followers, Items and Spells on the Personality, in the order they were attached. A duel
+        is fought by the whole unit, so a client draws them with him.
     focused : tuple of L5RCard or HiddenCard
         What this side has focused, in the order it focused. A card the viewer may not identify
         arrives as a back, which is every card the other side focused before the reveal.
@@ -147,6 +150,7 @@ class DuelistView:
 
     seat: PlayerId
     duelist: L5RCard | HiddenCard | None
+    attached: tuple[L5RCard | HiddenCard, ...]
     focused: tuple[L5RCard | HiddenCard, ...]
     duel_stat: int | None
     total: int | None
@@ -491,9 +495,11 @@ def _project_duelist(
     # duelist would otherwise keep publishing a stat for a Personality the view says is gone.
     duelist = next((card for card in game.table.battlefield.cards if card.id == wanted), None)
     seen = _focused_as_seen(game, table, duel, seat)
+    attached = () if duelist is None else attachments_of(game, duelist)
     return DuelistView(
         seat=seat,
         duelist=_as_seen(table, [wanted])[0] if duelist is not None else None,
+        attached=tuple(_as_seen(table, [card.id for card in attached])),
         focused=seen,
         duel_stat=duel_stat(game, duelist) if duelist is not None else None,
         total=_duel_total(game, duel, seat, duelist, seen),

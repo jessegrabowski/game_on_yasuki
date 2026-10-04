@@ -166,9 +166,11 @@ def test_the_view_key_enlarges_a_strip_card_and_puts_it_away_again(window):
 def _duel(duelist=None):
     return DuelView(
         challenger=DuelistView(
-            seat=PlayerId.P1, duelist=duelist, focused=(), duel_stat=3, total=None
+            seat=PlayerId.P1, duelist=duelist, attached=(), focused=(), duel_stat=3, total=None
         ),
-        challenged=DuelistView(seat=PlayerId.P2, duelist=None, focused=(), duel_stat=3, total=None),
+        challenged=DuelistView(
+            seat=PlayerId.P2, duelist=None, attached=(), focused=(), duel_stat=3, total=None
+        ),
         step=DuelStep.FOCUSING,
         option=None,
         ordinal=1,
