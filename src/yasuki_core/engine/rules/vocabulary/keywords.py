@@ -80,6 +80,7 @@ WEAPON = "Weapon"
 
 # --- Keywords individual cards ask after ---
 
+BERSERKER = "Berserker"
 CAVALRY = "Cavalry"
 COMMANDER = "Commander"
 COURTIER = "Courtier"
