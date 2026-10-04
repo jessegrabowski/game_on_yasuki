@@ -3,7 +3,6 @@ from collections.abc import Callable
 from functools import partial
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.intents import SetHonor
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
@@ -94,7 +93,7 @@ class PlayerInfoBox(tk.Frame):
         self.owner = owner
         # Set by whoever owns the board, since the pile is shown in a panel over it rather than in
         # a window this box could open for itself.
-        self.on_inspect: Callable[[list[L5RCard], str], None] | None = None
+        self.on_inspect: Callable[[ZoneKey, str], None] | None = None
         self._honor_text = tk.StringVar()
 
         self._avatar_canvas = tk.Canvas(
@@ -216,10 +215,10 @@ class PlayerInfoBox(tk.Frame):
         self._hand_cell.grid(row=0, column=2, padx=2, pady=2)
 
     def _inspect(self, role: ZoneRole, title: str) -> None:
-        cards = self.field.zone_render_cards(ZoneKey(self.owner, role))
-        if cards and self.on_inspect is not None:
+        pile = ZoneKey(self.owner, role)
+        if self.field.zone_render_cards(pile) and self.on_inspect is not None:
             owner = self.field.state.seats[self.owner].name
-            self.on_inspect(cards, f"{possessive(owner)} {title}")
+            self.on_inspect(pile, f"{possessive(owner)} {title}")
 
     def cell_counts(self) -> dict[str, int]:
         """The count shown in each grid cell, keyed by a stable cell name, read from the field's

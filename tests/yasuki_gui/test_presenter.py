@@ -58,6 +58,7 @@ from yasuki_gui.ui.game_window import GameWindow
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
+from yasuki_core.engine.rules.cards.shattered_empire import ENLIGHTENED_PATH_COPY
 from tests.yasuki_core.engine.rules.cards.test_shattered_empire import (
     ENLIGHTENED_PATH,
     _ring,
@@ -2153,5 +2154,28 @@ def test_a_lane_click_on_a_follower_picks_him_when_offered_and_his_personality_o
         presenter.on_lane_card_clicked("inkyo")
 
         assert window.field.selection == picked
+    finally:
+        window.root.destroy()
+
+
+def test_a_ring_taken_from_the_open_discard_pile_leaves_the_pile_window():
+    session = _ring_battle(
+        guard_force=6,
+        in_play=(stronghold(P1, printed_id=ENLIGHTENED_PATH),),
+        discarded=(_ring("fire", "ring_of_fire"),),
+    )
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(GameRunner(session, P1)), window)
+    window.bind_to(presenter)
+    try:
+        presenter.act(ActivateAbility("P1-SH"))
+        presenter.submit_answer(("fire",))
+        window.human_panel._inspect(ZoneRole.FATE_DISCARD, "Fate Discard")
+        assert list(window.card_strip._drawn) == ["card:fire"]
+
+        presenter.act(ActivateAbility("fire", ENLIGHTENED_PATH_COPY))
+        presenter.submit_answer(("guard",))
+
+        assert not window.card_strip.showing
     finally:
         window.root.destroy()

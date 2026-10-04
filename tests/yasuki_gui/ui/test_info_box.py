@@ -40,7 +40,7 @@ def test_opening_a_pile_titles_it_in_full_after_its_owner(root, loaded):
     field, state = loaded
     box = PlayerInfoBox(root, field, PlayerId.P1)
     opened = []
-    box.on_inspect = lambda cards, title: opened.append(title)
+    box.on_inspect = lambda pile, title: opened.append(title)
     field.dispatch(Draw(DeckKey(PlayerId.P1, Side.DYNASTY)))
     card = state.battlefield.cards[-1]
     field.dispatch(MoveCard(card.id, ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)))

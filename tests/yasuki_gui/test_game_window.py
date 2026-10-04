@@ -8,6 +8,7 @@ import yasuki_gui.ui.game_window as game_window_mod
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.projection import DuelistView, DuelView
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_gui.session import build_demo_state
 from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.game_window import GameWindow
@@ -302,3 +303,30 @@ def test_a_click_on_a_pile_card_asks_the_presenter_what_it_can_do(window):
     window.card_strip._on_click(DummyEventNamespace(x=(left + right) // 2, y=(top + bottom) // 2))
 
     assert called == [("on_card_activated", ("hida",))]
+
+
+def _discard_pile(window, *card_ids):
+    pile = ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)
+    zone = window.field.state.zones[pile]
+    zone.cards = [personality(card_id) for card_id in card_ids]
+    return pile, zone
+
+
+def test_an_open_pile_drops_a_card_that_has_left_it(window):
+    pile, zone = _discard_pile(window, "stays", "leaves")
+    window.show_pile(pile, "Fate Discard")
+
+    zone.cards = [card for card in zone.cards if card.id != "leaves"]
+    window.refresh_pile()
+
+    assert list(window.card_strip._drawn) == ["card:stays"]
+
+
+def test_an_open_pile_closes_once_it_is_empty(window):
+    pile, zone = _discard_pile(window, "leaves")
+    window.show_pile(pile, "Fate Discard")
+
+    zone.cards = []
+    window.refresh_pile()
+
+    assert not window.card_strip.showing

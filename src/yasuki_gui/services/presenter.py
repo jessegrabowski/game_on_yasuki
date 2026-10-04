@@ -207,6 +207,7 @@ class Presenter:
         window.field.state = self.host.session.game.table
         window.field.gold = view.gold[view.viewer]
         window.field.render_snapshot(view.table, self.host.human_seat, view.stats)
+        window.refresh_pile()
         window.phase_bar.refresh(view)
         status, buttons = self._prompt(view)
         window.prompt_box.show(status, buttons, self._spinner_amounts())
