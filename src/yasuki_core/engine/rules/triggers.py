@@ -446,17 +446,18 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
     once every member has happened. An effect something acts before, a destruction a trait reads
     "before this card is destroyed", is announced first as an events frame of its own, read as the
     Interrupt modifications and the negations in force will leave it, and commits once that frame
-    has resolved. A destruction inside a group, or one the state-based rules demand, is not
-    announced. An events frame announces all of its occurrence's events and collects every trait
-    they trigger, dropping those that would do nothing when several were collected. While the
-    triggers left belong to two or more cards outside a hand, it pauses for the active player's
-    :class:`~.ChooseNextTrigger` (CR, Timing Conflicts). Otherwise it fires the next as a new
-    effects frame, unless its card has since left where it answers from. A frame with nothing left
-    is dropped, and the walk ends with the stack. An :class:`~.InterruptingEffect` pauses the walk:
-    it stashes the exact remainder (every frame, the paused one holding the effects after the one
-    that asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
-    :func:`~.resume_cascade` continues from precisely here once the seat answers. An effect with
-    nothing to ask leaves the stash to drain behind the work it queued.
+    has resolved. A group's destructions are announced together, as one occurrence, before any
+    member commits. A destruction the state-based rules demand is not announced. An events frame
+    announces all of its occurrence's events and collects every trait they trigger, dropping those
+    that would do nothing when several were collected. While the triggers left belong to two or more
+    cards outside a hand, it pauses for the active player's :class:`~.ChooseNextTrigger` (CR, Timing
+    Conflicts). Otherwise it fires the next as a new effects frame, unless its card has since left
+    where it answers from. A frame with nothing left is dropped, and the walk ends with the stack.
+    An :class:`~.InterruptingEffect` pauses the walk: it stashes the exact remainder (every frame,
+    the paused one holding the effects after the one that asked) as a :class:`~.ResumeCascade` and
+    records that effect's decision, so :func:`~.resume_cascade` continues from precisely here once
+    the seat answers. An effect with nothing to ask leaves the stash to drain behind the work it
+    queued.
 
     Each effects frame carries the provenance of its effects. Its ``interruptible`` says they are an
     action's own, the only ones an Interrupt may modify (ShE datasheet, Interrupt). Each is checked
@@ -499,7 +500,12 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                     top.pending[:0] = effect.effects
                 else:
                     frames.append(_Events([]))
-                    frames.append(_Effects(list(effect.effects), provenance, simultaneous=True))
+                    group = _Effects(list(effect.effects), provenance, simultaneous=True)
+                    frames.append(group)
+                    announcing = _group_impending(game, effect.effects, provenance)
+                    if announcing:
+                        group.announced = frozenset(event.card_id for event in announcing)
+                        frames.append(_Events(list(announcing)))
                 continue
             if isinstance(effect, Attributed):
                 # Stashed beneath it, so the effects around it keep their order.
@@ -507,7 +513,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 game.stack.append(ApplyEffects((effect.effect,), effect.provenance))
                 return
             stands = as_modified(game, effect) if _modifiable(effect, provenance) else effect
-            impending = () if top.simultaneous else stands.impending(game)
+            impending = stands.impending(game)
             unannounced = [event for event in impending if event.card_id not in top.announced]
             if any(_collect(game, event) for event in unannounced) and not _will_be_negated(
                 game, stands, provenance
@@ -535,8 +541,12 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             _trace.append(f"    {effect.describe()}")
             happens = bool(contingent) and happens_as(game, first, effect)
             raised = apply_effect(game, effect)
-            # An announced effect is put back at the head of its frame, so it is the one committing.
-            top.announced = frozenset()
+            # A group's frame holds every member's announcement, so only this member's leaves. Any
+            # other frame announced at most the effect it put back at its head, which this is.
+            if top.simultaneous:
+                top.announced -= {event.card_id for event in impending}
+            else:
+                top.announced = frozenset()
             # What the effect produced goes next, ahead of the rest, so an attack's outcome resolves
             # where the attack stood and passes through the Interrupt step on its own.
             top.pending[:0] = (*effect.follow_on(game), *(contingent if happens else ()))
@@ -585,6 +595,39 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             top.firing.extend((card, trigger, event) for card, trigger in _collect(game, event))
         if len(top.firing) > 1:
             top.firing = _triggered(game, top.firing)
+
+
+def _group_impending(
+    game: GameState, effects: tuple[Effect, ...], provenance: Provenance
+) -> list[Destroying]:
+    """What is announced before a :class:`~.Simultaneously` group of ``effects`` commits, as one
+    occurrence: each member read as the Interrupts and the negations in force will leave it, a
+    ``once`` negation hiding only the first member it will spend itself on. Empty when nothing
+    answers any of it. A member the forecast misses is announced as it comes up."""
+    members = [
+        as_modified(game, member) if _modifiable(member, provenance) else member
+        for member in _group_members(effects)
+    ]
+    impending = [(member, member.impending(game)) for member in members]
+    if not any(_collect(game, event) for _, events in impending for event in events):
+        return []
+    spent: list[Negation] = []
+    return [
+        event
+        for member, events in impending
+        if provenance.paying or not would_negate(game, member, provenance, spent)
+        for event in events
+    ]
+
+
+def _group_members(effects: tuple[Effect, ...]) -> Iterator[Effect]:
+    """The effects a group commits, a nested group's among them, and the first of a :class:`~.To`,
+    whose dependent effects are not known until it has happened."""
+    for effect in effects:
+        if isinstance(effect, Simultaneously):
+            yield from _group_members(effect.effects)
+        else:
+            yield effect.first if isinstance(effect, To) else effect
 
 
 def _will_be_negated(game: GameState, stands: Effect, provenance: Provenance) -> bool:
