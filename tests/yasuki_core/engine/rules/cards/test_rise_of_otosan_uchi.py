@@ -2313,6 +2313,18 @@ def test_higaru_straightens_his_target_when_that_is_chosen():
     assert not session.game.table.cards_by_id["ally"].bowed
 
 
+def test_higaru_straightens_a_ring_without_offering_it_a_bonus():
+    session = _higaru_game(rings=(Element.AIR,))
+    ring = session.game.table.cards_by_id["ring0"]
+    ring.bow()
+    session.act(P1, ActivateAbility("higaru"))
+
+    session.submit(P1, DecisionResponse(("ring0",)))
+
+    assert session.game.pending is None
+    assert not ring.bowed
+
+
 def test_higaru_with_no_ring_straightens_his_target_without_asking():
     session = _higaru_game(ally_bowed=True)
     session.act(P1, ActivateAbility("higaru"))

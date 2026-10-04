@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
     different_elements,
+    followers_in_play,
     phase_history,
     has_keyword,
     owned_holdings,
@@ -1305,9 +1306,11 @@ def _togashi_higaru_clan_champion_experienced_3_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     """Straighten a target card, or give it +1F/+1C for each of your Rings with different element
-    keywords. With no such Ring the bonus is nothing, so the straightening is all there is."""
+    keywords. With no such Ring the bonus is nothing, and a card with no Force or Chi of its own,
+    a Ring or a Holding, has nothing to give it to, so the straightening is all there is."""
     bonus = _togashi_higaru_clan_champion_experienced_3_bonus(game, source)
-    if bonus == 0:
+    has_force_and_chi = target in personalities_in_play(game) or target in followers_in_play(game)
+    if bonus == 0 or not has_force_and_chi:
         return [Straighten(target.id)]
     return [
         AskOption(
