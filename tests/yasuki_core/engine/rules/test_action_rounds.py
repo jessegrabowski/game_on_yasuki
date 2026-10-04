@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
-from yasuki_core.engine.rules.effects import AdditionalAction
+from yasuki_core.engine.rules.effects import AdditionalAction, GrantKeyword
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
 from yasuki_core.engine.rules.legality import is_legal
 from tests.yasuki_core.engine.builders import end_phase, holding, province_card, put_in_play
@@ -201,3 +201,37 @@ def test_what_was_granted_for_the_additional_action_lapses_once_it_is_spent(
     follow_up_session.act(PlayerId.P1, FOLLOW_UP if spend == "take" else Pass())
 
     assert granted not in follow_up_session.game.ongoing
+
+
+NEXT_FOLLOW_UP = ActivateAbility("other", "probe")
+
+
+def _granting_a_second_follow_up(game, source, target):
+    return [
+        GrantKeyword(source.id, source.id, "Probe", Duration.FOR_ADDITIONAL_ACTION),
+        AdditionalAction(PlayerId.P1, frozenset({NEXT_FOLLOW_UP})),
+    ]
+
+
+def test_a_follow_up_spent_on_another_limited_one_keeps_what_was_granted_for_the_next():
+    state = TableState.empty_two_seat()
+    for card_id in ("granter", "chosen", "other"):
+        put_in_play(state, holding(card_id, printed_id=f"{card_id}_probe"))
+    with (
+        probe_ability("granter_probe", _open_probe(_granting)),
+        probe_ability("chosen_probe", _open_probe(_granting_a_second_follow_up)),
+        probe_ability("other_probe", _open_probe(_doing_nothing)),
+    ):
+        session = EngineSession.start(state, PlayerId.P1)
+        session.act(PlayerId.P1, ActivateAbility("granter", "probe"))
+
+        granted = KeywordGrant("chosen", "chosen", "Probe", Duration.FOR_ADDITIONAL_ACTION)
+
+        session.act(PlayerId.P1, FOLLOW_UP)
+
+        assert session.game.round.follow_ups == frozenset({NEXT_FOLLOW_UP})
+        assert granted in session.game.ongoing
+
+        session.act(PlayerId.P1, NEXT_FOLLOW_UP)
+
+        assert granted not in session.game.ongoing

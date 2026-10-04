@@ -239,15 +239,18 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
     nothing never receives the opportunity, and counts as having passed, as does a seat holding no
     action for the open Interrupt or Response step.
     """
-    if game.round.follow_ups is not None:
-        # A limited additional opportunity is spent by whatever the seat did with it, so what was
-        # granted for it alone goes with it.
+    reopened = not passed and game.additional_action is game.round.priority
+    opens_another_limited = reopened and game.additional_follow_ups is not None
+    if game.round.follow_ups is not None and not opens_another_limited:
+        # A spent limited opportunity takes what was granted for it alone. One that opens another
+        # keeps them: the action spending it may have granted for the next, and the new limit
+        # keeps what is left of the old out of reach until both lapse together.
         game.ongoing = [
             recorded
             for recorded in game.ongoing
             if recorded.duration is not Duration.FOR_ADDITIONAL_ACTION
         ]
-    if not passed and game.additional_action is game.round.priority:
+    if reopened:
         # The seat keeps the opportunity, and its consecutive-pass count starts again, so a pass
         # taken at the additional opportunity does not count toward closing the round.
         game.round = replace(game.round, passes=0, follow_ups=game.additional_follow_ups)
