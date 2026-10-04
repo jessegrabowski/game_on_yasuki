@@ -11,10 +11,18 @@ from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.duel.records import DuelRecord
 from yasuki_core.engine.rules.effects import Destroy, Effect, GrantModifier, StartDuel
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.vocabulary.decisions import focus_source, focus_token
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    DecisionResponse,
+    focus_source,
+    focus_token,
+)
+from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.game_pieces.cards import L5RCard
+
+from tests.yasuki_core.engine.builders import focus_card, personality, put_in_play, register
 
 
 @dataclass(frozen=True, slots=True)
@@ -97,3 +105,25 @@ CHALLENGE_ABILITY = Ability(
     targets=enemy_personalities,
     effects=lambda game, source, target: [StartDuel(source.id, target.id, source.id)],
 )
+
+
+def duel_focusing(card: L5RCard, *, mine_chi: int, theirs_chi: int = 3) -> EngineSession:
+    """A duel between P1's challenger and P2's rival with ``card`` the only thing P1 focuses.
+
+    The challenge comes from :data:`CHALLENGE_ABILITY`, so the caller holds the probe registered
+    around this. Each seat focuses once and the next ask strikes, which carries the duel to its end.
+    """
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        personality("challenger", owner=PlayerId.P1, chi=mine_chi, printed_id=CHALLENGE_PROBE),
+    )
+    put_in_play(state, personality("rival", owner=PlayerId.P2, chi=theirs_chi))
+    for held in (card, focus_card("P2-plain", PlayerId.P2, 1)):
+        state.zones[ZoneKey(held.owner, ZoneRole.HAND)].add(register(state, held))
+    session = EngineSession.start(state, PlayerId.P1)
+    session.act(PlayerId.P1, ActivateAbility("challenger"))
+    session.submit(PlayerId.P1, DecisionResponse(("rival",)))
+    session.submit(PlayerId.P2, DecisionResponse((focus_token("P2-plain"),)))
+    session.submit(PlayerId.P1, DecisionResponse((focus_token(card.id),)))
+    return session

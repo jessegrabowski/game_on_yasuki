@@ -247,6 +247,7 @@ def combat_segment(
     *,
     attacker: PlayerId = PlayerId.P1,
     in_hand: list[L5RCard] | None = None,
+    defender_passes: bool = True,
 ) -> EngineSession:
     """The Combat Segment at battlefield 0 of ``attacker``'s attack, with ``cards`` in play and each
     seat's Personalities assigned by id to the battlefield index given, the defender passed, so the
@@ -255,6 +256,10 @@ def combat_segment(
     ``in_hand`` cards go to their own owner's hand before the game starts, which is where a battle
     Strategy has to be for the tape to replay: a card put on the table afterwards is not in the
     state the log was opened on.
+
+    The defender holds priority as the Combat Segment opens and passes it to the attacker, which is
+    what almost every test wants. Set ``defender_passes`` false to leave it with the defender, for a
+    card only the defending player can take.
     """
     defender = PlayerId.P2 if attacker is PlayerId.P1 else PlayerId.P1
     state = TableState.empty_two_seat()
@@ -280,7 +285,8 @@ def combat_segment(
     session.submit(choice.seat, DecisionResponse(("0",)))
     while session.game.attack.battle_segment is not BattleSegment.COMBAT:
         session.act(session.game.round.priority, Pass())
-    session.act(defender, Pass())
+    if defender_passes:
+        session.act(defender, Pass())
     return session
 
 

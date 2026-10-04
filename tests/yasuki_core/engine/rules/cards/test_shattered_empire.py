@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import Bow, Destroy, Discard
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
@@ -1295,6 +1296,91 @@ def _duel(session: EngineSession) -> None:
         token = focus_token(f"{pending.seat.name}-fv")
         answer = token if token in pending.candidates else STRIKE
         session.submit(pending.seat, DecisionResponse((answer,)))
+
+
+# --- the Edicts' Focus Effects ---
+
+
+def _edict_duel(
+    edict_id: str,
+    *,
+    holder: PlayerId = P1,
+    p1_focus: int | None = 1,
+    guard_force: int = 3,
+    raider_chi: int = 3,
+) -> EngineSession:
+    """A duel inside a battle with the named Edict focused by ``holder``, beside P2's focusing card.
+
+    The Edict is focused from hand rather than played, which is the only way its Focus Effect is
+    reached: a card in hand is a focus source whatever else it could do. P1's raider is always the
+    challenger, so ``holder`` is what tells a challenger's Edict from a challenged seat's.
+    """
+    edict = focus_card("edict", holder, 0, printed_id=edict_id)
+    others = _focusers(p1_focus) if holder is P1 else ()
+    session = _ring_battle(
+        raider_printed_id=DUEL_PROBE,
+        guard_force=guard_force,
+        raider_chi=raider_chi,
+        held=(*others, edict),
+    )
+    session.act(P1, ActivateAbility("raider"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while isinstance(session.game.pending, FocusOrStrike):
+        pending = session.game.pending
+        wanted = focus_token("edict") if pending.seat is holder else focus_token("P2-fv")
+        answer = wanted if wanted in pending.candidates else STRIKE
+        session.submit(pending.seat, DecisionResponse((answer,)))
+    return session
+
+
+def test_way_of_the_crab_makes_the_duel_compare_force():
+    # The raider's Chi is 3 and its Force 2, and the guard is given 9 Force, so a duel on Chi goes
+    # the other way.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _edict_duel("way_of_the_crab_experienced", p1_focus=None, guard_force=9)
+
+        outcome = session.game.duel.outcome
+        assert outcome.totals == {P1: 2, P2: 9 + 1}
+        assert outcome.winners == (P2,)
+
+
+def test_way_of_the_crane_honors_you_and_strengthens_your_provinces_when_you_win():
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _edict_duel("way_of_the_crane_experienced", raider_chi=5)
+
+        assert session.game.duel.outcome.winners == (P1,)
+        assert session.game.table.seats[P1].honor == 1
+        # No Stronghold is in play, so a Province's printed base is nothing and the bonus is all
+        # of its strength.
+        province = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+        assert effective_province_strength(session.game, province) == 1
+
+
+def test_way_of_the_crane_does_nothing_when_you_lose():
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _edict_duel("way_of_the_crane_experienced", p1_focus=None)
+
+        assert session.game.duel.outcome.winners == (P2,)
+        assert session.game.table.seats[P1].honor == 0
+        assert effective_province_strength(session.game, ZoneKey(P1, ZoneRole.PROVINCE, 0)) == 0
+
+
+def test_way_of_the_scorpion_dishonors_the_winner_only_for_the_challenged_seat():
+    # P1 created the duel, so P1 focusing the Edict is the challenger and nothing happens.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _edict_duel("way_of_the_scorpion_experienced", raider_chi=5)
+
+        assert session.game.duel.outcome.winners == (P1,)
+        assert session.game.table.cards_by_id["raider"].dishonorable is False
+
+
+def test_way_of_the_scorpion_dishonors_the_winner_for_the_seat_that_was_challenged():
+    # P2 is the challenged seat, so its Edict dishonors whoever won, which here is P2's own guard.
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _edict_duel("way_of_the_scorpion_experienced", holder=P2, raider_chi=1)
+
+        assert session.game.duel.outcome.winners == (P2,)
+        assert session.game.table.cards_by_id["guard"].dishonorable is True
 
 
 def _ring_of_fire_offered(session: EngineSession) -> bool:

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING, ClassVar, NamedTuple
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
@@ -14,9 +14,18 @@ class DuelWork:
     A duel that ends before its steps run drops them off the stack, so what is the duel's own has to
     be distinguishable from the work of whatever created it. Carried as a base class rather than
     matched by type, so a step added later cannot be forgotten by the filter.
+
+    Attributes
+    ----------
+    survives_early_exit : bool
+        Whether a duel ending without resolution leaves this step on the stack. False for the
+        duel's own remaining steps, which do not happen. A step added later is dropped unless it
+        says otherwise, so the filter still cannot forget one.
     """
 
     __slots__ = ()
+
+    survives_early_exit: ClassVar[bool] = False
 
     def resume(self, game: "GameState") -> None:
         raise NotImplementedError
@@ -80,6 +89,9 @@ class DuelRecord:
         not focused is absent, so read it through :meth:`focuses`. Default empty.
     outcome : DuelOutcome or None
         What the duel did, or None until it has ended. Default None.
+    lost_by_both : bool
+        Whether a card has made both Personalities lose the duel, whatever the totals come to (CR,
+        Duel). Read once, as the duel is decided. Default False.
     """
 
     challenger: PlayerId
@@ -90,6 +102,7 @@ class DuelRecord:
     step: DuelStep = DuelStep.FOCUSING
     focused: dict[PlayerId, int] = field(default_factory=dict)
     outcome: DuelOutcome | None = None
+    lost_by_both: bool = False
 
     def duelist_of(self, seat: PlayerId) -> str:
         """The id of ``seat``'s Personality in the duel. Raise ``KeyError`` for a seat not in it."""

@@ -8,7 +8,14 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.duel.conftest import (
+    CHALLENGE_ABILITY,
+    CHALLENGE_PROBE,
+    duel_focusing,
+)
 from tests.yasuki_core.engine.builders import (
+    focus_card,
     end_phase,
     fate_card,
     personality,
@@ -70,3 +77,14 @@ def test_discretionary_valor_sends_an_opposed_personality_home_for_honor_and_a_c
     assert location_of(game.table, game.table.cards_by_id["kakita"]).is_home
     assert game.table.seats[P2].honor == 1
     assert [card.id for card in game.table.zones[ZoneKey(P2, ZoneRole.HAND)].cards] == ["spare"]
+
+
+def test_discretionary_valor_bows_the_other_personality():
+    # "The other Personality" is the one facing yours, whatever the duel comes to.
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        card = focus_card("valor", P1, 2, printed_id="discretionary_valor")
+        session = duel_focusing(card, mine_chi=3)
+
+        cards = session.game.table.cards_by_id
+        assert cards["rival"].bowed
+        assert not cards["challenger"].bowed

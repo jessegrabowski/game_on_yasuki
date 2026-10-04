@@ -110,6 +110,21 @@ class ApplyDuelConsequences(DuelWork):
 
 
 @dataclass(frozen=True, slots=True)
+class DropDuelConsequences:
+    """Lapse the records lasting until the duel's end and discard the consequences held for it.
+
+    A step rather than part of :func:`~.end_without_resolution`, because the Focus Effects that
+    outlive an early exit resolve first and may hold consequences of their own. One left held would
+    resolve off the next duel's end (CR, Duel). Not a step of the duel's own, so an early exit does
+    not drop it.
+    """
+
+    def resume(self, game: GameState) -> None:
+        triggers.lapse_ongoing(game, DUEL_CONSEQUENCES)
+        triggers.discard_delayed(game, DUEL_CONSEQUENCES)
+
+
+@dataclass(frozen=True, slots=True)
 class DiscardFocusedCards(DuelWork):
     """Discard what the duel focused and take the focusing areas off the table, the last step of the
     CR's DUEL entry, after the duel has ended and its consequences have applied."""
@@ -184,24 +199,32 @@ def end_without_resolution(game: GameState) -> list[GameEvent]:
     to a duel (CR, Duel). Return the event ending it. Its cleanup is queued to resolve once the
     cascade it ended in has settled, since this runs inside an effect.
 
-    The duel's queued work goes with it, so no step of a duel that has ended runs. Work queued by
-    whatever created the duel is left alone: the action that declared it still has its own steps to
-    finish. Effects delayed until the duel's end are dropped rather than resolved, since the duel
-    reached no outcome for a consequence to act on. An outstanding focus-or-strike is not withdrawn
-    here, because only the decision layer clears a pending request; answering one for a duel that has
-    ended raises instead.
+    The duel's queued work goes with it, so no step of a duel that has ended runs, except one that
+    outlives an early exit: the Focus Effects of the cards the strike revealed still resolve, while
+    their cards are still in their focusing areas and before what waited for the duel's end is torn
+    down. Effects delayed until the duel's end are dropped rather than resolved, since the duel
+    reached no outcome for a consequence to act on. Work queued by whatever created the duel is left
+    alone, since the action that declared it still has its own steps to finish. An outstanding
+    focus-or-strike is not withdrawn here, because only the decision layer clears a pending request;
+    answering one for a duel that has ended raises instead.
     """
     duel = duel_in_progress(game)
     duel.step = DuelStep.ENDED
+    standing = [
+        item for item in game.stack if isinstance(item, DuelWork) and item.survives_early_exit
+    ]
     game.stack[:] = [item for item in game.stack if not isinstance(item, DuelWork)]
     # The duel reached no outcome, so what waited for its end does not happen: the records lasting
     # until it lapse, and the consequences held for it are dropped rather than resolved. One left
     # held would resolve off the next duel's end (CR, Duel).
-    triggers.lapse_ongoing(game, DUEL_CONSEQUENCES)
-    triggers.discard_delayed(game, DUEL_CONSEQUENCES)
     duel.outcome = DuelOutcome(winners=(), losers=(), totals={})
+    # Pushed in reverse of the order they run, since the stack pops the last item first: the Focus
+    # Effects that outlived the exit, then the teardown of what waited for the duel's end, then the
+    # cleanup that discards the cards those Focus Effects read.
     game.stack.append(RemoveFocusAreas(duel))
     game.stack.append(ApplyEffects(tuple(duel_cleanup(game))))
+    game.stack.append(DropDuelConsequences())
+    game.stack.extend(standing)
     return [DuelEnded(resolved=False, source_card_id=duel.source)]
 
 
@@ -222,7 +245,11 @@ def _is_duelist(game: GameState, card: L5RCard) -> bool:
 
 def _outcome_on_totals(game: GameState, duel: DuelRecord) -> DuelOutcome:
     """Who won, on the totals and then on the Duelist tiebreak: the higher total wins, an equal one
-    is won by a Duelist against a non-Duelist, and any other tie is lost by both (CR, Duel)."""
+    is won by a Duelist against a non-Duelist, and any other tie is lost by both (CR, Duel).
+
+    A duel a card has made both Personalities lose skips the comparison and is lost by both, with
+    the totals it reached still recorded, since cards and clients read them either way.
+    """
     challenger, challenged = duel.challenger, duel.challenged
     totals = {seat: duel_total(game, duel, seat) for seat in (challenger, challenged)}
     # Read while the cards are still in their areas, since the duel's last step discards them.
@@ -230,6 +257,8 @@ def _outcome_on_totals(game: GameState, duel: DuelRecord) -> DuelOutcome:
         seat: tuple(card.id for card in focused_cards(game, seat))
         for seat in (challenger, challenged)
     }
+    if duel.lost_by_both:
+        return DuelOutcome((), (challenger, challenged), totals, focused)
     if totals[challenger] != totals[challenged]:
         winner = max(totals, key=lambda seat: totals[seat])
         return DuelOutcome((winner,), (duel.opponent_of(winner),), totals, focused)

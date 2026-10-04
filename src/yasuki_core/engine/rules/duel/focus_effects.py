@@ -1,10 +1,10 @@
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import ClassVar
 
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.focusing import focused_cards
-from yasuki_core.engine.rules.duel.procedure import duel_in_progress
 from yasuki_core.engine.rules.duel.records import DuelRecord, DuelWork
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.state import GameState
@@ -39,8 +39,11 @@ class ResolveFocusEffects(DuelWork):
     """Resolve the Focus Effects the strike revealed, one card at a time (CR, Duel).
 
     The active player names the next one while more than one is left, and the step queues itself
-    again with the rest, so an effect that pauses for a decision resumes into the next card and a
-    duel that ends early drops the Focus Effects that have not resolved.
+    again with the rest, so an effect that pauses for a decision resumes into the next card.
+
+    A Focus Effect that ends the duel does not stop the others: this step outlives an early exit,
+    because the CR resolves the Focus Effects of the cards the strike revealed whatever becomes of
+    the duel (Relentless states it as a reminder).
 
     Attributes
     ----------
@@ -50,8 +53,9 @@ class ResolveFocusEffects(DuelWork):
 
     remaining: tuple[str, ...]
 
+    survives_early_exit: ClassVar[bool] = True
+
     def resume(self, game: GameState) -> None:
-        duel_in_progress(game)
         if not self.remaining:
             return
         if len(self.remaining) == 1:

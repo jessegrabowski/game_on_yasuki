@@ -74,7 +74,10 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     EndLook,
     Fear,
+    BothLoseTheDuel,
+    DelayedEffect,
     GainHonor,
+    MoveToHand,
     GrantKeyword,
     GrantModifier,
     GrantNegation,
@@ -97,7 +100,13 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
-from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_ACTION_PHASE, Boundary, Moment
+from yasuki_core.engine.rules.turn.structure import (
+    BEGINNING_OF_ACTION_PHASE,
+    DUEL_CONSEQUENCES,
+    END_OF_BATTLE,
+    Boundary,
+    Moment,
+)
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
@@ -122,11 +131,89 @@ from yasuki_core.engine.rules.triggers import (
     on,
 )
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import ActionPrint, PersonalityPrint, RingPrint
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
+
+
+# --- Against the Darkness ---
+
+AGAINST_THE_DARKNESS_HONOR = 2
+
+
+@focus_effect("against_the_darkness")
+def _against_the_darkness_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
+    """ "As a Focus Effect, when this duel resolves, both Personalities lose the duel, and you gain
+    2 Honor."
+
+    The Honor waits for the duel's end rather than landing as the card is revealed, so a duel that
+    ends without resolution gives none: the delay is discarded along with the duel.
+    """
+    return [
+        BothLoseTheDuel(card.id),
+        DelayedEffect(
+            GainHonor(card.owner, AGAINST_THE_DARKNESS_HONOR, source_id=card.id),
+            DUEL_CONSEQUENCES,
+        ),
+    ]
+
+
+AGAINST_THE_DARKNESS_FORCE = -1
+
+
+def _against_the_darkness_shadowlands(game: GameState) -> list[L5RCard]:
+    """The Shadowlands Followers and Personalities at the battle being fought, both armies'. The
+    text names no controller, so neither does this, and a bowed card is still at the battlefield."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return []
+    at_the_battle: list[L5RCard] = []
+    for seat in game.table.seats:
+        for personality in units_at(game, attack.current, seat):
+            at_the_battle.append(personality)
+            at_the_battle.extend(followers_of(game, personality))
+    return [card for card in at_the_battle if has_keyword(game, card, keywords.SHADOWLANDS)]
+
+
+def _against_the_darkness_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Give all Shadowlands Followers and Personalities at this battlefield -1F. If you are the
+    Defender, return this Strategy to your hand after this battle's resolution."
+
+    The text gives the Force loss no duration, so it lasts until the end of the turn (CR, Ongoing).
+    """
+    losses = tuple(
+        GrantModifier(
+            source_id=source.id,
+            target_id=card.id,
+            stat=Stat.FORCE,
+            amount=AGAINST_THE_DARKNESS_FORCE,
+            duration=Duration.UNTIL_END_OF_TURN,
+        )
+        for card in _against_the_darkness_shadowlands(game)
+    )
+    effects: list[Effect] = [Simultaneously(losses)] if losses else []
+    attack = game.attack
+    if attack is not None and attack.defender is source.owner:
+        effects.append(DelayedEffect(MoveToHand(source.id, source.owner), END_OF_BATTLE))
+    return effects
+
+
+register_ability(
+    "against_the_darkness",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=itself,
+        hits_every_target=True,
+        effects=_against_the_darkness_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
 
 
 # --- Aseth's Legion ---

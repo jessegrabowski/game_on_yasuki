@@ -1308,6 +1308,27 @@ class StartDuel(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class BothLoseTheDuel(Effect):
+    """Have both Personalities lose the duel being fought, whatever their totals come to (CR, Duel).
+
+    Recorded on the duel and read once, as it is decided, so a card played before the strike still
+    decides a duel resolved later. A no-op where no duel is being fought.
+    """
+
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.source_id}: both Personalities lose the duel"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        duel = game.duel_being_fought
+        if duel is None:
+            return []
+        duel.lost_by_both = True
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class EndDuel(Effect):
     """End the duel being fought without resolution, which is what a duelist leaving play does to it
     (CR, Duel). Nothing the duel would have done happens: there is no winner, no loser, and no
