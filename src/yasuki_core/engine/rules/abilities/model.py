@@ -113,6 +113,9 @@ class Interrupt[T: Effect]:
         Whether the rulebook confers this Interrupt rather than the card printing it. Taken from
         hand, it pays its own ``cost`` and plays nothing, where a card's own hand Interrupt plays
         the card. Default False.
+    tireless : bool, optional
+        The Tireless keyword: the Interrupt may be taken even while its card is bowed (CR,
+        Tireless). Default False.
     """
 
     answers: type[T] | UnionType
@@ -130,6 +133,7 @@ class Interrupt[T: Effect]:
     limit: InterruptLimit = InterruptLimit.ONCE_PER_TURN
     from_keyword: str | None = None
     from_rulebook: bool = False
+    tireless: bool = False
 
     def __post_init__(self) -> None:
         """Raise ValueError for a keyword's Interrupt not marked ``from_rulebook``."""

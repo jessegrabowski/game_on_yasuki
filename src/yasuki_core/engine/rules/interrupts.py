@@ -7,7 +7,11 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.costs import can_pay, priced_cost
 from yasuki_core.engine.rules.abilities.activation import ResolveAbility
 from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt, InterruptLimit
-from yasuki_core.engine.rules.abilities.registry import ability_for, interrupts_for
+from yasuki_core.engine.rules.abilities.registry import (
+    ability_for,
+    granted_tireless,
+    interrupts_for,
+)
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
@@ -189,9 +193,18 @@ def _affordable(
     if _plays_card(interrupt, location):
         purchase = interrupt.purchase(game, card, plays_card=True)
         return discounted_gold_cost(game, purchase) <= reachable_gold(game, seat, card)
-    if location is not CardLocation.HAND and (card.bowed or not location_permits(game, card)):
-        return False
+    if location is not CardLocation.HAND:
+        if not location_permits(game, card):
+            return False
+        if card.bowed and not _tireless(game, card, interrupt):
+            return False
     return can_pay(game, card, interrupt.cost)
+
+
+def _tireless(game: GameState, card: L5RCard, interrupt: Interrupt) -> bool:
+    """Whether ``interrupt`` may be taken while ``card`` is bowed: Tireless, printed on it or
+    granted to the card by another in play (CR, Tireless)."""
+    return interrupt.tireless or granted_tireless(game, card)
 
 
 def _plays_card(interrupt: Interrupt, location: CardLocation) -> bool:

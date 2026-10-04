@@ -1656,3 +1656,28 @@ def test_the_which_effect_question_reads_each_effect_as_it_stands_and_takes_the_
 
     assert left not in game.table.battlefield.cards
     assert right in game.table.battlefield.cards and right.bowed
+
+
+# --- Interrupts on a bowed card, and Interrupts a card grants ---
+
+for _printed_id, _tireless in (("tireless_bow_probe", True), ("rested_bow_probe", False)):
+    register_interrupt(
+        _printed_id,
+        Interrupt(
+            answers=Bow,
+            interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+            located_at=(CardLocation.BATTLEFIELD,),
+            tireless=_tireless,
+        ),
+    )
+
+
+def test_a_tireless_interrupt_is_offered_from_a_bowed_card_and_no_other_is():
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+    for card_id in ("tireless_bow_probe", "rested_bow_probe"):
+        put_in_play(game, holding(card_id, printed_id=card_id, owner=P2)).bow()
+
+    resolve_action_effects(game, [Bow(farm.id)])
+
+    assert legality.legal_actions(game, P2) == [Pass(), PlayInterrupt("tireless_bow_probe")]
