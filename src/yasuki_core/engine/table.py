@@ -117,9 +117,6 @@ class BoardPos(NamedTuple):
 class SeatInfo:
     name: str
     honor: int = 0  # set from the stronghold + sensei at setup; 0 until then
-    # Whether this seat waives every Personality's Honor Requirement when recruiting. Granted by
-    # cards' effects; false until one sets it.
-    ignores_honor_requirements: bool = False
     # Whether anything but this seat's own cards has caused it to lose Honor, which waives the
     # Honor Requirement of its own Clan Alignment's Personalities for the rest of the game
     # (CR, Honor Requirement). Latched: nothing clears it.

@@ -95,9 +95,11 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    sensei,
+    stronghold,
+    wind,
 )
 from tests.yasuki_core.engine.rules.conftest import probe_resolver
-from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 
 
 def _game(hand: int = 0, fate_deck: int = 1) -> GameState:
@@ -350,44 +352,27 @@ def test_a_new_game_starts_with_an_empty_stack():
     assert not game.stack and game.pending is None
 
 
-def test_two_pregame_permanents_that_pause_are_each_answered_before_the_turn_opens(reacting):
+def test_a_pregame_permanent_hears_no_entry_as_the_game_begins(reacting):
     state = TableState.empty_two_seat()
-    put_in_play(
-        state,
-        L5RCard.of(
-            StrongholdPrint,
-            id="P1-SH",
-            name="SH",
-            side=Side.STRONGHOLD,
-            owner=PlayerId.P1,
-            printed_id="pause_probe",
-        ),
-    )
-    put_in_play(
-        state,
-        L5RCard.of(
-            SenseiPrint,
-            id="P1-SE",
-            name="Sensei",
-            side=Side.FATE,
-            owner=PlayerId.P1,
-            printed_id="pause_probe",
-        ),
-    )
-    bowed = _bowed_on_battlefield(state, PlayerId.P1, "P1-bowed")
-    reacting(EnteredPlay, "pause_probe", _pause_on_own_event)
+    put_in_play(state, stronghold(PlayerId.P1, printed_id="entry_probe"))
+    put_in_play(state, wind(PlayerId.P1, printed_id="entry_probe"))
+    for seat in PlayerId:
+        put_in_play(state, sensei(seat, printed_id="entry_probe"))
+    seen: list[str] = []
+
+    def record_entry(ctx):
+        seen.append(ctx.event.card_id)
+        return []
+
+    reacting(EnteredPlay, "entry_probe", record_entry)
     game = GameState.start(state, PlayerId.P1)
 
     sequence.begin_game(game)
-    assert isinstance(game.pending, ChooseNextTrigger) and bowed.bowed is True
-    action_sequence.submit(game, DecisionResponse(("P1-SH",)))
-    assert game.pending is not None and bowed.bowed is True
-    _answer(game)
-    assert game.pending is not None and bowed.bowed is True
-    _answer(game)
 
-    assert game.pending is None and bowed.bowed is False
-    assert not game.stack and game.round.priority is game.active
+    # Under the CR's Start of Game a Stronghold, Sensei and Wind are already in play and never
+    # enter it, so none hears an entry and no question of whose trigger goes first opens.
+    assert seen == []
+    assert game.pending is None and not game.stack
 
 
 def test_two_cards_that_pause_on_straightening_are_answered_before_any_reveal(reacting):
@@ -551,11 +536,6 @@ def test_the_turn_start_straighten_announces_each_card_it_stands_up(reacting):
     # for standing up when it was never bowed would show up here as a second entry.
     assert seen == [bowed.id]
     assert already_up.bowed is False
-
-
-def test_begin_game_leaves_an_ordinary_seat_enforcing_honor_requirements():
-    game = _begun_game_with_sensei("some_other_sensei")
-    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is False
 
 
 # --- the Response Step ---
@@ -1024,35 +1004,6 @@ def test_a_delayed_effect_that_asks_a_question_at_the_end_of_the_turn_is_answere
 
     assert len(game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards) == 1
     assert game.turn == 2
-
-
-def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
-    state = TableState.empty_two_seat()
-    put_in_play(
-        state,
-        L5RCard.of(
-            StrongholdPrint,
-            id="P1-SH",
-            printed_id="P1-SH",
-            name="SH",
-            side=Side.STRONGHOLD,
-            owner=PlayerId.P1,
-        ),
-    )
-    put_in_play(
-        state,
-        L5RCard.of(
-            SenseiPrint,
-            id="P1-SE",
-            name="Sensei",
-            side=Side.FATE,
-            owner=PlayerId.P1,
-            printed_id=sensei_printed_id,
-        ),
-    )
-    game = GameState.start(state, PlayerId.P1)
-    sequence.begin_game(game)
-    return game
 
 
 register_ability(

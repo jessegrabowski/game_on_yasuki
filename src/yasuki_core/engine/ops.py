@@ -542,16 +542,6 @@ def set_honor(
     return True
 
 
-def set_ignore_honor_requirements(state: TableState, seat: PlayerId, value: bool) -> bool:
-    """Set whether ``seat`` waives every Personality's Honor Requirement when recruiting. Returns
-    whether it changed."""
-    info = state.seats[seat]
-    if info.ignores_honor_requirements == value:
-        return False
-    info.ignores_honor_requirements = value
-    return True
-
-
 def set_lost_honor_from_elsewhere(state: TableState, seat: PlayerId) -> bool:
     """Record that something other than ``seat``'s own cards has cost it Honor. Returns whether it
     changed."""

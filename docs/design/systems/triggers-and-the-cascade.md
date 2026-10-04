@@ -238,9 +238,9 @@ the same walk with several:
 
 The distinction is the rule, not a convenience. Occurrences that happen at the same instant go
 through `fire_all` together: every card the end-of-turn discard removes, every card a turn's
-straighten stands up, every pre-game permanent entering play. Firing them one at a time imposes
-an order the rules do not give, and once a trigger on the first one pauses, the second call would
-be a walk driven mid-decision.
+straighten stands up, every unit a seat assigns to a battlefield in one answer. Firing them one at
+a time imposes an order the rules do not give, and once a trigger on the first one pauses, the
+second call would be a walk driven mid-decision.
 
 {func}`~yasuki_core.engine.rules.triggers.resolve_effects` is the walk entered with effects in
 hand and an empty queue, which is how a rulebook procedure's effects or a resolver's output gets

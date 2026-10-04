@@ -56,7 +56,6 @@ from yasuki_core.engine.rules.effects import (
     DiscardFromHand,
     GainHonor,
     Bow,
-    IgnoreHonorRequirements,
     MoveToHand,
     Negated,
     PutIntoPlay,
@@ -683,14 +682,6 @@ def test_a_trigger_whose_card_an_earlier_one_destroyed_does_not_resolve(reacting
 def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():
     with pytest.raises(ValueError, match="resolve_action_effects"):
         resolve_effects(two_seat_game(), [], provenance=Provenance(interruptible=True))
-
-
-def test_ignore_honor_requirements_effect_sets_the_seat_flag():
-    game = two_seat_game()
-    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is False
-    apply_effect(game, IgnoreHonorRequirements(PlayerId.P1))
-    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is True
-    assert game.table.seats[PlayerId.P2].ignores_honor_requirements is False
 
 
 def _rice_farm(game, seat=PlayerId.P1, card_id="P1-farm"):

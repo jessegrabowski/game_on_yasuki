@@ -2,7 +2,7 @@ from dataclasses import replace
 
 import pytest
 
-from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, recruitable
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -703,6 +703,23 @@ def test_mishime_blocks_honor_loss_only_from_his_controllers_own_cards(
     resolve_effects(session.game, [GainHonor(P1, amount, source_id=source_id)])
 
     assert session.game.table.seats[P1].honor == before + change
+
+
+@pytest.mark.parametrize(
+    ("with_mishime", "owner", "recruitable_ids"),
+    [(True, P1, ["proud"]), (False, P1, []), (True, P2, [])],
+    ids=["his controller", "no waiver in play", "the opposing seat"],
+)
+def test_mishime_waives_an_honor_requirement_only_for_his_own_controller(
+    with_mishime, owner, recruitable_ids
+):
+    # "...and may ignore Honor Requirements." Mishime is P1's, and the waiver is read off the
+    # board, so it reaches the seat controlling him and nobody else.
+    game = _mishime_game().game if with_mishime else two_seat_game()
+    game.table.seats[owner].honor = -2
+    proud = register(game.table, personality("proud", owner=owner, honor_requirement=5))
+
+    assert recruitable(game, proud) == recruitable_ids
 
 
 def test_mishime_does_not_target_a_bowed_personality():

@@ -2465,21 +2465,6 @@ class DelayStraighten(Effect):
 
 
 @dataclass(frozen=True, slots=True)
-class IgnoreHonorRequirements(Effect):
-    """Grant ``seat`` the standing waiver of every Personality's Honor Requirement when
-    recruiting."""
-
-    seat: PlayerId
-
-    def describe(self) -> str:
-        return f"{self.seat.name} ignores honor requirements"
-
-    def perform(self, game: GameState) -> list[GameEvent]:
-        ops.set_ignore_honor_requirements(game.table, self.seat, True)
-        return []
-
-
-@dataclass(frozen=True, slots=True)
 class Recruit(Effect):
     """Bring ``card_id`` into play as a Recruit, in its entry state and with a Fortification
     attached to a Province (CR, Recruit). What its arrival is followed by resolves behind the

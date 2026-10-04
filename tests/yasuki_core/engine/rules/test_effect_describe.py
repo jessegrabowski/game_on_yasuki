@@ -77,7 +77,6 @@ from yasuki_core.engine.rules.effects import (
     SpendSeatOncePerTurn,
     SpendSeatOncePerGame,
     PayGold,
-    IgnoreHonorRequirements,
     MoveToDeck,
     PlaceOnDeck,
     PlaceInProvince,
@@ -170,7 +169,6 @@ EFFECTS = [
     (Show("a"), "show a"),
     (MoveToHand("a", PlayerId.P1), "a to P1's hand"),
     (Move("shiba", Location.home(PlayerId.P2)), "move shiba to P2's home"),
-    (IgnoreHonorRequirements(PlayerId.P1), "P1 ignores honor requirements"),
     (
         GrantModifier("millet", "farm_1", Stat.GOLD_PRODUCTION, 2, Duration.UNTIL_END_OF_TURN),
         "millet grants farm_1 +2 GOLD_PRODUCTION (UNTIL_END_OF_TURN)",
