@@ -30,6 +30,7 @@ def header_id(title: str) -> str:
 # the name of a step in a sequence rather than on a card, so they carry no id to place or order.
 _DECORATORS = {
     "on",
+    "focus_effect",
     "gold_handler",
     "recruit_discount",
     "invest_discount",
@@ -147,6 +148,7 @@ def _owning_card(sections: list[tuple[int, str]], line: int) -> str | None:
 # registered; a name that never does is a helper the card's own handlers call.
 _REGISTRARS = {
     "on",
+    "focus_effect",
     "register_ability",
     "register_interrupt",
     "register_invest",
@@ -285,6 +287,7 @@ ROLES = frozenset(
         "entry_state",
         "before_entering_play",
         "lobby_bar",
+        "focus_effect",
         # triggers, named for the event they answer
         "action_resolved",
         "assigned",
