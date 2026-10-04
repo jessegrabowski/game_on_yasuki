@@ -28,6 +28,38 @@ the rules layer is what turns it down.
 
 The engine puts the request on `GameState.pending` and returns. Nothing polls, and nothing blocks.
 
+Any request that picks cards carries {class}`~.PickLimit` conditions on the set, which is how one
+phrase naming several cards stays one question. A limit answers two questions, kept apart because
+they come apart: {meth}`~.PickLimit.permits` says whether a card may still join what is picked, and
+{meth}`~.PickLimit.satisfied` whether what is picked is a legal answer. A ceiling
+({class}`~.TotalAtMost`) refuses the pick that would break it, so its two answers agree. A floor
+refuses nothing and is unsatisfied until enough is picked, so they do not.
+{meth}`~.DecisionRequest.selectable` reports what a part-built answer may still grow by -- every
+candidate while nothing is picked, the rest of one part of a {class}`~.OneGroup` once something is
+-- and a client reads it to gray out the board the first pick ruled out. The picks themselves stay
+on offer, so clicking one again takes it back.
+
+The limits are plain data, computed when the request is raised. They have to be: a pending request
+is written to the tape and compared against the one a replay rebuilds, and a closure would not
+compare equal. Nothing can move between the raising and the answer anyway, because the cascade is
+paused on the question. A rule that cannot be said in data -- one reading the board as the answer is
+built -- would need a named predicate in a registry, the way a choice resolver is named, rather than
+a function on the request.
+
+A limited question has to be answerable before it is asked, which takes two readings of the limits.
+{func}`~.within_reach` drops a candidate no legal answer could hold at all, which is the one whose
+own weight already breaks a ceiling, and it runs where the targets are read, so the offering, the
+question and an Interrupt's substitution agree on what is targetable. {func}`~.answerable` then
+asks whether what is left can seat the fewest cards the phrase takes: enough candidates, and every
+limit able to admit that many ({meth}`~.PickLimit.admits`, the third question a limit answers). A
+phrase that fails either withholds the action, and a later phrase that fails targets nothing. Three
+Personalities of Force three are each a legal target of "two cards with total Force less than five"
+and no two of them are, so that phrase is no action at all.
+
+Each limit is asked on its own, so a phrase carrying two gets a necessary condition rather than a
+sufficient one: both can admit the minimum over sets that do not overlap. Nothing prints two yet,
+and the card that does wants a joint check instead.
+
 ## The life of a decision
 
 A decision is raised, answered, cleared and resumed, in that order, and four rules say who may do

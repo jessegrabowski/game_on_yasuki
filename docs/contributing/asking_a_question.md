@@ -88,6 +88,71 @@ and Done answers with whatever has been picked, nothing included. `@choice_resol
 wording as `pick`, as in `pick="Put on the bottom of your deck"`, and a choice that registers none
 offers "Choose".
 
+## A set the card puts a condition on
+
+Some text picks several cards at once and says something about the set: "one or two of your target
+cards in one unit", "one or two target Personalities with total Force less than Zaiberu's", "one to
+two enemy Followers ... with total Gold Cost less than your Personality's". The count is the easy
+half. The condition is a {class}`~.PickLimit`, and it answers two questions:
+
+- {meth}`~.PickLimit.permits` says whether a card may still join what is picked, which is what
+  narrows the board as the seat clicks.
+- {meth}`~.PickLimit.satisfied` says whether what is picked is a legal answer, which is what lights
+  the confirm button.
+
+A ceiling refuses the pick that would break it, so its two answers agree. A floor refuses nothing
+and stays unsatisfied until enough is picked, so they do not. Two limits ship:
+{class}`~.OneGroup`, every pick from one part of a partition, and {class}`~.TotalAtMost`, the picks
+weighing no more than a bound between them. A phrase may carry several, and all of them have to
+hold.
+
+A limit is plain data worked out when the question is raised, never a closure: a pending request has
+to compare equal to the one a replay rebuilds. Nothing can move in between anyway, since the cascade
+is paused on the question.
+
+Where the cards are the action's own targets, the limits belong on the ability's
+{class}`~.TargetGroup`, and the chosen cards are recorded as the action's targets. {card}`Ring of
+Air` straightens "one or two of your target cards in one unit":
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/shattered_empire.py
+:pyobject: _ring_of_air_limits
+:language: python
+```
+
+A card no legal answer could hold is not offered at all -- one whose own Force already breaks a
+total the set may not exceed cannot be targeted even alone -- and a phrase with no legal answer to
+give withholds the action, which is what makes {card}`With Regards`' "two or more of your unbowed
+Merchant or Ninja Personalities" no action for a seat with one, and a phrase taking two cards under
+a total no two of them reach no action either. A limit says which sets it could ever admit through
+{meth}`~.PickLimit.admits`, so neither the seat nor a bot is handed a question it cannot answer.
+
+## A second phrase that reads the first
+
+An ability printing two "target" phrases declares a {class}`~.TargetGroup` each, in print order,
+and a later group is handed the picks already made. {card}`Desperate Melee` reads "Target your
+Personality. Target and destroy one to two enemy Followers, or one to five enemy Followers if your
+Personality is a Berserker, with total Gold Cost less than your Personality's", so its second
+phrase reads the first for both its count and its ceiling:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/road_to_ruin.py
+:pyobject: _desperate_melee_count
+:language: python
+```
+
+Where the figure the first phrase settles narrows what the second may be pointed at, rather than
+limiting a set, it belongs in that group's candidates instead. {card}`With Regards` destroys "a
+target Personality with a lower Gold Cost than the combined Chi of your Personalities this
+targeted":
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/chaos_reigns_part_iii.py
+:pyobject: _with_regards_victims
+:language: python
+```
+
+Such an ability builds its effects over the whole set with `effects_for_groups`, which is handed one
+tuple of cards per phrase: effects built per target could not tell the phrases apart. Backing out of
+a later phrase returns to the one before it, since targeting has changed nothing on the board.
+
 ## A mode
 
 {class}`~.AskOption` offers a fixed set of answers that are not cards. "A target player gains or
