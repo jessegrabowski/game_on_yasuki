@@ -497,12 +497,12 @@ def unprinted_registrations(
                 frozenset(t.name.capitalize() for t in a.timings),
             )
             for a in abilities.get(card_id, ())
-            if a.label is None
+            if not isinstance(a.label, str)
         ]
         held += [
             (card_id, i.printed_index, i.ruleset, frozenset({"Interrupt"}))
             for i in interrupts.get(card_id, ())
-            if i.label is None
+            if not isinstance(i.label, str)
         ]
         for name, index, ruleset_name, timings in held:
             printing = printing_of(card_id, ruleset_name)

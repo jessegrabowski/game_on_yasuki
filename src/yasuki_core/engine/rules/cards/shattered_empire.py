@@ -4,7 +4,6 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, ignoring_bow_costs, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
-    RING_PITCH,
     plays_clan,
     register_condition_entry,
     register_entry,
@@ -28,6 +27,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     granted_interrupt,
     printed_abilities,
     printed_interrupt,
+    printed_line_without_cost,
     register_ability,
     register_cannot_attack,
     register_interrupt,
@@ -400,7 +400,7 @@ register_ring(
         key="air",
         repeatable=True,
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
@@ -509,7 +509,7 @@ register_ring(
         key="fire",
         repeatable=True,
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
@@ -547,7 +547,7 @@ register_ring(
         hits_every_target=True,
         key="void",
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
@@ -609,7 +609,7 @@ register_ring(
         key="water",
         repeatable=True,
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 
@@ -763,10 +763,12 @@ def _the_enlightened_path_of_the_dragon_granted_ability(
 
 
 def _the_enlightened_path_of_the_dragon_copied[T: Ability | Interrupt[Effect]](printed: T) -> T:
-    """``printed`` taken from play or the discard pile, ignoring bow costs."""
+    """``printed`` taken from play or the discard pile, ignoring bow costs, and shown without the
+    cost it skips, which on a Ring is its bow alone."""
     return replace(
         printed,
         key=ENLIGHTENED_PATH_COPY,
+        label=printed_line_without_cost,
         cost=ignoring_bow_costs(printed.cost),
         located_at=(CardLocation.BATTLEFIELD, CardLocation.DISCARD),
     )

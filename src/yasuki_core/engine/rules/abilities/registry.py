@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.abilities.model import (
     CardLocation,
     Interrupt,
     InvestAbility,
+    Label,
 )
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
@@ -19,6 +20,7 @@ from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Ongoing, SeatAbilityGrant
 from yasuki_core.engine.table import ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.text_split import Ability as PrintedAbility
 from yasuki_core.game_pieces.text_split import split_text_box
 from yasuki_core.game_pieces.prints import HoldingPrint
 
@@ -527,20 +529,38 @@ def printed_ability_line(card: L5RCard, index: int) -> str:
     The card's name when its text prints no such ability, which a card built without its text
     does. The registration audit is what holds a real registration's index to the printing.
     """
+    printed = _printed_ability(card, index)
+    return card.name if printed is None else printed.printed
+
+
+def printed_line_without_cost(card: L5RCard, index: int) -> str:
+    """The ``index``-th ability ``card``'s text prints, less the cost printed after its
+    designator: what a client shows for a use that pays none of it, as a Ring's cast from hand."""
+    printed = _printed_ability(card, index)
+    if printed is None:
+        return card.name
+    if printed.cost is None:
+        return printed.printed
+    return printed.printed.replace(f", {printed.cost}", "", 1)
+
+
+def _printed_ability(card: L5RCard, index: int) -> PrintedAbility | None:
     abilities = split_text_box(card.printed.text).abilities
-    return abilities[index].printed if index < len(abilities) else card.name
+    return abilities[index] if index < len(abilities) else None
 
 
 def ability_label(card: L5RCard, ability: Ability) -> str:
     """What a client shows for ``ability`` on ``card``: its own ``label`` when it has one, and
     otherwise the printed ability it implements, read off the card's text."""
-    if ability.label is not None:
-        return ability.label
-    return printed_ability_line(card, ability.printed_index)
+    return _shown(card, ability.label, ability.printed_index)
 
 
 def interrupt_label(card: L5RCard, interrupt: Interrupt[Effect]) -> str:
     """What a client shows for ``interrupt`` on ``card``, the way :func:`~.ability_label` does."""
-    if interrupt.label is not None:
-        return interrupt.label
-    return printed_ability_line(card, interrupt.printed_index)
+    return _shown(card, interrupt.label, interrupt.printed_index)
+
+
+def _shown(card: L5RCard, label: Label | None, index: int) -> str:
+    if label is None:
+        return printed_ability_line(card, index)
+    return label if isinstance(label, str) else label(card, index)

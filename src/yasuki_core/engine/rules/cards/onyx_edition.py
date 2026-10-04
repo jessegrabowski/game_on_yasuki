@@ -6,7 +6,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.lobby import register_may_not_lobby
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
-    RING_PITCH,
     clan_player,
     one_wealth,
     register_entry,
@@ -26,6 +25,7 @@ from yasuki_core.engine.rules.abilities.model import (
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
+    printed_line_without_cost,
     granted_ability,
     invest_amounts,
     register_ability,
@@ -347,7 +347,7 @@ register_ring(
         keywords=frozenset({keywords.AIR}),
         repeatable=True,
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -442,7 +442,7 @@ register_ring(
         key="fire",
         keywords=frozenset({keywords.FIRE}),
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -504,7 +504,7 @@ register_ring(
         key="void",
         keywords=frozenset({keywords.VOID}),
     ),
-    pitch="You may discard this Ring from your hand to use its Void ability without cost.",
+    pitch=printed_line_without_cost,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -571,7 +571,7 @@ register_ring(
         keywords=frozenset({keywords.WATER}),
         repeatable=True,
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.ONYX.name,
 )
 
