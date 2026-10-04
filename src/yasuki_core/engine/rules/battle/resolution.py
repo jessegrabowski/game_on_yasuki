@@ -237,8 +237,7 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     if attacking_force > defending_force:
         effects = [
             Simultaneously(tuple(_destroy_army(defending))),
-            Simultaneously(tuple(_rehonored(attacking))),
-            *_spoils(game, attack.attacker, attacking, defending),
+            _winners_spoils(game, attack.attacker, attacking, defending),
         ]
         province = attack.battlefields[battlefield].province
         if attacking_force > defending_force + effective_province_strength(game, province):
@@ -247,16 +246,15 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     if defending_force > attacking_force:
         return [
             Simultaneously(tuple(_destroy_army(attacking))),
-            Simultaneously(tuple(_rehonored(defending))),
-            *_spoils(game, attack.defender, defending, attacking),
+            _winners_spoils(game, attack.defender, defending, attacking),
         ]
     if not (attacking and defending):
         return []  # tied on zero Force with a side empty: no outcome
     return [
         Simultaneously((*_rehonored(attacking), *_rehonored(defending))),
         Simultaneously((*_destroy_army(defending), *_destroy_army(attacking))),
-        *_spoils(game, attack.attacker, attacking, defending),
-        *_spoils(game, attack.defender, defending, attacking),
+        *_tie_spoils(game, attack.attacker, attacking, defending),
+        *_tie_spoils(game, attack.defender, defending, attacking),
     ]
 
 
@@ -264,11 +262,23 @@ def _rehonored(army: list[L5RCard]) -> list[Rehonor]:
     return [Rehonor(personality.id) for personality in army if personality.dishonorable]
 
 
-def _spoils(
+def _winners_spoils(
+    game: GameState, winner: PlayerId, army: list[L5RCard], destroyed: list[L5RCard]
+) -> GainHonor:
+    """The Honor ``winner`` gains for destroying ``destroyed``, twice the cards. Read as it commits,
+    after the destruction and whatever resolved before it: if ``army`` then holds a dishonorable
+    Personality of the winner's, all of them are rehonored instead (CR, Rehonoring 0.3), so one a
+    trait dishonored during the destruction counts."""
+    personalities = tuple(personality.id for personality in army)
+    return GainHonor(winner, 2 * _cards_in(game, destroyed), personalities=personalities)
+
+
+def _tie_spoils(
     game: GameState, winner: PlayerId, army: list[L5RCard], destroyed: list[L5RCard]
 ) -> list[Effect]:
-    """The Honor ``winner`` gains for destroying ``destroyed``, twice the cards, unless a
-    dishonorable Personality in its ``army`` was rehonored in its place (CR, Rehonoring 0.3)."""
+    """The Honor ``winner`` gains in a tie for destroying ``destroyed``, twice the cards, unless a
+    dishonorable Personality in its ``army`` was rehonored in its place before the destruction
+    (CR, Rehonoring 0.3)."""
     if any(personality.dishonorable for personality in army):
         return []
     return [GainHonor(winner, 2 * _cards_in(game, destroyed))]
