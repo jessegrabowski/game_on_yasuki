@@ -199,6 +199,22 @@ def register_ability(printed_id: str, value: Ability) -> None:
         _RULEBOOK_KEYS.add(value.key)
 
 
+def acts_from_discard(card: L5RCard) -> bool:
+    """Whether ``card`` prints an ability acting from a discard pile."""
+    return any(
+        CardLocation.DISCARD in held.located_at for held in _ABILITIES.get(card.printed_id, ())
+    )
+
+
+def holds_seat_grant(game: GameState, seat: PlayerId) -> bool:
+    """Whether a grant reaching every card ``seat`` owns is in force, which can give a card in its
+    discard pile an ability."""
+    return any(
+        isinstance(recorded, SeatAbilityGrant) and recorded.seat is seat
+        for recorded in game.ongoing
+    )
+
+
 # The keys the rulebook's own abilities are registered under, wherever they sit. A printed card
 # may not take one, which is what lets a rulebook action be recognized by its key alone.
 _RULEBOOK_KEYS: set[str] = set()
@@ -432,18 +448,19 @@ def _by_location(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
 
 
 _LOCATION_ZONE_ROLES = {
-    CardLocation.PROVINCE: ZoneRole.PROVINCE,
-    CardLocation.HAND: ZoneRole.HAND,
-    CardLocation.RULEBOOK: ZoneRole.RULEBOOK,
+    CardLocation.PROVINCE: (ZoneRole.PROVINCE,),
+    CardLocation.HAND: (ZoneRole.HAND,),
+    CardLocation.RULEBOOK: (ZoneRole.RULEBOOK,),
+    CardLocation.DISCARD: (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD),
 }
 
 
 def _sits_at(game: GameState, card: L5RCard, location: CardLocation) -> bool:
     if location is CardLocation.BATTLEFIELD:
         return any(held is card for held in game.table.battlefield.cards)
-    role = _LOCATION_ZONE_ROLES[location]
+    roles = _LOCATION_ZONE_ROLES[location]
     return any(
-        key.role is role and any(held is card for held in zone.cards)
+        key.role in roles and any(held is card for held in zone.cards)
         for key, zone in game.table.zones.items()
     )
 

@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     RoundKind,
 )
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, SeatAbilityGrant
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
@@ -53,6 +54,9 @@ from dataclasses import replace
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import (
+    GRANTED_ABILITIES,
+    granted_ability,
+    printed_abilities,
     _ABILITIES,
     ability_for,
     register_ability,
@@ -1088,3 +1092,72 @@ def test_a_round_between_battles_applies_no_presence_rule():
     round = ActionRound(timings=RESPONSE_TIMINGS, priority=PlayerId.P1, kind=RoundKind.RESPONSE)
 
     assert legality.permitted_timings_in(game, round, PlayerId.P2)
+
+
+# An ability that acts from the discard pile, which no printed ability does, but a copy a card grants
+# may.
+register_ability(
+    "test_acts_from_discard",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        label="test",
+        cost=lambda game, source: [],
+        targets=lambda game, card: [card.id],
+        effects=lambda game, source, target: [],
+        located_at=(CardLocation.DISCARD,),
+    ),
+)
+
+
+def _in_discard(state: TableState, card_id: str, printed_id: str) -> L5RCard:
+    card = register(
+        state,
+        L5RCard.of(
+            FatePrint,
+            id=card_id,
+            name=card_id,
+            printed_id=printed_id,
+            side=Side.FATE,
+            owner=PlayerId.P1,
+        ),
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].add(card)
+    return card
+
+
+@pytest.mark.parametrize(
+    ("printed_id", "offered"), [("test_acts_from_discard", True), ("test_acts_from_play", False)]
+)
+def test_only_an_ability_that_acts_from_the_discard_pile_is_found_there(printed_id, offered):
+    state = TableState.empty_two_seat()
+    card = _in_discard(state, "discarded", printed_id)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert (ActivateAbility(card.id) in session.legal_actions(PlayerId.P1)) is offered
+
+
+def _discard_copy_for_the_named_card(game, card, context):
+    if card.id != context[0]:
+        return None
+    (printed,) = printed_abilities(card)
+    return dataclasses.replace(printed, key="copy", located_at=(CardLocation.DISCARD,))
+
+
+def test_a_seat_grant_offers_its_one_card_an_ability_from_the_discard_pile():
+    granted_ability("discard_grant_probe")(_discard_copy_for_the_named_card)
+    try:
+        state = TableState.empty_two_seat()
+        put_in_play(state, holding("granter", printed_id="discard_grant_probe"))
+        named = _in_discard(state, "named", "test_acts_from_play")
+        other = _in_discard(state, "other", "test_acts_from_play")
+        session = EngineSession.start(state, PlayerId.P1)
+        session.game.ongoing.append(
+            SeatAbilityGrant("granter", PlayerId.P1, (named.id,), Duration.FOR_ADDITIONAL_ACTION)
+        )
+
+        offered = session.legal_actions(PlayerId.P1)
+
+        assert ActivateAbility(named.id, "copy") in offered
+        assert not any(getattr(action, "card_id", None) == other.id for action in offered)
+    finally:
+        GRANTED_ABILITIES.pop("discard_grant_probe", None)
