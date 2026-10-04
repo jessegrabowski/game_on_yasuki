@@ -2268,17 +2268,17 @@ def test_higaru_looks_at_one_more_card_than_rings_before_the_end_of_turn_draw(ri
     assert session.game.pending.candidates == seen
 
 
-def test_higaru_puts_the_chosen_on_the_bottom_in_order_before_the_card_is_drawn():
-    session = _higaru_game(rings=(Element.AIR,))
+def test_higaru_puts_the_chosen_on_the_bottom_in_one_pick_before_the_card_is_drawn():
+    session = _higaru_game(rings=(Element.AIR, Element.FIRE))
     end_turn(session)
     session.submit(P1, DecisionResponse(("higaru",)))
 
-    session.submit(P1, DecisionResponse(("a", "b")))
     session.submit(P1, DecisionResponse(("b", "a")))
 
     hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
     assert [card.id for card in hand] == ["c"]
     assert _fate_deck_top_first(session) == ["d", "b", "a"]
+    assert session.game.look is None
     assert session.log.replay() == session.game
 
 

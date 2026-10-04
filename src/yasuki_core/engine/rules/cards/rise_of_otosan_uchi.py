@@ -53,12 +53,11 @@ from yasuki_core.engine.rules.board.seats import (
     opposing_seats,
     seat_named,
 )
-from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM, TAKE_ONE_AND_SHUFFLE
+from yasuki_core.engine.rules.rulebook.looks import TAKE_ONE_AND_SHUFFLE
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    Arrange,
     Ask,
     AskOption,
     AttackEffect,
@@ -1284,10 +1283,10 @@ def _resolve_togashi_higaru_look(
 def _resolve_togashi_higaru_bottom(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Then put any of them at the bottom of the deck in any order."""
-    if not chosen:
-        return [EndLook()]
-    return [Arrange(seat, chosen, PUT_ON_BOTTOM, source_id, to_bottom=True)]
+    """Then put any of them at the bottom of the deck in any order: the order they were picked in,
+    the last one picked at the very bottom. The rest stay on top as they were."""
+    fate = DeckKey(seat, Side.FATE)
+    return [*(MoveToDeck(card_id, fate, from_bottom=0) for card_id in chosen), EndLook()]
 
 
 def _togashi_higaru_clan_champion_experienced_3_bonus(game: GameState, higaru: L5RCard) -> int:
