@@ -10,7 +10,6 @@ from yasuki_core.engine.rules.abilities.model import (
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.board.queries import (
-    has_keyword,
     owned_personalities,
     remaining_look,
     rings_in_play,
@@ -54,15 +53,6 @@ from yasuki_core.game_pieces.constants import Side
 BANISH_ALL_DOUBT_LOOK = 4
 
 
-def _banish_all_doubt_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Your unbowed Tacticians. The Tactician performs the action and is not bowed by it."""
-    return [
-        card.id
-        for card in owned_personalities(game, source.owner)
-        if not card.bowed and has_keyword(game, card, keywords.TACTICIAN)
-    ]
-
-
 def _banish_all_doubt_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Look at the top four and take one. An empty deck leaves nothing to do."""
     seat = source.owner
@@ -91,11 +81,11 @@ def _resolve_banish_all_doubt(
 register_ability(
     "banish_all_doubt",
     Ability(
-        timings=(ActionTiming.LIMITED,),
+        timings=(ActionTiming.OPEN,),
         keywords=frozenset({keywords.TACTICAL}),
         cost=no_cost,
-        targets=_banish_all_doubt_targets,
-        targeting_message="your performing unbowed Tactician",
+        targets=itself,
+        hits_every_target=True,
         effects=_banish_all_doubt_effects,
         located_at=(CardLocation.HAND,),
     ),

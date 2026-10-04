@@ -145,7 +145,7 @@ def _resolve_sanctioned_duel_loser(
 register_ability(
     "sanctioned_duel",
     Ability(
-        timings=(ActionTiming.LIMITED,),
+        timings=(ActionTiming.OPEN,),
         cost=no_cost,
         targets=_sanctioned_duel_targets,
         targeting_message="your unbowed Personality",

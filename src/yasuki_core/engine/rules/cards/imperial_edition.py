@@ -41,7 +41,6 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
-from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -260,12 +259,6 @@ register_ability(
 # --- Touch of Death ---
 
 
-def _touch_of_death_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    """Bow the Personality this Spell is attached to and destroy the Spell. Unpayable while it
-    is attached to none."""
-    return [*bow_parent_cost(game, source), Destroy(source.id, source.owner)]
-
-
 def _touch_of_death_targets(game: GameState, source: L5RCard) -> list[str]:
     """Bowed Personalities whose Chi does not exceed the Shugenja carrying this Spell.
 
@@ -284,15 +277,14 @@ def _touch_of_death_targets(game: GameState, source: L5RCard) -> list[str]:
 
 
 def _touch_of_death_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [Destroy(target.id, source.owner)]
+    return [Destroy(target.id, source.owner), Destroy(source.id, source.owner)]
 
 
 register_ability(
     "touch_of_death",
     Ability(
-        timings=(ActionTiming.LIMITED,),
-        keywords=frozenset({keywords.MAHO}),
-        cost=_touch_of_death_cost,
+        timings=(ActionTiming.OPEN,),
+        cost=bow_parent_cost,
         targets=_touch_of_death_targets,
         targeting_message="a bowed Personality with equal or lower Chi",
         effects=_touch_of_death_effects,

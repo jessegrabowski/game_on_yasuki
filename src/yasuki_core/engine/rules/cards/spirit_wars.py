@@ -1,7 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar
 from yasuki_core.engine.rules.abilities.costs import bow_cost
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import EntryState, entry_state, register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Effect, GainHonor
@@ -18,9 +18,9 @@ def _poorly_placed_garden_entry_state(game: GameState, card: L5RCard) -> EntrySt
 
 
 def _poorly_placed_garden_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The Holding itself. The honor is unconditional, so the ability targets nothing but its own
-    source and the board offers no choice."""
-    return [source.id]
+    """The Holding itself while it is its owner's turn. An Open designator lets any seat act, so
+    the printed "If it is your turn" has to close the ability on the other seats' turns."""
+    return itself(game, source) if game.active is source.owner else []
 
 
 def _poorly_placed_garden_effects(
@@ -32,7 +32,7 @@ def _poorly_placed_garden_effects(
 register_ability(
     "poorly_placed_garden",
     Ability(
-        timings=(ActionTiming.LIMITED,),
+        timings=(ActionTiming.OPEN,),
         cost=bow_cost,
         targets=_poorly_placed_garden_targets,
         effects=_poorly_placed_garden_effects,
