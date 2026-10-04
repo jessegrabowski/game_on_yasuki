@@ -1,10 +1,11 @@
 from yasuki_core import ruleset
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     ask_who_loses_honor,
     plays_clan,
     register_entry,
+    register_yu,
 )
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
@@ -97,6 +98,33 @@ def _bayushi_gihei_destroyed(ctx: TriggerContext) -> list[Effect]:
 def _bayushi_gihei_dishonored(ctx: TriggerContext) -> list[Effect]:
     dishonored = ctx.game.table.cards_by_id[ctx.event.card_id]
     return _bayushi_gihei_reacts(ctx, location_of(ctx.game.table, dishonored))
+
+
+# --- Bayushi Purimu ---
+
+PURIMU_HONOR_LOSS = 3
+
+
+def _bayushi_purimu_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Dishonor a target Personality at any location." Any Personality in play, since the
+    text lifts the Yu's battlefield limit."""
+    targets = tuple(card.id for card in personalities_in_play(ctx.game))
+    return [Choose(ctx.card.owner, targets, 1, 1, "bayushi_purimu", ctx.card.id)] if targets else []
+
+
+register_yu("bayushi_purimu", _bayushi_purimu_yu)
+
+
+@choice_resolver("bayushi_purimu", prompt="Choose a Personality to dishonor")
+def _resolve_bayushi_purimu(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Dishonor the target, then "Their controller loses 3 Honor"."""
+    target = game.table.cards_by_id[chosen[0]]
+    return [
+        Dishonor(target.id, Trait(source_id)),
+        GainHonor(target.owner, -PURIMU_HONOR_LOSS, source_id=source_id),
+    ]
 
 
 # --- Chuda Jomei ---

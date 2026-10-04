@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
+from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -44,6 +45,11 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint, WindPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.cards.test_lotus_edition import (
+    _answer_everything,
+    _hired_killer,
+    _table,
+)
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -838,3 +844,39 @@ def test_comprehensive_education_declining_both_may_questions_still_buries_the_r
 
     assert _education_fate_deck(session) == ["deep", "edict1", "plain", "p2", "p3", "p4"]
     assert session.game.look is None
+
+
+# --- Bayushi Purimu ---
+
+
+def test_bayushi_purimu_dishonors_a_personality_anywhere_and_costs_its_controller_3_honor():
+    game = two_seat_game()
+    put_in_play(game, personality("purimu", owner=PlayerId.P2, printed_id="bayushi_purimu"))
+    far = put_in_play(game, personality("far", personal_honor=2))
+
+    resolve_effects(game, [Destroy("purimu", Rulebook.BATTLE_RESOLUTION)])
+    assert isinstance(game.pending, ChooseCards) and game.pending.seat is PlayerId.P2
+    assert "far" in game.pending.candidates
+    submit(game, DecisionResponse(("far",)))
+
+    assert far.dishonorable
+    assert game.table.seats[PlayerId.P1].honor == -3
+
+
+def test_bayushi_purimu_raises_no_yu_when_hired_killer_destroys_him_outside_battle():
+    state = _table()
+    put_in_play(
+        state, personality("purimu", owner=PlayerId.P2, printed_id="bayushi_purimu", gold_cost=3)
+    )
+    put_in_play(state, personality("witness"))
+    killer = _hired_killer(state)
+    session = EngineSession.start(state, PlayerId.P1)
+    honor = session.game.table.seats[PlayerId.P2].honor
+
+    session.act(PlayerId.P1, PlayStrategy(killer.id))
+    _answer_everything(session, amount=5)
+
+    game = session.game
+    assert "purimu" not in {card.id for card in game.table.battlefield.cards}
+    assert not any(card.dishonorable for card in game.table.cards_by_id.values())
+    assert game.table.seats[PlayerId.P2].honor == honor
