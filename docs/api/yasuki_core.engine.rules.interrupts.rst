@@ -16,7 +16,6 @@ yasuki_core.engine.rules.interrupts
     answered_by
     apply_interrupt_effect
     apply_interrupt_target
-    as_modified
     card_interrupts_for
     forecast
     foreseen_now

@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
+    as_modified,
     choice_resolver,
     resolve_action_effects,
     resolve_effects,
@@ -722,8 +723,8 @@ def test_an_adjustment_applies_to_the_effect_it_is_bound_to(effect, adjusted):
 
     AdjustPending(effect, -2).perform(game)
 
-    assert interrupts.as_modified(game, effect) == adjusted
-    assert interrupts.as_modified(game, GainHonor(P2, 3)) == GainHonor(P2, 3)
+    assert as_modified(game, effect) == adjusted
+    assert as_modified(game, GainHonor(P2, 3)) == GainHonor(P2, 3)
 
 
 def test_the_defender_is_offered_the_courage_interrupt_and_a_reduction_saves_the_target():

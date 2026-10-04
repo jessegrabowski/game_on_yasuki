@@ -644,19 +644,24 @@ def _held_from(effect: Effect, provenance: Provenance) -> Effect:
     return replace(effect, effect=Attributed(effect.effect, action))
 
 
-def _modified(game: GameState, effect: Effect) -> Effect:
-    """``effect`` as the Interrupts taken against the action make of it: every modification bound
-    to it applies in the order the Interrupts were taken, and is spent. One that would negate an
-    effect that cannot be negated is spent and changes nothing."""
+def as_modified(game: GameState, effect: Effect) -> Effect:
+    """``effect`` as the Interrupts taken against the action will have it resolve, read without
+    spending them: every modification bound to it applies in the order the Interrupts were taken.
+    One that would negate an effect that cannot be negated changes nothing."""
     original = effect
-    for modification in list(game.modifications):
+    for modification in game.modifications:
         if modification.answers(original):
             modified = modification.apply(game, effect)
-            refused = isinstance(modified, Negated) and not effect.is_negatable(game)
-            if not refused:
+            if not (isinstance(modified, Negated) and not effect.is_negatable(game)):
                 effect = modified
-            game.modifications.remove(modification)
     return effect
+
+
+def _modified(game: GameState, effect: Effect) -> Effect:
+    """``effect`` as :func:`as_modified` reads it, spending every modification bound to it."""
+    modified = as_modified(game, effect)
+    game.modifications[:] = [m for m in game.modifications if not m.answers(effect)]
+    return modified
 
 
 def _refuse_mid_decision(game: GameState, driver: str) -> None:

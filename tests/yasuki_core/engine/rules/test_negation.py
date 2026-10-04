@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.negation import (
 )
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE_PROXY
 from yasuki_core.engine.rules.triggers import (
+    as_modified,
     choice_resolver,
     pay_costs,
     resolve_action_effects,
@@ -429,6 +430,17 @@ def test_an_interrupt_cannot_negate_an_effect_that_cannot_be_negated():
 
     assert hero not in game.table.battlefield.cards
     assert game.modifications == []
+
+
+def test_a_forecast_reads_an_interrupt_negation_of_an_unnegatable_effect_as_changing_nothing():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+    destroy = Destroy(hero.id, PlayerId.P1, negatable=False)
+    ward = Replacement(bound=destroy, card_id="ward", replacement=Negated(destroy))
+    game.modifications.append(ward)
+
+    assert as_modified(game, destroy) == destroy
+    assert game.modifications == [ward]
 
 
 def test_a_strategys_delayed_effect_is_negated_by_a_negation_made_after_it_was_held():

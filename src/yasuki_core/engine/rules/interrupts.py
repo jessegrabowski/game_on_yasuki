@@ -70,7 +70,7 @@ def _foreseen(
             continue
         if isinstance(effect, To):
             first = effect.first
-            happens = triggers.happens_as(game, first, as_modified(game, first))
+            happens = triggers.happens_as(game, first, triggers.as_modified(game, first))
             negated = would_negate(game, first, provenance, list(spent))
             yield from _foreseen(game, (first,), provenance, spent)
             if happens and not negated:
@@ -78,20 +78,11 @@ def _foreseen(
             continue
         if effect.is_interruptible(game) and not would_negate(game, effect, provenance, spent):
             yield effect
-        stands = as_modified(game, effect)
+        stands = triggers.as_modified(game, effect)
         if isinstance(stands, ResolveAbility | AttackEffect):
             yield from _foreseen(game, stands.follow_on(game), provenance, spent)
         elif isinstance(stands, Recruit):
             yield from _foreseen(game, stands.proclamation(game), provenance, spent)
-
-
-def as_modified(game: GameState, effect: Effect) -> Effect:
-    """``effect`` as the Interrupts already taken against the action will have it resolve, read
-    without spending them: what the step forecasts behind a negated attack is nothing."""
-    for modification in game.modifications:
-        if modification.answers(effect):
-            effect = modification.apply(game, effect)
-    return effect
 
 
 @dataclass(frozen=True, slots=True)
@@ -218,7 +209,7 @@ def answered_by(
     return _unique(
         effect
         for effect in foreseen
-        if isinstance(as_modified(game, effect), interrupt.answers)
+        if isinstance(triggers.as_modified(game, effect), interrupt.answers)
         and interrupt.applies(game, card, effect)
         and (interrupt.targets is None or interrupt.targets(game, card, effect))
     )
@@ -260,7 +251,7 @@ def held_action_targets(game: GameState) -> tuple[str, ...]:
     """The cards the action held at the Interrupt step targets: those already recorded, and the
     target of a targeting still waiting there to resolve, as an Interrupt substituting it leaves it
     (CR, Action Sequence step D)."""
-    waiting = (as_modified(game, effect) for effect in foreseen_now(game))
+    waiting = (triggers.as_modified(game, effect) for effect in foreseen_now(game))
     return game.action_targets + tuple(
         targeting.target_id for targeting in waiting if isinstance(targeting, ResolveAbility)
     )
@@ -326,7 +317,7 @@ def play_interrupt(game: GameState, seat: PlayerId, card_id: str, key: str | Non
         return
     game.pending = ChooseInterruptEffect(
         seat=seat,
-        candidates=tuple(as_modified(game, effect).narrate(game) for effect in answered),
+        candidates=tuple(triggers.as_modified(game, effect).narrate(game) for effect in answered),
         question="Which effect?",
         resolver=INTERRUPT_EFFECT_QUESTION,
         source_id=card_id,
@@ -365,7 +356,8 @@ def apply_interrupt_effect(
     key = request.resolver_context[0] or None
     answered = _answerable(game, request.seat, request.source_id, key)
     effect = _named(
-        answered, lambda effect: as_modified(game, effect).narrate(game) == response.choices[0]
+        answered,
+        lambda effect: triggers.as_modified(game, effect).narrate(game) == response.choices[0],
     )
     _play(game, request.seat, request.source_id, key, effect)
 
