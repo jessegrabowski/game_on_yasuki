@@ -11,6 +11,7 @@ engine
 build_from_the_vocabulary
 systems/effects
 systems/triggers-and-the-cascade
+stack-and-tree
 systems/stats
 systems/gold
 systems/abilities-and-costs
