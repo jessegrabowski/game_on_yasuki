@@ -150,6 +150,7 @@ numpydoc_xref_aliases = {
     "Action": "yasuki_gui.services.actions.Action",
     "ActionRound": "yasuki_core.engine.rules.turn.structure.ActionRound",
     "ActionTiming": "yasuki_core.engine.rules.vocabulary.actions.ActionTiming",
+    "AdditionalGrant": "yasuki_core.engine.rules.turn.structure.AdditionalGrant",
     "Agent": "yasuki_core.bots.agents.Agent",
     "Answer": "yasuki_core.engine.replay.game_log.Answer",
     "AttackPhase": "yasuki_core.engine.rules.battle.records.AttackPhase",
