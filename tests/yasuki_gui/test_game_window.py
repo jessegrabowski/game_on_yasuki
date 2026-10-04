@@ -276,3 +276,13 @@ def test_binding_points_each_debug_hook_at_its_own_presenter_method(window):
         "debug_card_to_province",
         "debug_spawn_personality",
     ]
+
+
+def test_a_pile_opened_again_comes_up_over_a_panel_opened_since(window):
+    window.show_cards([personality("hida")], "Fate Discard")
+    window.battle_view.open_at(0, 0)
+
+    window.show_cards([personality("hida")], "Fate Discard")
+
+    stacking = window.field.winfo_children()
+    assert stacking.index(window.card_strip) > stacking.index(window.battle_view)

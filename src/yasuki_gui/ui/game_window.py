@@ -216,6 +216,9 @@ class GameWindow:
         # Placed before it is filled, so the cards are laid out at the size they will be shown at
         # rather than measured against an unplaced panel and corrected on a later redraw.
         self.card_strip.open_at(STRIP_INSET, STRIP_INSET)
+        # Raised whether or not it was already open, so a panel opened since, such as the battle
+        # view, does not keep covering the pile the player just asked for.
+        self.card_strip.lift()
         self.card_strip.show(cards, title)
 
     def show_look(
