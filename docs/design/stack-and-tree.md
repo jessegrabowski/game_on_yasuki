@@ -464,6 +464,22 @@ A group holds back reactions only. The state-based rules still apply after each 
 a Personality the first member leaves at zero Chi is destroyed before the second member applies,
 and only the announcement of that destruction waits for the group.
 
+### Before a card is destroyed
+
+Some traits act before a destruction rather than after it. The Yu trait reads "Before a card with
+the Yu trait is destroyed by another player's action during battle, or during resolution, resolve
+the Yu effect" (ShE datasheet, The Yu Trait). In the tree, a Yu is a child that has to come before
+its parent's destruction, so the walk announces the destruction first, as a
+{class}`~.Destroying` events frame, and commits it afterward.
+
+When a destruction comes up and some card answers it, the walk puts the effect back at the head of
+its frame, records the card in that frame's `announced`, and pushes the announcement on top. The
+traits it wakes resolve as one occurrence, ordered by the active player like any other, and the
+destruction commits when it comes back up. A negation in force is read first, so a destruction it
+will stop is never announced, as the datasheet requires: "the negation/substitution will always
+occur first". A group announces all of its destructions together, above the group's frame, so every
+trait sees the whole army still standing.
+
 ### Pausing
 
 When a step needs a player's answer, the walk freezes every frame as a {class}`~.ResumeCascade`

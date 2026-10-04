@@ -140,6 +140,8 @@ type and one card's `printed_id`. The cascade drains the events raised by its ef
 further events are produced. `ProducingGold` is the exception to "already committed": it opens the
 window *before* a producer's yield is read, so a trait firing there still counts toward the
 production it interrupts, and `ProducedGold` announces the result once the Gold has landed.
+`Destroying` is announced before a destruction commits, so a trait reading "before this card is
+destroyed" acts while the card still stands.
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.vocabulary.game_events
@@ -152,6 +154,7 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
    CardDiscarded
    CounterChanged
    Destroyed
+   Destroying
    Dishonored
    EnteredPlay
    FavorDiscarded
