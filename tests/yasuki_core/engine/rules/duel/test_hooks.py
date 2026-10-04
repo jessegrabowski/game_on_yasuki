@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.duel.procedure import (
     declare_duel,
 )
 from yasuki_core.engine.rules.duel.records import DuelWork
+from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.triggers import apply_effect, enforce_state_based_actions
 from yasuki_core.engine.rules.effects import DelayedEffect, Destroy, Effect, GainHonor
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, RoundKind
@@ -292,6 +293,9 @@ def test_a_duel_that_ends_without_resolving_drops_the_consequences_that_waited_f
     ops.remove_card(game.table, game.table.cards_by_id["rival"])
 
     enforce_state_based_actions(game)
+    # The teardown of what waited for the duel's end is a step of its own now, so it runs as
+    # the stack drains, which a session does for itself.
+    run_stack(game)
 
     assert game.delayed == []
     assert game.table.seats[P1].honor == 0

@@ -506,6 +506,9 @@ def test_a_duel_that_ends_without_resolving_drops_what_it_scoped():
     ops.remove_card(game.table, game.table.cards_by_id["rival"])
 
     enforce_state_based_actions(game)
+    # The teardown of what waited for the duel's end is a step of its own now, so it runs as
+    # the stack drains, which a session does for itself.
+    run_stack(game)
 
     assert game.ongoing == []
 

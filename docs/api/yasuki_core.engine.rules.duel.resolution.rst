@@ -11,6 +11,7 @@ yasuki_core.engine.rules.duel.resolution
     ApplyDuelConsequences
     DecideTheDuel
     DiscardFocusedCards
+    DropDuelConsequences
     EndTheDuel
     RemoveFocusAreas
     RevealFocusedCards
