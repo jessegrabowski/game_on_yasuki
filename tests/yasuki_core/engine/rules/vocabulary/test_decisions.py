@@ -7,6 +7,10 @@ from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
     CHOICE_PICKS,
     ChooseOption,
+    OneGroup,
+    TotalAtMost,
+    answerable,
+    within_reach,
     ArrangeCards,
     ChooseAbilityTarget,
     Confirm,
@@ -140,6 +144,40 @@ def test_choose_cards_rejects_duplicate_or_non_candidate_choices():
     request = _choose(minimum=0, maximum=2)
     assert request.accepts(DecisionResponse(("a", "a"))) is False
     assert request.accepts(DecisionResponse(("z",))) is False  # z is not a candidate
+
+
+def test_a_grouped_limit_admits_only_what_one_part_can_seat():
+    limit = OneGroup((("a", "b"), ("c",)))
+
+    assert limit.admits(_HAND, 1) is True
+    assert limit.admits(_HAND, 2) is True
+    assert limit.admits(_HAND, 3) is False
+    assert limit.admits(("b", "c"), 2) is False  # one from each part is not one part
+
+
+def test_a_capped_limit_admits_what_its_cheapest_cards_can_carry():
+    limit = TotalAtMost((("a", 2), ("b", 3), ("c", 4)), 5)
+
+    assert limit.admits(_HAND, 2) is True  # a + b
+    assert limit.admits(("b", "c"), 2) is False  # the cheapest pair left is already over
+    assert limit.admits(_HAND, 3) is False
+
+
+def test_a_question_with_no_legal_answer_is_not_answerable():
+    # Three Personalities of Force 3 and a phrase taking two of them under a total of 5: every card
+    # passes on its own, and no pair does.
+    heavy = TotalAtMost((("a", 3), ("b", 3), ("c", 3)), 5)
+
+    assert within_reach(_HAND, (heavy,)) == _HAND
+    assert answerable(_HAND, 1, (heavy,)) is True
+    assert answerable(_HAND, 2, (heavy,)) is False
+    assert answerable(("a",), 2, ()) is False  # too few cards, limits or not
+
+
+def test_an_ungrouped_choice_keeps_every_candidate_on_offer():
+    request = _choose(minimum=0, maximum=2)
+
+    assert request.selectable(DecisionResponse(("a",))) == _HAND
 
 
 def _every_request_type():

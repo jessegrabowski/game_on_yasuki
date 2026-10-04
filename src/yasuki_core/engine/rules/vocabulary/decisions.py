@@ -1,7 +1,128 @@
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 from dataclasses import dataclass, field
+from typing import Protocol
 
 from yasuki_core.engine.players import Cause, PlayerId
+
+# The "target" phrases of an action that are already settled, in print order, each holding the ids
+# it targeted.
+PickedTargets = tuple[tuple[str, ...], ...]
+
+
+class PickLimit(Protocol):
+    """A condition one phrase puts on the cards chosen together, beyond how many of them there are:
+    "one or two of your target cards in one unit", "with total Force less than Zaiberu's".
+
+    A limit answers three questions, because they come apart. :meth:`permits` says whether a card
+    may still join what is picked, which narrows a board as the seat clicks. :meth:`satisfied` says
+    whether what is picked is a legal answer, which lights the confirm. :meth:`admits` says whether
+    a set of a given size could satisfy it at all, which is what decides whether the question may
+    be asked. A ceiling refuses the pick that would break it, so its first two answers agree. A
+    floor refuses nothing and is unsatisfied until enough is picked, so they do not.
+
+    An implementation is plain data, read off the board when the question is raised, so that a
+    pending request compares equal to the one a replay rebuilds.
+    """
+
+    def permits(self, picked: tuple[str, ...], candidate: str) -> bool:
+        """Whether ``candidate`` may join ``picked``."""
+        ...
+
+    def satisfied(self, picked: tuple[str, ...]) -> bool:
+        """Whether ``picked`` meets this limit as it stands."""
+        ...
+
+    def admits(self, candidates: tuple[str, ...], count: int) -> bool:
+        """Whether some ``count`` of ``candidates`` satisfies this limit."""
+        ...
+
+
+def within_reach(candidates: Iterable[str], limits: tuple[PickLimit, ...]) -> tuple[str, ...]:
+    """Those of ``candidates`` a legal answer could hold at all: the ones every limit permits as a
+    first pick. A card whose own Force already breaks a total the set may not exceed is no legal
+    target even alone, so offering it would ask a question with no legal answer."""
+    return tuple(
+        candidate
+        for candidate in candidates
+        if all(limit.permits((), candidate) for limit in limits)
+    )
+
+
+def answerable(candidates: tuple[str, ...], minimum: int, limits: tuple[PickLimit, ...]) -> bool:
+    """Whether a question offering ``candidates`` and asking for at least ``minimum`` of them has a
+    legal answer: enough cards to pick from, and every limit able to seat that many of them. A
+    phrase asking for two cards whose total Force must stay under five has none to ask for among
+    three Personalities of Force three each.
+
+    Each limit is asked separately, so with more than one the answer is necessary but not
+    sufficient: two limits can each seat ``minimum`` cards over sets that do not overlap. No card
+    carries two yet, and the one that does should be read against a joint check rather than this.
+    """
+    return len(candidates) >= minimum and all(limit.admits(candidates, minimum) for limit in limits)
+
+
+@dataclass(frozen=True, slots=True)
+class OneGroup:
+    """Every pick comes from one part of ``groups``: the "in one unit" Ring of Air prints, and
+    the same wording about one Province or one location. The first pick is free and settles which
+    part the rest come from, and taking it back opens the choice up again.
+
+    Attributes
+    ----------
+    groups : tuple of tuple of str
+        A partition of the candidates. A candidate in no part is in no legal answer at all, so it
+        is never offered.
+    """
+
+    groups: tuple[tuple[str, ...], ...]
+
+    def permits(self, picked: tuple[str, ...], candidate: str) -> bool:
+        return self.satisfied((*picked, candidate))
+
+    def satisfied(self, picked: tuple[str, ...]) -> bool:
+        chosen = set(picked)
+        return any(chosen.issubset(group) for group in self.groups)
+
+    def admits(self, candidates: tuple[str, ...], count: int) -> bool:
+        """Whether one part holds ``count`` of ``candidates`` between them."""
+        offered = set(candidates)
+        return any(len(offered.intersection(group)) >= count for group in self.groups)
+
+
+@dataclass(frozen=True, slots=True)
+class TotalAtMost:
+    """The cards chosen together carry at most ``bound`` between them: "one or two target
+    Personalities with total Force less than Zaiberu's", "any number of target attachments with
+    total Gold cost less than Yamadera's Force".
+
+    Attributes
+    ----------
+    weights : tuple of (str, int)
+        What each candidate contributes, read off the board when the question is raised, so a card
+        whose Force changes afterwards does not move the arithmetic under an answer half given. A
+        candidate absent from it contributes nothing.
+    bound : int
+        The most the picks may total. A card reading "less than" passes one less than the figure
+        it names.
+    """
+
+    weights: tuple[tuple[str, int], ...]
+    bound: int
+
+    def permits(self, picked: tuple[str, ...], candidate: str) -> bool:
+        return self.satisfied((*picked, candidate))
+
+    def satisfied(self, picked: tuple[str, ...]) -> bool:
+        chosen = set(picked)
+        return sum(weight for card_id, weight in self.weights if card_id in chosen) <= self.bound
+
+    def admits(self, candidates: tuple[str, ...], count: int) -> bool:
+        """Whether the ``count`` lightest of ``candidates`` stay inside the bound, which is the
+        most a set of that size can hope for."""
+        weights = dict(self.weights)
+        cheapest = sorted(weights.get(candidate, 0) for candidate in candidates)
+        return sum(cheapest[:count]) <= self.bound
 
 
 @dataclass(frozen=True, slots=True)
@@ -42,11 +163,29 @@ class DecisionRequest(ABC):
         Whether a trigger raised the request, reacting to an event already committed. Backing out
         is refused for such a request whatever its ``cancellable`` says, because the event it
         answers cannot be taken back. Keyword-only. Default False.
+    limits : tuple of :class:`~.PickLimit`, optional
+        The conditions one phrase puts on the cards chosen together, beyond their number, which
+        :meth:`selectable` reads to narrow a board as it is answered. A request type that carries
+        them enforces them in its own ``accepts``. Keyword-only. Default none.
     """
 
     seat: PlayerId
     candidates: tuple[str, ...]
     triggered: bool = field(default=False, kw_only=True)
+    limits: tuple[PickLimit, ...] = field(default=(), kw_only=True)
+
+    def selectable(self, partial: DecisionResponse = DecisionResponse()) -> tuple[str, ...]:
+        """The candidates ``partial`` may still grow by: every one for a request under no limit, and
+        otherwise those every limit permits joining what is picked. A card already picked stays
+        among them, so a client answering with clicks can take it back."""
+        if not self.limits:
+            return self.candidates
+        picked = partial.choices
+        return tuple(
+            card_id
+            for card_id in self.candidates
+            if card_id in picked or all(limit.permits(picked, card_id) for limit in self.limits)
+        )
 
     @abstractmethod
     def accepts(self, response: DecisionResponse) -> bool:
