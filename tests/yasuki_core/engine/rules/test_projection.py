@@ -764,6 +764,17 @@ def _duelling_game() -> GameState:
     return game
 
 
+def test_a_duelist_carries_the_cards_attached_to_him():
+    # A duel is fought by the whole unit, and the client draws the Personality with what is on him.
+    game = _duelling_game()
+    attached(game, attachment("blade"), "challenger")
+
+    duel = project(game, PlayerId.P1).duel
+
+    assert [card.id for card in duel.challenger.attached] == ["blade"]
+    assert duel.challenged.attached == ()
+
+
 def test_a_duel_reaches_both_seats_with_the_duel_stats_they_may_read():
     game = _duelling_game()
 

@@ -2813,6 +2813,10 @@ class Choose(InterruptingEffect):
         A card id handed to the resolver as its context. Which card that is belongs to the resolver.
         Often the one whose trigger raised the choice, sometimes the card being acted on. None when
         the rulebook raises the choice and there is no card to name. Default None.
+    resolver_context : tuple of str, optional
+        What an earlier step of the same choice settled, handed to the resolver alongside the chosen
+        ids. A card that asks two questions in a row carries what the first one answered here,
+        rather than reading it back off the game. Default empty.
     """
 
     seat: PlayerId
@@ -2821,6 +2825,7 @@ class Choose(InterruptingEffect):
     maximum: int
     resolver: str
     source_id: str | None = None
+    resolver_context: tuple[str, ...] = ()
 
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """A cost that asks the seat to pick cannot be met with too few to pick from."""
@@ -2840,6 +2845,7 @@ class Choose(InterruptingEffect):
             maximum=self.maximum,
             resolver=self.resolver,
             source_id=self.source_id,
+            resolver_context=self.resolver_context,
         )
 
 

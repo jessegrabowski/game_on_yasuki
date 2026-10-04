@@ -34,6 +34,20 @@ def duel_in_progress(game: GameState) -> DuelRecord:
     return duel
 
 
+def duel_decided_by(game: GameState, source_id: str) -> DuelRecord | None:
+    """The decided duel ``source_id`` created, or None where there is none.
+
+    What a consequence delayed to the duel's end reads before it acts. None covers the three states
+    it must not act on: no duel at all, a duel another card created, and a duel still being fought.
+    A challenge that did not happen leaves the consequence held, so matching the source is what
+    keeps it off the next duel to end (CR, Challenge).
+    """
+    duel = game.duel
+    if duel is None or duel.source != source_id or duel.outcome is None:
+        return None
+    return duel
+
+
 def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duelist: str) -> bool:
     """Whether a challenge between these two cards happens at all (CR, Challenge): it does not where
     one player controls both, nor where either card is not a Personality.

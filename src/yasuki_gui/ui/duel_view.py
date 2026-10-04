@@ -8,7 +8,7 @@ from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
 from yasuki_gui.constants import CARD_H, CARD_W
-from yasuki_gui.layout import centered_row
+from yasuki_gui.layout import centered_row, tower_draw_order, unit_tower_positions
 from yasuki_gui.ui.card_panel import CardPanel
 from yasuki_gui.ui.geometry import widget_size
 from yasuki_gui.visuals.cardface import RenderCard, to_render_card
@@ -20,6 +20,8 @@ _CARD_TAG = "duel:"
 _TOTAL_TAG = "duel-total"
 # The line naming who won, drawn once the duel is decided.
 _OUTCOME_TAG = "duel-outcome"
+# The band it is written on, tagged apart so a reader of the line gets the line and not a rectangle.
+_OUTCOME_BAND_TAG = "duel-outcome-band"
 # The button that dismisses a decided duel, tagged so a click can find it and a test can read it.
 _CONTINUE_TAG = "duel-continue"
 # The line marking which duelist has the option to focus or strike.
@@ -40,6 +42,8 @@ SIDE_MARGIN = 28
 SOURCE_INSET = 10
 # The band along the foot holding the outcome line and the panel's own button.
 FOOTER_H = 62
+# How far above the footer its own band starts, so the outcome line is not read off a card face.
+OUTCOME_PAD = 10
 # How wide the button that dismisses a decided duel is, and what it leaves above and below itself
 # inside the footer band.
 CONTINUE_W = 110
@@ -47,7 +51,7 @@ CONTINUE_TOP_GAP = 14
 CONTINUE_BOTTOM_GAP = 8
 # The size the panel is built at, which is what its canvas asks for before Tk lays it out.
 PANEL_W = 560
-PANEL_H = 460
+PANEL_H = 640
 
 
 class DuelPanel(CardPanel):
@@ -100,21 +104,32 @@ class DuelPanel(CardPanel):
         self._draw_outcome(duel, width, height)
 
     def _draw_side(self, side: DuelistView, width: int, height: int, *, near: bool) -> None:
-        """One duelist, its focused cards lying across it, and the number it compares."""
+        """One duelist's whole unit, the cards it focused lying across it, and the number it
+        compares."""
         center_x = width // 2
-        center_y = (
-            height - FOOTER_H - CARD_H // 2 - SIDE_MARGIN if near else CARD_H // 2 + SIDE_MARGIN
+        anchor_y = (
+            height - FOOTER_H - SIDE_MARGIN - FOCUS_OFFSET - CARD_H // 2
+            if near
+            else CARD_H // 2 + SIDE_MARGIN
         )
+        # Sinking the far side anchors the stack by its top, so its attachments cannot climb off
+        # the panel however many he carries.
+        (leader_x, leader_y), attached = unit_tower_positions(
+            center_x, anchor_y, len(side.attached), sink=not near
+        )
+        for card, spot in tower_draw_order(list(zip(side.attached, attached, strict=True))):
+            self.draw_card(to_render_card(card), spot[0], spot[1], stats=self._stats, pickable=True)
         if side.duelist is not None:
             self.draw_card(
                 to_render_card(side.duelist),
-                center_x,
-                center_y,
+                leader_x,
+                leader_y,
                 stats=self._stats,
                 pickable=True,
             )
-        # Outboard, so the stack lies across the Personality's outer half rather than hiding it.
-        fan_y = center_y - FOCUS_OFFSET if not near else center_y + FOCUS_OFFSET
+        # Below him, so the fan lies across his lower half rather than hiding him, and on the
+        # opposite side from the attachments for either duelist.
+        fan_y = leader_y + FOCUS_OFFSET
         for card, x in zip(
             side.focused, centered_row(center_x, len(side.focused), step=FOCUS_STEP), strict=True
         ):
@@ -125,8 +140,8 @@ class DuelPanel(CardPanel):
             self.draw_card(
                 to_render_card(card), x, fan_y, stats=self._stats, pickable=True, peeked=peeked
             )
-        self._draw_total(side, TOTAL_INSET, center_y)
-        self._draw_option(side, TOTAL_INSET, center_y + OPTION_DROP)
+        self._draw_total(side, TOTAL_INSET, leader_y)
+        self._draw_option(side, TOTAL_INSET, leader_y + OPTION_DROP)
 
     def _draw_source(self, duel: DuelView, height: int) -> None:
         """The card that created the duel, drawn beside it.
@@ -187,6 +202,15 @@ class DuelPanel(CardPanel):
         """
         if duel.step is DuelStep.FOCUSING:
             return
+        self.canvas.create_rectangle(
+            0,
+            height - FOOTER_H - OUTCOME_PAD,
+            width,
+            height,
+            fill=theme.SURFACE,
+            outline=theme.LINE_SOFT,
+            tags=(_OUTCOME_BAND_TAG,),
+        )
         self.canvas.create_text(
             width // 2,
             height - FOOTER_H,

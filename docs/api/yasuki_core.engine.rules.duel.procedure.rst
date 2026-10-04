@@ -17,6 +17,7 @@ yasuki_core.engine.rules.duel.procedure
     apply_focus_or_strike
     challenge_is_legal
     declare_duel
+    duel_decided_by
     duel_in_progress
     duel_stat
     focus

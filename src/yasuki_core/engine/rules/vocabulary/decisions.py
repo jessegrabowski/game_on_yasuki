@@ -712,12 +712,16 @@ class ChooseCards(DecisionRequest):
         A card id handed to the resolver as its context. Which card that is belongs to the resolver,
         often the one whose trigger raised the choice, sometimes the card being acted on. None
         when the rulebook raises the choice and there is no card to name. Default None.
+    resolver_context : tuple of str, optional
+        What an earlier step of the same choice settled, handed to the resolver alongside the chosen
+        ids. A resolver is otherwise given only what was picked and one source card. Default empty.
     """
 
     minimum: int
     maximum: int
     resolver: str
     source_id: str | None = None
+    resolver_context: tuple[str, ...] = ()
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         registered = CHOICE_PROMPTS.get(self.resolver)
