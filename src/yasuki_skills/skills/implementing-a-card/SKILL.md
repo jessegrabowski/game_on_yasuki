@@ -4,13 +4,13 @@ description: >
   Use this when you are making a printed card work: choosing which hook its text wants, writing the
   trigger or activated ability, registering it, or editing anything under
   src/yasuki_core/engine/rules/cards/. Fires on "implement this card", "model this card", "why does
-  my handler never fire", "which hook does this wording want", "where does this card go", and on any
-  request naming a card title and asking for behavior. Read it before you write the handler: the
-  card id is derived rather than written down, the module a card belongs in is decided by its first
-  printing, and a handler keyed on a typo registers happily and never fires. This skill covers
-  writing the handler. The effects, triggers, costs and stat vocabulary a handler may return are the
-  card-vocabulary skill, the machinery that calls it is turns-and-actions, and the card's text,
-  stats and printings are card-data.
+  my handler never fire", "which hook does this wording want", "where does this card go", "as a
+  Focus Effect", "the winner of the duel", and on any request naming a card title and asking for
+  behavior. Read it before you write the handler: the card id is derived rather than written down,
+  the module a card belongs in is decided by its first printing, and a handler keyed on a typo
+  registers happily and never fires. This skill covers writing the handler. The effects, triggers,
+  costs and stat vocabulary a handler may return are the card-vocabulary skill, the machinery that
+  calls it is turns-and-actions, and the card's text, stats and printings are card-data.
 ---
 
 # Implementing a card
