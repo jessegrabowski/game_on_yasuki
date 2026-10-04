@@ -20,8 +20,11 @@ from yasuki_core.engine.rules.effects import (
     Arrange,
     Bow,
     Choose,
+    DelayedEffect,
     Effect,
     EndLook,
+    Evaluate,
+    GainHonor,
     GrantConditionalModifier,
     LookAtTop,
     Move,
@@ -29,7 +32,10 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     SpendSeatOncePerTurn,
 )
+from yasuki_core.engine.rules.duel.focus_effects import focus_effect
+from yasuki_core.engine.rules.duel.procedure import decided_outcome
 from yasuki_core.engine.rules.legality import location_permits
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM
 from yasuki_core.engine.rules.state import GameState, seat_once_key
 from yasuki_core.engine.rules.triggers import choice_resolver
@@ -181,6 +187,30 @@ register_ability(
 
 
 # --- Flashy Technique ---
+
+FLASHY_TECHNIQUE_HONOR = 1
+
+
+@focus_effect("flashy_technique")
+def _flashy_technique_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
+    """ "As a Focus Effect, this duel's winner gains 1 Honor after it ends." Whoever won, which
+    need not be the seat that focused it."""
+    evaluation = Evaluate("flashy_technique_winner", card.id, card.owner)
+    return [DelayedEffect(evaluation, DUEL_CONSEQUENCES)]
+
+
+@choice_resolver("flashy_technique_winner")
+def _resolve_flashy_technique_winner(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """A duel both Personalities lost has no winner, and gives no Honor to anyone."""
+    outcome = decided_outcome(game)
+    if outcome is None:
+        return []
+    return [
+        GainHonor(winner, FLASHY_TECHNIQUE_HONOR, source_id=source_id) for winner in outcome.winners
+    ]
+
 
 FLASHY_TECHNIQUE = "flashy_technique"
 FLASHY_TECHNIQUE_PENALTY = -1

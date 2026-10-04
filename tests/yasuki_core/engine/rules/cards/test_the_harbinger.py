@@ -27,7 +27,13 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, RingPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.duel.conftest import (
+    CHALLENGE_ABILITY,
+    CHALLENGE_PROBE,
+    duel_focusing,
+)
 from tests.yasuki_core.engine.builders import (
+    focus_card,
     combat_segment,
     end_phase,
     end_turn,
@@ -293,3 +299,27 @@ def test_cowed_by_wisdom_bows_your_personality_unless_you_control_a_ring(ring, p
     table = session.game.table
     assert table.cards_by_id["guard"].bowed
     assert table.cards_by_id["raider"].bowed is performer_bowed
+
+
+def test_flashy_technique_honors_the_duels_winner_whoever_it_is():
+    # "This duel's winner", which can be the seat that did not focus it: P1 totals 1 against P2's
+    # 3 plus 1.
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        card = focus_card("flashy", P1, 0, printed_id="flashy_technique")
+        session = duel_focusing(card, mine_chi=1)
+
+        assert session.game.duel.outcome.winners == (P2,)
+        assert session.game.table.seats[P2].honor == 1
+        assert session.game.table.seats[P1].honor == 0
+
+
+def test_flashy_technique_honors_nobody_when_both_personalities_lose():
+    # Equal totals that the Duelist tiebreak cannot separate are lost by both, so there is no
+    # winner to honor.
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        card = focus_card("flashy", P1, 1, printed_id="flashy_technique")
+        session = duel_focusing(card, mine_chi=3)
+
+        assert session.game.duel.outcome.winners == ()
+        assert session.game.table.seats[P1].honor == 0
+        assert session.game.table.seats[P2].honor == 0

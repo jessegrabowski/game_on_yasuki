@@ -68,6 +68,8 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     EndLook,
     Evaluate,
+    GrantDuelStat,
+    GrantProvinceStrength,
     GainHonor,
     GrantModifier,
     GrantNegation,
@@ -95,7 +97,13 @@ from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
-from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE, END_OF_TURN
+from yasuki_core.engine.rules.duel.focus_effects import focus_effect
+from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcome
+from yasuki_core.engine.rules.turn.structure import (
+    DUEL_CONSEQUENCES,
+    END_OF_BATTLE,
+    END_OF_TURN,
+)
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
@@ -676,9 +684,24 @@ register_entry(
     "way_of_the_crab_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.CRAB)
 )
 
-# The Focus Effect and "Your Personalities have Siege while opposed" have no handler: duels are not
-# modeled, and Siege has no rules behind it yet.
+# "Your Personalities have Siege while opposed" has no handler: Siege has no rules behind it yet.
 WAY_OF_THE_CRAB_TAG = "way_of_the_crab_straighten"
+
+
+@focus_effect("way_of_the_crab_experienced")
+def _way_of_the_crab_experienced_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
+    """ "As a Focus Effect, both Personalities use their Force as their duel stat."
+
+    The CR names the duel stat per Personality rather than per duel, so each duelist is told to
+    compare it (CR, Duel Stat).
+    """
+    duel = game.duel
+    if duel is None:
+        return []
+    return [
+        GrantDuelStat(card.id, duel.duelist_of(seat), Stat.FORCE, DUEL_CONSEQUENCES)
+        for seat in (duel.challenger, duel.challenged)
+    ]
 
 
 @on(Bowed, "way_of_the_crab_experienced")
@@ -702,8 +725,38 @@ def _way_of_the_crab_experienced_bowed(ctx: TriggerContext) -> list[Effect]:
 
 # --- Way of the Crane (Experienced) ---
 
-# "As a Focus Effect, after this duel ends, if you won it, gain 1 Honor and give your provinces
-# +1PS." Duels are not modeled, so the Focus Effect has no handler.
+WAY_OF_THE_CRANE_HONOR = 1
+WAY_OF_THE_CRANE_STRENGTH = 1
+
+
+@focus_effect("way_of_the_crane_experienced")
+def _way_of_the_crane_experienced_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
+    """ "As a Focus Effect, after this duel ends, if you won it, gain 1 Honor and give your
+    provinces +1PS." """
+    evaluation = Evaluate("way_of_the_crane_experienced_won", card.id, card.owner)
+    return [DelayedEffect(evaluation, DUEL_CONSEQUENCES)]
+
+
+@choice_resolver("way_of_the_crane_experienced_won")
+def _resolve_way_of_the_crane_experienced_won(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Nothing for a duel the seat did not win, which includes one both Personalities lost. The
+    Province bonus has no printed duration, so it runs to the end of the turn (CR, Ongoing)."""
+    outcome = decided_outcome(game)
+    if outcome is None or seat not in outcome.winners:
+        return []
+    return [
+        GainHonor(seat, WAY_OF_THE_CRANE_HONOR, source_id=source_id),
+        *(
+            GrantProvinceStrength(
+                source_id, province, WAY_OF_THE_CRANE_STRENGTH, Duration.UNTIL_END_OF_TURN
+            )
+            for province, _ in province_zones(game, seat)
+        ),
+    ]
+
+
 register_entry(
     "way_of_the_crane_experienced",
     clears=keywords.EDICT,
@@ -841,6 +894,27 @@ register_entry(
 register_entry(
     "way_of_the_scorpion_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.SCORPION)
 )
+
+
+@focus_effect("way_of_the_scorpion_experienced")
+def _way_of_the_scorpion_experienced_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
+    """ "As a Focus Effect, after this duel ends, if you were not the challenger, dishonor the
+    winner." """
+    evaluation = Evaluate("way_of_the_scorpion_experienced_winner", card.id, card.owner)
+    return [DelayedEffect(evaluation, DUEL_CONSEQUENCES)]
+
+
+@choice_resolver("way_of_the_scorpion_experienced_winner")
+def _resolve_way_of_the_scorpion_experienced_winner(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The challenger is the seat whose card created the duel, so a card focused by that seat does
+    nothing. A duel both Personalities lost has no winner to dishonor."""
+    duel = decided_duel(game)
+    outcome = decided_outcome(game)
+    if duel is None or outcome is None or duel.challenger is seat:
+        return []
+    return [Dishonor(duel.duelist_of(winner), seat) for winner in outcome.winners]
 
 
 # --- Way of the Spider (Experienced) ---
