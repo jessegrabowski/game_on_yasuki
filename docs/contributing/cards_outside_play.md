@@ -170,9 +170,12 @@ A Ring printing "Play if X" names a state, not an event, and {func}`~.register_c
 registers it through {func}`~.watch`. A watch names the zones it looks from and the reaction that
 answers it. Its condition is read each time the board settles, except while a card announced out of
 a hand waits in its entering-play or resolution area, and when it turns from false to true the
-engine announces a `ConditionFulfilled` that only that watch's reaction hears, ahead of whatever
-else the effect that fulfilled it goes on to do. The owner is then asked, as for a "Play after X"
-Ring. A condition that already holds when the Ring arrives in hand counts as fulfilled then.
+engine announces a `ConditionFulfilled` that only that watch's reaction hears, in the same
+occurrence as the effect that fulfilled it. A Ring may enter immediately after its condition is
+fulfilled (CR, Ring), so the owner is asked before any other trigger of that occurrence resolves,
+as for a "Play after X" Ring. The condition is a continuous check, so the owner is asked only
+while it still holds. A condition that already holds when the Ring arrives in hand counts as
+fulfilled then.
 {card}`Ring of the Void`'s ShE text compares {func}`~.fate_cards_in_play` with
 {func}`~.cards_in_hand`, leaving out the Ring itself. That query leaves out the Imperial Favor's
 proxy, and every card announced out of the hand that has not landed, since a Strategy being played

@@ -592,6 +592,11 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             # events follow the effect's own once their triggers have resolved.
             demanded: list[GameEvent] = []
             _settle_state_based_actions(game, demanded)
+            # A condition the effect itself made true is part of its occurrence, so a Ring that
+            # enters on it is offered alongside whatever else the effect set off. One a
+            # state-based action made true follows with that action.
+            if all(isinstance(event, ConditionFulfilled) for event in demanded):
+                raised, demanded = [*raised, *demanded], []
             if top.simultaneous:
                 group = _group_events(frames)
                 group.queue.extend(raised)
@@ -602,7 +607,8 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
         top.firing = [entry for entry in top.firing if _still_collected(game, entry)]
         if top.firing:
             conflict = _conflict(game, top)
-            if top.chosen is None and len(conflict) > 1:
+            entry_offer_first = _in_hand(game, top.firing[0][0])
+            if top.chosen is None and len(conflict) > 1 and not entry_offer_first:
                 _stash(game, frames)
                 game.pending = ChooseNextTrigger(seat=game.active, candidates=conflict)
                 return
@@ -727,16 +733,17 @@ def _still_collected(game: GameState, entry: _Firing) -> bool:
 
 def _triggered(game: GameState, firing: list[_Firing]) -> list[_Firing]:
     """The triggered traits in ``firing`` whose condition the occurrence met, which return effects
-    on the board it left, the public ones first. A trait that returns nothing was not triggered,
-    whatever a sibling's resolution makes of the board later. A card in a hand is no candidate the
-    active player may see, so its triggers resolve after the others. Handlers never change the
-    board, so asking one is safe."""
+    on the board it left, those of cards in a hand first. A trait that returns nothing was not
+    triggered, whatever a sibling's resolution makes of the board later. A card in a hand answers
+    only to offer entering play, which may follow its condition immediately and may not be delayed
+    (CR, Ring), so it is offered before any other trait resolves or any order is asked. Handlers
+    never change the board, so asking one is safe."""
     acting = [
         (card, trigger, event)
         for card, trigger, event in firing
         if list(trigger(TriggerContext(game, card, event)))
     ]
-    return sorted(acting, key=lambda entry: _in_hand(game, entry[0]))
+    return sorted(acting, key=lambda entry: not _in_hand(game, entry[0]))
 
 
 def _in_hand(game: GameState, card: L5RCard) -> bool:

@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.effects import Bow, Destroy, Discard
+from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, PutIntoPlay
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
@@ -1901,6 +1901,42 @@ def test_ring_of_the_void_is_offered_when_fate_cards_in_play_come_to_match_the_h
     assert [card.id for card in hand] == ["spare"]
 
 
+def test_ring_of_the_void_is_offered_before_a_trigger_that_would_break_its_count(reacting):
+    # A Ring may enter immediately after its condition is fulfilled (CR, Ring), so its offer comes
+    # ahead of a draw the same entry set off, which would leave the hand one card larger.
+    def _draw(ctx):
+        return [DrawCard(P1)]
+
+    reacting(EnteredPlay, "probe_drawer", _draw)
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(state, holding("drawer", owner=P1, printed_id="probe_drawer"))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("drawn", P1))]
+    hand = state.zones[ZoneKey(P1, ZoneRole.HAND)]
+    for card in (
+        _ring("void", "ring_of_the_void"),
+        fate_card("entering", P1),
+        fate_card("spare", P1),
+    ):
+        hand.add(register(state, card))
+    session = EngineSession.start(state, P1)
+
+    resolve_effects(session.game, [PutIntoPlay("entering")])
+
+    assert _void_offered(session)
+    assert "drawn" in _fate_deck(session, P1)
+
+
+def test_a_second_ring_of_the_void_is_not_offered_once_the_first_breaks_its_count():
+    session = _void_equip_game(_ring("void2", "ring_of_the_void"))
+
+    assert _void_offered(session, "void")
+    session.submit(P1, DecisionResponse(("void",)))
+
+    assert "void" in _in_play(session)
+    assert not _void_offered(session, "void2")
+
+
 def test_declining_ring_of_the_void_is_not_offered_again_while_the_count_still_matches():
     session = _void_equip_game(fate_card("spare", P1))
 
@@ -1939,6 +1975,33 @@ def test_ring_of_the_void_is_not_offered_while_an_equipped_card_waits_to_enter()
 
     assert "played" in _in_play(session)
     assert not _void_offered(session)
+
+
+def test_ring_of_the_void_is_not_offered_while_a_strategy_can_still_be_cancelled():
+    # Announcing the Strategy takes it out of hand, leaving none in hand against none in play, but
+    # the action can still be backed out of, so nothing is judged until it resolves.
+    played = L5RCard.of(
+        ActionPrint,
+        id="played",
+        name="Played",
+        printed_id="probe_gain_honor",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=1,
+    )
+    session = _void_game(played, in_play=0)
+
+    with probe_ability("probe_gain_honor", _GAIN_HONOR):
+        session.act(P1, PlayStrategy("played"))
+
+        assert isinstance(session.game.pending, ChoosePayment)
+        assert session.can_cancel(P1)
+
+        session.cancel(P1)
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert {card.id for card in hand} == {"void", "played"}
+    assert session.game.pending is None
 
 
 def test_ring_of_the_void_is_offered_once_a_strategy_has_left_the_resolution_area():

@@ -141,7 +141,9 @@ first. The chosen trigger resolves completely, and the active player is asked ag
 more cards are left. Each trigger's own questions stay its controller's (CR, Choices). One card's
 several triggers fire in collection order, and a rulebook trigger counts as the card its event
 names. A card in a hand is never a candidate, since naming it would show the active player what
-its owner holds. Its triggers resolve after the others, each asking its own controller.
+its owner holds. A card answers from a hand only to offer entering play, which may follow its
+condition immediately and may not be delayed (CR, Ring), so its triggers resolve before the others
+and before any order is asked, each asking its own controller.
 
 Pushing each commit's events on top is what makes the walk depth-first, which is the order the CR
 gives: "Once a triggered trait starts, activate all its costs, targeting, and effects in sequence

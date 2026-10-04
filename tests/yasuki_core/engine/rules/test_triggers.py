@@ -518,7 +518,7 @@ def _gain_one_honor(ctx):
     return [GainHonor(PlayerId.P1, 1)]
 
 
-def test_a_card_in_a_hand_is_no_candidate_and_its_trigger_resolves_after_the_others(reacting):
+def test_a_card_in_a_hand_is_no_candidate_and_its_trigger_resolves_before_the_others(reacting):
     game = two_seat_game()
     mine = put_in_play(game, holding("P1-farm", printed_id="public_probe"))
     held = register(
@@ -542,8 +542,8 @@ def test_a_card_in_a_hand_is_no_candidate_and_its_trigger_resolves_after_the_oth
 
     fire(game, EnteredPlay("someone"))
 
-    assert mine.counters == {"wealth": 1}
     assert isinstance(game.pending, ChooseCards) and game.pending.seat is PlayerId.P2
+    assert mine.counters == {}
 
 
 def test_a_trait_whose_condition_the_occurrence_did_not_meet_is_not_triggered_later(reacting):

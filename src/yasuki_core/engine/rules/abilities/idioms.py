@@ -268,7 +268,9 @@ def register_condition_entry(
 
     The CR's Ring rule, as for :func:`~.register_trait_entry`: the card may enter immediately after
     the condition is fulfilled, and the condition is fulfilled again by each new occurrence. A
-    condition that already holds as the card arrives in hand is fulfilled by the arrival.
+    condition that already holds as the card arrives in hand is fulfilled by the arrival. The
+    condition is a continuous check, so the offer is made only while it still holds: one whose
+    condition another Ring's entry broke first offers nothing.
 
     Parameters
     ----------
@@ -280,11 +282,15 @@ def register_condition_entry(
         The name of the one ruleset the trait is in force under, for a card whose text differs
         between arcs. Default None, for a text every arc reads.
     """
+
+    def offer_while_it_holds(ctx: TriggerContext) -> list[Effect]:
+        return _offer_entry(ctx) if condition(ctx.game, ctx.card) else []
+
     watch(
         printed_id,
         key=CONDITION_ENTRY,
         condition=condition,
-        reaction=_offer_entry,
+        reaction=offer_while_it_holds,
         where=(CardLocation.HAND,),
         ruleset=ruleset,
     )
