@@ -18,8 +18,11 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     FUSHICHO,
+    HANSHIRO_LOWER,
+    HANSHIRO_RAISE,
     IKARICHIS_UNDEAD,
     KANPEKI_DYNASTY,
+    NAGA_ZEALOT,
     ZOMBIE_FOLLOWER,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -32,16 +35,17 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import ActionPrint, WindPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
@@ -53,6 +57,7 @@ from tests.yasuki_core.engine.rules.cards.test_lotus_edition import (
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    combat_segment,
     end_phase,
     end_turn,
     fate_card,
@@ -880,3 +885,91 @@ def test_bayushi_purimu_raises_no_yu_when_hired_killer_destroys_him_outside_batt
     assert "purimu" not in {card.id for card in game.table.battlefield.cards}
     assert not any(card.dishonorable for card in game.table.cards_by_id.values())
     assert game.table.seats[PlayerId.P2].honor == honor
+
+
+# --- Ijathilu Zealots ---
+
+
+def test_ijathilu_zealots_create_two_zealots_in_their_home_as_they_die():
+    units = [personality("attacker", force=5), personality("leader", owner=P2)]
+    game = combat_segment(units, {"attacker": 0}, {"leader": 0}).game
+    token_template(
+        game,
+        NAGA_ZEALOT,
+        name="Naga Zealot",
+        card_type="Personality",
+        keywords=("Naga", "Nonhuman", "Zealot"),
+        force=2,
+        chi=2,
+    )
+    zealots = attachment(
+        "zealots",
+        owner=P2,
+        printed_id="ijathilu_zealots",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=3,
+    )
+    attached(game, zealots, "leader")
+
+    resolve_effects(game, [Destroy("zealots", P1)])
+
+    created = [card for card in personalities_in_play(game) if card.name == "Naga Zealot"]
+    assert len(created) == 2
+    assert all(card.owner is P2 for card in created)
+    assert all(location_of(game.table, card).battlefield is None for card in created)
+
+
+def test_ijathilu_zealots_fear_3_bows_an_enemy_of_force_3():
+    units = [personality("leader"), personality("enemy", owner=P2, force=3)]
+    session = combat_segment(units, {"leader": 0}, {"enemy": 0})
+    zealots = attachment(
+        "zealots", printed_id="ijathilu_zealots", attachment_type=AttachmentType.FOLLOWER, force=3
+    )
+    attached(session.game, zealots, "leader")
+
+    session.act(P1, ActivateAbility("zealots"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+
+    assert session.game.table.cards_by_id["enemy"].bowed
+
+
+# --- Matsu Hanshiro ---
+
+
+@pytest.mark.parametrize(("option", "change"), [(HANSHIRO_LOWER, -4), (HANSHIRO_RAISE, 4)])
+def test_matsu_hanshiro_changes_the_province_he_dies_at(option, change):
+    units = [
+        personality("attacker", force=5),
+        personality("hanshiro", owner=P2, printed_id="matsu_hanshiro"),
+    ]
+    game = combat_segment(units, {"attacker": 0}, {"hanshiro": 0}).game
+    put_in_play(game, stronghold(P2, province_strength=6))
+    province = ZoneKey(P2, ZoneRole.PROVINCE, 0)
+    strength = effective_province_strength(game, province)
+
+    resolve_effects(game, [Destroy("hanshiro", P1)])
+    assert isinstance(game.pending, ChooseOption) and game.pending.seat is P2
+    submit(game, DecisionResponse((option,)))
+
+    assert effective_province_strength(game, province) == strength + change
+
+
+@pytest.mark.parametrize("deathseeker_fell", [True, False])
+def test_matsu_hanshiro_melees_again_only_after_his_deathseeker_falls_this_battle(
+    deathseeker_fell,
+):
+    units = [
+        personality("hanshiro", printed_id="matsu_hanshiro", force=4),
+        personality("kin", keywords=("Deathseeker",)),
+        personality("first", owner=P2),
+        personality("second", owner=P2),
+    ]
+    session = combat_segment(units, {"hanshiro": 0, "kin": 0}, {"first": 0, "second": 0})
+    session.act(P1, ActivateAbility("hanshiro"))
+    session.submit(P1, DecisionResponse(("first",)))
+
+    if deathseeker_fell:
+        resolve_effects(session.game, [Destroy("kin", P2)])
+    session.act(P2, Pass())
+
+    assert (ActivateAbility("hanshiro") in session.legal_actions(P1)) is deathseeker_fell

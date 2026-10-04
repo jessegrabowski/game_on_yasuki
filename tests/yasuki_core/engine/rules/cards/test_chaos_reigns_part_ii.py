@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import (
     HIYAMAKOS_CLAW,
+    LESSER_ONI,
     NAGA_FOLLOWER,
     WRATH_FIRE_MODE,
     WRATH_MELEE_MODE,
@@ -32,13 +33,16 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.battle.resolution import assignment_candidates
+from yasuki_core.engine.rules.board.seats import cards_in_hand
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT_WITH_INVEST
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import FatePrint, PersonalityPrint, RingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, PersonalityPrint, RingPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
@@ -46,12 +50,15 @@ from tests.yasuki_core.engine.builders import (
     attachment,
     combat_segment,
     end_phase,
+    end_turn,
     fate_card,
     holding,
+    pay,
     personality,
     province_card,
     put_in_play,
     register,
+    stronghold,
     token_template,
     two_seat_game,
 )
@@ -728,3 +735,123 @@ def test_matsu_kurutta_gives_a_deathseeker_at_his_battlefield_a_force_token_as_h
 
     assert comrade.counters == {"plus1f": 1}
     assert effective_force(game, comrade) == force + 1
+
+
+# --- Akodo Iori ---
+
+
+def _strategy(card_id, keywords):
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        name=card_id,
+        printed_id=card_id,
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+        keywords=keywords,
+    )
+
+
+def _iori_game():
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, gold_production=12))
+    for index in range(1, 4):
+        province_card(state, f"filler{index}", seat=P1, index=index)
+    sought = (("virtue", ("Bushido Virtue",)), ("tactics", ("Tactical",)), ("plain", ()))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(state, _strategy(card_id, carried)) for card_id, carried in sought
+    ]
+    iori = register(state, personality("iori", printed_id="akodo_iori", chi=3, gold_cost=4))
+    iori.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(iori)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+    return session
+
+
+def test_akodo_ioris_invest_finds_a_bushido_virtue_or_a_tactical_strategy():
+    session = _iori_game()
+
+    session.act(P1, ActivateAbility("iori", RECRUIT_WITH_INVEST))
+    pay(session, P1)
+    assert set(session.game.pending.candidates) == {"virtue", "tactics"}
+    session.submit(P1, DecisionResponse(("tactics",)))
+
+    assert "tactics" in {card.id for card in cards_in_hand(session.game, P1)}
+
+
+def test_akodo_iori_permanently_gives_a_personality_at_his_battlefield_tactician_as_he_dies():
+    units = [
+        personality("attacker", force=5),
+        personality("iori", owner=PlayerId.P2, printed_id="akodo_iori"),
+        personality("comrade", owner=PlayerId.P2, force=9),
+        personality("at_home", owner=PlayerId.P2),
+    ]
+    session = combat_segment(units, {"attacker": 0}, {"iori": 0, "comrade": 0})
+    game = session.game
+
+    resolve_effects(game, [Destroy("iori", P1)])
+    assert set(game.pending.candidates) == {"iori", "comrade"}
+    submit(game, DecisionResponse(("comrade",)))
+    end_turn(session)
+
+    assert has_keyword(game, game.table.cards_by_id["comrade"], keywords.TACTICIAN)
+
+
+# --- Yabe no Oni, Blessed Abomination (Experienced) ---
+
+
+def _yabe_game():
+    game = two_seat_game()
+    token_template(
+        game,
+        LESSER_ONI,
+        name="Lesser Oni",
+        card_type="Personality",
+        keywords=("Nonhuman", "Oni", "Shadowlands"),
+        force=2,
+        chi=1,
+    )
+    yabe = personality(
+        "yabe",
+        printed_id="yabe_no_oni_blessed_abomination_experienced",
+        force=6,
+        chi=2,
+        keywords=("Nonhuman", "Oni"),
+    )
+    put_in_play(game, yabe)
+    return game
+
+
+def _lesser_oni(game):
+    return [card for card in personalities_in_play(game) if card.name == "Lesser Oni"]
+
+
+def test_yabe_no_oni_costs_six_honor_as_he_enters_play():
+    game = _yabe_game()
+
+    fire(game, EnteredPlay("yabe"))
+
+    assert game.table.seats[P1].honor == -6
+
+
+@pytest.mark.parametrize(("carried", "created"), [((), 1), (("Oni",), 0)], ids=["human", "oni"])
+def test_yabe_no_oni_creates_an_oni_after_a_non_oni_personality_is_destroyed(carried, created):
+    game = _yabe_game()
+    put_in_play(game, personality("victim", owner=PlayerId.P2, keywords=carried))
+
+    resolve_effects(game, [Destroy("victim", P1)])
+
+    assert len(_lesser_oni(game)) == created
+
+
+def test_yabe_no_oni_creates_two_oni_as_he_dies_in_battle_resolution():
+    game = _yabe_game()
+
+    resolve_effects(game, [Destroy("yabe", Rulebook.BATTLE_RESOLUTION)])
+
+    assert len(_lesser_oni(game)) == 2

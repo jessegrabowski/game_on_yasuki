@@ -1,13 +1,14 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_yu
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import (
     granted_ability,
     register_ability,
     register_cannot_attack,
+    register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
@@ -32,12 +33,15 @@ from yasuki_core.engine.rules.effects import (
     DrawCard,
     Effect,
     Evaluate,
+    GainHonor,
     GrantAbility,
     GrantKeyword,
     GrantModifier,
     MeleeAttack,
     MoveToDeck,
+    MoveToHand,
     RangedAttack,
+    Show,
     ShuffleDeck,
     Simultaneously,
     SpendOncePerTurn,
@@ -73,7 +77,65 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import WEALTH, counter_from_key
-from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    AttachmentPrint,
+    HoldingPrint,
+    PersonalityPrint,
+)
+
+
+# --- Akodo Iori ---
+
+IORI_INVEST = 1
+
+
+def _akodo_iori_sought(game: GameState, card: L5RCard) -> bool:
+    """A Bushido Virtue, or a Strategy carrying Tactical."""
+    carried = effective_keywords(game, card)
+    if keywords.BUSHIDO_VIRTUE in carried:
+        return True
+    return isinstance(card.printed, ActionPrint) and keywords.TACTICAL in carried
+
+
+def _akodo_iori_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
+    """Search the Fate deck, where every card the text may find is kept."""
+    deck = game.table.decks[DeckKey(source.owner, Side.FATE)].cards
+    pool = tuple(card.id for card in deck if _akodo_iori_sought(game, card))
+    return [Choose(source.owner, pool, 1, 1, "akodo_iori_invest", source.id)] if pool else []
+
+
+register_invest("akodo_iori", InvestAbility((IORI_INVEST,), _akodo_iori_invest))
+
+
+@choice_resolver(
+    "akodo_iori_invest", prompt="Search your deck for a Bushido Virtue or Tactical Strategy"
+)
+def _resolve_akodo_iori_invest(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Show(chosen[0]), MoveToHand(chosen[0], seat), ShuffleDeck(DeckKey(seat, Side.FATE))]
+
+
+def _akodo_iori_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Permanently give your target Personality Tactician." Your Personalities at Iori's
+    battlefield, Iori among them, since a targeted Yu reaches only that battlefield (ShE datasheet,
+    The Yu Trait)."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    targets = tuple(card.id for card in units_at(ctx.game, battlefield, ctx.card.owner))
+    return [Choose(ctx.card.owner, targets, 1, 1, "akodo_iori_yu", ctx.card.id)] if targets else []
+
+
+register_yu("akodo_iori", _akodo_iori_yu)
+
+
+@choice_resolver("akodo_iori_yu", prompt="Choose your Personality to permanently give Tactician")
+def _resolve_akodo_iori_yu(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [GrantKeyword(source_id, chosen[0], keywords.TACTICIAN, Duration.PERMANENT)]
 
 
 # --- Burnt Offering ---
@@ -644,4 +706,43 @@ register_ability(
         effects=_wrath_of_the_shattered_star_effects,
         located_at=(CardLocation.HAND,),
     ),
+)
+
+
+# --- Yabe no Oni, Blessed Abomination (Experienced) ---
+
+LESSER_ONI = "oni_personality_2_1"
+YABE_HONOR_LOSS = 6
+YABE_YU_ONI_COUNT = 2
+
+
+@on(EnteredPlay, "yabe_no_oni_blessed_abomination_experienced")
+def _yabe_no_oni_blessed_abomination_experienced_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After Yabe no Oni enters play, lose 6 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -YABE_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+@on(Destroyed, "yabe_no_oni_blessed_abomination_experienced")
+def _yabe_no_oni_blessed_abomination_experienced_destroyed(ctx: TriggerContext) -> list[Effect]:
+    """After a non-Oni Personality is destroyed, create a 2F/1C Nonhuman Oni Shadowlands
+    Personality in your home. A created Personality leaves the table as it is destroyed, so its
+    destruction is not read here."""
+    destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
+    if destroyed is None or not isinstance(destroyed.printed, PersonalityPrint):
+        return []
+    if has_keyword(ctx.game, destroyed, keywords.ONI):
+        return []
+    return [CreateToken(LESSER_ONI, ctx.card.owner, ctx.card.id)]
+
+
+def _yabe_no_oni_blessed_abomination_experienced_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Create two 2F/1C Nonhuman Oni Shadowlands Personalities in your home." """
+    oni = (CreateToken(LESSER_ONI, ctx.card.owner, ctx.card.id) for _ in range(YABE_YU_ONI_COUNT))
+    return [Simultaneously(tuple(oni))]
+
+
+register_yu(
+    "yabe_no_oni_blessed_abomination_experienced", _yabe_no_oni_blessed_abomination_experienced_yu
 )

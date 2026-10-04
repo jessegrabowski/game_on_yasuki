@@ -40,10 +40,12 @@ from yasuki_core.engine.rules.effects import (
     DrawCard,
     Effect,
     EndLook,
+    Fear,
     LookAtTop,
     GainHonor,
     GrantKeyword,
     GrantModifier,
+    GrantProvinceStrength,
     MeleeAttack,
     MoveToHand,
     PlaceInProvince,
@@ -54,11 +56,17 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, Dishonored, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    BattleEnded,
+    Destroyed,
+    Dishonored,
+    EnteredPlay,
+)
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.board.queries import (
     has_keyword,
+    phase_history,
     province_zones,
     remaining_look,
     top_of_deck,
@@ -442,6 +450,40 @@ register_ability(
 )
 
 
+# --- Ijathilu Zealots ---
+
+NAGA_ZEALOT = "naga_zealot_personality_2_2_1"
+IJATHILU_ZEALOT_COUNT = 2
+IJATHILU_FEAR = 3
+
+
+def _ijathilu_zealots_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Create two 2F/2C/1PH Naga Nonhuman Zealot Personalities in your home." """
+    zealots = (
+        CreateToken(NAGA_ZEALOT, ctx.card.owner, ctx.card.id) for _ in range(IJATHILU_ZEALOT_COUNT)
+    )
+    return [Simultaneously(tuple(zealots))]
+
+
+register_yu("ijathilu_zealots", _ijathilu_zealots_yu)
+
+
+def _ijathilu_zealots_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Fear(IJATHILU_FEAR, target.id, source.owner)]
+
+
+register_ability(
+    "ijathilu_zealots",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_ijathilu_zealots_effects,
+    ),
+)
+
+
 # --- Kengun Grounds ---
 
 
@@ -485,6 +527,86 @@ register_ability(
         targets=_kengun_grounds_targets,
         targeting_message="your Personality",
         effects=_kengun_grounds_effects,
+    ),
+)
+
+
+# --- Matsu Hanshiro ---
+
+HANSHIRO_PROVINCE_STRENGTH = 4
+HANSHIRO_LOWER = "Give this Province -4PS"
+HANSHIRO_RAISE = "Give this Province +4PS"
+HANSHIRO_MELEE = 3
+HANSHIRO_USES_AFTER_A_DEATHSEEKER_FELL = 2
+
+
+def _matsu_hanshiro_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Give this Province -4PS or +4PS." """
+    return [
+        AskOption(
+            ctx.card.owner,
+            (HANSHIRO_LOWER, HANSHIRO_RAISE),
+            "Give this Province -4PS or +4PS?",
+            "matsu_hanshiro",
+            ctx.card.id,
+        )
+    ]
+
+
+register_yu("matsu_hanshiro", _matsu_hanshiro_yu)
+
+
+@choice_resolver("matsu_hanshiro")
+def _resolve_matsu_hanshiro(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The Province at Hanshiro's battlefield, which he still stands at: his Yu resolves before he
+    is destroyed. The change lasts the turn, the default for an effect that states no duration (CR,
+    Ongoing)."""
+    battlefield = location_of(game.table, game.table.cards_by_id[source_id]).battlefield
+    province = game.attack.battlefields[battlefield].province
+    amount = (
+        -HANSHIRO_PROVINCE_STRENGTH if chosen[0] == HANSHIRO_LOWER else HANSHIRO_PROVINCE_STRENGTH
+    )
+    return [GrantProvinceStrength(source_id, province, amount, Duration.UNTIL_END_OF_TURN)]
+
+
+def _matsu_hanshiro_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [MeleeAttack(HANSHIRO_MELEE, target.id, source.owner)]
+
+
+def _matsu_hanshiro_uses_per_turn(game: GameState, source: L5RCard) -> int:
+    """ "You may use this ability one additional time this turn if any of your Deathseekers have
+    been destroyed during this battle." """
+    if _matsu_hanshiro_deathseeker_fell_this_battle(game, source.owner):
+        return HANSHIRO_USES_AFTER_A_DEATHSEEKER_FELL
+    return 1
+
+
+def _matsu_hanshiro_deathseeker_fell_this_battle(game: GameState, seat: PlayerId) -> bool:
+    """Whether a Deathseeker ``seat`` controlled was destroyed since the last battle of this Attack
+    Phase ended."""
+    history = phase_history(game)
+    ended = [index for index, event in enumerate(history) if isinstance(event, BattleEnded)]
+    this_battle = history[ended[-1] + 1 :] if ended else history
+    for event in this_battle:
+        if not isinstance(event, Destroyed) or event.controller is not seat:
+            continue
+        destroyed = game.table.cards_by_id.get(event.card_id)
+        if destroyed is not None and has_keyword(game, destroyed, keywords.DEATHSEEKER):
+            return True
+    return False
+
+
+register_ability(
+    "matsu_hanshiro",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_matsu_hanshiro_effects,
+        uses_per_turn=_matsu_hanshiro_uses_per_turn,
     ),
 )
 
