@@ -20,14 +20,25 @@ class AskedBy(Enum):
 
 @dataclass(frozen=True)
 class Asking:
-    """Who asks what type a card is: an action or trait printed on ``card``, or the rulebook.
+    """Who asks about a card: an action or trait printed on ``card``, or the rulebook.
 
     Build one with :meth:`action`, :meth:`trait` or ``RULEBOOK``. Raise ValueError for a card
     with a rule or a missing card with an action or trait.
+
+    Attributes
+    ----------
+    by : AskedBy
+        What kind of thing asks.
+    card : L5RCard or None
+        The card whose action or trait asks, or None for the rulebook.
+    keywords : frozenset of str
+        The ability keywords of the action asking, such as Kiho, for a card considered to have a
+        stat "when a Kiho checks" it. Default empty.
     """
 
     by: AskedBy
     card: L5RCard | None
+    keywords: frozenset[str] = frozenset()
 
     def __post_init__(self) -> None:
         if (self.card is None) is not (self.by is AskedBy.RULE):
@@ -35,8 +46,8 @@ class Asking:
             raise ValueError(f"{self.by.value} asking with card {card_id}")
 
     @classmethod
-    def action(cls, card: L5RCard) -> Self:
-        return cls(AskedBy.ACTION, card)
+    def action(cls, card: L5RCard, keywords: frozenset[str] = frozenset()) -> Self:
+        return cls(AskedBy.ACTION, card, keywords)
 
     @classmethod
     def trait(cls, card: L5RCard) -> Self:
