@@ -25,6 +25,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | A rulebook ability every card with a keyword has, as Kharmic | `register_keyword_ability(Ability(..., from_keyword=..., from_rulebook=True))` | `rulebook/kharmic.py` |
 | A rulebook ability every card at a location has, as Dynasty Discard | `register_location_ability(Ability(..., from_rulebook=True))` | `rulebook/dynasty_discard.py` |
 | Gives every card you own an ability, as "the next time you use the rulebook Kharmic ability, you may ..." | `@granted_ability(id)` and effects returning `GrantSeatAbility(...)` | {card}`The Sacred Ground of the Phoenix` |
+| "Take an additional Battle or Interrupt from your target Ring ... ignoring bow costs" | `@granted_ability(id)` and `@granted_interrupt(id)` with effects returning `GrantSeatAbility(...)` and `AdditionalAction(seat, follow_ups)` | {card}`The Enlightened Path of the Dragon` |
 | Buy an extra effect while recruiting | `register_invest(id, InvestAbility(...))` | {card}`Rebuilt Harbor` |
 | "Interrupt: ..." against a pending effect | `register_interrupt(id, Interrupt(...))` | {card}`Okura is Released` |
 | "Interrupt: ..." on a card in play | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.BATTLEFIELD,)))` | {card}`Doji Yuten` |

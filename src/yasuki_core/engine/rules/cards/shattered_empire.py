@@ -1,6 +1,8 @@
+from dataclasses import replace
+
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Trait
-from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, ignoring_bow_costs, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     RING_PITCH,
     plays_clan,
@@ -18,15 +20,27 @@ from yasuki_core.engine.rules.abilities.model import (
     Interruption,
     InvestAbility,
     itself,
+    once_tag,
 )
 from yasuki_core.engine.rules.abilities.registry import (
     before_entering_play,
+    granted_ability,
+    granted_interrupt,
+    printed_abilities,
+    printed_interrupt,
     register_ability,
     register_cannot_attack,
     register_interrupt,
     register_invest,
 )
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator, PlayStrategy
+from yasuki_core.engine.rules.vocabulary.actions import (
+    Action,
+    ActionTiming,
+    ActivateAbility,
+    BattleDesignator,
+    PlayInterrupt,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.board.seats import (
     cards_in_hand,
@@ -53,10 +67,12 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     province_zones,
+    rings_in_play,
     top_of_deck,
     units_at,
 )
 from yasuki_core.engine.rules.effects import (
+    AdditionalAction,
     Bow,
     Choose,
     CreateToken,
@@ -73,12 +89,14 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantModifier,
     GrantNegation,
+    GrantSeatAbility,
     LookAtTop,
     MeleeAttack,
     Move,
     MoveToDeck,
     Negated,
     Rehonor,
+    ShuffleDeck,
     SpendOncePerTurn,
     Straighten,
     seppuku,
@@ -95,11 +113,13 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.calculation import unbounded_stat
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
+from yasuki_core.engine.rules.interrupts import INTERRUPT_TAG, answered_by
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcome
 from yasuki_core.engine.rules.turn.structure import (
+    ADDITIONAL_ACTION_SPENT,
     DUEL_CONSEQUENCES,
     END_OF_BATTLE,
     END_OF_TURN,
@@ -635,6 +655,187 @@ register_ability(
         targeting_message=ATTACK_TARGET,
         effects=_shinjo_mayuko_soul_of_shinjo_wei_effects,
     ),
+)
+
+
+# --- The Enlightened Path of the Dragon ---
+
+# The key a target Ring's ability or Interrupt is copied under, for the additional action taken
+# from it "ignoring bow costs".
+ENLIGHTENED_PATH_COPY = "enlightened_path"
+
+
+def _the_enlightened_path_of_the_dragon_rings(game: GameState, source: L5RCard) -> list[L5RCard]:
+    """Your Rings in play, unbowed since a bowed card's abilities cannot be used, and those in your
+    Fate discard pile."""
+    asking = Asking.action(source)
+    in_play = [ring for ring in rings_in_play(game, source.owner, asking) if not ring.bowed]
+    pile = game.table.zones[ZoneKey(source.owner, ZoneRole.FATE_DISCARD)].cards
+    return in_play + [card for card in pile if counts_as(game, card, RingPrint, asking)]
+
+
+def _the_enlightened_path_of_the_dragon_printed(
+    ring: L5RCard, taken_as: ActionTiming
+) -> Ability | None:
+    """The ability ``ring`` prints in play under ``taken_as``, leaving out its cast from hand. None
+    for the Interrupt, which no Ring's ability is taken as."""
+    return next(
+        (
+            ability
+            for ability in printed_abilities(ring)
+            if CardLocation.BATTLEFIELD in ability.located_at and taken_as in ability.timings
+        ),
+        None,
+    )
+
+
+def _the_enlightened_path_of_the_dragon_taken_as(game: GameState, source: L5RCard) -> ActionTiming:
+    """Battle during a battle, where an Open action cannot be taken, and Open otherwise."""
+    permitted = permitted_timings_in(game, action_round(game), source.owner)
+    return ActionTiming.BATTLE if ActionTiming.BATTLE in permitted else ActionTiming.OPEN
+
+
+def _the_enlightened_path_of_the_dragon_follow_up(
+    game: GameState, source: L5RCard, ring: L5RCard, taken_as: ActionTiming, follow_up: Action
+) -> list[Effect]:
+    """Grant ``ring`` its copy for ``taken_as`` until the additional action is spent, open that
+    action to ``follow_up`` alone, and reshuffle a Ring taken from the discard pile once it is."""
+    seat = source.owner
+    effects: list[Effect] = [
+        GrantSeatAbility(source.id, seat, (ring.id, taken_as.name), ADDITIONAL_ACTION_SPENT),
+        AdditionalAction(seat, frozenset({follow_up})),
+    ]
+    pile = game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards
+    if any(card is ring for card in pile):
+        fate = DeckKey(seat, Side.FATE)
+        effects += [
+            DelayedEffect(MoveToDeck(ring.id, fate, from_top=0), ADDITIONAL_ACTION_SPENT),
+            DelayedEffect(ShuffleDeck(fate), ADDITIONAL_ACTION_SPENT),
+        ]
+    return effects
+
+
+def _the_enlightened_path_of_the_dragon_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Taken as a Battle or Open action, the one ability spends its use as an Interrupt too."""
+    return [SpendOncePerTurn(source.id, INTERRUPT_TAG)]
+
+
+def _the_enlightened_path_of_the_dragon_targets(game: GameState, source: L5RCard) -> list[str]:
+    taken_as = _the_enlightened_path_of_the_dragon_taken_as(game, source)
+    return [
+        ring.id
+        for ring in _the_enlightened_path_of_the_dragon_rings(game, source)
+        if _the_enlightened_path_of_the_dragon_printed(ring, taken_as) is not None
+    ]
+
+
+def _the_enlightened_path_of_the_dragon_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    taken_as = _the_enlightened_path_of_the_dragon_taken_as(game, source)
+    follow_up = ActivateAbility(target.id, ENLIGHTENED_PATH_COPY)
+    return _the_enlightened_path_of_the_dragon_follow_up(game, source, target, taken_as, follow_up)
+
+
+ENLIGHTENED_PATH_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    cost=_the_enlightened_path_of_the_dragon_cost,
+    targets=_the_enlightened_path_of_the_dragon_targets,
+    effects=_the_enlightened_path_of_the_dragon_effects,
+    tireless=True,
+)
+
+register_ability("the_enlightened_path_of_the_dragon", ENLIGHTENED_PATH_ABILITY)
+
+
+@granted_ability("the_enlightened_path_of_the_dragon")
+def _the_enlightened_path_of_the_dragon_granted_ability(
+    game: GameState, card: L5RCard, context: tuple[str, ...]
+) -> Ability | None:
+    ring_id, taken_as = context
+    if card.id != ring_id:
+        return None
+    printed = _the_enlightened_path_of_the_dragon_printed(card, ActionTiming[taken_as])
+    if printed is None:
+        return None
+    copied = _the_enlightened_path_of_the_dragon_copied(printed)
+    return replace(copied, limit_key=printed.key or "")
+
+
+def _the_enlightened_path_of_the_dragon_copied[T: Ability | Interrupt[Effect]](printed: T) -> T:
+    """``printed`` taken from play or the discard pile, ignoring bow costs."""
+    return replace(
+        printed,
+        key=ENLIGHTENED_PATH_COPY,
+        cost=ignoring_bow_costs(printed.cost),
+        located_at=(CardLocation.BATTLEFIELD, CardLocation.DISCARD),
+    )
+
+
+@granted_interrupt("the_enlightened_path_of_the_dragon")
+def _the_enlightened_path_of_the_dragon_granted_interrupt(
+    game: GameState, card: L5RCard, context: tuple[str, ...]
+) -> Interrupt[Effect] | None:
+    ring_id, taken_as = context
+    if card.id != ring_id or taken_as != ActionTiming.INTERRUPT.name:
+        return None
+    printed = printed_interrupt(card)
+    return None if printed is None else _the_enlightened_path_of_the_dragon_copied(printed)
+
+
+def _the_enlightened_path_of_the_dragon_interrupt_cost(
+    game: GameState, source: L5RCard
+) -> list[Effect]:
+    """Taken as an Interrupt, the one ability spends its use as a Battle or Open action too."""
+    return [SpendOncePerTurn(source.id, once_tag(ENLIGHTENED_PATH_ABILITY))]
+
+
+def _the_enlightened_path_of_the_dragon_interrupt_targets(
+    game: GameState, source: L5RCard, effect: Effect
+) -> tuple[str, ...]:
+    """Your Rings whose Interrupt could be taken against ``effect``."""
+    return tuple(
+        ring.id
+        for ring in _the_enlightened_path_of_the_dragon_rings(game, source)
+        if (printed := printed_interrupt(ring)) is not None
+        and answered_by(game, ring, _the_enlightened_path_of_the_dragon_copied(printed), (effect,))
+    )
+
+
+def _the_enlightened_path_of_the_dragon_interrupt(
+    game: GameState, source: L5RCard, effect: Effect, target: L5RCard
+) -> Interruption:
+    follow_up = PlayInterrupt(target.id, ENLIGHTENED_PATH_COPY)
+    effects = _the_enlightened_path_of_the_dragon_follow_up(
+        game, source, target, ActionTiming.INTERRUPT, follow_up
+    )
+    return Interruption(effect, tuple(effects))
+
+
+ENLIGHTENED_PATH_INTERRUPT = Interrupt(
+    answers=Effect,
+    interrupt=_the_enlightened_path_of_the_dragon_interrupt,
+    targets=_the_enlightened_path_of_the_dragon_interrupt_targets,
+    located_at=(CardLocation.BATTLEFIELD,),
+    cost=_the_enlightened_path_of_the_dragon_interrupt_cost,
+    tireless=True,
+)
+
+register_interrupt("the_enlightened_path_of_the_dragon", ENLIGHTENED_PATH_INTERRUPT)
+
+
+# --- The Enlightened Path of the Dragon (back) ---
+
+register_ability(
+    "the_enlightened_path_of_the_dragon__back",
+    replace(ENLIGHTENED_PATH_ABILITY, timings=(ActionTiming.BATTLE, ActionTiming.OPEN)),
+)
+granted_ability("the_enlightened_path_of_the_dragon__back")(
+    _the_enlightened_path_of_the_dragon_granted_ability
+)
+register_interrupt("the_enlightened_path_of_the_dragon__back", ENLIGHTENED_PATH_INTERRUPT)
+granted_interrupt("the_enlightened_path_of_the_dragon__back")(
+    _the_enlightened_path_of_the_dragon_granted_interrupt
 )
 
 
