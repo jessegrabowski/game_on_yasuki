@@ -7,6 +7,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseDiscard,
     ChooseDistribution,
+    OneGroup,
+    TotalAtMost,
 )
 
 
@@ -23,6 +25,68 @@ def test_auto_agent_takes_as_many_targets_as_the_choice_asks():
     request = ChooseAbilityTarget(PlayerId.P1, ("a", "b", "c"), "spell", minimum=2, maximum=2)
 
     assert AutoAgent().decide(request, view=None).choices == ("a", "b")
+
+
+def test_auto_agent_grows_an_answer_a_limit_narrows():
+    # A prefix search would have offered ("a", "b"), which the total refuses. Growing through
+    # selectable stops at the first set the request accepts.
+    request = ChooseAbilityTarget(
+        PlayerId.P1,
+        ("a", "b", "c"),
+        "spell",
+        minimum=1,
+        maximum=2,
+        limits=(TotalAtMost((("a", 3), ("b", 3), ("c", 1)), 4),),
+    )
+
+    response = AutoAgent().decide(request, view=None)
+
+    assert response.choices == ("a",)
+    assert request.accepts(response)
+
+
+def test_auto_agent_finds_a_pair_the_first_card_rules_out():
+    # The heaviest card is offered first and reaches nothing: ("b", "c") is the only legal pair, so
+    # an answer grown from "a" and never turned back would strand the bot.
+    request = ChooseAbilityTarget(
+        PlayerId.P1,
+        ("a", "b", "c"),
+        "spell",
+        minimum=2,
+        maximum=2,
+        limits=(TotalAtMost((("a", 4), ("b", 2), ("c", 2)), 5),),
+    )
+
+    assert AutoAgent().decide(request, view=None).choices == ("b", "c")
+
+
+def test_auto_agent_finds_a_pair_inside_one_group():
+    request = ChooseAbilityTarget(
+        PlayerId.P1,
+        ("a", "b", "c"),
+        "spell",
+        minimum=2,
+        maximum=2,
+        limits=(OneGroup((("a",), ("b", "c"))),),
+    )
+
+    assert AutoAgent().decide(request, view=None).choices == ("b", "c")
+
+
+def test_auto_agent_raises_only_when_no_set_satisfies_the_limits():
+    # Two parts of one card each cannot seat a pair, so there is nothing to find and raising is the
+    # answer. The engine withholds such a question; this covers the bot meeting one anyway.
+    request = ChooseAbilityTarget(
+        PlayerId.P1,
+        ("a", "b"),
+        "spell",
+        minimum=2,
+        maximum=2,
+        limits=(OneGroup((("a",), ("b",))),),
+    )
+
+    with pytest.raises(ValueError, match="no auto-answer"):
+        AutoAgent().decide(request, view=None)
 
 
 def test_auto_agent_handles_a_zero_count():

@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
+    ChooseAbilityTarget,
     ChooseAmount,
     ChooseCards,
     ChooseNextTrigger,
@@ -35,6 +36,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
     DecisionResponse,
     FocusOrStrike,
+    OneGroup,
     focus_token,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
@@ -290,6 +292,28 @@ def test_the_order_of_triggers_on_the_board_is_picked_there_and_resolved_by_a_bu
     assert _status(window) == "Choose the next triggered ability to resolve"
     assert unpicked == (["Resolve"], False)
     assert _primary_enabled(window)
+
+
+def test_a_limited_target_phrase_puts_the_rest_of_the_board_out_of_reach(board):
+    presenter, window, session = board
+    session.game.pending = ChooseAbilityTarget(
+        seat=P1,
+        candidates=("of", "target"),
+        source_card_id="of",
+        minimum=1,
+        maximum=2,
+        limits=(OneGroup((("of",), ("target",))),),
+    )
+
+    presenter.present()
+    window.field.toggle_selection("of")
+    presenter.refresh()
+    settled = window.field.is_selectable("target")
+    window.field.toggle_selection("of")
+    presenter.refresh()
+
+    assert settled is False
+    assert window.field.is_selectable("target") is True
 
 
 def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
