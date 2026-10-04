@@ -56,6 +56,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Minimum,
     Modifier,
     Negation,
+    Ongoing,
     ProvinceModifier,
     SeatAbilityGrant,
     Stat,
@@ -1444,10 +1445,15 @@ class PutIntoPlay(Effect):
     battlefield : int, optional
         The battlefield it enters play at, for a Terrain, which stands there in no unit (CR,
         Location). Default None, which puts it in its owner's home.
+    entering_under : tuple of Ongoing, optional
+        Ongoing records the card enters play under, as "if you put a Ring into play, while it
+        remains in play, it does not count towards an Enlightenment Victory" has it. Laid as the
+        card arrives, so no state-based action reads it without them. Default none.
     """
 
     card_id: str
     battlefield: int | None = None
+    entering_under: tuple[Ongoing, ...] = ()
 
     @property
     def subject_id(self) -> str:
@@ -1472,6 +1478,7 @@ class PutIntoPlay(Effect):
         if self.battlefield is not None:
             assert game.attack is not None and 0 <= self.battlefield < len(game.attack.battlefields)
             ops.set_location(game.table, card, Location.at_battlefield(self.battlefield))
+        game.ongoing.extend(self.entering_under)
         return [EnteredPlay(self.card_id, from_hand=from_hand)]
 
 

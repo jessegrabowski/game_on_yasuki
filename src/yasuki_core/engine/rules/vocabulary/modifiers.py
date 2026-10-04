@@ -213,6 +213,26 @@ class KeywordGrant:
 
 
 @dataclass(frozen=True, slots=True)
+class EnlightenmentExclusion:
+    """A continuous effect under which one card does not count towards an Enlightenment Victory,
+    as "while it remains in play, it does not count towards an Enlightenment Victory" has it.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the exclusion comes from, used to attribute the effect.
+    target_id : str
+        The card that does not count while the exclusion lasts.
+    duration : Duration or Moment
+        When the exclusion stops applying.
+    """
+
+    source_id: str
+    target_id: str
+    duration: Lifetime
+
+
+@dataclass(frozen=True, slots=True)
 class Minimum:
     """A continuous effect that floors one card's stat while active: "a target Personality has a
     minimum Chi of 1" (CR, Minimums and Maximums).
@@ -418,6 +438,7 @@ Ongoing = (
     | SeatAbilityGrant
     | DuelStatOverride
     | KeywordGrant
+    | EnlightenmentExclusion
     | Minimum
     | ProvinceModifier
     | LobbyModifier

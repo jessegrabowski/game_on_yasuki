@@ -38,7 +38,11 @@ seat starts its turn with and a Dishonor loss off the Honor it ends its turn wit
 called by the turn flow at that boundary. An Enlightenment Victory is won "immediately" by a seat
 controlling Rings of all five elements, so {func}`~.enlightenment` is a state-based action and
 runs after every committed effect. A Ring whose text says it does not count registers through
-`register_no_enlightenment`.
+`register_no_enlightenment`. A card that stops another Ring counting lays an
+{class}`~.EnlightenmentExclusion` on it, which lapses when that Ring leaves play.
+{func}`~.counts_towards_enlightenment` reads both. A Ring that enters play excluded carries the
+record on its {class}`~.PutIntoPlay`, because a record laid after it lands would come too late for
+the check that runs after every committed effect.
 
 ## What replay rebuilds
 

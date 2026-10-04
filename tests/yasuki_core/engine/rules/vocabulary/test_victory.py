@@ -10,12 +10,17 @@ from yasuki_core.engine.rules.board.counts_as import (
     register_counts_as,
     while_in_play,
 )
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    Duration,
+    EnlightenmentExclusion,
+    KeywordGrant,
+)
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
-from yasuki_core.engine.rules.triggers import enforce_state_based_actions
+from yasuki_core.engine.rules.effects import Discard, PutIntoPlay
+from yasuki_core.engine.rules.triggers import enforce_state_based_actions, resolve_effects
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Element, Side
 from yasuki_core.game_pieces.prints import RingPrint
@@ -240,6 +245,31 @@ def test_a_ring_registered_as_not_counting_does_not_complete_the_set():
     enforce_state_based_actions(session.game)
 
     assert session.game.game_over is False
+
+
+def test_a_ring_entering_play_excluded_does_not_complete_the_set():
+    session = _game()
+    for ring in _rings_of(Element.AIR, Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(session.game, ring)
+    void = register(session.game.table, _ring("void", Element.VOID))
+    session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(void)
+
+    excluded = EnlightenmentExclusion("source", void.id, Duration.PERMANENT)
+    resolve_effects(session.game, [PutIntoPlay(void.id, entering_under=(excluded,))])
+
+    assert session.game.game_over is False
+
+
+def test_an_exclusion_lapses_when_its_ring_leaves_play():
+    session = _game()
+    for ring in _rings_of(Element.AIR, Element.EARTH, Element.FIRE, Element.WATER):
+        put_in_play(session.game, ring)
+    void = put_in_play(session.game, _ring("void", Element.VOID))
+    session.game.ongoing.append(EnlightenmentExclusion("source", void.id, Duration.PERMANENT))
+
+    resolve_effects(session.game, [Discard(void.id, P1), PutIntoPlay(void.id)])
+
+    assert session.game.winner is P1
 
 
 @pytest.mark.parametrize(
