@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     DestroyProvince,
     Discard,
+    Dishonor,
     GainHonor,
     Move,
     Rehonor,
@@ -722,16 +723,18 @@ def test_resolution_honor_is_not_open_to_the_honor_interrupt():
     assert session.game.table.seats[PlayerId.P1].honor - before == 2
 
 
-def test_a_winner_with_a_dishonorable_personality_is_rehonored_instead_of_paid():
+def test_every_dishonorable_personality_in_a_winning_army_is_rehonored_for_the_one_gain():
     # CR, Rehonoring 0.3: "all such dishonorable Personalities are rehonored, substituting for the
     # Honor gain."
-    session = _one_battlefield({"a": 5, "b": 1}, {"d": 2})
-    session.game.table.cards_by_id["b"].dishonor()
+    session = _one_battlefield({"a": 3, "b": 3, "c": 3}, {"d": 1})
+    for card_id in ("a", "b"):
+        session.game.table.cards_by_id[card_id].dishonor()
     before = session.game.table.seats[PlayerId.P1].honor
 
     _fight_one_battle(session)
 
-    assert not session.game.table.cards_by_id["b"].dishonorable
+    cards = session.game.table.cards_by_id
+    assert not any(cards[card_id].dishonorable for card_id in ("a", "b", "c"))
     assert session.game.table.seats[PlayerId.P1].honor == before
 
 
@@ -1367,6 +1370,23 @@ def test_a_tie_announces_both_armies_before_either_is_destroyed(reacting):
         PlayerId.P1: 3,
         PlayerId.P2: 3,
     }
+
+
+def test_a_winner_dishonored_while_the_enemy_army_is_destroyed_is_rehonored_instead(reacting):
+    # CR, Rehonoring 0.3 substitutes at the gain, after the destruction, so a dishonor a trait
+    # resolved before the loser died still counts.
+    session = _one_battlefield({"winner": 4}, {"loser": 1})
+    honor = session.game.table.seats[PlayerId.P1].honor
+    reacting(
+        Destroying,
+        "loser",
+        lambda ctx: [Dishonor("winner", PlayerId.P2)] if ctx.event.card_id == ctx.card.id else [],
+    )
+
+    _fight_one_battle(session)
+
+    assert not session.game.table.cards_by_id["winner"].dishonorable
+    assert session.game.table.seats[PlayerId.P1].honor == honor
 
 
 def test_a_province_destroyed_before_resolution_is_not_credited_to_it():
