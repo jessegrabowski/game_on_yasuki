@@ -14,6 +14,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.effects import AdditionalAction
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
 from yasuki_core.engine.rules.legality import is_legal
 from tests.yasuki_core.engine.builders import end_phase, holding, province_card, put_in_play
 from tests.yasuki_core.engine.rules.conftest import probe_ability
@@ -188,3 +189,15 @@ def test_the_limit_ends_with_the_additional_action(follow_up_session):
 
     assert follow_up_session.game.round.follow_ups is None
     assert follow_up_session.game.round.priority is PlayerId.P2
+
+
+@pytest.mark.parametrize("spend", ["take", "pass"])
+def test_what_was_granted_for_the_additional_action_lapses_once_it_is_spent(
+    follow_up_session, spend
+):
+    granted = KeywordGrant("granter", "chosen", "Probe", Duration.FOR_ADDITIONAL_ACTION)
+    follow_up_session.game.ongoing.append(granted)
+
+    follow_up_session.act(PlayerId.P1, FOLLOW_UP if spend == "take" else Pass())
+
+    assert granted not in follow_up_session.game.ongoing
