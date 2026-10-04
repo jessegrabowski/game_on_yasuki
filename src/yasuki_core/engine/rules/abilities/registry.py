@@ -152,6 +152,13 @@ GRANTED_ABILITIES: HandlerRegistry[AbilityFactory] = HandlerRegistry(
 )
 granted_ability = GRANTED_ABILITIES.make_decorator()
 
+# The Interrupt a card grants, built the way a granted ability is, from the same grant records.
+InterruptFactory = Callable[[GameState, L5RCard, tuple[str, ...]], Interrupt | None]
+GRANTED_INTERRUPTS: HandlerRegistry[InterruptFactory] = HandlerRegistry(
+    "granted interrupts", "already grants an Interrupt"
+)
+granted_interrupt = GRANTED_INTERRUPTS.make_decorator()
+
 
 def ability_registrations(*, ruleset_name: str | None = None) -> dict[str, tuple[Ability, ...]]:
     """Every printed id with the registered abilities in force for it under one ruleset.
@@ -319,23 +326,28 @@ def register_keyword_interrupt(value: Interrupt) -> None:
 
 def interrupts_for(game: GameState, card: L5RCard) -> tuple[Interrupt, ...]:
     """Every Interrupt ``card`` offers right now: the one it prints, in force under the active
-    ruleset, then those every keyword it carries confers."""
-    printed = _printed_interrupt(card)
+    ruleset, then those a grant gives it, then those every keyword it carries confers."""
+    printed = printed_interrupt(card)
+    granted = _granted(game, card, GRANTED_INTERRUPTS)
     conferred = _by_keyword(game, card, KEYWORD_INTERRUPTS)
-    return conferred if printed is None else (printed, *conferred)
+    return (*(() if printed is None else (printed,)), *granted, *conferred)
 
 
-def interrupt_for(card: L5RCard, key: str | None = None) -> Interrupt | None:
-    """The Interrupt keyed ``key`` that ``card`` was taken with, or None.
+def interrupt_for(game: GameState, card: L5RCard, key: str | None = None) -> Interrupt | None:
+    """The Interrupt keyed ``key`` that ``card`` offers, or None.
 
-    The card's own Interrupt answers to its key, None for one registered without. Any other key is
-    looked up among the keyword Interrupts whether or not the card still carries the keyword, since
-    an Interrupt taken against an effect applies when the effect comes up even if the card lost the
-    keyword in between.
+    The card's own Interrupt answers to its key, None for one registered without, then one a grant
+    gives it. Any other key is looked up among the keyword Interrupts whether or not the card still
+    carries the keyword.
     """
-    printed = _printed_interrupt(card)
+    printed = printed_interrupt(card)
     if printed is not None and printed.key == key:
         return printed
+    granted = next(
+        (held for held in _granted(game, card, GRANTED_INTERRUPTS) if held.key == key), None
+    )
+    if granted is not None:
+        return granted
     if key is None:
         return None
     return next(
@@ -349,7 +361,9 @@ def interrupt_for(card: L5RCard, key: str | None = None) -> Interrupt | None:
     )
 
 
-def _printed_interrupt(card: L5RCard) -> Interrupt | None:
+def printed_interrupt(card: L5RCard) -> Interrupt | None:
+    """The Interrupt registered for ``card``'s printed id and in force under the active ruleset,
+    without what grants or keywords add: what a grant copying a card's own Interrupt reads."""
     return next((held for held in _INTERRUPTS.get(card.printed_id, ()) if in_force(held)), None)
 
 
@@ -391,14 +405,7 @@ def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     yields to a granted one under the same key, which is how a card changes a rulebook ability for
     a while."""
     printed = printed_abilities(card)
-    built = (
-        GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](
-            game, card, grant.context
-        )
-        for grant in game.ongoing
-        if _grants_to(grant, card) and grant_applies(game, grant)
-    )
-    granted = tuple(ability for ability in built if ability is not None)
+    granted = _granted(game, card, GRANTED_ABILITIES)
     shadowed = {held.key for held in granted}
     conferred = tuple(held for held in _conferred(game, card) if held.key not in shadowed)
     return (*printed, *granted, *conferred)
@@ -409,6 +416,24 @@ def printed_abilities(card: L5RCard) -> tuple[Ability, ...]:
     without what grants, keywords or the rulebook add: what a grant copying a card's own ability
     reads, since reading every ability from inside a grant would read the grant again."""
     return tuple(held for held in _ABILITIES.get(card.printed_id, ()) if in_force(held))
+
+
+def _granted[T](
+    game: GameState,
+    card: L5RCard,
+    factories: HandlerRegistry[Callable[[GameState, L5RCard, tuple[str, ...]], T | None]],
+) -> tuple[T, ...]:
+    """What the grants in force reaching ``card`` give it from ``factories``, in the order they
+    were granted. A grant whose card registers no factory there gives nothing of that kind."""
+    given: list[T] = []
+    for grant in game.ongoing:
+        if not _grants_to(grant, card) or not grant_applies(game, grant):
+            continue
+        factory = factories.get(game.table.cards_by_id[grant.source_id].printed_id)
+        built = None if factory is None else factory(game, card, grant.context)
+        if built is not None:
+            given.append(built)
+    return tuple(given)
 
 
 def _grants_to(recorded: Ongoing, card: L5RCard) -> TypeGuard[AbilityGrant | SeatAbilityGrant]:

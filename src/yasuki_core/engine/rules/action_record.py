@@ -54,7 +54,7 @@ def is_printed_action(game: GameState, action: Action) -> bool:
             card = game.table.cards_by_id.get(card_id)
             if card is None or isinstance(card.printed, RulebookPrint):
                 return False
-            interrupt = interrupt_for(card, key)
+            interrupt = interrupt_for(game, card, key)
             return interrupt is not None and interrupt.acts_from_its_card
         case _:
             return False

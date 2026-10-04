@@ -466,7 +466,7 @@ def test_the_imperial_favor_prevents_another_players_honor_loss(game):
 def test_the_imperial_favors_interrupt_is_political(game):
     proxy = _proxy(game)
 
-    interrupt = interrupt_for(proxy)
+    interrupt = interrupt_for(game, proxy)
 
     assert interrupt is not None
     assert interrupt.purchase(game, proxy, plays_card=False).has_keyword(keywords.POLITICAL)

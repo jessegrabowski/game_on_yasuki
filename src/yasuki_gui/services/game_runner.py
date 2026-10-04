@@ -219,7 +219,7 @@ class GameRunner:
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if isinstance(action, PlayInterrupt) and action.card_id == card_id:
-                interrupt = interrupt_for(card, action.interrupt_key)
+                interrupt = interrupt_for(self.session.game, card, action.interrupt_key)
                 label = (
                     interrupt_label(card, interrupt)
                     if interrupt is not None
