@@ -5,7 +5,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, Ente
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DecisionResponse
-from yasuki_core.engine.rules.effects import AdjustCounter, RecruitCard
+from yasuki_core.engine.rules.effects import AdjustCounter
+from yasuki_core.engine.rules.rulebook.recruit import recruit_card
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules import triggers
@@ -144,7 +145,7 @@ def test_recruit_card_pauses_for_payment_and_brings_the_card_in():
     put_in_play(game, holding("P1-gold", gold_production=8))
     target = province_card(game, "P1-target", gold_cost=2)
 
-    resolve_effects(game, [RecruitCard(target.id)])
+    resolve_effects(game, recruit_card(game, target))
 
     assert isinstance(game.pending, ChoosePayment)
     assert game.pending.amount == 2  # the target's gold cost
@@ -172,7 +173,7 @@ def test_the_next_effect_runs_after_the_recruited_cards_entry_trait():
     resolve_effects(
         game,
         [
-            RecruitCard(target.id),
+            *recruit_card(game, target),
             AdjustCounter("P1-watcher", WEALTH, 1),
         ],
     )
@@ -188,7 +189,7 @@ def test_recruit_card_brings_in_a_card_that_costs_nothing_without_a_payment():
     game = two_seat_game()
     target = province_card(game, "P1-target", gold_cost=0)
 
-    resolve_effects(game, [RecruitCard(target.id)])
+    resolve_effects(game, recruit_card(game, target))
     run_stack(game)
 
     assert game.pending is None
@@ -203,7 +204,7 @@ def test_the_next_effect_runs_after_a_free_recruited_cards_entry_trait():
     resolve_effects(
         game,
         [
-            RecruitCard(target.id),
+            *recruit_card(game, target),
             AdjustCounter("P1-watcher", WEALTH, 1),
         ],
     )
@@ -223,7 +224,7 @@ def test_recruit_card_refills_the_vacated_province_face_up_with_renew():
         register(game.table, holding("P1-refill"))
     ]
 
-    resolve_effects(game, [RecruitCard(target.id, renew=True)])
+    resolve_effects(game, recruit_card(game, target, renew=True))
     submit(game, DecisionResponse(("P1-gold",)))
 
     refill = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards[-1]
@@ -238,7 +239,7 @@ def test_recruit_card_leaves_the_province_face_down_without_renew():
         register(game.table, holding("P1-refill"))
     ]
 
-    resolve_effects(game, [RecruitCard(target.id)])
+    resolve_effects(game, recruit_card(game, target))
     submit(game, DecisionResponse(("P1-gold",)))
 
     refill = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards[-1]

@@ -1,5 +1,4 @@
 from collections.abc import Callable
-from dataclasses import dataclass
 from typing import TypeGuard
 
 from yasuki_core.engine import ops
@@ -22,6 +21,7 @@ from yasuki_core.engine.rules.effects import (
     Ask,
     AskAmount,
     Attributed,
+    Choose,
     Effect,
     GainHonor,
     Invest,
@@ -30,13 +30,7 @@ from yasuki_core.engine.rules.effects import (
     RefillProvince,
     SpendSeatOncePerTurn,
 )
-from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseFortificationProvince,
-    ChoosePayment,
-    DecisionResponse,
-)
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, GameEvent
-from yasuki_core.engine.rules.gold.payment import payment_request
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import PROCLAIM, can_proclaim, recruit_cost
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
@@ -52,83 +46,42 @@ from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
 
 
-@dataclass(frozen=True, slots=True)
-class ResolveRecruit:
-    """Finish a Recruit once its cost is paid: resolve what the card does before entering play,
-    then bring it from its province into play and refill the vacated province.
+def recruit_card(game: GameState, card: L5RCard, *, renew: bool = False) -> list[Effect]:
+    """What a card's text that Recruits ``card`` resolves (CR, Recruit): the card's Gold Cost paid
+    for it, since the action that calls for the Recruit gave no opportunity to pay, then its
+    arrival. A Fortification Recruited from anywhere but a Province is attached to the Province its
+    controller chooses (CR, Fortification). Nothing, not even the payment, for a card that may not
+    enter play.
 
-    Attributes
+    Parameters
     ----------
-    seat : PlayerId
-        The recruiting seat.
-    card_id : str
-        The card leaving its province for play.
-    renew : bool
-        Whether to refill the vacated province face-up (a granted Renew), on top of the card's own
-        Renew keyword. Default False.
-    proclaim : bool
-        Whether the recruit is Proclaimed, claiming the seat's once-per-turn Proclaim and adding the
-        Personality's Personal Honor to its Family Honor after entry. Default False.
+    renew : bool, optional
+        Whether the vacated Province refills face-up whatever the card's own Renew keyword says.
+        Default False.
     """
-
-    seat: PlayerId
-    card_id: str
-    renew: bool = False
-    proclaim: bool = False
-
-    def resume(self, game: GameState) -> None:
-        resolve_recruit(
-            game,
-            seat=self.seat,
-            card_id=self.card_id,
-            renew=self.renew,
-            proclaim=self.proclaim,
-        )
-
-
-def announce_recruit(
-    game: GameState,
-    card: L5RCard | L5RCard,
-    seat: PlayerId,
-    renew: bool = False,
-    proclaim: bool = False,
-) -> ChoosePayment | None:
-    """Queue the recruit and build the payment it must be paid with, or None for a recruit that
-    costs nothing."""
-    game.stack.append(ResolveRecruit(seat, card.id, renew, proclaim))
-    amount = recruit_cost(game, card)
-    if amount == 0:
-        return None
-    return payment_request(game, seat, amount, card.name, target=card)
-
-
-def resolve_recruit(
-    game: GameState,
-    seat: PlayerId,
-    card_id: str,
-    renew: bool = False,
-    proclaim: bool = False,
-) -> None:
-    """Hand the Recruit's effects to the action once its cost is paid, held at the Interrupt step
-    (CR, Action Sequence step D). A Fortification Recruited from anywhere but a Province asks its
-    controller which Province it will attach to first (CR, Fortification)."""
-    card = game.table.cards_by_id[card_id]
-    from_province = province_key_holding(game, seat, card_id)
+    seat = card.owner
+    if not copy_may_enter(game, seat, card) or not may_recruit(game, seat, card):
+        return []
+    payment = recruit_gold(game, card)
+    from_province = province_key_holding(game, seat, card.id)
     if from_province is None and keywords.FORTIFICATION in effective_keywords(game, card):
-        game.pending = ChooseFortificationProvince(
-            seat=seat,
-            candidates=_province_slots(game, seat),
-            source_card_id=card_id,
-            proclaim=proclaim,
-        )
-        return
-    arrival = Recruit(
-        card_id,
-        from_province=from_province,
-        renew=renew,
-        proclaim=proclaim,
-    )
-    triggers.resolve_action_effects(game, recruit_effects(game, arrival))
+        slots = tuple(key.token for key, _ in province_zones(game, seat))
+        return [*payment, Choose(seat, slots, 1, 1, FORTIFY, card.id)]
+    arrival = Recruit(card.id, from_province=from_province, renew=renew)
+    return [*payment, *recruit_effects(game, arrival)]
+
+
+FORTIFY = "fortify"
+
+
+@triggers.choice_resolver(FORTIFY, prompt="Choose a Province for the Fortification")
+def _recruit_into_the_chosen_province(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Recruit the Fortification, attaching it to the Province the seat named. A Province is a
+    slot rather than the card standing in it, so an empty one is as attachable as any other."""
+    arrival = Recruit(source_id, from_province=None, fortifies=ZoneKey.from_token(chosen[0]))
+    return recruit_effects(game, arrival)
 
 
 def recruit_effects(game: GameState, arrival: Recruit) -> list[Effect]:
@@ -138,25 +91,6 @@ def recruit_effects(game: GameState, arrival: Recruit) -> list[Effect]:
     card = game.table.cards_by_id[arrival.card_id]
     before = effects_before_entering_play(game, card)
     return [*(Attributed(effect, Provenance()) for effect in before), arrival]
-
-
-def _province_slots(game: GameState, seat: PlayerId) -> tuple[str, ...]:
-    """Every one of ``seat``'s Provinces, named by slot. A Province is a slot rather than the card
-    standing in it, so an empty one is as attachable as any other (CR, Fortification)."""
-    return tuple(key.token for key, _ in province_zones(game, seat))
-
-
-def apply_fortification_province(
-    game: GameState, request: ChooseFortificationProvince, response: DecisionResponse
-) -> None:
-    """Recruit the waiting Fortification, attaching it to the Province the seat named."""
-    arrival = Recruit(
-        request.source_card_id,
-        from_province=None,
-        fortifies=ZoneKey.from_token(response.choices[0]),
-        proclaim=request.proclaim,
-    )
-    triggers.resolve_action_effects(game, recruit_effects(game, arrival))
 
 
 def bring_into_play(game: GameState, arrival: Recruit) -> list[GameEvent]:

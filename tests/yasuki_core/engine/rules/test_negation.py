@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.rulebook.recruit import recruit_card
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.effects import (
     Ask,
@@ -11,7 +12,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     GrantModifier,
     Negated,
-    RecruitCard,
+    Recruit,
     Rehonor,
     SpendOncePerTurn,
     Straighten,
@@ -355,10 +356,10 @@ def test_a_once_negation_of_recruiting_waits_for_a_card_that_may_enter_play():
     game = two_seat_game()
     put_in_play(game, holding("P2-shrine", owner=PlayerId.P2, printed_id="shrine"))
     target = province_card(game, "P1-shrine", printed_id="shrine", keywords=(keywords.SINGULAR,))
-    negation = Negation("any", END_OF_TURN, effect_kind=RecruitCard, once=True)
+    negation = Negation("any", END_OF_TURN, effect_kind=Recruit, once=True)
     game.ongoing.append(negation)
 
-    resolve_effects(game, [RecruitCard(target.id)])
+    resolve_effects(game, recruit_card(game, target))
 
     assert game.ongoing == [negation]
 

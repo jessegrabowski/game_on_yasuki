@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.gold.production import effective_gold_production, 
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.interrupts import held_action_targets
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
+from yasuki_core.engine.rules.rulebook.recruit import recruit_card
 from yasuki_core.engine.rules.legality import permitted_timings_in, recruit_cost
 from yasuki_core.engine.rules.rulebook.equip import attach_restriction, is_spell
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
@@ -44,7 +45,6 @@ from yasuki_core.engine.rules.effects import (
     MeleeAttack,
     PayGold,
     RangedAttack,
-    RecruitCard,
     register_honor_loss_shield,
     Straighten,
 )
@@ -460,7 +460,7 @@ def _modest_farm_effects(game: GameState, source: L5RCard, target: L5RCard) -> l
     offer follows the recruit and anything the recruited card's entry causes."""
     question = f"Destroy {source.name} to straighten {target.name}?"
     return [
-        RecruitCard(target.id, renew=keywords.FARM in target.keywords),
+        *recruit_card(game, target, renew=keywords.FARM in target.keywords),
         Ask(
             source.owner,
             question,

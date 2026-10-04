@@ -116,7 +116,6 @@ plain list, since effects "occur in the order they are written" (CR, Order of Ef
    ReshuffleFromHand
    RangedAttack
    Recruit
-   RecruitCard
    RefillProvince
    Rehonor
    RevokeGrants
@@ -187,7 +186,6 @@ Legality with respect to game state is checked separately.
    ChooseDiscard
    ChooseDistribution
    ChooseEquipTarget
-   ChooseFortificationProvince
    ChooseInterruptEffect
    ChooseInterruptTarget
    ChooseOption
@@ -221,7 +219,6 @@ the action rather than by deserializing it.
    gold.payment.ContinuePayment
    gold.production.CompleteProduction
    rulebook.equip.SelectEquipTarget
-   rulebook.recruit.ResolveRecruit
    triggers.ResumeCascade
    turn.sequence.AccrueSincerity
    turn.sequence.BeginNextTurn

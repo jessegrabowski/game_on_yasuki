@@ -17,7 +17,6 @@ yasuki_core.engine.rules.vocabulary.decisions
     ChooseDistribution
     ChooseEquipTarget
     ChooseFocusEffect
-    ChooseFortificationProvince
     ChooseInterruptEffect
     ChooseInterruptTarget
     ChooseOption

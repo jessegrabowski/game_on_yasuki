@@ -330,6 +330,15 @@ def test_modest_farm_can_be_kept_leaving_the_recruit_bowed():
     assert mf in table.battlefield.cards and mf.bowed  # Modest Farm kept, still bowed by its cost
 
 
+def test_modest_farm_offers_the_sacrifice_once_the_recruit_has_refilled_its_province():
+    session = _modest_farm_game()
+
+    _drive_to_straighten_choice(session)
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [card.id for card in province.cards] == ["refill"]
+
+
 def test_modest_farm_grants_a_farm_target_renew_refilling_its_province_face_up():
     session = _modest_farm_game(target_keywords=("Farm",))
     _drive_to_straighten_choice(session)
