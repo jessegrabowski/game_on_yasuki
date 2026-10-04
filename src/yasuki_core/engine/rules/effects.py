@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     CounterChanged,
     Destroyed,
+    Destroying,
     Dishonored,
     EnteredPlay,
     FavorDiscarded,
@@ -170,6 +171,12 @@ class Effect(ABC):
         """The effects this one produces once performed, which the cascade applies next, each
         through its own Interrupt step. Read after :meth:`~.Effect.perform`, on the board it left.
         Empty for an effect that is complete in itself."""
+        return ()
+
+    def impending(self, game: GameState) -> tuple[Destroying, ...]:
+        """What is announced before this effect commits, for the traits that act before it: read on
+        the board as it stands, before :meth:`~.Effect.perform`. Empty for an effect nothing acts
+        before."""
         return ()
 
 
@@ -470,6 +477,18 @@ class Destroy(Effect):
 
     def is_negatable(self, game: GameState) -> bool:
         return self.negatable
+
+    def impending(self, game: GameState) -> tuple[Destroying, ...]:
+        """One :class:`~.Destroying` for each card of the unit about to leave play, or none for a
+        card not in play."""
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None or not any(held is card for held in game.table.battlefield.cards):
+            return ()
+        location = location_of(game.table, card)
+        return tuple(
+            Destroying(member.id, self.cause, location, member.owner)
+            for member in unit_of(game, card)
+        )
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
