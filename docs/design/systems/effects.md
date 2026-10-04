@@ -128,6 +128,16 @@ place simultaneously, in parallel" (CR, Timing Conflicts). An ability that build
 target and hits several targets returns one group for each step, every target's first effect
 together, then every target's second. Two sentences of one card are not a group, and stay in order.
 
+A group holds off triggers only. The walk still enforces the state-based rules after each member
+commits, as it does after any effect, so a Personality the first member leaves at zero Chi is
+destroyed before the second member applies. What the rules demanded is announced as the occurrence
+that follows the group, once the group's own triggers have resolved.
+
+So wrapping two effects in a group does not let both commit before the board is judged. Two clauses
+happen in written order even inside one sentence. A clause that depends on an earlier one, as in
+"discard a card to draw a card" or "if you put a Ring into play, ...", is a {class}`~.To`, so it
+applies only if the earlier one actually happened.
+
 ## The half of the invariant that is not about cards
 
 No card module in the package calls the mutation layer. The flow does, in a handful of places where
