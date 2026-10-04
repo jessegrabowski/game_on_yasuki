@@ -50,6 +50,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     CounterChanged,
     Dishonored,
+    EnteredPlay,
     FavorDiscarded,
     HonorChanged,
     Rehonored,
@@ -65,7 +66,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, province_keys
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.prints import AttachmentPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 from yasuki_core.game_pieces.counters import WEALTH
 
 from tests.yasuki_core.engine.builders import (
@@ -457,6 +458,25 @@ def test_creating_from_a_template_the_deck_load_never_resolved_is_an_error():
 
     with pytest.raises(KeyError):
         CreateToken("no_such_token", PlayerId.P1, "maker").perform(game)
+
+
+def test_a_recruited_creation_enters_play_recruited_and_charges_nothing():
+    game = _token_game()
+    game.table.creatable_tokens["yojimbo"] = PersonalityPrint(
+        name="Yojimbo", side=Side.DYNASTY, printed_id="yojimbo", force=2, chi=2, gold_cost=3
+    )
+
+    resolve_effects(game, [CreateToken("yojimbo", PlayerId.P1, "maker", recruit=True)])
+
+    (made,) = game.table.battlefield.cards
+    assert (made.is_token, game.created_by[made.id]) == (True, "maker")
+    assert EnteredPlay(made.id, recruited=True) in game.turn_events
+    assert game.pending is None
+
+
+def test_a_recruited_creation_does_not_arrive_attached():
+    with pytest.raises(ValueError):
+        CreateToken("scout", PlayerId.P1, "maker", attach_to="hero", recruit=True)
 
 
 def test_placing_into_a_full_province_is_a_no_op():
