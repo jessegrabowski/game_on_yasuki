@@ -39,7 +39,6 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
     Simultaneously,
     Straighten,
-    Then,
 )
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.legality import location_permits
@@ -126,7 +125,7 @@ def _resolve_burnt_offering(
     if personality is None:
         return [destroyed]
     after = Evaluate("burnt_offering_followers", source_id, seat, (personality.id,))
-    return [destroyed, Then((after,))]
+    return [destroyed, after]
 
 
 @choice_resolver("burnt_offering_followers")
@@ -432,11 +431,11 @@ CHIYO_MELEE = 2
 
 
 def _togashi_chiyo_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """The Melee 2, then a reading of whether it destroyed anything, deferred until the Melee and
-    the destruction it causes have resolved."""
+    """The Melee 2, then a reading of whether it destroyed anything, once the Melee and the
+    destruction it causes have resolved."""
     return [
         MeleeAttack(CHIYO_MELEE, target.id, source.owner),
-        Then((Evaluate("togashi_chiyo_destroyed", source.id, source.owner),)),
+        Evaluate("togashi_chiyo_destroyed", source.id, source.owner),
     ]
 
 

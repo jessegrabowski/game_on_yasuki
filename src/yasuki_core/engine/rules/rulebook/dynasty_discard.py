@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_location_ability
 from yasuki_core.engine.rules.board.queries import province_key_of
-from yasuki_core.engine.rules.effects import Discard, Effect, RefillProvince, Then
+from yasuki_core.engine.rules.effects import Discard, Effect, RefillProvince
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.actions import Action, ActionTiming, ActivateAbility
 from yasuki_core.game_pieces.cards import L5RCard
@@ -19,7 +19,7 @@ def is_dynasty_discard(action: Action) -> TypeGuard[ActivateAbility]:
 
 def _discard_and_refill(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     vacated = province_key_of(game, source.owner, source.id)
-    return [Discard(source.id, source.owner), Then((RefillProvince(vacated),))]
+    return [Discard(source.id, source.owner), RefillProvince(vacated)]
 
 
 # Repeatable Dynasty, at no cost: discard a face-up Province card of any type and refill the

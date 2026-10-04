@@ -23,7 +23,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     Negated,
     Simultaneously,
-    Then,
+    To,
 )
 from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.negation import negate_committed, spend_once
@@ -381,10 +381,12 @@ def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
 
 @dataclass(slots=True)
 class _Effects:
-    """Effects a walk still has to apply, in order, and where they came from."""
+    """Effects a walk still has to apply, in order, and where they came from. A ``simultaneous``
+    frame is a group's, whose events gather in the events frame beneath it."""
 
     pending: list[Effect]
     provenance: Provenance
+    simultaneous: bool = False
 
 
 @dataclass(slots=True)
@@ -414,37 +416,40 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
     """Run the effect-and-trigger cascade to a fixpoint over ``frames``, the stack of work it still
     holds, bottom first.
 
-    An effects frame applies its next effect, which commits at once. Every event the walk raises, an
-    effect's or a state-based action's, joins the queue of the events frame at the bottom of the
-    stack, so it waits behind those already queued. An events frame fires its next trigger as a new
-    effects frame, or pops its next queued event and collects that event's triggers. A frame with
-    nothing left is dropped, and the walk ends with the stack. An :class:`~.InterruptingEffect`
-    pauses the walk: it stashes the exact remainder (every frame, the paused one holding the effects
-    after the one that asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
-    :func:`~.resume_cascade` continues from precisely here once the seat answers. An effect with
-    nothing to ask leaves the stash to drain behind the work it queued.
+    An effects frame applies its next effect, which commits at once. The events it raised, with
+    those of the state-based actions it demanded, become an events frame on top, so every trait they
+    trigger resolves, nested triggers included, before the next effect applies (CR 20F, Timing:
+    "Once a triggered trait starts, activate all its costs, targeting, and effects in sequence
+    before proceeding, even if another action or triggered trait is under way"). A
+    :class:`~.Simultaneously` group is the exception: its members' events gather in one events frame
+    beneath the group, which fires once every member has happened. An events frame fires its next
+    trigger as a new effects frame, or pops its next queued event and collects that event's
+    triggers. A frame with nothing left is dropped, and the walk ends with the stack. An
+    :class:`~.InterruptingEffect` pauses the walk: it stashes the exact remainder (every frame, the
+    paused one holding the effects after the one that asked) as a :class:`~.ResumeCascade` and
+    records that effect's decision, so :func:`~.resume_cascade` continues from precisely here once
+    the seat answers. An effect with nothing to ask leaves the stash to drain behind the work it
+    queued.
 
     Each effects frame carries the provenance of its effects. Its ``interruptible`` says they are an
     action's own, the only ones an Interrupt may modify (ShE datasheet, Interrupt). Each is checked
     against the modifications the action's :class:`~.InterruptWindow` collected before it is
     applied, and resolves as what the Interrupt made of it. What a trigger returns is a trait's or
-    the rulebook's, never the action's, so it is applied as returned, and a ``Then`` among the
-    action's effects carries the flag to the deferred step.
+    the rulebook's, never the action's, so it is applied as returned.
 
     Every effect, an action's or not, is checked against the negations in force as it commits,
     whatever produced it, since a negation makes an effect fail to happen whenever it would occur
     (CR, Prevention). The check comes before an effect pauses, so a negated discard asks nothing.
     The provenance's ``acting`` names the card whose action produced the effects in hand, which a
-    negation naming a source reads, and its ``negations`` are the ones that action spent. A
-    ``Then``, a pause and what an effect produces keep both, and a trigger's effects carry
-    neither. The provenance's ``paying`` says the effects in hand are a
-    cost's payments instead, which are no effects (CR, Effects), so no negation reaches them. What
-    reacts to them is effects again, and so is what a ``Then`` among them defers.
+    negation naming a source reads, and its ``negations`` are the ones that action spent. A pause
+    and what an effect produces keep both, and a trigger's effects carry neither. The provenance's
+    ``paying`` says the effects in hand are a cost's payments instead, which are no effects (CR,
+    Effects), so no negation reaches them. What reacts to them is effects again.
 
     The provenance's ``triggered`` says the effects in hand are a trigger's, so a decision among
     them is marked as the trigger's question, one that cannot be backed out of. The walk sets it on
-    the effects frame of each trigger it fires for an event that has happened, and a stash or a
-    ``Then`` carries it on to the effects that follow. A trigger firing in a window a step opens
+    the effects frame of each trigger it fires for an event that has happened, and a stash carries
+    it on to the effects that follow. A trigger firing in a window a step opens
     before committing asks on the step's behalf, and its question stays the step's own."""
     resolved = 0
     while frames:
@@ -455,14 +460,19 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 continue
             effect = top.pending.pop(0)
             provenance = top.provenance
+            contingent: tuple[Effect, ...] = ()
+            if isinstance(effect, To):
+                _trace.append(f"    {effect.describe()}")
+                contingent = effect.contingent
+                effect = effect.first
+            first = effect
             if isinstance(effect, Simultaneously):
-                # A frame of its own, so its members finish before the rest of this frame.
                 _trace.append(f"    {effect.describe()}")
-                frames.append(_Effects(list(effect.effects), provenance))
-                continue
-            if isinstance(effect, Then):
-                _trace.append(f"    {effect.describe()}")
-                game.stack.append(ApplyEffects(effect.effects, replace(provenance, paying=False)))
+                if top.simultaneous:
+                    top.pending[:0] = effect.effects
+                else:
+                    frames.append(_Events([]))
+                    frames.append(_Effects(list(effect.effects), provenance, simultaneous=True))
                 continue
             if isinstance(effect, Attributed):
                 # Stashed beneath it, so the effects around it keep their order.
@@ -486,12 +496,16 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                     )
                 return
             _trace.append(f"    {effect.describe()}")
-            queue = _bottom_events(frames).queue
-            queue.extend(apply_effect(game, effect))
+            happens = bool(contingent) and happens_as(game, first, effect)
+            raised = apply_effect(game, effect)
             # What the effect produced goes next, ahead of the rest, so an attack's outcome resolves
             # where the attack stood and passes through the Interrupt step on its own.
-            top.pending[:0] = effect.follow_on(game)
-            _settle_state_based_actions(game, queue)
+            top.pending[:0] = (*effect.follow_on(game), *(contingent if happens else ()))
+            _settle_state_based_actions(game, raised)
+            if top.simultaneous:
+                _group_events(frames).queue.extend(raised)
+            elif raised:
+                frames.append(_Events(raised))
             continue
         if top.firing:
             card, trigger = top.firing.pop(0)
@@ -503,7 +517,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
         if not top.queue:
             # The walk can be entered on a board something else already made illegal, and with
             # nothing to commit the per-effect check never runs. Judge it before returning.
-            _settle_state_based_actions(game, _bottom_events(frames).queue)
+            _settle_state_based_actions(game, top.queue)
             if not top.queue:
                 frames.pop()
                 continue
@@ -525,13 +539,22 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
         top.firing = _collect(game, event)
 
 
-def _bottom_events(frames: list[_Frame]) -> _Events:
-    """The events frame at the bottom of the stack, whose queue every event the walk raises
-    joins."""
-    bottom = frames[0]
-    if not isinstance(bottom, _Events):
-        raise RuntimeError("a cascade's frames have no events frame at the bottom")
-    return bottom
+def happens_as(game: GameState, first: Effect, committing: Effect) -> bool:
+    """Whether ``committing``, what the checks made of ``first``, is ``first`` actually happening:
+    the same kind of effect on the same card, which an Interrupt's adjustment leaves it and a
+    negation or substitution does not, and one that would change something."""
+    if type(committing) is not type(first) or committing.subject_id != first.subject_id:
+        return False
+    return committing.would_happen(game)
+
+
+def _group_events(frames: list[_Frame]) -> _Events:
+    """The events frame beneath the group on top of the stack, which gathers what its members
+    raise."""
+    beneath = frames[-2]
+    if not isinstance(beneath, _Events):
+        raise RuntimeError("a group's effects frame has no events frame beneath it")
+    return beneath
 
 
 def _reacted_to(frame: _Events) -> GameEvent:
@@ -808,10 +831,14 @@ class EffectsFrame:
         The effects still to apply, in order.
     provenance : Provenance, optional
         Where they came from. Default a rulebook procedure's.
+    simultaneous : bool, optional
+        Whether they are the rest of a :class:`~.Simultaneously` group, whose events gather in the
+        events frame beneath. Default False.
     """
 
     effects: tuple[Effect, ...]
     provenance: Provenance = Provenance()
+    simultaneous: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -867,7 +894,7 @@ def _stash(game: GameState, frames: list[_Frame]) -> None:
 
 def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
     if isinstance(frame, _Effects):
-        return EffectsFrame(tuple(frame.pending), frame.provenance)
+        return EffectsFrame(tuple(frame.pending), frame.provenance, frame.simultaneous)
     firing = tuple((card.id, trigger) for card, trigger in frame.firing)
     return EventsFrame(tuple(frame.queue), frame.event, firing)
 
@@ -875,7 +902,7 @@ def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
 def _thawed(game: GameState, frame: EffectsFrame | EventsFrame) -> _Frame:
     """``frame`` for the walk to resume, dropping the triggers whose card has left the table."""
     if isinstance(frame, EffectsFrame):
-        return _Effects(list(frame.effects), frame.provenance)
+        return _Effects(list(frame.effects), frame.provenance, frame.simultaneous)
     firing = [
         (game.table.cards_by_id[card_id], trigger)
         for card_id, trigger in frame.firing
@@ -985,8 +1012,7 @@ def resolve_effects(
     triggered reaction to those effects still resolves. The effects are not an action's own, so
     none is held at the Interrupt step: a rulebook procedure's effects, a trait's, and an
     Interrupt's own effects all come through here, and a cost through :func:`~.pay_costs`.
-    ``provenance`` says where they came from, as a ``Then`` deferring a trigger's effects keeps
-    them the trigger's.
+    ``provenance`` says where they came from.
 
     Raise ``ValueError`` if ``provenance`` names an action's own effects, which
     :func:`~.resolve_action_effects` resolves, and ``RuntimeError`` if a decision is pending.
@@ -1014,8 +1040,8 @@ def resolve_action_effects(
     """Apply ``effects`` as an action's own, which is what step E of the Action Sequence hands
     over. The first effects an action hands over are held beneath an Interrupt round first (CR,
     Action Sequence step D), when any seat holds an Interrupt to take, and every effect resolves
-    as the Interrupts taken there make of it. What the action defers behind them through a
-    ``Then`` opens no second round. The derived-event cascade runs as in
+    as the Interrupts taken there make of it. What the action hands over after that round, such as
+    an effect a delay held, opens no second one. The derived-event cascade runs as in
     :func:`~.resolve_effects`. ``provenance`` says whose action this is, as
     :func:`~.action_provenance` builds it, and an action from no card by default.
 

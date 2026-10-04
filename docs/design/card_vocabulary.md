@@ -40,9 +40,10 @@ then a destruction, and a handler returns that pair so each passes the Interrupt
 The CR adds that neither can be negated, so both are built with `negatable=False`, which a lasting
 negation and an Interrupt that negates both respect.
 
-`Then` is the counterpart for sequencing. An effect placed inline runs before the events already
-queued behind it, so a step that must follow another card's reaction to what just happened is
-deferred through `Then` instead.
+Effects in a list happen in the order they are written, and what each one sets off resolves before
+the next applies (CR 20F, Timing), so a step that follows another card's reaction to what just
+happened is simply the next effect. `To` links two effects the CR joins with "to": the second
+applies only if the first actually happened (CR, Independence of Effects).
 
 `Simultaneously` is the counterpart for one occurrence. A piece of text or a rule that acts on
 several cards at once, as battle resolution destroying an army does, returns its effects inside a
@@ -128,7 +129,7 @@ plain list, since effects "occur in the order they are written" (CR, Order of Ef
    SpendSeatOncePerTurn
    Straighten
    TakeFavor
-   Then
+   To
    TurnOver
    Unpayable
 ```
@@ -201,7 +202,7 @@ Legality with respect to game state is checked separately.
 
 A work item is a unit of engine work held on `GameState.stack` and run once the current decision
 clears. An action pushes its remaining steps onto the stack when an earlier step pauses, so that an
-interrupting trait resolves first, and a `Then` effect queues its sub-sequence the same way. The
+interrupting trait resolves first. The
 stack is last in, first out. Work items are ephemeral: replay reconstructs the stack by re-running
 the action rather than by deserializing it.
 

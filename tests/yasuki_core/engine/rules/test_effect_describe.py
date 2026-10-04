@@ -90,7 +90,7 @@ from yasuki_core.engine.rules.effects import (
     RevokeGrants,
     Straighten,
     TurnOver,
-    Then,
+    To,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     CompassionGrant,
@@ -324,8 +324,8 @@ EFFECTS = [
         "air_1 may not straighten until its next Action Phase begins",
     ),
     (RevealProvinces(PlayerId.P1), "reveal P1's provinces"),
-    (Then((Bow("a"), Destroy("b", PlayerId.P1))), "then: 2 deferred"),
     (Simultaneously((Bow("a"), Bow("b"))), "at once: 2 effects"),
+    (To(Bow("a"), (Bow("b"),)), "bow a to: 1 effects"),
     (
         Choose(PlayerId.P1, ("a", "b", "c"), 0, 2, "wheat_farm", "wheat_1"),
         "P1 chooses 0-2 of 3 for wheat_farm",
@@ -379,13 +379,12 @@ def test_every_effect_has_a_description_here():
     assert concrete - described == set()
 
 
-def test_nesting_deferrals_does_not_grow_the_line():
-    # Then is the deferral primitive, so it is the effect most likely to nest, and a cascade that
-    # fails to converge is where nesting runs deepest. Inlining children would put the longest line
-    # exactly where the trace matters most; the renderer nests them by depth instead.
-    inner = Then((Bow("a"), Destroy("b", PlayerId.P1), AdjustCounter("c", WEALTH, 1)))
+def test_nesting_groups_does_not_grow_the_line():
+    # A cascade that fails to converge is where nesting runs deepest. Inlining children would put the
+    # longest line exactly where the trace matters most, so the renderer nests them by depth.
+    inner = Simultaneously((Bow("a"), Destroy("b", PlayerId.P1), AdjustCounter("c", WEALTH, 1)))
 
-    assert Then((inner, inner, inner)).describe() == "then: 3 deferred"
+    assert Simultaneously((inner, inner, inner)).describe() == "at once: 3 effects"
 
 
 def test_an_effect_without_a_description_cannot_be_instantiated():

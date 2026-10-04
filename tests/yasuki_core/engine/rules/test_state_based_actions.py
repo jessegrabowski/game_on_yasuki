@@ -11,7 +11,6 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     GainHonor,
     GrantModifier,
-    Then,
 )
 from yasuki_core.engine.rules.turn.action_sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_TURN
@@ -509,10 +508,7 @@ def test_the_rule_reaches_the_opponents_personalities_too():
     assert _battlefield(game) == set()
 
 
-def test_work_deferred_behind_the_death_still_runs():
-    """``Then`` defers onto ``game.stack`` rather than into the cascade, so it resolves after the
-    death rather than being cancelled by it. Only what needed the dead Personality is skipped, and
-    a step that never mentioned him is not."""
+def test_an_effect_after_a_death_still_applies():
     samurai = _personality("doomed", chi=1)
     game = _in_play(samurai)
     before = game.table.seats[P1].honor
@@ -521,7 +517,7 @@ def test_work_deferred_behind_the_death_still_runs():
         game,
         [
             GrantModifier("src", "doomed", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN),
-            Then((GainHonor(P1, 3),)),
+            GainHonor(P1, 3),
         ],
     )
     run_stack(game)

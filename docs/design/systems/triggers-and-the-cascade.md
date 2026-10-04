@@ -117,14 +117,26 @@ whole machine is its loop body:
 :language: python
 ```
 
-The top frame decides each step. An effects frame applies its next effect, which commits at once
-with the events it raises joining the queue of the events frame at the bottom of the stack. An
-events frame fires its next trigger, whose effects become a new effects frame on top carrying the
-trigger's own provenance, or pops its next event and collects what answers it. A frame with nothing
-left is dropped, and the walk ends with the stack. Today the stack never holds more than the one
-events frame and an effects frame above it: every event the walk raises, an effect's or a
-state-based action's, joins the bottom frame's queue and waits behind those already queued, which is
-what keeps the order breadth-first.
+The top frame decides each step. An effects frame applies its next effect, which commits at once.
+The events it raised, with those of the state-based actions it demanded, become a new events frame
+on top. An events frame fires its next trigger, whose effects become a new effects frame on top
+carrying the trigger's own provenance, or pops its next event and collects what answers it. A frame
+with nothing left is dropped, and the walk ends with the stack.
+
+Pushing each commit's events on top is what makes the walk depth-first, which is the order the CR
+gives: "Once a triggered trait starts, activate all its costs, targeting, and effects in sequence
+before proceeding, even if another action or triggered trait is under way" (CR 20F, Timing).
+Everything an effect sets off, the triggers its events wake and whatever their own effects set off
+in turn, resolves before the next effect in the list applies. A trigger's effects frame, with every
+frame above it, finishes before its sibling trigger fires.
+
+A {class}`~.Simultaneously` group is the one exception, for things that happen at once, such as
+"two Personalities being destroyed in battle resolution" (CR, Timing Conflicts). The walk pushes an
+empty events frame and the group's members above it as an effects frame of their own. Each member's
+events join that one events frame, so nothing reacts to any member until all of them have
+happened. A {class}`~.To` applies its `first` effect and then its `contingent` effects only if
+`first` raised an event, since "the second effect depends on the first effect actually happening"
+(CR, Independence of Effects).
 
 `_settle_state_based_actions` runs after every effect, not once at the end. That is the order the
 Comprehensive Rules give, and it is why a Personality who dies as he arrives is dead before his
@@ -220,8 +232,7 @@ first effects an action hands over are held on the stack as a `HeldAction` benea
 round before any resolves, once per action and only when some seat holds an Interrupt, and every
 one of the action's effects is checked against the modifications the step collected before it is
 applied, while what a trigger returns inside that cascade is a trait's or the rulebook's and is
-applied as returned. A `Then` among the action's effects carries that provenance to the deferred
-step, which opens no second round. The provenance also names the card whose action it is, which a
+applied as returned. The provenance also names the card whose action it is, which a
 {class}`~.Negation` naming a source reads as each effect commits. {func}`~yasuki_core.engine.rules.triggers.resolve_delayed` is `resolve_effects` over the
 effects held until a given moment. An effect an action holds stays that action's: the walk wraps it
 in a {class}`~.Attributed` carrying the action's provenance as the delay commits, and resolves it
@@ -386,10 +397,11 @@ triggers._trace.clear()
 
 **P1 chooses shahai.** `submit` clears `pending` and runs the choice resolver, which returns a
 `Banish` and a `CreateToken`. `resume_paused_cascade` pops the stash and continues the walk with
-those two effects in hand, ahead of the second trigger and the second event. Both apply, then the
-second trigger fires for the second event, returns its own `Choose`, and the walk stashes and
-pauses again. The stack reads the same as before because it is the same shape: the next turn
-under a fresh stash.
+those two effects in hand, ahead of the second trigger and the second event. Both apply, and the
+created Naga Follower's `EnteredPlay` is announced before anything else moves, because what an
+effect sets off resolves before the walk goes on. Only then does the second trigger fire for the
+second event, return its own `Choose`, and pause the walk again. The stack reads the same as before
+because it is the same shape: the next turn under a fresh stash.
 
 ```python
 session.submit(P1, DecisionResponse(("shahai",)))
@@ -397,10 +409,11 @@ session.submit(P1, DecisionResponse(("shahai",)))
 assert isinstance(game.pending, ChooseCards)
 assert [type(item).__name__ for item in game.stack] == ["BeginNextTurn", "ResumeCascade"]
 assert game.active is P1
-# The answer's two effects, then the second event and its trigger, which pauses again.
+# The answer's two effects, the Follower entering play, then the second event and its trigger.
 assert list(triggers._trace) == [
     "    banish spearmen",
     "    P1 creates naga on shahai",
+    "EnteredPlay",
     "CardDiscarded",
     "  spearmen_of_the_akasha (spearmen2) reacts",
 ]
@@ -409,8 +422,8 @@ triggers._trace.clear()
 
 **P1 chooses shahai2.** The same again, and this time the walk finds nothing left to fire or pop
 and returns with `pending` clear. Now `submit`'s drain has work: it pops `BeginNextTurn`, which
-begins the next turn. The two `EnteredPlay` lines are the Naga Followers the two answers created,
-whose entry was queued behind the second answer's effects. P2's turn then opens through the same
+begins the next turn. The `EnteredPlay` line is the second Naga Follower entering play, announced
+right after it was created, as the first one was. P2's turn then opens through the same
 stack, each of its instants a walk of its own: nothing to straighten here, the Province reveal,
 the turn's start, and the Action Phase's start. The active seat is P2 and the round is P2's, so the yield at the end of
 `submit` sees a round it was not asked in and hands nothing on.
@@ -421,11 +434,10 @@ session.submit(P1, DecisionResponse(("shahai2",)))
 assert game.pending is None
 assert game.stack == []
 assert game.active is P2 and game.round.priority is P2
-# The last answer's effects, the two Followers entering play, and P2's turn opening.
+# The last answer's effects, the second Follower entering play, and P2's turn opening.
 assert list(triggers._trace) == [
     "    banish spearmen2",
     "    P1 creates naga on shahai2",
-    "EnteredPlay",
     "EnteredPlay",
     "    reveal P2's provinces",
     "TurnBoundary",

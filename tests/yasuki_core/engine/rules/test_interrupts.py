@@ -33,7 +33,6 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     RevokeGrants,
     Straighten,
-    Then,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
@@ -302,18 +301,6 @@ register_interrupt(
 
 
 register_interrupt(
-    "costing_strategy_probe",
-    Interrupt(
-        label="Interrupt: negate a Fear, bowing this card as well",
-        answers=Fear,
-        interrupt=lambda game, source, effect: Interruption(
-            Negated(effect), costs=(Bow(source.id),)
-        ),
-    ),
-)
-
-
-register_interrupt(
     "bow_negating_probe",
     Interrupt(
         label="Interrupt: negate a Bow",
@@ -338,7 +325,7 @@ register_ability(
         ],
         effects=lambda game, source, target: [
             Bow(target.id),
-            Then((Destroy(target.id, source.owner),)),
+            Destroy(target.id, source.owner),
         ],
     ),
 )
@@ -760,18 +747,21 @@ def test_a_keyword_interrupt_is_the_rulebooks_and_escapes_a_negation_naming_its_
     assert [card.id for card in discard] == ["P2-courage0"]
 
 
-def test_a_negation_of_discarding_does_not_reach_the_courage_cost():
+def test_a_negated_courage_discard_keeps_the_card_and_adjusts_nothing():
+    # CR, Independence of Effects: "effects linked by the word "to" mean that the second effect
+    # depends on the first effect actually happening".
     session = _fear_announced({DEFENDER: 1})
     session.game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=Discard))
 
     _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
+    session.act(DEFENDER, Pass())
 
-    discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
-    assert [card.id for card in discard] == ["P2-courage0"]
-    assert not _guard_bowed(session)
+    hand = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.HAND)].cards
+    assert "P2-courage0" in [card.id for card in hand]
+    assert _guard_bowed(session)
 
 
-def test_a_negation_of_the_adjustment_leaves_the_courage_card_paid():
+def test_a_negation_of_the_adjustment_still_discards_the_courage_card():
     session = _fear_announced({DEFENDER: 1})
     session.game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=AdjustPending))
 
@@ -780,15 +770,6 @@ def test_a_negation_of_the_adjustment_leaves_the_courage_card_paid():
     discard = session.game.table.zones[ZoneKey(DEFENDER, ZoneRole.FATE_DISCARD)].cards
     assert [card.id for card in discard] == ["P2-courage0"]
     assert _guard_bowed(session)
-
-
-def test_a_strategy_interrupt_may_not_add_costs_it_has_no_payment_for():
-    session = _fear_announced(
-        {DEFENDER: 1}, strategies=(("probe", "costing_strategy_probe", DEFENDER),)
-    )
-
-    with pytest.raises(ValueError, match="can add no costs"):
-        session.act(DEFENDER, PlayInterrupt("probe"))
 
 
 def test_passing_lets_the_fear_resolve_at_full_strength():
@@ -905,11 +886,11 @@ def test_a_played_interrupt_rejoins_the_cascade_where_the_fear_stood(reacting):
 
     session.act(DEFENDER, PlayInterrupt("okura"))
 
-    # The replacement resolves where the Fear stood, so the ability's next effect applies before
-    # a reaction to what the replacement did fires, the same as after a rulebook discard. Okura's
-    # own discard happened inside the step and is not among the action's events.
+    # The replacement resolves where the Fear stood, and a reaction to what it did resolves before
+    # the ability's next effect (CR 20F, Timing). Okura's own discard happened inside the step and
+    # is not among the action's events.
     assert _event_names(session) == ["Bowed", "Destroyed", "HonorChanged"]
-    assert honor_seen == [1]
+    assert honor_seen == [0]
 
 
 def test_a_played_interrupts_own_effects_resolve_inside_the_step_and_are_not_the_actions():
@@ -1036,15 +1017,6 @@ def test_a_cost_is_not_open_to_the_interrupt_step_but_the_effect_is():
     assert game.table.seats[P1].honor == -1
 
     sequence.run_stack(game)
-    assert _asked_seat(game) is P2
-
-
-def test_a_then_among_the_actions_effects_is_still_the_actions():
-    game = _inside_an_action()
-
-    resolve_action_effects(game, [Then((GainHonor(P1, 2),))])
-    sequence.run_stack(game)
-
     assert _asked_seat(game) is P2
 
 
@@ -1326,26 +1298,12 @@ def test_backing_out_of_which_effect_unwinds_the_interrupt():
     assert session.game.pending is None and _asked(session) is P2
 
 
-def test_a_deferred_step_of_the_action_opens_no_second_interrupt_step():
-    game = _inside_an_action()
-
-    resolve_action_effects(game, [GainHonor(P1, 1), Then((GainHonor(P1, 2),))])
-    assert _asked_seat(game) is P2
-    action_sequence.perform(game, Pass())
-    sequence.run_stack(game)
-
-    assert game.pending is None
-    assert game.table.seats[P1].honor == 3
-
-
-def test_the_forecast_reads_through_an_attacks_outcome_and_a_deferred_step():
+def test_the_forecast_reads_through_an_attacks_outcome():
     game = _inside_an_action()
     guard = put_in_play(game, personality("P1-guard", force=2))
     farm = put_in_play(game, holding("P1-farm"))
 
-    foreseen = interrupts.forecast(
-        game, (Fear(FEAR, guard.id, P2), Then((Bow(farm.id),)), GainHonor(P1, 0))
-    )
+    foreseen = interrupts.forecast(game, (Fear(FEAR, guard.id, P2), Bow(farm.id), GainHonor(P1, 0)))
 
     assert foreseen == (Fear(FEAR, guard.id, P2), Bow(guard.id), Bow(farm.id))
 

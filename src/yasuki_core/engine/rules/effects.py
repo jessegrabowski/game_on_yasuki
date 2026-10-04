@@ -418,6 +418,13 @@ def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> t
     return unit
 
 
+def _leaves_for_pile(game: GameState, card_id: str, *, banished: bool) -> bool:
+    card = game.table.cards_by_id.get(card_id)
+    return (
+        card is not None and card not in game.table.zones[pile_for(card, banished=banished)].cards
+    )
+
+
 def _destroying_seat(game: GameState, cause: Cause) -> PlayerId | None:
     """The seat a destruction belongs to: the seat that acted, or the controller of the card whose
     trait did it. None for the rulebook, and for a trait whose card has left the table."""
@@ -501,11 +508,14 @@ class Discard(Effect):
     def describe(self) -> str:
         return f"{self.cause.name} discards {self.card_id}"
 
+    def would_happen(self, game: GameState) -> bool:
+        """False for a card already gone or already in its discard pile, which nothing moves."""
+        return _leaves_for_pile(game, self.card_id, banished=False)
+
     def perform(self, game: GameState) -> list[GameEvent]:
-        card = game.table.cards_by_id.get(self.card_id)
-        if card is None:
+        if not self.would_happen(game):
             return []
-        unit = _remove_unit(game, card)
+        unit = _remove_unit(game, game.table.cards_by_id[self.card_id])
         return [CardDiscarded(member.id, member.side, self.cause) for member in unit]
 
 
@@ -533,6 +543,10 @@ class Banish(Effect):
 
     def describe(self) -> str:
         return f"banish {self.card_id}"
+
+    def would_happen(self, game: GameState) -> bool:
+        """False for a card already gone or already banished, which nothing moves."""
+        return _leaves_for_pile(game, self.card_id, banished=True)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
@@ -1905,9 +1919,9 @@ class Rehonor(Effect):
 def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     """The effects of a Personality committing seppuku: rehonor him, then destroy him (CR,
     Seppuku). Two effects rather than one, so each passes through the Interrupt step on its own,
-    and the destruction is deferred through ``Then`` so the Personality's own reaction to his
-    rehonoring fires while he is still in play. The CR adds that neither can be negated, so both
-    are built not negatable, against a lasting negation and an Interrupt's alike.
+    and the Personality's own reaction to his rehonoring resolves while he is still in play. The CR
+    adds that neither can be negated, so both are built not negatable, against a lasting negation
+    and an Interrupt's alike.
 
     Parameters
     ----------
@@ -1918,7 +1932,7 @@ def seppuku(card_id: str, cause: Cause) -> list[Effect]:
     """
     return [
         Rehonor(card_id, negatable=False),
-        Then((Destroy(card_id, cause, negatable=False),)),
+        Destroy(card_id, cause, negatable=False),
     ]
 
 
@@ -2520,7 +2534,7 @@ class Recruit(Effect):
         card = game.table.cards_by_id[self.card_id]
         if not any(held is card for held in game.table.battlefield.cards):
             return ()
-        return (Then(tuple(effects_after_entering_play(game, self))),)
+        return tuple(effects_after_entering_play(game, self))
 
 
 @dataclass(frozen=True, slots=True)
@@ -2626,9 +2640,8 @@ class Unpayable(Effect):
 
 @dataclass(frozen=True, slots=True)
 class ApplyEffects:
-    """Resolve ``effects`` once the current step finishes. The generic deferral: an effect that must
-    wait for what precedes it to resolve fully, including any cascade it raises, is queued here
-    rather than placed inline, where it would run ahead of the events already in flight.
+    """Resolve ``effects`` once the work queued above it on the stack has finished, such as a step
+    of a procedure that follows the one under way, or an Interrupt's effects behind its payment.
 
     Attributes
     ----------
@@ -2651,27 +2664,6 @@ class ApplyEffects:
             triggers.resolve_action_effects(game, list(self.effects), provenance=self.provenance)
         else:
             triggers.resolve_effects(game, list(self.effects), provenance=self.provenance)
-
-
-@dataclass(frozen=True, slots=True)
-class Then(Effect):
-    """Defer ``effects`` until the current step has fully resolved, cascade included.
-
-    Effects placed inline run before the events already queued behind them, so a step that must
-    follow another card's reaction to what just happened belongs here instead.
-    """
-
-    effects: tuple[Effect, ...]
-
-    def describe(self) -> str:
-        return f"then: {len(self.effects)} deferred"
-
-    def perform(self, game: GameState) -> list[GameEvent]:
-        """Defer the effects with no Interrupt step open on them. The cascade handles a ``Then``
-        itself, carrying the provenance of the effects around it, so this runs only when a ``Then``
-        is applied outside the cascade."""
-        game.stack.append(ApplyEffects(self.effects))
-        return []
 
 
 @dataclass(frozen=True, slots=True)
@@ -2705,6 +2697,53 @@ class Simultaneously(Effect):
         through the checks any effect meets, so this runs only when a group is applied outside
         it."""
         return [event for effect in self.effects for event in effect.perform(game)]
+
+
+@dataclass(frozen=True, slots=True)
+class To(Effect):
+    """Apply ``first``, then ``contingent`` only if ``first`` actually happened: "effects linked by
+    the word "to" mean that the second effect depends on the first effect actually happening" (CR,
+    Independence of Effects). ``first`` happened when it would change something as it commits
+    (:meth:`~.Effect.would_happen`) and commits as itself: one negated, or replaced by an Interrupt
+    with a different effect or the same effect on a different card, did not. One an Interrupt only
+    adjusted did. What reacts to ``first`` resolves before ``contingent`` applies.
+
+    Raise ``TypeError`` if ``first`` asks a question or holds other effects, which the walk could
+    not tell happened.
+
+    Attributes
+    ----------
+    first : Effect
+        The effect the rest depends on, such as the discard in "discard a card to draw a card".
+    contingent : tuple of Effect
+        What applies once ``first`` has happened, in order.
+    """
+
+    first: Effect
+    contingent: tuple[Effect, ...]
+
+    def __post_init__(self) -> None:
+        if isinstance(self.first, InterruptingEffect | Simultaneously | To | Attributed):
+            raise TypeError(f"{type(self.first).__name__} cannot be what another effect depends on")
+
+    def describe(self) -> str:
+        return f"{self.first.describe()} to: {len(self.contingent)} effects"
+
+    def is_interruptible(self, game: GameState) -> bool:
+        return False
+
+    def is_negatable(self, game: GameState) -> bool:
+        return False
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Apply ``first`` and, if it would change something, ``contingent``. The cascade handles
+        the link itself, applying each effect through the checks any effect meets, so this runs
+        only when it is applied outside it."""
+        happens = self.first.would_happen(game)
+        raised = self.first.perform(game)
+        if not happens:
+            return raised
+        return [*raised, *(event for effect in self.contingent for event in effect.perform(game))]
 
 
 @dataclass(frozen=True, slots=True)

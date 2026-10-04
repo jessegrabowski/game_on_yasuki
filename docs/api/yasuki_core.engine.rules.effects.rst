@@ -88,7 +88,7 @@ yasuki_core.engine.rules.effects
     StartDuel
     Straighten
     TakeFavor
-    Then
+    To
     TurnOver
     Unpayable
     WinGame

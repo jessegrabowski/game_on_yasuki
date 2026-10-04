@@ -12,7 +12,6 @@ from yasuki_core.engine.rules.effects import (
     MoveToHand,
     Show,
     ShuffleDeck,
-    Then,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
@@ -115,7 +114,7 @@ def _wisdom_gained_effects(game: GameState, source: L5RCard, target: L5RCard) ->
     order = _wisdom_gained_search_order(game, seat)
     return [
         Discard(source.id, seat),
-        Then(tuple(_wisdom_gained_ask_to_search(game, source.id, order))),
+        *_wisdom_gained_ask_to_search(game, source.id, order),
     ]
 
 

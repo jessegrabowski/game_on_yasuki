@@ -17,7 +17,6 @@ from yasuki_core.engine.rules.effects import (
     RefillProvince,
     ShuffleDeck,
     SpendSeatOncePerTurn,
-    Then,
 )
 from yasuki_core.engine.rules.legality import legacy_candidates, legacy_search_pool
 from yasuki_core.engine.rules.state import GameState, seat_once_key
@@ -153,18 +152,17 @@ def _place_found_card(
     assert source_id is not None
     target_key = province_key_of(game, seat, chosen[0])
     source_key = province_key_holding(game, seat, source_id)  # None when it came from the deck
-    # One effect per occurrence, so each announces itself where it happens. The placement is
-    # deferred because the rules resolve what the displaced card leaving triggered before anything
-    # fills the Province behind it. The refill of the Province the found card left waits likewise
-    # on the reactions to the placement.
-    after_the_discard: list[Effect] = [PlaceInProvince(card_id=source_id, zone=target_key)]
+    # One effect per occurrence, so each announces itself where it happens, and what the displaced
+    # card leaving triggered resolves before anything fills the Province behind it.
+    placed: list[Effect] = [
+        Discard(card_id=chosen[0], cause=seat),
+        PlaceInProvince(card_id=source_id, zone=target_key),
+    ]
     if source_key is None:
         # The found card came out of the deck, so the deck the search read is no longer secret. It
         # shuffles behind the placement, which is what takes the card out of it.
-        after_the_discard.append(ShuffleDeck(deck=DeckKey(seat, Side.DYNASTY)))
-    else:
-        after_the_discard.append(Then((RefillProvince(zone=source_key),)))
-    return [Discard(card_id=chosen[0], cause=seat), Then(tuple(after_the_discard))]
+        return [*placed, ShuffleDeck(deck=DeckKey(seat, Side.DYNASTY))]
+    return [*placed, RefillProvince(zone=source_key)]
 
 
 def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tuple[str, ...]:

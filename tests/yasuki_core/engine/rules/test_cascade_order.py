@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, Ente
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DecisionResponse
-from yasuki_core.engine.rules.effects import AdjustCounter, RecruitCard, Then
+from yasuki_core.engine.rules.effects import AdjustCounter, RecruitCard
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules import triggers
@@ -60,17 +60,34 @@ def order_log():
     FIRING_ORDER.clear()
 
 
-def test_every_effect_from_one_trigger_applies_before_its_derived_events_fire():
-    # The worklist drains the effects in hand before popping the event queue, so the subscriber sees
-    # both adjustments already committed, and each gain raises its own event, so it fires twice.
+def test_each_effect_of_a_trigger_is_reacted_to_before_the_next_applies():
+    # CR 20F, Timing: "Once a triggered trait starts, activate all its costs, targeting, and effects
+    # in sequence before proceeding, even if another action or triggered trait is under way."
     game = two_seat_game()
     source = put_in_play(game, holding("P1-source", printed_id="order_two_effects"))
     put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
 
     fire(game, EnteredPlay(source.id))
 
-    both_counters = ("watcher", "P1-source", {"wealth": 1, "sincerity": 1})
-    assert FIRING_ORDER == [both_counters, both_counters]
+    assert FIRING_ORDER == [
+        ("watcher", "P1-source", {"wealth": 1}),
+        ("watcher", "P1-source", {"wealth": 1, "sincerity": 1}),
+    ]
+
+
+def test_each_effect_is_reacted_to_before_the_next_effect_in_its_list_applies():
+    game = two_seat_game()
+    source = put_in_play(game, holding("P1-source"))
+    put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
+
+    resolve_effects(
+        game, [AdjustCounter(source.id, WEALTH, 1), AdjustCounter(source.id, SINCERITY, 1)]
+    )
+
+    assert FIRING_ORDER == [
+        ("watcher", "P1-source", {"wealth": 1}),
+        ("watcher", "P1-source", {"wealth": 1, "sincerity": 1}),
+    ]
 
 
 def test_triggers_for_one_event_fire_in_canonical_owner_then_id_order():
@@ -105,7 +122,9 @@ def test_a_rulebook_trigger_fires_after_every_card_trigger_on_the_card_the_event
     assert FIRING_ORDER == [("recorder", "P1-a"), ("recorder", "P2-z"), ("rulebook", "P1-a")]
 
 
-def test_a_second_subscriber_still_fires_after_the_first_ones_effects_resolve():
+def test_a_triggers_reactions_resolve_before_its_sibling_trigger_fires():
+    # CR 20F, Timing: a triggered trait resolves "even if another action or triggered trait is
+    # under way", so the watcher answers the first subscriber's gains before the recorder fires.
     game = two_seat_game()
     source = put_in_play(game, holding("P1-a-source", printed_id="order_two_effects"))
     put_in_play(game, holding("P1-b-recorder", printed_id="order_recorder"))
@@ -113,32 +132,11 @@ def test_a_second_subscriber_still_fires_after_the_first_ones_effects_resolve():
 
     fire(game, EnteredPlay(source.id))
 
-    # Every EnteredPlay subscriber runs before the derived CounterChanged events are dequeued.
-    both_counters = ("watcher", "P1-a-source", {"wealth": 1, "sincerity": 1})
-    assert FIRING_ORDER == [("recorder", "P1-b-recorder"), both_counters, both_counters]
-
-
-def test_then_defers_its_effects_until_the_cascade_has_finished_reacting():
-    # An effect placed inline runs before the events already queued behind it. Then exists for the
-    # step that must follow another card's reaction to what just happened.
-    game = two_seat_game()
-    source = put_in_play(game, holding("P1-source"))
-    put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
-
-    resolve_effects(
-        game,
-        [
-            AdjustCounter(source.id, WEALTH, 1),
-            Then((AdjustCounter(source.id, SINCERITY, 1),)),
-        ],
-    )
-
-    assert FIRING_ORDER == [("watcher", "P1-source", {"wealth": 1})]  # reacted already
-    assert source.counters.get("sincerity") is None  # deferred effect has not run
-
-    run_stack(game)
-
-    assert source.counters["sincerity"] == 1
+    assert FIRING_ORDER == [
+        ("watcher", "P1-a-source", {"wealth": 1}),
+        ("watcher", "P1-a-source", {"wealth": 1, "sincerity": 1}),
+        ("recorder", "P1-b-recorder"),
+    ]
 
 
 def test_recruit_card_pauses_for_payment_and_brings_the_card_in():
@@ -163,9 +161,9 @@ def _record_entry(ctx):
     return []
 
 
-def test_a_deferred_step_runs_after_the_recruited_cards_entry_trait():
-    # The interleaving the design mockup got wrong. Both the entry trait and the deferred step land
-    # in the same log, so this asserts their ORDER rather than merely that both happened.
+def test_the_next_effect_runs_after_the_recruited_cards_entry_trait():
+    # Both the entry trait and the next effect land in the same log, so this asserts their order
+    # rather than merely that both happened.
     game = two_seat_game()
     put_in_play(game, holding("P1-gold", gold_production=8))
     put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
@@ -175,7 +173,7 @@ def test_a_deferred_step_runs_after_the_recruited_cards_entry_trait():
         game,
         [
             RecruitCard(target.id),
-            Then((AdjustCounter("P1-watcher", WEALTH, 1),)),
+            AdjustCounter("P1-watcher", WEALTH, 1),
         ],
     )
     submit(game, DecisionResponse(("P1-gold",)))
@@ -197,7 +195,7 @@ def test_recruit_card_brings_in_a_card_that_costs_nothing_without_a_payment():
     assert target in game.table.battlefield.cards
 
 
-def test_a_deferred_step_runs_after_a_free_recruited_cards_entry_trait():
+def test_the_next_effect_runs_after_a_free_recruited_cards_entry_trait():
     game = two_seat_game()
     put_in_play(game, holding("P1-watcher", printed_id="order_watcher"))
     target = province_card(game, "P1-target", gold_cost=0, printed_id="order_on_entry")
@@ -206,7 +204,7 @@ def test_a_deferred_step_runs_after_a_free_recruited_cards_entry_trait():
         game,
         [
             RecruitCard(target.id),
-            Then((AdjustCounter("P1-watcher", WEALTH, 1),)),
+            AdjustCounter("P1-watcher", WEALTH, 1),
         ],
     )
     run_stack(game)

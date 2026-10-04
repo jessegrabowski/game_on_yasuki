@@ -1204,6 +1204,11 @@ def test_ring_of_the_void_has_no_action_entry_and_draws_as_an_open_action():
 
     hand = [card.id for card in state.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
     assert hand == ["held", "top"]
+    # The draw fulfills the held Ring's "Play if", which is answered before the action's discard
+    # (CR 20F, Timing).
+    entry = session.game.pending
+    assert isinstance(entry, Confirm) and entry.source_id == "held"
+    session.submit(P1, DecisionResponse(()))
     assert isinstance(session.game.pending, ChooseDiscard)
 
 

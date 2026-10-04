@@ -30,6 +30,7 @@ yasuki_core.engine.rules.triggers
     enforce_state_based_actions
     fire
     fire_all
+    happens_as
     lapse_ongoing
     on
     pay_costs

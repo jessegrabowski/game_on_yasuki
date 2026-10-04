@@ -27,8 +27,10 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    Bowed,
     CardDiscarded,
     ConditionFulfilled,
+    CounterChanged,
     Destroyed,
     DuelDeclared,
     EnteredPlay,
@@ -44,7 +46,9 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.effects import (
     Ask,
     AdjustCounter,
+    Adjustment,
     ApplyEffects,
+    Banish,
     Choose,
     Destroy,
     Discard,
@@ -56,7 +60,7 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     PutIntoPlay,
     Simultaneously,
-    Then,
+    To,
 )
 from yasuki_core.engine.rules.triggers import (
     CHOICE_RESOLVERS,
@@ -277,6 +281,188 @@ def test_a_question_inside_a_group_resumes_the_rest_of_the_group():
 
     assert game.table.cards_by_id["asker"].counters == {"wealth": 1}
     assert game.table.cards_by_id["other"].bowed
+
+
+def test_a_groups_members_all_happen_before_anything_reacts_to_one(reacting):
+    # CR, Timing Conflicts: "two Personalities being destroyed in battle resolution" happen at the
+    # same time, so neither's destruction is reacted to while the other is still in play.
+    game = two_seat_game()
+    put_in_play(game, personality("probe", printed_id="destroyed_probe"))
+    first = put_in_play(game, personality("first"))
+    second = put_in_play(game, personality("second"))
+    still_in_play: list[bool] = []
+
+    def _record_the_pair(ctx):
+        battlefield = ctx.game.table.battlefield.cards
+        still_in_play.append(first in battlefield or second in battlefield)
+        return []
+
+    reacting(Destroyed, "destroyed_probe", _record_the_pair)
+
+    resolve_effects(
+        game, [Simultaneously((Destroy(first.id, PlayerId.P2), Destroy(second.id, PlayerId.P2)))]
+    )
+
+    assert still_in_play == [False, False]
+
+
+def test_a_reaction_to_an_answer_inside_a_group_waits_for_the_rest_of_the_group(reacting):
+    game = two_seat_game()
+    put_in_play(game, personality("asker", printed_id="counter_probe"))
+    put_in_play(game, personality("other"))
+    other_bowed: list[bool] = []
+
+    def _record_other(ctx):
+        other_bowed.append(ctx.game.table.cards_by_id["other"].bowed)
+        return []
+
+    reacting(CounterChanged, "counter_probe", _record_other)
+    asking = Choose(PlayerId.P1, (), 0, 0, "test_sandwich", "asker")
+
+    resolve_effects(game, [Simultaneously((asking, Bow("other")))])
+    action_sequence.submit(game, DecisionResponse(()))
+
+    assert other_bowed == [True]
+
+
+def test_what_depends_on_an_effect_applies_after_the_reactions_to_it(reacting):
+    game = two_seat_game()
+    put_in_play(game, personality("probe", printed_id="bow_probe"))
+    samurai = put_in_play(game, personality("samurai"))
+    honor_when_bowed: list[int] = []
+
+    def _record_honor(ctx):
+        honor_when_bowed.append(ctx.game.table.seats[PlayerId.P1].honor)
+        return []
+
+    reacting(Bowed, "bow_probe", _record_honor)
+
+    resolve_effects(game, [To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),))])
+
+    assert honor_when_bowed == [0]
+    assert game.table.seats[PlayerId.P1].honor == 2
+
+
+def test_what_depends_on_a_banish_applies_though_nothing_reacts_to_it():
+    game = two_seat_game()
+    card = register(game.table, _fate("held", printed_id="held"))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+
+    resolve_effects(game, [To(Banish(card.id), (GainHonor(PlayerId.P1, 2),))])
+
+    assert game.table.seats[PlayerId.P1].honor == 2
+
+
+def test_discarding_a_card_already_in_the_discard_pile_is_nothing_to_depend_on():
+    game = two_seat_game()
+    card = register(game.table, _fate("gone", printed_id="gone"))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].add(card)
+
+    resolve_effects(game, [To(Discard(card.id, PlayerId.P1), (GainHonor(PlayerId.P1, 2),))])
+
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+
+def test_an_effect_an_interrupt_substituted_did_not_happen():
+    # CR, Independence of Effects: no draw "if something prevented him from bowing".
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai"))
+    other = put_in_play(game, personality("other"))
+    game.modifications.append(
+        Replacement(bound=Bow(samurai.id), card_id="ward", replacement=Bow(other.id))
+    )
+    game.interrupts_offered = True
+
+    resolve_action_effects(game, [To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),))])
+
+    assert other.bowed
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+
+def test_an_effect_an_interrupt_adjusted_still_happened():
+    game = two_seat_game()
+    gain = GainHonor(PlayerId.P1, 1)
+    game.modifications.append(Adjustment(gain, 1))
+    game.interrupts_offered = True
+
+    resolve_action_effects(game, [To(gain, (GainHonor(PlayerId.P1, 2),))])
+
+    assert game.table.seats[PlayerId.P1].honor == 4
+
+
+def test_the_interrupt_step_does_not_foresee_what_depends_on_a_negated_effect():
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai"))
+    game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=Bow))
+
+    assert forecast(game, (To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),)),)) == ()
+
+
+def test_the_interrupt_step_does_not_foresee_what_depends_on_a_substituted_effect():
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai"))
+    other = put_in_play(game, personality("other"))
+    game.modifications.append(
+        Replacement(bound=Bow(samurai.id), card_id="ward", replacement=Bow(other.id))
+    )
+
+    foreseen = forecast(game, (To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),)),))
+
+    assert foreseen == (Bow(samurai.id),)
+
+
+def test_a_question_cannot_be_what_another_effect_depends_on():
+    asking = Choose(PlayerId.P1, (), 0, 0, "test_sandwich", "asker")
+
+    with pytest.raises(TypeError, match="cannot be what another effect depends on"):
+        To(asking, (Bow("other"),))
+
+
+def test_what_depends_on_an_effect_that_did_not_happen_does_not_apply():
+    # CR, Independence of Effects: "Bow your Samurai to draw two cards" means the player doesn't draw
+    # the cards if the Samurai was already bowed at the time.
+    game = two_seat_game()
+    samurai = put_in_play(game, personality("samurai"))
+    samurai.bow()
+
+    resolve_effects(game, [To(Bow(samurai.id), (GainHonor(PlayerId.P1, 2),))])
+
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+
+def test_a_group_inside_a_group_is_one_occurrence_with_it(reacting):
+    game = two_seat_game()
+    put_in_play(game, personality("probe", printed_id="bowed_probe"))
+    for card_id in ("a", "b", "c"):
+        put_in_play(game, personality(card_id))
+    all_bowed: list[bool] = []
+
+    def _record_all_bowed(ctx):
+        all_bowed.append(all(ctx.game.table.cards_by_id[card_id].bowed for card_id in "abc"))
+        return []
+
+    reacting(Bowed, "bowed_probe", _record_all_bowed)
+
+    resolve_effects(game, [Simultaneously((Simultaneously((Bow("a"), Bow("b"))), Bow("c")))])
+
+    assert all_bowed == [True, True, True]
+
+
+def test_discarding_a_card_already_in_the_discard_pile_announces_nothing(reacting):
+    game = two_seat_game()
+    card = register(game.table, _fate("gone", printed_id="gone"))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].add(card)
+    told: list[str] = []
+
+    def _record_discard(ctx):
+        told.append(ctx.event.card_id)
+        return []
+
+    reacting(CardDiscarded, "gone", _record_discard)
+
+    resolve_effects(game, [Discard(card.id, PlayerId.P1)])
+
+    assert told == []
 
 
 def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():
@@ -844,22 +1030,6 @@ def test_only_the_opening_edge_of_a_duels_declaration_is_a_window(reacting, boun
     assert isinstance(game.pending, ChooseCards) and game.pending.triggered is marked
 
 
-def test_the_mark_follows_a_triggers_effects_through_a_then(reacting):
-    game = two_seat_game()
-    asker = holding("P1-later", printed_id="then_probe")
-    put_in_play(game, asker)
-    reacting(
-        EnteredPlay,
-        "then_probe",
-        lambda ctx: [Then((Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),))],
-    )
-
-    fire(game, EnteredPlay(asker.id))
-    sequence.run_stack(game)
-
-    assert isinstance(game.pending, ChooseCards) and game.pending.triggered
-
-
 # A test-only trigger asking twice, so the second question is raised from the stash the first
 # left, not from the trigger's own effects.
 @on(EnteredPlay, "test_two_questions")
@@ -1197,7 +1367,7 @@ def test_a_watched_card_arriving_where_it_watches_while_its_condition_holds_is_a
 
 
 def test_a_watched_condition_is_answered_before_the_rest_of_the_text_that_fulfilled_it(watching):
-    # "Then" defers the discard behind the cascade, where the watch answers with the marker in play.
+    # CR 20F, Timing: the watch answers the entry before the discard written after it.
     game, _ = _watcher_game(watching)
     in_play_when_answered: list[bool] = []
     watching(
@@ -1212,8 +1382,7 @@ def test_a_watched_condition_is_answered_before_the_rest_of_the_text_that_fulfil
         register(game.table, _fate("second", printed_id="order_probe"))
     )
 
-    resolve_effects(game, [PutIntoPlay("marker0"), Then((Discard("marker0", PlayerId.P1),))])
-    sequence.run_stack(game)
+    resolve_effects(game, [PutIntoPlay("marker0"), Discard("marker0", PlayerId.P1)])
 
     assert in_play_when_answered == [True]
 
@@ -1221,7 +1390,9 @@ def test_a_watched_condition_is_answered_before_the_rest_of_the_text_that_fulfil
 def test_a_watch_is_not_answered_once_its_card_has_left_where_it_watches(watching):
     game, told = _watcher_game(watching)
 
-    resolve_effects(game, [PutIntoPlay("marker0"), Discard("watcher", PlayerId.P1)])
+    resolve_effects(
+        game, [Simultaneously((PutIntoPlay("marker0"), Discard("watcher", PlayerId.P1)))]
+    )
 
     assert told == []
 

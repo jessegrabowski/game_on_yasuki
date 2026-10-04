@@ -22,8 +22,8 @@ description: >
   `decisions.py`, `game_events.py`, `keywords.py`, `modifiers.py`, `segments.py`, `victory.py`,
   `work.py`
 - `src/yasuki_core/engine/rules/effects.py`: the effect dataclasses and what applying one does
-- `src/yasuki_core/engine/rules/triggers.py`: the cascade: an event fires handlers, whose effects
-  are applied, which may fire more
+- `src/yasuki_core/engine/rules/triggers.py`: the cascade: an effect commits, the handlers its
+  events fire resolve completely, and only then does the next effect apply
 - `src/yasuki_core/engine/rules/abilities/`: `model.py`, `registry.py`, `activation.py`,
   `costs.py`, `invest.py`, `strategy.py`, `idioms.py`
 - `src/yasuki_core/engine/rules/stats/` and `rules/gold/`: effective values and the gold economy
@@ -44,10 +44,12 @@ bespoke path that did its job. `docs/design/build_from_the_vocabulary.md` is the
 Legacy, Edict and duel-consequence cases worked through. Read it before adding an effect, decision,
 event, moment or registry.
 
-Effects in a returned list happen in the order they are written. Text that acts on several cards at
-once, one phrase over many cards, returns those effects inside a `Simultaneously`, so nothing reacts
-to any of them until all have happened. `docs/design/systems/effects.md` has the rule and the CR
-lines behind it.
+Effects in a returned list happen in the order they are written, and what each one sets off resolves
+before the next applies (CR 20F, Timing), so a step that follows a reaction is just the next effect.
+Text that acts on several cards at once, one phrase over many cards, returns those effects inside a
+`Simultaneously`, so nothing reacts to any of them until all have happened. Two effects the text
+joins with "to" ("discard a card to draw a card") are a `To`, so the second applies only if the first
+actually happened. `docs/design/systems/effects.md` has the rules and the CR lines behind them.
 
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and
 modifiers layer over it. Gold is the same shape on the economy side. A card that appears to have the

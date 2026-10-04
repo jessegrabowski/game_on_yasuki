@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.effects import (
     Recruit,
     SpendOncePerTurn,
     Simultaneously,
-    Then,
+    To,
 )
 from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
@@ -50,14 +50,14 @@ def forecast(
     game: GameState, effects: tuple[Effect, ...], provenance: Provenance = Provenance()
 ) -> tuple[Effect, ...]:
     """What an action with ``provenance`` handing ``effects`` to step E is about to do, as the
-    Interrupt step offers it: the effects in order, the contents of a ``Then`` or a
-    :class:`~.Simultaneously` group where it stands, an ability's effects behind the
-    :class:`~.ResolveAbility` that targets them, a Proclaim's Honor gain behind the
-    :class:`~.effects.Recruit` it follows, and an attack's outcome behind the attack when it
-    reaches on the board as it stands. An effect that is nothing to interrupt, an Honor change of
-    zero, a question the action asks or one a negation will negate, is left out, and what a choice
-    resolver produces later is not foreseeable and is not offered. A ``once`` negation leaves out
-    only the first effect it will spend itself on."""
+    Interrupt step offers it: the effects in order, the contents of a :class:`~.Simultaneously`
+    group or a :class:`~.To` where it stands, with a ``To``'s dependent effects only when its first
+    will happen, an ability's effects behind the :class:`~.ResolveAbility` that targets them, a
+    Proclaim's Honor gain behind the :class:`~.effects.Recruit` it follows, and an attack's outcome
+    behind the attack when it reaches on the board as it stands. An effect that is nothing to
+    interrupt, an Honor change of zero, a question the action asks or one a negation will negate, is
+    left out, and what a choice resolver produces later is not foreseeable and is not offered. A
+    ``once`` negation leaves out only the first effect it will spend itself on."""
     return tuple(_foreseen(game, effects, provenance, []))
 
 
@@ -65,8 +65,16 @@ def _foreseen(
     game: GameState, effects: tuple[Effect, ...], provenance: Provenance, spent: list[Negation]
 ) -> Iterator[Effect]:
     for effect in effects:
-        if isinstance(effect, Then | Simultaneously):
+        if isinstance(effect, Simultaneously):
             yield from _foreseen(game, effect.effects, provenance, spent)
+            continue
+        if isinstance(effect, To):
+            first = effect.first
+            happens = triggers.happens_as(game, first, as_modified(game, first))
+            negated = would_negate(game, first, provenance, list(spent))
+            yield from _foreseen(game, (first,), provenance, spent)
+            if happens and not negated:
+                yield from _foreseen(game, effect.contingent, provenance, spent)
             continue
         if effect.is_interruptible(game) and not would_negate(game, effect, provenance, spent):
             yield effect
@@ -439,8 +447,6 @@ def _play(
                 )
             )
     if _plays_card(interrupt, location):
-        if interruption.costs:
-            raise ValueError(f"{card_id} plays its card, so its Interrupt can add no costs")
         play_strategy_with(game, card, interruption.effects, provenance)
         return
     purchase = interrupt.purchase(game, card, plays_card=False)
@@ -448,7 +454,7 @@ def _play(
     claimed = _claim(game, seat, card, interrupt)
     # Queued beneath the payment, so the cost is paid, and what reacts to it resolves, first.
     game.stack.append(ApplyEffects(interruption.effects, provenance))
-    triggers.pay_costs(game, [*claimed, *paid, *interruption.costs])
+    triggers.pay_costs(game, [*claimed, *paid])
 
 
 def _claim(game: GameState, seat: PlayerId, card: L5RCard, interrupt: Interrupt) -> list[Effect]:

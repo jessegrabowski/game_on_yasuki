@@ -26,7 +26,6 @@ from yasuki_core.engine.rules.effects import (
     MoveToHand,
     Show,
     ShuffleDeck,
-    Then,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -119,7 +118,7 @@ def _imperial_gift_effects(game: GameState, source: L5RCard, target: L5RCard) ->
     items = _imperial_gift_fate_deck_items(game, seat)
     if not items:
         return spent
-    return [*spent, Then((Choose(seat, items, 1, 1, "imperial_gift_item", source.id),))]
+    return [*spent, Choose(seat, items, 1, 1, "imperial_gift_item", source.id)]
 
 
 register_ability(

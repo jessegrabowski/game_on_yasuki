@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     DelayedEffect,
     Destroy,
+    Discard,
     DiscardFromHand,
     Effect,
     GrantModifier,
@@ -14,7 +15,6 @@ from yasuki_core.engine.rules.effects import (
     Rehonor,
     SpendOncePerTurn,
     Straighten,
-    Then,
     seppuku,
 )
 from yasuki_core.engine.rules.interrupts import Replacement, forecast
@@ -118,21 +118,6 @@ def test_a_negation_naming_a_source_leaves_an_effect_from_no_action():
     assert negate_committed(game, Bow("farm"), FROM_NO_ACTION) == Bow("farm")
 
 
-def test_a_named_source_negates_what_its_action_defers():
-    game = two_seat_game()
-    plan = _card(game, ActionPrint)
-    farm = put_in_play(game, holding("farm"))
-    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint))
-
-    resolve_action_effects(
-        game, [Then((Bow(farm.id),))], provenance=action_provenance(game, plan.id)
-    )
-    run_stack(game)
-
-    assert not game.stack
-    assert not farm.bowed
-
-
 def test_a_named_source_negates_what_an_answer_in_its_action_produces():
     game = two_seat_game()
     plan = _card(game, ActionPrint)
@@ -191,20 +176,6 @@ def test_a_once_negation_naming_a_source_negates_all_of_that_sources_first_actio
     assert farm.bowed
 
 
-def test_a_once_negation_an_action_spent_negates_what_that_action_defers():
-    game = two_seat_game()
-    plan = _card(game, ActionPrint)
-    farm = put_in_play(game, holding("farm"))
-    game.ongoing.append(Negation("ring", END_OF_TURN, source_kind=ActionPrint, once=True))
-
-    provenance = action_provenance(game, plan.id)
-    resolve_action_effects(game, [Then((Bow(farm.id),))], provenance=provenance)
-    run_stack(game)
-
-    assert not game.stack
-    assert not farm.bowed
-
-
 def test_the_interrupt_step_offers_the_effects_a_once_negation_will_not_reach():
     game = two_seat_game()
     game.ongoing.append(Negation("ring", END_OF_TURN, effect_kind=Bow, once=True))
@@ -213,6 +184,18 @@ def test_the_interrupt_step_offers_the_effects_a_once_negation_will_not_reach():
 
     assert forecast(game, (Bow("farm"), Bow("mine"))) == (Bow("mine"),)
     assert len(game.ongoing) == 1
+
+
+def test_discarding_a_card_already_in_the_discard_pile_spends_no_once_negation():
+    game = two_seat_game()
+    card = register(game.table, fate_card("gone", PlayerId.P1))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].add(card)
+    negation = Negation("ring", END_OF_TURN, effect_kind=Discard, once=True)
+    game.ongoing.append(negation)
+
+    negate_committed(game, Discard(card.id, PlayerId.P1), FROM_NO_ACTION)
+
+    assert game.ongoing == [negation]
 
 
 def test_an_effect_already_negated_spends_no_once_negation():

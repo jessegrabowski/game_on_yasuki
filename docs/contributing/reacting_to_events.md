@@ -165,6 +165,13 @@ return [Simultaneously(tuple(followers))]
 Drawing works the same way: "Draw three cards" is three draws at once (CR, "Effects that draw more
 than one card at the same time ... occur simultaneously").
 
+Your trigger runs as soon as what it answers has happened, before the next effect of the action or
+trait that caused it: "Once a triggered trait starts, activate all its costs, targeting, and effects
+in sequence before proceeding, even if another action or triggered trait is under way" (CR 20F,
+Timing). An action that reads "bow your target Personality and gain 2 Honor" bows him, every "after
+he bows" trait resolves, and only then is the Honor gained. A trait reading the board when it runs
+sees the bow and not yet the Honor.
+
 For what happens after you return, including the order several cards react in and what happens when
 an effect has to stop and ask a player a question, see
 [Triggers and the cascade](../design/systems/triggers-and-the-cascade.md).
