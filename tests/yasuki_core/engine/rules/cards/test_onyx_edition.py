@@ -54,8 +54,11 @@ from yasuki_core.game_pieces.prints import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
+    DRAGON_YOJIMBO,
     LION_ANCESTOR,
     NAGA_FOLLOWER,
+    TAMORI_TSUSHIMA_CREATE,
+    TAMORI_TSUSHIMA_RING,
 )
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
@@ -86,7 +89,7 @@ from yasuki_core.engine.session import EngineSession
 
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.constants import AttachmentType, Element, Side
 
 from tests.yasuki_core.engine.builders import (
     datasheet_favor_ability,
@@ -1945,3 +1948,95 @@ def test_hiyoku_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("hiyoku",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Tamori Tsushima ---
+
+
+def _element_ring(card_id: str, element: Element) -> L5RCard:
+    return L5RCard.of(
+        RingPrint,
+        id=card_id,
+        name=card_id,
+        printed_id=card_id,
+        side=Side.FATE,
+        owner=P1,
+        element=element,
+        keywords=(element.value,),
+    )
+
+
+def _tsushima_game(*, held: tuple[L5RCard, ...] = (), in_play: tuple[L5RCard, ...] = ()):
+    """P1's Dynasty phase, with Tsushima face-up in P1's first Province, a Stronghold to Recruit him
+    and a Holding to pay for his Response."""
+    state = TableState.empty_two_seat()
+    token_template(
+        state,
+        DRAGON_YOJIMBO,
+        name="Dragon Yojimbo",
+        card_type="Personality",
+        keywords=("Samurai", "Yojimbo"),
+        force=2,
+        chi=2,
+    )
+    put_in_play(state, register(state, stronghold(P1, gold_production=3)))
+    put_in_play(state, register(state, holding("mine", gold_production=3)))
+    for card in in_play:
+        put_in_play(state, register(state, card))
+    for card in held:
+        state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, card))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    tsushima = register(
+        state, personality("tsushima", printed_id="tamori_tsushima", force=2, chi=2, gold_cost=3)
+    )
+    tsushima.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(tsushima)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)  # Action -> Battle
+    end_phase(session)  # Battle -> Dynasty
+    session.act(P1, ActivateAbility("tsushima", RECRUIT))
+    pay(session, P1)
+    return session
+
+
+def _respond_with_tsushima(session: EngineSession) -> None:
+    session.act(P1, ActivateAbility("tsushima"))
+    pay(session, P1)
+
+
+def test_tsushima_creates_and_recruits_a_yojimbo_without_further_cost():
+    session = _tsushima_game()
+
+    _respond_with_tsushima(session)
+
+    (yojimbo,) = (card for card in session.game.table.battlefield.cards if card.is_token)
+    assert yojimbo.name == "Dragon Yojimbo"
+    assert EnteredPlay(yojimbo.id, recruited=True) in session.game.turn_events
+    assert session.game.pending is None
+
+
+def test_tsushima_with_a_ring_in_hand_may_still_create_the_yojimbo():
+    session = _tsushima_game(held=(_element_ring("void", Element.VOID),))
+
+    _respond_with_tsushima(session)
+    session.submit(P1, DecisionResponse((TAMORI_TSUSHIMA_CREATE,)))
+
+    assert any(card.is_token for card in session.game.table.battlefield.cards)
+    assert "void" not in _in_play(session)
+
+
+def test_a_ring_tsushima_puts_into_play_does_not_count_towards_enlightenment():
+    others = (Element.AIR, Element.EARTH, Element.FIRE, Element.WATER)
+    session = _tsushima_game(
+        held=(_element_ring("void", Element.VOID),),
+        in_play=tuple(_element_ring(element.value, element) for element in others),
+    )
+
+    _respond_with_tsushima(session)
+    session.submit(P1, DecisionResponse((TAMORI_TSUSHIMA_RING,)))
+    session.submit(P1, DecisionResponse(("void",)))
+
+    assert "void" in _in_play(session)
+    assert session.game.game_over is False
