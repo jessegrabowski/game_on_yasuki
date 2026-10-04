@@ -642,6 +642,33 @@ GameEvent = (
 )
 
 
+@dataclass(frozen=True, slots=True)
+class NextTime:
+    """The next time an event names a card, which a delayed effect waits for as "after Kintaro is
+    destroyed" reads (CR, Delayed Effects: "After the next time this game a Samurai assigns to
+    attack").
+
+    Attributes
+    ----------
+    event_type : type
+        The kind of event waited for.
+    card_id : str
+        The card that event names.
+    """
+
+    event_type: type
+    card_id: str
+
+    def describe(self) -> str:
+        return f"after the next {self.event_type.__name__} of {self.card_id}"
+
+    def matches(self, event: GameEvent) -> bool:
+        """Whether ``event`` is the occurrence this waits for."""
+        return (
+            isinstance(event, self.event_type) and getattr(event, "card_id", None) == self.card_id
+        )
+
+
 def opens_a_window(event: GameEvent) -> bool:
     """Whether ``event`` is a step announcing itself before it commits anything, to open a window for
     the cards it concerns.

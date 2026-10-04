@@ -109,7 +109,7 @@ register_invest("akodo_iori", InvestAbility((IORI_INVEST,), _akodo_iori_invest))
 
 
 @choice_resolver(
-    "akodo_iori_invest", prompt="Search your deck for a Bushido Virtue or Tactical Strategy"
+    "akodo_iori_invest", prompt="Akodo Iori's Invest: choose a Bushido Virtue or Tactical Strategy"
 )
 def _resolve_akodo_iori_invest(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
@@ -131,7 +131,9 @@ def _akodo_iori_yu(ctx: TriggerContext) -> list[Effect]:
 register_yu("akodo_iori", _akodo_iori_yu)
 
 
-@choice_resolver("akodo_iori_yu", prompt="Choose your Personality to permanently give Tactician")
+@choice_resolver(
+    "akodo_iori_yu", prompt="Akodo Iori's Yu: choose your Personality to give Tactician"
+)
 def _resolve_akodo_iori_yu(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
@@ -334,7 +336,9 @@ def _matsu_kurutta_yu(ctx: TriggerContext) -> list[Effect]:
 register_yu("matsu_kurutta", _matsu_kurutta_yu)
 
 
-@choice_resolver("matsu_kurutta", prompt="Choose your Deathseeker to give a +1F token")
+@choice_resolver(
+    "matsu_kurutta", prompt="Matsu Kurutta's Yu: choose your Deathseeker to get a +1F token"
+)
 def _resolve_matsu_kurutta(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:

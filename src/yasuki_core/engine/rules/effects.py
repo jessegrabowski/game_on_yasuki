@@ -41,6 +41,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     GameEvent,
     HonorChanged,
     Invested,
+    NextTime,
     Rehonored,
     Revealed,
     Straightened,
@@ -590,19 +591,20 @@ class DelayedEffect(Effect):
     ----------
     effect : Effect
         What resolves later.
-    until : Moment
-        The boundary of play it waits for. Resolving a delay to a moment the flow never reaches
-        raises ``ValueError`` rather than holding the effect for the rest of the game.
+    until : Moment or NextTime
+        The boundary of play it waits for, or the next time an event names a card. Resolving a
+        delay to a moment the flow never reaches raises ``ValueError`` rather than holding the
+        effect for the rest of the game.
     """
 
     effect: Effect
-    until: Moment
+    until: Moment | NextTime
 
     def describe(self) -> str:
         return f"{self.effect.describe()} {self.until.describe()}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        if not flow_resolves(self.until):
+        if isinstance(self.until, Moment) and not flow_resolves(self.until):
             raise ValueError(f"nothing resolves {self.until.describe()}")
         game.delayed.append((self.until, self.effect))
         return []

@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroying,
     EnteredPlay,
     GameEvent,
+    NextTime,
     names_both_edges,
     opens_a_window,
 )
@@ -328,8 +329,8 @@ def _departed_subject(game: GameState, event: GameEvent) -> L5RCard | None:
 
 def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
     """The ``(card, trigger)`` pairs ``event`` fires: the cards' in canonical order, then the
-    rulebook's, each on the card the event names. A watched condition is answered by its own
-    watch alone."""
+    rulebook's and the delayed effects waiting for it, each on the card the event names. A watched
+    condition is answered by its own watch alone."""
     if isinstance(event, ConditionFulfilled):
         return _watch_reactions(game, event)
     firing = _card_triggers(game, event)
@@ -339,7 +340,33 @@ def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]
         subject = _named_subject(game, event)
         if subject is not None:
             firing.extend((subject, trigger) for trigger in rulebook)
+    firing.extend(_held_until(game, event))
     return firing
+
+
+@dataclass(frozen=True, slots=True)
+class _Held:
+    """A delayed effect waiting for the next time an event names a card, fired as a reaction to
+    that event and taken out of ``game.delayed`` as it fires. A value, so a cascade paused with it
+    still to fire replays equal."""
+
+    until: NextTime
+    effect: Effect
+
+    def __call__(self, ctx: TriggerContext) -> list[Effect]:
+        return [self.effect]
+
+
+def _held_until(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
+    """The delayed effects ``event`` is the occurrence of, each on the card the event names."""
+    subject = _named_subject(game, event)
+    if subject is None:
+        return []
+    return [
+        (subject, _Held(until, effect))
+        for until, effect in game.delayed
+        if isinstance(until, NextTime) and until.matches(event)
+    ]
 
 
 def _card_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
@@ -570,6 +597,8 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 return
             card, trigger, event = top.firing.pop(0)
             top.chosen = None
+            if isinstance(trigger, _Held):
+                game.delayed.remove((trigger.until, trigger.effect))
             _trace.append(f"  {card.printed_id} ({card.id}) reacts")
             effects = list(trigger(TriggerContext(game, card, event)))
             frames.append(_Effects(effects, Provenance(triggered=not opens_a_window(event))))
@@ -682,7 +711,7 @@ def _still_collected(game: GameState, entry: _Firing) -> bool:
     """Whether the event in ``entry`` would still collect its trigger from its card, which a card
     that has since left where it answers from no longer is."""
     card, trigger, event = entry
-    return any(held is card and answer is trigger for held, answer in _collect(game, event))
+    return any(held is card and answer == trigger for held, answer in _collect(game, event))
 
 
 def _triggered(game: GameState, firing: list[_Firing]) -> list[_Firing]:

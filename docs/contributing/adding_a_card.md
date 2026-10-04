@@ -14,11 +14,12 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Costs less to bring into play, conditionally | `@recruit_discount(id)` | {card}`Colonial Farm` |
 | "After X happens..." | `@on(Event, id)` | {card}`Rice Farm` |
 | "Before this card is destroyed..." | `@on(Destroying, id)`, checking the event names this card | none yet |
-| "Yu: ..." | `register_yu(id, effects)`, which applies the datasheet's conditions, with a targeted Yu reaching the battlefield on the event's `location` | none yet |
+| "Yu: ..." | `register_yu(id, effects)`, which applies the datasheet's conditions, with a targeted Yu reaching the battlefield on the event's `location` | {card}`Matsu Kurutta` |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | {card}`Millet Farm` |
 | "Response: after X..." | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
 | "X have +NF while Y" for the rest of the turn | effects returning `GrantConditionalModifier(...)` | {card}`Flashy Technique` |
 | "cannot attack" | `register_cannot_attack(id)` | {card}`Daidoji Kaede` |
+| "After this card is destroyed, ..." inside an effect, as a Yu says it | effects returning `DelayedEffect(Evaluate(...), NextTime(Destroyed, card_id))` | {card}`Shiba Kintaro, the Remembered (Experienced)` |
 | "After this battle's resolution, if X, ..." | effects returning `DelayedEffect(Evaluate(...), END_OF_BATTLE)` | {card}`Daidoji Tashiko` |
 | Gives a card an ability, as in "she has 'Battle: Ranged 3'" | `@granted_ability(id)` and effects returning `GrantAbility(...)` | {card}`Daidoji Kaede` |
 | A rulebook ability every card with a keyword has, as Kharmic | `register_keyword_ability(Ability(..., from_keyword=..., from_rulebook=True))` | `rulebook/kharmic.py` |
