@@ -83,7 +83,7 @@ from yasuki_core.engine.rules.triggers import (
 from yasuki_core.engine.rules.interrupts import Replacement, forecast
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.game_pieces.counters import WEALTH, counter_from_key
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, PersonalityPrint
 
@@ -463,6 +463,58 @@ def test_discarding_a_card_already_in_the_discard_pile_announces_nothing(reactin
     resolve_effects(game, [Discard(card.id, PlayerId.P1)])
 
     assert told == []
+
+
+def _gain_one_honor(ctx):
+    return [GainHonor(PlayerId.P1, 1)]
+
+
+def test_what_the_rules_demand_after_an_effect_is_the_next_occurrence(reacting):
+    game = two_seat_game()
+    doomed = put_in_play(game, personality("doomed", chi=1))
+    put_in_play(game, holding("P1-counted", printed_id="counter_probe"))
+    put_in_play(game, holding("P1-mourner", printed_id="death_probe"))
+    reacting(CounterChanged, "counter_probe", _gain_one_honor)
+    reacting(Destroyed, "death_probe", _gain_one_honor)
+
+    resolve_effects(game, [AdjustCounter(doomed.id, counter_from_key("blood"), 1)])
+
+    assert doomed not in game.table.battlefield.cards
+    assert game.pending is None
+    assert game.table.seats[PlayerId.P1].honor == 2
+
+
+def test_what_the_rules_demand_after_a_group_follows_the_groups_own_occurrence(reacting):
+    game = two_seat_game()
+    doomed = put_in_play(game, personality("doomed", chi=1))
+    other = put_in_play(game, personality("other"))
+    put_in_play(game, holding("P1-counted", printed_id="counter_probe"))
+    put_in_play(game, holding("P1-mourner", printed_id="death_probe"))
+    reacting(CounterChanged, "counter_probe", _gain_one_honor)
+    reacting(Destroyed, "death_probe", _gain_one_honor)
+    blood = AdjustCounter(doomed.id, counter_from_key("blood"), 1)
+
+    resolve_effects(game, [Simultaneously((blood, Bow(other.id)))])
+
+    assert doomed not in game.table.battlefield.cards and other.bowed
+    assert game.pending is None
+    assert game.table.seats[PlayerId.P1].honor == 2
+
+
+def test_a_moment_is_announced_after_what_its_lapse_left_has_been_reacted_to(reacting):
+    game = two_seat_game()
+    doomed = put_in_play(game, personality("doomed", chi=0))
+    game.ongoing.append(Modifier("src", doomed.id, Stat.CHI, 1, Duration.UNTIL_END_OF_TURN))
+    put_in_play(game, holding("P1-mourner", printed_id="death_probe"))
+    put_in_play(game, holding("P1-ender", printed_id="end_probe"))
+    reacting(Destroyed, "death_probe", _gain_one_honor)
+    reacting(TurnBoundary, "end_probe", _gain_one_honor, boundary=Boundary.END)
+
+    reach_moment(game, END_OF_TURN, TurnBoundary(PlayerId.P1, Boundary.END))
+
+    assert doomed not in game.table.battlefield.cards
+    assert game.pending is None
+    assert game.table.seats[PlayerId.P1].honor == 2
 
 
 def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():

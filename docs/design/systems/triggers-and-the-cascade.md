@@ -118,10 +118,12 @@ whole machine is its loop body:
 ```
 
 The top frame decides each step. An effects frame applies its next effect, which commits at once.
-The events it raised, with those of the state-based actions it demanded, become a new events frame
-on top. An events frame fires its next trigger, whose effects become a new effects frame on top
-carrying the trigger's own provenance, or pops its next event and collects what answers it. A frame
-with nothing left is dropped, and the walk ends with the stack.
+The events it raised become a new events frame on top. What the state-based rules then demand of the
+board is the occurrence that follows, announced once that frame's triggers have resolved, and
+{func}`~.reach_moment` announces what a lapse left before the events that mark the moment. An events
+frame fires its next trigger, whose effects become a new effects frame on top carrying the trigger's
+own provenance, or pops its next event and collects what answers it. A frame with nothing left is
+dropped, and the walk ends with the stack.
 
 Pushing each commit's events on top is what makes the walk depth-first, which is the order the CR
 gives: "Once a triggered trait starts, activate all its costs, targeting, and effects in sequence
