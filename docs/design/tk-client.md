@@ -56,3 +56,11 @@ The board's selection mode is the third surface, for a decision answered by pick
 play. A decision whose candidates are not card ids must never reach it. `begin_selection` matches
 candidates against card ids, so a request carrying anything else highlights nothing and strands the
 player on a prompt that cannot be answered.
+
+The search dialog is the fourth surface, for card candidates the board cannot carry.
+{meth}`~.GameRunner.search_view` opens it when any candidate sits in a pile instead of in play,
+in a hand or in a Province. It lists each pile that holds a candidate, whole, with only the
+candidates takeable: the human's own decks and piles, and either seat's discard pile, which every
+player may see. A choice that also reaches cards in play, such as a {class}`~.ChooseNextTrigger`
+over one Personality still standing and one battle resolution destroyed, puts those in an "In
+play" pane, so every candidate is answerable from the one dialog.

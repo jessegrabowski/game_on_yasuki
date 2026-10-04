@@ -49,6 +49,10 @@ The board's selection mode is the third surface, for a decision answered by pick
 play. A decision whose candidates are not card ids must never reach it: `begin_selection` would find
 nothing matching and leave the player stranded on a prompt with nothing to click.
 
+The search dialog is the fourth, for card candidates sitting in a pile. It lists the human's own
+piles and either seat's discard pile, and adds an "In play" pane when the same choice also reaches
+cards on the battlefield.
+
 ## What checks it
 
 - The suite: GUI tests mock Tk rather than running the main loop, so they run headless in CI
