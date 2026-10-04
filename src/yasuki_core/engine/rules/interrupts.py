@@ -92,8 +92,8 @@ def _foreseen(
 @dataclass(frozen=True, slots=True)
 class Replacement:
     """A card Interrupt's answer to one effect of the action, bound to the effect as the forecast
-    showed it. What resolves instead is asked of the card's Interrupt as the effect comes up,
-    against the effect as earlier Interrupts leave it, so a negation after a Courage adjustment
+    showed it. What resolves instead is asked of the Interrupt it was taken with as the effect comes
+    up, against the effect as earlier Interrupts leave it, so a negation after a Courage adjustment
     negates the adjusted Fear. The Interrupt's own effects resolved when it was taken.
 
     Attributes
@@ -108,7 +108,7 @@ class Replacement:
         What resolves instead, settled when the Interrupt was taken, for a replacement whose
         contents read the board: a substituted :class:`~.ResolveAbility` is built against its new
         target then, so the forecast and the resolution read one object. Used while the effect
-        still stands as bound. Default None, asked of the card as the effect comes up.
+        still stands as bound. Default None, asked of ``interrupt`` as the effect comes up.
     interrupt : :class:`~yasuki_core.engine.rules.abilities.model.Interrupt`, optional
         The Interrupt taken, kept as it was taken, so one a grant or a keyword gave answers as its
         effect comes up even after the grant has lapsed or the keyword is gone. Default None, for
@@ -431,7 +431,7 @@ def _play(
         target = game.table.cards_by_id[target_id]
         interruption = interrupt.interrupt(game, card, effect, target)
     # A negated Interrupt is still taken, paid for and, from hand, discarded. It binds nothing,
-    # since a bound replacement is asked of the card again as its effect resolves. A rulebook
+    # since a bound replacement is asked of its Interrupt again as its effect resolves. A rulebook
     # Interrupt is no action from its card, so no negation naming a source reaches it.
     provenance = action_provenance(game, card.id if interrupt.acts_from_its_card else None)
     if not strips_interrupt(game, interruption.replacement, provenance):
