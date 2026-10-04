@@ -46,7 +46,7 @@ def test_temples_offers_only_the_named_type_among_the_four_looked_at():
     pending = session.game.pending
     assert isinstance(pending, ChooseCards) and pending.candidates == ("follower",)
     assert session.game.look.card_ids == ("spell", "follower", "plain", "item")
-    assert pending.decline_label == "Decline"
+    assert pending.minimum == 0
 
 
 def test_temples_shows_the_taken_card_and_leaves_the_rest_where_they_were():

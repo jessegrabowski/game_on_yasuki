@@ -1606,7 +1606,11 @@ def test_the_adjustment_discards_the_card_and_resolves_the_fear(a_fear_to_interr
 # --- Looking at cards ---
 
 
-@choice_resolver("presenter_look_bottom", prompt="You may put one at the bottom of your deck")
+@choice_resolver(
+    "presenter_look_bottom",
+    prompt="You may put one at the bottom of your deck",
+    pick="Put on the bottom of your deck",
+)
 def _bottom_and_arrange(game, source_id, chosen, seat):
     fate = DeckKey(P1, Side.FATE)
     rest = tuple(card_id for card_id in remaining_look(game) if card_id not in chosen)
@@ -1681,28 +1685,36 @@ def test_a_look_opens_its_window_over_the_cards_and_not_the_pile_dialog(looking)
     assert presenter.host.runner.search_view() is None
 
 
-def test_a_may_choice_in_a_look_offers_confirm_and_decline_and_no_cancel(looking):
+def _menu(presenter, window, card_id) -> list:
+    """The entries a click on a card in the look window offers."""
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+    presenter.on_look_card_clicked(card_id)
+    return offered
+
+
+def _pick(presenter, window, card_id) -> None:
+    """Click a card in the look window and choose the one entry its menu offers."""
+    ((_, command),) = _menu(presenter, window, card_id)
+    command()
+
+
+def test_a_may_choice_in_a_look_offers_done_alone_and_no_cancel(looking):
     presenter, window, session = looking
 
-    assert _buttons(window) == ["Confirm", "Decline"]
-    assert not _enabled(presenter, "Confirm")
-
-    presenter.on_look_card_clicked("second")
-
-    assert _enabled(presenter, "Confirm")
-    assert window.field.selection == ("second",)
+    assert _buttons(window) == ["Done"]
+    assert _enabled(presenter, "Done")
 
 
-def test_a_second_click_in_a_choice_of_one_replaces_the_first(looking):
+def test_a_looked_card_offers_what_the_question_does_to_it(looking):
     presenter, window, session = looking
-    presenter.on_look_card_clicked("second")
 
-    presenter.on_look_card_clicked("third")
+    assert [label for label, _ in _menu(presenter, window, "second")] == [
+        "Put on the bottom of your deck"
+    ]
 
-    assert window.field.selection == ("third",)
 
-
-def test_the_look_window_draws_a_card_the_question_does_not_offer_unpickable(looking):
+def test_the_look_window_offers_nothing_on_a_card_the_question_does_not(looking):
     presenter, window, session = looking
     session.game.pending = ChooseCards(P1, ("top",), 0, 1, "presenter_look_bottom", "looker")
 
@@ -1710,27 +1722,41 @@ def test_the_look_window_draws_a_card_the_question_does_not_offer_unpickable(loo
 
     assert "card:top" in window.look_view._drawn
     assert "card:shown:second" in window.look_view._drawn
-    presenter.on_look_card_clicked("second")
-    assert window.field.selection == ()
+    assert _menu(presenter, window, "second") == []
 
 
-def test_putting_a_card_on_the_bottom_takes_it_out_of_the_window_and_asks_for_the_order(looking):
+def test_a_full_choice_answers_itself_and_the_next_question_puts_cards_on_top(looking):
     presenter, window, session = looking
-    presenter.on_look_card_clicked("second")
 
-    _press(presenter, "Confirm")
+    _pick(presenter, window, "second")
 
     assert isinstance(session.game.pending, ArrangeCards)
     assert set(window.look_view._drawn) == {"card:top", "card:third"}
-    assert _buttons(window) == ["Confirm", "Keep Order", "Undo"]
-    assert _enabled(presenter, "Keep Order") and not _enabled(presenter, "Undo")
-    assert not _enabled(presenter, "Confirm")
+    assert [label for label, _ in _menu(presenter, window, "top")] == ["Put on top of your deck"]
+    assert _buttons(window) == ["Done", "Keep Order"]
+    assert not _enabled(presenter, "Done")
+
+
+def test_a_choice_of_several_takes_picks_until_done_and_ctrl_z_returns_the_last(looking):
+    presenter, window, session = looking
+    session.game.pending = ChooseCards(
+        P1, ("top", "second", "third"), 0, 3, "presenter_look_bottom", "looker"
+    )
+    presenter.present()
+
+    _pick(presenter, window, "second")
+    _pick(presenter, window, "top")
+    presenter.undo()
+
+    assert window.field.selection == ("second",)
+    assert set(window.look_view._drawn) == {"card:top", "card:third"}
+    assert _enabled(presenter, "Done")
 
 
 def test_keep_order_after_a_placement_keeps_the_rest_as_looked_at(looking):
     presenter, window, session = looking
-    _press(presenter, "Decline")
-    presenter.on_look_card_clicked("second")
+    _press(presenter, "Done")
+    _pick(presenter, window, "second")
 
     _press(presenter, "Keep Order")
 
@@ -1738,24 +1764,23 @@ def test_keep_order_after_a_placement_keeps_the_rest_as_looked_at(looking):
     assert session.game.look is None
 
 
-def test_arranging_places_cards_one_click_at_a_time_and_undoes_them(looking):
+def test_arranging_places_cards_one_pick_at_a_time_and_undoes_them(looking):
     presenter, window, session = looking
-    _press(presenter, "Decline")
+    _press(presenter, "Done")
     assert isinstance(session.game.pending, ArrangeCards)
 
-    presenter.on_look_card_clicked("second")
-    assert "card:second" not in window.look_view._drawn  # a placed card leaves the window
-    assert _enabled(presenter, "Keep Order") and _enabled(presenter, "Undo")
-    assert not _enabled(presenter, "Confirm")
+    _pick(presenter, window, "second")
+    assert "card:second" not in window.look_view._drawn
+    assert _enabled(presenter, "Keep Order") and not _enabled(presenter, "Done")
 
     presenter.undo()
     assert "card:second" in window.look_view._drawn
     assert window.field.selection == ()
 
     for card_id in ("third", "top", "second"):
-        presenter.on_look_card_clicked(card_id)
-    assert _enabled(presenter, "Confirm")
-    _press(presenter, "Confirm")
+        _pick(presenter, window, card_id)
+    assert _buttons(window) == ["Done"]
+    _press(presenter, "Done")
 
     assert _fate_deck(session) == ["second", "top", "third", "fourth"]
     assert session.game.look is None
@@ -1764,7 +1789,7 @@ def test_arranging_places_cards_one_click_at_a_time_and_undoes_them(looking):
 
 def test_keep_order_answers_with_the_unchanged_arrangement(looking):
     presenter, window, session = looking
-    _press(presenter, "Decline")
+    _press(presenter, "Done")
 
     _press(presenter, "Keep Order")
 
@@ -1784,13 +1809,12 @@ def test_escape_does_nothing_during_a_look(looking):
     assert session.game.look is not None
 
 
-def test_a_placed_card_is_not_taken_back_by_clicking_it(looking):
+def test_a_placed_card_offers_nothing_more(looking):
     presenter, window, session = looking
-    _press(presenter, "Decline")
-    presenter.on_look_card_clicked("second")
+    _press(presenter, "Done")
+    _pick(presenter, window, "second")
 
-    presenter.on_look_card_clicked("second")
-
+    assert _menu(presenter, window, "second") == []
     assert window.field.selection == ("second",)
 
 

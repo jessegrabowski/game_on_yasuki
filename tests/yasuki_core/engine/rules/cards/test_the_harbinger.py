@@ -171,7 +171,7 @@ def test_banish_all_doubt_takes_one_of_four_and_puts_the_rest_on_the_bottom_in_o
     _play_to_the_look(session)
     pending = session.game.pending
     assert isinstance(pending, ChooseCards) and pending.candidates == ("a", "b", "c", "d")
-    assert pending.decline_label is None  # one must be taken
+    assert pending.minimum == 1
 
     session.submit(P1, DecisionResponse(("c",)))
     pending = session.game.pending

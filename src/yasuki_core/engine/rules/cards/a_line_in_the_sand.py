@@ -127,7 +127,11 @@ def _beset_from_all_sides_effects(
     ]
 
 
-@choice_resolver("beset_from_all_sides", prompt="You may put one at the bottom of your deck")
+@choice_resolver(
+    "beset_from_all_sides",
+    prompt="You may put one at the bottom of your deck",
+    pick="Put on the bottom of your deck",
+)
 def _resolve_beset_from_all_sides(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:

@@ -108,7 +108,7 @@ def test_overwhelmed_destroys_the_enemys_highest_force_personality_when_he_moves
 
     session.act(P1, PlayStrategy("overwhelmed"))
     pending = session.game.pending
-    assert pending.seat is P2 and pending.decline_label == "Decline"
+    assert pending.seat is P2 and pending.accepts(DecisionResponse(()))
     session.submit(P2, DecisionResponse(()))
 
     assert _on_table(session) == {"aide", "first"}

@@ -1062,7 +1062,9 @@ def _way_of_the_dragon_experienced_turn_boundary(ctx: TriggerContext) -> list[Ef
 
 
 @choice_resolver(
-    "way_of_the_dragon_experienced_bottom", prompt="You may put it on the bottom of the deck"
+    "way_of_the_dragon_experienced_bottom",
+    prompt="You may put it on the bottom of the deck",
+    pick="Put on the bottom of your deck",
 )
 def _resolve_way_of_the_dragon_experienced_bottom(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId

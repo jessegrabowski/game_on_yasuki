@@ -1280,7 +1280,11 @@ def _resolve_togashi_higaru_look(
     ]
 
 
-@choice_resolver("togashi_higaru_bottom", prompt="Put any of them on the bottom of your deck")
+@choice_resolver(
+    "togashi_higaru_bottom",
+    prompt="Put any of them on the bottom of your deck",
+    pick="Put on the bottom of your deck",
+)
 def _resolve_togashi_higaru_bottom(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:

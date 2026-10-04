@@ -228,17 +228,13 @@ class Presenter:
 
     def _show_look(self) -> None:
         """Keep the look window in step with the engine: open over the cards in view, with the
-        current question's candidates offered and, while arranging, the placed cards gone."""
-        runner, field = self.host.runner, self.window.field
+        current question's candidates offered and the cards already put somewhere gone."""
+        runner = self.host.runner
         pending = runner.pending
-        candidates = (
-            frozenset(pending.candidates) if self._asks_about_the_look(pending) else frozenset()
-        )
-        selection = frozenset(field.selection)
-        placed = selection if isinstance(pending, ArrangeCards) else frozenset()
-        self.window.show_look(
-            runner.look_cards(), candidates, selected=selection - placed, placed=placed
-        )
+        asked = self._asks_about_the_look(pending)
+        candidates = frozenset(pending.candidates) if asked else frozenset()
+        placed = frozenset(self.window.field.selection) if asked else frozenset()
+        self.window.show_look(runner.look_cards(), candidates, placed=placed)
 
     def _asks_about_the_look(
         self, pending: DecisionRequest | None
@@ -353,40 +349,41 @@ class Presenter:
         ]
 
     def _look_prompt(self, pending: ChooseCards | ArrangeCards) -> tuple[str, list[ButtonSpec]]:
-        """The buttons for a question about the cards in view. None of them is Cancel: the seat has
-        read the cards, and the engine refuses to unread them.
-
-        A choice offers Confirm, gray until a card is picked, and Decline when choosing nothing is
-        an answer. An arrangement offers Confirm once every card is placed, Keep Order for whatever
-        is still in the window, and Undo while anything has been placed.
+        """The buttons for a question about the cards in view: Done, which answers with the cards
+        put somewhere so far, and, while an arrangement still has cards in the window, Keep Order,
+        which puts the rest back as they were looked at. What a card can be done with is offered on
+        the card, and Ctrl+Z takes the last one back. None of them is Cancel: the seat has read the
+        cards, and the engine refuses to unread them.
         """
         answer = self._board_answer()
-        if isinstance(pending, ArrangeCards):
-            placed = answer.choices
-            buttons: list[ButtonSpec] = [
-                ("Confirm", self.confirm, pending.accepts(answer)),
-                ("Keep Order", lambda: self.submit_answer(pending.keeping_order(placed)), True),
-                ("Undo", self.undo, bool(placed)),
-            ]
-            return pending.prompt(answer), buttons
-        buttons = [
-            (pending.confirm_label, self.confirm, pending.accepts(answer) and bool(answer.choices))
-        ]
-        if pending.decline_label is not None:
-            buttons.append((pending.decline_label, lambda: self.submit_answer(()), True))
+        buttons: list[ButtonSpec] = [("Done", self.confirm, pending.accepts(answer))]
+        placed = answer.choices
+        if isinstance(pending, ArrangeCards) and len(placed) < len(pending.candidates):
+            buttons.append(
+                ("Keep Order", lambda: self.submit_answer(pending.keeping_order(placed)), True)
+            )
         return pending.prompt(answer), buttons
 
     def on_look_card_clicked(self, card_id: str) -> None:
-        """Pick a card in the look window. For a choice of one, the click replaces any earlier
-        pick. For an arrangement, the click places the card and Undo is what takes it back."""
-        field = self.window.field
+        """Offer what the question does to a card in the look window, as the one entry of the
+        card's menu. A card the question does not offer, or one already put somewhere, offers
+        nothing."""
         pending = self.host.runner.pending
-        if isinstance(pending, ArrangeCards) and card_id in field.selection:
+        if not self._asks_about_the_look(pending):
             return
-        if isinstance(pending, ChooseCards) and pending.maximum == 1:
-            for picked in [picked for picked in field.selection if picked != card_id]:
-                field.toggle_selection(picked)
+        if card_id not in pending.candidates or card_id in self.window.field.selection:
+            return
+        self.window.popup_at_pointer([(pending.pick_label, lambda: self._place_looked(card_id))])
+
+    def _place_looked(self, card_id: str) -> None:
+        """Put ``card_id`` where the question puts it, taking it out of the window, and answer a
+        choice once it holds as many cards as it may."""
+        field = self.window.field
         field.toggle_selection(card_id)
+        pending = self.host.runner.pending
+        if isinstance(pending, ChooseCards) and len(field.selection) == pending.maximum:
+            self.confirm()
+            return
         self.refresh()
 
     def act(self, action: Action) -> None:
@@ -618,15 +615,17 @@ class Presenter:
 
     def undo(self, _event=None) -> None:
         """Ctrl+Z: take back the last step of an assignment, unbow the last producer tapped for gold
-        while paying, or undo a just-made Dynasty Discard if nothing has happened since.
+        while paying, bring the last card put somewhere back into the look window, or undo a
+        just-made Dynasty Discard if nothing has happened since.
 
         An assignment's steps come back one at a time.
         """
         field = self.window.field
-        if isinstance(self.host.runner.pending, AssignUnits):
+        pending = self.host.runner.pending
+        if isinstance(pending, AssignUnits):
             if field.undo_assignment():
                 self.present()
-        elif isinstance(self.host.runner.pending, ChoosePayment | ArrangeCards):
+        elif isinstance(pending, ChoosePayment) or self._asks_about_the_look(pending):
             field.undo_last_selection()
         elif self.host.runner.undo_last():
             field.end_selection()

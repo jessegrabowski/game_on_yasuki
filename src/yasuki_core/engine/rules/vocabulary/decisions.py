@@ -65,13 +65,6 @@ class DecisionRequest(ABC):
         return "Confirm"
 
     @property
-    def decline_label(self) -> str | None:
-        """The text of a button that answers with nothing, or None for a request that has no such
-        answer. A "may" question offers one, so that saying no is a click of its own rather than a
-        confirm with nothing chosen."""
-        return None
-
-    @property
     def cancellable(self) -> bool:
         """Whether the seat may back out of this decision, undoing the action that raised it. False
         for a forced decision the seat must answer."""
@@ -412,6 +405,8 @@ class ChooseEquipTarget(DecisionRequest):
 # read here rather than in triggers, because a prompt is only ever a property of the request the
 # seat sees, and decisions sits below triggers in the import order.
 CHOICE_PROMPTS: dict[str, str] = {}
+# Resolver key -> what picking one card does, worded for the entry a client offers on that card.
+CHOICE_PICKS: dict[str, str] = {}
 
 
 ASSIGNMENT_SEPARATOR = "@"
@@ -741,9 +736,9 @@ class ChooseCards(DecisionRequest):
         )
 
     @property
-    def decline_label(self) -> str | None:
-        """ "Decline" when choosing nothing is an answer, None when at least one card is owed."""
-        return "Decline" if self.minimum == 0 or self.declinable else None
+    def pick_label(self) -> str:
+        """What picking one card does, as a client words the entry it offers on the card."""
+        return CHOICE_PICKS.get(self.resolver, "Choose")
 
     @property
     def cancellable(self) -> bool:
@@ -786,6 +781,11 @@ class ArrangeCards(DecisionRequest):
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = response.choices
         return len(chosen) == len(self.candidates) and set(chosen) == set(self.candidates)
+
+    @property
+    def pick_label(self) -> str:
+        """What placing one card does, as a client words the entry it offers on the card."""
+        return "Put on the bottom of your deck" if self.to_bottom else "Put on top of your deck"
 
     @property
     def unchanged(self) -> tuple[str, ...]:

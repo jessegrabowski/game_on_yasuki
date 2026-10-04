@@ -5,6 +5,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    CHOICE_PICKS,
     ChooseOption,
     ArrangeCards,
     ChooseAbilityTarget,
@@ -382,15 +383,25 @@ def test_a_distribution_with_no_registered_wording_still_says_what_it_wants():
     assert request.prompt() == "Divide them among one or more cards (2 of 2 left)"
 
 
-def test_a_may_choice_offers_a_decline_and_a_must_does_not():
-    assert _choose(0, 1).decline_label == "Decline"
-    assert _choose(1, 1).decline_label is None
+def test_a_choice_words_its_pick_as_its_resolver_registered_it_or_choose():
+    CHOICE_PICKS["probe_pick"] = "Put on the bottom of your deck"
+    try:
+        registered = ChooseCards(PlayerId.P1, ("a",), 0, 1, "probe_pick")
+
+        assert registered.pick_label == "Put on the bottom of your deck"
+        assert _choose(0, 1).pick_label == "Choose"
+    finally:
+        CHOICE_PICKS.pop("probe_pick")
+
+
+def test_an_arrangement_words_its_pick_by_the_end_of_the_deck():
+    assert _arrange("a", to_bottom=True).pick_label == "Put on the bottom of your deck"
+    assert _arrange("a").pick_label == "Put on top of your deck"
 
 
 def test_a_declinable_choice_takes_nothing_or_exactly_its_count():
     request = ChooseCards(PlayerId.P1, _HAND, 2, 2, resolver="r", declinable=True)
 
-    assert request.decline_label == "Decline"
     assert request.accepts(DecisionResponse(())) is True
     assert request.accepts(DecisionResponse(("a",))) is False
     assert request.accepts(DecisionResponse(("a", "b"))) is True

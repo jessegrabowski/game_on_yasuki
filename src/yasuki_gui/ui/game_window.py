@@ -246,7 +246,6 @@ class GameWindow:
         self,
         cards: list[L5RCard],
         candidates: frozenset[str],
-        selected: frozenset[str] = frozenset(),
         placed: frozenset[str] = frozenset(),
     ) -> None:
         """Float the look over the board while ``cards`` are in view, and take it away when none
@@ -256,7 +255,7 @@ class GameWindow:
             return
         board_w, board_h = widget_size(self.field)
         self.look_view.open_over((board_w - LOOK_W) // 2, (board_h - LOOK_H) // 2, LOOK_W, LOOK_H)
-        self.look_view.refresh(cards, candidates, selected=selected, placed=placed)
+        self.look_view.refresh(cards, candidates, placed=placed)
 
     def show_options(
         self,

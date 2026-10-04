@@ -2266,6 +2266,7 @@ def test_higaru_looks_at_one_more_card_than_rings_before_the_end_of_turn_draw(ri
     session.submit(P1, DecisionResponse(("higaru",)))
 
     assert session.game.pending.candidates == seen
+    assert session.game.pending.pick_label == "Put on the bottom of your deck"
 
 
 def test_higaru_puts_the_chosen_on_the_bottom_in_one_pick_before_the_card_is_drawn():

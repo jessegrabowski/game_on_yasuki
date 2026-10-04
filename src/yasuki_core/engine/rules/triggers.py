@@ -16,7 +16,11 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     names_both_edges,
     opens_a_window,
 )
-from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS, ChooseNextTrigger
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    CHOICE_PICKS,
+    CHOICE_PROMPTS,
+    ChooseNextTrigger,
+)
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     DelayedEffect,
@@ -249,7 +253,9 @@ Resolver = Callable[..., list[Effect]]
 CHOICE_RESOLVERS: dict[str, Resolver] = {}
 
 
-def choice_resolver(key: str, *, prompt: str | None = None) -> Callable[[Resolver], Resolver]:
+def choice_resolver(
+    key: str, *, prompt: str | None = None, pick: str | None = None
+) -> Callable[[Resolver], Resolver]:
     """Register the decorated function as the choice resolver named ``key``.
 
     Parameters
@@ -261,6 +267,9 @@ def choice_resolver(key: str, *, prompt: str | None = None) -> Callable[[Resolve
         must track the selection belongs in a ``DecisionRequest.prompt`` override instead. A choice
         with no registered wording falls back to a generic line naming only how many cards it
         wants. Default None.
+    pick : str, optional
+        What picking one card does, as "Put on the bottom of your deck", for a client to offer on
+        the card itself. Default None, which offers "Choose".
     """
 
     def register(resolver: Resolver) -> Resolver:
@@ -269,6 +278,8 @@ def choice_resolver(key: str, *, prompt: str | None = None) -> Callable[[Resolve
         CHOICE_RESOLVERS[key] = resolver
         if prompt is not None:
             CHOICE_PROMPTS[key] = prompt
+        if pick is not None:
+            CHOICE_PICKS[key] = pick
         return resolver
 
     return register

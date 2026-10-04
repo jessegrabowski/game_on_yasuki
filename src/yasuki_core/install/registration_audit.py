@@ -547,6 +547,7 @@ NOT_KEYED_BY_CARD = {
     "CHOICE_RESOLVERS",  # keyed by the kind of a pending choice
     "_OPTIONAL_COST_ANSWERS",  # likewise -- a bot hint's answers, by resolver
     "CHOICE_PROMPTS",  # likewise, and it lives in decisions
+    "CHOICE_PICKS",  # likewise
     "POLICIES",  # keyed by policy name
     "AGENTS",  # keyed by agent name
     "ACTION_TIMINGS",  # keyed by action type
