@@ -387,6 +387,15 @@ def test_a_may_choice_offers_a_decline_and_a_must_does_not():
     assert _choose(1, 1).decline_label is None
 
 
+def test_a_declinable_choice_takes_nothing_or_exactly_its_count():
+    request = ChooseCards(PlayerId.P1, _HAND, 2, 2, resolver="r", declinable=True)
+
+    assert request.decline_label == "Decline"
+    assert request.accepts(DecisionResponse(())) is True
+    assert request.accepts(DecisionResponse(("a",))) is False
+    assert request.accepts(DecisionResponse(("a", "b"))) is True
+
+
 def _arrange(*candidates: str, to_bottom: bool = False) -> ArrangeCards:
     return ArrangeCards(PlayerId.P1, candidates, "r", "src", to_bottom)
 

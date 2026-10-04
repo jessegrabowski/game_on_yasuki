@@ -706,6 +706,9 @@ class ChooseCards(DecisionRequest):
     resolver_context : tuple of str, optional
         What an earlier step of the same choice settled, handed to the resolver alongside the chosen
         ids. A resolver is otherwise given only what was picked and one source card. Default empty.
+    declinable : bool, optional
+        Whether choosing nothing is an answer as well as a count within the bounds, as "may target
+        and move home exactly two units" reads. Default False.
     """
 
     minimum: int
@@ -713,6 +716,7 @@ class ChooseCards(DecisionRequest):
     resolver: str
     source_id: str | None = None
     resolver_context: tuple[str, ...] = ()
+    declinable: bool = False
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         registered = CHOICE_PROMPTS.get(self.resolver)
@@ -727,6 +731,8 @@ class ChooseCards(DecisionRequest):
 
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = response.choices
+        if not chosen and self.declinable:
+            return True
         distinct = set(chosen)
         return (
             len(distinct) == len(chosen)
@@ -737,7 +743,7 @@ class ChooseCards(DecisionRequest):
     @property
     def decline_label(self) -> str | None:
         """ "Decline" when choosing nothing is an answer, None when at least one card is owed."""
-        return "Decline" if self.minimum == 0 else None
+        return "Decline" if self.minimum == 0 or self.declinable else None
 
     @property
     def cancellable(self) -> bool:
