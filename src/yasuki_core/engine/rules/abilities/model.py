@@ -201,6 +201,10 @@ class Ability:
         Names this ability among the several its card prints, so an action can say which one it
         takes. A card printing one ability needs no key, because there is nothing to tell apart.
         Default None.
+    limit_key : str, optional
+        The key whose uses this ability is counted under, for a copy of a printed ability granted
+        under a key of its own: using either is the printed ability's use, so each spends the
+        other's once-per-turn allowance. Default None, for the ability's own key.
     tireless : bool, optional
         The Tireless keyword: the ability may be used even while its card is bowed (CR, Tireless).
         Default False, which leaves it to the rule that a bowed card's abilities cannot be used.
@@ -267,6 +271,7 @@ class Ability:
     battle_designators: frozenset[BattleDesignator] = frozenset()
     targets_any_location: bool = False
     key: str | None = None
+    limit_key: str | None = None
     tireless: bool = False
     keywords: frozenset[str] = frozenset()
     repeatable: bool = False
@@ -359,8 +364,10 @@ def _purchase(
 
 
 def once_tag(ability: Ability) -> str:
-    """The once-per-turn tag an ability's use is claimed under, distinct per keyed ability."""
-    return f"ability:{ability.key or ''}"
+    """The once-per-turn tag an ability's use is claimed under, distinct per keyed ability unless it
+    counts its uses under another's key."""
+    key = ability.key if ability.limit_key is None else ability.limit_key
+    return f"ability:{key or ''}"
 
 
 def use_tags(game: GameState, card: L5RCard, ability: Ability) -> tuple[str, ...]:

@@ -1136,6 +1136,34 @@ def test_only_an_ability_that_acts_from_the_discard_pile_is_found_there(printed_
     assert (ActivateAbility(card.id) in session.legal_actions(PlayerId.P1)) is offered
 
 
+# A printed ability and a copy of it under a key of its own that counts its uses under the printed
+# one's, as a card that grants another card's ability does.
+for _key, _limit_key in (("printed", None), ("copy", "printed")):
+    register_ability(
+        "test_shared_limit",
+        Ability(
+            timings=(ActionTiming.OPEN,),
+            label=_key,
+            cost=lambda game, source: [],
+            targets=lambda game, card: [card.id],
+            effects=lambda game, source, target: [],
+            key=_key,
+            limit_key=_limit_key,
+        ),
+    )
+
+
+def test_a_copy_counting_its_uses_under_the_printed_key_spends_the_printed_ability():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("shared", printed_id="test_shared_limit"))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    session.act(PlayerId.P1, ActivateAbility("shared", "copy"))
+
+    assert session.game.round.priority is PlayerId.P1
+    assert ActivateAbility("shared", "printed") not in session.legal_actions(PlayerId.P1)
+
+
 def _discard_copy_for_the_named_card(game, card, context):
     if card.id != context[0]:
         return None
