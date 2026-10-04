@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
@@ -23,6 +25,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseOption,
     Confirm,
     DecisionResponse,
+    focus_token,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
@@ -66,15 +69,22 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import has_keyword, personalities_in_play
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Boundary, Moment, Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.duel.conftest import (
+    CHALLENGE_ABILITY,
+    CHALLENGE_PROBE,
+)
 from yasuki_core.engine.rules.units.composition import followers_of
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    combat_segment,
     end_phase,
     end_turn,
+    focus_card,
     holding,
     fate_card,
     pay,
@@ -245,6 +255,171 @@ def test_it_cannot_be_backed_out_of_once_the_opponent_has_been_given_something()
     assert _honor(session, P2) == 1  # still theirs
     assert _hand(session, P2) == [drawn]
     assert isinstance(session.game.pending, Confirm)  # and the question is still owed
+
+
+# --- Against the Darkness ---
+
+
+@contextmanager
+def _against_the_darkness_duel(*, challenger_chi: int):
+    """A duel between P1's challenger and P2's rival, with Against the Darkness the only card P1
+    focuses and one plain card for P2, so the focusing ends with both revealed.
+
+    A context manager because the challenge comes from a probe ability, which has to stay
+    registered for a replay of the tape to find it.
+    """
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state, personality("challenger", owner=P1, chi=challenger_chi, printed_id=CHALLENGE_PROBE)
+    )
+    put_in_play(state, personality("rival", owner=P2, chi=3))
+    for card in (
+        focus_card("darkness", P1, 3, printed_id="against_the_darkness"),
+        focus_card("P2-plain", P2, 1),
+    ):
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        session = EngineSession.start(state, P1)
+        session.act(P1, ActivateAbility("challenger"))
+        session.submit(P1, DecisionResponse(("rival",)))
+        session.submit(P2, DecisionResponse((focus_token("P2-plain"),)))
+        session.submit(P1, DecisionResponse((focus_token("darkness"),)))
+        yield session
+
+
+@pytest.mark.parametrize("challenger_chi", [9, 1], ids=["would have won", "would have lost"])
+def test_against_the_darkness_makes_both_personalities_lose(challenger_chi):
+    # Whatever the totals come to, so the parametrize runs it from both sides of the comparison.
+    with _against_the_darkness_duel(challenger_chi=challenger_chi) as session:
+        outcome = session.game.duel.outcome
+        assert outcome.winners == ()
+        assert set(outcome.losers) == {P1, P2}
+
+
+def test_against_the_darkness_records_the_totals_it_overrode():
+    # Cards and the duel panel read the totals either way, so overriding who lost must not blank
+    # what each side reached.
+    with _against_the_darkness_duel(challenger_chi=9) as session:
+        assert session.game.duel.outcome.totals == {P1: 9 + 3, P2: 3 + 1}
+
+
+def test_against_the_darkness_gains_its_honor_for_a_duel_that_resolved():
+    with _against_the_darkness_duel(challenger_chi=9) as session:
+        assert session.game.table.seats[P1].honor == 2
+        assert session.game.table.seats[P2].honor == 0
+
+
+def test_a_duel_ended_early_leaves_nothing_held_for_its_end():
+    # Against the Darkness holds its Honor for the duel's end and Relentless ends the duel from the
+    # same Focus Effect step. Asserted on the containers a leak would sit in rather than on the
+    # Honor staying at zero, which is also true of a consequence merely held and never dropped.
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("challenger", owner=P1, chi=3, printed_id=CHALLENGE_PROBE))
+    put_in_play(state, personality("rival", owner=P2, chi=3))
+    for card in (
+        focus_card("darkness", P1, 3, printed_id="against_the_darkness"),
+        focus_card("quit", P1, 2, printed_id="relentless"),
+        focus_card("P2-a", P2, 1),
+        focus_card("P2-b", P2, 1),
+    ):
+        state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    with probe_ability(CHALLENGE_PROBE, CHALLENGE_ABILITY):
+        session = EngineSession.start(state, P1)
+        session.act(P1, ActivateAbility("challenger"))
+        session.submit(P1, DecisionResponse(("rival",)))
+        session.submit(P2, DecisionResponse((focus_token("P2-a"),)))
+        session.submit(P1, DecisionResponse((focus_token("darkness"),)))
+        session.submit(P2, DecisionResponse((focus_token("P2-b"),)))
+        session.submit(P1, DecisionResponse((focus_token("quit"),)))
+        # The active player orders the two Focus Effects, and Relentless goes first.
+        session.submit(session.game.pending.seat, DecisionResponse(("quit",)))
+
+        assert session.game.duel.outcome.totals == {}
+        assert session.game.delayed == []
+        assert session.game.ongoing == []
+        assert session.game.table.seats[P1].honor == 0
+
+
+def test_against_the_darkness_replays_to_the_same_board():
+    with _against_the_darkness_duel(challenger_chi=9) as session:
+        assert replay(session.log).table == session.game.table
+
+
+def _against_the_darkness_battle(*, attacker: PlayerId = P1) -> EngineSession:
+    """A battle with a Shadowlands Personality on each side, a clean Personality beside P1's, and
+    Against the Darkness in P1's hand."""
+    cards = [
+        personality("oni", owner=P1, force=3, keywords=(keywords.SHADOWLANDS,)),
+        personality("clean", owner=P1, force=3),
+        personality("beast", owner=P2, force=3, keywords=(keywords.SHADOWLANDS,)),
+    ]
+    held = [
+        L5RCard.of(
+            FatePrint,
+            id="darkness_card",
+            name="Against the Darkness",
+            side=Side.FATE,
+            owner=P1,
+            printed_id="against_the_darkness",
+            focus=3,
+        )
+    ]
+    mine, theirs = {"oni": 0, "clean": 0}, {"beast": 0}
+    if attacker is P1:
+        return combat_segment(cards, mine, theirs, in_hand=held)
+    return combat_segment(cards, theirs, mine, attacker=P2, in_hand=held, defender_passes=False)
+
+
+def _shadowlands_follower(session: EngineSession, card_id: str, on: str, *, tainted: bool) -> None:
+    follower = attachment(
+        card_id,
+        attachment_type=AttachmentType.FOLLOWER,
+        owner=session.game.table.cards_by_id[on].owner,
+        force=2,
+        keywords=(keywords.SHADOWLANDS,) if tainted else (),
+    )
+    attached(session.game, follower, on)
+
+
+def test_against_the_darkness_weakens_every_shadowlands_card_at_the_battlefield():
+    # "All ... at this battlefield" names no controller, so both armies lose Force, and a card
+    # without the keyword is left alone.
+    session = _against_the_darkness_battle()
+    _shadowlands_follower(session, "ashigaru", "oni", tainted=True)
+    _shadowlands_follower(session, "guard", "clean", tainted=False)
+
+    session.act(P1, PlayStrategy("darkness_card"))
+
+    cards = session.game.table.cards_by_id
+    assert effective_force(session.game, cards["oni"]) == 2
+    assert effective_force(session.game, cards["beast"]) == 2
+    assert effective_force(session.game, cards["ashigaru"]) == 1
+    assert effective_force(session.game, cards["clean"]) == 3
+    assert effective_force(session.game, cards["guard"]) == 2
+
+
+def _hand_ids(session: EngineSession, seat: PlayerId) -> set[str]:
+    return {card.id for card in session.game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards}
+
+
+def test_against_the_darkness_returns_itself_to_hand_for_the_defender():
+    session = _against_the_darkness_battle(attacker=P2)
+
+    session.act(P1, PlayStrategy("darkness_card"))
+    while session.game.attack is not None and not session.game.game_over:
+        session.act(session.game.round.priority, Pass())
+
+    assert "darkness_card" in _hand_ids(session, P1)
+
+
+def test_against_the_darkness_stays_discarded_for_the_attacker():
+    session = _against_the_darkness_battle()
+
+    session.act(P1, PlayStrategy("darkness_card"))
+    while session.game.attack is not None and not session.game.game_over:
+        session.act(session.game.round.priority, Pass())
+
+    assert "darkness_card" not in _hand_ids(session, P1)
 
 
 # --- Bound in Blood ---
