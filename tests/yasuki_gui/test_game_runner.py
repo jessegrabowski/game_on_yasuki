@@ -41,6 +41,7 @@ from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW, KHARMIC_REFI
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
     ChooseDiscard,
+    ChooseNextTrigger,
     Confirm,
     DecisionResponse,
 )
@@ -760,6 +761,7 @@ def test_a_search_through_hidden_piles_is_presented_as_a_dialog_not_a_board_sele
     search = runner_.search_view()
     assert search is not None
     assert search.panes["Provinces"] == []  # offered by the nav bar, but disabled
+    assert "In play" not in search.panes  # offered only to a choice that reaches the battlefield
     assert search.choosable == {"mine", "kobune"}
 
 
@@ -773,6 +775,36 @@ def test_a_search_shows_every_card_in_the_piles_it_looked_through():
     assert [card.id for card in search.panes["Deck"]] == ["mine", "unique-deck"]
     assert [card.id for card in search.panes["Discard"]] == ["kobune", "unique-discard"]
     assert search.choosable == {"mine", "kobune"}  # the Unique ones show but cannot be taken
+
+
+def _trigger_order_runner(candidates: tuple[str, ...]) -> GameRunner:
+    """P1 asked to order triggers on a Personality of each seat in play and one of P2's in P2's
+    discard pile, the way battle resolution leaves the Personalities it destroyed."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, personality("mine")))
+    put_in_play(state, register(state, personality("theirs", owner=PlayerId.P2)))
+    discard = state.zones[ZoneKey(PlayerId.P2, ZoneRole.DYNASTY_DISCARD)]
+    discard.add(register(state, personality("fallen", owner=PlayerId.P2)))
+    discard.add(register(state, personality("earlier", owner=PlayerId.P2)))
+    runner_ = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
+    runner_.session.game.pending = ChooseNextTrigger(seat=PlayerId.P1, candidates=candidates)
+    return runner_
+
+
+def test_ordering_triggers_on_cards_in_play_is_answered_on_the_board():
+    runner_ = _trigger_order_runner(("mine", "theirs"))
+
+    assert runner_.search_view() is None
+
+
+def test_ordering_a_trigger_on_a_card_in_the_opponents_discard_searches_that_pile():
+    runner_ = _trigger_order_runner(("mine", "fallen"))
+
+    search = runner_.search_view()
+
+    assert [card.id for card in search.panes["Discard"]] == ["fallen", "earlier"]
+    assert [card.id for card in search.panes["In play"]] == ["mine"]
+    assert search.choosable == {"mine", "fallen"}
 
 
 def test_a_board_targeting_ability_takes_no_search_dialog():
