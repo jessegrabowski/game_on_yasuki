@@ -103,7 +103,7 @@ def perform(game: GameState, action: Action) -> None:
         game.action_taken = describe_action(game, action)
         game.action_seat = game.round.priority
         game.action_targets = ()
-        game.amount_paid = None
+        game.amount_declared = None
         game.action_is_favor = False
         game.action = action
         game.interrupts_taken.clear()
@@ -267,10 +267,10 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
 def _apply_amount_choice(
     game: GameState, request: ChooseAmount, response: DecisionResponse
 ) -> None:
-    """Record the declared amount as the action's ``amount_paid`` and resume with what declaring
+    """Record the declared amount as the action's ``amount_declared`` and resume with what declaring
     it resolves."""
     declared = int(response.choices[0])
-    game.amount_paid = declared
+    game.amount_declared = declared
     produced = declared_amount_effects(
         game,
         request.seat,

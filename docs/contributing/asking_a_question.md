@@ -42,8 +42,8 @@ to spend, and the answer decides what the card can reach:
 
 An amount printed in the cost block, a :X:, is paid at step B and shapes the targets chosen at
 step C (CR, Action Sequence). {func}`~.declare_amount` asks it, and its answer does nothing but
-record the amount as the action's `amount_paid`. The ability sets `targets_after_cost`, so its
-`targets` are read once the cost is paid, and they and its `effects` read `game.amount_paid`:
+record the amount as the action's `amount_declared`. The ability sets `targets_after_cost`, so its
+`targets` are read once the cost is paid, and they and its `effects` read `game.amount_declared`:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/cards/lotus_edition.py
 :pyobject: _hired_killer_targets
@@ -54,7 +54,7 @@ What the card does then resolves as the action's own effects, which the Interrup
 a negation of the action reaches. A resolver that returned the destruction from inside the cost
 would make it a payment, which neither reaches. A count of targets the amount buys, as
 {card}`Bound in Blood`'s "half the Gold spent", is its `target_count`, which reads
-`game.amount_paid` the same way.
+`game.amount_declared` the same way.
 
 ## A card
 

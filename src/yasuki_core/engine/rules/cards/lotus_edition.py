@@ -49,12 +49,12 @@ def _hired_killer_targets(game: GameState, source: L5RCard) -> list[str]:
     can cost the same, so a choice remains once the amount is settled. An amount that reaches none
     targets nothing, and the card does nothing more, the Honor loss included (CR, Action Sequence
     step E)."""
-    if game.amount_paid is None:
+    if game.amount_declared is None:
         return []
     return [
         card.id
         for card in personalities_in_play(game)
-        if unit_gold_cost(game, card) == game.amount_paid - PAID_ABOVE_UNIT_COST
+        if unit_gold_cost(game, card) == game.amount_declared - PAID_ABOVE_UNIT_COST
     ]
 
 

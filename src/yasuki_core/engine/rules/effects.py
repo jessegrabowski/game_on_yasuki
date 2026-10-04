@@ -1621,7 +1621,7 @@ class AskAmount(InterruptingEffect):
         return len(self.amounts) != 1
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.amount_paid = self.amounts[0]
+        game.amount_declared = self.amounts[0]
         return []
 
     def follow_on(self, game: GameState) -> tuple[Effect, ...]:

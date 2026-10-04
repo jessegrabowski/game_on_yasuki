@@ -367,7 +367,7 @@ def _recruit_with_invest_gold(game: GameState, source: L5RCard) -> list[Effect]:
 
 def _recruit_with_invest(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     amounts = invest_amounts(game, source) or ()
-    invested = amounts[0] if len(amounts) == 1 else game.amount_paid
+    invested = amounts[0] if len(amounts) == 1 else game.amount_declared
     return recruit_effects(game, _arrival(game, source, invest_amount=invested))
 
 

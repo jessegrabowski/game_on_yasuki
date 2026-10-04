@@ -262,7 +262,7 @@ def _bound_in_blood_targets(game: GameState, source: L5RCard) -> list[str]:
 
 def _bound_in_blood_target_count(game: GameState, source: L5RCard) -> int:
     """The bodies the amount bought: half the Gold spent, rounded down, to a most of four."""
-    return min(MOST_SACRIFICES, (game.amount_paid or 0) // GOLD_PER_SACRIFICE)
+    return min(MOST_SACRIFICES, (game.amount_declared or 0) // GOLD_PER_SACRIFICE)
 
 
 def _bound_in_blood_effects(

@@ -231,4 +231,4 @@ def test_the_personality_chosen_is_the_actions_target():
     _answer_everything(session, amount=8)
 
     assert session.game.action_targets == ("dear",)
-    assert session.game.amount_paid == 8
+    assert session.game.amount_declared == 8

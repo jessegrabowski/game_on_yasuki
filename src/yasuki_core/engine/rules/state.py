@@ -169,7 +169,7 @@ class GameState:
         The cards the action now resolving has been pointed at, in the order its abilities hit
         them: the target a seat chose, or every card an untargeted ability reached. A card picked
         inside a later question is not among them. Ephemeral and rebuilt by replay. Default empty.
-    amount_paid : int or None
+    amount_declared : int or None
         The amount the action now resolving declared for a variable cost, its :X:, which the
         ability's targets and effects read. None outside one, or for an action that declared none.
         Ephemeral and rebuilt by replay. Default None.
@@ -265,7 +265,7 @@ class GameState:
     action_taken: str = ""
     action_seat: PlayerId | None = None
     action_targets: tuple[str, ...] = ()
-    amount_paid: int | None = None
+    amount_declared: int | None = None
     action_is_favor: bool = False
     action_events: list[GameEvent] = field(default_factory=list)
     action_resolved: bool = False

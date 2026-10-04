@@ -324,12 +324,12 @@ def _the_bad_death_of_hida_daizu_cost(game: GameState, source: L5RCard) -> list[
 def _the_bad_death_of_hida_daizu_targets(game: GameState, source: L5RCard) -> list[str]:
     """The Personalities whose unit costs no more than the amount paid. An amount below every unit
     reaches none, and the card does nothing more (CR, Action Sequence step E)."""
-    if game.amount_paid is None:
+    if game.amount_declared is None:
         return []
     return [
         card.id
         for card in personalities_in_play(game)
-        if unit_gold_cost(game, card) <= game.amount_paid
+        if unit_gold_cost(game, card) <= game.amount_declared
     ]
 
 

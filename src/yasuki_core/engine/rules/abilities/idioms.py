@@ -458,7 +458,7 @@ DECLARED_AMOUNT = "declared_amount"
 
 def declare_amount(source: L5RCard, amounts: tuple[int, ...], question: str) -> AskAmount:
     """The :X: in ``source``'s cost block: ask its controller which of ``amounts`` to spend. The
-    answer is recorded as the action's ``amount_paid``, which the ability's targets and effects
+    answer is recorded as the action's ``amount_declared``, which the ability's targets and effects
     read, and produces nothing else, so the cost question settles only the payment (CR, Action
     Sequence step B)."""
     return AskAmount(source.owner, amounts, question, DECLARED_AMOUNT, source.id)
