@@ -36,7 +36,6 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesi
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
-    Ask,
     AskOption,
     Banish,
     Bow,
@@ -996,8 +995,6 @@ def _the_sacred_ground_of_the_phoenix__back_granted_ability(
 
 # --- Togashi Hiyoku ---
 
-HIYOKU_ADDITIONAL_ACTION = "Take an additional action?"
-
 
 @on(DuelResolved, "togashi_hiyoku")
 def _togashi_hiyoku_duel_resolved(ctx: TriggerContext) -> list[Effect]:
@@ -1044,35 +1041,12 @@ def _togashi_hiyoku_effects(game: GameState, source: L5RCard, target: L5RCard) -
 def _resolve_togashi_hiyoku_winner(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Offer the additional action to whoever won, which may be the challenged seat.
-
-    Each winner is asked, because the CR lets both Personalities win a duel, and a tie neither won
-    asks nobody. The winning Personality is the question's subject, since a yes is read back as
-    whatever subjects the question carried.
-    """
+    """Give whoever won, which may be the challenged seat, the additional action. The "may" is the
+    seat's to exercise by taking the action or declining it. A tie neither won grants nothing."""
     duel = duel_decided_by(game, source_id)
     if duel is None:
         return []
-    return [
-        Ask(
-            winner,
-            HIYOKU_ADDITIONAL_ACTION,
-            "togashi_hiyoku_additional_action",
-            subjects=(duel.duelist_of(winner),),
-        )
-        for winner in duel.outcome.winners
-    ]
-
-
-@choice_resolver("togashi_hiyoku_additional_action")
-def _resolve_togashi_hiyoku_additional_action(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """Give the seat that accepted the additional action it asked for.
-
-    The resolver is called on either answer, so a no arrives as no subjects and buys nothing.
-    """
-    return [AdditionalAction(seat, source_id)] if chosen else []
+    return [AdditionalAction(winner, source_id) for winner in duel.outcome.winners]
 
 
 register_ability(
