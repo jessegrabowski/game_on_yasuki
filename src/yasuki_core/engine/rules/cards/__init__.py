@@ -55,6 +55,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     thousand_years_of_darkness,
     torn_asunder,
     twenty_festivals,
+    web_of_lies,
     winds_of_change,
     words_and_deeds,
 )
