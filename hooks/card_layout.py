@@ -66,6 +66,7 @@ _CALLS = {
     "register_may_remain_bowed",
     "register_bow_waiver",
     "register_cannot_attack",
+    "register_yu",
 }
 
 
