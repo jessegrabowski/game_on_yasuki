@@ -305,6 +305,24 @@ def test_an_outcome_a_card_spells_out_is_offered_as_one_button_each(board):
     assert not window.field.selecting
 
 
+def test_several_outcomes_are_ticked_on_a_panel_over_the_board(board):
+    presenter, window, session = board
+    session.game.pending = ChooseOption(
+        seat=P1,
+        candidates=("Invest 2", "Invest 3"),
+        question="Which Invests do you pay?",
+        resolver="probe",
+        source_id="of",
+        maximum=2,
+    )
+
+    presenter.present()
+
+    assert window.options_view.showing
+    assert _buttons(window) == []
+    assert not window.field.selecting
+
+
 def test_a_variable_gold_cost_is_named_on_a_spinner_rather_than_a_button_each(board):
     # The amounts run as high as the seat can raise, which is a list no panel this width can hold,
     # so the seat steps a spinner and one button spends what it reads.

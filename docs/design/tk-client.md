@@ -28,7 +28,8 @@ To be documented here:
 
 A panel that shows a procedure is a {class}`~.FloatingPanel` placed over the board rather than a
 region beside it: {class}`~.BattleView` for an attack, {class}`~.DuelPanel` for a duel,
-{class}`~.LookView` for the cards a look shows, and {class}`~.CardStrip` for any pile a player opens.
+{class}`~.LookView` for the cards a look shows, {class}`~.OptionsView` for a question that ticks
+several outcomes, and {class}`~.CardStrip` for any pile a player opens.
 Each one opens at a starting place the window computes and then stays wherever the player has dragged
 it, so the geometry is a first-open default and not a dock.
 

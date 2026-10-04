@@ -24,6 +24,7 @@ from yasuki_gui.ui.card_preview import CardPreview
 from yasuki_gui.ui.card_strip import CardStrip
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.look_view import LOOK_H, LOOK_W, LookView
+from yasuki_gui.ui.options_view import OPTIONS_W, OptionsView
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
 from yasuki_gui.ui.prompt_box import PromptBox
@@ -155,6 +156,8 @@ class GameWindow:
         self.card_strip = CardStrip(self.field, ImageProvider(self.field))
         # The cards a look shows, opened over the board while the questions about them are asked.
         self.look_view = LookView(self.field, ImageProvider(self.field))
+        # A question picking several outcomes, laid over the board while it is owed.
+        self.options_view = OptionsView(self.field)
         # Drawn on the window itself, so it floats over the board, the sidebar and every panel.
         # One preview shared by the board and every panel, so none can hide or clip another's.
         self.card_preview = CardPreview(self.root, ImageProvider(self.root))
@@ -230,6 +233,25 @@ class GameWindow:
         board_w, board_h = widget_size(self.field)
         self.look_view.open_over((board_w - LOOK_W) // 2, (board_h - LOOK_H) // 2, LOOK_W, LOOK_H)
         self.look_view.refresh(cards, candidates, selected=selected, placed=placed)
+
+    def show_options(
+        self,
+        question: str,
+        options: tuple[str, ...],
+        accepts: Callable[[tuple[str, ...]], bool],
+        on_submit: Callable[[tuple[str, ...]], None],
+        on_cancel: Callable[[], None] | None,
+    ) -> None:
+        """Float a question picking several outcomes over the board, unless it is already up. The
+        arguments are ``OptionsView.ask``'s and are passed straight through."""
+        if self.options_view.showing:
+            return
+        board_w, board_h = widget_size(self.field)
+        self.options_view.ask(question, options, accepts, on_submit, on_cancel)
+        height = self.options_view.winfo_reqheight()
+        self.options_view.open_over(
+            (board_w - OPTIONS_W) // 2, (board_h - height) // 2, OPTIONS_W, height
+        )
 
     def show_battle(
         self,
