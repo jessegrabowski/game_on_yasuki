@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.effects import (
     DrawCard,
     Effect,
     Evaluate,
+    GainHonor,
     GrantAbility,
     GrantKeyword,
     GrantModifier,
@@ -644,4 +645,43 @@ register_ability(
         effects=_wrath_of_the_shattered_star_effects,
         located_at=(CardLocation.HAND,),
     ),
+)
+
+
+# --- Yabe no Oni, Blessed Abomination (Experienced) ---
+
+LESSER_ONI = "oni_personality_2_1"
+YABE_HONOR_LOSS = 6
+YABE_YU_ONI_COUNT = 2
+
+
+@on(EnteredPlay, "yabe_no_oni_blessed_abomination_experienced")
+def _yabe_no_oni_blessed_abomination_experienced_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After Yabe no Oni enters play, lose 6 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -YABE_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+@on(Destroyed, "yabe_no_oni_blessed_abomination_experienced")
+def _yabe_no_oni_blessed_abomination_experienced_destroyed(ctx: TriggerContext) -> list[Effect]:
+    """After a non-Oni Personality is destroyed, create a 2F/1C Nonhuman Oni Shadowlands
+    Personality in your home. A created Personality leaves the table as it is destroyed, so its
+    destruction is not read here."""
+    destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
+    if destroyed is None or not isinstance(destroyed.printed, PersonalityPrint):
+        return []
+    if has_keyword(ctx.game, destroyed, keywords.ONI):
+        return []
+    return [CreateToken(LESSER_ONI, ctx.card.owner, ctx.card.id)]
+
+
+def _yabe_no_oni_blessed_abomination_experienced_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Create two 2F/1C Nonhuman Oni Shadowlands Personalities in your home." """
+    oni = (CreateToken(LESSER_ONI, ctx.card.owner, ctx.card.id) for _ in range(YABE_YU_ONI_COUNT))
+    return [Simultaneously(tuple(oni))]
+
+
+register_yu(
+    "yabe_no_oni_blessed_abomination_experienced", _yabe_no_oni_blessed_abomination_experienced_yu
 )

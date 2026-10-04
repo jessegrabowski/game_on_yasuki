@@ -1,6 +1,6 @@
 import pytest
 
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.board.queries import has_keyword
 from yasuki_core.engine.rules.cards.chaos_reigns_part_ii import (
     HIYAMAKOS_CLAW,
+    LESSER_ONI,
     NAGA_FOLLOWER,
     WRATH_FIRE_MODE,
     WRATH_MELEE_MODE,
@@ -728,3 +729,58 @@ def test_matsu_kurutta_gives_a_deathseeker_at_his_battlefield_a_force_token_as_h
 
     assert comrade.counters == {"plus1f": 1}
     assert effective_force(game, comrade) == force + 1
+
+
+# --- Yabe no Oni, Blessed Abomination (Experienced) ---
+
+
+def _yabe_game():
+    game = two_seat_game()
+    token_template(
+        game,
+        LESSER_ONI,
+        name="Lesser Oni",
+        card_type="Personality",
+        keywords=("Nonhuman", "Oni", "Shadowlands"),
+        force=2,
+        chi=1,
+    )
+    yabe = personality(
+        "yabe",
+        printed_id="yabe_no_oni_blessed_abomination_experienced",
+        force=6,
+        chi=2,
+        keywords=("Nonhuman", "Oni"),
+    )
+    put_in_play(game, yabe)
+    return game
+
+
+def _lesser_oni(game):
+    return [card for card in personalities_in_play(game) if card.name == "Lesser Oni"]
+
+
+def test_yabe_no_oni_costs_six_honor_as_he_enters_play():
+    game = _yabe_game()
+
+    fire(game, EnteredPlay("yabe"))
+
+    assert game.table.seats[P1].honor == -6
+
+
+@pytest.mark.parametrize(("carried", "created"), [((), 1), (("Oni",), 0)], ids=["human", "oni"])
+def test_yabe_no_oni_creates_an_oni_after_a_non_oni_personality_is_destroyed(carried, created):
+    game = _yabe_game()
+    put_in_play(game, personality("victim", owner=PlayerId.P2, keywords=carried))
+
+    resolve_effects(game, [Destroy("victim", P1)])
+
+    assert len(_lesser_oni(game)) == created
+
+
+def test_yabe_no_oni_creates_two_oni_as_he_dies_in_battle_resolution():
+    game = _yabe_game()
+
+    resolve_effects(game, [Destroy("yabe", Rulebook.BATTLE_RESOLUTION)])
+
+    assert len(_lesser_oni(game)) == 2
