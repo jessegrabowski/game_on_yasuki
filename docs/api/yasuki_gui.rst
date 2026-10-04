@@ -52,6 +52,7 @@ yasuki_gui
     yasuki_gui.ui.info_box <yasuki_gui.ui.info_box>
     yasuki_gui.ui.look_view <yasuki_gui.ui.look_view>
     yasuki_gui.ui.menus <yasuki_gui.ui.menus>
+    yasuki_gui.ui.options_view <yasuki_gui.ui.options_view>
     yasuki_gui.ui.phase_bar <yasuki_gui.ui.phase_bar>
     yasuki_gui.ui.prompt_box <yasuki_gui.ui.prompt_box>
     yasuki_gui.visuals <yasuki_gui.visuals>

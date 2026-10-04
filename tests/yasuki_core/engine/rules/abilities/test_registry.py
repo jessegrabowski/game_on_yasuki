@@ -280,6 +280,7 @@ def test_a_keyword_ability_joins_every_card_carrying_the_keyword_after_its_own()
         assert abilities_for(game, bare) == (plain,)
     finally:
         KEYWORD_ABILITIES.pop("probe", None)
+        _RULEBOOK_KEYS.discard("probe")
 
 
 def test_a_granted_keyword_brings_its_abilities_with_it():
@@ -301,6 +302,7 @@ def test_a_granted_keyword_brings_its_abilities_with_it():
         assert abilities_for(game, farm) == (plain,)
     finally:
         KEYWORD_ABILITIES.pop("probe", None)
+        _RULEBOOK_KEYS.discard("probe")
 
 
 def test_a_granted_ability_under_a_keyword_abilitys_key_stands_in_for_it():
@@ -320,6 +322,7 @@ def test_a_granted_ability_under_a_keyword_abilitys_key_stands_in_for_it():
         assert ability_for(game, farm, "probe").label == "Granted to farm"
     finally:
         KEYWORD_ABILITIES.pop("probe", None)
+        _RULEBOOK_KEYS.discard("probe")
         GRANTED_ABILITIES.pop("grant_probe", None)
 
 
@@ -404,6 +407,7 @@ def test_a_keyword_may_not_confer_two_abilities_under_one_key():
             register_keyword_ability(plain)
     finally:
         KEYWORD_ABILITIES.pop("probe", None)
+        _RULEBOOK_KEYS.discard("probe")
 
 
 def test_a_second_invest_for_one_card_is_refused():
@@ -519,9 +523,12 @@ def test_ability_registrations_lists_what_is_in_force_under_one_ruleset():
 @pytest.fixture
 def location_abilities():
     before = dict(LOCATION_ABILITIES)
+    reserved = set(_RULEBOOK_KEYS)
     yield
     LOCATION_ABILITIES.clear()
     LOCATION_ABILITIES.update(before)
+    _RULEBOOK_KEYS.clear()
+    _RULEBOOK_KEYS.update(reserved)
 
 
 @pytest.mark.usefixtures("location_abilities")

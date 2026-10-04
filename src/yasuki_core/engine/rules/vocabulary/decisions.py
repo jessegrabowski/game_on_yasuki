@@ -286,7 +286,8 @@ class ChooseAmount(DecisionRequest):
 @dataclass(frozen=True, slots=True)
 class ChooseOption(DecisionRequest):
     """The seat must pick one of the outcomes an ability spells out, such as "gain or lose" or
-    "this player or that".
+    "this player or that", or several of them where the card lets it, as a Strategy's two Invests
+    can be paid together.
 
     The candidates are the outcomes as the seat reads them. The answer feeds the named resolver,
     which turns the chosen label back into effects. A client shows a list of wordings, not a board
@@ -303,18 +304,29 @@ class ChooseOption(DecisionRequest):
     resolver_context : tuple of str, optional
         What an earlier step of the same choice settled, handed to the resolver alongside the
         answer. A resolver is otherwise given only what was picked. Default empty.
+    minimum : int, optional
+        The fewest outcomes an answer may pick. Default 1.
+    maximum : int, optional
+        The most outcomes an answer may pick. Default 1.
     """
 
     question: str
     resolver: str
     source_id: str
     resolver_context: tuple[str, ...] = ()
+    minimum: int = 1
+    maximum: int = 1
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question
 
     def accepts(self, response: DecisionResponse) -> bool:
-        return _chooses_exactly_one(self, response)
+        chosen = response.choices
+        return (
+            self.minimum <= len(chosen) <= self.maximum
+            and len(set(chosen)) == len(chosen)
+            and set(chosen) <= set(self.candidates)
+        )
 
     @property
     def cancellable(self) -> bool:

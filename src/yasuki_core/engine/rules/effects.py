@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseAmount,
@@ -1362,7 +1363,7 @@ class GrantPriority(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         # The pass count goes with it: the round is being handed to a seat rather than passed on by
         # one, so the consecutive passes that would close it start again from this seat.
-        game.round = replace(game.round, priority=self.seat, passes=0)
+        game.round = replace(game.round, priority=self.seat, passes=0, follow_ups=None)
         return []
 
 
@@ -1370,15 +1371,26 @@ class GrantPriority(Effect):
 class AdditionalAction(Effect):
     """Grant ``seat`` an additional action: once the action now resolving is done, the opportunity
     to act stays with ``seat`` instead of passing on (CR, Additional Action). A pass taken at that
-    opportunity does not count toward closing the round."""
+    opportunity does not count toward closing the round.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat granted the action.
+    follow_ups : frozenset of Action or None, optional
+        The actions the opportunity may be spent on, as "take an additional Battle from your target
+        Ring" limits it. A pass is always allowed. Default None, for any action the round permits.
+    """
 
     seat: PlayerId
+    follow_ups: frozenset[Action] | None = None
 
     def describe(self) -> str:
         return f"{self.seat.name} takes an additional action"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.additional_action = self.seat
+        game.additional_follow_ups = self.follow_ups
         return []
 
 
@@ -1753,6 +1765,10 @@ class AskOption(InterruptingEffect):
     resolver_context : tuple of str, optional
         What an earlier step of the same choice settled, carried through to the resolver. Default
         empty.
+    minimum : int, optional
+        The fewest outcomes the seat may pick. Default 1.
+    maximum : int, optional
+        The most outcomes the seat may pick, as "either or both" allows two. Default 1.
     """
 
     seat: PlayerId
@@ -1761,6 +1777,8 @@ class AskOption(InterruptingEffect):
     resolver: str
     source_id: str
     resolver_context: tuple[str, ...] = ()
+    minimum: int = 1
+    maximum: int = 1
 
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
@@ -1777,7 +1795,25 @@ class AskOption(InterruptingEffect):
             resolver=self.resolver,
             source_id=self.source_id,
             resolver_context=self.resolver_context,
+            minimum=self.minimum,
+            maximum=self.maximum,
         )
+
+
+@dataclass(frozen=True, slots=True)
+class DeclareOptions(Effect):
+    """Declare ``options`` for the action now resolving, the outcomes its cost was paid for, which
+    its effects read as ``game.options_declared`` (CR, Action Sequence step B). Part of the cost a
+    resolver turns an answer into, so only the action's own question declares anything."""
+
+    options: tuple[str, ...]
+
+    def describe(self) -> str:
+        return f"declare {', '.join(self.options)}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.options_declared = self.options
+        return []
 
 
 @dataclass(frozen=True, slots=True)

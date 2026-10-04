@@ -2,7 +2,7 @@ import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import Location, TableState, DeckKey, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
@@ -14,18 +14,23 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.cards.road_to_ruin import UNITY_CHI, UNITY_FORCE
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
+from yasuki_core.engine.rules.cards.road_to_ruin import (
+    FORGOTTEN_DEAD,
+    UNICORN_EXPEDITION_FOLLOW_UP,
+    UNICORN_EXPEDITION_STRAIGHTEN,
+)
 from yasuki_core.engine.rules.effects import (
     AttachCard,
     DelayStraighten,
     Destroy,
     Dishonor,
     MeleeAttack,
+    Move,
 )
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -37,19 +42,22 @@ from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MINUS_1F
-from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint, RingPrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, HoldingPrint, RingPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    combat_segment,
     end_phase,
     end_turn,
     holding,
+    pay,
     personality,
     province_card,
     put_in_play,
@@ -866,3 +874,135 @@ def test_tao_defenders_may_be_equipped_from_the_discard_pile_with_compassion(p1_
     session = EngineSession.start(state, P1)
 
     assert (Equip("defenders") in session.legal_actions(P1)) is offered
+
+
+# --- The Unicorn Expedition ---
+
+
+def _horse_ability(game, source, target):
+    return []
+
+
+HORSE_ACTION = ActivateAbility("horse", "probe")
+
+
+@pytest.fixture
+def expedition():
+    """The Combat Segment, with P1's bowed rider at home carrying a bowed horse, P1's vanguard
+    carrying a scout at the battlefield against P2's guard, gold for any Invest, and The Unicorn
+    Expedition in P1's hand. The horse and the scout each have a Battle ability."""
+    strategy = L5RCard.of(
+        FatePrint,
+        id="expedition",
+        name="The Unicorn Expedition",
+        printed_id="the_unicorn_expedition",
+        side=Side.FATE,
+        owner=P1,
+    )
+    probe = Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=itself,
+        effects=_horse_ability,
+        hits_every_target=True,
+        key="probe",
+    )
+    with probe_ability("horse_probe", probe), probe_ability("scout_probe", probe):
+        session = combat_segment(
+            [
+                holding("mine", gold_production=5),
+                personality("rider"),
+                personality("vanguard"),
+                personality("guard", owner=PlayerId.P2),
+            ],
+            {"vanguard": 0},
+            {"guard": 0},
+            in_hand=[strategy],
+        )
+        table = session.game.table
+        follower = AttachmentType.FOLLOWER
+        attached(
+            table, attachment("horse", printed_id="horse_probe", attachment_type=follower), "rider"
+        )
+        attached(
+            table,
+            attachment("scout", printed_id="scout_probe", attachment_type=follower),
+            "vanguard",
+        )
+        for card_id in ("rider", "horse"):
+            table.cards_by_id[card_id].bow()
+        yield session
+
+
+def _send_the_rider(session, *invests):
+    """Play the Expedition on the rider, paying ``invests`` on top, or plainly with none."""
+    if not invests:
+        session.act(P1, PlayStrategy("expedition", "battle"))
+    else:
+        session.act(P1, PlayStrategy("expedition", "invest"))
+        session.submit(P1, DecisionResponse(invests))
+        pay(session, P1)
+    session.submit(P1, DecisionResponse(("rider",)))
+
+
+def test_the_expedition_is_offered_plain_or_with_invest(expedition):
+    offered = {
+        action.ability_key
+        for action in expedition.legal_actions(P1)
+        if isinstance(action, PlayStrategy) and action.card_id == "expedition"
+    }
+
+    assert offered == {"battle", "invest"}
+
+
+def test_investing_offers_both_lines_and_either_or_both(expedition):
+    expedition.act(P1, PlayStrategy("expedition", "invest"))
+
+    asked = expedition.game.pending
+    assert asked.candidates == (UNICORN_EXPEDITION_FOLLOW_UP, UNICORN_EXPEDITION_STRAIGHTEN)
+    assert (asked.minimum, asked.maximum) == (1, 2)
+
+
+def test_the_expedition_is_withheld_with_no_enemy_to_oppose(expedition):
+    resolve_effects(expedition.game, [Move("guard", Location.home(PlayerId.P2))])
+
+    assert not any(
+        isinstance(action, PlayStrategy) and action.card_id == "expedition"
+        for action in expedition.legal_actions(P1)
+    )
+
+
+def test_the_expedition_moves_a_personality_from_home_to_the_battle(expedition):
+    _send_the_rider(expedition)
+
+    rider = expedition.game.table.cards_by_id["rider"]
+    assert location_of(expedition.game.table, rider).battlefield == 0
+    assert rider.bowed
+
+
+def test_invest_3_straightens_the_unit_as_it_moves(expedition):
+    _send_the_rider(expedition, UNICORN_EXPEDITION_STRAIGHTEN)
+
+    cards = expedition.game.table.cards_by_id
+    assert not cards["rider"].bowed and not cards["horse"].bowed
+
+
+def test_invest_2_follows_up_only_with_a_card_in_the_moved_unit(expedition):
+    expedition.game.table.cards_by_id["horse"].unbow()
+
+    _send_the_rider(expedition, UNICORN_EXPEDITION_FOLLOW_UP)
+
+    assert expedition.legal_actions(P1) == [Pass(), HORSE_ACTION]
+
+
+def test_a_negated_move_buys_neither_invest(expedition):
+    expedition.game.ongoing.append(
+        Negation("probe", Duration.UNTIL_END_OF_TURN, effect_kind=Move, subject_id="rider")
+    )
+
+    _send_the_rider(expedition, UNICORN_EXPEDITION_FOLLOW_UP, UNICORN_EXPEDITION_STRAIGHTEN)
+
+    cards = expedition.game.table.cards_by_id
+    assert location_of(expedition.game.table, cards["rider"]).is_home
+    assert cards["rider"].bowed and cards["horse"].bowed
+    assert expedition.game.round.follow_ups is None

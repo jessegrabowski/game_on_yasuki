@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
@@ -9,7 +11,12 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.effects import AdditionalAction
+from yasuki_core.engine.rules.legality import is_legal
 from tests.yasuki_core.engine.builders import end_phase, holding, province_card, put_in_play
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 
 
 def _session():
@@ -130,3 +137,54 @@ def test_a_turn_walks_its_phases_and_hands_off_at_the_end():
     assert session.game.phase is Phase.ACTION
     assert session.game.round.priority is PlayerId.P2
     assert session.game.round.passes == 0
+
+
+FOLLOW_UP = ActivateAbility("chosen", "probe")
+
+
+def _open_probe(effects) -> Ability:
+    return Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        effects=effects,
+        hits_every_target=True,
+        key="probe",
+    )
+
+
+def _granting(game, source, target):
+    return [AdditionalAction(PlayerId.P1, frozenset({FOLLOW_UP}))]
+
+
+def _doing_nothing(game, source, target):
+    return []
+
+
+@pytest.fixture
+def follow_up_session():
+    """P1's Action Phase, after a Holding granted an additional action limited to the "chosen"
+    Holding's ability. An "other" Holding's ability is left out of the limit."""
+    state = TableState.empty_two_seat()
+    for card_id in ("granter", "chosen", "other"):
+        put_in_play(state, holding(card_id, printed_id=f"{card_id}_probe"))
+    with (
+        probe_ability("granter_probe", _open_probe(_granting)),
+        probe_ability("chosen_probe", _open_probe(_doing_nothing)),
+        probe_ability("other_probe", _open_probe(_doing_nothing)),
+    ):
+        session = EngineSession.start(state, PlayerId.P1)
+        session.act(PlayerId.P1, ActivateAbility("granter", "probe"))
+        yield session
+
+
+def test_an_additional_action_limited_to_follow_ups_offers_only_them(follow_up_session):
+    assert follow_up_session.legal_actions(PlayerId.P1) == [Pass(), FOLLOW_UP]
+    assert not is_legal(follow_up_session.game, PlayerId.P1, ActivateAbility("other", "probe"))
+
+
+def test_the_limit_ends_with_the_additional_action(follow_up_session):
+    follow_up_session.act(PlayerId.P1, FOLLOW_UP)
+
+    assert follow_up_session.game.round.follow_ups is None
+    assert follow_up_session.game.round.priority is PlayerId.P2

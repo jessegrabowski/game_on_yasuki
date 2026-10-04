@@ -5,6 +5,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 # Imported for the prompt registrations the card modules perform on import.
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseOption,
     ArrangeCards,
     ChooseAbilityTarget,
     Confirm,
@@ -415,3 +416,20 @@ def test_keeping_order_places_the_rest_as_looked_at_after_what_is_already_placed
 
 def test_an_arrangement_cannot_be_backed_out_of():
     assert not _arrange("a").cancellable
+
+
+@pytest.mark.parametrize(
+    ("choices", "accepted"),
+    [((), False), (("a",), True), (("a", "b"), True), (("a", "a"), False), (("c",), False)],
+)
+def test_an_option_question_accepts_any_distinct_pick_within_its_bounds(choices, accepted):
+    asked = ChooseOption(
+        seat=PlayerId.P1,
+        candidates=("a", "b"),
+        question="Which?",
+        resolver="probe",
+        source_id="card",
+        maximum=2,
+    )
+
+    assert asked.accepts(DecisionResponse(choices)) is accepted

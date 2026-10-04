@@ -95,6 +95,13 @@ class Presenter:
             self._open_search(search)
             self.refresh()
             return
+        if isinstance(pending, ChooseOption) and pending.maximum > 1:
+            # Outcomes long enough to need wrapping, several of which may be ticked, so a panel over
+            # the board lists them where the narrow prompt cannot.
+            self._open_options(pending)
+            self.refresh()
+            return
+        self.window.options_view.close()
         if isinstance(pending, ChooseDistribution):
             # A division is answered by how many go where, not by which cards were picked, so each
             # chosen card carries a spinner rather than only a selection ring.
@@ -274,6 +281,9 @@ class Presenter:
             # battlefield, and the whole map goes over as the one answer the CR's simultaneous
             # assignment calls for.
             return self._assignment_prompt(), [("Done assigning", self.submit_assignment, True)]
+        if isinstance(pending, ChooseOption) and pending.maximum > 1:
+            # Answered in the panel that ticks the outcomes (opened in present), not from here.
+            return pending.prompt(), []
         if isinstance(pending, ChooseOption):
             # An outcome the card spells out rather than anything on the board: "gain or lose" or
             # "which player". It is read as a list of wordings and answered by picking one.
@@ -692,6 +702,21 @@ class Presenter:
                 *answers,
                 *((label, lambda chosen=action: self.act(chosen)) for label, action in items),
             ]
+        )
+
+    def _open_options(self, pending: ChooseOption) -> None:
+        """Float the panel that ticks several outcomes, and submit what is ticked."""
+
+        def on_submit(chosen: tuple[str, ...]) -> None:
+            self.host.runner.submit(DecisionResponse(chosen))
+            self.present()
+
+        self.window.show_options(
+            pending.prompt(),
+            pending.candidates,
+            lambda ticked: pending.accepts(DecisionResponse(ticked)),
+            on_submit,
+            self.cancel if self.host.runner.can_cancel() else None,
         )
 
     def _open_search(self, search: SearchView) -> None:
