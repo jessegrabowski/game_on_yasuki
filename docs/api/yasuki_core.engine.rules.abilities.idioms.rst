@@ -21,6 +21,7 @@ yasuki_core.engine.rules.abilities.idioms
     register_ring
     register_terrain
     register_trait_entry
+    register_yu
     resolved_favor_actions
 
 .. automodule:: yasuki_core.engine.rules.abilities.idioms

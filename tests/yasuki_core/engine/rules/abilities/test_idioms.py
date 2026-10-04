@@ -3,7 +3,7 @@ from dataclasses import replace
 import pytest
 
 from yasuki_core import ruleset
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     PITCH,
@@ -11,16 +11,25 @@ from yasuki_core.engine.rules.abilities.idioms import (
     register_entry,
     register_ring,
     register_trait_entry,
+    register_yu,
 )
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import abilities_for
 from yasuki_core.engine.rules.abilities.costs import declare_amount, declared_gold_discount
-from yasuki_core.engine.rules.effects import GainHonor, PayGold
+from yasuki_core.engine.rules.effects import (
+    Destroy,
+    GainHonor,
+    GrantNegation,
+    PayGold,
+    Simultaneously,
+)
 from yasuki_core.engine.rules.projection import project
-from yasuki_core.engine.rules.triggers import fire
+from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.turn.action_sequence import submit
-from yasuki_core.engine.rules.vocabulary.decisions import Confirm
-from yasuki_core.engine.rules.vocabulary.game_events import FavorDiscarded
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseNextTrigger, Confirm
+from yasuki_core.engine.rules.vocabulary.game_events import Destroying, FavorDiscarded
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.ruleset import RingEntry
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
@@ -31,7 +40,9 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, RingPrint
 
 from tests.yasuki_core.engine.builders import (
+    combat_segment,
     holding,
+    personality,
     put_in_play,
     register,
     sensei,
@@ -300,3 +311,103 @@ def test_fixed_gold_spends_the_discount_before_a_variable_amount_in_the_same_cos
 
     assert declared_gold_discount(asked) == 0
     assert max(asked.amounts) == 5
+
+
+def _standing(game, card_id):
+    return any(card.id == card_id for card in game.table.battlefield.cards)
+
+
+# A test-only Yu: its controller gains 1 Honor, and only while the card still stands.
+register_yu(
+    "yu_probe",
+    lambda ctx: [GainHonor(ctx.card.owner, 1)] if _standing(ctx.game, ctx.card.id) else [],
+)
+
+
+def _in_combat():
+    units = [
+        personality("attacker"),
+        personality("defender", owner=PlayerId.P2),
+        personality("yu", owner=PlayerId.P2, printed_id="yu_probe"),
+    ]
+    return combat_segment(units, {"attacker": 0}, {"defender": 0, "yu": 0}).game
+
+
+def test_a_yu_resolves_before_battle_resolution_destroys_its_card():
+    game = two_seat_game()
+    put_in_play(game, personality("yu", printed_id="yu_probe"))
+
+    resolve_effects(game, [Destroy("yu", Rulebook.BATTLE_RESOLUTION)])
+
+    assert game.table.seats[PlayerId.P1].honor == 1
+    assert not _standing(game, "yu")
+
+
+def test_a_yu_resolves_before_another_players_battle_action_destroys_its_card():
+    game = _in_combat()
+    honor = game.table.seats[PlayerId.P2].honor
+
+    resolve_effects(game, [Destroy("yu", PlayerId.P1)])
+
+    assert game.table.seats[PlayerId.P2].honor == honor + 1
+
+
+def _own_action_in_battle():
+    return _in_combat(), PlayerId.P2
+
+
+def _a_trait_in_battle():
+    return _in_combat(), Trait("attacker")
+
+
+def _another_players_action_outside_battle():
+    game = two_seat_game()
+    put_in_play(game, personality("yu", owner=PlayerId.P2, printed_id="yu_probe"))
+    return game, PlayerId.P1
+
+
+@pytest.mark.parametrize(
+    "board",
+    [_own_action_in_battle, _a_trait_in_battle, _another_players_action_outside_battle],
+    ids=["own-action", "trait", "outside-battle"],
+)
+def test_no_yu_resolves_for_a_destruction_the_trait_does_not_name(board):
+    game, cause = board()
+    honor = game.table.seats[PlayerId.P2].honor
+
+    resolve_effects(game, [Destroy("yu", cause)])
+
+    assert game.table.seats[PlayerId.P2].honor == honor
+    assert not _standing(game, "yu")
+
+
+def test_a_negation_granted_before_the_yu_resolves_prevents_it(reacting):
+    game = two_seat_game()
+    put_in_play(game, personality("ward", printed_id="ward_probe"))
+    put_in_play(game, personality("yu", printed_id="yu_probe"))
+    reacting(
+        Destroying,
+        "ward_probe",
+        lambda ctx: [
+            GrantNegation(Negation(ctx.card.id, END_OF_TURN, effect_kind=Destroy, subject_id="yu"))
+        ]
+        if ctx.event.card_id == ctx.card.id
+        else [],
+    )
+
+    resolve_effects(
+        game,
+        [
+            Simultaneously(
+                (
+                    Destroy("ward", Rulebook.BATTLE_RESOLUTION),
+                    Destroy("yu", Rulebook.BATTLE_RESOLUTION),
+                )
+            )
+        ],
+    )
+    assert isinstance(game.pending, ChooseNextTrigger)
+    submit(game, DecisionResponse(("ward",)))
+
+    assert _standing(game, "yu")
+    assert game.table.seats[PlayerId.P1].honor == 0

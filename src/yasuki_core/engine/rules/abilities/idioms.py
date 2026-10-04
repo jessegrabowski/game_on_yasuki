@@ -2,7 +2,7 @@ from collections.abc import Callable
 from dataclasses import replace
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import ability_for, register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -35,7 +35,13 @@ from yasuki_core.engine.rules.triggers import (
     on,
     watch,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, BattleResolved
+from yasuki_core.engine.rules.negation import would_negate
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    ActionResolved,
+    BattleResolved,
+    Destroying,
+)
+from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.ruleset import RingEntry, ring_entry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
@@ -346,6 +352,55 @@ def register_event_entry(
             keywords=ability_keywords,
         ),
     )
+
+
+def register_yu(
+    printed_id: str,
+    effects: Callable[[TriggerContext], list[Effect]],
+    *,
+    ruleset: str | None = None,
+) -> None:
+    """Register ``printed_id``'s Yu trait: "Before a card with the Yu trait is destroyed by another
+    player's action during battle, or during resolution, resolve the Yu effect" (ShE datasheet, The
+    Yu Trait).
+
+    The trait answers the :class:`~.Destroying` that names its own card, while the card still
+    stands. A destruction a negation will stop raises no Yu, since "the negation/substitution will
+    always occur first", and that includes a negation another trait granted after the destruction
+    was announced. The Yu is not optional: ``effects`` returns nothing only where the Yu cannot be
+    resolved, a targeted one with no target. A targeted Yu reaches the dying card's battlefield,
+    the event's ``location``, unless its text says otherwise.
+
+    Parameters
+    ----------
+    printed_id : str
+        The card's printed id.
+    effects : callable
+        Maps the trigger context to the Yu effect.
+    ruleset : str, optional
+        The name of the one ruleset the trait is in force under. Default None, for every arc.
+    """
+
+    def yu(ctx: TriggerContext) -> list[Effect]:
+        return effects(ctx) if _yu_resolves(ctx) else []
+
+    on(Destroying, printed_id, ruleset=ruleset)(yu)
+
+
+def _yu_resolves(ctx: TriggerContext) -> bool:
+    event = ctx.event
+    if event.card_id != ctx.card.id:
+        return False
+    if not (event.cause is Rulebook.BATTLE_RESOLUTION or _by_another_player_in_battle(ctx)):
+        return False
+    return not would_negate(ctx.game, Destroy(event.card_id, event.cause), Provenance(), [])
+
+
+def _by_another_player_in_battle(ctx: TriggerContext) -> bool:
+    attack = ctx.game.attack
+    cause = ctx.event.cause
+    in_battle = attack is not None and attack.current is not None
+    return in_battle and isinstance(cause, PlayerId) and cause is not ctx.event.controller
 
 
 # The choice of which Terrain a Terrain entering play destroys, when more than one is there.
