@@ -78,3 +78,16 @@ def test_a_placed_card_is_not_drawn(view):
     view.refresh(_cards("top", "second"), frozenset({"top", "second"}), placed=frozenset({"top"}))
 
     assert set(view._drawn) == {"card:second"}
+
+
+def test_a_freshly_opened_look_is_laid_out_by_the_refresh_that_fills_it():
+    root = tk.Tk()
+    try:
+        look_view = LookView(root, PreviewOnlyImages())
+        look_view.open_at(0, 0)
+
+        look_view.refresh(_cards("top"), frozenset({"top"}))
+
+        assert look_view.winfo_width() > 1
+    finally:
+        root.destroy()

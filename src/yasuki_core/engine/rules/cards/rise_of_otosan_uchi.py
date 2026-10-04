@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
     different_elements,
+    followers_in_play,
     phase_history,
     has_keyword,
     owned_holdings,
@@ -53,12 +54,11 @@ from yasuki_core.engine.rules.board.seats import (
     opposing_seats,
     seat_named,
 )
-from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM, TAKE_ONE_AND_SHUFFLE
+from yasuki_core.engine.rules.rulebook.looks import TAKE_ONE_AND_SHUFFLE
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.attack_effects import attack_strength_against
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    Arrange,
     Ask,
     AskOption,
     AttackEffect,
@@ -1280,14 +1280,18 @@ def _resolve_togashi_higaru_look(
     ]
 
 
-@choice_resolver("togashi_higaru_bottom", prompt="Put any of them on the bottom of your deck")
+@choice_resolver(
+    "togashi_higaru_bottom",
+    prompt="Put any of them on the bottom of your deck",
+    pick="Put on the bottom of your deck",
+)
 def _resolve_togashi_higaru_bottom(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Then put any of them at the bottom of the deck in any order."""
-    if not chosen:
-        return [EndLook()]
-    return [Arrange(seat, chosen, PUT_ON_BOTTOM, source_id, to_bottom=True)]
+    """Then put any of them at the bottom of the deck in any order: the order they were picked in,
+    the last one picked at the very bottom. The rest stay on top as they were."""
+    fate = DeckKey(seat, Side.FATE)
+    return [*(MoveToDeck(card_id, fate, from_bottom=0) for card_id in chosen), EndLook()]
 
 
 def _togashi_higaru_clan_champion_experienced_3_bonus(game: GameState, higaru: L5RCard) -> int:
@@ -1306,9 +1310,11 @@ def _togashi_higaru_clan_champion_experienced_3_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     """Straighten a target card, or give it +1F/+1C for each of your Rings with different element
-    keywords. With no such Ring the bonus is nothing, so the straightening is all there is."""
+    keywords. With no such Ring the bonus is nothing, and a card with no Force or Chi of its own,
+    a Ring or a Holding, has nothing to give it to, so the straightening is all there is."""
     bonus = _togashi_higaru_clan_champion_experienced_3_bonus(game, source)
-    if bonus == 0:
+    has_force_and_chi = target in personalities_in_play(game) or target in followers_in_play(game)
+    if bonus == 0 or not has_force_and_chi:
         return [Straighten(target.id)]
     return [
         AskOption(

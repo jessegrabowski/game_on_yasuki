@@ -127,15 +127,17 @@ retargeting. When it is, its entry is `register_entry("show_of_power", clears=ke
 
 A Ring prints one ability and a trait letting its holder discard it from hand to use that ability
 without cost (CR, Ring). {func}`~.register_ring` registers both from one `Ability`: the printed
-one from play, and with `pitch` set to the trait as the card prints it a copy keyed `PITCH` that
-is taken from hand for nothing and discarded at step F, because it is still in hand when the
-ability is done. The trait's sentence is what a client shows for the cast.
+one from play, and with `pitch` set a copy keyed `PITCH` that is taken from hand for nothing and
+discarded at step F, because it is still in hand when the ability is done. `pitch` is what a client
+shows for the cast. {func}`~.printed_line_without_cost` shows the printed ability less the cost
+the cast skips, the way a Strategy's ability is shown. A Ring whose cast does
+something else passes its own wording, as {card}`Legacy of Fudo` does.
 
 ```python
 register_ring(
     "ring_of_air",
     ability=Ability(..., key="air", keywords=frozenset({keywords.AIR}), repeatable=True),
-    pitch="You may discard this Ring from your hand to use its ability without cost.",
+    pitch=printed_line_without_cost,
     ruleset=ruleset.SHATTERED_EMPIRE.name,
 )
 ```
@@ -168,9 +170,12 @@ A Ring printing "Play if X" names a state, not an event, and {func}`~.register_c
 registers it through {func}`~.watch`. A watch names the zones it looks from and the reaction that
 answers it. Its condition is read each time the board settles, except while a card announced out of
 a hand waits in its entering-play or resolution area, and when it turns from false to true the
-engine announces a `ConditionFulfilled` that only that watch's reaction hears, ahead of whatever
-else the effect that fulfilled it goes on to do. The owner is then asked, as for a "Play after X"
-Ring. A condition that already holds when the Ring arrives in hand counts as fulfilled then.
+engine announces a `ConditionFulfilled` that only that watch's reaction hears, in the same
+occurrence as the effect that fulfilled it. A Ring may enter immediately after its condition is
+fulfilled (CR, Ring), so the owner is asked before any other trigger of that occurrence resolves,
+as for a "Play after X" Ring. The condition is a continuous check, so the owner is asked only
+while it still holds. A condition that already holds when the Ring arrives in hand counts as
+fulfilled then.
 {card}`Ring of the Void`'s ShE text compares {func}`~.fate_cards_in_play` with
 {func}`~.cards_in_hand`, leaving out the Ring itself. That query leaves out the Imperial Favor's
 proxy, and every card announced out of the hand that has not landed, since a Strategy being played

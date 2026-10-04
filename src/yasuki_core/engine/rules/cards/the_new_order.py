@@ -56,7 +56,11 @@ def _plain_library_effects(game: GameState, source: L5RCard, target: L5RCard) ->
     ]
 
 
-@choice_resolver("plain_library", prompt="Place zero to two of them at the bottom of your deck")
+@choice_resolver(
+    "plain_library",
+    prompt="Place zero to two of them at the bottom of your deck",
+    pick="Put on the bottom of your deck",
+)
 def _resolve_plain_library(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:

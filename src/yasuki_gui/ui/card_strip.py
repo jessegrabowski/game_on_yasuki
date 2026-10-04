@@ -1,4 +1,5 @@
 import tkinter as tk
+from collections.abc import Callable
 
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
@@ -20,6 +21,12 @@ class CardStrip(CardPanel):
     any other panel, and reopening it keeps wherever the player left it. It opens exactly one row of
     cards tall with the scrollbar under it: the strip scrolls sideways and never wraps, and opening
     it any taller would say otherwise.
+
+    Attributes
+    ----------
+    on_card_click : callable or None
+        Taken with a card id when the player clicks a card in the pile, for what that card can do
+        from where it lies, as an ability usable from the discard pile.
     """
 
     def __init__(self, master: tk.Misc, images: ImageProvider):
@@ -45,6 +52,8 @@ class CardStrip(CardPanel):
         # X11 reports the wheel as buttons 4 and 5 rather than a delta.
         self.canvas.bind("<Button-4>", lambda _event: self.canvas.xview_scroll(-1, "units"))
         self.canvas.bind("<Button-5>", lambda _event: self.canvas.xview_scroll(1, "units"))
+        self.on_card_click: Callable[[str], None] | None = None
+        self.canvas.bind("<Button-1>", self._on_click)
 
     def show(self, cards: list[L5RCard], title: str) -> None:
         """Fill the strip with ``cards`` under ``title``, replacing whatever it held."""
@@ -62,6 +71,11 @@ class CardStrip(CardPanel):
         # opened it rather than the one after. Idle tasks only, because pumping events here would
         # run the handler that is still on the stack.
         self.update_idletasks()
+
+    def _on_click(self, event: tk.Event) -> None:
+        card_id = self.card_at(event)
+        if card_id is not None and self.on_card_click:
+            self.on_card_click(card_id)
 
     def _on_wheel(self, event: tk.Event) -> None:
         self.canvas.xview_scroll(-1 if event.delta > 0 else 1, "units")

@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
     register_yu,
 )
 from yasuki_core.engine.rules.abilities.model import Ability, itself
-from yasuki_core.engine.rules.abilities.registry import abilities_for
+from yasuki_core.engine.rules.abilities.registry import printed_line_without_cost, abilities_for
 from yasuki_core.engine.rules.abilities.costs import declare_amount, declared_gold_discount
 from yasuki_core.engine.rules.effects import (
     Destroy,
@@ -76,8 +76,8 @@ RING_ABILITY = Ability(
     hits_every_target=True,
     key="gain",
 )
-register_ring("ring_probe", ability=RING_ABILITY, pitch=True)
-register_ring("ring_probe_unpitched", ability=RING_ABILITY, pitch=False)
+register_ring("ring_probe", ability=RING_ABILITY, pitch=printed_line_without_cost)
+register_ring("ring_probe_unpitched", ability=RING_ABILITY, pitch=None)
 register_trait_entry(
     "trait_entry_probe", FavorDiscarded, lambda ctx: ctx.event.seat is ctx.card.owner
 )

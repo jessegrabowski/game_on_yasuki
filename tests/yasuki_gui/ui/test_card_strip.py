@@ -168,3 +168,16 @@ def test_the_wheel_scrolls_the_row(board):
     strip._on_wheel(DummyEventNamespace(delta=-1))
 
     assert strip.canvas.canvasx(0) == CARD_W + CELL_PAD
+
+
+def test_clicking_a_card_in_the_pile_reports_it(board):
+    strip = CardStrip(board, PreviewOnlyImages())
+    strip.open_at(0, 0)
+    picked = []
+    strip.on_card_click = picked.append
+    strip.show([_card("first"), _card("second")], "Fate Discard")
+    left, top, right, bottom = strip.canvas.bbox("card:second")
+
+    strip._on_click(DummyEventNamespace(x=(left + right) // 2, y=(top + bottom) // 2))
+
+    assert picked == ["second"]

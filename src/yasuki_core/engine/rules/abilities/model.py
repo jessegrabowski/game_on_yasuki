@@ -14,6 +14,11 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.game_pieces.cards import L5RCard
 
 
+# What a client shows for an ability or an Interrupt: its wording, or a callable building it from
+# the card and the index of the printed ability it uses.
+Label = str | Callable[[L5RCard, int], str]
+
+
 @dataclass(frozen=True, slots=True)
 class Interruption:
     """What an Interrupt makes of the effect it interrupts.
@@ -58,8 +63,9 @@ class Interrupt[T: Effect]:
 
     Attributes
     ----------
-    label : str, optional
-        What a client shows for the card, when the wording is not a printed ability. Default None,
+    label : str or callable, optional
+        What a client shows for the card, when the wording is not a printed ability, or a callable
+        mapping ``(card, printed_index)`` to it, for one built from the printing. Default None,
         which shows the printed ability ``printed_index`` names, as :func:`~.interrupt_label` reads
         it off the card.
     printed_index : int, optional
@@ -120,7 +126,7 @@ class Interrupt[T: Effect]:
 
     answers: type[T] | UnionType
     interrupt: Callable[..., Interruption]
-    label: str | None = None
+    label: Label | None = None
     printed_index: int = 0
     applies: Callable[[GameState, L5RCard, T], bool] = lambda game, source, effect: True
     located_at: tuple[CardLocation, ...] = (CardLocation.HAND,)
@@ -167,11 +173,12 @@ class Ability:
         The designators printed on the card, saying when the ability may be used and by whom. A card
         printing more than one, as in "Battle/Open", may be used in any round that permits any
         of them.
-    label : str, optional
+    label : str or callable, optional
         What the activation menu shows, when the wording is not a printed ability: a rulebook
-        procedure, or a way of using the card its text does not print as an ability. Default None,
-        which shows the printed ability ``printed_index`` names, as :func:`~.ability_label` reads
-        it off the card, icons and all.
+        procedure, or a way of using the card its text does not print as an ability. A callable
+        maps ``(card, printed_index)`` to it, for a use built from the printing, as a Ring's cast
+        from hand is. Default None, which shows the printed ability ``printed_index`` names, as
+        :func:`~.ability_label` reads it off the card, icons and all.
     printed_index : int, optional
         Which of the card's printed abilities this registration implements, counting from zero in
         the order the text box prints them. Default 0, the card's first or only ability.
@@ -268,7 +275,7 @@ class Ability:
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
     effects: Callable[[GameState, L5RCard, L5RCard], list[Effect]] | None = None
-    label: str | None = None
+    label: Label | None = None
     printed_index: int = 0
     hits_every_target: bool = False
     located_at: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,)

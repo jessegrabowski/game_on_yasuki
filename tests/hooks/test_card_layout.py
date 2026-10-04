@@ -107,6 +107,26 @@ def test_a_handler_not_named_for_its_card_is_reported(tmp_path, capsys):
     assert "_do_the_gold_thing should start with _modest_farm_" in capsys.readouterr().err
 
 
+def test_an_interrupt_beside_an_ability_qualifies_its_parts(tmp_path, capsys):
+    both = """# --- Modest Farm ---
+
+
+def _modest_farm_cost(game, source):
+    return []
+
+
+def _modest_farm_interrupt_cost(game, source):
+    return []
+
+
+register_ability("modest_farm", Ability(cost=_modest_farm_cost))
+register_interrupt("modest_farm", Interrupt(cost=_modest_farm_interrupt_cost))
+"""
+
+    assert main([written(tmp_path, both)]) == 0
+    assert capsys.readouterr().err == ""
+
+
 @pytest.mark.parametrize("source", [FARM, PORT])
 def test_one_card_alone_is_a_whole_valid_module(tmp_path, source):
     # The checks compare sequences pairwise, so a module with nothing to compare has to pass

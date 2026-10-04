@@ -497,12 +497,12 @@ def unprinted_registrations(
                 frozenset(t.name.capitalize() for t in a.timings),
             )
             for a in abilities.get(card_id, ())
-            if a.label is None
+            if not isinstance(a.label, str)
         ]
         held += [
             (card_id, i.printed_index, i.ruleset, frozenset({"Interrupt"}))
             for i in interrupts.get(card_id, ())
-            if i.label is None
+            if not isinstance(i.label, str)
         ]
         for name, index, ruleset_name, timings in held:
             printing = printing_of(card_id, ruleset_name)
@@ -547,6 +547,7 @@ NOT_KEYED_BY_CARD = {
     "CHOICE_RESOLVERS",  # keyed by the kind of a pending choice
     "_OPTIONAL_COST_ANSWERS",  # likewise -- a bot hint's answers, by resolver
     "CHOICE_PROMPTS",  # likewise, and it lives in decisions
+    "CHOICE_PICKS",  # likewise
     "POLICIES",  # keyed by policy name
     "AGENTS",  # keyed by agent name
     "ACTION_TIMINGS",  # keyed by action type

@@ -25,8 +25,8 @@ class LookView(CardPanel):
     Opened and closed by the game rather than the player, like the battle view: a stray dismissal
     would hide cards the seat still has to answer about. A card the current question offers is drawn
     and a click reports it; one it does not is drawn the same and answers nothing. A card the seat
-    has already placed while arranging is not drawn at all, which is what makes the arranging read
-    as taking cards off the table one by one.
+    has already put somewhere is not drawn at all, which is what makes answering read as taking
+    cards off the table one by one.
 
     Attributes
     ----------
@@ -45,7 +45,6 @@ class LookView(CardPanel):
         self,
         cards: list[L5RCard],
         candidates: frozenset[str],
-        selected: frozenset[str] = frozenset(),
         placed: frozenset[str] = frozenset(),
     ) -> None:
         """Redraw for ``cards`` in their order, top of the deck leftmost.
@@ -56,11 +55,8 @@ class LookView(CardPanel):
             The cards in view, top first.
         candidates : frozenset of str
             The ids the current question may be answered with. The rest answer no click.
-        selected : frozenset of str, optional
-            The ids picked so far, ringed. Default empty.
         placed : frozenset of str, optional
-            The ids the seat has already put back while arranging, left out of the row. Default
-            empty.
+            The ids the seat has already put somewhere, left out of the row. Default empty.
         """
         self.clear()
         # The cards are face down in the deck and stay so on the table; here the seat is looking
@@ -69,7 +65,11 @@ class LookView(CardPanel):
         center = widget_size(self.canvas)[0] // 2
         y = CELL_PAD + CARD_H // 2
         for x, card in zip(centered_row(center, len(shown), step=CARD_W + CELL_PAD), shown):
-            self.draw_card(card, x, y, selected=card.id in selected, pickable=card.id in candidates)
+            self.draw_card(card, x, y, pickable=card.id in candidates)
+        # Opened from a click or an answer, the panel is placed and drawn into while that handler
+        # is still on the stack, and Tk holds the layout until its next redraw. Flushing idle work
+        # paints it now rather than on whatever event comes next.
+        self.update_idletasks()
 
     def _on_click(self, event: tk.Event) -> None:
         card_id = self.card_at(event)

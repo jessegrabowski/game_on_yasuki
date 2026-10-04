@@ -27,11 +27,12 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.battle.presence import place_unit
 from yasuki_core.engine.rules.turn.structure import (
+    ADDITIONAL_ACTION_SPENT,
     RESPONSE_TIMINGS,
     ActionRound,
     RoundKind,
 )
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, SeatAbilityGrant
+from yasuki_core.engine.rules.vocabulary.modifiers import SeatAbilityGrant
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
@@ -1144,7 +1145,7 @@ def test_a_seat_grant_offers_its_one_card_an_ability_from_the_discard_pile():
         other = _in_discard(state, "other", "test_acts_from_play")
         session = EngineSession.start(state, PlayerId.P1)
         session.game.ongoing.append(
-            SeatAbilityGrant("granter", PlayerId.P1, (named.id,), Duration.FOR_ADDITIONAL_ACTION)
+            SeatAbilityGrant("granter", PlayerId.P1, (named.id,), ADDITIONAL_ACTION_SPENT)
         )
 
         offered = session.legal_actions(PlayerId.P1)

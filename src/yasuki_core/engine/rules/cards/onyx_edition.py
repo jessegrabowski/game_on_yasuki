@@ -6,7 +6,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.lobby import register_may_not_lobby
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
-    RING_PITCH,
     clan_player,
     one_wealth,
     register_entry,
@@ -26,6 +25,7 @@ from yasuki_core.engine.rules.abilities.model import (
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
+    printed_line_without_cost,
     granted_ability,
     invest_amounts,
     register_ability,
@@ -36,7 +36,6 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesi
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
-    Ask,
     AskOption,
     Banish,
     Bow,
@@ -347,7 +346,7 @@ register_ring(
         keywords=frozenset({keywords.AIR}),
         repeatable=True,
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -442,7 +441,7 @@ register_ring(
         key="fire",
         keywords=frozenset({keywords.FIRE}),
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -504,7 +503,7 @@ register_ring(
         key="void",
         keywords=frozenset({keywords.VOID}),
     ),
-    pitch="You may discard this Ring from your hand to use its Void ability without cost.",
+    pitch=printed_line_without_cost,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -571,7 +570,7 @@ register_ring(
         keywords=frozenset({keywords.WATER}),
         repeatable=True,
     ),
-    pitch=RING_PITCH,
+    pitch=printed_line_without_cost,
     ruleset=ruleset.ONYX.name,
 )
 
@@ -810,7 +809,7 @@ def _the_dark_capital_of_the_spider_effects(
         GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN)
     ]
     if target.owner is not source.owner:
-        return [*effects, AdditionalAction(source.owner)]
+        return [*effects, AdditionalAction(source.owner, source.id)]
     feared = attack_targets(game, source)
     if feared:
         effects.append(Choose(source.owner, tuple(feared), 1, 1, DARK_CAPITAL_FEAR, target.id))
@@ -853,7 +852,7 @@ def _the_dark_capital_of_the_spider__back_effects(
         return _the_dark_capital_of_the_spider_effects(game, source, target)
     return [
         GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN),
-        AdditionalAction(source.owner),
+        AdditionalAction(source.owner, source.id),
     ]
 
 
@@ -996,8 +995,6 @@ def _the_sacred_ground_of_the_phoenix__back_granted_ability(
 
 # --- Togashi Hiyoku ---
 
-HIYOKU_ADDITIONAL_ACTION = "Take an additional action?"
-
 
 @on(DuelResolved, "togashi_hiyoku")
 def _togashi_hiyoku_duel_resolved(ctx: TriggerContext) -> list[Effect]:
@@ -1044,35 +1041,12 @@ def _togashi_hiyoku_effects(game: GameState, source: L5RCard, target: L5RCard) -
 def _resolve_togashi_hiyoku_winner(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Offer the additional action to whoever won, which may be the challenged seat.
-
-    Each winner is asked, because the CR lets both Personalities win a duel, and a tie neither won
-    asks nobody. The winning Personality is the question's subject, since a yes is read back as
-    whatever subjects the question carried.
-    """
+    """Give whoever won, which may be the challenged seat, the additional action. The "may" is the
+    seat's to exercise by taking the action or declining it. A tie neither won grants nothing."""
     duel = duel_decided_by(game, source_id)
     if duel is None:
         return []
-    return [
-        Ask(
-            winner,
-            HIYOKU_ADDITIONAL_ACTION,
-            "togashi_hiyoku_additional_action",
-            subjects=(duel.duelist_of(winner),),
-        )
-        for winner in duel.outcome.winners
-    ]
-
-
-@choice_resolver("togashi_hiyoku_additional_action")
-def _resolve_togashi_hiyoku_additional_action(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """Give the seat that accepted the additional action it asked for.
-
-    The resolver is called on either answer, so a no arrives as no subjects and buys nothing.
-    """
-    return [AdditionalAction(seat)] if chosen else []
+    return [AdditionalAction(winner, source_id) for winner in duel.outcome.winners]
 
 
 register_ability(

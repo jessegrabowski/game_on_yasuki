@@ -83,9 +83,10 @@ effects:
 `@choice_resolver` on that function binds the two.
 
 A minimum of zero makes the choice a "may". Where the cards are shown in a window of their own,
-as a look at the top of a deck is, the client offers a Decline button beside Confirm so that saying
-no is a click of its own. That is {attr}`~.DecisionRequest.decline_label`, and a card never sets
-it.
+as a look at the top of a deck is, the client offers what picking a card does on the card itself,
+and Done answers with whatever has been picked, nothing included. `@choice_resolver` takes that
+wording as `pick`, as in `pick="Put on the bottom of your deck"`, and a choice that registers none
+offers "Choose".
 
 ## A mode
 

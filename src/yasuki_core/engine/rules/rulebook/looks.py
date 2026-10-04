@@ -32,7 +32,7 @@ def _put_on_bottom(
     return [PlaceOnDeck(chosen, _open_look(game).deck, to_bottom=True), EndLook()]
 
 
-@choice_resolver(TAKE_ONE_AND_SHUFFLE, prompt="Put one in your hand")
+@choice_resolver(TAKE_ONE_AND_SHUFFLE, prompt="Put one in your hand", pick="Put in your hand")
 def _take_one_and_shuffle(
     game: GameState, source_id: str | None, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:

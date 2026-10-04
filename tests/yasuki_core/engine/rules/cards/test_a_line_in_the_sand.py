@@ -529,7 +529,8 @@ def test_beset_looks_at_the_courtiers_chi_in_cards_and_cannot_be_backed_out_of()
     assert session.game.table.cards_by_id["courtier"].bowed
     pending = session.game.pending
     assert isinstance(pending, ChooseCards) and pending.candidates == ("top", "second", "third")
-    assert pending.decline_label == "Decline"
+    assert pending.minimum == 0
+    assert pending.pick_label == "Put on the bottom of your deck"
     with pytest.raises(ValueError):
         session.cancel(P1)
 

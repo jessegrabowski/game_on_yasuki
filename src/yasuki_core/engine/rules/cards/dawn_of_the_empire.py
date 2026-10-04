@@ -76,6 +76,7 @@ def _resolve_temples_of_gisei_toshi_name(
 @choice_resolver(
     "temples_of_gisei_toshi_take",
     prompt="You may show one of those cards that is of the type you named, then put it in your hand",
+    pick="Show it and put it in your hand",
 )
 def _resolve_temples_of_gisei_toshi_take(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId

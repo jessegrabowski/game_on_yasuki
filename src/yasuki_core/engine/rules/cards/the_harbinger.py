@@ -76,7 +76,7 @@ def _banish_all_doubt_effects(game: GameState, source: L5RCard, target: L5RCard)
     ]
 
 
-@choice_resolver("banish_all_doubt", prompt="Put one of them in your hand")
+@choice_resolver("banish_all_doubt", prompt="Put one of them in your hand", pick="Put in your hand")
 def _resolve_banish_all_doubt(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:

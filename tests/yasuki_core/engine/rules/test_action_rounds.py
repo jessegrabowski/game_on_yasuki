@@ -9,12 +9,12 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
-from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.turn.structure import ADDITIONAL_ACTION_SPENT, Phase
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
-from yasuki_core.engine.rules.effects import AdditionalAction, GrantKeyword
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
+from yasuki_core.engine.rules.effects import AdditionalAction, Bow, DelayedEffect, GrantKeyword
+from yasuki_core.engine.rules.vocabulary.modifiers import KeywordGrant
 from yasuki_core.engine.rules.legality import is_legal
 from tests.yasuki_core.engine.builders import end_phase, holding, province_card, put_in_play
 from tests.yasuki_core.engine.rules.conftest import probe_ability
@@ -155,7 +155,7 @@ def _open_probe(effects) -> Ability:
 
 
 def _granting(game, source, target):
-    return [AdditionalAction(PlayerId.P1, frozenset({FOLLOW_UP}))]
+    return [AdditionalAction(PlayerId.P1, source.id, frozenset({FOLLOW_UP}))]
 
 
 def _doing_nothing(game, source, target):
@@ -191,11 +191,20 @@ def test_the_limit_ends_with_the_additional_action(follow_up_session):
     assert follow_up_session.game.round.priority is PlayerId.P2
 
 
+@pytest.mark.parametrize("spend", [FOLLOW_UP, Pass()])
+def test_the_opportunity_names_the_card_granting_it_until_it_is_spent(follow_up_session, spend):
+    assert follow_up_session.game.round.granted_by == "granter"
+
+    follow_up_session.act(PlayerId.P1, spend)
+
+    assert follow_up_session.game.round.granted_by is None
+
+
 @pytest.mark.parametrize("spend", ["take", "pass"])
 def test_what_was_granted_for_the_additional_action_lapses_once_it_is_spent(
     follow_up_session, spend
 ):
-    granted = KeywordGrant("granter", "chosen", "Probe", Duration.FOR_ADDITIONAL_ACTION)
+    granted = KeywordGrant("granter", "chosen", "Probe", ADDITIONAL_ACTION_SPENT)
     follow_up_session.game.ongoing.append(granted)
 
     follow_up_session.act(PlayerId.P1, FOLLOW_UP if spend == "take" else Pass())
@@ -203,13 +212,40 @@ def test_what_was_granted_for_the_additional_action_lapses_once_it_is_spent(
     assert granted not in follow_up_session.game.ongoing
 
 
+def _granting_with_a_delayed_bow(game, source, target):
+    return [
+        DelayedEffect(Bow("other"), ADDITIONAL_ACTION_SPENT),
+        AdditionalAction(PlayerId.P1, source.id, frozenset({FOLLOW_UP})),
+    ]
+
+
+@pytest.mark.parametrize("spend", [FOLLOW_UP, Pass()])
+def test_what_waits_on_the_additional_action_resolves_once_it_is_spent(spend):
+    state = TableState.empty_two_seat()
+    for card_id in ("granter", "chosen", "other"):
+        put_in_play(state, holding(card_id, printed_id=f"{card_id}_probe"))
+    with (
+        probe_ability("granter_probe", _open_probe(_granting_with_a_delayed_bow)),
+        probe_ability("chosen_probe", _open_probe(_doing_nothing)),
+    ):
+        session = EngineSession.start(state, PlayerId.P1)
+        session.act(PlayerId.P1, ActivateAbility("granter", "probe"))
+
+        assert not session.game.table.cards_by_id["other"].bowed
+
+        session.act(PlayerId.P1, spend)
+
+        assert session.game.table.cards_by_id["other"].bowed
+        assert session.game.round.priority is PlayerId.P2
+
+
 NEXT_FOLLOW_UP = ActivateAbility("other", "probe")
 
 
 def _granting_a_second_follow_up(game, source, target):
     return [
-        GrantKeyword(source.id, source.id, "Probe", Duration.FOR_ADDITIONAL_ACTION),
-        AdditionalAction(PlayerId.P1, frozenset({NEXT_FOLLOW_UP})),
+        GrantKeyword(source.id, source.id, "Probe", ADDITIONAL_ACTION_SPENT),
+        AdditionalAction(PlayerId.P1, source.id, frozenset({NEXT_FOLLOW_UP})),
     ]
 
 
@@ -225,7 +261,7 @@ def test_a_follow_up_spent_on_another_limited_one_keeps_what_was_granted_for_the
         session = EngineSession.start(state, PlayerId.P1)
         session.act(PlayerId.P1, ActivateAbility("granter", "probe"))
 
-        granted = KeywordGrant("chosen", "chosen", "Probe", Duration.FOR_ADDITIONAL_ACTION)
+        granted = KeywordGrant("chosen", "chosen", "Probe", ADDITIONAL_ACTION_SPENT)
 
         session.act(PlayerId.P1, FOLLOW_UP)
 

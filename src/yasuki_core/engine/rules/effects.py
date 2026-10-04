@@ -73,6 +73,7 @@ from yasuki_core.engine.rules.state import (
     seat_once_key,
 )
 from yasuki_core.engine.rules.turn.structure import (
+    AdditionalGrant,
     BEGINNING_OF_ACTION_PHASE,
     END_OF_ACTION_PHASE,
     END_OF_TURN,
@@ -1384,34 +1385,41 @@ class GrantPriority(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         # The pass count goes with it: the round is being handed to a seat rather than passed on by
         # one, so the consecutive passes that would close it start again from this seat.
-        game.round = replace(game.round, priority=self.seat, passes=0, follow_ups=None)
+        game.round = replace(
+            game.round, priority=self.seat, passes=0, follow_ups=None, granted_by=None
+        )
         return []
 
 
 @dataclass(frozen=True, slots=True)
 class AdditionalAction(Effect):
     """Grant ``seat`` an additional action: once the action now resolving is done, the opportunity
-    to act stays with ``seat`` instead of passing on (CR, Additional Action). A pass taken at that
-    opportunity does not count toward closing the round.
+    to act goes to ``seat`` instead of passing on in turn order (CR, Additional Action). The
+    consecutive-pass count starts again there, so a pass taken at that opportunity is the first of
+    the passes that close the round, and a pass made before the action is not counted with it.
 
     Attributes
     ----------
     seat : PlayerId
         The seat granted the action.
+    source_id : str
+        The card whose text grants it, which a client names the opportunity after.
     follow_ups : frozenset of Action or None, optional
         The actions the opportunity may be spent on, as "take an additional Battle from your target
         Ring" limits it. A pass is always allowed. Default None, for any action the round permits.
     """
 
     seat: PlayerId
+    source_id: str
     follow_ups: frozenset[Action] | None = None
 
     def describe(self) -> str:
         return f"{self.seat.name} takes an additional action"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        game.additional_action = self.seat
-        game.additional_follow_ups = self.follow_ups
+        game.additional_grant = AdditionalGrant(
+            self.seat, self.source_id, self.follow_ups, game.round.kind
+        )
         return []
 
 

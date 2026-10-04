@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.effects import Bow, Destroy, Discard
+from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, PutIntoPlay
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
@@ -36,11 +36,21 @@ from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.triggers import pay_costs, resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
 from yasuki_core.engine.replay.game_log import replay
-from yasuki_core.engine.rules.cards.shattered_empire import FINE_SWORD, SANJIROS_ARMOR
+from yasuki_core.engine.rules.cards.shattered_empire import (
+    ENLIGHTENED_PATH_COPY,
+    FINE_SWORD,
+    SANJIROS_ARMOR,
+)
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, FavorDiscarded
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, RoundKind
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Negation, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    Duration,
+    Modifier,
+    Negation,
+    SeatAbilityGrant,
+    Stat,
+)
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.players import Trait
 from yasuki_core.engine.rules.rulebook import proxies
@@ -71,6 +81,10 @@ from yasuki_core.engine.rules.effects import Move, StartDuel
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.cards.test_anvil_of_despair import (
+    _reach_the_combat_segment,
+    _refugees_battle,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.builders import (
@@ -1233,6 +1247,7 @@ def _ring_battle(
     raider_chi: int = 3,
     in_play: tuple[L5RCard, ...] = (),
     held: tuple[L5RCard, ...] = (),
+    discarded: tuple[L5RCard, ...] = (),
 ) -> EngineSession:
     """P1 attacks P2's Province with a raider; P2 defends with a guard. Left in the Combat Segment
     with P1 holding the opportunity."""
@@ -1245,6 +1260,8 @@ def _ring_battle(
         put_in_play(state, register(state, card))
     for card in held:
         state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(register(state, card))
+    for card in discarded:
+        state.zones[ZoneKey(card.owner, ZoneRole.FATE_DISCARD)].add(register(state, card))
     session = EngineSession.start(state, P1)
     end_phase(session)
     session.act(P1, DeclareAttack())
@@ -1488,6 +1505,169 @@ def test_ring_of_earth_pitched_from_hand_negates_the_move_and_is_discarded():
         assert "earth" in _fate_discard(session, P2)
 
 
+# --- The Enlightened Path of the Dragon ---
+
+ENLIGHTENED_PATH = "the_enlightened_path_of_the_dragon"
+
+
+def _fate_deck(session: EngineSession, seat: PlayerId) -> set[str]:
+    return {card.id for card in session.game.table.decks[DeckKey(seat, Side.FATE)].cards}
+
+
+def test_the_enlightened_path_takes_a_discarded_rings_battle_then_reshuffles_it():
+    session = _ring_battle(
+        guard_force=6,
+        in_play=(stronghold(P1, printed_id=ENLIGHTENED_PATH),),
+        discarded=(_ring("fire", "ring_of_fire"),),
+    )
+
+    session.act(P1, ActivateAbility("P1-SH"))
+    _answer_until_settled(session, "fire")
+
+    assert session.legal_actions(P1) == [Pass(), ActivateAbility("fire", ENLIGHTENED_PATH_COPY)]
+
+    session.act(P1, ActivateAbility("fire", ENLIGHTENED_PATH_COPY))
+    _answer_until_settled(session, "guard")
+
+    assert effective_force(session.game, session.game.table.cards_by_id["guard"]) == 6 - 4
+    assert "fire" in _fate_deck(session, P1)
+    assert not any(isinstance(held, SeatAbilityGrant) for held in session.game.ongoing)
+
+
+def test_the_enlightened_path_reshuffles_the_ring_when_the_additional_action_is_passed():
+    session = _ring_battle(
+        in_play=(stronghold(P1, printed_id=ENLIGHTENED_PATH),),
+        discarded=(_ring("fire", "ring_of_fire"),),
+    )
+    session.act(P1, ActivateAbility("P1-SH"))
+    _answer_until_settled(session, "fire")
+
+    session.act(P1, Pass())
+
+    assert "fire" in _fate_deck(session, P1)
+
+
+def test_the_enlightened_path_takes_a_ring_in_play_ignoring_its_bow_cost():
+    session = _ring_battle(
+        guard_force=6,
+        in_play=(stronghold(P1, printed_id=ENLIGHTENED_PATH), _ring("fire", "ring_of_fire")),
+    )
+
+    session.act(P1, ActivateAbility("P1-SH"))
+    _answer_until_settled(session, "fire")
+    session.act(P1, ActivateAbility("fire", ENLIGHTENED_PATH_COPY))
+    _answer_until_settled(session, "guard")
+
+    table = session.game.table
+    assert effective_force(session.game, table.cards_by_id["guard"]) == 6 - 4
+    assert not table.cards_by_id["fire"].bowed
+    assert "fire" in _in_play(session)
+
+
+def test_the_enlightened_path_skips_a_bowed_ring_in_play():
+    session = _ring_battle(
+        in_play=(stronghold(P1, printed_id=ENLIGHTENED_PATH), _ring("fire", "ring_of_fire"))
+    )
+    session.game.table.cards_by_id["fire"].bow()
+
+    assert ActivateAbility("P1-SH") not in session.legal_actions(P1)
+
+
+@pytest.mark.parametrize("used_as_a_battle", [False, True])
+def test_the_enlightened_path_taken_as_a_battle_spends_its_interrupt(used_as_a_battle):
+    with probe_ability(MOVE_PROBE, MOVE_ABILITY):
+        session = _ring_battle(
+            raider_printed_id=MOVE_PROBE,
+            in_play=(stronghold(P1, printed_id=ENLIGHTENED_PATH),),
+            discarded=(_ring("earth", "ring_of_earth"), _ring("fire", "ring_of_fire")),
+        )
+        if used_as_a_battle:
+            session.act(P1, ActivateAbility("P1-SH"))
+            _answer_until_settled(session, "fire")
+            session.act(P1, ActivateAbility("fire", ENLIGHTENED_PATH_COPY))
+            _answer_until_settled(session, "guard")
+            session.act(P2, Pass())
+
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        offered = PlayInterrupt("P1-SH") in session.legal_actions(P1)
+        assert offered is not used_as_a_battle
+
+
+def test_the_enlightened_path_takes_a_discarded_rings_interrupt_then_spends_its_one_use():
+    with probe_ability(MOVE_PROBE, MOVE_ABILITY):
+        session = _ring_battle(
+            raider_printed_id=MOVE_PROBE,
+            in_play=(stronghold(P2, printed_id=ENLIGHTENED_PATH),),
+            discarded=(_ring("earth", "ring_of_earth", P2), _ring("fire", "ring_of_fire", P2)),
+        )
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        session.act(P2, PlayInterrupt("P2-SH"))
+        _answer_until_settled(session, "earth")
+        session.act(P2, PlayInterrupt("earth", ENLIGHTENED_PATH_COPY))
+        _answer_until_settled(session)
+
+        table = session.game.table
+        assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
+        assert "earth" in _fate_deck(session, P2)
+        assert session.game.round.priority is P2
+        assert ActivateAbility("P2-SH") not in session.legal_actions(P2)
+
+
+def test_the_enlightened_path_takes_a_discarded_earths_interrupt_against_refugees():
+    session = _refugees_battle()
+    table = session.game.table
+    put_in_play(table, register(table, stronghold(P1, printed_id=ENLIGHTENED_PATH)))
+    table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(
+        register(table, _ring("earth", "ring_of_earth"))
+    )
+    _reach_the_combat_segment(session, P2)
+    session.act(P2, PlayStrategy("refugees"))
+    session.submit(P2, DecisionResponse(("raider",)))
+
+    session.act(P1, PlayInterrupt("P1-SH"))
+    _answer_until_settled(session, "earth")
+    session.act(P1, PlayInterrupt("earth", ENLIGHTENED_PATH_COPY))
+    _answer_until_settled(session)
+
+    raider = table.cards_by_id["raider"]
+    assert location_of(table, raider).battlefield == 0
+    assert not raider.bowed
+    assert "earth" in _fate_deck(session, P1)
+
+
+def test_the_enlightened_path_back_takes_an_open_from_the_discard_pile():
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1, printed_id=f"{ENLIGHTENED_PATH}__back")))
+    state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(
+        register(state, _ring("void", "ring_of_the_void"))
+    )
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("drawn", P1))]
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, ActivateAbility("P1-SH"))
+    _answer_until_settled(session, "void")
+    session.act(P1, ActivateAbility("void", ENLIGHTENED_PATH_COPY))
+    _answer_until_settled(session)
+
+    assert _fate_deck(session, P1) == {"void"}
+    assert "drawn" in _fate_discard(session, P1)
+
+
+def test_the_enlightened_path_front_is_not_taken_as_an_open():
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1, printed_id=ENLIGHTENED_PATH)))
+    state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(
+        register(state, _ring("void", "ring_of_the_void"))
+    )
+    session = EngineSession.start(state, P1)
+
+    assert ActivateAbility("P1-SH") not in session.legal_actions(P1)
+
+
 FAVOR_PROBE = "favor_probe_shattered"
 register_ability(
     FAVOR_PROBE,
@@ -1721,6 +1901,42 @@ def test_ring_of_the_void_is_offered_when_fate_cards_in_play_come_to_match_the_h
     assert [card.id for card in hand] == ["spare"]
 
 
+def test_ring_of_the_void_is_offered_before_a_trigger_that_would_break_its_count(reacting):
+    # A Ring may enter immediately after its condition is fulfilled (CR, Ring), so its offer comes
+    # ahead of a draw the same entry set off, which would leave the hand one card larger.
+    def _draw(ctx):
+        return [DrawCard(P1)]
+
+    reacting(EnteredPlay, "probe_drawer", _draw)
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(state, holding("drawer", owner=P1, printed_id="probe_drawer"))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("drawn", P1))]
+    hand = state.zones[ZoneKey(P1, ZoneRole.HAND)]
+    for card in (
+        _ring("void", "ring_of_the_void"),
+        fate_card("entering", P1),
+        fate_card("spare", P1),
+    ):
+        hand.add(register(state, card))
+    session = EngineSession.start(state, P1)
+
+    resolve_effects(session.game, [PutIntoPlay("entering")])
+
+    assert _void_offered(session)
+    assert "drawn" in _fate_deck(session, P1)
+
+
+def test_a_second_ring_of_the_void_is_not_offered_once_the_first_breaks_its_count():
+    session = _void_equip_game(_ring("void2", "ring_of_the_void"))
+
+    assert _void_offered(session, "void")
+    session.submit(P1, DecisionResponse(("void",)))
+
+    assert "void" in _in_play(session)
+    assert not _void_offered(session, "void2")
+
+
 def test_declining_ring_of_the_void_is_not_offered_again_while_the_count_still_matches():
     session = _void_equip_game(fate_card("spare", P1))
 
@@ -1759,6 +1975,33 @@ def test_ring_of_the_void_is_not_offered_while_an_equipped_card_waits_to_enter()
 
     assert "played" in _in_play(session)
     assert not _void_offered(session)
+
+
+def test_ring_of_the_void_is_not_offered_while_a_strategy_can_still_be_cancelled():
+    # Announcing the Strategy takes it out of hand, leaving none in hand against none in play, but
+    # the action can still be backed out of, so nothing is judged until it resolves.
+    played = L5RCard.of(
+        ActionPrint,
+        id="played",
+        name="Played",
+        printed_id="probe_gain_honor",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=1,
+    )
+    session = _void_game(played, in_play=0)
+
+    with probe_ability("probe_gain_honor", _GAIN_HONOR):
+        session.act(P1, PlayStrategy("played"))
+
+        assert isinstance(session.game.pending, ChoosePayment)
+        assert session.can_cancel(P1)
+
+        session.cancel(P1)
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert {card.id for card in hand} == {"void", "played"}
+    assert session.game.pending is None
 
 
 def test_ring_of_the_void_is_offered_once_a_strategy_has_left_the_resolution_area():

@@ -3,10 +3,10 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
+    owned_carrying,
     has_keyword,
     opposed_units_in_battle,
     opposing_units_in_battle,
-    owned_personalities,
     personalities_in_play,
     units_at,
 )
@@ -191,10 +191,8 @@ def _palm_strike_targets(game: GameState, source: L5RCard) -> list[str]:
         return []
     return [
         card.id
-        for card in owned_personalities(game, source.owner)
-        if not card.bowed
-        and has_keyword(game, card, keywords.MONK)
-        and _palm_strike_unarmed(game, card)
+        for card in owned_carrying(game, source.owner, keywords.MONK)
+        if not card.bowed and _palm_strike_unarmed(game, card)
     ]
 
 

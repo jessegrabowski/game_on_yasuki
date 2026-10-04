@@ -2266,19 +2266,20 @@ def test_higaru_looks_at_one_more_card_than_rings_before_the_end_of_turn_draw(ri
     session.submit(P1, DecisionResponse(("higaru",)))
 
     assert session.game.pending.candidates == seen
+    assert session.game.pending.pick_label == "Put on the bottom of your deck"
 
 
-def test_higaru_puts_the_chosen_on_the_bottom_in_order_before_the_card_is_drawn():
-    session = _higaru_game(rings=(Element.AIR,))
+def test_higaru_puts_the_chosen_on_the_bottom_in_one_pick_before_the_card_is_drawn():
+    session = _higaru_game(rings=(Element.AIR, Element.FIRE))
     end_turn(session)
     session.submit(P1, DecisionResponse(("higaru",)))
 
-    session.submit(P1, DecisionResponse(("a", "b")))
     session.submit(P1, DecisionResponse(("b", "a")))
 
     hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
     assert [card.id for card in hand] == ["c"]
     assert _fate_deck_top_first(session) == ["d", "b", "a"]
+    assert session.game.look is None
     assert session.log.replay() == session.game
 
 
@@ -2311,6 +2312,18 @@ def test_higaru_straightens_his_target_when_that_is_chosen():
     session.submit(P1, DecisionResponse(("Straighten it",)))
 
     assert not session.game.table.cards_by_id["ally"].bowed
+
+
+def test_higaru_straightens_a_ring_without_offering_it_a_bonus():
+    session = _higaru_game(rings=(Element.AIR,))
+    ring = session.game.table.cards_by_id["ring0"]
+    ring.bow()
+    session.act(P1, ActivateAbility("higaru"))
+
+    session.submit(P1, DecisionResponse(("ring0",)))
+
+    assert session.game.pending is None
+    assert not ring.bowed
 
 
 def test_higaru_with_no_ring_straightens_his_target_without_asking():

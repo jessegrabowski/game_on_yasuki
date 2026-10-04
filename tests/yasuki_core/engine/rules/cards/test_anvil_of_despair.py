@@ -5,6 +5,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import DeclareAttack, Pass, PlayStrategy
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.effects import Move
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -99,6 +101,21 @@ def test_the_target_goes_home_and_bows():
     raider = session.game.table.cards_by_id["raider"]
     assert location_of(session.game.table, raider).is_home
     assert raider.bowed
+
+
+def test_a_negated_move_leaves_the_target_unbowed():
+    session = _refugees_battle()
+    _reach_the_combat_segment(session, DEFENDER)
+    session.game.ongoing.append(
+        Negation("probe", Duration.UNTIL_END_OF_TURN, effect_kind=Move, subject_id="raider")
+    )
+    _offered_targets(session, DEFENDER)
+
+    session.submit(DEFENDER, DecisionResponse(("raider",)))
+
+    raider = session.game.table.cards_by_id["raider"]
+    assert location_of(session.game.table, raider).battlefield == 0
+    assert not raider.bowed
 
 
 def test_paying_the_gold_buys_the_ashigaru():

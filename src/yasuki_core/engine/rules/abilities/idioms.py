@@ -3,7 +3,7 @@ from dataclasses import replace
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Label
 from yasuki_core.engine.rules.abilities.registry import ability_for, register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
@@ -49,8 +49,6 @@ from yasuki_core.engine.rules.rulebook.recruit_restrictions import RecruitRestri
 
 # The key of the ability a Ring is discarded from hand to use.
 PITCH = "pitch"
-# The trait every Ring prints for its cast from hand, which is what a client shows for it.
-RING_PITCH = "You may discard this Ring from your hand to use its ability without cost."
 
 
 def plays_clan(clan: str) -> Callable[[GameState, L5RCard], bool]:
@@ -163,7 +161,7 @@ def register_entry(
 
 
 def register_ring(
-    printed_id: str, *, ability: Ability, pitch: str | None, ruleset: str | None = None
+    printed_id: str, *, ability: Ability, pitch: Label | None, ruleset: str | None = None
 ) -> None:
     """Register a Ring's printed ability, and the cast that discards the Ring from hand to use it.
 
@@ -178,9 +176,11 @@ def register_ring(
     ability : :class:`~yasuki_core.engine.rules.abilities.model.Ability`
         The ability as printed on the Ring in play. It needs a ``key`` when ``pitch`` is set,
         since the cast is a second ability on the card.
-    pitch : str or None
-        The trait letting the Ring be discarded from hand to use ``ability``, as the card prints
-        it, which is what a client shows for the cast. None for a Ring that prints no such trait.
+    pitch : str, callable or None
+        What a client shows for the cast, in the forms an ability's ``label`` takes:
+        :func:`~.printed_line_without_cost` for the trait every Ring prints, or the card's own
+        wording for a Ring whose cast does something else. None for a Ring that prints no such
+        trait.
     ruleset : str, optional
         The name of the one ruleset both registrations are in force under, for a Ring whose text
         differs between arcs. Default None, for a text every arc reads.
@@ -268,7 +268,9 @@ def register_condition_entry(
 
     The CR's Ring rule, as for :func:`~.register_trait_entry`: the card may enter immediately after
     the condition is fulfilled, and the condition is fulfilled again by each new occurrence. A
-    condition that already holds as the card arrives in hand is fulfilled by the arrival.
+    condition that already holds as the card arrives in hand is fulfilled by the arrival. The
+    condition is a continuous check, so the offer is made only while it still holds: one whose
+    condition another Ring's entry broke first offers nothing.
 
     Parameters
     ----------
@@ -280,11 +282,15 @@ def register_condition_entry(
         The name of the one ruleset the trait is in force under, for a card whose text differs
         between arcs. Default None, for a text every arc reads.
     """
+
+    def offer_while_it_holds(ctx: TriggerContext) -> list[Effect]:
+        return _offer_entry(ctx) if condition(ctx.game, ctx.card) else []
+
     watch(
         printed_id,
         key=CONDITION_ENTRY,
         condition=condition,
-        reaction=_offer_entry,
+        reaction=offer_while_it_holds,
         where=(CardLocation.HAND,),
         ruleset=ruleset,
     )

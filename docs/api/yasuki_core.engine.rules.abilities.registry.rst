@@ -34,6 +34,7 @@ yasuki_core.engine.rules.abilities.registry
     printed_abilities
     printed_ability_line
     printed_interrupt
+    printed_line_without_cost
     register_ability
     register_interrupt
     register_invest

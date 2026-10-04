@@ -37,10 +37,17 @@ def test_a_cost_with_no_designator_is_still_an_ability():
     assert abilities("<b>:bow::</b> Produce 2 Gold.") == [((), (), ":bow:", "Produce 2 Gold.")]
 
 
-def test_an_ability_may_carry_two_designators():
-    ability = split_text_box("Battle/Open: Gain 1 Honor.").abilities[0]
+@pytest.mark.parametrize(
+    "head, designators",
+    [
+        ("Battle/Open", ("Battle", "Open")),
+        ("Battle/Interrupt/Open", ("Battle", "Interrupt", "Open")),
+    ],
+)
+def test_an_ability_may_carry_several_designators(head, designators):
+    ability = split_text_box(f"{head}: Gain 1 Honor.").abilities[0]
 
-    assert ability.designators == ("Battle", "Open")
+    assert ability.designators == designators
 
 
 def test_a_named_trait_opens_a_new_trait():

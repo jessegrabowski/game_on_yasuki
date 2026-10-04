@@ -7,7 +7,7 @@ from yasuki_gui.config import load_hotkeys
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.projection import AttackView, DuelView
-from yasuki_core.engine.table import TableState
+from yasuki_core.engine.table import TableState, ZoneKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
@@ -154,6 +154,8 @@ class GameWindow:
         # One strip for every pile either player opens, retitled as it is reused, so a player who
         # has moved it finds it where they left it.
         self.card_strip = CardStrip(self.field, ImageProvider(self.field))
+        # The pile the strip is showing and its title, so a refresh can redraw it from the board.
+        self._pile_shown: tuple[ZoneKey, str] | None = None
         # The cards a look shows, opened over the board while the questions about them are asked.
         self.look_view = LookView(self.field, ImageProvider(self.field))
         # A question picking several outcomes, laid over the board while it is owed.
@@ -177,7 +179,7 @@ class GameWindow:
         self.opponent_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P2)
         self.human_panel = PlayerInfoBox(self.sidebar, self.field, PlayerId.P1)
         for panel in (self.opponent_panel, self.human_panel):
-            panel.on_inspect = self.show_cards
+            panel.on_inspect = self.show_pile
         self.prompt_box = PromptBox(self.sidebar)
         self.prompt_box.grid(row=1, column=0, sticky="nsew")
         # Spacebar takes the primary offered action (Pass/Pay/Discard), never a secondary like
@@ -210,19 +212,40 @@ class GameWindow:
                 return found
         return self.field.card_under_pointer(x_root, y_root)
 
+    def show_pile(self, pile: ZoneKey, title: str) -> None:
+        """Lay ``pile`` out over the board under ``title``, and keep it in step with the board until
+        the strip is closed or another pile replaces it."""
+        self._pile_shown = (pile, title)
+        self.show_cards(self.field.zone_render_cards(pile), title)
+
+    def refresh_pile(self) -> None:
+        """Redraw the open pile from the board, so a card that has left it leaves the strip too.
+        Close the strip once the pile is empty."""
+        if self._pile_shown is None or not self.card_strip.showing:
+            return
+        pile, title = self._pile_shown
+        cards = self.field.zone_render_cards(pile)
+        if not cards:
+            self.card_strip.close()
+            self._pile_shown = None
+            return
+        self.card_strip.show(cards, title)
+
     def show_cards(self, cards: list[L5RCard], title: str) -> None:
         """Lay a pile out over the board in the strip panel, reusing the one panel for every
         pile."""
         # Placed before it is filled, so the cards are laid out at the size they will be shown at
         # rather than measured against an unplaced panel and corrected on a later redraw.
         self.card_strip.open_at(STRIP_INSET, STRIP_INSET)
+        # Raised whether or not it was already open, so a panel opened since, such as the battle
+        # view, does not keep covering the pile the player just asked for.
+        self.card_strip.lift()
         self.card_strip.show(cards, title)
 
     def show_look(
         self,
         cards: list[L5RCard],
         candidates: frozenset[str],
-        selected: frozenset[str] = frozenset(),
         placed: frozenset[str] = frozenset(),
     ) -> None:
         """Float the look over the board while ``cards`` are in view, and take it away when none
@@ -232,7 +255,7 @@ class GameWindow:
             return
         board_w, board_h = widget_size(self.field)
         self.look_view.open_over((board_w - LOOK_W) // 2, (board_h - LOOK_H) // 2, LOOK_W, LOOK_H)
-        self.look_view.refresh(cards, candidates, selected=selected, placed=placed)
+        self.look_view.refresh(cards, candidates, placed=placed)
 
     def show_options(
         self,
@@ -348,6 +371,7 @@ class GameWindow:
         for panel in (self.opponent_panel, self.human_panel):
             panel.on_deck_click = presenter.on_deck_activated
         self.look_view.on_card_click = presenter.on_look_card_clicked
+        self.card_strip.on_card_click = presenter.on_card_activated
         self.root.bind("<Control-z>", presenter.undo)
         self.root.bind("<Escape>", presenter.cancel_via_escape)
 

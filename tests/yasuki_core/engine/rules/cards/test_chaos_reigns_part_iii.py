@@ -800,7 +800,7 @@ def test_comprehensive_education_walks_take_then_discard_then_bottom():
     pending = session.game.pending
     assert isinstance(pending, ChooseCards)
     assert pending.candidates == ("edict1", "kata1", "edict2")
-    assert pending.decline_label == "Decline"
+    assert pending.minimum == 0
 
     session.submit(P1, DecisionResponse(("kata1",)))
     pending = session.game.pending

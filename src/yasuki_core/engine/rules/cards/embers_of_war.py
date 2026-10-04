@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import has_keyword, owned_personalities
+from yasuki_core.engine.rules.board.queries import owned_carrying
 from yasuki_core.engine.rules.effects import AskOption, Effect, GrantKeyword
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
@@ -19,11 +19,9 @@ TEMPLE_TO_THE_ELEMENTS_ELEMENTS = (keywords.AIR, keywords.EARTH, keywords.FIRE, 
 
 
 def _temple_to_the_elements_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Your Monk and Shugenja Personalities, bowed or not."""
+    """Your Monks and Shugenja, Followers among them, bowed or not."""
     return [
-        card.id
-        for card in owned_personalities(game, source.owner)
-        if has_keyword(game, card, keywords.MONK) or has_keyword(game, card, keywords.SHUGENJA)
+        card.id for card in owned_carrying(game, source.owner, keywords.MONK, keywords.SHUGENJA)
     ]
 
 

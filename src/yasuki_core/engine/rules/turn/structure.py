@@ -116,6 +116,9 @@ class ActionRound:
         The actions the seat holding priority may spend an additional action on, as "take an
         additional Battle from your target Ring" limits it, or None when the opportunity is not
         limited. Dropped as the opportunity passes on. Default None.
+    granted_by : str or None
+        The card whose additional action the seat holding priority is taking, or None when it
+        holds an ordinary opportunity. Dropped as the opportunity passes on. Default None.
     """
 
     timings: RoundTimings
@@ -123,6 +126,31 @@ class ActionRound:
     passes: int = 0
     kind: RoundKind = RoundKind.PHASE
     follow_ups: frozenset[Action] | None = None
+    granted_by: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class AdditionalGrant:
+    """An additional action granted by the action now resolving and not yet opened (CR, Additional
+    Action).
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat granted it.
+    source_id : str
+        The card whose text grants it.
+    follow_ups : frozenset of Action or None
+        The actions it is limited to, or None for any the round permits.
+    kind : RoundKind
+        The kind of round it was granted in, which is the round it opens in: a Response Step taken
+        over the action passes it by, and it opens once the round beneath resumes.
+    """
+
+    seat: PlayerId
+    source_id: str
+    follow_ups: frozenset[Action] | None
+    kind: RoundKind
 
 
 # What each battle segment that is an Action Round permits. Both are open to every seat and permit
@@ -143,9 +171,16 @@ class Turn(Enum):
     CURRENT = "turn"
 
 
-# The stretches of play a Moment can name the edge of: the turn, one of its phases, or one of the
-# Attack Phase's segments.
-Stage = Turn | Phase | Segment | BattleSegment | DuelStep
+class Opportunity(Enum):
+    """An additional action limited to some follow-ups, as a stage of play: it opens as the action
+    granting it resolves and closes once the seat has taken or passed it (CR, Additional Action)."""
+
+    ADDITIONAL = "additional action"
+
+
+# The stretches of play a Moment can name the edge of: the turn, one of its phases, one of the
+# Attack Phase's segments, a duel's steps, or an additional action.
+Stage = Turn | Phase | Segment | BattleSegment | DuelStep | Opportunity
 
 
 @dataclass(frozen=True, slots=True)
@@ -169,6 +204,8 @@ class Moment:
             # The CR's own wording for a duel's consequences, which is the one edge of a duel's
             # steps a card delays an effect to.
             return "as the duel ends"
+        if self.stage is Opportunity.ADDITIONAL:
+            return "once the additional action is spent"
         return f"at the {self.boundary.value} of the {self._stage_name()}"
 
     def _stage_name(self) -> str:
@@ -198,6 +235,10 @@ END_OF_BATTLE = Moment(BattleSegment.AFTER_RESOLUTION, Boundary.END)
 # it gave for the winner or the loser resolve as it ends, before its focused cards are discarded
 # (CR, Duel).
 DUEL_CONSEQUENCES = Moment(DuelStep.ENDED, Boundary.BEGINNING)
+# "Take an additional action ... If the Ring was in the discard pile, reshuffle it": what is granted
+# for a limited additional action alone, and what waits on it, lasts until the seat has taken or
+# passed it.
+ADDITIONAL_ACTION_SPENT = Moment(Opportunity.ADDITIONAL, Boundary.END)
 
 # The moments the flow reaches. Any other Moment is constructible and correctly worded, so an effect
 # delayed to one would be held for the rest of the game with nothing to resolve it. The battle
@@ -208,6 +249,7 @@ FIRED_MOMENTS: frozenset[Moment] = frozenset(
         END_OF_TURN,
         END_OF_BATTLE,
         DUEL_CONSEQUENCES,
+        ADDITIONAL_ACTION_SPENT,
         *(Moment(segment, Boundary.BEGINNING) for segment in BATTLE_SEGMENT_TIMINGS),
     }
 )

@@ -399,6 +399,15 @@ class GameRunner:
         pending = self.session.game.pending
         return pending if pending is not None and pending.seat is self.human else None
 
+    def follow_up_source(self) -> L5RCard | None:
+        """The card whose additional action the human holds the opportunity to take, or None while
+        the human holds no such opportunity (CR, Additional Action)."""
+        game = self.session.game
+        granted_by = game.round.granted_by
+        if granted_by is None or game.round.priority is not self.human:
+            return None
+        return game.table.cards_by_id[granted_by]
+
     @property
     def opponent_owes_decision(self) -> bool:
         """Whether the engine is waiting on an answer from the AI-reserved opponent.

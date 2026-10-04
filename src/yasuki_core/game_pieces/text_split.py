@@ -29,10 +29,10 @@ _DESIG = "|".join(sorted(DESIGNATORS))
 _TAGS = re.compile(r"<[^>]+>")
 _BREAK = re.compile(r"<br\s*/?>")
 
-# [keywords] [designator(/designator)] [, cost [or cost]] :
+# [keywords] [designator(/designator...)] [, cost [or cost]] :
 _ANCHOR = re.compile(
     rf"(?P<kw>(?:[A-Z][a-z]+\s+){{0,3}})"
-    rf"(?P<desig>(?:{_DESIG})(?:\s*/\s*(?:{_DESIG}))?)"
+    rf"(?P<desig>(?:{_DESIG})(?:\s*/\s*(?:{_DESIG}))*)"
     rf"(?P<cost>(?:\s*,?\s*(?:{_ICON})(?:\s+or\s+{_ICON})?)*)"
     rf"\s*:"
 )

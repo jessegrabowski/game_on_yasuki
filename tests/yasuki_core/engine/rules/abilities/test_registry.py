@@ -5,6 +5,7 @@ import pytest
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import (
+    printed_line_without_cost,
     ability_label,
     _ABILITIES,
     _INVEST,
@@ -234,6 +235,17 @@ def test_a_labeled_ability_shows_its_label_whatever_the_card_prints():
 
     assert ability_label(card, _labelless(label="Open: Put this Event into play")) == (
         "Open: Put this Event into play"
+    )
+
+
+def test_a_ring_cast_from_hand_shows_its_ability_without_the_cost_it_skips():
+    card = _printed(
+        "You may discard this Ring from your hand to use its ability without cost.<br>"
+        "<b>Repeatable Battle/Open, :bow::</b> Straighten one or two of your target cards."
+    )
+
+    assert ability_label(card, _labelless(label=printed_line_without_cost)) == (
+        "Repeatable Battle/Open: Straighten one or two of your target cards."
     )
 
 

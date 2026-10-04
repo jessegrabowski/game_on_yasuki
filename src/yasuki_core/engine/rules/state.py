@@ -13,7 +13,13 @@ from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent, NextTime
 from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.modifiers import Ongoing
-from yasuki_core.engine.rules.turn.structure import ActionRound, Moment, PHASE_TIMINGS, Phase
+from yasuki_core.engine.rules.turn.structure import (
+    ActionRound,
+    AdditionalGrant,
+    Moment,
+    PHASE_TIMINGS,
+    Phase,
+)
 from yasuki_core.engine.rules.vocabulary.victory import VictoryRule
 from yasuki_core.engine.rules.vocabulary.work import Modification, WorkItem
 
@@ -215,13 +221,10 @@ class GameState:
         The once-per-action rulebook Interrupts taken against the action now resolving, as the
         Interrupt's key and the seat that took it. Cleared as the next action begins. Ephemeral
         and rebuilt by replay. Default empty.
-    additional_action : PlayerId or None
-        The seat granted an additional action by the action now resolving, which keeps the
-        opportunity to act once it is done (CR, Additional Action). Spent as the opportunity is
-        handed on. Ephemeral and rebuilt by replay. Default None.
-    additional_follow_ups : frozenset of Action or None
-        The actions that additional action is limited to, or None for any the round permits. Spent
-        with it. Ephemeral and rebuilt by replay. Default None.
+    additional_grant : AdditionalGrant or None
+        The additional action the action now resolving granted, waiting for its round to hand on
+        the opportunity (CR, Additional Action). Spent as it opens. Ephemeral and rebuilt by
+        replay. Default None.
     interrupts_offered : bool
         Whether the action now resolving has opened its Interrupt step. An action opens one,
         over the effects it first hands to step E, and what it defers behind them resolves without
@@ -283,8 +286,7 @@ class GameState:
     announced_from_hand: frozenset[str] = frozenset()
     asked_outside_action: bool = False
     interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)
-    additional_action: PlayerId | None = None
-    additional_follow_ups: frozenset[Action] | None = None
+    additional_grant: AdditionalGrant | None = None
     interrupts_offered: bool = False
     modifications: list[Modification] = field(default_factory=list)
     hidden_card_shown: bool = False

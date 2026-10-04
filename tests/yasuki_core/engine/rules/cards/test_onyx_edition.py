@@ -816,10 +816,10 @@ def test_the_capital_gives_an_enemy_shadowlands_and_keeps_the_opportunity_to_act
     assert has_keyword(game, game.table.cards_by_id["guard"], keywords.SHADOWLANDS)
     assert not game.table.cards_by_id["guard"].bowed
     assert game.round.priority is P1 and game.round.passes == 0
-    assert game.additional_action is None
+    assert game.additional_grant is None
 
 
-def test_a_pass_at_the_additional_opportunity_does_not_count_toward_closing_the_round():
+def test_a_pass_at_the_additional_opportunity_starts_the_count_that_closes_the_round():
     session = _dark_capital_in_combat()
     session.act(P1, ActivateAbility("capital"))
     session.submit(P1, DecisionResponse(("guard",)))
@@ -1866,39 +1866,32 @@ def _duel_with_hiyoku(session: EngineSession) -> EngineSession:
     return session
 
 
-def test_hiyoku_winning_a_duel_in_battle_takes_a_token_and_is_offered_the_action():
+def test_hiyoku_winning_a_duel_in_battle_takes_a_token_and_the_follow_up():
     session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=1))
 
-    assert session.game.table.cards_by_id["hiyoku"].counters[PLUS_1F_PLUS_1C.key] == 1
-    pending = session.game.pending
-    assert isinstance(pending, Confirm)
-    assert pending.seat is P1
-    # The winning Personality is what a yes comes back as, so an empty subject would make yes
-    # indistinguishable from no.
-    assert pending.candidates == ("hiyoku",)
-
-    session.submit(P1, DecisionResponse(("hiyoku",)))
-
-    assert session.game.pending is None
+    game = session.game
+    assert game.table.cards_by_id["hiyoku"].counters[PLUS_1F_PLUS_1C.key] == 1
+    assert game.pending is None
+    assert (game.round.priority, game.round.granted_by) == (P1, "hiyoku")
 
 
-def test_the_additional_action_is_offered_to_the_opponent_who_won():
+def test_the_follow_up_goes_to_the_opponent_who_won():
     # "The winner may take an additional action" names the winner, not Hiyoku's controller, and the
     # challenged seat can be the one who won.
     session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=9))
 
-    assert isinstance(session.game.pending, Confirm)
-    assert session.game.pending.seat is P2
-    assert PLUS_1F_PLUS_1C.key not in session.game.table.cards_by_id["hiyoku"].counters
+    game = session.game
+    assert (game.round.priority, game.round.granted_by) == (P2, "hiyoku")
+    assert game.additional_grant is None
+    assert PLUS_1F_PLUS_1C.key not in game.table.cards_by_id["hiyoku"].counters
 
 
-def test_declining_the_additional_action_grants_nothing():
+def test_declining_the_follow_up_hands_the_opportunity_on():
     session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=1))
 
-    session.submit(P1, DecisionResponse(()))
+    session.act(P1, Pass())
 
-    # The resolver is called on either answer, so a no has to buy nothing of its own accord.
-    assert session.game.additional_action is None
+    assert (session.game.round.priority, session.game.round.granted_by) == (P2, None)
 
 
 def test_a_duel_neither_personality_wins_offers_nothing():
@@ -1906,7 +1899,7 @@ def test_a_duel_neither_personality_wins_offers_nothing():
     session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=4))
 
     assert session.game.pending is None
-    assert session.game.additional_action is None
+    assert session.game.additional_grant is None
     assert PLUS_1F_PLUS_1C.key not in session.game.table.cards_by_id["hiyoku"].counters
 
 
@@ -1945,7 +1938,7 @@ def test_hiyoku_takes_no_token_for_a_duel_he_is_not_in():
 
 def test_hiyoku_replays_to_the_same_board():
     session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=1))
-    session.submit(P1, DecisionResponse(("hiyoku",)))
+    session.act(P1, Pass())
 
     assert replay(session.log).table == session.game.table
 
