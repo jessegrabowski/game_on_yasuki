@@ -23,6 +23,7 @@ yasuki_core.engine.rules.triggers
     action_did
     action_recruited
     apply_effect
+    as_modified
     at_cap
     caused_by
     choice_resolver

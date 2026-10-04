@@ -17,6 +17,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     ConditionFulfilled
     CounterChanged
     Destroyed
+    Destroying
     Dishonored
     DuelDeclared
     DuelEnded

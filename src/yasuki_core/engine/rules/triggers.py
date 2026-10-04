@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CardDiscarded,
     ConditionFulfilled,
     Destroyed,
+    Destroying,
     EnteredPlay,
     GameEvent,
     names_both_edges,
@@ -26,7 +27,7 @@ from yasuki_core.engine.rules.effects import (
     To,
 )
 from yasuki_core.engine.rules import state_based_actions
-from yasuki_core.engine.rules.negation import negate_committed, spend_once
+from yasuki_core.engine.rules.negation import negate_committed, spend_once, would_negate
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, STEP_ROUNDS, Moment
 from yasuki_core.engine.rules.vocabulary.modifiers import (
@@ -397,11 +398,13 @@ def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
 @dataclass(slots=True)
 class _Effects:
     """Effects a walk still has to apply, in order, and where they came from. A ``simultaneous``
-    frame is a group's, whose events gather in the events frame beneath it."""
+    frame is a group's, whose events gather in the events frame beneath it. ``announced`` holds the
+    cards whose destruction has been announced and has not yet committed."""
 
     pending: list[Effect]
     provenance: Provenance
     simultaneous: bool = False
+    announced: frozenset[str] = frozenset()
 
 
 @dataclass(slots=True)
@@ -440,14 +443,18 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
     is under way"). What the state-based rules then demand of the board is the occurrence that
     follows, announced once that frame's triggers have resolved. A :class:`~.Simultaneously` group
     is the exception: its members' events gather in one events frame beneath the group, which fires
-    once every member has happened. An events frame announces all of its occurrence's events and
-    collects every trait they trigger, dropping those that would do nothing when several were
-    collected. While the triggers left belong to two or more cards outside a hand, it pauses for the
-    active player's :class:`~.ChooseNextTrigger` (CR, Timing Conflicts). Otherwise it fires the next
-    as a new effects frame, unless its card has since left where it answers from. A frame with
-    nothing left is dropped, and the walk ends with the stack. An :class:`~.InterruptingEffect`
-    pauses the walk: it stashes the exact remainder (every frame, the paused one holding the effects
-    after the one that asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
+    once every member has happened. An effect something acts before, a destruction a trait reads
+    "before this card is destroyed", is announced first as an events frame of its own, read as the
+    Interrupt modifications and the negations in force will leave it, and commits once that frame
+    has resolved. A destruction inside a group, or one the state-based rules demand, is not
+    announced. An events frame announces all of its occurrence's events and collects every trait
+    they trigger, dropping those that would do nothing when several were collected. While the
+    triggers left belong to two or more cards outside a hand, it pauses for the active player's
+    :class:`~.ChooseNextTrigger` (CR, Timing Conflicts). Otherwise it fires the next as a new
+    effects frame, unless its card has since left where it answers from. A frame with nothing left
+    is dropped, and the walk ends with the stack. An :class:`~.InterruptingEffect` pauses the walk:
+    it stashes the exact remainder (every frame, the paused one holding the effects after the one
+    that asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
     :func:`~.resume_cascade` continues from precisely here once the seat answers. An effect with
     nothing to ask leaves the stash to drain behind the work it queued.
 
@@ -478,7 +485,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             if not top.pending:
                 frames.pop()
                 continue
-            effect = top.pending.pop(0)
+            popped = effect = top.pending.pop(0)
             provenance = top.provenance
             contingent: tuple[Effect, ...] = ()
             if isinstance(effect, To):
@@ -499,7 +506,17 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 _stash(game, frames)
                 game.stack.append(ApplyEffects((effect.effect,), effect.provenance))
                 return
-            if provenance.interruptible and not isinstance(effect, InterruptingEffect):
+            stands = as_modified(game, effect) if _modifiable(effect, provenance) else effect
+            impending = () if top.simultaneous else stands.impending(game)
+            unannounced = [event for event in impending if event.card_id not in top.announced]
+            if any(_collect(game, event) for event in unannounced) and not _will_be_negated(
+                game, stands, provenance
+            ):
+                top.announced |= {event.card_id for event in unannounced}
+                top.pending.insert(0, popped)
+                frames.append(_Events(unannounced))
+                continue
+            if _modifiable(effect, provenance):
                 effect = _modified(game, effect)
             if not provenance.paying:
                 effect = negate_committed(game, effect, provenance)
@@ -518,6 +535,8 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             _trace.append(f"    {effect.describe()}")
             happens = bool(contingent) and happens_as(game, first, effect)
             raised = apply_effect(game, effect)
+            # An announced effect is put back at the head of its frame, so it is the one committing.
+            top.announced = frozenset()
             # What the effect produced goes next, ahead of the rest, so an attack's outcome resolves
             # where the attack stood and passes through the Interrupt step on its own.
             top.pending[:0] = (*effect.follow_on(game), *(contingent if happens else ()))
@@ -568,6 +587,19 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             top.firing = _triggered(game, top.firing)
 
 
+def _will_be_negated(game: GameState, stands: Effect, provenance: Provenance) -> bool:
+    """Whether a negation in force will negate ``stands``, an effect as the Interrupts leave it,
+    read without spending one. A negated effect is announced to nothing, since the negation
+    happens first (ShE datasheet, The Yu Trait)."""
+    return not provenance.paying and would_negate(game, stands, provenance, [])
+
+
+def _modifiable(effect: Effect, provenance: Provenance) -> bool:
+    """Whether the Interrupts taken against the action can modify ``effect``: one of the action's
+    own effects, other than a question it asks."""
+    return provenance.interruptible and not isinstance(effect, InterruptingEffect)
+
+
 def happens_as(game: GameState, first: Effect, committing: Effect) -> bool:
     """Whether ``committing``, what the checks made of ``first``, is ``first`` actually happening:
     the same kind of effect on the same card, which an Interrupt's adjustment leaves it and a
@@ -593,7 +625,9 @@ def _announce(game: GameState, event: GameEvent) -> None:
     # Interrupt or a Response does inside its own round is its doing, not the action's, and the
     # announcement that the action resolved is about it rather than by it.
     inside_a_step = game.round.kind in STEP_ROUNDS
-    if not inside_a_step and not isinstance(event, ActionResolved | ConditionFulfilled):
+    if not inside_a_step and not isinstance(
+        event, ActionResolved | ConditionFulfilled | Destroying
+    ):
         game.action_events.append(event)
     _trace.append(type(event).__name__)
 
@@ -644,19 +678,24 @@ def _held_from(effect: Effect, provenance: Provenance) -> Effect:
     return replace(effect, effect=Attributed(effect.effect, action))
 
 
-def _modified(game: GameState, effect: Effect) -> Effect:
-    """``effect`` as the Interrupts taken against the action make of it: every modification bound
-    to it applies in the order the Interrupts were taken, and is spent. One that would negate an
-    effect that cannot be negated is spent and changes nothing."""
+def as_modified(game: GameState, effect: Effect) -> Effect:
+    """``effect`` as the Interrupts taken against the action will have it resolve, read without
+    spending them: every modification bound to it applies in the order the Interrupts were taken.
+    One that would negate an effect that cannot be negated changes nothing."""
     original = effect
-    for modification in list(game.modifications):
+    for modification in game.modifications:
         if modification.answers(original):
             modified = modification.apply(game, effect)
-            refused = isinstance(modified, Negated) and not effect.is_negatable(game)
-            if not refused:
+            if not (isinstance(modified, Negated) and not effect.is_negatable(game)):
                 effect = modified
-            game.modifications.remove(modification)
     return effect
+
+
+def _modified(game: GameState, effect: Effect) -> Effect:
+    """``effect`` as :func:`as_modified` reads it, spending every modification bound to it."""
+    modified = as_modified(game, effect)
+    game.modifications[:] = [m for m in game.modifications if not m.answers(effect)]
+    return modified
 
 
 def _refuse_mid_decision(game: GameState, driver: str) -> None:
@@ -905,11 +944,14 @@ class EffectsFrame:
     simultaneous : bool, optional
         Whether they are the rest of a :class:`~.Simultaneously` group, whose events gather in the
         events frame beneath. Default False.
+    announced : frozenset of str, optional
+        The cards whose destruction has been announced and has not yet committed. Default none.
     """
 
     effects: tuple[Effect, ...]
     provenance: Provenance = Provenance()
     simultaneous: bool = False
+    announced: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True, slots=True)
@@ -963,7 +1005,9 @@ def _stash(game: GameState, frames: list[_Frame]) -> None:
 
 def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
     if isinstance(frame, _Effects):
-        return EffectsFrame(tuple(frame.pending), frame.provenance, frame.simultaneous)
+        return EffectsFrame(
+            tuple(frame.pending), frame.provenance, frame.simultaneous, frame.announced
+        )
     firing = tuple((card.id, trigger, event) for card, trigger, event in frame.firing)
     return EventsFrame(tuple(frame.queue), firing, frame.chosen, tuple(frame.following))
 
@@ -971,7 +1015,7 @@ def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
 def _thawed(game: GameState, frame: EffectsFrame | EventsFrame) -> _Frame:
     """``frame`` for the walk to resume, dropping the triggers whose card has left the table."""
     if isinstance(frame, EffectsFrame):
-        return _Effects(list(frame.effects), frame.provenance, frame.simultaneous)
+        return _Effects(list(frame.effects), frame.provenance, frame.simultaneous, frame.announced)
     firing = [
         (game.table.cards_by_id[card_id], trigger, event)
         for card_id, trigger, event in frame.firing

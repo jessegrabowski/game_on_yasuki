@@ -141,6 +141,38 @@ class Destroyed:
 
 
 @dataclass(frozen=True, slots=True)
+class Destroying:
+    """A card is about to be destroyed: announced before the destruction commits, once the
+    Interrupts taken against it and the negations in force have been read, so a trait reading
+    "before this card is destroyed" resolves while the card still stands. The destruction commits
+    after the traits it wakes have resolved, and may still be negated by one of them.
+
+    Announced for a destruction the cascade walks on its own, and only when some card answers it, so
+    the turn's history holds only the announcements a trait answered. A destruction inside a
+    :class:`~.Simultaneously` group is not announced, and neither is one a state-based rule demands,
+    such as a Personality's at zero Chi, which no player's action causes. Unlike a window such as
+    :class:`~.ProducingGold`, it is no step announcing itself, so a question a trait asks here is
+    the trait's own.
+
+    Attributes
+    ----------
+    card_id : str
+        The card about to be destroyed.
+    cause : PlayerId, Rulebook or Trait
+        Who or what is destroying it.
+    location : Location
+        Where the card stands.
+    controller : PlayerId
+        The seat that controls it.
+    """
+
+    card_id: str
+    cause: Cause
+    location: Location
+    controller: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
 class EnteredPlay:
     """A card entered play on the battlefield.
 
@@ -589,6 +621,7 @@ GameEvent = (
     | CounterChanged
     | ProvinceDestroyed
     | Destroyed
+    | Destroying
     | Dishonored
     | DuelDeclared
     | DuelEnded

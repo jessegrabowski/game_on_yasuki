@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ConditionFulfilled,
     CounterChanged,
     Destroyed,
+    Destroying,
     DuelDeclared,
     EnteredPlay,
     HonorChanged,
@@ -55,6 +56,8 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     DiscardFromHand,
     GainHonor,
+    GrantModifier,
+    GrantNegation,
     Bow,
     IgnoreHonorRequirements,
     MoveToHand,
@@ -89,6 +92,8 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, PersonalityPrint
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     fate_card,
     holding,
     personality,
@@ -1724,3 +1729,180 @@ def test_reaching_a_moment_lapses_what_lasted_until_it_before_resolving_what_wai
 
     assert game.ongoing == []
     assert farm.bowed
+
+
+def _standing(game, card):
+    return any(held is card for held in game.table.battlefield.cards)
+
+
+def test_a_trait_acting_before_a_destruction_resolves_while_the_card_stands(reacting):
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying", printed_id="before_probe"))
+    reacting(
+        Destroying,
+        "before_probe",
+        lambda ctx: [GainHonor(PlayerId.P1, 1)] if _standing(game, ctx.card) else [],
+    )
+
+    resolve_effects(game, [Destroy(dying.id, PlayerId.P2)])
+
+    seen = [e for e in game.turn_events if isinstance(e, Destroying | HonorChanged | Destroyed)]
+    assert [type(event) for event in seen] == [Destroying, HonorChanged, Destroyed]
+    assert seen[0] == Destroying(dying.id, PlayerId.P2, Location.home(PlayerId.P1), PlayerId.P1)
+
+
+def test_a_destruction_nothing_acts_before_is_not_announced():
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying"))
+    before = len(game.turn_events)
+
+    resolve_effects(game, [Destroy(dying.id, PlayerId.P2)])
+
+    assert game.turn_events[before:] == (
+        Destroyed(dying.id, PlayerId.P2, Location.home(PlayerId.P1), PlayerId.P1),
+    )
+
+
+def test_a_followers_trait_acts_before_its_personality_is_destroyed(reacting):
+    game = two_seat_game()
+    put_in_play(game, personality("hero"))
+    follower = attached(game, attachment("follower", printed_id="before_probe"), "hero")
+    reacting(
+        Destroying,
+        "before_probe",
+        lambda ctx: [GainHonor(PlayerId.P1, 1)] if ctx.event.card_id == ctx.card.id else [],
+    )
+
+    resolve_effects(game, [Destroy("hero", PlayerId.P2)])
+
+    assert game.table.seats[PlayerId.P1].honor == 1
+    assert not _standing(game, follower)
+
+
+def _destroyed_together(game, dying):
+    resolve_effects(game, [Simultaneously((Destroy(dying.id, PlayerId.P2),))])
+
+
+def _destroyed_at_zero_chi(game, dying):
+    resolve_effects(
+        game,
+        [GrantModifier("curse", dying.id, Stat.CHI, -dying.chi, Duration.UNTIL_END_OF_TURN)],
+    )
+
+
+@pytest.mark.parametrize(
+    "destroy", [_destroyed_together, _destroyed_at_zero_chi], ids=["group", "chi-death"]
+)
+def test_a_destruction_in_a_group_or_by_a_state_based_rule_is_not_announced(reacting, destroy):
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying", printed_id="before_probe", chi=1))
+    reacting(Destroying, "before_probe", lambda ctx: [GainHonor(PlayerId.P1, 1)])
+
+    destroy(game, dying)
+
+    assert not _standing(game, dying)
+    assert not any(isinstance(event, Destroying) for event in game.turn_events)
+
+
+def test_a_trait_destroying_its_own_card_before_it_is_destroyed_never_settles(reacting):
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying", printed_id="before_probe"))
+    reacting(Destroying, "before_probe", lambda ctx: [Destroy(ctx.card.id, PlayerId.P2)])
+
+    with pytest.raises(RuntimeError, match="did not converge"):
+        resolve_effects(game, [Destroy(dying.id, PlayerId.P2)])
+
+
+def _negated_by_a_lasting_negation(game, destroy):
+    game.ongoing.append(Negation("ward", END_OF_TURN, effect_kind=Destroy))
+    resolve_effects(game, [destroy])
+
+
+def _negated_by_an_interrupt(game, destroy):
+    game.modifications.append(
+        Replacement(bound=destroy, card_id="ward", replacement=Negated(destroy))
+    )
+    game.interrupts_offered = True
+    resolve_action_effects(game, [destroy])
+
+
+@pytest.mark.parametrize(
+    "negate",
+    [_negated_by_a_lasting_negation, _negated_by_an_interrupt],
+    ids=["lasting-negation", "interrupt"],
+)
+def test_a_destruction_that_will_be_negated_is_not_announced(reacting, negate):
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying", printed_id="before_probe"))
+    reacting(Destroying, "before_probe", lambda ctx: [GainHonor(PlayerId.P1, 1)])
+
+    negate(game, Destroy(dying.id, PlayerId.P2))
+
+    assert _standing(game, dying)
+    assert game.table.seats[PlayerId.P1].honor == 0
+
+
+def test_a_negation_granted_before_a_destruction_negates_it(reacting):
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying", printed_id="before_probe"))
+    reacting(
+        Destroying,
+        "before_probe",
+        lambda ctx: [
+            GrantNegation(
+                Negation(ctx.card.id, END_OF_TURN, effect_kind=Destroy, subject_id=ctx.card.id)
+            )
+        ],
+    )
+
+    resolve_effects(game, [Destroy(dying.id, PlayerId.P2)])
+
+    assert _standing(game, dying)
+
+
+def test_a_card_whose_announced_destruction_was_negated_is_announced_again(reacting):
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying", printed_id="before_probe"))
+    reacting(
+        Destroying,
+        "before_probe",
+        lambda ctx: [
+            GrantNegation(
+                Negation(
+                    ctx.card.id, END_OF_TURN, effect_kind=Destroy, subject_id=ctx.card.id, once=True
+                )
+            )
+        ],
+    )
+
+    resolve_effects(game, [Destroy(dying.id, PlayerId.P2), Destroy(dying.id, PlayerId.P2)])
+
+    assert sum(isinstance(event, Destroying) for event in game.turn_events) == 2
+    assert _standing(game, dying)
+
+
+def test_a_question_asked_before_a_destruction_is_the_traits_own_and_the_card_dies_once(reacting):
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying", printed_id="before_probe"))
+    reacting(
+        Destroying,
+        "before_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id)],
+    )
+
+    resolve_effects(game, [Destroy(dying.id, PlayerId.P2)])
+
+    assert game.pending.triggered and _standing(game, dying)
+    action_sequence.submit(game, DecisionResponse(()))
+    assert [e.card_id for e in game.turn_events if isinstance(e, Destroyed)] == [dying.id]
+
+
+def test_an_announced_destruction_is_not_among_what_the_action_did(reacting):
+    game = two_seat_game()
+    dying = put_in_play(game, personality("dying", printed_id="before_probe"))
+    reacting(Destroying, "before_probe", lambda ctx: [GainHonor(PlayerId.P1, 1)])
+
+    resolve_action_effects(game, [Destroy(dying.id, PlayerId.P2)])
+
+    assert any(isinstance(event, Destroying) for event in game.turn_events)
+    assert not any(isinstance(event, Destroying) for event in game.action_events)

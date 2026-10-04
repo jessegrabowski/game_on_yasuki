@@ -70,6 +70,8 @@ from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 from yasuki_core.game_pieces.counters import WEALTH
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     fate_card,
     flip_stronghold,
     holding,
@@ -883,3 +885,21 @@ def test_gaining_a_province_creates_it_leftmost_under_an_id_no_province_has_held
     ]
     assert provinces == [(3, ["refill"]), (0, ["left"]), (2, ["right"])]
     assert middle not in game.table.zones  # the destroyed Province's key still names nothing
+
+
+def test_a_destruction_announces_every_card_of_the_unit():
+    game = two_seat_game()
+    put_in_play(game, personality("hero"))
+    attached(game, attachment("blade"), "hero")
+
+    impending = Destroy("hero", PlayerId.P2).impending(game)
+
+    assert [event.card_id for event in impending] == ["hero", "blade"]
+
+
+def test_a_card_out_of_play_has_no_destruction_to_announce():
+    game = two_seat_game()
+    put_in_play(game, personality("hero"))
+    resolve_effects(game, [Destroy("hero", PlayerId.P2)])
+
+    assert Destroy("hero", PlayerId.P2).impending(game) == ()

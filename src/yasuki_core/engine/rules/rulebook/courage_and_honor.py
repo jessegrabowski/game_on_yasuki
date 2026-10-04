@@ -18,9 +18,9 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     To,
 )
-from yasuki_core.engine.rules.interrupts import as_modified, foreseen_now
+from yasuki_core.engine.rules.interrupts import foreseen_now
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import Resolver, choice_resolver
+from yasuki_core.engine.rules.triggers import Resolver, as_modified, choice_resolver
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 
