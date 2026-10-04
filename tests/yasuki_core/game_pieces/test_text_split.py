@@ -117,6 +117,14 @@ def test_a_break_is_a_boundary_an_ability_can_open_at():
     ]
 
 
+def test_a_newline_is_a_boundary_an_ability_can_open_at():
+    text = "Discipline :g2:\nIaijutsu Repeatable Battle: Challenge a target enemy Personality."
+
+    assert abilities(text) == [
+        (("Iaijutsu",), ("Battle",), None, "Challenge a target enemy Personality.")
+    ]
+
+
 def test_a_prefix_separates_what_classifies_the_ability_from_what_modifies_it():
     """Only the classification rises to the card, so the two cannot share a field."""
     ability = split_text_box("Political Home Open/Engage: Take :favor:.").abilities[0]
