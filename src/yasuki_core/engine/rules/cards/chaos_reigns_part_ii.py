@@ -1,13 +1,14 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_yu
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import (
     granted_ability,
     register_ability,
     register_cannot_attack,
+    register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
@@ -38,7 +39,9 @@ from yasuki_core.engine.rules.effects import (
     GrantModifier,
     MeleeAttack,
     MoveToDeck,
+    MoveToHand,
     RangedAttack,
+    Show,
     ShuffleDeck,
     Simultaneously,
     SpendOncePerTurn,
@@ -74,7 +77,65 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import WEALTH, counter_from_key
-from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import (
+    ActionPrint,
+    AttachmentPrint,
+    HoldingPrint,
+    PersonalityPrint,
+)
+
+
+# --- Akodo Iori ---
+
+IORI_INVEST = 1
+
+
+def _akodo_iori_sought(game: GameState, card: L5RCard) -> bool:
+    """A Bushido Virtue, or a Strategy carrying Tactical."""
+    carried = effective_keywords(game, card)
+    if keywords.BUSHIDO_VIRTUE in carried:
+        return True
+    return isinstance(card.printed, ActionPrint) and keywords.TACTICAL in carried
+
+
+def _akodo_iori_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
+    """Search the Fate deck, where every card the text may find is kept."""
+    deck = game.table.decks[DeckKey(source.owner, Side.FATE)].cards
+    pool = tuple(card.id for card in deck if _akodo_iori_sought(game, card))
+    return [Choose(source.owner, pool, 1, 1, "akodo_iori_invest", source.id)] if pool else []
+
+
+register_invest("akodo_iori", InvestAbility((IORI_INVEST,), _akodo_iori_invest))
+
+
+@choice_resolver(
+    "akodo_iori_invest", prompt="Search your deck for a Bushido Virtue or Tactical Strategy"
+)
+def _resolve_akodo_iori_invest(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Show(chosen[0]), MoveToHand(chosen[0], seat), ShuffleDeck(DeckKey(seat, Side.FATE))]
+
+
+def _akodo_iori_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Permanently give your target Personality Tactician." Your Personalities at Iori's
+    battlefield, Iori among them, since a targeted Yu reaches only that battlefield (ShE datasheet,
+    The Yu Trait)."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    targets = tuple(card.id for card in units_at(ctx.game, battlefield, ctx.card.owner))
+    return [Choose(ctx.card.owner, targets, 1, 1, "akodo_iori_yu", ctx.card.id)] if targets else []
+
+
+register_yu("akodo_iori", _akodo_iori_yu)
+
+
+@choice_resolver("akodo_iori_yu", prompt="Choose your Personality to permanently give Tactician")
+def _resolve_akodo_iori_yu(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [GrantKeyword(source_id, chosen[0], keywords.TACTICIAN, Duration.PERMANENT)]
 
 
 # --- Burnt Offering ---
