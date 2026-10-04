@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
     ChooseBattlefield,
     ChooseCards,
+    ChooseNextTrigger,
     DecisionResponse,
     assignment,
     assignment_token,
@@ -45,6 +46,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     BattleResolved,
     Bowed,
     CardDiscarded,
+    Destroying,
 )
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -1338,6 +1340,33 @@ def test_a_question_asked_during_resolution_is_answered_before_the_battle_announ
     [resolved] = _battles_resolved(session)
     assert resolved.destroyed == ("ashura",)
     assert resolved.destroyed_controllers == frozenset({PlayerId.P1})
+
+
+def test_a_tie_announces_both_armies_before_either_is_destroyed(reacting):
+    session = _one_battlefield({"a": 4}, {"d": 4})
+    honor = {seat: session.game.table.seats[seat].honor for seat in PlayerId}
+
+    def _gain_while_the_enemy_stands(ctx):
+        enemy = "d" if ctx.card.id == "a" else "a"
+        mine = ctx.event.card_id == ctx.card.id
+        return [GainHonor(ctx.card.owner, 1)] if mine and _in_play(session, enemy) else []
+
+    reacting(Destroying, "a", _gain_while_the_enemy_stands)
+    reacting(Destroying, "d", _gain_while_the_enemy_stands)
+    session.submit(PlayerId.P1, DecisionResponse(("0",)))
+    while session.game.round.kind is RoundKind.BATTLE_SEGMENT:
+        session.act(session.game.round.priority, Pass())
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseNextTrigger) and set(pending.candidates) == {"a", "d"}
+    session.submit(PlayerId.P1, DecisionResponse(("a",)))
+
+    assert not _in_play(session, "a") and not _in_play(session, "d")
+    # Each side's trait saw the enemy still standing, then gained 2 for the card it destroyed.
+    assert {seat: session.game.table.seats[seat].honor - honor[seat] for seat in PlayerId} == {
+        PlayerId.P1: 3,
+        PlayerId.P2: 3,
+    }
 
 
 def test_a_province_destroyed_before_resolution_is_not_credited_to_it():

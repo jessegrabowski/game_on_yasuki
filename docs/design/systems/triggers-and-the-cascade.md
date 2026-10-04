@@ -159,6 +159,24 @@ happened. A {class}`~.To` applies its `first` effect and then its `contingent` e
 "the second effect depends on the first effect actually happening" (CR, Independence of
 Effects).
 
+A destruction can also be acted on before it commits. "Before a card with the Yu trait is
+destroyed by another player's action during battle, or during resolution, resolve the Yu effect"
+(ShE datasheet, The Yu Trait). Whenever some card answers it, the walk announces a
+{class}`~.Destroying` for each card of the unit before the {class}`~.Destroy` commits. It reads the
+effect as the Interrupt modifications will leave it and skips one that a negation in force will
+negate, since "the negation/substitution will always occur first". It then puts the effect back at
+the head of its frame, records the cards in the frame's `announced`, and pushes the announcement as
+an events frame. The traits it wakes resolve while the card still stands, and the effect commits
+when it comes back up, through the Interrupt modifications and the negation check like any other,
+so a negation one of those traits granted stops it.
+
+A group's destructions are announced together, as one occurrence, before any member commits. The
+walk forecasts every member, a `once` negation hiding only the first member it will spend itself
+on, and pushes the announcement above the group's frame. A member the forecast missed, a card a
+trait put into play say, is announced as it comes up. A destruction the state-based rules demand is
+never announced, since no player's action causes it, and nothing is announced when no card answers,
+so a game without such a trait walks exactly as before.
+
 `_settle_state_based_actions` runs after every effect, not once at the end. That is the order the
 Comprehensive Rules give, and it is why a Personality who dies as he arrives is dead before his
 arrival is announced.
@@ -184,7 +202,8 @@ The paused frame keeps the effects after this one, and the frames beneath it kee
 yet fired, the event being processed, and the queue behind it. Each frame is stored as a frozen
 {class}`~yasuki_core.engine.rules.triggers.EffectsFrame` or
 {class}`~yasuki_core.engine.rules.triggers.EventsFrame` naming its cards by id, so the stash
-compares equal under replay. The order in the loop above matters: the stash happens *before*
+compares equal under replay. An effects frame keeps the cards whose destruction it has announced, so
+a walk paused while destroying does not announce them again when it resumes. The order in the loop above matters: the stash happens *before*
 `effect.request` is called, because the work stack is last-in-first-out and an effect whose request
 queues its own work needs that work to run first.
 

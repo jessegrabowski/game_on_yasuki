@@ -1770,29 +1770,100 @@ def test_a_followers_trait_acts_before_its_personality_is_destroyed(reacting):
     assert not _standing(game, follower)
 
 
-def _destroyed_together(game, dying):
-    resolve_effects(game, [Simultaneously((Destroy(dying.id, PlayerId.P2),))])
-
-
-def _destroyed_at_zero_chi(game, dying):
-    resolve_effects(
-        game,
-        [GrantModifier("curse", dying.id, Stat.CHI, -dying.chi, Duration.UNTIL_END_OF_TURN)],
-    )
-
-
-@pytest.mark.parametrize(
-    "destroy", [_destroyed_together, _destroyed_at_zero_chi], ids=["group", "chi-death"]
-)
-def test_a_destruction_in_a_group_or_by_a_state_based_rule_is_not_announced(reacting, destroy):
+def test_a_destruction_a_state_based_rule_demands_is_not_announced(reacting):
     game = two_seat_game()
     dying = put_in_play(game, personality("dying", printed_id="before_probe", chi=1))
     reacting(Destroying, "before_probe", lambda ctx: [GainHonor(PlayerId.P1, 1)])
 
-    destroy(game, dying)
+    resolve_effects(
+        game, [GrantModifier("curse", dying.id, Stat.CHI, -1, Duration.UNTIL_END_OF_TURN)]
+    )
 
     assert not _standing(game, dying)
     assert not any(isinstance(event, Destroying) for event in game.turn_events)
+
+
+def test_a_groups_destructions_are_announced_together_and_ordered_by_the_active_player(reacting):
+    game = two_seat_game()
+    first = put_in_play(game, personality("first", printed_id="before_probe"))
+    second = put_in_play(game, personality("second", printed_id="before_probe"))
+    reacting(
+        Destroying,
+        "before_probe",
+        lambda ctx: [GainHonor(PlayerId.P1, 1)]
+        if ctx.event.card_id == ctx.card.id and _standing(game, first) and _standing(game, second)
+        else [],
+    )
+
+    resolve_effects(
+        game,
+        [
+            Simultaneously(
+                (
+                    Destroy(first.id, PlayerId.P2),
+                    GainHonor(PlayerId.P2, 1),
+                    Destroy(second.id, PlayerId.P2),
+                )
+            )
+        ],
+    )
+    assert isinstance(game.pending, ChooseNextTrigger)
+    action_sequence.submit(game, DecisionResponse((second.id,)))
+
+    announced = [e.card_id for e in game.turn_events if isinstance(e, Destroying)]
+    assert announced == [first.id, second.id]
+    assert game.table.seats[PlayerId.P1].honor == 2
+    assert not _standing(game, first) and not _standing(game, second)
+
+
+def test_a_group_paused_while_destroying_commits_each_member_once(reacting):
+    game = two_seat_game()
+    asking = put_in_play(game, personality("asking", printed_id="before_probe"))
+    quiet = put_in_play(game, personality("quiet"))
+    reacting(
+        Destroying,
+        "before_probe",
+        lambda ctx: [Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id)]
+        if ctx.event.card_id == ctx.card.id
+        else [],
+    )
+
+    resolve_effects(
+        game,
+        [Simultaneously((Destroy(asking.id, PlayerId.P2), Destroy(quiet.id, PlayerId.P2)))],
+    )
+    assert _standing(game, asking) and _standing(game, quiet)
+    action_sequence.submit(game, DecisionResponse(()))
+
+    destroyed = [e.card_id for e in game.turn_events if isinstance(e, Destroyed)]
+    assert destroyed == [asking.id, quiet.id]
+
+
+def test_a_group_member_the_forecast_missed_is_announced_before_it_commits(reacting):
+    game = two_seat_game()
+    first = put_in_play(game, personality("first", printed_id="returning_probe"))
+    late = register(game.table, personality("late", printed_id="before_probe"))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(late)
+    reacting(
+        Destroying,
+        "returning_probe",
+        lambda ctx: [PutIntoPlay(late.id)] if ctx.event.card_id == ctx.card.id else [],
+    )
+    reacting(
+        Destroying,
+        "before_probe",
+        lambda ctx: [GainHonor(PlayerId.P1, 1)] if ctx.event.card_id == ctx.card.id else [],
+    )
+
+    resolve_effects(
+        game,
+        [Simultaneously((Destroy(first.id, PlayerId.P2), Destroy(late.id, PlayerId.P2)))],
+    )
+
+    announced = [e.card_id for e in game.turn_events if isinstance(e, Destroying)]
+    assert announced == [first.id, late.id]
+    assert game.table.seats[PlayerId.P1].honor == 1
+    assert not _standing(game, late)
 
 
 def test_a_trait_destroying_its_own_card_before_it_is_destroyed_never_settles(reacting):

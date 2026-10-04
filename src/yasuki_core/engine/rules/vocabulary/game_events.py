@@ -147,12 +147,12 @@ class Destroying:
     "before this card is destroyed" resolves while the card still stands. The destruction commits
     after the traits it wakes have resolved, and may still be negated by one of them.
 
-    Announced for a destruction the cascade walks on its own, and only when some card answers it, so
-    the turn's history holds only the announcements a trait answered. A destruction inside a
-    :class:`~.Simultaneously` group is not announced, and neither is one a state-based rule demands,
-    such as a Personality's at zero Chi, which no player's action causes. Unlike a window such as
-    :class:`~.ProducingGold`, it is no step announcing itself, so a question a trait asks here is
-    the trait's own.
+    Announced only when some card answers it, so the turn's history holds only the announcements a
+    trait answered. A :class:`~.Simultaneously` group's destructions are announced together, as one
+    occurrence, before any of them commits. A destruction a state-based rule demands, such as a
+    Personality's at zero Chi, is not announced, since no player's action causes it. Unlike a
+    window such as :class:`~.ProducingGold`, it is no step announcing itself, so a question a trait
+    asks here is the trait's own.
 
     Attributes
     ----------

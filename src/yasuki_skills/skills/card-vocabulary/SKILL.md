@@ -52,7 +52,10 @@ triggers only. The state-based rules are still enforced after each member, so wr
 in a group does not let both commit before the board is judged. Two effects the text joins with "to"
 ("discard a card to draw a card"), or a clause that depends on an earlier one ("if you put a Ring
 into play, ..."), are a `To`, so the second applies only if the first actually happened.
-`docs/design/systems/effects.md` has the rules and the CR lines behind them.
+A trait acting before a card is destroyed ("before this card is destroyed", Yu) answers
+`Destroying`, which is announced before the destruction commits unless a negation in force will stop
+it. A group's destructions are announced together. `docs/design/systems/effects.md` has the rules
+and the CR lines behind them.
 
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and
 modifiers layer over it. Gold is the same shape on the economy side. A card that appears to have the
