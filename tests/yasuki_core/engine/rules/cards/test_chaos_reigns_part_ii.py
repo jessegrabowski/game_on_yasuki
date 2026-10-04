@@ -1,7 +1,8 @@
 import pytest
 
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
@@ -10,6 +11,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
+    ChooseNextTrigger,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
@@ -28,7 +30,7 @@ from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Bow, Destroy
+from yasuki_core.engine.rules.effects import Bow, Destroy, Simultaneously
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
@@ -59,6 +61,7 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
     stronghold,
+    terrain_at,
     token_template,
     two_seat_game,
 )
@@ -855,3 +858,118 @@ def test_yabe_no_oni_creates_two_oni_as_he_dies_in_battle_resolution():
     resolve_effects(game, [Destroy("yabe", Rulebook.BATTLE_RESOLUTION)])
 
     assert len(_lesser_oni(game)) == 2
+
+
+# --- Desperate Ground ---
+
+
+def _desperate_ground_battle(enemy="guard"):
+    units = [
+        personality("raider"),
+        personality("second"),
+        personality("guard", owner=PlayerId.P2, printed_id=enemy),
+        personality("armed", owner=PlayerId.P2),
+    ]
+    game = combat_segment(units, {"raider": 0, "second": 0}, {"guard": 0, "armed": 0}).game
+    attached(game, attachment("blade", owner=PlayerId.P2), "armed")
+    terrain_at(game, "desperate_ground", 0)
+    return game
+
+
+def test_desperate_ground_gives_your_dying_personality_a_yu_against_an_enemy_card():
+    game = _desperate_ground_battle()
+
+    resolve_effects(game, [Destroy("raider", PlayerId.P2)])
+    assert game.pending.seat is P1
+    assert set(game.pending.candidates) == {"guard", "blade"}
+    submit(game, DecisionResponse(("guard",)))
+
+    assert "guard" not in {card.id for card in game.table.battlefield.cards}
+
+
+def test_desperate_ground_gives_your_follower_its_yu_and_your_unit_at_home_none():
+    game = _desperate_ground_battle()
+    attached(game, attachment("spear", attachment_type=AttachmentType.FOLLOWER), "raider")
+    put_in_play(game, personality("home"))
+
+    resolve_effects(game, [Destroy("home", PlayerId.P2)])
+    at_home = game.pending
+    resolve_effects(game, [Destroy("spear", PlayerId.P2)])
+
+    assert at_home is None
+    assert game.pending.seat is P1 and "guard" in game.pending.candidates
+
+
+def test_desperate_ground_gives_no_yu_to_an_enemy():
+    game = _desperate_ground_battle()
+
+    resolve_effects(game, [Destroy("guard", P1)])
+
+    assert game.pending is None
+
+
+def test_two_personalities_dying_under_desperate_ground_are_ordered_apart():
+    game = _desperate_ground_battle()
+
+    resolve_effects(
+        game,
+        [Simultaneously((Destroy("raider", PlayerId.P2), Destroy("second", PlayerId.P2)))],
+    )
+
+    assert isinstance(game.pending, ChooseNextTrigger)
+    assert set(game.pending.candidates) == {"raider", "second"}
+    submit(game, DecisionResponse(("raider",)))
+    submit(game, DecisionResponse(("guard",)))
+    submit(game, DecisionResponse(("second",)))
+    submit(game, DecisionResponse(("blade",)))
+
+    on_table = {card.id for card in game.table.battlefield.cards}
+    assert on_table & {"guard", "blade", "raider", "second"} == set()
+
+
+def test_a_card_a_yu_destroys_resolves_no_yu_of_its_own():
+    game = _desperate_ground_battle(enemy="bayushi_purimu")
+
+    resolve_effects(game, [Destroy("raider", PlayerId.P2)])
+    submit(game, DecisionResponse(("guard",)))
+
+    assert "guard" not in {card.id for card in game.table.battlefield.cards}
+    assert game.pending is None
+
+
+def test_a_personality_with_its_own_yu_under_desperate_ground_offers_both_by_their_text():
+    kurutta = L5RCard.of(
+        PersonalityPrint,
+        id="kurutta",
+        name="Matsu Kurutta",
+        side=Side.DYNASTY,
+        owner=P1,
+        printed_id="matsu_kurutta",
+        force=2,
+        chi=3,
+        keywords=("Deathseeker",),
+        text="Yu: Give your target Deathseeker a +1F token.",
+    )
+    units = [kurutta, personality("other"), personality("guard", owner=PlayerId.P2)]
+    game = combat_segment(units, {"kurutta": 0, "other": 0}, {"guard": 0}).game
+    ground = L5RCard.of(
+        ActionPrint,
+        id="ground",
+        name="Desperate Ground",
+        side=Side.FATE,
+        owner=P1,
+        printed_id="desperate_ground",
+        keywords=("Terrain",),
+        text='Your Followers and Personalities at this battlefield have, "Yu: Destroy a target '
+        'enemy card without attachments."',
+    )
+    put_in_play(game, ground)
+    ops.set_location(game.table, ground, Location.at_battlefield(0))
+
+    resolve_effects(game, [Destroy("kurutta", PlayerId.P2)])
+
+    assert game.pending.candidates == ("kurutta#1", "kurutta#2")
+    assert set(game.pending.labels) == {
+        "Yu: Give your target Deathseeker a +1F token.",
+        "Yu: Destroy a target enemy card without attachments.",
+    }

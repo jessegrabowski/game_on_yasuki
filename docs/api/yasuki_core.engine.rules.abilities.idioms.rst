@@ -18,6 +18,7 @@ yasuki_core.engine.rules.abilities.idioms
     register_condition_entry
     register_entry
     register_event_entry
+    register_granted_yu
     register_ring
     register_terrain
     register_trait_entry

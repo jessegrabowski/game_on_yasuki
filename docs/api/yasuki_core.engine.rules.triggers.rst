@@ -10,6 +10,7 @@ yasuki_core.engine.rules.triggers
     AnnounceEvent
     EffectsFrame
     EventsFrame
+    GrantedTrigger
     HeldAction
     Registration
     ResumeCascade
@@ -31,6 +32,7 @@ yasuki_core.engine.rules.triggers
     enforce_state_based_actions
     fire
     fire_all
+    granted_trigger
     happens_as
     lapse_ongoing
     on

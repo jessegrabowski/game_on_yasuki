@@ -55,8 +55,10 @@ into play, ..."), are a `To`, so the second applies only if the first actually h
 A trait acting before a card is destroyed ("before this card is destroyed", Yu) answers
 `Destroying`, which is announced before the destruction commits unless a negation in force will stop
 it. A group's destructions are announced together. A printed Yu registers with `register_yu`, which
-applies the datasheet's conditions for when Yu resolves. `docs/design/systems/effects.md` has the
-rules and the CR lines behind them.
+applies the datasheet's conditions for when Yu resolves, and a Yu one card gives others ("Your
+Followers at this battlefield have, 'Yu: ...'") with `register_granted_yu`, whose `reaches` names
+the cards that have it. A granted trigger fires as the reached card's own.
+`docs/design/systems/effects.md` has the rules and the CR lines behind them.
 
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and
 modifiers layer over it. Gold is the same shape on the economy side. A card that appears to have the

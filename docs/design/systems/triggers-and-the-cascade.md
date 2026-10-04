@@ -147,6 +147,13 @@ immediately and may not be delayed (CR, Ring), so its triggers resolve before th
 any order is asked, each asking its own controller. A lone trigger with nothing to conflict with
 fires without asking.
 
+A card can also have a trigger another card gives it, as "Your Followers and Personalities at this
+battlefield have, 'Yu: ...'" reads. {func}`~yasuki_core.engine.rules.triggers.granted_trigger`
+registers it under the granting card, with a `reaches` read saying which cards have it now.
+`_collect` reads the grants of the cards in play for the card each event names, so a granted
+trigger answers only events about the card it was given, and that card fires it as its own: it is
+ordered among the card's other triggers, and a card with two such triggers offers both.
+
 Pushing each commit's events on top is what makes the walk depth-first, which is the order the CR
 gives: "Once a triggered trait starts, activate all its costs, targeting, and effects in sequence
 before proceeding, even if another action or triggered trait is under way" (CR 20F, Timing).

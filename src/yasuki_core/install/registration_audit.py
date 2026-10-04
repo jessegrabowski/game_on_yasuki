@@ -64,6 +64,9 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
             for by_card in by_zone.values()
             for card_id in by_card
         ),
+        "granted triggers": frozenset(
+            card_id for by_card in triggers._GRANTED_TRIGGERS.values() for card_id in by_card
+        ),
     }
 
 
@@ -535,6 +538,7 @@ VALIDATED_REGISTRIES = {
     "_INTERRUPTS",
     "CHI_DEATH_EXEMPT",
     "_TRIGGERS",
+    "_GRANTED_TRIGGERS",
     "_WATCHES",
 }
 

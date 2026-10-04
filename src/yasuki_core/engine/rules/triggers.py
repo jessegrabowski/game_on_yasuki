@@ -197,6 +197,71 @@ def on(
     return register
 
 
+# Whether a granting card's text reaches a card: maps (game, granting card, card) to whether the
+# card has the trigger the text gives right now.
+Reach = Callable[[GameState, L5RCard, L5RCard], bool]
+
+
+class GrantedTrigger(NamedTuple):
+    """A trigger one card gives others, as registered: "Your Followers at this battlefield have,
+    'Yu: ...'".
+
+    Attributes
+    ----------
+    reaches : callable
+        Maps ``(game, granting card, card)`` to whether the grant gives ``card`` the trigger now.
+    trigger : callable
+        What runs when the event fires, with the reached card as its context card.
+    ruleset : str or None
+        The one ruleset the grant is read under, or None for every arc.
+    """
+
+    reaches: Reach
+    trigger: Trigger
+    ruleset: str | None
+
+
+# event type -> the granting card's printed id -> the triggers it gives. A granting card answers
+# from the battlefield, and a granted trigger answers only events naming the card it is given.
+_GRANTED_TRIGGERS: dict[type, dict[str, list[GrantedTrigger]]] = {}
+
+
+def granted_trigger(
+    event_type: type,
+    printed_id: str,
+    *,
+    reaches: Reach,
+    label: TriggerLabel,
+    ruleset: str | None = None,
+) -> Callable[[Trigger], Trigger]:
+    """Register the decorated function as a trigger ``printed_id`` gives every card ``reaches``
+    names while the granting card is in play, answering the events that name the reached card, as
+    "Yu: ..." and "after this card is destroyed" do. The reached card fires it as its own trait, so
+    the active player orders it among that card's triggers.
+
+    Parameters
+    ----------
+    event_type : type
+        The event the trigger answers.
+    printed_id : str
+        The granting card's printed id.
+    reaches : callable
+        Maps ``(game, granting card, card)`` to whether the grant gives ``card`` the trigger now.
+    label : callable
+        Maps ``(game, card)`` to the trigger's name for the active player.
+    ruleset : str, optional
+        The name of the one ruleset the grant is in force under. Default None, for every arc.
+    """
+
+    def register(trigger: Trigger) -> Trigger:
+        _LABELS[trigger] = label
+        granted = GrantedTrigger(reaches, trigger, ruleset)
+        _GRANTED_TRIGGERS.setdefault(event_type, {}).setdefault(printed_id, []).append(granted)
+        return trigger
+
+    return register
+
+
 # What a card watches the board for: "If X ever happens" and "Play if X" name a state, not an
 # event.
 WatchedCondition = Callable[[GameState, L5RCard], bool]
@@ -387,7 +452,7 @@ def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]
     condition is answered by its own watch alone."""
     if isinstance(event, ConditionFulfilled):
         return _watch_reactions(game, event)
-    firing = _card_triggers(game, event)
+    firing = [*_card_triggers(game, event), *_granted_triggers(game, event)]
     firing.sort(key=_canonical_order)
     rulebook = _RULEBOOK_TRIGGERS.get(type(event))
     if rulebook:
@@ -420,6 +485,23 @@ def _held_until(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigge
         (subject, _Held(until, effect))
         for until, effect in game.delayed
         if isinstance(until, NextTime) and until.matches(event)
+    ]
+
+
+def _granted_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
+    """The triggers the granting cards in play give the card ``event`` names, wherever it now is,
+    for ``event``."""
+    by_source = _GRANTED_TRIGGERS.get(type(event))
+    if not by_source:
+        return []
+    subject = _named_subject(game, event)
+    if subject is None:
+        return []
+    return [
+        (subject, granted.trigger)
+        for source in game.table.battlefield.cards
+        for granted in by_source.get(source.printed_id, ())
+        if in_force(granted) and granted.reaches(game, source, subject)
     ]
 
 
