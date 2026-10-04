@@ -595,16 +595,19 @@ class Presenter:
 
     def on_lane_card_clicked(self, card_id: str) -> None:
         """A left click on a unit standing at a battlefield does what one at home does: while the
-        board is selecting, pick or unpick the unit, and otherwise open the card's menu.
+        board is selecting, pick or unpick the card, and otherwise open the card's menu.
 
-        The board and the lanes share one selection, so picking here drops anything picked at
-        home.
+        A card the question offers is picked itself, so a Follower can be a target. One it does not
+        offer stands for its unit, as a click on a Follower picks his Personality while units are
+        assigned. The board and the lanes share one selection, so picking here drops anything
+        picked at home.
         """
         field = self.window.field
         if not field.selecting:
             self.on_card_activated(card_id)
             return
-        field.toggle_selection(field.unit_leader(card_id))
+        picked = card_id if field.is_selectable(card_id) else field.unit_leader(card_id)
+        field.toggle_selection(picked)
         self.refresh()
 
     def on_board_menu(self) -> None:

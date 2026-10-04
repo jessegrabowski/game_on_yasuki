@@ -2133,3 +2133,25 @@ def test_the_prompt_names_the_card_granting_a_follow_up_and_declining_it_reshuff
         assert [card.id for card in fate] == ["air"]
     finally:
         window.root.destroy()
+
+
+@pytest.mark.parametrize(
+    ("candidates", "picked"), [(["inkyo"], ("inkyo",)), (["bearer"], ("bearer",))]
+)
+def test_a_lane_click_on_a_follower_picks_him_when_offered_and_his_personality_otherwise(
+    candidates, picked
+):
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("bearer", owner=P1))
+    attached(state, attachment("inkyo", attachment_type=AttachmentType.FOLLOWER), "bearer")
+    session = EngineSession.start(state, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(GameRunner(session, P1)), window)
+    try:
+        window.field.begin_selection(candidates)
+
+        presenter.on_lane_card_clicked("inkyo")
+
+        assert window.field.selection == picked
+    finally:
+        window.root.destroy()
