@@ -123,7 +123,7 @@ def _bayushi_purimu_yu(ctx: TriggerContext) -> list[Effect]:
 register_yu("bayushi_purimu", _bayushi_purimu_yu)
 
 
-@choice_resolver("bayushi_purimu", prompt="Choose a Personality to dishonor")
+@choice_resolver("bayushi_purimu", prompt="Bayushi Purimu's Yu: choose a Personality to dishonor")
 def _resolve_bayushi_purimu(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
@@ -546,7 +546,7 @@ def _matsu_hanshiro_yu(ctx: TriggerContext) -> list[Effect]:
         AskOption(
             ctx.card.owner,
             (HANSHIRO_LOWER, HANSHIRO_RAISE),
-            "Give this Province -4PS or +4PS?",
+            "Matsu Hanshiro's Yu: give this Province -4PS or +4PS?",
             "matsu_hanshiro",
             ctx.card.id,
         )

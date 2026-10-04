@@ -485,7 +485,7 @@ register_yu(
 
 @choice_resolver(
     "yoritomo_robusuta_master_of_gaijin_pepper_yu",
-    prompt="Choose an enemy Personality with an Explosive token",
+    prompt="Yoritomo Robusuta's Yu: choose an enemy Personality with an Explosive token",
 )
 def _resolve_yoritomo_robusuta_master_of_gaijin_pepper_yu(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
@@ -507,7 +507,7 @@ def _resolve_yoritomo_robusuta_master_of_gaijin_pepper_yu(
 
 @choice_resolver(
     "yoritomo_robusuta_master_of_gaijin_pepper_follower",
-    prompt="Choose a Follower in their unit to destroy",
+    prompt="Yoritomo Robusuta's Yu: choose a Follower to destroy",
 )
 def _resolve_yoritomo_robusuta_master_of_gaijin_pepper_follower(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
