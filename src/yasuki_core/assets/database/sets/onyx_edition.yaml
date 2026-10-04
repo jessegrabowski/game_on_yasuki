@@ -2709,8 +2709,8 @@ cards:
   keywords:
   - Jade
   - Monk
-  text: This Follower contributes Force even while bowed and it is considered to have 3 Chi when a Kiho
-    checks a card's Chi.
+  - Elite
+  text: This Follower is considered to have 3 Chi when a Kiho checks a card's Chi.
   gold_cost: 5
   focus: 4
   force: 3
