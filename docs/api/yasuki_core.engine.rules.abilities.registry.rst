@@ -33,6 +33,7 @@ yasuki_core.engine.rules.abilities.registry
     may_stay_bowed
     printed_abilities
     printed_ability_line
+    printed_interrupt
     register_ability
     register_interrupt
     register_invest

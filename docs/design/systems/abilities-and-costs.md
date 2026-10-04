@@ -200,8 +200,13 @@ in `GameState.interrupts_taken` and cleared with the action, or without limit fo
 
 A keyword confers an Interrupt on every card carrying it through `register_keyword_interrupt`,
 keyed and marked `from_keyword` and `from_rulebook`, the way a keyword confers an ability.
-{func}`~.interrupts_for` lists a card's own Interrupt and the ones its keywords confer, and
-{func}`~.interrupt_for` finds one by key even after the card has lost the keyword. Taken from hand,
+{func}`~.interrupts_for` lists a card's own Interrupt, the ones a grant gives it, and the ones its
+keywords confer, and {func}`~.interrupt_for` finds one by key even after the card has lost the
+keyword. A card grants an Interrupt through a `@granted_interrupt` factory read from the same grant
+records as `@granted_ability`, and {func}`~.printed_interrupt` is what a factory copying a card's own
+Interrupt reads. A {class}`~.Replacement` keeps the Interrupt it was taken with, so a granted or
+keyword Interrupt still answers its effect after the grant has lapsed. An Interrupt's `tireless` lets
+it be taken while its card is bowed, as an ability's does. Taken from hand,
 a rulebook Interrupt pays its own `cost` and plays nothing. The datasheet's Courage and Honor
 Interrupts, in `rulebook/courage_and_honor.py`, are two of these. Each asks for its adjustment
 through an {class}`~.AskOption` in its `Interruption.costs`, which are paid with its cost because

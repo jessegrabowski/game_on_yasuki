@@ -618,7 +618,7 @@ def test_a_keyword_interrupt_is_found_by_key_on_a_card_without_the_keyword():
     game = two_seat_game()
     farm = put_in_play(game, holding("farm", printed_id="millet_farm"))
 
-    courage = interrupt_for(farm, COURAGE_INTERRUPT)
+    courage = interrupt_for(game, farm, COURAGE_INTERRUPT)
 
     assert courage is not None and courage.from_keyword == "Courage"
-    assert interrupt_for(farm) is None
+    assert interrupt_for(game, farm) is None

@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.abilities.model import (
 )
 from yasuki_core.engine.rules.abilities.registry import (
     ability_for,
+    granted_interrupt,
     register_ability,
     register_interrupt,
 )
@@ -70,7 +71,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, Destroyed, Straightened
-from yasuki_core.engine.rules.vocabulary.modifiers import Negation
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, SeatAbilityGrant
 from yasuki_core.engine.rules.negation import action_provenance
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.session import EngineSession
@@ -1656,3 +1657,62 @@ def test_the_which_effect_question_reads_each_effect_as_it_stands_and_takes_the_
 
     assert left not in game.table.battlefield.cards
     assert right in game.table.battlefield.cards and right.bowed
+
+
+# --- Interrupts on a bowed card, and Interrupts a card grants ---
+
+for _printed_id, _tireless in (("tireless_bow_probe", True), ("rested_bow_probe", False)):
+    register_interrupt(
+        _printed_id,
+        Interrupt(
+            answers=Bow,
+            interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+            located_at=(CardLocation.BATTLEFIELD,),
+            tireless=_tireless,
+        ),
+    )
+
+
+def test_a_tireless_interrupt_is_offered_from_a_bowed_card_and_no_other_is():
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+    for card_id in ("tireless_bow_probe", "rested_bow_probe"):
+        put_in_play(game, holding(card_id, printed_id=card_id, owner=P2)).bow()
+
+    resolve_action_effects(game, [Bow(farm.id)])
+
+    assert legality.legal_actions(game, P2) == [Pass(), PlayInterrupt("tireless_bow_probe")]
+
+
+def _negate_a_bow_from_the_discard_pile(game, card, context):
+    if card.id != context[0]:
+        return None
+    return Interrupt(
+        answers=Bow,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+        located_at=(CardLocation.DISCARD,),
+        key="granted",
+        answers_every=True,
+    )
+
+
+granted_interrupt("interrupt_grant_probe")(_negate_a_bow_from_the_discard_pile)
+
+
+def test_a_granted_interrupt_still_answers_after_its_grant_is_gone():
+    game = _inside_an_action()
+    farm = put_in_play(game, holding("P1-farm"))
+    put_in_play(game, holding("granter", printed_id="interrupt_grant_probe", owner=P2))
+    held = register(game.table, holding("held", owner=P2))
+    game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)].add(held)
+    grant = SeatAbilityGrant("granter", P2, (held.id,), Duration.UNTIL_END_OF_TURN)
+    game.ongoing.append(grant)
+    resolve_action_effects(game, [Bow(farm.id)])
+
+    action_sequence.perform(game, PlayInterrupt(held.id, "granted"))
+    game.ongoing.remove(grant)
+    while game.pending is None and game.round.kind is RoundKind.INTERRUPT:
+        action_sequence.perform(game, Pass())
+
+    assert game.round.kind is not RoundKind.INTERRUPT
+    assert not farm.bowed

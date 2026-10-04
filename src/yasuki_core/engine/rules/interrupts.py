@@ -7,7 +7,11 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.costs import can_pay, priced_cost
 from yasuki_core.engine.rules.abilities.activation import ResolveAbility
 from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt, InterruptLimit
-from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for, interrupts_for
+from yasuki_core.engine.rules.abilities.registry import (
+    ability_for,
+    granted_tireless,
+    interrupts_for,
+)
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
@@ -88,8 +92,8 @@ def _foreseen(
 @dataclass(frozen=True, slots=True)
 class Replacement:
     """A card Interrupt's answer to one effect of the action, bound to the effect as the forecast
-    showed it. What resolves instead is asked of the card's Interrupt as the effect comes up,
-    against the effect as earlier Interrupts leave it, so a negation after a Courage adjustment
+    showed it. What resolves instead is asked of the Interrupt it was taken with as the effect comes
+    up, against the effect as earlier Interrupts leave it, so a negation after a Courage adjustment
     negates the adjusted Fear. The Interrupt's own effects resolved when it was taken.
 
     Attributes
@@ -104,17 +108,18 @@ class Replacement:
         What resolves instead, settled when the Interrupt was taken, for a replacement whose
         contents read the board: a substituted :class:`~.ResolveAbility` is built against its new
         target then, so the forecast and the resolution read one object. Used while the effect
-        still stands as bound. Default None, asked of the card as the effect comes up.
-    interrupt_key : str, optional
-        The key of the Interrupt taken, for one a keyword conferred. Default None, the card's
-        printed Interrupt.
+        still stands as bound. Default None, asked of ``interrupt`` as the effect comes up.
+    interrupt : :class:`~yasuki_core.engine.rules.abilities.model.Interrupt`, optional
+        The Interrupt taken, kept as it was taken, so one a grant or a keyword gave answers as its
+        effect comes up even after the grant has lapsed or the keyword is gone. Default None, for
+        one whose replacement was settled when it was taken.
     """
 
     bound: Effect
     card_id: str
     target_id: str | None = None
     replacement: Effect | None = None
-    interrupt_key: str | None = None
+    interrupt: Interrupt | None = None
 
     def answers(self, effect: Effect) -> bool:
         return effect == self.bound
@@ -122,14 +127,13 @@ class Replacement:
     def apply(self, game: GameState, effect: Effect) -> Effect:
         if self.replacement is not None and effect == self.bound:
             return self.replacement
+        if self.interrupt is None:
+            raise RuntimeError(f"{self.card_id}'s answer to {effect.describe()} was never settled")
         card = game.table.cards_by_id[self.card_id]
-        interrupt = interrupt_for(card, self.interrupt_key)
-        if interrupt is None:
-            raise RuntimeError(f"{self.card_id} has no Interrupt {self.interrupt_key!r} to apply")
         if self.target_id is None:
-            return interrupt.interrupt(game, card, effect).replacement
+            return self.interrupt.interrupt(game, card, effect).replacement
         target = game.table.cards_by_id[self.target_id]
-        return interrupt.interrupt(game, card, effect, target).replacement
+        return self.interrupt.interrupt(game, card, effect, target).replacement
 
 
 def _unique(effects: Iterable[Effect]) -> list[Effect]:
@@ -189,9 +193,18 @@ def _affordable(
     if _plays_card(interrupt, location):
         purchase = interrupt.purchase(game, card, plays_card=True)
         return discounted_gold_cost(game, purchase) <= reachable_gold(game, seat, card)
-    if location is not CardLocation.HAND and (card.bowed or not location_permits(game, card)):
-        return False
+    if location is not CardLocation.HAND:
+        if not location_permits(game, card):
+            return False
+        if card.bowed and not _tireless(game, card, interrupt):
+            return False
     return can_pay(game, card, interrupt.cost)
+
+
+def _tireless(game: GameState, card: L5RCard, interrupt: Interrupt) -> bool:
+    """Whether ``interrupt`` may be taken while ``card`` is bowed: Tireless, printed on it or
+    granted to the card by another in play (CR, Tireless)."""
+    return interrupt.tireless or granted_tireless(game, card)
 
 
 def _plays_card(interrupt: Interrupt, location: CardLocation) -> bool:
@@ -418,14 +431,14 @@ def _play(
         target = game.table.cards_by_id[target_id]
         interruption = interrupt.interrupt(game, card, effect, target)
     # A negated Interrupt is still taken, paid for and, from hand, discarded. It binds nothing,
-    # since a bound replacement is asked of the card again as its effect resolves. A rulebook
+    # since a bound replacement is asked of its Interrupt again as its effect resolves. A rulebook
     # Interrupt is no action from its card, so no negation naming a source reaches it.
     provenance = action_provenance(game, card.id if interrupt.acts_from_its_card else None)
     if not strips_interrupt(game, interruption.replacement, provenance):
         if interrupt.answers_every:
             bound = answered_by(game, card, interrupt, foreseen)
             game.modifications.extend(
-                Replacement(bound=each, card_id=card.id, target_id=target_id, interrupt_key=key)
+                Replacement(bound=each, card_id=card.id, target_id=target_id, interrupt=interrupt)
                 for each in bound
             )
         elif interruption.replacement != effect:
@@ -435,7 +448,7 @@ def _play(
                     card_id=card.id,
                     target_id=target_id,
                     replacement=_settled(game, interruption.replacement),
-                    interrupt_key=key,
+                    interrupt=interrupt,
                 )
             )
     if _plays_card(interrupt, location):
