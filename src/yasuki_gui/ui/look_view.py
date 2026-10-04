@@ -70,6 +70,10 @@ class LookView(CardPanel):
         y = CELL_PAD + CARD_H // 2
         for x, card in zip(centered_row(center, len(shown), step=CARD_W + CELL_PAD), shown):
             self.draw_card(card, x, y, selected=card.id in selected, pickable=card.id in candidates)
+        # Opened from a click or an answer, the panel is placed and drawn into while that handler
+        # is still on the stack, and Tk holds the layout until its next redraw. Flushing idle work
+        # paints it now rather than on whatever event comes next.
+        self.update_idletasks()
 
     def _on_click(self, event: tk.Event) -> None:
         card_id = self.card_at(event)
