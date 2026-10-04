@@ -77,9 +77,9 @@ not, and `docs/contributing/reacting_to_events.md` for a worked trigger.
 
 Then by what the card does: `an_ability.md` and `several_abilities.md` for activated abilities,
 `asking_a_question.md` when the text says "choose" or "may", `holdings_and_gold.md` for a gold
-handler, and `stats_and_costs.md` for whether a number needs a handler at all. Five pages cover the
+handler, and `stats_and_costs.md` for whether a number needs a handler at all. Six pages cover the
 kinds of card that need something other than the common shape: `attachments.md`, `battle_cards.md`,
-`cards_outside_play.md`, `creating_cards.md` and `the_favor_and_the_court.md`.
+`duel_cards.md`, `cards_outside_play.md`, `creating_cards.md` and `the_favor_and_the_court.md`.
 
 Two pages are about what happens to a handler once it exists.
 `docs/design/systems/registration-and-the-audit.md` covers how it binds to its card, and

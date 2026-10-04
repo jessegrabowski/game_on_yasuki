@@ -13,6 +13,7 @@ docs/contributing/stats_and_costs.md
 # One page per kind of card that needs something other than the common shape.
 docs/contributing/attachments.md
 docs/contributing/battle_cards.md
+docs/contributing/duel_cards.md
 docs/contributing/cards_outside_play.md
 docs/contributing/creating_cards.md
 docs/contributing/the_favor_and_the_court.md

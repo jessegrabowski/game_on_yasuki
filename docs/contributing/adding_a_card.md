@@ -39,6 +39,12 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
 | Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
 | Changes a Province's strength | `@province_strength_grant(id)` | {card}`Defensive Memorial` |
+| "X challenges Y to a duel" | effects returning `StartDuel(...)` | {card}`Sanctioned Duel` |
+| "...to a duel of Force", or any duel stat the arc does not default to | effects returning `GrantDuelStat(...)` | {card}`Hida Haikeru` |
+| "As a Focus Effect, ..." | `@focus_effect(id)` | {card}`Discretionary Valor` |
+| "...the duel's winner" or "...the loser", after it ends | effects returning `DelayedEffect(Evaluate(...), DUEL_CONSEQUENCES)` | {card}`Flashy Technique` |
+| "both Personalities lose the duel" | effects returning `BothLoseTheDuel(...)` | {card}`Against the Darkness` |
+| "end the duel without resolution" | effects returning `EndDuel()` | {card}`Relentless` |
 | Puts itself into play from hand, as an Edict, Kata or Ring | `register_entry(id, ...)` | {card}`Act With Authority` |
 | An Event played from the Province it sits in | `register_event_entry(id)` | {card}`Shadow of the Dark God` |
 | Raises its own Gold Production as it bows | `register_self_grant(id, n)`, or `@self_grant(id)` when the grant has a condition | {card}`Jade Mine`, {card}`Slave Pits` |
@@ -159,6 +165,7 @@ Then by what the card is:
 
 - Hangs on a Personality: [Cards that attach](attachments.md)
 - Fights, or changes a fight: [Cards that act in a battle](battle_cards.md)
+- Duels, or changes a duel: [Cards that act in a duel](duel_cards.md)
 - Makes a card: [Cards that create cards](creating_cards.md)
 - Acts from hand or a Province, or stays in play:
   [Cards that act from outside play](cards_outside_play.md)
