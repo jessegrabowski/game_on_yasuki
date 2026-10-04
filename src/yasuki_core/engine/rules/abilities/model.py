@@ -243,7 +243,7 @@ class Ability:
     targets_after_cost : bool, optional
         Whether ``targets`` is read once the cost is paid instead of when the ability is announced,
         for an ability whose targets depend on the amount its cost declares, which ``targets``
-        reads from ``game.amount_paid`` (CR, Action Sequence steps B and C). The ability is offered
+        reads from ``game.amount_declared`` (CR, Action Sequence steps B and C). The ability is offered
         whenever its cost is payable, and an amount that reaches no target targets nothing.
         Default False.
     target_count : callable, optional
@@ -384,7 +384,7 @@ class InvestAbility:
         ("Invest :g1: to :g3:") or as separate prices that buy different things ("Invest :g2: or
         :g6:").
     effect : callable
-        Maps ``(game, source_card, amount_paid)`` to the effects the Invest emits once the card
+        Maps ``(game, source_card, invested)`` to the effects the Invest emits once the card
         enters play. It takes the board because an Invest may search a zone for what it fetches.
     """
 

@@ -14,7 +14,6 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
-    AskAmount,
     AskOption,
     Choose,
     Destroy,
@@ -451,24 +450,6 @@ def declarable_gold(game: GameState, source: L5RCard, ability_key: str | None = 
     declared and charges the off-clan 2 Gold on top of it (CR, Recruit).
     """
     return reachable_gold(game, source.owner) + _unspent_discount(game, source, ability_key)
-
-
-DECLARED_AMOUNT = "declared_amount"
-
-
-def declare_amount(source: L5RCard, amounts: tuple[int, ...], question: str) -> AskAmount:
-    """The :X: in ``source``'s cost block: ask its controller which of ``amounts`` to spend. The
-    answer is recorded as the action's ``amount_paid``, which the ability's targets and effects
-    read, and produces nothing else, so the cost question settles only the payment (CR, Action
-    Sequence step B)."""
-    return AskAmount(source.owner, amounts, question, DECLARED_AMOUNT, source.id)
-
-
-@choice_resolver(DECLARED_AMOUNT)
-def _amount_declared(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return []
 
 
 def _unspent_discount(game: GameState, source: L5RCard, ability_key: str | None) -> int:

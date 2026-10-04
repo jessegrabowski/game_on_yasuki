@@ -51,20 +51,20 @@ def test_the_announcing_seat_is_recorded_until_the_action_is_forgotten():
     assert game.action_targets == ()
 
 
-def test_an_amount_paid_is_cleared_by_the_next_action_and_by_forgetting_it():
+def test_an_amount_declared_is_cleared_by_the_next_action_and_by_forgetting_it():
     game = two_seat_game()
     game.table.seats[P1].honor = 10
     put_in_play(game, personality("courtier", personal_honor=2))
     proxies.spawn_rulebook_proxies(game)
     lobby = ActivateAbility(rulebook_proxy(game, P1, ONYX_LOBBY_PROXY_ID).id, LOBBY)
-    game.amount_paid = 8
+    game.amount_declared = 8
 
     action_sequence.perform(game, lobby)
-    assert game.amount_paid is None
+    assert game.amount_declared is None
 
-    game.amount_paid = 8
+    game.amount_declared = 8
     sequence.forget_action(game)
-    assert game.amount_paid is None
+    assert game.amount_declared is None
 
 
 def test_a_chosen_target_is_recorded_on_the_action():

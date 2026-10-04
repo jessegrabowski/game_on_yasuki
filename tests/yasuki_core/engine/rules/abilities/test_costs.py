@@ -1,20 +1,24 @@
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities.costs import declare_amount
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     ChooseCards,
+    ChoosePayment,
     DecisionResponse,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter, Choose
+from yasuki_core.engine.rules.effects import AdjustCounter, AskAmount, Choose
 from yasuki_core.engine.replay.game_log import replay
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
+from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.counters import WEALTH
 
-from tests.yasuki_core.engine.builders import holding, put_in_play
+from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
 
 
 @choice_resolver("test_cost_pauses")
@@ -65,3 +69,32 @@ def test_a_cost_that_pauses_resolves_before_the_ability_target():
     assert session.game.pending is None
     assert session.game.table.cards_by_id["tgt"].counters == {"wealth": 1}  # ability effect applied
     assert replay(session.log) == session.game  # the deferred-cost chain replays deterministically
+
+
+@choice_resolver("amount_probe")
+def _amount_probe(game, source_id, chosen, seat):
+    return []
+
+
+def _answer_two(ask) -> GameState:
+    game = two_seat_game()
+    source = put_in_play(game, holding("source", owner=PlayerId.P1))
+    resolve_effects(game, [ask(source)])
+    submit(game, DecisionResponse(("2",)))
+    return game
+
+
+def test_naming_an_amount_charges_nothing_its_resolver_does_not():
+    game = _answer_two(
+        lambda source: AskAmount(PlayerId.P1, (1, 2), "How many?", "amount_probe", source.id)
+    )
+
+    assert game.amount_declared == 2
+    assert game.pending is None
+
+
+def test_a_declared_amount_of_gold_is_charged():
+    game = _answer_two(lambda source: declare_amount(source, (1, 2), "How much?"))
+
+    assert game.amount_declared == 2
+    assert isinstance(game.pending, ChoosePayment) and game.pending.amount == 2

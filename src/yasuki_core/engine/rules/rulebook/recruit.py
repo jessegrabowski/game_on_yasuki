@@ -1,18 +1,18 @@
 from collections.abc import Callable
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from typing import TypeGuard
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.invest import invest_effects
-from yasuki_core.engine.rules.abilities.idioms import declare_amount
+from yasuki_core.engine.rules.abilities.costs import priced_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import (
     EntryState,
     effects_before_entering_play,
     entry_state_of,
+    ability_for,
     invest_amounts,
     register_location_ability,
 )
@@ -20,14 +20,15 @@ from yasuki_core.engine.rules.board.queries import province_key_holding, provinc
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
+    AskAmount,
     Attributed,
     Effect,
     GainHonor,
+    Invest,
     PayGold,
     Recruit,
     RefillProvince,
     SpendSeatOncePerTurn,
-    Unpayable,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseFortificationProvince,
@@ -62,10 +63,6 @@ class ResolveRecruit:
         The recruiting seat.
     card_id : str
         The card leaving its province for play.
-    invest_amount : int or None
-        The gold Invested while recruiting, driving the card's one-time Invest effect on entry, or
-        None when the recruit took no Invest. A free Invest is an amount of zero, not None. Default
-        None.
     renew : bool
         Whether to refill the vacated province face-up (a granted Renew), on top of the card's own
         Renew keyword. Default False.
@@ -76,7 +73,6 @@ class ResolveRecruit:
 
     seat: PlayerId
     card_id: str
-    invest_amount: int | None = None
     renew: bool = False
     proclaim: bool = False
 
@@ -85,7 +81,6 @@ class ResolveRecruit:
             game,
             seat=self.seat,
             card_id=self.card_id,
-            invest_amount=self.invest_amount,
             renew=self.renew,
             proclaim=self.proclaim,
         )
@@ -95,14 +90,13 @@ def announce_recruit(
     game: GameState,
     card: L5RCard | L5RCard,
     seat: PlayerId,
-    invest_amount: int | None,
     renew: bool = False,
     proclaim: bool = False,
 ) -> ChoosePayment | None:
     """Queue the recruit and build the payment it must be paid with, or None for a recruit that
     costs nothing."""
-    game.stack.append(ResolveRecruit(seat, card.id, invest_amount, renew, proclaim))
-    amount = recruit_cost(game, card) + (invest_amount or 0)
+    game.stack.append(ResolveRecruit(seat, card.id, renew, proclaim))
+    amount = recruit_cost(game, card)
     if amount == 0:
         return None
     return payment_request(game, seat, amount, card.name, target=card)
@@ -112,7 +106,6 @@ def resolve_recruit(
     game: GameState,
     seat: PlayerId,
     card_id: str,
-    invest_amount: int | None = None,
     renew: bool = False,
     proclaim: bool = False,
 ) -> None:
@@ -126,14 +119,12 @@ def resolve_recruit(
             seat=seat,
             candidates=_province_slots(game, seat),
             source_card_id=card_id,
-            invest_amount=invest_amount,
             proclaim=proclaim,
         )
         return
     arrival = Recruit(
         card_id,
         from_province=from_province,
-        invest_amount=invest_amount,
         renew=renew,
         proclaim=proclaim,
     )
@@ -163,7 +154,6 @@ def apply_fortification_province(
         request.source_card_id,
         from_province=None,
         fortifies=ZoneKey.from_token(response.choices[0]),
-        invest_amount=request.invest_amount,
         proclaim=request.proclaim,
     )
     triggers.resolve_action_effects(game, recruit_effects(game, arrival))
@@ -200,17 +190,12 @@ def _arrive(card: L5RCard, state: EntryState) -> None:
 
 def effects_after_entering_play(game: GameState, arrival: Recruit) -> list[Effect]:
     """What a Recruited card's arrival is followed by: its Sincerity tokens removed (Sincerity
-    keyword), its Invest, a Proclaim's Honor gain, and the refill of the Province it left.
-
-    The Invest comes before the Proclaim's gain, which can pause for an Honor Interrupt. The two
-    never combine, since a Recruit cannot both Invest and Proclaim.
-    """
+    keyword), a Proclaim's Honor gain, and the refill of the Province it left."""
     card = game.table.cards_by_id[arrival.card_id]
     effects: list[Effect] = []
     held = card.counters.get(SINCERITY.key, 0)
     if held:
         effects.append(AdjustCounter(card.id, SINCERITY, -held))
-    effects.extend(invest_effects(game, card, arrival.invest_amount))
     effects.extend(proclamation_effects(game, arrival))
     if arrival.from_province is not None:
         # Renew is read once the card has entered play, which is when the keyword speaks.
@@ -312,10 +297,10 @@ def _meets_honor_requirement(game: GameState, personality: L5RCard) -> bool:
     return seat.ignores_honor_requirements or required is None or seat.honor >= required
 
 
-def recruit_gold(game: GameState, source: L5RCard) -> list[Effect]:
+def recruit_gold(game: GameState, source: L5RCard, *, raised_by: int = 0) -> list[Effect]:
     """The Gold Recruiting ``source`` costs, paid for the card, or nothing for a card that costs
-    nothing."""
-    amount = recruit_cost(game, source)
+    nothing. ``raised_by`` is an Invest about to raise its Gold Cost. Default 0."""
+    amount = recruit_cost(game, source, raised_by=raised_by)
     if amount == 0:
         return []
     return [PayGold(source.owner, amount, source.name, target_id=source.id)]
@@ -326,14 +311,9 @@ def recruit_from_its_province(game: GameState, source: L5RCard, target: L5RCard)
     return recruit_effects(game, _arrival(game, source))
 
 
-def _arrival(
-    game: GameState, card: L5RCard, *, invest_amount: int | None = None, proclaim: bool = False
-) -> Recruit:
+def _arrival(game: GameState, card: L5RCard, *, proclaim: bool = False) -> Recruit:
     return Recruit(
-        card.id,
-        from_province=province_key_holding(game, card.owner, card.id),
-        invest_amount=invest_amount,
-        proclaim=proclaim,
+        card.id, from_province=province_key_holding(game, card.owner, card.id), proclaim=proclaim
     )
 
 
@@ -350,25 +330,30 @@ def _investable(game: GameState, source: L5RCard) -> list[str]:
 
 
 def _recruit_with_invest_gold(game: GameState, source: L5RCard) -> list[Effect]:
-    """The Gold Cost and the Invest, paid together for the card (CR, Invest). An Invest the payer
-    sizes is declared first."""
-    amounts = invest_amounts(game, source)
-    if amounts is None:
-        return [Unpayable(f"{source.id} prints no Invest")]
-    if len(amounts) > 1:
-        question = f"Invest how much Gold in {source.name}?"
-        declared = declare_amount(source, amounts, question)
-        return [replace(declared, alongside=recruit_cost(game, source), target_id=source.id)]
-    amount = recruit_cost(game, source) + amounts[0]
-    if amount == 0:
-        return []
-    return [PayGold(source.owner, amount, source.name, target_id=source.id)]
-
-
-def _recruit_with_invest(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Name the Invest, which raises the card's Gold Cost before it is paid for (CR, Invest).
+    Pricing the cost keeps on offer only the Invests its controller can pay for."""
+    question = f"Invest how much Gold in {source.name}?"
     amounts = invest_amounts(game, source) or ()
-    invested = amounts[0] if len(amounts) == 1 else game.amount_paid
-    return recruit_effects(game, _arrival(game, source, invest_amount=invested))
+    return [AskAmount(source.owner, amounts, question, INVEST_CHOICE, source.id)]
+
+
+INVEST_CHOICE = "invest"
+
+
+@triggers.choice_resolver(INVEST_CHOICE)
+def _resolve_invest(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Invest the named amount in the card, then pay its Gold Cost so raised, priced as any
+    Recruit's is."""
+    card = game.table.cards_by_id[source_id]
+    invested = int(chosen[0])
+    ability = ability_for(game, card, RECRUIT_WITH_INVEST)
+    if ability is None:
+        raise ValueError(f"{card.id} carries no Recruit to Invest with")
+    purchase = ability.purchase(game, card, plays_card=False)
+    payment = priced_cost(game, purchase, recruit_gold(game, card, raised_by=invested))
+    return [Invest(card.id, invested), *payment]
 
 
 def _register_recruit(
@@ -406,5 +391,5 @@ _register_recruit(
     "Recruit & Invest",
     _investable,
     _recruit_with_invest_gold,
-    _recruit_with_invest,
+    recruit_from_its_province,
 )

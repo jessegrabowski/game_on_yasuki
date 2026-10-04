@@ -2,7 +2,8 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.abilities.idioms import declarable_gold, declare_amount
+from yasuki_core.engine.rules.abilities.costs import declare_amount
+from yasuki_core.engine.rules.abilities.idioms import declarable_gold
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
 from yasuki_core.engine.rules.effects import Destroy, Effect, GainHonor
 from yasuki_core.engine.rules.state import GameState
@@ -49,12 +50,12 @@ def _hired_killer_targets(game: GameState, source: L5RCard) -> list[str]:
     can cost the same, so a choice remains once the amount is settled. An amount that reaches none
     targets nothing, and the card does nothing more, the Honor loss included (CR, Action Sequence
     step E)."""
-    if game.amount_paid is None:
+    if game.amount_declared is None:
         return []
     return [
         card.id
         for card in personalities_in_play(game)
-        if unit_gold_cost(game, card) == game.amount_paid - PAID_ABOVE_UNIT_COST
+        if unit_gold_cost(game, card) == game.amount_declared - PAID_ABOVE_UNIT_COST
     ]
 
 

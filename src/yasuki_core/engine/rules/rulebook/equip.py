@@ -5,7 +5,8 @@ from collections.abc import Callable
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.invest import equip_invest_amount, invest_effects
+from yasuki_core.engine.rules.abilities.invest import equip_invest_amount
+from yasuki_core.engine.rules.effects import Invest
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.vocabulary.decisions import ChooseEquipTarget, DecisionResponse
@@ -169,26 +170,29 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
     Equip is the rulebook action, with a cost and a target. An effect that merely *attaches* a card
     reaches the same board without paying (CR, Equip), so the two do not share a path.
 
-    Raise ``ValueError`` if ``invest`` names an Invest whose amount the player chooses. Every
+    With ``invest``, the card is Invested in before its cost is asked for, so the cost is its raised
+    Gold Cost (CR, Invest). Raise ``ValueError`` if ``invest`` names an Invest whose amount the
+    player chooses. Every
     attachment printing one prints a fixed cost, so the amount is settled here rather than through a
     decision, and a variable one would need a step this path does not have.
     """
     card = game.table.cards_by_id[card_id]
     candidates = tuple(target.id for target in equip_targets(game, card))
-    invest_amount = equip_invest_amount(game, card) if invest else None
-    amount = equip_gold(game, card, invest=invest)
     hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards
     if any(held is card for held in hand):
         game.announced_from_hand |= {card_id}
-    game.stack.append(SelectEquipTarget(card_id, candidates, invest_amount))
-    game.stack.append(RequestPayment(card.owner, amount, card.name, card_id))
+    if invest:
+        triggers.pay_costs(game, [Invest(card.id, equip_invest_amount(game, card))])
+    game.stack.append(SelectEquipTarget(card_id, candidates))
+    game.stack.append(RequestPayment(card.owner, equip_gold(game, card), card.name, card_id))
     triggers.enforce_state_based_actions(game)
 
 
 def equip_gold(game: GameState, card: L5RCard, *, invest: bool = False) -> int:
-    """The Gold Equipping ``card`` charges: its Gold Cost, and its Invest when ``invest``, less the
-    seat's discount on the Equip. Raise ``ValueError`` for ``invest`` on a card printing no fixed
-    Invest."""
+    """The Gold Equipping ``card`` charges: its Gold Cost less the seat's discount on the Equip. With
+    ``invest``, its Gold Cost as the Invest about to be laid will raise it, so a card already
+    Invested in is priced without the flag. Raise ``ValueError`` for ``invest`` on a card printing
+    no fixed Invest."""
     invest_amount = equip_invest_amount(game, card) if invest else 0
     return discounted_gold(
         game, equip_purchase(card), effective_gold_cost(game, card) + invest_amount
@@ -206,14 +210,10 @@ class SelectEquipTarget:
         The attachment being Equipped, still in hand.
     candidates : tuple of str
         The Personalities it may join, fixed before paying so the choice is never left empty.
-    invest_amount : int or None
-        The Invest cost paid alongside the Gold Cost, or None when the Equip took no Invest.
-        Default None.
     """
 
     card_id: str
     candidates: tuple[str, ...]
-    invest_amount: int | None = None
 
     def resume(self, game: GameState) -> None:
         owner = game.table.cards_by_id[self.card_id].owner
@@ -221,7 +221,6 @@ class SelectEquipTarget:
             seat=owner,
             candidates=self.candidates,
             source_card_id=self.card_id,
-            invest_amount=self.invest_amount,
         )
 
 
@@ -229,12 +228,10 @@ def apply_equip_target(
     game: GameState, request: ChooseEquipTarget, response: DecisionResponse
 ) -> None:
     """Attach the paid-for card to the chosen Personality."""
-    resolve_equip(game, request.source_card_id, response.choices[0], request.invest_amount)
+    resolve_equip(game, request.source_card_id, response.choices[0])
 
 
-def resolve_equip(
-    game: GameState, card_id: str, target_id: str, invest_amount: int | None = None
-) -> None:
+def resolve_equip(game: GameState, card_id: str, target_id: str) -> None:
     """Bring the paid-for attachment out of its hand or discard pile and onto its Personality."""
     card = game.table.cards_by_id[card_id]
     from_hand = card_id in game.announced_from_hand
@@ -242,31 +239,9 @@ def resolve_equip(
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
     # Queued beneath the settling, which may stop to ask a question: the board is legal before
-    # anything is told the card arrived, for the reason _put_into_play gives, and the Invest runs
-    # after the arrival's own cascade.
-    game.stack.append(FinishInvest(card_id, invest_amount))
+    # anything is told the card arrived, for the reason _put_into_play gives.
     game.stack.append(triggers.AnnounceEvent(EnteredPlay(card_id, from_hand=from_hand)))
     triggers.enforce_state_based_actions(game)
-
-
-@dataclass(frozen=True, slots=True)
-class FinishInvest:
-    """Run an Equipped card's Invest once its arrival has been announced.
-
-    Attributes
-    ----------
-    card_id : str
-        The card that entered play.
-    invest_amount : int or None
-        The Invest cost paid alongside the Gold Cost, or None when the Equip took no Invest.
-    """
-
-    card_id: str
-    invest_amount: int | None
-
-    def resume(self, game: GameState) -> None:
-        card = game.table.cards_by_id[self.card_id]
-        triggers.resolve_effects(game, invest_effects(game, card, self.invest_amount))
 
 
 def is_spell(card: L5RCard) -> bool:

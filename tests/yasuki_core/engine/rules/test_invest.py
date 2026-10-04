@@ -10,7 +10,11 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import HoldingPrint
 from yasuki_core.engine.rules.abilities.model import InvestAbility
+from yasuki_core.engine.rules.abilities.idioms import one_wealth
 from yasuki_core.engine.rules.abilities.registry import _INVEST, register_invest
+from yasuki_core.engine.rules.effects import Invest
+from yasuki_core.engine.rules.gold.discounts import RECRUIT_DISCOUNTS, recruit_discount
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
@@ -31,6 +35,8 @@ def _clear_probe_registrations():
     every later test in the process."""
     yield
     _INVEST.pop("free_invest_probe", None)
+    _INVEST.pop("discounted_invest_probe", None)
+    RECRUIT_DISCOUNTS.pop("discounted_invest_probe", None)
 
 
 def _register_free_invest(printed_id: str):
@@ -228,6 +234,16 @@ def test_a_variable_invest_raises_the_cost_by_what_was_actually_paid():
     assert effective_gold_cost(session.game, rh) == 1 + 3
 
 
+def test_investing_raises_the_gold_cost_before_it_is_paid_for():
+    session = _invest_game("qm", "questionable_market", gold_cost=1)
+
+    session.act(PlayerId.P1, ActivateAbility("qm", RECRUIT_WITH_INVEST))
+
+    qm = session.game.table.cards_by_id["qm"]
+    assert session.game.pending.amount == 3
+    assert effective_gold_cost(session.game, qm) == 3
+
+
 def test_the_invest_rise_survives_the_turn_that_bought_it():
     """Permanent, not until-end-of-turn: the modifier has to still be there next turn."""
     session = _invest_game("qm", "questionable_market", gold_cost=1)
@@ -273,3 +289,25 @@ def test_a_recruit_without_the_option_runs_no_invest_at_all():
     pay(session, PlayerId.P1)
 
     assert invested == []
+
+
+def test_an_invest_left_on_a_card_buys_nothing_for_a_later_entry():
+    session = _invest_game("qm", "questionable_market", gold_cost=1)
+    resolve_effects(session.game, [Invest("qm", 2)])  # an Invest whose entry never came
+
+    session.act(PlayerId.P1, ActivateAbility("qm", RECRUIT))
+    pay(session, PlayerId.P1)
+
+    qm = session.game.table.cards_by_id["qm"]
+    assert qm in session.game.table.battlefield.cards
+    assert qm.counters == {}
+
+
+def test_a_recruit_discount_is_taken_off_the_gold_cost_the_invest_raised():
+    register_invest("discounted_invest_probe", InvestAbility(amounts=(2,), effect=one_wealth))
+    recruit_discount("discounted_invest_probe")(lambda card, game, seat: 3)
+    session = _invest_game("probe", "discounted_invest_probe", gold_cost=2)
+
+    session.act(PlayerId.P1, ActivateAbility("probe", RECRUIT_WITH_INVEST))
+
+    assert session.game.pending.amount == 1  # 2 Gold Cost raised by 2, less the 3 discount

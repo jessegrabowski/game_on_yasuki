@@ -164,6 +164,24 @@ class EnteredPlay:
 
 
 @dataclass(frozen=True, slots=True)
+class Invested:
+    """A card was Invested in before its entry into play was paid for, its Gold Cost permanently
+    raised by ``amount`` (CR, Invest). What the Invest buys reads this off the action that took it,
+    so it is bought once, by the entry it was paid for.
+
+    Attributes
+    ----------
+    card_id : str
+        The card Invested in.
+    amount : int
+        The Gold Invested. A free Invest is an amount of zero.
+    """
+
+    card_id: str
+    amount: int
+
+
+@dataclass(frozen=True, slots=True)
 class Assigned:
     """A Personality was assigned from home to a battlefield in the Maneuvers Segment, by either
     seat. Raised after the unit has moved, so a trigger reading his location sees the battlefield.
@@ -581,6 +599,7 @@ GameEvent = (
     | StrikeDeclared
     | FavorDiscarded
     | HonorChanged
+    | Invested
     | PhaseStarted
     | ProducedGold
     | ProducingGold

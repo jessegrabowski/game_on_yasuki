@@ -272,6 +272,21 @@ def choice_resolver(key: str, *, prompt: str | None = None) -> Callable[[Resolve
     return register
 
 
+def resolve_choice(
+    game: GameState,
+    resolver: str,
+    source_id: str | None,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """The effects the choice resolver ``resolver`` makes of ``chosen``. The context is passed only
+    when the choice carries one, so a resolver whose card asks a single question never declares a
+    parameter it would not read."""
+    context = {"resolver_context": resolver_context} if resolver_context else {}
+    return CHOICE_RESOLVERS[resolver](game, source_id, chosen, seat, **context)
+
+
 def at_cap(card: L5RCard, counter: Counter, cap: int) -> bool:
     """Whether ``card`` already holds ``cap`` or more of ``counter``, a shared trigger guard."""
     return card.counters.get(counter.key, 0) >= cap
@@ -686,7 +701,10 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     """
     if not game.ongoing:
         return
-    on_table = {card.id for card in game.table.battlefield.cards}
+    # A card announced from hand stands in the area a card entering play waits in while its costs
+    # are checked and paid (CR, Entering-Play Areas), so what was laid on it then, an Invest among
+    # them, reaches play with it.
+    on_table = {card.id for card in game.table.battlefield.cards} | game.announced_from_hand
     for key, zone in game.table.zones.items():
         if key.role in (ZoneRole.PROVINCE, ZoneRole.FOCUS):
             on_table.update(card.id for card in zone.cards)

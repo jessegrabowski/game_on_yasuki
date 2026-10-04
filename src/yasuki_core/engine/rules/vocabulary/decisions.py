@@ -250,12 +250,9 @@ def _chooses_exactly_one(request: "DecisionRequest", response: DecisionResponse)
 
 @dataclass(frozen=True, slots=True)
 class ChooseAmount(DecisionRequest):
-    """The seat must say how much Gold to spend on an action whose cost block prints a variable
-    amount: the ``:X:`` whose effects scale with what is paid (CR, Costs).
-
-    The candidates are the amounts the seat could declare, rendered as strings. The engine charges
-    the declared amount less ``discount`` and hands the amount to the named resolver, which shapes
-    what it bought. A client shows a number, not a board selection.
+    """The seat must name one of the amounts on offer, rendered as strings. A client shows a
+    number, not a board selection. The answer is the amount the action declares, and the named
+    resolver says what it does.
 
     Attributes
     ----------
@@ -264,21 +261,15 @@ class ChooseAmount(DecisionRequest):
     resolver : str
         The registered choice resolver the chosen amount is handed to.
     source_id : str
-        The card charging the cost, handed to the resolver as its context.
-    discount : int, optional
-        The Gold taken off the declared amount when it is charged. Default 0.
-    alongside : int, optional
-        Fixed Gold charged in the same payment as the declared amount. Default 0.
-    target_id : str or None, optional
-        The card the payment is for. Default None.
+        The card asking, handed to the resolver as its context.
+    resolver_context : tuple of str, optional
+        What the cost settled before asking, carried through to the resolver. Default empty.
     """
 
     question: str
     resolver: str
     source_id: str
-    discount: int = 0
-    alongside: int = 0
-    target_id: str | None = None
+    resolver_context: tuple[str, ...] = ()
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return self.question
@@ -389,13 +380,9 @@ class ChooseEquipTarget(DecisionRequest):
     ----------
     source_card_id : str
         The attachment being Equipped, still in hand with its cost already paid.
-    invest_amount : int or None
-        The Invest cost paid alongside the Gold Cost, or None when the Equip took no Invest. A
-        free Invest is an amount of zero, not None.
     """
 
     source_card_id: str
-    invest_amount: int | None = None
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose a Personality to equip"
@@ -631,14 +618,11 @@ class ChooseFortificationProvince(DecisionRequest):
     ----------
     source_card_id : str
         The Fortification, already on the battlefield and waiting to be attached.
-    invest_amount : int
-        The Invest cost paid for it, applied once it has entered play.
     proclaim : bool
         Whether the recruit was a Proclaim.
     """
 
     source_card_id: str
-    invest_amount: int = 0
     proclaim: bool = False
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:

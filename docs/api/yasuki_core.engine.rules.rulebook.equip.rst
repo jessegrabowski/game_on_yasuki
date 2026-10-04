@@ -7,7 +7,6 @@ yasuki_core.engine.rules.rulebook.equip
 
 .. autosummary::
 
-    FinishInvest
     SelectEquipTarget
 
 .. rubric:: Functions
