@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.effects import (
     RangedAttack,
     ShuffleDeck,
     Simultaneously,
+    SpendOncePerTurn,
     Straighten,
 )
 from yasuki_core.engine.rules.board.counts_as import Asking
@@ -57,7 +58,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.state import claim_once_per_turn
+from yasuki_core.engine.rules.state import used_this_turn
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
     action_did,
@@ -283,6 +284,9 @@ def _rice_farm_turn_boundary(ctx: TriggerContext) -> list[Effect]:
 # --- Shosuro Aoki / Yoritomo Kayoko (Experienced) ---
 
 
+AOKI_DRAW = "aoki_draw"
+
+
 @on(CounterChanged, "shosuro_aoki_yoritomo_kayoko_experienced")
 def _shosuro_aoki_yoritomo_kayoko_experienced_counter_changed(ctx: TriggerContext) -> list[Effect]:
     """After your Holding gains any Wealth tokens, once per turn, draw a card."""
@@ -291,9 +295,9 @@ def _shosuro_aoki_yoritomo_kayoko_experienced_counter_changed(ctx: TriggerContex
     gainer = ctx.game.table.cards_by_id[ctx.event.card_id]
     if not isinstance(gainer.printed, HoldingPrint) or gainer.owner is not ctx.card.owner:
         return []
-    if not claim_once_per_turn(ctx.game, ctx.card, "aoki_draw"):
+    if used_this_turn(ctx.game, ctx.card, AOKI_DRAW):
         return []
-    return [DrawCard(ctx.card.owner)]
+    return [SpendOncePerTurn(ctx.card.id, AOKI_DRAW), DrawCard(ctx.card.owner)]
 
 
 # --- Tarkasha ---
