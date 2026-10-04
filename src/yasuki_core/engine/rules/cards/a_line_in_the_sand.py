@@ -20,7 +20,10 @@ from yasuki_core.engine.rules.rulebook.recruit import (
     recruit_gold,
     recruitable,
 )
+from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.stats.checked import considered_stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.units.membership import shares_unit
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -150,6 +153,23 @@ register_ability(
         located_at=(CardLocation.HAND,),
     ),
 )
+
+
+# --- Dragon Elite Inkyo ---
+
+DRAGON_ELITE_INKYO_KIHO_CHI = 3
+
+
+# The Onyx and Shattered Empire printings carry the Elite keyword in place of this printing's
+# "This Follower contributes Force even while bowed", which the keyword's rule now covers.
+@considered_stat("dragon_elite_inkyo")
+def _dragon_elite_inkyo_considered_stat(
+    game: GameState, card: L5RCard, stat: Stat, asking: Asking
+) -> int | None:
+    """This Follower is considered to have 3 Chi when a Kiho checks a card's Chi."""
+    if stat is not Stat.CHI or keywords.KIHO not in asking.keywords:
+        return None
+    return DRAGON_ELITE_INKYO_KIHO_CHI
 
 
 # --- Ichigo's Guard ---

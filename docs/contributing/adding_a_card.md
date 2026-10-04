@@ -34,6 +34,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Gives another card's abilities Tireless | `@tireless_grant(id)` | {card}`Shrine to Inari` |
 | Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
 | Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |
+| Is considered to have a stat when a certain action checks it | `@considered_stat(id)` | {card}`Dragon Elite Inkyo` |
 | Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |
 | "The rulebook Equip ability may target this Follower in the discard pile" | `@equips_from_discard(id)` | {card}`Tao Defenders` |
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
@@ -203,7 +204,7 @@ id:
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, `uses_per_turn`, an entry point of a
 registry (`gold`, `invest`, `keywords`, `recruit_discount`, `invest_discount`, `stat_grant`,
-`attach_restriction`, `equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`,
+`considered_stat`, `attach_restriction`, `equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`,
 `lobby_bar`, `favor_payer`, `entry_state`, `before_entering_play`), or the event a trigger answers
 (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`, `turn_boundary`,
 `counter_changed`, `province_destroyed`, `card_discarded`, `producing_gold`, `produced_gold`,

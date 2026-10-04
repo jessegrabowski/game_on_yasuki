@@ -195,6 +195,11 @@ handler names the scope: {card}`Haramaki-do` reaches the Personality it hangs on
 `@keyword_grant`. A card that changes a Province's strength uses
 `@province_strength_grant`.
 
+A card "considered to have" a stat when a certain asker checks it, as {card}`Dragon Elite Inkyo`
+has 3 Chi when a Kiho checks a card's Chi, uses `@considered_stat`. Only an action that reads the
+stat through {func}`~.checked_stat` sees the considered value, and it names itself with an
+{class}`~.Asking` carrying its ability keywords. {card}`Blood of Fu Leng` compares Chi that way.
+
 For which hook a printed sentence wants, see [Adding a Card](../../contributing/adding_a_card.md).
 For the decision of whether a number needs a handler at all, see
 [Printed and computed values](../../contributing/stats_and_costs.md).
