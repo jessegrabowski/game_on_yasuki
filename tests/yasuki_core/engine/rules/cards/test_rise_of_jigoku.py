@@ -106,6 +106,83 @@ def _rural_market_game(wealth=1):
     return session
 
 
+# --- Hida Zaiberu (Experienced) ---
+
+
+def _zaiberu_game(*others: L5RCard) -> EngineSession:
+    """Zaiberu at 6F in play for P1, with ``others`` alongside him."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(
+        state, personality("zaiberu", printed_id="hida_zaiberu_experienced", force=6, chi=3)
+    )
+    for card in others:
+        put_in_play(state, register(state, card))
+    return EngineSession.start(state, P1)
+
+
+def test_zaiberu_bows_two_personalities_under_his_total_force():
+    session = _zaiberu_game(
+        personality("small", force=2, owner=P2), personality("other", force=3, owner=P2)
+    )
+
+    session.act(P1, ActivateAbility("zaiberu"))
+    session.submit(P1, DecisionResponse(("small", "other")))
+
+    cards = session.game.table.cards_by_id
+    assert cards["small"].bowed and cards["other"].bowed
+    assert cards["zaiberu"].bowed  # the cost
+
+
+def test_zaiberu_will_not_bow_a_pair_whose_total_force_reaches_his():
+    session = _zaiberu_game(
+        personality("small", force=2, owner=P2), personality("big", force=4, owner=P2)
+    )
+
+    session.act(P1, ActivateAbility("zaiberu"))
+
+    pending = session.game.pending
+    assert pending.accepts(DecisionResponse(("small", "big"))) is False
+    assert pending.selectable(DecisionResponse(("small",))) == ("small",)
+
+
+def test_zaiberu_does_not_offer_a_personality_whose_own_force_breaks_the_total():
+    session = _zaiberu_game(
+        personality("small", force=2, owner=P2), personality("huge", force=9, owner=P2)
+    )
+
+    session.act(P1, ActivateAbility("zaiberu"))
+
+    # Zaiberu himself is left out the same way: his Force is never under his own.
+    assert set(session.game.pending.candidates) == {"small"}
+
+
+def test_zaiberu_straightens_for_a_single_target_under_half_his_force():
+    session = _zaiberu_game(personality("small", force=2, owner=P2))
+
+    session.act(P1, ActivateAbility("zaiberu"))
+    session.submit(P1, DecisionResponse(("small",)))
+
+    cards = session.game.table.cards_by_id
+    assert cards["small"].bowed
+    assert not cards["zaiberu"].bowed
+
+
+def test_zaiberu_stays_bowed_for_a_single_target_at_half_his_force():
+    session = _zaiberu_game(personality("half", force=3, owner=P2))
+
+    session.act(P1, ActivateAbility("zaiberu"))
+    session.submit(P1, DecisionResponse(("half",)))
+
+    assert session.game.table.cards_by_id["zaiberu"].bowed
+
+
+def test_zaiberu_is_not_offered_with_nothing_his_force_reaches():
+    session = _zaiberu_game(personality("huge", force=9, owner=P2))
+
+    assert ActivateAbility("zaiberu") not in session.legal_actions(P1)
+
+
 def test_rural_market_pays_itself_for_another_farm_going_down():
     game = two_seat_game()
     market = put_in_play(
