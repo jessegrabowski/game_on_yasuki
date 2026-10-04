@@ -47,8 +47,9 @@ applies only if the first actually happened (CR, Independence of Effects).
 
 `Simultaneously` is the counterpart for one occurrence. A piece of text or a rule that acts on
 several cards at once, as battle resolution destroying an army does, returns its effects inside a
-`Simultaneously`, so nothing reacts to any of them until all have happened. Several sentences stay a
-plain list, since effects "occur in the order they are written" (CR, Order of Effects).
+`Simultaneously`, so nothing reacts to any of them until all have happened. The state-based rules
+are still enforced after each member. Several sentences stay a plain list, since effects "occur in
+the order they are written" (CR, Order of Effects).
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.effects

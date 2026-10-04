@@ -32,6 +32,7 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
+    "sphinxcontrib.mermaid",
     "cards",
     "card_image",
 ]
@@ -246,6 +247,12 @@ numpydoc_xref_aliases = {
 html_theme = "pydata_sphinx_theme"
 html_title = "Game on, Yasuki!"
 html_static_path = ["_static"]
+html_css_files = ["mermaid.css"]
+
+# Render diagrams at their own size so mermaid.css can stop the extension stretching them.
+mermaid_init_config = {"startOnLoad": False, "flowchart": {"useMaxWidth": False}}
+mermaid_height = "auto"
+
 html_theme_options = {
     "secondary_sidebar_items": ["page-toc", "sourcelink"],
     "show_prev_next": True,

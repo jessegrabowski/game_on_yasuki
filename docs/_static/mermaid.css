@@ -1,0 +1,13 @@
+/* Show each diagram at its natural size, shrinking it only to fit the page. */
+pre.mermaid > svg,
+.mermaid-container > pre.mermaid > svg {
+    width: auto;
+    height: auto;
+    max-width: 100% !important;
+}
+
+/* sphinxcontrib-mermaid already renders with mermaid's dark theme, so the theme's invert filter
+   would apply dark mode twice. */
+html[data-theme="dark"] pre.mermaid > svg {
+    filter: none;
+}

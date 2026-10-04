@@ -47,9 +47,12 @@ event, moment or registry.
 Effects in a returned list happen in the order they are written, and what each one sets off resolves
 before the next applies (CR 20F, Timing), so a step that follows a reaction is just the next effect.
 Text that acts on several cards at once, one phrase over many cards, returns those effects inside a
-`Simultaneously`, so nothing reacts to any of them until all have happened. Two effects the text
-joins with "to" ("discard a card to draw a card") are a `To`, so the second applies only if the first
-actually happened. `docs/design/systems/effects.md` has the rules and the CR lines behind them.
+`Simultaneously`, so nothing reacts to any of them until all have happened. A group holds off
+triggers only. The state-based rules are still enforced after each member, so wrapping two effects
+in a group does not let both commit before the board is judged. Two effects the text joins with "to"
+("discard a card to draw a card"), or a clause that depends on an earlier one ("if you put a Ring
+into play, ..."), are a `To`, so the second applies only if the first actually happened.
+`docs/design/systems/effects.md` has the rules and the CR lines behind them.
 
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and
 modifiers layer over it. Gold is the same shape on the economy side. A card that appears to have the
