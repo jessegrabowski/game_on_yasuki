@@ -122,8 +122,9 @@ declines every card but one gives a single card an ability wherever that card is
 included. A copy of a printed ability granted that way takes a key of its own and sets `limit_key`
 to the printed one's, so using either spends the other's once-per-turn allowance.
 {func}`~.ignoring_bow_costs` wraps a cost for a copy taken "ignoring bow costs", dropping every bow
-and the waiver a bow cost would ask about. A grant meant for one follow-up alone lasts
-`Duration.FOR_ADDITIONAL_ACTION`, and lapses once the limited additional opportunity is spent.
+and the waiver a bow cost would ask about. A grant meant for one follow-up alone lasts until
+`ADDITIONAL_ACTION_SPENT`, the moment the limited additional opportunity is taken or passed,
+and an effect delayed until that moment resolves there too.
 
 A keyword ability is one the rulebook attaches to a keyword rather than to a card, as the Kharmic
 abilities come with the Kharmic keyword (ShE datasheet). {func}`~.register_keyword_ability` files

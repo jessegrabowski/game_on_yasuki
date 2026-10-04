@@ -40,16 +40,12 @@ class Duration(Enum):
     UNTIL_ACTION_RESOLVES
         Lasts while the action now resolving resolves, including the cards it brings into play
         entering, and lapses as that action is announced resolved, whatever became of its source.
-    FOR_ADDITIONAL_ACTION
-        Lasts until the additional action limited to some follow-ups that the action now resolving
-        grants is spent, taken or passed, as an ability granted for that follow-up alone does.
     """
 
     UNTIL_END_OF_TURN = "until_end_of_turn"
     WHILE_SOURCE_IN_PLAY = "while_source_in_play"
     PERMANENT = "permanent"
     UNTIL_ACTION_RESOLVES = "until_action_resolves"
-    FOR_ADDITIONAL_ACTION = "for_additional_action"
 
 
 # How long an ongoing record lasts: a Duration, or a Moment it lapses at the first time the flow

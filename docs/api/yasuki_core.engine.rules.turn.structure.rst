@@ -9,6 +9,7 @@ yasuki_core.engine.rules.turn.structure
 
     ActionRound
     Moment
+    Opportunity
     Phase
     RoundKind
     RoundTimings

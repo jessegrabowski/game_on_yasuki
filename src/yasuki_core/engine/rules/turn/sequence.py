@@ -34,6 +34,7 @@ from yasuki_core.engine.rules.legality import activatable, permitted_timings, pl
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.turn.structure import (
+    ADDITIONAL_ACTION_SPENT,
     ActionRound,
     BEGINNING_OF_ACTION_PHASE,
     Boundary,
@@ -211,14 +212,14 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
     reopened = not passed and game.additional_action is game.round.priority
     opens_another_limited = reopened and game.additional_follow_ups is not None
     if game.round.follow_ups is not None and not opens_another_limited:
-        # A spent limited opportunity takes what was granted for it alone. One that opens another
-        # keeps them: the action spending it may have granted for the next, and the new limit
-        # keeps what is left of the old out of reach until both lapse together.
-        game.ongoing = [
-            recorded
-            for recorded in game.ongoing
-            if recorded.duration is not Duration.FOR_ADDITIONAL_ACTION
-        ]
+        # A spent limited opportunity takes what was granted for it alone, and resolves what
+        # waited on it. One that opens another keeps them: the action spending it may have granted
+        # for the next, and the new limit keeps what is left of the old out of reach until the
+        # next is spent too.
+        triggers.reach_moment(game, ADDITIONAL_ACTION_SPENT)
+        run_stack(game)
+        if game.awaiting_decision:
+            return
     if reopened:
         # The seat keeps the opportunity and the consecutive-pass count starts again, so a pass
         # made before the action is not counted with one taken at the additional opportunity.
