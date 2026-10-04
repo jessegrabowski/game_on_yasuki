@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_personal_honor
+from yasuki_core.engine.rules.stats.checked import checked_stat
 from yasuki_core.engine.rules.stats.province_strength import province_strength_grant
 from yasuki_core.engine.rules.gold.discounts import Purchase, action_discount
 from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler
@@ -23,9 +24,9 @@ from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.interrupts import held_action_targets
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.rulebook.recruit import recruit_card
-from yasuki_core.engine.rules.legality import permitted_timings_in, recruit_cost
+from yasuki_core.engine.rules.legality import location_permits, permitted_timings_in, recruit_cost
 from yasuki_core.engine.rules.rulebook.equip import attach_restriction, is_spell
-from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -71,7 +72,7 @@ from yasuki_core.engine.rules.board.queries import province_holdings
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
-from yasuki_core.game_pieces.prints import AttachmentPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 
 
@@ -107,6 +108,108 @@ def _resolve_blood_of_fu_leng(
             source_id, chosen[0], Stat.CHI, BLOOD_OF_FU_LENG_PENALTY, Duration.UNTIL_END_OF_TURN
         )
     ]
+
+
+BLOOD_OF_FU_LENG_HONOR_LOSS = -3
+
+
+def _blood_of_fu_leng_lower(
+    game: GameState, source: L5RCard, performer: L5RCard
+) -> tuple[str, ...]:
+    """The enemy Personalities with lower Chi than ``performer``, both as the Kiho checks it, that
+    the action may target."""
+    kiho = Asking.action(source, frozenset({keywords.KIHO}))
+    bar = checked_stat(game, performer, Stat.CHI, kiho)
+    return tuple(
+        card.id
+        for card in personalities_in_play(game)
+        if card.owner is not source.owner
+        and location_permits(game, card)
+        and checked_stat(game, card, Stat.CHI, kiho) < bar
+    )
+
+
+def _blood_of_fu_leng_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your unbowed Monks and Shugenja, Followers among them, with an enemy Personality of lower Chi
+    to target."""
+    return [
+        card.id
+        for card in cards_in_play(game, source.owner)
+        if not card.bowed
+        and (has_keyword(game, card, keywords.MONK) or has_keyword(game, card, keywords.SHUGENJA))
+        and _blood_of_fu_leng_lower(game, source, card)
+    ]
+
+
+def _blood_of_fu_leng_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Bow the performer, then target an enemy Personality with lower Chi."""
+    enemies = _blood_of_fu_leng_lower(game, source, target)
+    return [
+        Bow(target.id),
+        Choose(
+            source.owner,
+            enemies,
+            1,
+            1,
+            "blood_of_fu_leng_enemy",
+            source.id,
+            resolver_context=(target.id,),
+        ),
+    ]
+
+
+@choice_resolver("blood_of_fu_leng_enemy", prompt="Target an enemy Personality with lower Chi")
+def _resolve_blood_of_fu_leng_enemy(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    enemy = game.table.cards_by_id[chosen[0]]
+    unit = tuple(card.id for card in unit_of(game, enemy))
+    return [
+        Choose(
+            seat, unit, 1, 1, "blood_of_fu_leng_bow", source_id, resolver_context=resolver_context
+        )
+    ]
+
+
+@choice_resolver("blood_of_fu_leng_bow", prompt="Bow a card in their unit")
+def _resolve_blood_of_fu_leng_bow(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """Bow the card. If your Personality is Shadowlands, straighten them. Lose 3 Honor."""
+    (performer_id,) = resolver_context
+    performer = game.table.cards_by_id.get(performer_id)
+    straightened = (
+        performer is not None
+        and isinstance(performer.printed, PersonalityPrint)
+        and has_keyword(game, performer, keywords.SHADOWLANDS)
+    )
+    return [
+        Bow(chosen[0]),
+        *([Straighten(performer_id)] if straightened else []),
+        GainHonor(seat, BLOOD_OF_FU_LENG_HONOR_LOSS, source_id=source_id),
+    ]
+
+
+register_ability(
+    "blood_of_fu_leng",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        keywords=frozenset({keywords.KIHO}),
+        cost=no_cost,
+        targets=_blood_of_fu_leng_targets,
+        targeting_message="your unbowed Monk or Shugenja",
+        effects=_blood_of_fu_leng_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
 
 
 # --- Confront Your Truth ---

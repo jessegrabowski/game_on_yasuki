@@ -1032,6 +1032,78 @@ def test_it_asks_for_no_target_with_no_personality_in_play():
     assert session.game.ongoing == []
 
 
+def _blood_of_fu_leng_kiho(*, performer_keywords=(keywords.MONK,)) -> EngineSession:
+    """P1's 3 Chi performer against P2's 2 Chi Personality with a Follower and P2's 5 Chi
+    Personality, all at the battlefield, and Blood of Fu Leng in P1's hand."""
+    blood = L5RCard.of(
+        FatePrint,
+        id="blood",
+        name="Blood of Fu Leng",
+        printed_id="blood_of_fu_leng",
+        side=Side.FATE,
+        owner=P1,
+        keywords=(keywords.KHARMIC, keywords.MAHO, keywords.SHADOWLANDS),
+    )
+    session = combat_segment(
+        [
+            personality("monk", chi=3, keywords=performer_keywords),
+            personality("weak", owner=P2, chi=2),
+            personality("strong", owner=P2, chi=5),
+        ],
+        {"monk": 0},
+        {"weak": 0, "strong": 0},
+        in_hand=[blood],
+    )
+    attached(
+        session.game.table,
+        attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER),
+        "weak",
+    )
+    return session
+
+
+def _play_blood_of_fu_leng(session: EngineSession, *answers: str) -> None:
+    session.act(P1, PlayStrategy("blood"))
+    for answer in answers:
+        session.submit(P1, DecisionResponse((answer,)))
+
+
+def test_blood_of_fu_leng_targets_only_an_enemy_with_lower_chi():
+    session = _blood_of_fu_leng_kiho()
+
+    _play_blood_of_fu_leng(session, "monk")
+
+    assert session.game.pending.candidates == ("weak",)
+
+
+def test_blood_of_fu_leng_bows_a_card_in_the_enemy_unit_for_3_honor():
+    session = _blood_of_fu_leng_kiho()
+
+    _play_blood_of_fu_leng(session, "monk", "weak", "ashigaru")
+
+    cards = session.game.table.cards_by_id
+    assert (cards["ashigaru"].bowed, cards["weak"].bowed, cards["monk"].bowed) == (
+        True,
+        False,
+        True,
+    )
+    assert session.game.table.seats[P1].honor == -3
+
+
+def test_blood_of_fu_leng_straightens_a_shadowlands_performer():
+    session = _blood_of_fu_leng_kiho(performer_keywords=(keywords.MONK, keywords.SHADOWLANDS))
+
+    _play_blood_of_fu_leng(session, "monk", "weak", "weak")
+
+    assert not session.game.table.cards_by_id["monk"].bowed
+
+
+def test_blood_of_fu_leng_needs_a_monk_or_shugenja():
+    session = _blood_of_fu_leng_kiho(performer_keywords=())
+
+    assert PlayStrategy("blood") not in session.legal_actions(P1)
+
+
 def _heart_of_honor(game: GameState):
     card = register(
         game.table,
