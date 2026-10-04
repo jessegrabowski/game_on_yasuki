@@ -81,6 +81,10 @@ from yasuki_core.engine.rules.effects import Move, StartDuel
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.cards.test_anvil_of_despair import (
+    _reach_the_combat_segment,
+    _refugees_battle,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.builders import (
@@ -1611,6 +1615,28 @@ def test_the_enlightened_path_takes_a_discarded_rings_interrupt_then_spends_its_
         assert "earth" in _fate_deck(session, P2)
         assert session.game.round.priority is P2
         assert ActivateAbility("P2-SH") not in session.legal_actions(P2)
+
+
+def test_the_enlightened_path_takes_a_discarded_earths_interrupt_against_refugees():
+    session = _refugees_battle()
+    table = session.game.table
+    put_in_play(table, register(table, stronghold(P1, printed_id=ENLIGHTENED_PATH)))
+    table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(
+        register(table, _ring("earth", "ring_of_earth"))
+    )
+    _reach_the_combat_segment(session, P2)
+    session.act(P2, PlayStrategy("refugees"))
+    session.submit(P2, DecisionResponse(("raider",)))
+
+    session.act(P1, PlayInterrupt("P1-SH"))
+    _answer_until_settled(session, "earth")
+    session.act(P1, PlayInterrupt("earth", ENLIGHTENED_PATH_COPY))
+    _answer_until_settled(session)
+
+    raider = table.cards_by_id["raider"]
+    assert location_of(table, raider).battlefield == 0
+    assert not raider.bowed
+    assert "earth" in _fate_deck(session, P1)
 
 
 def test_the_enlightened_path_back_takes_an_open_from_the_discard_pile():

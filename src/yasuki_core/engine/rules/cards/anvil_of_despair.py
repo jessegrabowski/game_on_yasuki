@@ -4,7 +4,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
-from yasuki_core.engine.rules.effects import Ask, Bow, CreateToken, Effect, Move, PayGold
+from yasuki_core.engine.rules.effects import Ask, Bow, CreateToken, Effect, Move, PayGold, To
 from yasuki_core.engine.rules.gold.payment import can_afford
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
@@ -26,16 +26,13 @@ def _refugees_targets(game: GameState, source: L5RCard) -> list[str]:
 
 
 def _refugees_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Send the target home, bow them as they move, then offer their controller the Ashigaru.
+    """Send the target home, bow them if they moved, then offer their controller the Ashigaru.
 
     The offer is withheld from a controller who could not pay it, which is what "may pay" means for
     a seat with no Gold to reach.
     """
     controller = target.owner
-    # The bow rides the movement, so a card negating the move (The Height of Courage) should take
-    # the bow with it. Nothing can negate one until the Interrupt layer exists, so the two never
-    # differ yet and the bow is written plainly.
-    sent_home: list[Effect] = [Move(target.id, Location.home(controller)), Bow(target.id)]
+    sent_home: list[Effect] = [To(Move(target.id, Location.home(controller)), (Bow(target.id),))]
     if not can_afford(game, controller, ASHIGARU_GOLD):
         return sent_home
     return [
