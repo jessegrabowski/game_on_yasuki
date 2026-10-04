@@ -40,6 +40,7 @@ from yasuki_core.engine.rules.effects import (
     DrawCard,
     Effect,
     EndLook,
+    Fear,
     LookAtTop,
     GainHonor,
     GrantKeyword,
@@ -438,6 +439,40 @@ register_ability(
         effects=_hungry_moon_wealth_effects,
         located_at=(CardLocation.HAND,),
         key="wealth",
+    ),
+)
+
+
+# --- Ijathilu Zealots ---
+
+NAGA_ZEALOT = "naga_zealot_personality_2_2_1"
+IJATHILU_ZEALOT_COUNT = 2
+IJATHILU_FEAR = 3
+
+
+def _ijathilu_zealots_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Create two 2F/2C/1PH Naga Nonhuman Zealot Personalities in your home." """
+    zealots = (
+        CreateToken(NAGA_ZEALOT, ctx.card.owner, ctx.card.id) for _ in range(IJATHILU_ZEALOT_COUNT)
+    )
+    return [Simultaneously(tuple(zealots))]
+
+
+register_yu("ijathilu_zealots", _ijathilu_zealots_yu)
+
+
+def _ijathilu_zealots_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Fear(IJATHILU_FEAR, target.id, source.owner)]
+
+
+register_ability(
+    "ijathilu_zealots",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_ijathilu_zealots_effects,
     ),
 )
 

@@ -20,6 +20,7 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     FUSHICHO,
     IKARICHIS_UNDEAD,
     KANPEKI_DYNASTY,
+    NAGA_ZEALOT,
     ZOMBIE_FOLLOWER,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -38,10 +39,10 @@ from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import ActionPrint, WindPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
@@ -53,6 +54,7 @@ from tests.yasuki_core.engine.rules.cards.test_lotus_edition import (
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    combat_segment,
     end_phase,
     end_turn,
     fate_card,
@@ -880,3 +882,49 @@ def test_bayushi_purimu_raises_no_yu_when_hired_killer_destroys_him_outside_batt
     assert "purimu" not in {card.id for card in game.table.battlefield.cards}
     assert not any(card.dishonorable for card in game.table.cards_by_id.values())
     assert game.table.seats[PlayerId.P2].honor == honor
+
+
+# --- Ijathilu Zealots ---
+
+
+def test_ijathilu_zealots_create_two_zealots_in_their_home_as_they_die():
+    units = [personality("attacker", force=5), personality("leader", owner=P2)]
+    game = combat_segment(units, {"attacker": 0}, {"leader": 0}).game
+    token_template(
+        game,
+        NAGA_ZEALOT,
+        name="Naga Zealot",
+        card_type="Personality",
+        keywords=("Naga", "Nonhuman", "Zealot"),
+        force=2,
+        chi=2,
+    )
+    zealots = attachment(
+        "zealots",
+        owner=P2,
+        printed_id="ijathilu_zealots",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=3,
+    )
+    attached(game, zealots, "leader")
+
+    resolve_effects(game, [Destroy("zealots", P1)])
+
+    created = [card for card in personalities_in_play(game) if card.name == "Naga Zealot"]
+    assert len(created) == 2
+    assert all(card.owner is P2 for card in created)
+    assert all(location_of(game.table, card).battlefield is None for card in created)
+
+
+def test_ijathilu_zealots_fear_3_bows_an_enemy_of_force_3():
+    units = [personality("leader"), personality("enemy", owner=P2, force=3)]
+    session = combat_segment(units, {"leader": 0}, {"enemy": 0})
+    zealots = attachment(
+        "zealots", printed_id="ijathilu_zealots", attachment_type=AttachmentType.FOLLOWER, force=3
+    )
+    attached(session.game, zealots, "leader")
+
+    session.act(P1, ActivateAbility("zealots"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+
+    assert session.game.table.cards_by_id["enemy"].bowed
