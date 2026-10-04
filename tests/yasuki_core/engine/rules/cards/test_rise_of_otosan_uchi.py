@@ -506,7 +506,7 @@ def test_a_discount_lowers_the_payment_but_not_the_bodies_it_buys():
     assert session.game.pending.amount == 4
     pay(session, P1)
 
-    assert session.game.pending.count == 3
+    assert session.game.pending.maximum == 3
 
 
 def test_a_declared_amount_the_discount_covers_asks_for_no_payment():
@@ -515,7 +515,7 @@ def test_a_declared_amount_the_discount_covers_asks_for_no_payment():
     session.act(P1, ActivateAbility("spell"))
     session.submit(P1, DecisionResponse(("2",)))
 
-    assert session.game.pending.count == 1
+    assert session.game.pending.maximum == 1
     assert session.game.gold[P1] == 0
 
 
@@ -582,7 +582,7 @@ def test_the_amount_settles_how_many_may_be_bound():
     session.submit(P1, DecisionResponse(("2",)))
     pay(session, P1)
 
-    assert session.game.pending.count == 1
+    assert session.game.pending.maximum == 1
 
 
 def test_bound_in_blood_is_withheld_when_no_amount_buys_a_body():

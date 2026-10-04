@@ -20,7 +20,7 @@ def test_auto_agent_answers_with_the_shortest_accepting_prefix():
 
 
 def test_auto_agent_takes_as_many_targets_as_the_choice_asks():
-    request = ChooseAbilityTarget(PlayerId.P1, ("a", "b", "c"), "spell", count=2)
+    request = ChooseAbilityTarget(PlayerId.P1, ("a", "b", "c"), "spell", minimum=2, maximum=2)
 
     assert AutoAgent().decide(request, view=None).choices == ("a", "b")
 

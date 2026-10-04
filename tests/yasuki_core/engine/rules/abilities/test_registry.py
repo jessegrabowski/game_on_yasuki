@@ -32,7 +32,14 @@ from yasuki_core.engine.rules.abilities.registry import (
 # Without this the registries are empty and a lookup for a real card raises instead of testing.
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.rulebook.cycle import CYCLE
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt, Interruption
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+    TargetGroup,
+)
+from yasuki_core.engine.rules.vocabulary.decisions import OneGroup
 from yasuki_core.engine.rules.effects import Bow, Destroy, Fear, Simultaneously
 from yasuki_core.engine.rules.rulebook.courage_and_honor import COURAGE_INTERRUPT
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -404,13 +411,61 @@ def test_a_keyword_ability_is_a_rulebook_ability():
 def test_an_ability_builds_its_effects_one_way():
     plain = _ABILITIES["millet_farm"][0]
 
-    def over_the_set(game, source, targets):
+    def over_the_set(game, source, groups):
         return []
 
     with pytest.raises(ValueError, match="per target or over the set"):
-        replace(plain, effects_for_targets=over_the_set, target_count=lambda game, source: 2)
-    with pytest.raises(ValueError, match="counts its targets"):
-        replace(plain, effects=None, effects_for_targets=over_the_set)
+        replace(plain, effects_for_groups=over_the_set)
+    with pytest.raises(ValueError, match="per target or over the set"):
+        replace(plain, effects=None)
+
+
+def test_an_ability_declares_its_targets_one_way():
+    plain = _ABILITIES["millet_farm"][0]
+    group = TargetGroup(candidates=lambda game, source, picked: [])
+
+    with pytest.raises(ValueError, match="one phrase or in groups"):
+        replace(plain, target_groups=(group,))
+    with pytest.raises(ValueError, match="one phrase or in groups"):
+        replace(plain, targets=None)
+
+
+def test_an_ability_targeting_several_phrases_builds_its_effects_over_the_set():
+    plain = _ABILITIES["millet_farm"][0]
+    group = TargetGroup(candidates=lambda game, source, picked: [])
+
+    with pytest.raises(ValueError, match="several phrases"):
+        replace(plain, targets=None, target_groups=(group, group))
+
+
+def test_a_one_phrase_ability_reads_as_a_single_target_group():
+    ability = _ABILITIES["millet_farm"][0]
+    game = two_seat_game()
+    source = put_in_play(game, personality("source"))
+
+    (phrase,) = ability.phrases
+
+    assert ability.phrases is ability.phrases  # built once: legality reads it per sweep
+    assert phrase.targeting_message == ability.targeting_message
+    assert phrase.candidates(game, source, ()) == ability.targets(game, source)
+    assert phrase.wanted(game, source, (), ("source",)) == (1, 1)
+    assert phrase.conditions(game, source, ()) == ()
+
+
+def test_a_declared_group_is_read_as_it_stands():
+    group = TargetGroup(
+        candidates=lambda game, source, picked: ["a"],
+        count=lambda game, source, picked, offered: (1, 2),
+        limits=lambda game, source, picked: (OneGroup((("a",),)),),
+        targeting_message="your bowed cards in one unit",
+    )
+    ability = replace(_ABILITIES["millet_farm"][0], targets=None, target_groups=(group,))
+    game = two_seat_game()
+    source = put_in_play(game, personality("source"))
+
+    assert ability.phrases == (group,)
+    assert group.wanted(game, source, (), ("a",)) == (1, 2)
+    assert group.conditions(game, source, ()) == (OneGroup((("a",),)),)
 
 
 def test_an_ability_against_several_targets_takes_each_step_on_all_of_them_at_once():
@@ -423,7 +478,7 @@ def test_an_ability_against_several_targets_takes_each_step_on_all_of_them_at_on
         put_in_play(game, personality(card_id)) for card_id in ("source", "first", "second")
     )
 
-    effects = ability.effects_against(game, source, (first, second))
+    effects = ability.effects_against(game, source, ((first, second),))
 
     assert effects == [
         Simultaneously((Bow("first"), Bow("second"))),

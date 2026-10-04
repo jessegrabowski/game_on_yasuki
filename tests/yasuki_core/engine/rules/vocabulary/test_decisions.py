@@ -7,10 +7,6 @@ from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
     CHOICE_PICKS,
     ChooseOption,
-    OneGroup,
-    TotalAtMost,
-    answerable,
-    within_reach,
     ArrangeCards,
     ChooseAbilityTarget,
     Confirm,
@@ -20,6 +16,10 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseDistribution,
     ChoosePayment,
     DecisionResponse,
+    OneGroup,
+    TotalAtMost,
+    answerable,
+    within_reach,
 )
 from yasuki_core.engine.rules.triggers import choice_resolver
 
@@ -146,6 +146,79 @@ def test_choose_cards_rejects_duplicate_or_non_candidate_choices():
     assert request.accepts(DecisionResponse(("z",))) is False  # z is not a candidate
 
 
+def _grouped(minimum: int, maximum: int) -> ChooseAbilityTarget:
+    return ChooseAbilityTarget(
+        PlayerId.P1,
+        _HAND,
+        "src",
+        minimum=minimum,
+        maximum=maximum,
+        limits=(OneGroup((("a", "b"), ("c",))),),
+    )
+
+
+def test_a_grouped_phrase_accepts_picks_from_one_group_only():
+    request = _grouped(minimum=1, maximum=2)
+
+    assert request.accepts(DecisionResponse(("a", "b"))) is True
+    assert request.accepts(DecisionResponse(("c",))) is True
+    assert request.accepts(DecisionResponse(("b", "c"))) is False
+
+
+def test_a_grouped_phrase_offers_every_group_until_a_pick_settles_one():
+    request = _grouped(minimum=1, maximum=2)
+
+    assert request.selectable() == _HAND
+    assert request.selectable(DecisionResponse(("a",))) == ("a", "b")
+    assert request.selectable(DecisionResponse(("c",))) == ("c",)
+
+
+def _capped(bound: int, minimum: int = 1) -> ChooseAbilityTarget:
+    weights = (("a", 2), ("b", 3), ("c", 4))
+    return ChooseAbilityTarget(
+        PlayerId.P1, _HAND, "src", minimum=minimum, maximum=3, limits=(TotalAtMost(weights, bound),)
+    )
+
+
+def test_a_capped_phrase_accepts_a_set_within_the_total():
+    request = _capped(bound=5)
+
+    assert request.accepts(DecisionResponse(("a", "b"))) is True
+    assert request.accepts(DecisionResponse(("b", "c"))) is False
+
+
+def test_a_capped_phrase_drops_what_no_longer_fits_as_the_picks_mount():
+    request = _capped(bound=5)
+
+    assert request.selectable() == _HAND
+    assert request.selectable(DecisionResponse(("a",))) == ("a", "b")
+    assert request.selectable(DecisionResponse(("a", "b"))) == ("a", "b")
+
+
+def test_a_candidate_outside_the_cap_is_never_offered_alone():
+    # The weight of one card can break the total by itself. The engine drops such a card before it
+    # offers anything; the request refuses it too, so the two agree.
+    request = _capped(bound=3)
+
+    assert request.selectable() == ("a", "b")
+    assert request.accepts(DecisionResponse(("c",))) is False
+
+
+def test_limits_stack_and_all_of_them_have_to_hold():
+    request = ChooseAbilityTarget(
+        PlayerId.P1,
+        _HAND,
+        "src",
+        minimum=1,
+        maximum=3,
+        limits=(OneGroup((("a", "b"), ("c",))), TotalAtMost((("a", 2), ("b", 3), ("c", 1)), 4)),
+    )
+
+    assert request.accepts(DecisionResponse(("a",))) is True
+    assert request.accepts(DecisionResponse(("a", "b"))) is False  # one unit, but over the total
+    assert request.accepts(DecisionResponse(("a", "c"))) is False  # under the total, two units
+
+
 def test_a_grouped_limit_admits_only_what_one_part_can_seat():
     limit = OneGroup((("a", "b"), ("c",)))
 
@@ -210,7 +283,7 @@ def test_the_target_prompt_names_the_condition_and_the_card():
 
 
 def test_a_target_choice_of_several_takes_that_many_distinct_candidates():
-    request = ChooseAbilityTarget(PlayerId.P1, ("a", "b", "c"), "spell", count=2)
+    request = ChooseAbilityTarget(PlayerId.P1, ("a", "b", "c"), "spell", minimum=2, maximum=2)
 
     assert request.accepts(DecisionResponse(("a", "b")))
     assert not request.accepts(DecisionResponse(("a",)))
@@ -491,3 +564,25 @@ def test_an_option_question_accepts_any_distinct_pick_within_its_bounds(choices,
     )
 
     assert asked.accepts(DecisionResponse(choices)) is accepted
+
+
+def test_a_target_prompt_names_the_range_it_takes():
+    one = ChooseAbilityTarget(PlayerId.P1, ("a",), "c", targeting_message="your Personality")
+    several = ChooseAbilityTarget(
+        PlayerId.P1, ("a", "b", "c"), "c", targeting_message="enemy Followers", minimum=1, maximum=2
+    )
+    exact = ChooseAbilityTarget(
+        PlayerId.P1, ("a", "b"), "c", targeting_message="your Personalities", minimum=2, maximum=2
+    )
+
+    assert one.prompt() == "Target your Personality"
+    assert several.prompt() == "Target 1 to 2 of enemy Followers"
+    assert exact.prompt() == "Target 2 of your Personalities"
+
+
+def test_backing_out_of_a_later_target_phrase_returns_to_the_one_before_it():
+    first = ChooseAbilityTarget(PlayerId.P1, ("a",), "c")
+    second = ChooseAbilityTarget(PlayerId.P1, ("b",), "c", settled=(("a",),))
+
+    assert first.reopens_on_cancel is False
+    assert second.reopens_on_cancel is True

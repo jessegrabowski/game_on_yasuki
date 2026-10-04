@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.abilities.model import (
     Interrupt,
     Interruption,
     InvestAbility,
+    TargetGroup,
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
@@ -109,6 +110,7 @@ from yasuki_core.engine.rules.turn.structure import (
 )
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
+from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
@@ -342,21 +344,28 @@ def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
     ]
 
 
-def _bound_in_blood_targets(game: GameState, source: L5RCard) -> list[str]:
+def _bound_in_blood_targets(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
     """The controller's Personalities, any of whom the bodies bought can be."""
     return [card.id for card in owned_personalities(game, source.owner)]
 
 
-def _bound_in_blood_target_count(game: GameState, source: L5RCard) -> int:
-    """The bodies the amount bought: half the Gold spent, rounded down, to a most of four."""
-    return min(MOST_SACRIFICES, (game.amount_declared or 0) // GOLD_PER_SACRIFICE)
+def _bound_in_blood_target_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    """The bodies the amount bought: half the Gold spent, rounded down, to a most of four. The card
+    names one number, so it is both the fewest and the most, and a seat with fewer Personalities on
+    offer than the Gold bought binds all of them."""
+    bought = min(MOST_SACRIFICES, (game.amount_declared or 0) // GOLD_PER_SACRIFICE)
+    bodies = min(bought, len(offered))
+    return bodies, bodies
 
 
 def _bound_in_blood_effects(
-    game: GameState, source: L5RCard, bound: tuple[L5RCard, ...]
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
     """The Horror is measured against the bound before they are banished, since it is made of what
     they were."""
+    bound = groups[0]
     horror = CreateToken(
         HORROR,
         source.owner,
@@ -377,11 +386,15 @@ register_ability(
     Ability(
         timings=(ActionTiming.OPEN,),
         cost=_bound_in_blood_cost,
-        targets=_bound_in_blood_targets,
-        targeting_message="your Personalities",
+        target_groups=(
+            TargetGroup(
+                candidates=_bound_in_blood_targets,
+                count=_bound_in_blood_target_count,
+                targeting_message="your Personalities",
+            ),
+        ),
         targets_after_cost=True,
-        target_count=_bound_in_blood_target_count,
-        effects_for_targets=_bound_in_blood_effects,
+        effects_for_groups=_bound_in_blood_effects,
     ),
 )
 

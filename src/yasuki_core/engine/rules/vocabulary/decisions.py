@@ -483,35 +483,56 @@ class ChooseAbilityTarget(DecisionRequest):
         The card's name, for the prompt. Default empty, which leaves the card unnamed.
     targeting_message : str, optional
         What the ability targets, as its card words it. Default None, which asks for a card.
-    count : int, optional
-        How many distinct targets the seat chooses at once. Default 1.
+    minimum : int, optional
+        The fewest distinct targets the seat chooses at once. Default 1.
+    maximum : int, optional
+        The most, for a card that targets a range of them: "one or two target Personalities with
+        total Force less than Zaiberu's". Default 1, one target.
+    settled  : tuple of tuple of str, optional
+        The ability's earlier "target" phrases and what each of them targeted, in print order, for
+        a card printing more than one. The answer to this one is appended to them. Default none,
+        the ability's first or only phrase.
     """
 
     source_card_id: str
     ability_key: str | None = None
     source_name: str = ""
     targeting_message: str | None = None
-    count: int = 1
+    minimum: int = 1
+    maximum: int = 1
+    settled: PickedTargets = ()
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        if self.count == 1:
-            asked = f"Target {self.targeting_message or 'a card'}"
+        offered = self.targeting_message or ("a card" if self.maximum == 1 else "the cards offered")
+        if self.maximum == 1:
+            asked = f"Target {offered}"
+        elif self.minimum == self.maximum:
+            asked = f"Target {self.minimum} of {offered}"
         else:
-            asked = f"Target {self.count} of {self.targeting_message or 'the cards offered'}"
+            asked = f"Target {self.minimum} to {self.maximum} of {offered}"
         return f"{asked} for {self.source_name}" if self.source_name else asked
 
     def accepts(self, response: DecisionResponse) -> bool:
         choices = response.choices
+        distinct = set(choices)
         return (
-            len(choices) == self.count
-            and len(set(choices)) == self.count
-            and all(choice in self.candidates for choice in choices)
+            len(distinct) == len(choices)
+            and self.minimum <= len(choices) <= self.maximum
+            and distinct <= set(self.candidates)
+            and all(limit.satisfied(choices) for limit in self.limits)
         )
 
     @property
     def cancellable(self) -> bool:
         """Backing out unwinds the whole action that raised it, cost included."""
         return True
+
+    @property
+    def reopens_on_cancel(self) -> bool:
+        """Backing out of a later "target" phrase returns to the one before it. Targeting changes
+        nothing on the board, so a seat that has read what its first pick left on offer can take
+        that pick back without giving up the action."""
+        return bool(self.settled)
 
 
 @dataclass(frozen=True, slots=True)

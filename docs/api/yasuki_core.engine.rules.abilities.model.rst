@@ -12,6 +12,7 @@ yasuki_core.engine.rules.abilities.model
     InterruptLimit
     Interruption
     InvestAbility
+    TargetGroup
 
 .. rubric:: Functions
 
