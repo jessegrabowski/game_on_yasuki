@@ -2,6 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
+from yasuki_core.engine.rules.abilities.idioms import register_yu
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import (
     granted_ability,
@@ -18,6 +19,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     rings_in_play,
+    units_at,
 )
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -70,7 +72,7 @@ from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.game_pieces.counters import WEALTH, counter_from_key
 from yasuki_core.game_pieces.prints import AttachmentPrint, HoldingPrint, PersonalityPrint
 
 
@@ -243,6 +245,38 @@ def _fortified_farmlands_keywords(
     step for it to be taken in.
     """
     return ("Renew",) if seat_controls_printed(game, seat, "Farm", other_than=card) else ()
+
+
+# --- Matsu Kurutta ---
+
+# "Kurutta has +1F while attacking and +2F while actions are resolving" has no handler. The second
+# clause needs a read of an action resolving that the engine does not have, and the two land together.
+KURUTTA_TOKEN = counter_from_key("plus1f")
+
+
+def _matsu_kurutta_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Give your target Deathseeker a +1F token." Your Deathseekers at Kurutta's battlefield,
+    Kurutta among them, since a targeted Yu reaches only that battlefield (ShE datasheet, The Yu
+    Trait)."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    targets = tuple(
+        card.id
+        for card in units_at(ctx.game, battlefield, ctx.card.owner)
+        if has_keyword(ctx.game, card, keywords.DEATHSEEKER)
+    )
+    return [Choose(ctx.card.owner, targets, 1, 1, "matsu_kurutta", ctx.card.id)] if targets else []
+
+
+register_yu("matsu_kurutta", _matsu_kurutta_yu)
+
+
+@choice_resolver("matsu_kurutta", prompt="Choose your Deathseeker to give a +1F token")
+def _resolve_matsu_kurutta(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [AdjustCounter(chosen[0], KURUTTA_TOKEN, 1)]
 
 
 # --- Millet Farm ---

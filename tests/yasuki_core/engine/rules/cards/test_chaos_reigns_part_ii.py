@@ -33,6 +33,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.battle.resolution import assignment_candidates
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
+from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -702,3 +703,28 @@ def test_burnt_offering_gives_chi_while_you_control_a_ring():
     monk = _offer(session, "helm")
 
     assert effective_chi(session.game, monk) == 3 + 2
+
+
+# --- Matsu Kurutta ---
+
+
+def test_matsu_kurutta_gives_a_deathseeker_at_his_battlefield_a_force_token_as_he_dies():
+    units = [
+        personality("attacker", force=5),
+        personality(
+            "kurutta", owner=PlayerId.P2, printed_id="matsu_kurutta", keywords=("Deathseeker",)
+        ),
+        personality("comrade", owner=PlayerId.P2, keywords=("Deathseeker",)),
+        personality("at_home", owner=PlayerId.P2, keywords=("Deathseeker",)),
+    ]
+    game = combat_segment(units, {"attacker": 0}, {"kurutta": 0, "comrade": 0}).game
+    comrade = game.table.cards_by_id["comrade"]
+    force = effective_force(game, comrade)
+
+    resolve_effects(game, [Destroy("kurutta", PlayerId.P1)])
+    assert game.pending.seat is PlayerId.P2
+    assert set(game.pending.candidates) == {"kurutta", "comrade"}
+    submit(game, DecisionResponse(("comrade",)))
+
+    assert comrade.counters == {"plus1f": 1}
+    assert effective_force(game, comrade) == force + 1
