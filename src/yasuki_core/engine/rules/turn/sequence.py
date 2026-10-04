@@ -241,8 +241,9 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
     if not passed and game.additional_action is game.round.priority:
         # The seat keeps the opportunity, and its consecutive-pass count starts again, so a pass
         # taken at the additional opportunity does not count toward closing the round.
+        game.round = replace(game.round, passes=0, follow_ups=game.additional_follow_ups)
         game.additional_action = None
-        game.round = replace(game.round, passes=0)
+        game.additional_follow_ups = None
         return
     seats = list(game.table.seats)
     passes = game.round.passes + 1 if passed else 0
@@ -255,7 +256,7 @@ def yield_priority(game: GameState, *, passed: bool) -> None:
         # A step is the exception: it opened only because a seat held an Interrupt or a Response,
         # and a seat holding none is a pass nobody needs to be asked for.
         if permitted_timings(game, seat) and _holds_a_step_action(game, seat):
-            game.round = replace(game.round, priority=seat, passes=passes)
+            game.round = replace(game.round, priority=seat, passes=passes, follow_ups=None)
             return
         passes += 1
     if game.round.kind in ROUNDS_OVER_HELD_WORK:

@@ -41,6 +41,12 @@ whether to decline a window is the seat's own call, and auto-passing on its beha
 policy owns rather than a rule of the round. A step is the exception, because each one opened only
 because some seat held an Interrupt or a Response, so a seat holding none is skipped there too.
 
+An {class}`~.AdditionalAction` keeps the opportunity with its seat once the action now resolving is
+done, and the pass count starts again (CR, Additional Action). One limited to some follow-ups, as
+"take an additional Battle from your target Ring" is, sets the round's `follow_ups`, and
+{func}`~.legal_actions` then offers only those and a pass. The limit is dropped as the opportunity
+passes on.
+
 The Action Sequence's two windows are rounds over the round the action was taken in.
 {func}`~yasuki_core.engine.rules.interrupts.open_interrupt_window` opens the Interrupt step (D)
 once the action's targets are chosen and its effects held, and {func}`~.open_response_window`

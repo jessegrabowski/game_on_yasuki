@@ -122,18 +122,19 @@ def legal_actions(game: GameState, seat: PlayerId) -> list[Action]:
     pending and for any seat but the active one.
 
     Gold is not a free action: it is produced only while paying a cost (rules-skeleton section 7),
-    so it surfaces through a cost's ``ChoosePayment``, never here.
+    so it surfaces through a cost's ``ChoosePayment``, never here. An additional action limited to
+    some follow-ups offers only those.
     """
     if not _may_act(game, seat):
         return []
-    return [
-        Pass(),
+    available = [
         *_abilities(game, seat),
         *_equips(game, seat),
         *_strategies(game, seat),
         *_declare_attack(game, seat),
         *_interrupts(game, seat),
     ]
+    return [Pass(), *(action for action in available if _follows_up(game, action))]
 
 
 def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
@@ -147,6 +148,8 @@ def is_legal(game: GameState, seat: PlayerId, action: Action) -> bool:
     match action:
         case Pass():
             return True
+        case _ if not _follows_up(game, action):
+            return False
         case ActivateAbility(card_id=card_id):
             return action in _abilities(game, seat, only=card_id)
         case Equip(card_id=card_id):
@@ -169,6 +172,13 @@ def _interrupts(game: GameState, seat: PlayerId) -> list[Action]:
     if not permits(game, seat, ActionTiming.INTERRUPT):
         return []
     return interrupt_actions(game, seat)
+
+
+def _follows_up(game: GameState, action: Action) -> bool:
+    """Whether ``action`` is one the open opportunity may be spent on: any, unless it is an
+    additional action limited to some follow-ups (CR, Additional Action)."""
+    follow_ups = game.round.follow_ups
+    return follow_ups is None or action in follow_ups
 
 
 def _may_act(game: GameState, seat: PlayerId) -> bool:

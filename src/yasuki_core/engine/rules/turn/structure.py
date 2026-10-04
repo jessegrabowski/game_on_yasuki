@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import Action, ActionTiming
 from yasuki_core.engine.rules.vocabulary.segments import (
     BattleSegment,
     Boundary,
@@ -112,12 +112,17 @@ class ActionRound:
         How many seats have passed in a row. Default 0.
     kind : RoundKind
         What sort of round this is, which decides how it closes. Default ``RoundKind.PHASE``.
+    follow_ups : frozenset of Action or None
+        The actions the seat holding priority may spend an additional action on, as "take an
+        additional Battle from your target Ring" limits it, or None when the opportunity is not
+        limited. Dropped as the opportunity passes on. Default None.
     """
 
     timings: RoundTimings
     priority: PlayerId
     passes: int = 0
     kind: RoundKind = RoundKind.PHASE
+    follow_ups: frozenset[Action] | None = None
 
 
 # What each battle segment that is an Action Round permits. Both are open to every seat and permit
