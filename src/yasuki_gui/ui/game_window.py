@@ -351,6 +351,7 @@ class GameWindow:
         for panel in (self.opponent_panel, self.human_panel):
             panel.on_deck_click = presenter.on_deck_activated
         self.look_view.on_card_click = presenter.on_look_card_clicked
+        self.card_strip.on_card_click = presenter.on_card_activated
         self.root.bind("<Control-z>", presenter.undo)
         self.root.bind("<Escape>", presenter.cancel_via_escape)
 

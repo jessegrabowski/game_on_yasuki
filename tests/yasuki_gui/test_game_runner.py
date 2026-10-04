@@ -62,6 +62,12 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_gui.services import game_runner as game_runner_module
 from yasuki_gui.services.game_runner import GameRunner
+from yasuki_core.engine.rules.cards.shattered_empire import ENLIGHTENED_PATH_COPY
+from tests.yasuki_core.engine.rules.cards.test_shattered_empire import (
+    ENLIGHTENED_PATH,
+    _ring,
+    _ring_battle,
+)
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer, FAVOR_PAYERS
 from yasuki_core.engine.rules.effects import TakeFavor
 
@@ -1313,3 +1319,17 @@ def test_a_rivals_favor_proxy_offers_the_human_nothing():
         assert game_runner.favor_menu(rivals_proxy) == []
     finally:
         FAVOR_PAYERS.pop("test_favor_payer", None)
+
+
+def test_a_ring_in_the_discard_pile_offers_the_enlightened_paths_follow_up():
+    session = _ring_battle(
+        in_play=(stronghold(PlayerId.P1, printed_id=ENLIGHTENED_PATH),),
+        discarded=(_ring("fire", "ring_of_fire"),),
+    )
+    runner = GameRunner(session, PlayerId.P1)
+    runner.act(ActivateAbility("P1-SH"))
+    runner.submit(DecisionResponse(("fire",)))
+
+    offered = [action for _, action in runner.ability_menu("fire")]
+
+    assert offered == [ActivateAbility("fire", ENLIGHTENED_PATH_COPY)]

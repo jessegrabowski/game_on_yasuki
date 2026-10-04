@@ -286,3 +286,19 @@ def test_a_pile_opened_again_comes_up_over_a_panel_opened_since(window):
 
     stacking = window.field.winfo_children()
     assert stacking.index(window.card_strip) > stacking.index(window.battle_view)
+
+
+def test_a_click_on_a_pile_card_asks_the_presenter_what_it_can_do(window):
+    called = []
+
+    class _Presenter:
+        def __getattr__(self, name):
+            return lambda *args: called.append((name, args))
+
+    window.bind_to(_Presenter())
+    window.show_cards([personality("hida")], "Fate Discard")
+    left, top, right, bottom = window.card_strip.canvas.bbox("card:hida")
+
+    window.card_strip._on_click(DummyEventNamespace(x=(left + right) // 2, y=(top + bottom) // 2))
+
+    assert called == [("on_card_activated", ("hida",))]
