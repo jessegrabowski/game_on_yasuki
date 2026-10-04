@@ -7,7 +7,7 @@ from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.costs import can_pay, priced_cost
 from yasuki_core.engine.rules.abilities.activation import ResolveAbility
 from yasuki_core.engine.rules.abilities.model import CardLocation, Interrupt, InterruptLimit
-from yasuki_core.engine.rules.abilities.registry import ability_for, interrupt_for, interrupts_for
+from yasuki_core.engine.rules.abilities.registry import ability_for, interrupts_for
 from yasuki_core.engine.rules.abilities.strategy import play_strategy_with
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
@@ -105,16 +105,17 @@ class Replacement:
         contents read the board: a substituted :class:`~.ResolveAbility` is built against its new
         target then, so the forecast and the resolution read one object. Used while the effect
         still stands as bound. Default None, asked of the card as the effect comes up.
-    interrupt_key : str, optional
-        The key of the Interrupt taken, for one a keyword conferred. Default None, the card's
-        printed Interrupt.
+    interrupt : :class:`~yasuki_core.engine.rules.abilities.model.Interrupt`, optional
+        The Interrupt taken, kept as it was taken, so one a grant or a keyword gave answers as its
+        effect comes up even after the grant has lapsed or the keyword is gone. Default None, for
+        one whose replacement was settled when it was taken.
     """
 
     bound: Effect
     card_id: str
     target_id: str | None = None
     replacement: Effect | None = None
-    interrupt_key: str | None = None
+    interrupt: Interrupt | None = None
 
     def answers(self, effect: Effect) -> bool:
         return effect == self.bound
@@ -122,14 +123,13 @@ class Replacement:
     def apply(self, game: GameState, effect: Effect) -> Effect:
         if self.replacement is not None and effect == self.bound:
             return self.replacement
+        if self.interrupt is None:
+            raise RuntimeError(f"{self.card_id}'s answer to {effect.describe()} was never settled")
         card = game.table.cards_by_id[self.card_id]
-        interrupt = interrupt_for(card, self.interrupt_key)
-        if interrupt is None:
-            raise RuntimeError(f"{self.card_id} has no Interrupt {self.interrupt_key!r} to apply")
         if self.target_id is None:
-            return interrupt.interrupt(game, card, effect).replacement
+            return self.interrupt.interrupt(game, card, effect).replacement
         target = game.table.cards_by_id[self.target_id]
-        return interrupt.interrupt(game, card, effect, target).replacement
+        return self.interrupt.interrupt(game, card, effect, target).replacement
 
 
 def _unique(effects: Iterable[Effect]) -> list[Effect]:
@@ -425,7 +425,7 @@ def _play(
         if interrupt.answers_every:
             bound = answered_by(game, card, interrupt, foreseen)
             game.modifications.extend(
-                Replacement(bound=each, card_id=card.id, target_id=target_id, interrupt_key=key)
+                Replacement(bound=each, card_id=card.id, target_id=target_id, interrupt=interrupt)
                 for each in bound
             )
         elif interruption.replacement != effect:
@@ -435,7 +435,7 @@ def _play(
                     card_id=card.id,
                     target_id=target_id,
                     replacement=_settled(game, interruption.replacement),
-                    interrupt_key=key,
+                    interrupt=interrupt,
                 )
             )
     if _plays_card(interrupt, location):
