@@ -22,7 +22,11 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
-from yasuki_core.engine.rules.vocabulary.decisions import ChooseOption, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseAbilityTarget,
+    ChooseOption,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, PutIntoPlay
@@ -1165,35 +1169,71 @@ def _fate_discard(session: EngineSession, seat: PlayerId) -> set[str]:
     return {card.id for card in pile.cards}
 
 
-def test_ring_of_air_straightens_two_bowed_cards_of_one_unit():
+def _ring_of_air_unit_game() -> EngineSession:
+    """P1 holding the Ring, a bowed Personality carrying a bowed Follower, and a second bowed
+    Personality in a unit of his own."""
     state = TableState.empty_two_seat()
     put_in_play(state, register(state, stronghold(P1)))
     put_in_play(state, personality("samurai"))
     attached(state, attachment("guard", attachment_type=AttachmentType.FOLLOWER), "samurai")
+    put_in_play(state, personality("other"))
     put_in_play(state, register(state, _ring("air", "ring_of_air")))
     session = EngineSession.start(state, P1)
-    for card_id in ("samurai", "guard"):
+    for card_id in ("samurai", "guard", "other"):
         session.game.table.cards_by_id[card_id].bow()
+    return session
+
+
+def test_ring_of_air_straightens_two_bowed_cards_of_one_unit():
+    session = _ring_of_air_unit_game()
 
     session.act(P1, ActivateAbility("air", "air"))
-    _answer_until_settled(session, "samurai", "guard")
+    session.submit(P1, DecisionResponse(("samurai", "guard")))
 
     cards = session.game.table.cards_by_id
     assert not cards["samurai"].bowed and not cards["guard"].bowed
     assert cards["air"].bowed
 
 
-def test_ring_of_air_offers_a_second_card_only_from_the_targets_unit():
-    session = _ring_game(personality("samurai"), personality("other"), _ring("air", "ring_of_air"))
-    for card_id in ("samurai", "other"):
-        session.game.table.cards_by_id[card_id].bow()
+def test_ring_of_air_asks_for_both_cards_before_either_straightens():
+    session = _ring_of_air_unit_game()
 
     session.act(P1, ActivateAbility("air", "air"))
-    _answer_until_settled(session, "samurai")
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseAbilityTarget)
+    assert (pending.minimum, pending.maximum) == (1, 2)
+    assert session.game.table.cards_by_id["samurai"].bowed
+    # Both cards of the unit stay on offer after the first is picked, and the other unit does not.
+    assert set(pending.selectable(DecisionResponse(("samurai",)))) == {"samurai", "guard"}
+    assert pending.accepts(DecisionResponse(("samurai", "other"))) is False
+
+
+def test_ring_of_air_asks_for_its_targets_without_restating_the_count():
+    # The prompt composes the count, so a targeting message that spells it out again reads "Target
+    # 1 to 2 of one or two of your bowed cards".
+    session = _ring_of_air_unit_game()
+
+    session.act(P1, ActivateAbility("air", "air"))
+
+    assert session.game.pending.prompt().startswith("Target 1 to 2 of your bowed cards in one unit")
+
+
+def test_ring_of_air_straightens_one_card_of_a_unit_of_one():
+    session = _ring_of_air_unit_game()
+
+    session.act(P1, ActivateAbility("air", "air"))
+    session.submit(P1, DecisionResponse(("other",)))
 
     cards = session.game.table.cards_by_id
-    assert not cards["samurai"].bowed
-    assert cards["other"].bowed
+    assert not cards["other"].bowed
+    assert cards["samurai"].bowed and cards["guard"].bowed
+
+
+def test_ring_of_air_is_not_offered_with_nothing_bowed_to_straighten():
+    session = _ring_game(personality("samurai"), _ring("air", "ring_of_air"))
+
+    assert ActivateAbility("air", "air") not in session.legal_actions(P1)
 
 
 def test_ring_of_air_pitched_from_hand_straightens_one_and_is_discarded():
