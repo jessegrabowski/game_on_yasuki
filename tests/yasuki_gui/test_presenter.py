@@ -58,6 +58,11 @@ from yasuki_gui.ui.game_window import GameWindow
 from yasuki_core.game_pieces.constants import AttachmentType
 
 from tests.yasuki_core.engine.rules.test_interrupts import DEFENDER, _fear_announced
+from tests.yasuki_core.engine.rules.cards.test_shattered_empire import (
+    ENLIGHTENED_PATH,
+    _ring,
+    _ring_battle,
+)
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
@@ -70,6 +75,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    stronghold,
 )
 
 P1 = PlayerId.P1
@@ -2104,3 +2110,26 @@ def test_a_duel_still_being_focused_offers_no_continue(board):
 
     assert window.duel_view.place_info()
     assert not window.duel_view.canvas.find_withtag("duel-continue")
+
+
+def test_the_prompt_names_the_card_granting_a_follow_up_and_declining_it_reshuffles_the_ring():
+    session = _ring_battle(
+        in_play=(stronghold(P1, printed_id=ENLIGHTENED_PATH),),
+        discarded=(_ring("air", "ring_of_air"),),
+    )
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    try:
+        presenter.act(ActivateAbility("P1-SH"))
+        presenter.submit_answer(("air",))
+
+        assert _status(window) == "Follow-up action from SH"
+        assert _buttons(window) == ["Decline follow-up action"]
+
+        window.prompt_box._buttons[0].invoke()
+
+        fate = session.game.table.decks[DeckKey(P1, Side.FATE)].cards
+        assert [card.id for card in fate] == ["air"]
+    finally:
+        window.root.destroy()

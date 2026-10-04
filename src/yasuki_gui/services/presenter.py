@@ -328,6 +328,13 @@ class Presenter:
             if runner.can_cancel():
                 board_buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(answer), board_buttons
+        source = runner.follow_up_source()
+        if source is not None:
+            # An additional action: name the card that granted it, and word the pass as turning it
+            # down, whether or not anything it allows can be taken right now.
+            return f"Follow-up action from {source.name}", [
+                ("Decline follow-up action", lambda: self.act(Pass()), True)
+            ]
         if view.responding_to is not None:
             # A Response Step: say what is being answered, or the Pass button asks the seat to
             # decline something it was never told the name of.
