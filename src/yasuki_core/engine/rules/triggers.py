@@ -701,7 +701,10 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     """
     if not game.ongoing:
         return
-    on_table = {card.id for card in game.table.battlefield.cards}
+    # A card announced from hand stands in the area a card entering play waits in while its costs
+    # are checked and paid (CR, Entering-Play Areas), so what was laid on it then, an Invest among
+    # them, reaches play with it.
+    on_table = {card.id for card in game.table.battlefield.cards} | game.announced_from_hand
     for key, zone in game.table.zones.items():
         if key.role in (ZoneRole.PROVINCE, ZoneRole.FOCUS):
             on_table.update(card.id for card in zone.cards)

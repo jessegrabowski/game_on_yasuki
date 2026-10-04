@@ -170,9 +170,9 @@ class GameState:
         them: the target a seat chose, or every card an untargeted ability reached. A card picked
         inside a later question is not among them. Ephemeral and rebuilt by replay. Default empty.
     amount_declared : int or None
-        The amount the action now resolving declared for a variable cost, its :X:, which the
-        ability's targets and effects read. None outside one, or for an action that declared none.
-        Ephemeral and rebuilt by replay. Default None.
+        The amount the action now resolving declared when it was asked for one, such as a variable
+        cost's :X:, which the ability's targets and effects read. None outside one, or for an action
+        that declared none. Ephemeral and rebuilt by replay. Default None.
     action_is_favor : bool
         Whether the action now resolving has paid a Favor cost, which is what makes it a Favor
         action. Settled during payment rather than at announcement, because an action with an

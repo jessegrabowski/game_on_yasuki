@@ -41,8 +41,8 @@ to spend, and the answer decides what the card can reach:
 ```
 
 An amount printed in the cost block, a :X:, is paid at step B and shapes the targets chosen at
-step C (CR, Action Sequence). {func}`~.declare_amount` asks it, and its answer does nothing but
-record the amount as the action's `amount_declared`. The ability sets `targets_after_cost`, so its
+step C (CR, Action Sequence). {func}`~.declare_amount` asks it, and its answer is charged and
+recorded as the action's `amount_declared`. The ability sets `targets_after_cost`, so its
 `targets` are read once the cost is paid, and they and its `effects` read `game.amount_declared`:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/cards/lotus_edition.py

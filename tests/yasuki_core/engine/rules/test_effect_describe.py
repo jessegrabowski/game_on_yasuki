@@ -67,6 +67,7 @@ from yasuki_core.engine.rules.effects import (
     GrantLobbyBonus,
     GrantProvinceStrength,
     GrantModifier,
+    Invest,
     PayFavorCost,
     PutIntoPlay,
     SpendOncePerTurn,
@@ -271,6 +272,7 @@ EFFECTS = [
         "move farm_1 into P2's fate deck, 3 from top",
     ),
     (Recruit("holding_1", ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)), "recruit holding_1"),
+    (Invest("holding_1", 2), "invest 2 in holding_1"),
     (RecruitCard("holding_1"), "recruit holding_1 out of sequence"),
     (
         RecruitCard("holding_1", renew=True),

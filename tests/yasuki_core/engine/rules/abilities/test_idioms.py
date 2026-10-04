@@ -14,7 +14,8 @@ from yasuki_core.engine.rules.abilities.idioms import (
 )
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import abilities_for
-from yasuki_core.engine.rules.effects import AskAmount, GainHonor, PayGold
+from yasuki_core.engine.rules.abilities.costs import declare_amount, declared_gold_discount
+from yasuki_core.engine.rules.effects import GainHonor, PayGold
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.triggers import fire
 from yasuki_core.engine.rules.turn.action_sequence import submit
@@ -265,13 +266,7 @@ def _variable_cost_game(ability_keywords, fixed_gold):
         timings=(ActionTiming.OPEN,),
         cost=lambda game, source: [
             *([PayGold(source.owner, fixed_gold, "probe")] if fixed_gold else []),
-            AskAmount(
-                source.owner,
-                tuple(range(declarable_gold(game, source) + 1)),
-                "How much?",
-                "variable_probe",
-                source.id,
-            ),
+            declare_amount(source, tuple(range(declarable_gold(game, source) + 1)), "How much?"),
         ],
         targets=itself,
         effects=lambda game, source, target: [],
@@ -293,7 +288,7 @@ def test_a_variable_cost_reads_the_keywords_printed_on_its_ability(
     with probe_ability("variable_probe", ability):
         (asked,) = ability.discounted_cost(game, source, plays_card=False)
 
-    assert asked.discount == discount
+    assert declared_gold_discount(asked) == discount
     assert max(asked.amounts) == most
 
 
@@ -303,5 +298,5 @@ def test_fixed_gold_spends_the_discount_before_a_variable_amount_in_the_same_cos
     with probe_ability("variable_probe", ability):
         (asked,) = ability.discounted_cost(game, source, plays_card=False)
 
-    assert asked.discount == 0
+    assert declared_gold_discount(asked) == 0
     assert max(asked.amounts) == 5

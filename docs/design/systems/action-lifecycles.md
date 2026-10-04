@@ -42,10 +42,10 @@ What is on the stack, and what each continues:
 
 - `ResolveRecruit` in `rulebook/recruit.py`: a Recruit after its payment, which hands the card's
   before-entry effects and a {class}`~.effects.Recruit` effect to the action's Interrupt step. The
-  effect's arrival is followed by its Sincerity tokens removed, its Invest, a Proclaim's gain and
-  the refill. `SelectEquipTarget` in `rulebook/equip.py` is an Equip's target choice, deferred behind
-  its payment, and `FinishInvest` its Invest, deferred behind the announcement that it entered
-  play.
+  effect's arrival is followed by its Sincerity tokens removed, a Proclaim's gain and the refill.
+  `SelectEquipTarget` in `rulebook/equip.py` is an Equip's target choice, deferred behind its
+  payment. An Invest needs no step of its own: it raises the card's Gold Cost before the payment,
+  and {func}`~.resolve_invest` answers the card's entry.
 - `ResolveStrategy` and `DiscardPlayed` in `abilities/strategy.py`: a played Strategy's ability,
   then its discard. `SelectAbilityTarget` and `ApplyAbilityEffects` in `abilities/activation.py`:
   an ability's targeting or its untargeted effects, deferred behind its cost.

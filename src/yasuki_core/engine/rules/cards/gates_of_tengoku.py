@@ -1,8 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.costs import declare_amount
 from yasuki_core.engine.rules.abilities.idioms import (
     declarable_gold,
-    declare_amount,
     register_event_entry,
 )
 from yasuki_core.engine.rules.abilities.model import (

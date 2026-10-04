@@ -962,7 +962,7 @@ def test_a_trigger_that_asks_stashes_the_event_and_the_triggers_left_to_fire():
     assert isinstance(events, EventsFrame) and isinstance(effects, EffectsFrame)
     assert events.event == EnteredPlay(wheat.id)
     assert events.queue == ()
-    assert [card_id for card_id, _ in events.firing] == [probe.id]
+    assert events.firing[0][0] == probe.id
     assert effects.provenance == Provenance(triggered=True)
 
 

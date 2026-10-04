@@ -2,6 +2,7 @@ from dataclasses import replace
 
 from yasuki_core.engine.registrar import FlagRegistry
 from collections.abc import Callable
+from typing import TypeGuard
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
@@ -94,8 +95,8 @@ def priced_cost(game: GameState, purchase: Purchase, effects: list[Effect]) -> l
     """A cost's ``effects`` with what is left of ``purchase``'s discount spent once across them.
 
     The fixed Gold payments take it first, and a payment discounted to nothing is not asked for.
-    A variable amount carries what remains, and keeps on offer only the amounts the seat can still
-    pay once the fixed Gold is paid.
+    A declared amount of Gold carries what remains. An amount the cost asks for keeps on offer only
+    the amounts whose Gold the seat can still pay once the fixed Gold is paid.
     """
     if not any(isinstance(effect, PayGold | AskAmount) for effect in effects):
         return list(effects)
@@ -111,22 +112,72 @@ def priced_cost(game: GameState, purchase: Purchase, effects: list[Effect]) -> l
         priced.append(effect)
     if not any(isinstance(effect, AskAmount) for effect in priced):
         return priced
-    fixed = sum(effect.amount for effect in priced if isinstance(effect, PayGold))
+    fixed = gold_charged(priced)
     budget = reachable_gold(game, purchase.seat) - fixed
     return [
-        replace(
-            effect,
-            discount=discount,
-            amounts=tuple(
-                amount
-                for amount in effect.amounts
-                if max(0, amount - discount) + effect.alongside <= budget
-            ),
-        )
+        _within(game, _discounted(effect, discount), budget)
         if isinstance(effect, AskAmount)
         else effect
         for effect in priced
     ]
+
+
+def _discounted(effect: AskAmount, discount: int) -> AskAmount:
+    if not is_declared_gold(effect) or not discount:
+        return effect
+    return replace(effect, resolver_context=(str(discount),))
+
+
+def _within(game: GameState, effect: AskAmount, budget: int) -> AskAmount:
+    """``effect`` offering only the amounts whose Gold comes to ``budget`` or less."""
+    amounts = tuple(
+        amount for amount in effect.amounts if gold_charged(effect.answered(game, amount)) <= budget
+    )
+    return replace(effect, amounts=amounts)
+
+
+def gold_charged(effects: list[Effect]) -> int:
+    """The Gold ``effects`` charge in fixed payments."""
+    return sum(effect.amount for effect in effects if isinstance(effect, PayGold))
+
+
+DECLARED_AMOUNT = "declared_amount"
+
+
+def declare_amount(source: L5RCard, amounts: tuple[int, ...], question: str) -> AskAmount:
+    """The :X: in ``source``'s cost block: ask its controller which of ``amounts`` of Gold to
+    spend, and charge it. The answer is the action's ``amount_declared``, which the ability's
+    targets and effects read (CR, Action Sequence step B). Its resolver context holds the action's
+    discount on it, which :func:`priced_cost` sets."""
+    return AskAmount(source.owner, amounts, question, DECLARED_AMOUNT, source.id)
+
+
+def is_declared_gold(effect: Effect) -> TypeGuard[AskAmount]:
+    """Whether ``effect`` asks for an amount of Gold that the answer charges."""
+    return isinstance(effect, AskAmount) and effect.resolver == DECLARED_AMOUNT
+
+
+def declared_gold_discount(effect: AskAmount) -> int:
+    """The Gold the action's discount takes off the amount ``effect`` asks for."""
+    return _discount_in(effect.resolver_context)
+
+
+def _discount_in(resolver_context: tuple[str, ...]) -> int:
+    return int(resolver_context[0]) if resolver_context else 0
+
+
+@choice_resolver(DECLARED_AMOUNT)
+def _charge_declared_amount(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """Charge the declared amount less the action's discount, a charge of nothing not asked for."""
+    charged = max(0, int(chosen[0]) - _discount_in(resolver_context))
+    source = game.table.cards_by_id[source_id]
+    return [PayGold(seat, charged, source.name)] if charged else []
 
 
 def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:

@@ -384,7 +384,7 @@ class InvestAbility:
         ("Invest :g1: to :g3:") or as separate prices that buy different things ("Invest :g2: or
         :g6:").
     effect : callable
-        Maps ``(game, source_card, amount_declared)`` to the effects the Invest emits once the card
+        Maps ``(game, source_card, invested)`` to the effects the Invest emits once the card
         enters play. It takes the board because an Invest may search a zone for what it fetches.
     """
 

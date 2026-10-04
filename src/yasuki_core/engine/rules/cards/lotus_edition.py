@@ -2,7 +2,8 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.rules.abilities.idioms import declarable_gold, declare_amount
+from yasuki_core.engine.rules.abilities.costs import declare_amount
+from yasuki_core.engine.rules.abilities.idioms import declarable_gold
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
 from yasuki_core.engine.rules.effects import Destroy, Effect, GainHonor
 from yasuki_core.engine.rules.state import GameState

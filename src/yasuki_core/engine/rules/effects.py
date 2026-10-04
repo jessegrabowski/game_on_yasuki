@@ -38,12 +38,14 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ProvinceDestroyed,
     GameEvent,
     HonorChanged,
+    Invested,
     Rehonored,
     Revealed,
     Straightened,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
+    Duration,
     CompassionGrant,
     Condition,
     ConditionalModifier,
@@ -828,6 +830,37 @@ class GrantModifier(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class Invest(Effect):
+    """Invest ``amount`` in ``card_id`` before its entry into play is paid for: permanently raise
+    its Gold Cost by that much, and announce the Invest for what it buys once the card has entered
+    play (CR, Invest).
+
+    Attributes
+    ----------
+    card_id : str
+        The card Invested in.
+    amount : int
+        The Gold Invested. A free Invest is an amount of zero, and is still an Invest.
+    """
+
+    card_id: str
+    amount: int
+
+    @property
+    def subject_id(self) -> str:
+        return self.card_id
+
+    def describe(self) -> str:
+        return f"invest {self.amount} in {self.card_id}"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(
+            Modifier(self.card_id, self.card_id, Stat.GOLD_COST, self.amount, Duration.PERMANENT)
+        )
+        return [Invested(self.card_id, self.amount)]
+
+
+@dataclass(frozen=True, slots=True)
 class GrantConditionalModifier(Effect):
     """Record a continuous stat modifier on every card meeting ``condition``: the ``source`` card
     grants a change of ``amount`` to ``stat`` for ``duration`` to whichever cards satisfy it at
@@ -1569,35 +1602,27 @@ class PayGold(InterruptingEffect):
 
 @dataclass(frozen=True, slots=True)
 class AskAmount(InterruptingEffect):
-    """Pause for the seat to say how much Gold it spends on a variable cost, then hand the amount to
-    a resolver.
+    """Pause for the seat to name one of ``amounts``, record it as the amount the action declares,
+    and hand it to a resolver, which says what the amount does.
 
-    The ``:X:`` in a cost block: the amount is settled during the Pay Costs step and everything the
-    action does is shaped by it (CR, Action Sequence, Good Faith). The seat declares the amount, the
-    engine charges it less ``discount``, and the resolver reads the amount declared.
+    The ``:X:`` in a cost block is one: :func:`~.declare_amount` asks it with a resolver that
+    charges the Gold (CR, Action Sequence, Good Faith). One amount on offer is nothing to choose,
+    so nothing is asked.
 
     Attributes
     ----------
     seat : PlayerId
-        The seat choosing and paying.
+        The seat choosing.
     amounts : tuple of int
-        The amounts on offer, which the caller narrows to what the seat can declare and what would
-        leave the action something legal to do. Pricing the cost narrows them to what the seat can
-        pay.
+        The amounts on offer.
     question : str
         What the amount is for, as the seat reads it.
     resolver : str
         The registered choice resolver the chosen amount is handed to.
     source_id : str
-        The card charging the cost.
-    discount : int, optional
-        The Gold the action's discount takes off the declared amount: what is left of it once the
-        cost's fixed Gold has taken its share. Default 0.
-    alongside : int, optional
-        Fixed Gold charged in the same payment as the declared amount, as a Recruit pays a card's
-        Gold Cost together with the Invest its payer sizes. Default 0.
-    target_id : str or None, optional
-        The card the payment is for, as :class:`~.PayGold` names it. Default None.
+        The card asking.
+    resolver_context : tuple of str, optional
+        What the cost settled before asking, carried through to the resolver. Default empty.
     """
 
     seat: PlayerId
@@ -1605,9 +1630,7 @@ class AskAmount(InterruptingEffect):
     question: str
     resolver: str
     source_id: str
-    discount: int = 0
-    alongside: int = 0
-    target_id: str | None = None
+    resolver_context: tuple[str, ...] = ()
 
     def describe(self) -> str:
         return f"{self.seat.name} is asked: {self.question}"
@@ -1625,17 +1648,15 @@ class AskAmount(InterruptingEffect):
         return []
 
     def follow_on(self, game: GameState) -> tuple[Effect, ...]:
-        return tuple(
-            declared_amount_effects(
-                game,
-                self.seat,
-                self.amounts[0],
-                discount=self.discount,
-                alongside=self.alongside,
-                target_id=self.target_id,
-                resolver=self.resolver,
-                source_id=self.source_id,
-            )
+        return tuple(self.answered(game, self.amounts[0]))
+
+    def answered(self, game: GameState, amount: int) -> list[Effect]:
+        """What naming ``amount`` resolves, as the resolver makes it of the board as it stands."""
+        from yasuki_core.engine.rules.triggers import resolve_choice
+
+        chosen = (str(amount),)
+        return resolve_choice(
+            game, self.resolver, self.source_id, chosen, self.seat, self.resolver_context
         )
 
     def request(self, game: GameState) -> DecisionRequest:
@@ -1645,32 +1666,8 @@ class AskAmount(InterruptingEffect):
             question=self.question,
             resolver=self.resolver,
             source_id=self.source_id,
-            discount=self.discount,
-            alongside=self.alongside,
-            target_id=self.target_id,
+            resolver_context=self.resolver_context,
         )
-
-
-def declared_amount_effects(
-    game: GameState,
-    seat: PlayerId,
-    declared: int,
-    *,
-    discount: int,
-    alongside: int,
-    target_id: str | None,
-    resolver: str,
-    source_id: str,
-) -> list[Effect]:
-    """What declaring ``declared`` for a variable Gold cost resolves: the declared amount less
-    ``discount`` charged with ``alongside``, a charge of nothing not asked for, then what the
-    resolver makes of the amount."""
-    from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS
-
-    charged = max(0, declared - discount) + alongside
-    source = game.table.cards_by_id[source_id]
-    payment = [PayGold(seat, charged, source.name, target_id=target_id)] if charged else []
-    return [*payment, *CHOICE_RESOLVERS[resolver](game, source_id, (str(declared),), seat)]
 
 
 @dataclass(frozen=True, slots=True)
@@ -2458,15 +2455,15 @@ class RecruitCard(InterruptingEffect):
         from yasuki_core.engine.rules.rulebook.recruit import announce_recruit
 
         card = game.table.cards_by_id[self.card_id]
-        return announce_recruit(game, card, card.owner, invest_amount=None, renew=self.renew)
+        return announce_recruit(game, card, card.owner, renew=self.renew)
 
 
 @dataclass(frozen=True, slots=True)
 class Recruit(Effect):
     """Bring ``card_id`` into play as a Recruit, in its entry state and with a Fortification
     attached to a Province (CR, Recruit). What its arrival is followed by resolves behind the
-    reactions to it: its Sincerity tokens are removed, its Invest resolves, a Proclaim adds its
-    Personal Honor, and the Province it left is refilled.
+    reactions to it: its Sincerity tokens are removed, a Proclaim adds its Personal Honor, and the
+    Province it left is refilled.
 
     A card put into play is not Recruited, and only this effect's arrival reports ``recruited``.
 
@@ -2480,9 +2477,6 @@ class Recruit(Effect):
     fortifies : ZoneKey or None, optional
         The Province a Fortification Recruited from anywhere else attaches to, as its controller
         chose (CR, Fortification). Default None.
-    invest_amount : int or None, optional
-        The Gold Invested while recruiting, or None when the Recruit took no Invest. A free Invest is
-        an amount of zero. Default None.
     renew : bool, optional
         Whether the vacated Province refills face-up whatever the card's own Renew keyword says.
         Default False.
@@ -2493,7 +2487,6 @@ class Recruit(Effect):
     card_id: str
     from_province: ZoneKey | None
     fortifies: ZoneKey | None = None
-    invest_amount: int | None = None
     renew: bool = False
     proclaim: bool = False
 

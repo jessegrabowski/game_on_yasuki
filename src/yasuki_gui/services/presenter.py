@@ -297,8 +297,8 @@ class Presenter:
                 for name in pending.candidates
             ]
         if isinstance(pending, ChooseAmount):
-            # The seat names its own amount for a variable Gold cost, so the panel carries a spinner
-            # over the amounts and one button that spends what it reads.
+            # The seat names an amount, which can run as high as it can raise, so the panel carries a
+            # spinner over the amounts and one button that answers with what it reads.
             return pending.prompt(), [
                 ("Spend", self.submit_amount, True),
                 ("Cancel", self.cancel, True),

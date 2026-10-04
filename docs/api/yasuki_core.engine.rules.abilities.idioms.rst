@@ -11,7 +11,6 @@ yasuki_core.engine.rules.abilities.idioms
     ask_whose_honor_moves
     clan_player
     declarable_gold
-    declare_amount
     enemy_units_ever_present
     one_wealth
     plays_clan

@@ -2,9 +2,9 @@ from collections.abc import Callable, Iterator
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import payable
+from yasuki_core.engine.rules.abilities.costs import gold_charged, payable
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, use_tags
-from yasuki_core.engine.rules.effects import AskAmount, PayGold
+from yasuki_core.engine.rules.effects import AskAmount
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
     ability_for,
@@ -277,12 +277,11 @@ def _ability_named(game: GameState, card: L5RCard, key: str | None) -> Ability:
 
 def _ability_gold(game: GameState, card: L5RCard, ability: Ability) -> tuple[int, ...]:
     costs = ability.discounted_cost(game, card, plays_card=False)
-    fixed = sum(cost.amount for cost in costs if isinstance(cost, PayGold))
-    declared = next((cost for cost in costs if isinstance(cost, AskAmount)), None)
-    if declared is None:
+    fixed = gold_charged(costs)
+    asked = next((cost for cost in costs if isinstance(cost, AskAmount)), None)
+    if asked is None:
         return (fixed,)
-    paid = fixed + declared.alongside
-    return tuple(paid + max(0, amount - declared.discount) for amount in declared.amounts)
+    return tuple(fixed + gold_charged(asked.answered(game, amount)) for amount in asked.amounts)
 
 
 def strategy_gold(game: GameState, card: L5RCard, ability: Ability) -> int:
@@ -290,14 +289,21 @@ def strategy_gold(game: GameState, card: L5RCard, ability: Ability) -> int:
     ability's cost adds, with the action's one discount spent across both."""
     gold_cost = discounted_gold_cost(game, ability.purchase(game, card, plays_card=True))
     added = ability.discounted_cost(game, card, plays_card=True)
-    return gold_cost + sum(effect.amount for effect in added if isinstance(effect, PayGold))
+    return gold_cost + gold_charged(added)
 
 
-def recruit_cost(game: GameState, card: L5RCard) -> int:
+def recruit_cost(game: GameState, card: L5RCard, *, raised_by: int = 0) -> int:
     """The gold a seat pays to recruit ``card``: its gold cost with modifiers, plus the off-clan
     surcharge when the card has a Clan Alignment the seat does not share, less the card's own
-    conditional recruit discount. Floored at zero."""
-    cost = effective_gold_cost(game, card)
+    conditional recruit discount. Floored at zero.
+
+    Parameters
+    ----------
+    raised_by : int, optional
+        Gold the card's Gold Cost is about to be raised by, an Invest not yet laid, so the cost is
+        read as it will stand when it is paid. Default 0.
+    """
+    cost = effective_gold_cost(game, card) + raised_by
     seat_aligns = seat_alignments(game, card.owner)
     card_aligns = card_alignments(card)
     if seat_aligns and card_aligns and seat_aligns.isdisjoint(card_aligns):

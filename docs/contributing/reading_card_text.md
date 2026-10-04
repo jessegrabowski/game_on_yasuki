@@ -97,8 +97,10 @@ before the card arrives.
 ## Invest changes the stat, a discount does not
 
 The two read alike on the card. "Paying 2 more Gold" leaves the Gold Cost stat alone, while
-`Invest :g2:` raises it permanently. Cards that read a Gold Cost see the raised value, so the
-difference is visible to other cards rather than only to the purchase.
+`Invest :g2:` raises it permanently, before the card is paid for, so the purchase pays the raised
+Gold Cost like any other. Cards that read a Gold Cost see the raised value, so the difference is
+visible to other cards rather than only to the purchase. What the Invest buys resolves after the
+card enters play, as its own trait.
 
 ## "X have Y while Z" names a condition
 

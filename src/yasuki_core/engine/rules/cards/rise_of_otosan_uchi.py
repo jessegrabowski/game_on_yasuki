@@ -1,10 +1,10 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payer
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
+from yasuki_core.engine.rules.abilities.costs import declare_amount
 from yasuki_core.engine.rules.abilities.idioms import (
     ask_whose_honor_moves,
     declarable_gold,
-    declare_amount,
     register_entry,
     register_event_entry,
     register_ring,

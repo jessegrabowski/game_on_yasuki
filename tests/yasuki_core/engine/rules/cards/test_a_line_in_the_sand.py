@@ -5,6 +5,9 @@ from yasuki_core.engine.rules.cards.a_line_in_the_sand import (
     THE_IVORY_COURTROOM_RECRUIT,
 )
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
+from yasuki_core.engine.rules.effects import Invest
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.action_record import action_keywords
@@ -124,6 +127,17 @@ def test_investing_raises_the_price_by_the_invest_cost():
     pending = session.project(P1).pending
     assert isinstance(pending, ChoosePayment)
     assert pending.amount == 4  # 3 Gold Cost plus the 1 it Invests
+    weapon = session.game.table.cards_by_id["weapon"]
+    assert effective_gold_cost(session.game, weapon) == 4  # raised before it is paid for
+
+
+def test_a_negation_does_not_reach_the_invest_an_equip_pays():
+    session = _sand_game()
+    session.game.ongoing.append(Negation("weapon", END_OF_TURN, effect_kind=Invest))
+
+    session.act(P1, Equip("weapon", invest=True))
+
+    assert session.project(P1).pending.amount == 4  # 3 Gold Cost raised by the 1 it Invests
 
 
 def test_investing_fetches_another_copy_out_of_the_fate_deck():

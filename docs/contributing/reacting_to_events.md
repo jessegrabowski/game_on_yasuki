@@ -95,6 +95,7 @@ The events a trigger can answer:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.TurnBoundary`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.PhaseStarted`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.HonorChanged`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.Invested`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducingGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducedGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ActionResolved`

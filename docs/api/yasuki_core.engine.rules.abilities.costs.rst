@@ -10,6 +10,10 @@ yasuki_core.engine.rules.abilities.costs
     bow_cost
     bow_parent_cost
     can_pay
+    declare_amount
+    declared_gold_discount
+    gold_charged
+    is_declared_gold
     no_cost
     payable
     priced_cost

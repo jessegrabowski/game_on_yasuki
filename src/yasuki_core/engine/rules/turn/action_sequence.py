@@ -53,7 +53,7 @@ from yasuki_core.engine.rules.interrupts import (
     play_interrupt,
 )
 from yasuki_core.engine.rules.board.seats import cards_in_hand
-from yasuki_core.engine.rules.effects import DiscardFromHand, declared_amount_effects
+from yasuki_core.engine.rules.effects import DiscardFromHand
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.sequence import (
     open_turn,
@@ -267,22 +267,9 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
 def _apply_amount_choice(
     game: GameState, request: ChooseAmount, response: DecisionResponse
 ) -> None:
-    """Record the declared amount as the action's ``amount_declared`` and resume with what declaring
-    it resolves."""
-    declared = int(response.choices[0])
-    game.amount_declared = declared
-    produced = declared_amount_effects(
-        game,
-        request.seat,
-        declared,
-        discount=request.discount,
-        alongside=request.alongside,
-        target_id=request.target_id,
-        resolver=request.resolver,
-        source_id=request.source_id,
-    )
-    triggers.resume_paused_cascade(game, produced)
-    run_stack(game)
+    """Record the named amount as the action's ``amount_declared``, then hand it to the resolver."""
+    game.amount_declared = int(response.choices[0])
+    _apply_card_choice(game, request, response)
 
 
 def _apply_discard_choice(
@@ -314,7 +301,11 @@ def _apply_card_choice(
     | Confirm,
     response: DecisionResponse,
 ) -> None:
-    carried = request.resolver_context if isinstance(request, ChooseOption | ChooseCards) else ()
+    carried = (
+        request.resolver_context
+        if isinstance(request, ChooseOption | ChooseCards | ChooseAmount)
+        else ()
+    )
     produced = triggers.resolve_choice(
         game, request.resolver, request.source_id, response.choices, request.seat, carried
     )
