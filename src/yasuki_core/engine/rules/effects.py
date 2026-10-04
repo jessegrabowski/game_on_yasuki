@@ -2873,6 +2873,9 @@ class Choose(InterruptingEffect):
         What an earlier step of the same choice settled, handed to the resolver alongside the chosen
         ids. A card that asks two questions in a row carries what the first one answered here,
         rather than reading it back off the game. Default empty.
+    declinable : bool, optional
+        Whether choosing nothing is an answer as well as a count within the bounds, as "may target
+        and move home exactly two units" reads. Default False.
     """
 
     seat: PlayerId
@@ -2882,6 +2885,7 @@ class Choose(InterruptingEffect):
     resolver: str
     source_id: str | None = None
     resolver_context: tuple[str, ...] = ()
+    declinable: bool = False
 
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """A cost that asks the seat to pick cannot be met with too few to pick from."""
@@ -2902,6 +2906,7 @@ class Choose(InterruptingEffect):
             resolver=self.resolver,
             source_id=self.source_id,
             resolver_context=self.resolver_context,
+            declinable=self.declinable,
         )
 
 
