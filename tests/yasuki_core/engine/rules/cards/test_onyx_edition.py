@@ -816,7 +816,7 @@ def test_the_capital_gives_an_enemy_shadowlands_and_keeps_the_opportunity_to_act
     assert has_keyword(game, game.table.cards_by_id["guard"], keywords.SHADOWLANDS)
     assert not game.table.cards_by_id["guard"].bowed
     assert game.round.priority is P1 and game.round.passes == 0
-    assert game.additional_action is None
+    assert game.additional_grant is None
 
 
 def test_a_pass_at_the_additional_opportunity_starts_the_count_that_closes_the_round():
@@ -1898,7 +1898,7 @@ def test_declining_the_additional_action_grants_nothing():
     session.submit(P1, DecisionResponse(()))
 
     # The resolver is called on either answer, so a no has to buy nothing of its own accord.
-    assert session.game.additional_action is None
+    assert session.game.additional_grant is None
 
 
 def test_a_duel_neither_personality_wins_offers_nothing():
@@ -1906,7 +1906,7 @@ def test_a_duel_neither_personality_wins_offers_nothing():
     session = _duel_with_hiyoku(_hiyoku_in_combat(rival_chi=4))
 
     assert session.game.pending is None
-    assert session.game.additional_action is None
+    assert session.game.additional_grant is None
     assert PLUS_1F_PLUS_1C.key not in session.game.table.cards_by_id["hiyoku"].counters
 
 

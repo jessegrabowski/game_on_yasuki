@@ -810,7 +810,7 @@ def _the_dark_capital_of_the_spider_effects(
         GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN)
     ]
     if target.owner is not source.owner:
-        return [*effects, AdditionalAction(source.owner)]
+        return [*effects, AdditionalAction(source.owner, source.id)]
     feared = attack_targets(game, source)
     if feared:
         effects.append(Choose(source.owner, tuple(feared), 1, 1, DARK_CAPITAL_FEAR, target.id))
@@ -853,7 +853,7 @@ def _the_dark_capital_of_the_spider__back_effects(
         return _the_dark_capital_of_the_spider_effects(game, source, target)
     return [
         GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN),
-        AdditionalAction(source.owner),
+        AdditionalAction(source.owner, source.id),
     ]
 
 
@@ -1072,7 +1072,7 @@ def _resolve_togashi_hiyoku_additional_action(
 
     The resolver is called on either answer, so a no arrives as no subjects and buys nothing.
     """
-    return [AdditionalAction(seat)] if chosen else []
+    return [AdditionalAction(seat, source_id)] if chosen else []
 
 
 register_ability(

@@ -418,7 +418,7 @@ def _the_unicorn_expedition_effects(
             for card in unit
             for ability in abilities_for(game, card)
         )
-        contingent.append(AdditionalAction(source.owner, follow_ups))
+        contingent.append(AdditionalAction(source.owner, source.id, follow_ups))
     if not contingent:
         return [move]
     moved = To(move, tuple(contingent))

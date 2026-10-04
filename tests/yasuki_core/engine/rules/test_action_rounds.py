@@ -155,7 +155,7 @@ def _open_probe(effects) -> Ability:
 
 
 def _granting(game, source, target):
-    return [AdditionalAction(PlayerId.P1, frozenset({FOLLOW_UP}))]
+    return [AdditionalAction(PlayerId.P1, source.id, frozenset({FOLLOW_UP}))]
 
 
 def _doing_nothing(game, source, target):
@@ -191,6 +191,15 @@ def test_the_limit_ends_with_the_additional_action(follow_up_session):
     assert follow_up_session.game.round.priority is PlayerId.P2
 
 
+@pytest.mark.parametrize("spend", [FOLLOW_UP, Pass()])
+def test_the_opportunity_names_the_card_granting_it_until_it_is_spent(follow_up_session, spend):
+    assert follow_up_session.game.round.granted_by == "granter"
+
+    follow_up_session.act(PlayerId.P1, spend)
+
+    assert follow_up_session.game.round.granted_by is None
+
+
 @pytest.mark.parametrize("spend", ["take", "pass"])
 def test_what_was_granted_for_the_additional_action_lapses_once_it_is_spent(
     follow_up_session, spend
@@ -206,7 +215,7 @@ def test_what_was_granted_for_the_additional_action_lapses_once_it_is_spent(
 def _granting_with_a_delayed_bow(game, source, target):
     return [
         DelayedEffect(Bow("other"), ADDITIONAL_ACTION_SPENT),
-        AdditionalAction(PlayerId.P1, frozenset({FOLLOW_UP})),
+        AdditionalAction(PlayerId.P1, source.id, frozenset({FOLLOW_UP})),
     ]
 
 
@@ -236,7 +245,7 @@ NEXT_FOLLOW_UP = ActivateAbility("other", "probe")
 def _granting_a_second_follow_up(game, source, target):
     return [
         GrantKeyword(source.id, source.id, "Probe", ADDITIONAL_ACTION_SPENT),
-        AdditionalAction(PlayerId.P1, frozenset({NEXT_FOLLOW_UP})),
+        AdditionalAction(PlayerId.P1, source.id, frozenset({NEXT_FOLLOW_UP})),
     ]
 
 

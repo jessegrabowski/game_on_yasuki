@@ -248,7 +248,7 @@ EFFECTS = [
         "P1 takes the opportunity to act",
     ),
     (
-        AdditionalAction(PlayerId.P1),
+        AdditionalAction(PlayerId.P1, "source"),
         "P1 takes an additional action",
     ),
     (

@@ -703,7 +703,7 @@ def _the_enlightened_path_of_the_dragon_follow_up(
     seat = source.owner
     effects: list[Effect] = [
         GrantSeatAbility(source.id, seat, (ring.id, taken_as.name), ADDITIONAL_ACTION_SPENT),
-        AdditionalAction(seat, frozenset({follow_up})),
+        AdditionalAction(seat, source.id, frozenset({follow_up})),
     ]
     pile = game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards
     if any(card is ring for card in pile):

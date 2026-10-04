@@ -995,6 +995,40 @@ def test_invest_2_follows_up_only_with_a_card_in_the_moved_unit(expedition):
     assert expedition.legal_actions(P1) == [Pass(), HORSE_ACTION]
 
 
+def test_invest_2_opens_its_follow_up_even_with_nothing_in_the_unit_to_take(expedition):
+    _send_the_rider(expedition, UNICORN_EXPEDITION_FOLLOW_UP)
+
+    assert expedition.legal_actions(P1) == [Pass()]
+    assert (expedition.game.round.priority, expedition.game.round.granted_by) == (
+        P1,
+        "expedition",
+    )
+
+
+RESPONSE_PROBE = Ability(
+    timings=(ActionTiming.RESPONSE,),
+    cost=no_cost,
+    targets=itself,
+    effects=lambda game, source, target: [],
+    hits_every_target=True,
+)
+
+
+def test_a_response_taken_over_the_expedition_leaves_its_follow_up_for_the_battle(expedition):
+    with probe_ability("responder_probe", RESPONSE_PROBE):
+        put_in_play(
+            expedition.game, holding("responder", owner=PlayerId.P2, printed_id="responder_probe")
+        )
+        expedition.game.table.cards_by_id["horse"].unbow()
+        _send_the_rider(expedition, UNICORN_EXPEDITION_FOLLOW_UP)
+
+        expedition.act(PlayerId.P2, ActivateAbility("responder"))
+
+        assert expedition.game.round.kind is RoundKind.BATTLE_SEGMENT
+        assert expedition.game.round.granted_by == "expedition"
+        assert expedition.legal_actions(P1) == [Pass(), HORSE_ACTION]
+
+
 def test_a_negated_move_buys_neither_invest(expedition):
     expedition.game.ongoing.append(
         Negation("probe", Duration.UNTIL_END_OF_TURN, effect_kind=Move, subject_id="rider")

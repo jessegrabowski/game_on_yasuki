@@ -8,6 +8,7 @@ yasuki_core.engine.rules.turn.structure
 .. autosummary::
 
     ActionRound
+    AdditionalGrant
     Moment
     Opportunity
     Phase

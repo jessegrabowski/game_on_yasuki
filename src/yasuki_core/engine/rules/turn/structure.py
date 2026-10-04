@@ -116,6 +116,9 @@ class ActionRound:
         The actions the seat holding priority may spend an additional action on, as "take an
         additional Battle from your target Ring" limits it, or None when the opportunity is not
         limited. Dropped as the opportunity passes on. Default None.
+    granted_by : str or None
+        The card whose additional action the seat holding priority is taking, or None when it
+        holds an ordinary opportunity. Dropped as the opportunity passes on. Default None.
     """
 
     timings: RoundTimings
@@ -123,6 +126,31 @@ class ActionRound:
     passes: int = 0
     kind: RoundKind = RoundKind.PHASE
     follow_ups: frozenset[Action] | None = None
+    granted_by: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class AdditionalGrant:
+    """An additional action granted by the action now resolving and not yet opened (CR, Additional
+    Action).
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat granted it.
+    source_id : str
+        The card whose text grants it.
+    follow_ups : frozenset of Action or None
+        The actions it is limited to, or None for any the round permits.
+    kind : RoundKind
+        The kind of round it was granted in, which is the round it opens in: a Response Step taken
+        over the action passes it by, and it opens once the round beneath resumes.
+    """
+
+    seat: PlayerId
+    source_id: str
+    follow_ups: frozenset[Action] | None
+    kind: RoundKind
 
 
 # What each battle segment that is an Action Round permits. Both are open to every seat and permit
