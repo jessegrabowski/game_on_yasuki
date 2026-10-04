@@ -8852,7 +8852,7 @@ cards:
   - Earth
   - Monk
   - Tattooed
-  text: Korimi has +2F while defending. <br><b>Interrupt, :bow::</b> After you Recruit Korimi, draw a
+  text: Korimi has +2F while defending. <br><b>Response, :bow::</b> After you Recruit Korimi, draw a
     card.
   gold_cost: 5
   force: 3

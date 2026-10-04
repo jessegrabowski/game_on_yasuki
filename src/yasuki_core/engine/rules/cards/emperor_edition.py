@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
@@ -10,16 +10,20 @@ from yasuki_core.engine.rules.effects import (
     DelayedEffect,
     Destroy,
     Dishonor,
+    DrawCard,
     Effect,
     Evaluate,
     GainHonor,
     StartDuel,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import choice_resolver
+from yasuki_core.engine.rules.stats.conditions import condition_holds
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
+from yasuki_core.engine.rules.triggers import action_recruited, choice_resolver
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.modifiers import Condition, Stat
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -148,5 +152,45 @@ register_ability(
         effects=_sanctioned_duel_effects,
         located_at=(CardLocation.HAND,),
         keywords=frozenset({keywords.IAIJUTSU}),
+    ),
+)
+
+
+# --- Togashi Korimi ---
+
+TOGASHI_KORIMI_DEFENDING_FORCE = 2
+
+
+# The Shattered Empire printing, "Response, :bow:: After you Recruit Korimi, draw a card." Its
+# Emperor printing made the draw an optional trait on entry, and its Ivory printing an Interrupt.
+@stat_grant("togashi_korimi")
+def _togashi_korimi_stat_grant(game: GameState, source: L5RCard, card: L5RCard, stat: Stat) -> int:
+    """Korimi has +2F while defending."""
+    if stat is not Stat.FORCE or card is not source:
+        return 0
+    if not condition_holds(game, card, Condition.DEFENDING):
+        return 0
+    return TOGASHI_KORIMI_DEFENDING_FORCE
+
+
+def _togashi_korimi_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Herself, once the action just resolved was her controller's and Recruited her."""
+    if game.action_seat is not source.owner or not action_recruited(game, source.id):
+        return []
+    return [source.id]
+
+
+def _togashi_korimi_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [DrawCard(source.owner)]
+
+
+register_ability(
+    "togashi_korimi",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=bow_cost,
+        targets=_togashi_korimi_targets,
+        effects=_togashi_korimi_effects,
+        hits_every_target=True,
     ),
 )

@@ -91,9 +91,12 @@ class Condition(Enum):
 
     ATTACKING
         A Personality standing in the attacking army at the battle now being fought.
+    DEFENDING
+        A Personality standing in the defending army at the battle now being fought.
     """
 
     ATTACKING = "attacking"
+    DEFENDING = "defending"
 
 
 @dataclass(frozen=True, slots=True)

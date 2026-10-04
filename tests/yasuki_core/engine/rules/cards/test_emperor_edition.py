@@ -5,7 +5,10 @@ from yasuki_core.engine.rules.cards.emperor_edition import (
     SANCTIONED_DUEL_ACCEPT,
     SANCTIONED_DUEL_REFUSE,
 )
-from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
+from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
+from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
+from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass, PlayStrategy
 from yasuki_core.engine.rules.vocabulary.game_events import Destroyed
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
@@ -15,7 +18,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     focus_token,
 )
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
@@ -24,11 +28,15 @@ from yasuki_core.engine.rules.duel.procedure import declare_duel
 from yasuki_core.engine.rules.turn.sequence import run_stack
 
 from tests.yasuki_core.engine.builders import (
+    end_phase,
+    fate_card,
     focus_card,
+    pay,
     personality,
     put_in_play,
     register,
     stronghold,
+    two_seat_game,
 )
 
 P1, P2 = PlayerId.P1, PlayerId.P2
@@ -247,3 +255,85 @@ def test_sanctioned_duel_destroys_both_personalities_when_neither_wins():
     assert session.game.duel.outcome.winners == ()
     assert set(session.game.duel.outcome.losers) == {P1, P2}
     assert {"mine", "theirs"} & _in_play(session) == set()
+
+
+# --- Togashi Korimi ---
+
+
+def _korimi_game(*, also_in_province: tuple[L5RCard, ...] = ()) -> EngineSession:
+    """P1's Dynasty phase, with Korimi face-up in P1's first Province, gold to Recruit her, and one
+    card in P1's Fate deck to draw. ``also_in_province`` fill further Provinces face-up."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1, gold_production=8)))
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("drawn", P1))]
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [
+        register(state, personality(f"refill{index}", owner=P1)) for index in range(3)
+    ]
+    for index, card in enumerate(
+        (personality("korimi", owner=P1, printed_id=KORIMI, gold_cost=5), *also_in_province)
+    ):
+        register(state, card).turn_face_up()
+        province = ProvinceZone(owner=P1)
+        province.add(card)
+        state.zones[ZoneKey(P1, ZoneRole.PROVINCE, index)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+    return session
+
+
+KORIMI = "togashi_korimi"
+
+
+def _hand(session: EngineSession) -> list[str]:
+    return [card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
+
+
+def test_recruiting_korimi_offers_her_response_to_bow_and_draw():
+    session = _korimi_game()
+    session.act(P1, ActivateAbility("korimi", RECRUIT))
+    pay(session, P1)
+
+    session.act(P1, ActivateAbility("korimi"))
+
+    assert session.game.table.cards_by_id["korimi"].bowed
+    assert "drawn" in _hand(session)
+
+
+def test_korimi_draws_nothing_when_her_response_is_passed():
+    session = _korimi_game()
+    session.act(P1, ActivateAbility("korimi", RECRUIT))
+    pay(session, P1)
+
+    session.act(P1, Pass())
+
+    assert not session.game.table.cards_by_id["korimi"].bowed
+    assert "drawn" not in _hand(session)
+
+
+def test_korimi_answers_no_recruit_but_her_own():
+    session = _korimi_game(also_in_province=(personality("other", owner=P1, gold_cost=1),))
+    session.act(P1, ActivateAbility("korimi", RECRUIT))
+    pay(session, P1)
+    session.act(P1, Pass())
+
+    session.act(P1, ActivateAbility("other", RECRUIT))
+    pay(session, P1)
+
+    assert ActivateAbility("korimi") not in session.legal_actions(P1)
+
+
+def test_korimi_has_two_more_force_while_defending():
+    game = two_seat_game()
+    game.attack = AttackPhase(
+        attacker=P2,
+        defender=P1,
+        battlefields=(BattlefieldInfo(province=ZoneKey(P1, ZoneRole.PROVINCE, 0)),),
+        current=0,
+    )
+    korimi = put_in_play(game, personality("korimi", owner=P1, printed_id=KORIMI, force=3))
+    assert effective_force(game, korimi) == 3  # at home, not defending
+
+    ops.set_location(game.table, korimi, Location.at_battlefield(0))
+
+    assert effective_force(game, korimi) == 5
