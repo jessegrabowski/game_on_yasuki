@@ -19,7 +19,11 @@ from yasuki_core.engine.rules.board.queries import attack_targets
 from yasuki_core.engine.rules.cards.road_to_ruin import UNITY_CHI, UNITY_FORCE
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.rules.cards.road_to_ruin import FORGOTTEN_DEAD
+from yasuki_core.engine.rules.cards.road_to_ruin import (
+    FORGOTTEN_DEAD,
+    UNICORN_EXPEDITION_FOLLOW_UP,
+    UNICORN_EXPEDITION_STRAIGHTEN,
+)
 from yasuki_core.engine.rules.effects import (
     AttachCard,
     DelayStraighten,
@@ -930,21 +934,33 @@ def expedition():
         yield session
 
 
-def _send_the_rider(session, key="battle"):
-    session.act(P1, PlayStrategy("expedition", key))
-    if key != "battle":
+def _send_the_rider(session, *invests):
+    """Play the Expedition on the rider, paying ``invests`` on top, or plainly with none."""
+    if not invests:
+        session.act(P1, PlayStrategy("expedition", "battle"))
+    else:
+        session.act(P1, PlayStrategy("expedition", "invest"))
+        session.submit(P1, DecisionResponse(invests))
         pay(session, P1)
     session.submit(P1, DecisionResponse(("rider",)))
 
 
-def test_the_expedition_is_offered_plain_and_with_either_invest_or_both(expedition):
+def test_the_expedition_is_offered_plain_or_with_invest(expedition):
     offered = {
         action.ability_key
         for action in expedition.legal_actions(P1)
         if isinstance(action, PlayStrategy) and action.card_id == "expedition"
     }
 
-    assert offered == {"battle", "invest_2", "invest_3", "invest_5"}
+    assert offered == {"battle", "invest"}
+
+
+def test_investing_offers_both_lines_and_either_or_both(expedition):
+    expedition.act(P1, PlayStrategy("expedition", "invest"))
+
+    asked = expedition.game.pending
+    assert asked.candidates == (UNICORN_EXPEDITION_FOLLOW_UP, UNICORN_EXPEDITION_STRAIGHTEN)
+    assert (asked.minimum, asked.maximum) == (1, 2)
 
 
 def test_the_expedition_is_withheld_with_no_enemy_to_oppose(expedition):
@@ -965,7 +981,7 @@ def test_the_expedition_moves_a_personality_from_home_to_the_battle(expedition):
 
 
 def test_invest_3_straightens_the_unit_as_it_moves(expedition):
-    _send_the_rider(expedition, "invest_3")
+    _send_the_rider(expedition, UNICORN_EXPEDITION_STRAIGHTEN)
 
     cards = expedition.game.table.cards_by_id
     assert not cards["rider"].bowed and not cards["horse"].bowed
@@ -974,7 +990,7 @@ def test_invest_3_straightens_the_unit_as_it_moves(expedition):
 def test_invest_2_follows_up_only_with_a_card_in_the_moved_unit(expedition):
     expedition.game.table.cards_by_id["horse"].unbow()
 
-    _send_the_rider(expedition, "invest_2")
+    _send_the_rider(expedition, UNICORN_EXPEDITION_FOLLOW_UP)
 
     assert expedition.legal_actions(P1) == [Pass(), HORSE_ACTION]
 
@@ -984,7 +1000,7 @@ def test_a_negated_move_buys_neither_invest(expedition):
         Negation("probe", Duration.UNTIL_END_OF_TURN, effect_kind=Move, subject_id="rider")
     )
 
-    _send_the_rider(expedition, "invest_5")
+    _send_the_rider(expedition, UNICORN_EXPEDITION_FOLLOW_UP, UNICORN_EXPEDITION_STRAIGHTEN)
 
     cards = expedition.game.table.cards_by_id
     assert location_of(expedition.game.table, cards["rider"]).is_home

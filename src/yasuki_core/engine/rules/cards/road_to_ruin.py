@@ -1,5 +1,4 @@
 from dataclasses import replace
-from functools import partial
 
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
@@ -23,6 +22,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     BattleDesignator,
 )
+from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.gold.self_grants import register_self_grant, SELF_GRANT
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     CreateToken,
+    DeclareOptions,
     Destroy,
     Discard,
     Effect,
@@ -373,11 +374,14 @@ def _resolve_the_forgotten(
 
 # --- The Unicorn Expedition ---
 
-# The two Invest traits, each a price and what it adds to the move: Invest 3 straightens the
-# target's unit as they move, and Invest 2 takes an additional action from a card in it after.
-# Either may be paid, or both together (CR, Invest).
-UNICORN_EXPEDITION_STRAIGHTEN = 3
-UNICORN_EXPEDITION_FOLLOW_UP = 2
+# The two Invest traits as printed, each its price and what it adds to the move. Either may be
+# paid, or both together, on top of the action (CR, Invest).
+UNICORN_EXPEDITION_STRAIGHTEN = "Invest 3: Straighten the target's unit as they move."
+UNICORN_EXPEDITION_FOLLOW_UP = (
+    "Invest 2: Take an additional action from a card in the target's unit after they move."
+)
+UNICORN_EXPEDITION_INVESTS = ((UNICORN_EXPEDITION_FOLLOW_UP, 2), (UNICORN_EXPEDITION_STRAIGHTEN, 3))
+UNICORN_EXPEDITION_INVEST = "the_unicorn_expedition_invest"
 
 
 def _the_unicorn_expedition_targets(game: GameState, source: L5RCard) -> list[str]:
@@ -394,25 +398,21 @@ def _the_unicorn_expedition_targets(game: GameState, source: L5RCard) -> list[st
 
 
 def _the_unicorn_expedition_effects(
-    game: GameState,
-    source: L5RCard,
-    target: L5RCard,
-    *,
-    straighten: bool = False,
-    follow_up: bool = False,
+    game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """If they would be opposed, move the target to the current battlefield, straightening their
-    unit as they move for the Invest 3, and then take an additional action from a card in it for
-    the Invest 2. Both depend on the move happening, and the straightening is part of the same
-    occurrence as the move."""
+    """If they would be opposed, move the target to the current battlefield, with what each Invest
+    the action was paid with adds. Both depend on the move happening, and the straightening is part
+    of the same occurrence as the move."""
     if not opposing_units_in_battle(game, source.owner):
         return []
+    invested = game.options_declared
+    straighten = UNICORN_EXPEDITION_STRAIGHTEN in invested
     unit = unit_of(game, target)
     move = Move(target.id, Location.at_battlefield(game.attack.current))
     contingent: list[Effect] = []
     if straighten:
         contingent.extend(Straighten(card.id) for card in unit)
-    if follow_up:
+    if UNICORN_EXPEDITION_FOLLOW_UP in invested:
         follow_ups = frozenset(
             ActivateAbility(card.id, ability.key)
             for card in unit
@@ -425,11 +425,32 @@ def _the_unicorn_expedition_effects(
     return [Simultaneously((moved,))] if straighten else [moved]
 
 
-def _the_unicorn_expedition_cost(
-    game: GameState, source: L5RCard, *, invested: int
+def _the_unicorn_expedition_invest_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Ask which Invests to pay on top of the action, offering only what the seat can raise: each
+    one it can afford, and both when it can afford the two together."""
+    reach = reachable_gold(game, source.owner)
+    affordable = tuple(line for line, price in UNICORN_EXPEDITION_INVESTS if price <= reach)
+    both = sum(price for _, price in UNICORN_EXPEDITION_INVESTS) <= reach
+    return [
+        AskOption(
+            source.owner,
+            affordable,
+            "Which Invests do you pay?",
+            UNICORN_EXPEDITION_INVEST,
+            source.id,
+            maximum=2 if both else 1,
+        )
+    ]
+
+
+@choice_resolver(UNICORN_EXPEDITION_INVEST)
+def _the_unicorn_expedition_invest_paid(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """The Invest paid on top of the action, which costs nothing of its own (CR, Invest)."""
-    return [PayGold(source.owner, invested, f"{source.name} Invest")]
+    """Declare the Invests ticked, and pay them as one payment."""
+    invested = sum(price for line, price in UNICORN_EXPEDITION_INVESTS if line in chosen)
+    name = game.table.cards_by_id[source_id].name
+    return [DeclareOptions(chosen), PayGold(seat, invested, f"{name} Invest")]
 
 
 _THE_UNICORN_EXPEDITION = Ability(
@@ -444,42 +465,14 @@ _THE_UNICORN_EXPEDITION = Ability(
     key="battle",
 )
 
-
-def _the_unicorn_expedition_invested(
-    invested: int, *, straighten: bool, follow_up: bool, label: str
-) -> Ability:
-    """The action with an Invest paid on top, adding what it buys."""
-    return replace(
-        _THE_UNICORN_EXPEDITION,
-        key=f"invest_{invested}",
-        label=label,
-        cost=partial(_the_unicorn_expedition_cost, invested=invested),
-        effects=partial(
-            _the_unicorn_expedition_effects, straighten=straighten, follow_up=follow_up
-        ),
-    )
-
-
 register_ability("the_unicorn_expedition", _THE_UNICORN_EXPEDITION)
 register_ability(
     "the_unicorn_expedition",
-    _the_unicorn_expedition_invested(
-        UNICORN_EXPEDITION_FOLLOW_UP, straighten=False, follow_up=True, label="Invest 2"
-    ),
-)
-register_ability(
-    "the_unicorn_expedition",
-    _the_unicorn_expedition_invested(
-        UNICORN_EXPEDITION_STRAIGHTEN, straighten=True, follow_up=False, label="Invest 3"
-    ),
-)
-register_ability(
-    "the_unicorn_expedition",
-    _the_unicorn_expedition_invested(
-        UNICORN_EXPEDITION_STRAIGHTEN + UNICORN_EXPEDITION_FOLLOW_UP,
-        straighten=True,
-        follow_up=True,
-        label="Invest 5 (both)",
+    replace(
+        _THE_UNICORN_EXPEDITION,
+        key="invest",
+        label="Invest",
+        cost=_the_unicorn_expedition_invest_cost,
     ),
 )
 
