@@ -173,6 +173,11 @@ class GameState:
         The amount the action now resolving declared when it was asked for one, such as a variable
         cost's :X:, which the ability's targets and effects read. None outside one, or for an action
         that declared none. Ephemeral and rebuilt by replay. Default None.
+    options_declared : tuple of str
+        The outcomes the action now resolving declared while its costs were paid, such as the
+        Invests a Strategy's action is paid with, which the ability's effects read. Set by
+        :class:`~.DeclareOptions`, so an option question asked by anything else leaves it alone.
+        Empty outside one. Ephemeral and rebuilt by replay. Default empty.
     action_is_favor : bool
         Whether the action now resolving has paid a Favor cost, which is what makes it a Favor
         action. Settled during payment rather than at announcement, because an action with an
@@ -269,6 +274,7 @@ class GameState:
     action_seat: PlayerId | None = None
     action_targets: tuple[str, ...] = ()
     amount_declared: int | None = None
+    options_declared: tuple[str, ...] = ()
     action_is_favor: bool = False
     action_events: list[GameEvent] = field(default_factory=list)
     action_resolved: bool = False

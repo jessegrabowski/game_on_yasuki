@@ -9,6 +9,8 @@ from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.rulebook.lobby import LOBBY
 from yasuki_core.engine.rules.turn import action_sequence, sequence
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.effects import AskOption
+from yasuki_core.engine.rules.triggers import choice_resolver, resolve_effects
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState
@@ -65,6 +67,40 @@ def test_an_amount_declared_is_cleared_by_the_next_action_and_by_forgetting_it()
     game.amount_declared = 8
     sequence.forget_action(game)
     assert game.amount_declared is None
+
+
+def test_options_declared_are_cleared_by_the_next_action_and_by_forgetting_it():
+    game = two_seat_game()
+    game.table.seats[P1].honor = 10
+    put_in_play(game, personality("courtier", personal_honor=2))
+    proxies.spawn_rulebook_proxies(game)
+    lobby = ActivateAbility(rulebook_proxy(game, P1, ONYX_LOBBY_PROXY_ID).id, LOBBY)
+    game.options_declared = ("Invest 2",)
+
+    action_sequence.perform(game, lobby)
+    assert game.options_declared == ()
+
+    game.options_declared = ("Invest 2",)
+    sequence.forget_action(game)
+    assert game.options_declared == ()
+
+
+@choice_resolver("unrelated_option_probe")
+def _resolve_unrelated_option_probe(game, source_id, chosen, seat):
+    return []
+
+
+def test_answering_another_option_question_leaves_the_declared_options_alone():
+    session = EngineSession.start(TableState.empty_two_seat(), P1)
+    session.game.options_declared = ("Invest 2",)
+    asked = AskOption(
+        P1, ("Gain 1 Honor", "Lose 1 Honor"), "Gain or lose?", "unrelated_option_probe", "probe"
+    )
+    resolve_effects(session.game, [asked])
+
+    session.submit(P1, DecisionResponse(("Gain 1 Honor",)))
+
+    assert session.game.options_declared == ("Invest 2",)
 
 
 def test_a_chosen_target_is_recorded_on_the_action():

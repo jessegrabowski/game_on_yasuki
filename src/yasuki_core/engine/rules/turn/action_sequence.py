@@ -104,6 +104,7 @@ def perform(game: GameState, action: Action) -> None:
         game.action_seat = game.round.priority
         game.action_targets = ()
         game.amount_declared = None
+        game.options_declared = ()
         game.action_is_favor = False
         game.action = action
         game.interrupts_taken.clear()

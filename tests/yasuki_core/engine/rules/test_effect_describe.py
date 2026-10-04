@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.effects import (
     Unpayable,
     Choose,
     CreateToken,
+    DeclareOptions,
     DelayStraighten,
     Dishonor,
     Discard,
@@ -303,6 +304,7 @@ EFFECTS = [
         CreateToken("yojimbo", PlayerId.P1, "tsushima", recruit=True),
         "P1 creates and Recruits yojimbo",
     ),
+    (DeclareOptions(("Invest 2", "Invest 3")), "declare Invest 2, Invest 3"),
     (Banish("oni"), "banish oni"),
     (
         DelayedEffect(Banish("oni"), END_OF_TURN),
