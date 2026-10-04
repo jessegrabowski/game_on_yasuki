@@ -24,7 +24,6 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
-    EnteredPlay,
     PhaseStarted,
     Straightened,
     TurnBoundary,
@@ -53,7 +52,6 @@ from yasuki_core.engine.rules.board.queries import province_zones
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.counters import SINCERITY
-from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint, WindPrint
 
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton section 1).
@@ -67,22 +65,13 @@ def next_phase(phase: Phase) -> Phase | None:
     return TURN_PHASES[index + 1] if index + 1 < len(TURN_PHASES) else None
 
 
-# The pre-game permanents that get their enters-play effect fired as the game begins.
-_PREGAME_PERMANENTS = (StrongholdPrint, SenseiPrint, WindPrint)
-
-
 def begin_game(game: GameState) -> None:
-    """Run the game-start pass once after ``GameState.start``, before the active player acts:
-    announce each pre-game permanent entering play, then open the first turn. Re-runs on every
-    replay, so those effects must be idempotent.
-
-    The first turn is queued behind the announcement and the stack drained, so a permanent whose
-    trait pauses is answered before anything straightens, and the stack is empty on return unless
-    a question is open.
+    """Run the game-start pass once after ``GameState.start``, before the active player acts: spawn
+    the rulebook's proxies, then open the first turn. Re-runs on every replay, so it must be
+    idempotent. The stack is empty on return unless the turn's opening left a question open.
     """
-    game.stack.append(OpenFirstTurn())
     proxies.spawn_rulebook_proxies(game)
-    _begin_pregame(game)
+    _begin_turn(game)
     run_stack(game)
 
 
@@ -111,26 +100,6 @@ def run_stack(game: GameState) -> None:
         game.stack.pop().resume(game)
     if game.pending is None:
         refill_short_provinces(game)
-
-
-@dataclass(frozen=True, slots=True)
-class OpenFirstTurn:
-    """Open the first turn once the pre-game permanents have entered play and anything their entry
-    asked has been answered."""
-
-    def resume(self, game: GameState) -> None:
-        _begin_turn(game)
-
-
-def _begin_pregame(game: GameState) -> None:
-    """Announce every pre-game permanent on the battlefield entering play as one instant, so a
-    Stronghold or Sensei with an ``@on(EnteredPlay, ...)`` trigger runs it as the game begins."""
-    entered = [
-        EnteredPlay(card.id)
-        for card in game.table.battlefield.cards
-        if isinstance(card.printed, _PREGAME_PERMANENTS)
-    ]
-    triggers.fire_all(game, entered)
 
 
 def advance(game: GameState) -> None:

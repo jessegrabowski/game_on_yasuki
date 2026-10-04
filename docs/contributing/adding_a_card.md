@@ -57,6 +57,8 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "You have a +N Lobby Bonus" | `@lobby_bonus_grant(id)` | {card}`Shigekawa's Court` |
 | Stops a player Lobbying at all | `@lobby_bar(id)` | {card}`Wasp Sensei` |
 | "May not Lobby" | `register_may_not_lobby(id)` | {card}`Moto Chen` |
+| "You do not lose Honor from your cards' effects" | `register_honor_loss_shield(id)` | {card}`Mishime Sensei` |
+| "You may ignore Honor Requirements" | `register_honor_requirement_waiver(id)` | {card}`Mishime Sensei` |
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
 id no card has and tells you the nearest real one.
@@ -67,6 +69,10 @@ These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straight
 `Rehonored`, `CardDiscarded`, `CounterChanged`, `ProvinceDestroyed`, `Revealed`, `TurnBoundary`,
 `ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose moment is not one of them needs a
 new event, which is a core change.
+
+A Stronghold, a Sensei and a Wind never answer `EnteredPlay`. Under the CR's Start of Game they are
+already in play and never enter it, so a standing trait of one belongs in a registry or grant row
+from the table above, read off the board for as long as the card is there.
 
 A card that fits no row is almost always several rows at once. Break its text into the rule-level
 verbs it prints and find each in this table and in [the card vocabulary](../design/card_vocabulary.md)

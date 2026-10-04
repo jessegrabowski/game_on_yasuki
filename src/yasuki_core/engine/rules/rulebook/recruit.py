@@ -2,7 +2,7 @@ from collections.abc import Callable
 from typing import TypeGuard
 
 from yasuki_core.engine import ops
-from yasuki_core.engine.registrar import HandlerRegistry
+from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.costs import priced_cost
@@ -15,7 +15,9 @@ from yasuki_core.engine.rules.abilities.registry import (
     invest_amounts,
     register_location_ability,
 )
+from yasuki_core.engine.rules.board.clans import shares_seat_alignment
 from yasuki_core.engine.rules.board.queries import province_key_holding, province_zones
+from yasuki_core.engine.rules.board.seats import cards_in_play
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
@@ -214,7 +216,8 @@ def recruitable(game: GameState, source: L5RCard) -> list[str]:
     """Itself, when its controller may Recruit it (CR, Recruit): a Holding or a Personality that
     the limits on copies and its own "May only be Recruited by" text let into play, and a
     Personality whose Honor Requirement its controller's Family Honor meets. A dash never withholds,
-    and nothing does for a seat that ignores Honor Requirements."""
+    and neither does a requirement the seat may ignore, whether for its lost Honor or for a card it
+    controls that waives every requirement."""
     seat = source.owner
     if not isinstance(source.printed, HoldingPrint | PersonalityPrint):
         return []
@@ -225,10 +228,34 @@ def recruitable(game: GameState, source: L5RCard) -> list[str]:
     return [source.id]
 
 
+# Cards whose controller may ignore every Personality's Honor Requirement, keyed on printed id.
+# Read off the board as the Recruit is offered, so the waiver lasts exactly as long as the card
+# stays in play.
+HONOR_REQUIREMENT_WAIVERS = FlagRegistry(
+    "honor requirement waivers", "already waives Honor Requirements"
+)
+register_honor_requirement_waiver = HONOR_REQUIREMENT_WAIVERS.make_register()
+
+
 def _meets_honor_requirement(game: GameState, personality: L5RCard) -> bool:
-    seat = game.table.seats[personality.owner]
     required = personality.honor_requirement
-    return seat.ignores_honor_requirements or required is None or seat.honor >= required
+    if required is None or game.table.seats[personality.owner].honor >= required:
+        return True
+    return _waives_honor_requirement(game, personality)
+
+
+def _waives_honor_requirement(game: GameState, personality: L5RCard) -> bool:
+    """Whether anything lets ``personality``'s controller ignore its Honor Requirement (CR, Honor
+    Requirement): Honor the seat has lost to anything but its own cards, which waives the
+    requirement of its own Clan Alignment's Personalities only, or a card in play that waives every
+    requirement whatever clan it names.
+    """
+    seat = personality.owner
+    if game.table.seats[seat].lost_honor_from_elsewhere and shares_seat_alignment(
+        game, personality
+    ):
+        return True
+    return any(card.printed_id in HONOR_REQUIREMENT_WAIVERS for card in cards_in_play(game, seat))
 
 
 def recruit_gold(game: GameState, source: L5RCard, *, raised_by: int = 0) -> list[Effect]:

@@ -56,6 +56,13 @@ def _clan_names(card: L5RCard) -> tuple[str, ...]:
     return (card.clan,) if card.clan else ()
 
 
+def shares_seat_alignment(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` carries one of its controller's Clan Alignments: what a rule means by a
+    Personality "with his or her Clan Alignment". False for an unaligned card and for a seat with
+    no alignment of its own, neither of which shares one with anybody."""
+    return not seat_alignments(game, card.owner).isdisjoint(card_alignments(card))
+
+
 def is_clan(game: GameState, seat: PlayerId | None, clan: str) -> bool:
     """Whether ``seat`` plays ``clan``, read from its Stronghold's Clan Alignment."""
     alignment = ruleset.ACTIVE.alignment(clan)

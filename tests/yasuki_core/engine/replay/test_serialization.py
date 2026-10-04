@@ -276,7 +276,7 @@ def test_an_encoded_location_is_json_ready():
 
 
 def test_seat_round_trips():
-    info = SeatInfo(name="Ada", honor=7, ready=True, connected=True)
+    info = SeatInfo(name="Ada", honor=7, lost_honor_from_elsewhere=True, ready=True, connected=True)
     assert decode_seat(encode_seat(info)) == info
 
 

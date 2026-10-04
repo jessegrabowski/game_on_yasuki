@@ -31,8 +31,8 @@ yasuki_core.engine.ops
     return_home
     reveal_provinces
     set_honor
-    set_ignore_honor_requirements
     set_location
+    set_lost_honor_from_elsewhere
     set_position
     spawn_token
     stack

@@ -25,7 +25,11 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayInterrupt,
     PlayStrategy,
 )
-from yasuki_core.engine.rules.board.clans import card_alignments, seat_alignments
+from yasuki_core.engine.rules.board.clans import (
+    card_alignments,
+    seat_alignments,
+    shares_seat_alignment,
+)
 from yasuki_core.engine.rules.units.composition import in_a_unit
 from yasuki_core.engine.rules.board.queries import (
     has_keyword,
@@ -335,7 +339,7 @@ def can_proclaim(game: GameState, card: L5RCard) -> bool:
     seat = card.owner
     if seat is None:
         return False
-    if seat_alignments(game, seat).isdisjoint(card_alignments(card)):
+    if not shares_seat_alignment(game, card):
         return False
     return not game.has_used(seat_once_key(seat, PROCLAIM, game.turn))
 

@@ -1,6 +1,6 @@
 import pytest
 
-from tests.yasuki_core.engine.builders import end_phase, holding, pay, put_in_play
+from tests.yasuki_core.engine.builders import end_phase, holding, pay, put_in_play, sensei
 from tests.yasuki_core.engine.rules.cards.test_rise_of_jigoku import _modest_farm_game
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_AND_PROCLAIM
 from yasuki_core.engine.players import PlayerId
@@ -309,16 +309,17 @@ def test_dash_honor_requirement_recruits_at_negative_family_honor():
     assert ActivateAbility("P1-zero", RECRUIT) not in actions  # HR 0 still needs Family Honor >= 0
 
 
-def test_ignoring_honor_requirements_waives_the_gate_for_every_personality():
+def test_a_waiver_in_play_recruits_a_personality_above_the_seats_family_honor():
     state = _dealt_table()
     state.seats[PlayerId.P1].honor = -2
-    state.seats[PlayerId.P1].ignores_honor_requirements = True
     _gold_source(state, "P1-SH", 8)
+    put_in_play(state, sensei(PlayerId.P1, printed_id="mishime_sensei"))
     _personality_in_province(state, "P1-proud", honor_requirement=5)
     session = EngineSession.start(state, PlayerId.P1)
     _in_dynasty(session)
 
-    # An HR-5 Personality is recruitable at -2 Family Honor because the seat ignores requirements.
+    # Mishime Sensei's controller may ignore Honor Requirements, so an HR-5 Personality is
+    # recruitable at -2 Family Honor.
     assert ActivateAbility("P1-proud", RECRUIT) in session.legal_actions(PlayerId.P1)
 
 

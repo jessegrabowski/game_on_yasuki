@@ -41,6 +41,16 @@ than the actions: {func}`~.legacy_search_pool` and {func}`~.legacy_candidates` f
 {func}`~.can_proclaim` for Proclaim, and {func}`~.recruit_cost` for what a Recruit will cost this
 seat.
 
+The Honor Requirement gate sits with the Recruit instead, in `rulebook/recruit.py`.
+{func}`~.recruitable` withholds a Personality whose Honor Requirement its controller's Family Honor
+does not reach, and ``_waives_honor_requirement`` answers whether anything lets the seat ignore it
+anyway. Two things do, and they differ in scope. A seat that has lost Honor to anything but its own
+cards ignores the requirement of its own Clan Alignment's Personalities for the rest of the game
+(CR, Honor Requirement); `SeatInfo.lost_honor_from_elsewhere` records that loss, because a loss
+leaves no trace on the board to read. A card in play may waive every requirement whatever clan it
+names, which is the `HONOR_REQUIREMENT_WAIVERS` registry, read off the board for as long as the
+card is there.
+
 {func}`~.activatable` is the ability version: whether a card's ability can be announced at all,
 cost included. {func}`~.playable` applies the same tests to a card played out of hand, which is
 the one place the two part: a card's own hand ability is played, while one a keyword confers is

@@ -2,7 +2,11 @@ import pytest
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.board.clans import controlled_alignments, is_clan
+from yasuki_core.engine.rules.board.clans import (
+    controlled_alignments,
+    is_clan,
+    shares_seat_alignment,
+)
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 
@@ -59,6 +63,27 @@ def test_a_stronghold_printing_several_clans_plays_them_all():
     assert is_clan(game, PlayerId.P1, "Lion")
     assert is_clan(game, PlayerId.P1, "Crane")
     assert not is_clan(game, PlayerId.P1, "Scorpion")
+
+
+@pytest.mark.parametrize(
+    ("stronghold_clan", "card_clans", "shared"),
+    [
+        ("Crab", ("Crab",), True),
+        ("Crab", ("Crane",), False),
+        ("Crab", (), False),
+        (None, (), False),
+    ],
+    ids=["own clan", "off clan", "unaligned card", "unaligned seat"],
+)
+def test_a_card_shares_its_controllers_alignment_only_when_both_name_one(
+    stronghold_clan, card_clans, shared
+):
+    game = two_seat_game()
+    if stronghold_clan:
+        put_in_play(game, stronghold(PlayerId.P1, clan=stronghold_clan))
+    card = put_in_play(game, personality("theirs", clans=card_clans))
+
+    assert shares_seat_alignment(game, card) is shared
 
 
 def test_a_seat_controls_the_alignment_of_every_card_it_has_in_play():

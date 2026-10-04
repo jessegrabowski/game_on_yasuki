@@ -12,7 +12,6 @@ from yasuki_core.game_pieces.prints import (
     FatePrint,
     HoldingPrint,
     PersonalityPrint,
-    SenseiPrint,
     StrongholdPrint,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -82,7 +81,6 @@ from yasuki_core.bots.agents import make_agent
 from yasuki_core.bots.policies import make_policy
 from yasuki_core.engine.driver import Controls, run_game
 from yasuki_core.game_setup import build_state_from_deck
-from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.gold.producers import gold_reach, reachable_gold
 
 DECK = "src/yasuki_gui/assets/decks/spider_oni_control.yaml"
@@ -831,40 +829,6 @@ def test_can_proclaim_rejects_off_clan_and_unaligned_personalities():
     assert not legality.can_proclaim(game, _personality(("Crane",)))  # off-clan
     assert not legality.can_proclaim(game, _personality(("Fox",)))  # unaligned (minor clan only)
     assert not legality.can_proclaim(game, _personality(()))  # unaligned (no clan)
-
-
-def _begun_game_with_sensei(sensei_printed_id: str) -> GameState:
-    state = TableState.empty_two_seat()
-    put_in_play(
-        state,
-        L5RCard.of(
-            StrongholdPrint,
-            id="P1-SH",
-            printed_id="P1-SH",
-            name="SH",
-            side=Side.STRONGHOLD,
-            owner=PlayerId.P1,
-        ),
-    )
-    put_in_play(
-        state,
-        L5RCard.of(
-            SenseiPrint,
-            id="P1-SE",
-            name="Sensei",
-            side=Side.FATE,
-            owner=PlayerId.P1,
-            printed_id=sensei_printed_id,
-        ),
-    )
-    game = GameState.start(state, PlayerId.P1)
-    sequence.begin_game(game)
-    return game
-
-
-def test_begin_game_grants_mishimes_ignore_honor_requirements_waiver():
-    game = _begun_game_with_sensei("mishime_sensei")
-    assert game.table.seats[PlayerId.P1].ignores_honor_requirements is True
 
 
 def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):

@@ -104,7 +104,6 @@ the order they are written" (CR, Order of Effects).
    GrantProvinceStrength
    GrantSeatAbility
    GrantModifier
-   IgnoreHonorRequirements
    InterruptingEffect
    Move
    MoveToDeck
@@ -223,7 +222,6 @@ the action rather than by deserializing it.
    triggers.ResumeCascade
    turn.sequence.AccrueSincerity
    turn.sequence.BeginNextTurn
-   turn.sequence.OpenFirstTurn
    turn.sequence.OpenRound
 ```
 

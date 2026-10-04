@@ -11,7 +11,6 @@ yasuki_core.engine.rules.turn.sequence
     BeginNextTurn
     EnforceMaximumHandSize
     LiftStraightenDelays
-    OpenFirstTurn
     OpenNextTurn
     OpenRound
 

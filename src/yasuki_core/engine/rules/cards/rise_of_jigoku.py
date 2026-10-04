@@ -23,7 +23,10 @@ from yasuki_core.engine.rules.gold.production import effective_gold_production, 
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.interrupts import held_action_targets
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
-from yasuki_core.engine.rules.rulebook.recruit import recruit_card
+from yasuki_core.engine.rules.rulebook.recruit import (
+    recruit_card,
+    register_honor_requirement_waiver,
+)
 from yasuki_core.engine.rules.legality import location_permits, permitted_timings_in, recruit_cost
 from yasuki_core.engine.rules.rulebook.equip import attach_restriction, is_spell
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
@@ -42,7 +45,6 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantKeyword,
     GrantModifier,
-    IgnoreHonorRequirements,
     MeleeAttack,
     PayGold,
     RangedAttack,
@@ -432,7 +434,11 @@ ONI_COST = 5
 # "You pay :g2: less ... for each player who controls any :shadowlands: cards."
 MISHIME_SENSEI_DISCOUNT = 2
 
+# "You do not lose Honor from your cards' effects and may ignore Honor Requirements." Both halves
+# are read off the board: a Sensei starts the game in play and never enters it, so there is no
+# arrival to react to.
 register_honor_loss_shield("mishime_sensei")
+register_honor_requirement_waiver("mishime_sensei")
 
 
 @action_discount("mishime_sensei")
@@ -450,15 +456,6 @@ def _mishime_sensei_action_discount(game: GameState, sensei: L5RCard, purchase: 
         for seat in game.table.seats
     )
     return MISHIME_SENSEI_DISCOUNT * shadowlands_seats
-
-
-@on(EnteredPlay, "mishime_sensei")
-def _mishime_sensei_entered_play(ctx: TriggerContext) -> list[Effect]:
-    """Mishime Sensei: grant its controller the ignore-Honor-Requirements waiver as it enters
-    play."""
-    if ctx.event.card_id != ctx.card.id:
-        return []
-    return [IgnoreHonorRequirements(ctx.card.owner)]
 
 
 def _mishime_sensei_of(game: GameState, seat: PlayerId) -> L5RCard:

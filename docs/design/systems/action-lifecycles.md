@@ -58,8 +58,8 @@ What is on the stack, and what each continues:
   card's entry into play is.
 - `ApplyEffects` in `effects.py`: effects held until the work above them has run, which the rulebook
   procedures and an Interrupt's effects behind its payment push.
-- `AccrueSincerity`, `EnforceMaximumHandSize`, `BeginNextTurn`, `OpenNextTurn`, `OpenFirstTurn` and
-  `OpenRound` in `turn/sequence.py`: the turn boundary. The end of the turn resolves the effects held
+- `AccrueSincerity`, `EnforceMaximumHandSize`, `BeginNextTurn`, `OpenNextTurn` and `OpenRound` in
+  `turn/sequence.py`: the turn boundary. The end of the turn resolves the effects held
   for it, accrues Sincerity and announces the turn's end, then the rulebook's draw resolves as an
   ordinary `DrawCard` and the hand-size check waits behind whatever it fulfilled. The next turn
   waits behind the end-of-turn discard and what dropping the expiring modifiers fulfilled, and a

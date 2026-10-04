@@ -62,6 +62,7 @@ def personality(
     force: int = 2,
     chi: int = 3,
     personal_honor: int = 0,
+    honor_requirement: int | None = None,
     gold_cost: int | None = None,
     keywords: tuple[str, ...] = (),
     clans: tuple[str, ...] = (),
@@ -78,6 +79,7 @@ def personality(
         force=force,
         chi=chi,
         personal_honor=personal_honor,
+        honor_requirement=honor_requirement,
         gold_cost=gold_cost,
         keywords=keywords,
         clans=clans,
@@ -193,6 +195,7 @@ def holding(
 def stronghold(
     owner: PlayerId = PlayerId.P1,
     *,
+    printed_id: str | None = None,
     gold_production: int = 0,
     province_strength: int = 0,
     clan: str | None = None,
@@ -202,7 +205,7 @@ def stronghold(
     return L5RCard.of(
         StrongholdPrint,
         id=f"{owner.name}-SH",
-        printed_id=f"{owner.name}-SH",
+        printed_id=f"{owner.name}-SH" if printed_id is None else printed_id,
         name="SH",
         side=Side.STRONGHOLD,
         owner=owner,
@@ -308,12 +311,14 @@ def sensei(
     )
 
 
-def wind(owner: PlayerId = PlayerId.P1, *, name: str = "Wind") -> L5RCard:
+def wind(
+    owner: PlayerId = PlayerId.P1, *, name: str = "Wind", printed_id: str | None = None
+) -> L5RCard:
     """A Wind. A deck holds at most one and it starts in play, so tests put it there directly."""
     return L5RCard.of(
         WindPrint,
         id=f"{owner.name}-wind",
-        printed_id=f"{owner.name}-wind",
+        printed_id=f"{owner.name}-wind" if printed_id is None else printed_id,
         name=name,
         side=Side.FATE,
         owner=owner,
