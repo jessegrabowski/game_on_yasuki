@@ -5,6 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.gates_of_tengoku import (
+    EXPLOSIVE,
     SASADAS_OROCHI,
     THUNDER_VETERAN,
 )
@@ -31,6 +32,7 @@ from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.board.seats import has_compassion, province_count
 from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
     Bow,
     Destroy,
     DestroyProvince,
@@ -879,3 +881,74 @@ def test_veteran_of_thunder_creates_a_mantis_samurai_as_it_dies():
 
     created = [card for card in personalities_in_play(game) if card.name == "Thunder Veteran"]
     assert [card.owner for card in created] == [PlayerId.P2]
+
+
+# --- Yoritomo Robusuta, Master of Gaijin Pepper ---
+
+
+def test_yoritomo_robusuta_gives_another_players_personality_an_explosive_token_for_two_gold():
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, gold_production=2))
+    put_in_play(
+        state, personality("robusuta", printed_id="yoritomo_robusuta_master_of_gaijin_pepper")
+    )
+    put_in_play(state, personality("mine"))
+    put_in_play(state, personality("theirs", owner=PlayerId.P2))
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, ActivateAbility("robusuta"))
+    pay(session, P1)
+    assert session.game.pending.candidates == ("theirs",)
+    session.submit(P1, DecisionResponse(("theirs",)))
+
+    assert session.game.table.cards_by_id["theirs"].counters == {EXPLOSIVE.key: 1}
+
+
+def _robusuta_battle(*, followers):
+    units = [
+        personality("attacker", force=5),
+        personality("primed"),
+        personality("bystander"),
+        personality(
+            "robusuta",
+            owner=PlayerId.P2,
+            printed_id="yoritomo_robusuta_master_of_gaijin_pepper",
+        ),
+    ]
+    game = combat_segment(units, {"attacker": 0, "primed": 0, "bystander": 0}, {"robusuta": 0}).game
+    resolve_effects(game, [AdjustCounter("primed", EXPLOSIVE, 1)])
+    for index in range(followers):
+        attached(
+            game,
+            attachment(f"follower{index}", attachment_type=AttachmentType.FOLLOWER),
+            "primed",
+        )
+    return game
+
+
+@pytest.mark.parametrize(
+    ("followers", "left"), [(0, set()), (1, {"primed"})], ids=["alone", "followed"]
+)
+def test_yoritomo_robusutas_yu_destroys_a_follower_of_an_explosive_enemy_or_the_enemy(
+    followers, left
+):
+    game = _robusuta_battle(followers=followers)
+
+    resolve_effects(game, [Destroy("robusuta", P1)])
+    assert game.pending.candidates == ("primed",)
+    submit(game, DecisionResponse(("primed",)))
+
+    on_table = {card.id for card in game.table.battlefield.cards}
+    assert on_table & {"primed", "follower0"} == left
+
+
+def test_yoritomo_robusutas_yu_asks_which_follower_when_the_enemy_has_several():
+    game = _robusuta_battle(followers=2)
+
+    resolve_effects(game, [Destroy("robusuta", P1)])
+    submit(game, DecisionResponse(("primed",)))
+    assert set(game.pending.candidates) == {"follower0", "follower1"}
+    submit(game, DecisionResponse(("follower1",)))
+
+    on_table = {card.id for card in game.table.battlefield.cards}
+    assert on_table & {"primed", "follower0", "follower1"} == {"primed", "follower0"}

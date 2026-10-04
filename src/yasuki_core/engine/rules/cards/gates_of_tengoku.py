@@ -1,4 +1,4 @@
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost
 from yasuki_core.engine.rules.abilities.costs import declare_amount
 from yasuki_core.engine.rules.abilities.idioms import (
@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.effects import (
     AskOption,
     Banish,
     Bow,
+    Choose,
     CreateToken,
     DelayedEffect,
     Destroy,
@@ -43,6 +44,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
     MoveToDeck,
     Negated,
+    PayGold,
     ShuffleDeck,
     Unpayable,
 )
@@ -50,6 +52,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, Provinc
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import rightmost_province, sincerity_seed_targets
@@ -447,3 +450,96 @@ def _veteran_of_thunder_yu(ctx: TriggerContext) -> list[Effect]:
 
 
 register_yu("veteran_of_thunder", _veteran_of_thunder_yu)
+
+
+# --- Yoritomo Robusuta, Master of Gaijin Pepper ---
+
+EXPLOSIVE = counter_from_key("explosive")
+ROBUSUTA_GOLD = 2
+
+
+def _yoritomo_robusuta_master_of_gaijin_pepper_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Target an enemy Personality with an Explosive token and destroy a Follower in their
+    unit, or them if they have no Followers." An enemy at Robusuta's battlefield, since a targeted
+    Yu reaches only that battlefield (ShE datasheet, The Yu Trait)."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    targets = tuple(
+        card.id
+        for card in personalities_in_play(ctx.game)
+        if card.owner is not ctx.card.owner
+        and card.counters.get(EXPLOSIVE.key, 0) > 0
+        and location_of(ctx.game.table, card).battlefield == battlefield
+    )
+    if not targets:
+        return []
+    resolver = "yoritomo_robusuta_master_of_gaijin_pepper_yu"
+    return [Choose(ctx.card.owner, targets, 1, 1, resolver, ctx.card.id)]
+
+
+register_yu(
+    "yoritomo_robusuta_master_of_gaijin_pepper", _yoritomo_robusuta_master_of_gaijin_pepper_yu
+)
+
+
+@choice_resolver(
+    "yoritomo_robusuta_master_of_gaijin_pepper_yu",
+    prompt="Choose an enemy Personality with an Explosive token",
+)
+def _resolve_yoritomo_robusuta_master_of_gaijin_pepper_yu(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Destroy a Follower in the target's unit, asking which when there are several, or the target
+    when it has none."""
+    target = game.table.cards_by_id[chosen[0]]
+    followers = tuple(follower.id for follower in followers_of(game, target))
+    if not followers:
+        return [Destroy(target.id, Trait(source_id))]
+    if len(followers) == 1:
+        return [Destroy(followers[0], Trait(source_id))]
+    return [
+        Choose(
+            seat, followers, 1, 1, "yoritomo_robusuta_master_of_gaijin_pepper_follower", source_id
+        )
+    ]
+
+
+@choice_resolver(
+    "yoritomo_robusuta_master_of_gaijin_pepper_follower",
+    prompt="Choose a Follower in their unit to destroy",
+)
+def _resolve_yoritomo_robusuta_master_of_gaijin_pepper_follower(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Destroy(chosen[0], Trait(source_id))]
+
+
+def _yoritomo_robusuta_master_of_gaijin_pepper_cost(
+    game: GameState, source: L5RCard
+) -> list[Effect]:
+    return [PayGold(source.owner, ROBUSUTA_GOLD, source.name)]
+
+
+def _yoritomo_robusuta_master_of_gaijin_pepper_targets(
+    game: GameState, source: L5RCard
+) -> list[str]:
+    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
+
+
+def _yoritomo_robusuta_master_of_gaijin_pepper_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [AdjustCounter(target.id, EXPLOSIVE, 1)]
+
+
+register_ability(
+    "yoritomo_robusuta_master_of_gaijin_pepper",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=_yoritomo_robusuta_master_of_gaijin_pepper_cost,
+        targets=_yoritomo_robusuta_master_of_gaijin_pepper_targets,
+        targeting_message="another player's Personality",
+        effects=_yoritomo_robusuta_master_of_gaijin_pepper_effects,
+    ),
+)
