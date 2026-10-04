@@ -53,6 +53,11 @@ from yasuki_core.game_pieces.prints import CardPrint
 # search in hand does not reach.
 PROVINCES_PANE, DECK_PANE, DISCARD_PANE = "Provinces", "Deck", "Discard"
 SEARCH_PANES = (PROVINCES_PANE, DECK_PANE, DISCARD_PANE)
+# Offered only by a choice that also reaches the battlefield, such as the order of triggers whose
+# cards are partly in play and partly in a discard pile.
+IN_PLAY_PANE = "In play"
+
+DISCARD_PILES = (ZoneRole.DYNASTY_DISCARD, ZoneRole.FATE_DISCARD)
 
 
 class SearchView(NamedTuple):
@@ -287,15 +292,17 @@ class GameRunner:
         return [table.cards_by_id[card_id] for card_id in self.looked_at()]
 
     def _piles_holding(self, candidates: set[str]) -> list[L5RCard]:
-        """Every card in each of the human's piles that holds a candidate. The whole pile is shown
-        so the seat sees what it passed over, and only the candidates in it can be taken."""
+        """Every card in each pile that holds a candidate: the human's own piles, and either seat's
+        discard pile, which every player may see. The whole pile is shown so the seat sees what it
+        passed over, and only the candidates in it can be taken."""
         table = self.session.game.table
         pool: list[L5RCard] = []
         for deck_key, deck in table.decks.items():
             if deck_key.owner is self.human and any(card.id in candidates for card in deck.cards):
                 pool.extend(deck.cards)
         for zone_key, zone in table.zones.items():
-            if zone_key.owner is self.human and any(card.id in candidates for card in zone.cards):
+            readable = zone_key.owner is self.human or zone_key.role in DISCARD_PILES
+            if readable and any(card.id in candidates for card in zone.cards):
                 pool.extend(zone.cards)
         # A candidate somewhere no pile covers would otherwise drop out of the dialog entirely.
         found = {card.id for card in pool}
@@ -324,21 +331,26 @@ class GameRunner:
         )
 
     def _panes(self, pool: Iterable[L5RCard]) -> dict[str, list[L5RCard]]:
-        """``pool`` bucketed into the three panes a search dialog offers, by where each card sits.
-        A pane nothing was found in stays present and empty, so the dialog can disable it."""
+        """``pool`` bucketed into the panes a search dialog offers, by where each card sits. The
+        three of ``SEARCH_PANES`` stay present when nothing was found in them, so the dialog can
+        disable them. ``IN_PLAY_PANE`` is added only for a card on the battlefield."""
         table = self.session.game.table
         provinces = self._province_card_ids()
         discards = {
             card.id
-            for role in (ZoneRole.DYNASTY_DISCARD, ZoneRole.FATE_DISCARD)
-            for card in table.zones[ZoneKey(self.human, role)].cards
+            for key, zone in table.zones.items()
+            if key.role in DISCARD_PILES
+            for card in zone.cards
         }
+        in_play = {card.id for card in table.battlefield.cards}
         panes: dict[str, list[L5RCard]] = {name: [] for name in SEARCH_PANES}
         for card in pool:
             if card.id in provinces:
                 panes[PROVINCES_PANE].append(card)
             elif card.id in discards:
                 panes[DISCARD_PANE].append(card)
+            elif card.id in in_play:
+                panes.setdefault(IN_PLAY_PANE, []).append(card)
             else:
                 panes[DECK_PANE].append(card)
         return panes
