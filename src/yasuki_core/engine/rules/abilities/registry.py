@@ -143,8 +143,10 @@ def granted_tireless(game: GameState, card: L5RCard) -> bool:
 
 # The ability a card grants, built for the card that holds it from the context its granting action
 # recorded ("While a target Personality opposes Kaede, she has 'Battle: Ranged 3'"). One per
-# granting card: the record names the card, and the card's factory says what it gives.
-AbilityFactory = Callable[[GameState, L5RCard, tuple[str, ...]], Ability]
+# granting card: the record names the card, and the card's factory says what it gives. A factory
+# answers None for a card its grant does not reach, as a grant to a seat that gives one of its cards
+# an ability answers for every other.
+AbilityFactory = Callable[[GameState, L5RCard, tuple[str, ...]], Ability | None]
 GRANTED_ABILITIES: HandlerRegistry[AbilityFactory] = HandlerRegistry(
     "granted abilities", "already grants an ability"
 )
@@ -373,13 +375,14 @@ def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     yields to a granted one under the same key, which is how a card changes a rulebook ability for
     a while."""
     printed = printed_abilities(card)
-    granted = tuple(
+    built = (
         GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](
             game, card, grant.context
         )
         for grant in game.ongoing
         if _grants_to(grant, card) and grant_applies(game, grant)
     )
+    granted = tuple(ability for ability in built if ability is not None)
     shadowed = {held.key for held in granted}
     conferred = tuple(held for held in _conferred(game, card) if held.key not in shadowed)
     return (*printed, *granted, *conferred)
