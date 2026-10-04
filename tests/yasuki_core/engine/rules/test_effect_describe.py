@@ -72,6 +72,7 @@ from yasuki_core.engine.rules.effects import (
     PutIntoPlay,
     SpendOncePerTurn,
     StartDuel,
+    BothLoseTheDuel,
     EndDuel,
     SpendSeatOncePerTurn,
     SpendSeatOncePerGame,
@@ -117,6 +118,7 @@ EFFECTS = [
     ),
     (Straighten("farm_1"), "straighten farm_1"),
     (EndDuel(), "end the duel without resolution"),
+    (BothLoseTheDuel("darkness"), "darkness: both Personalities lose the duel"),
     (
         StartDuel("kakita", "bayushi", "sanctioned_duel"),
         "duel: kakita challenges bayushi",

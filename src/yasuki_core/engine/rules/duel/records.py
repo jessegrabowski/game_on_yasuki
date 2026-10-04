@@ -89,6 +89,9 @@ class DuelRecord:
         not focused is absent, so read it through :meth:`focuses`. Default empty.
     outcome : DuelOutcome or None
         What the duel did, or None until it has ended. Default None.
+    lost_by_both : bool
+        Whether a card has made both Personalities lose the duel, whatever the totals come to (CR,
+        Duel). Read once, as the duel is decided. Default False.
     """
 
     challenger: PlayerId
@@ -99,6 +102,7 @@ class DuelRecord:
     step: DuelStep = DuelStep.FOCUSING
     focused: dict[PlayerId, int] = field(default_factory=dict)
     outcome: DuelOutcome | None = None
+    lost_by_both: bool = False
 
     def duelist_of(self, seat: PlayerId) -> str:
         """The id of ``seat``'s Personality in the duel. Raise ``KeyError`` for a seat not in it."""

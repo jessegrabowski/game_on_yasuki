@@ -22,6 +22,7 @@ yasuki_core.engine.rules.effects
     Attributed
     Banish
     BanishTopFate
+    BothLoseTheDuel
     Bow
     Choose
     CounterOnAttachedProvince

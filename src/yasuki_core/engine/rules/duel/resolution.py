@@ -246,6 +246,9 @@ def _is_duelist(game: GameState, card: L5RCard) -> bool:
 def _outcome_on_totals(game: GameState, duel: DuelRecord) -> DuelOutcome:
     """Who won, on the totals and then on the Duelist tiebreak: the higher total wins, an equal one
     is won by a Duelist against a non-Duelist, and any other tie is lost by both (CR, Duel).
+
+    A duel a card has made both Personalities lose skips the comparison and is lost by both, with
+    the totals it reached still recorded, since cards and clients read them either way.
     """
     challenger, challenged = duel.challenger, duel.challenged
     totals = {seat: duel_total(game, duel, seat) for seat in (challenger, challenged)}
@@ -254,6 +257,8 @@ def _outcome_on_totals(game: GameState, duel: DuelRecord) -> DuelOutcome:
         seat: tuple(card.id for card in focused_cards(game, seat))
         for seat in (challenger, challenged)
     }
+    if duel.lost_by_both:
+        return DuelOutcome((), (challenger, challenged), totals, focused)
     if totals[challenger] != totals[challenged]:
         winner = max(totals, key=lambda seat: totals[seat])
         return DuelOutcome((winner,), (duel.opponent_of(winner),), totals, focused)
