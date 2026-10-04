@@ -952,3 +952,27 @@ def test_yoritomo_robusutas_yu_asks_which_follower_when_the_enemy_has_several():
 
     on_table = {card.id for card in game.table.battlefield.cards}
     assert on_table & {"primed", "follower0", "follower1"} == {"primed", "follower0"}
+
+
+# --- Shiba Kintaro, the Remembered (Experienced) ---
+
+
+def test_shiba_kintaro_refills_a_province_of_his_owners_once_he_is_destroyed():
+    units = [
+        personality("attacker", force=5),
+        personality(
+            "kintaro", owner=PlayerId.P2, printed_id="shiba_kintaro_the_remembered_experienced"
+        ),
+    ]
+    game = combat_segment(units, {"attacker": 0}, {"kintaro": 0}).game
+
+    resolve_effects(game, [Destroy("kintaro", P1)])
+    assert "kintaro" not in {card.id for card in game.table.battlefield.cards}
+    assert game.pending.candidates == ("def-prov0",)
+    submit(game, DecisionResponse(("def-prov0",)))
+
+    province = game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)].cards
+    assert [card.id for card in province] == ["kintaro"]
+    assert province[0].face_up
+    assert game.table.seats[PlayerId.P2].honor == 1
+    assert game.delayed == []

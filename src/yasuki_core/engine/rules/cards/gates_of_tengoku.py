@@ -13,7 +13,11 @@ from yasuki_core.engine.rules.abilities.model import (
     Interruption,
 )
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
-from yasuki_core.engine.rules.board.queries import owned_personalities, personalities_in_play
+from yasuki_core.engine.rules.board.queries import (
+    owned_personalities,
+    personalities_in_play,
+    province_zones,
+)
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.gold.cost import unit_gold_cost
@@ -37,18 +41,27 @@ from yasuki_core.engine.rules.effects import (
     DelayedEffect,
     Destroy,
     DestroyProvince,
+    Discard,
     DiscardFavor,
     Effect,
+    Evaluate,
+    GainHonor,
     GainProvince,
     GrantCompassion,
     Move,
     MoveToDeck,
     Negated,
     PayGold,
+    PlaceInProvince,
     ShuffleDeck,
     Unpayable,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, ProvinceDestroyed
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    Destroyed,
+    EnteredPlay,
+    NextTime,
+    ProvinceDestroyed,
+)
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
@@ -172,6 +185,54 @@ def _sasada_pearl_champion_experienced_entered_play(ctx: TriggerContext) -> list
     if ctx.event.card_id != ctx.card.id:
         return []
     return [CreateToken(SASADAS_OROCHI, ctx.card.owner, ctx.card.id, attach_to=ctx.card.id)]
+
+
+# --- Shiba Kintaro, the Remembered (Experienced) ---
+
+KINTARO_HONOR = 1
+
+
+def _shiba_kintaro_the_remembered_experienced_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: After Kintaro is destroyed, discard a card in one of your Provinces, refill it with
+    Kintaro face-up, and gain 1 Honor." """
+    after = Evaluate("shiba_kintaro_the_remembered_experienced_after", ctx.card.id, ctx.card.owner)
+    return [DelayedEffect(after, NextTime(Destroyed, ctx.card.id))]
+
+
+register_yu(
+    "shiba_kintaro_the_remembered_experienced", _shiba_kintaro_the_remembered_experienced_yu
+)
+
+
+@choice_resolver("shiba_kintaro_the_remembered_experienced_after")
+def _resolve_shiba_kintaro_the_remembered_experienced_after(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Ask which card in the seat's Provinces makes room for Kintaro, or only gain the Honor when
+    they hold none."""
+    held = tuple(card.id for _, zone in province_zones(game, seat) for card in zone.cards)
+    if not held:
+        return [GainHonor(seat, KINTARO_HONOR, source_id=source_id)]
+    return [Choose(seat, held, 1, 1, "shiba_kintaro_the_remembered_experienced_discard", source_id)]
+
+
+@choice_resolver(
+    "shiba_kintaro_the_remembered_experienced_discard",
+    prompt="Shiba Kintaro's Yu: choose a card in your Provinces to discard",
+)
+def _resolve_shiba_kintaro_the_remembered_experienced_discard(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    province = next(
+        key
+        for key, zone in province_zones(game, seat)
+        if any(card.id == chosen[0] for card in zone.cards)
+    )
+    return [
+        Discard(chosen[0], Trait(source_id)),
+        PlaceInProvince(source_id, province),
+        GainHonor(seat, KINTARO_HONOR, source_id=source_id),
+    ]
 
 
 # --- Shrine of Compassion (Experienced) ---
