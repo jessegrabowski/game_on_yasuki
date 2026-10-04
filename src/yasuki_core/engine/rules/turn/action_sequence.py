@@ -314,11 +314,9 @@ def _apply_card_choice(
     | Confirm,
     response: DecisionResponse,
 ) -> None:
-    resolver = triggers.CHOICE_RESOLVERS[request.resolver]
-    # Passed only when the choice carries one, so a resolver whose card asks a single question
-    # never declares a parameter it would not read.
     carried = request.resolver_context if isinstance(request, ChooseOption | ChooseCards) else ()
-    context = {"resolver_context": carried} if carried else {}
-    produced = resolver(game, request.source_id, response.choices, request.seat, **context)
+    produced = triggers.resolve_choice(
+        game, request.resolver, request.source_id, response.choices, request.seat, carried
+    )
     triggers.resume_paused_cascade(game, produced)
     run_stack(game)  # finish any work deferred behind the choice, unless it paused again

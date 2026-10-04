@@ -272,6 +272,21 @@ def choice_resolver(key: str, *, prompt: str | None = None) -> Callable[[Resolve
     return register
 
 
+def resolve_choice(
+    game: GameState,
+    resolver: str,
+    source_id: str | None,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """The effects the choice resolver ``resolver`` makes of ``chosen``. The context is passed only
+    when the choice carries one, so a resolver whose card asks a single question never declares a
+    parameter it would not read."""
+    context = {"resolver_context": resolver_context} if resolver_context else {}
+    return CHOICE_RESOLVERS[resolver](game, source_id, chosen, seat, **context)
+
+
 def at_cap(card: L5RCard, counter: Counter, cap: int) -> bool:
     """Whether ``card`` already holds ``cap`` or more of ``counter``, a shared trigger guard."""
     return card.counters.get(counter.key, 0) >= cap

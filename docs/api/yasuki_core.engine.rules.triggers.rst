@@ -36,6 +36,7 @@ yasuki_core.engine.rules.triggers
     pay_costs
     reach_moment
     resolve_action_effects
+    resolve_choice
     resolve_delayed
     resolve_effects
     resume_cascade
