@@ -8,6 +8,8 @@ from yasuki_core.engine.rules.cards.gates_of_tengoku import (
     EXPLOSIVE,
     SASADAS_OROCHI,
     THUNDER_VETERAN,
+    YAMADERA_ATTACHMENTS,
+    YAMADERA_PERSONALITY,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
@@ -29,7 +31,7 @@ from yasuki_core.game_pieces.prints import ActionPrint, EventPrint, PersonalityP
 
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.board.queries import personalities_in_play, top_of_deck
 from yasuki_core.engine.rules.board.seats import has_compassion, province_count
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -976,3 +978,55 @@ def test_shiba_kintaro_refills_a_province_of_his_owners_once_he_is_destroyed():
     assert province[0].face_up
     assert game.table.seats[PlayerId.P2].honor == 1
     assert game.delayed == []
+
+
+# --- Hida Yamadera, Dark Human (Experienced 2) ---
+
+
+def test_hida_yamadera_destroys_a_small_personality_then_returns_to_his_dynasty_deck():
+    units = [
+        personality("brute", force=9),
+        personality("small", force=3),
+        personality(
+            "yamadera",
+            owner=PlayerId.P2,
+            printed_id="hida_yamadera_dark_human_experienced_2",
+            force=8,
+        ),
+    ]
+    game = combat_segment(units, {"brute": 0, "small": 0}, {"yamadera": 0}).game
+
+    resolve_effects(game, [Destroy("yamadera", P1)])
+    submit(game, DecisionResponse((YAMADERA_PERSONALITY,)))
+    assert game.pending.candidates == ("small",)
+    submit(game, DecisionResponse(("small",)))
+
+    on_table = {card.id for card in game.table.battlefield.cards}
+    assert on_table & {"small", "yamadera"} == set()
+    assert top_of_deck(game, DeckKey(PlayerId.P2, Side.DYNASTY), 1) == ("yamadera",)
+    assert game.table.seats[PlayerId.P2].honor == -1
+
+
+def test_hida_yamadera_destroys_attachments_whose_total_gold_cost_stays_below_his_force():
+    units = [
+        personality("brute", force=9),
+        personality(
+            "yamadera",
+            owner=PlayerId.P2,
+            printed_id="hida_yamadera_dark_human_experienced_2",
+            force=8,
+        ),
+    ]
+    game = combat_segment(units, {"brute": 0}, {"yamadera": 0}).game
+    for card_id, cost in (("cheap", 3), ("mid", 4), ("dear", 5)):
+        attached(game, attachment(card_id, gold_cost=cost), "brute")
+
+    resolve_effects(game, [Destroy("yamadera", P1)])
+    assert game.pending.candidates == (YAMADERA_ATTACHMENTS,)
+    submit(game, DecisionResponse((YAMADERA_ATTACHMENTS,)))
+    submit(game, DecisionResponse(("cheap",)))
+    assert game.pending.candidates == ("mid",)
+    submit(game, DecisionResponse(("mid",)))
+
+    brute = game.table.cards_by_id["brute"]
+    assert [card.id for card in attachments_of(game, brute)] == ["dear"]

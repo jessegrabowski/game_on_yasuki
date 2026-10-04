@@ -17,10 +17,11 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     province_zones,
+    units_at,
 )
-from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
-from yasuki_core.engine.rules.gold.cost import unit_gold_cost
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost, unit_gold_cost
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.gold.production import gold_handler
 from yasuki_core.engine.rules.board.seats import (
@@ -53,7 +54,9 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     PayGold,
     PlaceInProvince,
+    PlaceOnDeck,
     ShuffleDeck,
+    Simultaneously,
     Unpayable,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -66,6 +69,7 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import rightmost_province, sincerity_seed_targets
@@ -129,6 +133,176 @@ def _resolve_decree_of_the_hantei_favor(
     if not chosen:
         return []
     return [DiscardFavor(seat), GainProvince(seat)]
+
+
+# --- Hida Yamadera, Dark Human (Experienced 2) ---
+
+YAMADERA_MOST_FORCE = 4
+YAMADERA_HONOR_LOSS = 1
+YAMADERA_PERSONALITY = "Destroy a target Personality without attachments and 4 or less Force"
+YAMADERA_ATTACHMENTS = (
+    "Destroy any number of target attachments with total Gold cost less than Yamadera's Force"
+)
+
+
+def _hida_yamadera_dark_human_experienced_2_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Destroy a target Personality without attachments and 4 or less Force, or any number of
+    target attachments with total Gold cost less than Yamadera's Force; after Yamadera is
+    destroyed, put him on top of your Dynasty deck and lose 1 Honor." Targets at his battlefield,
+    since a targeted Yu reaches only that battlefield (ShE datasheet, The Yu Trait)."""
+    game, yamadera = ctx.game, ctx.card
+    offered = (
+        (
+            YAMADERA_PERSONALITY,
+            _hida_yamadera_dark_human_experienced_2_personalities(game, yamadera),
+        ),
+        (
+            YAMADERA_ATTACHMENTS,
+            _hida_yamadera_dark_human_experienced_2_attachments(game, yamadera, ()),
+        ),
+    )
+    modes = tuple(mode for mode, targets in offered if targets)
+    asked = [
+        AskOption(
+            yamadera.owner,
+            modes,
+            "Hida Yamadera's Yu: choose what to destroy",
+            "hida_yamadera_dark_human_experienced_2",
+            yamadera.id,
+        )
+    ]
+    after = Evaluate("hida_yamadera_dark_human_experienced_2_after", yamadera.id, yamadera.owner)
+    return [*(asked if modes else []), DelayedEffect(after, NextTime(Destroyed, yamadera.id))]
+
+
+register_yu("hida_yamadera_dark_human_experienced_2", _hida_yamadera_dark_human_experienced_2_yu)
+
+
+def _hida_yamadera_dark_human_experienced_2_units(
+    game: GameState, yamadera: L5RCard
+) -> list[L5RCard]:
+    battlefield = location_of(game.table, yamadera).battlefield
+    if battlefield is None:
+        return []
+    return [card for seat in game.table.seats for card in units_at(game, battlefield, seat)]
+
+
+def _hida_yamadera_dark_human_experienced_2_personalities(
+    game: GameState, yamadera: L5RCard
+) -> tuple[str, ...]:
+    return tuple(
+        card.id
+        for card in _hida_yamadera_dark_human_experienced_2_units(game, yamadera)
+        if not attachments_of(game, card) and effective_force(game, card) <= YAMADERA_MOST_FORCE
+    )
+
+
+def _hida_yamadera_dark_human_experienced_2_attachments(
+    game: GameState, yamadera: L5RCard, chosen: tuple[str, ...]
+) -> tuple[str, ...]:
+    """The attachments at Yamadera's battlefield that keep the total Gold cost of ``chosen`` and
+    themselves below his Force."""
+    spent = sum(effective_gold_cost(game, game.table.cards_by_id[card_id]) for card_id in chosen)
+    budget = effective_force(game, yamadera) - spent
+    return tuple(
+        attachment.id
+        for card in _hida_yamadera_dark_human_experienced_2_units(game, yamadera)
+        for attachment in attachments_of(game, card)
+        if attachment.id not in chosen and effective_gold_cost(game, attachment) < budget
+    )
+
+
+@choice_resolver("hida_yamadera_dark_human_experienced_2")
+def _resolve_hida_yamadera_dark_human_experienced_2(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    yamadera = game.table.cards_by_id[source_id]
+    if chosen[0] == YAMADERA_PERSONALITY:
+        targets = _hida_yamadera_dark_human_experienced_2_personalities(game, yamadera)
+        return [
+            Choose(
+                seat, targets, 1, 1, "hida_yamadera_dark_human_experienced_2_personality", source_id
+            )
+        ]
+    targets = _hida_yamadera_dark_human_experienced_2_attachments(game, yamadera, ())
+    return [
+        Choose(
+            seat,
+            targets,
+            1,
+            1,
+            "hida_yamadera_dark_human_experienced_2_first_attachment",
+            source_id,
+        )
+    ]
+
+
+@choice_resolver(
+    "hida_yamadera_dark_human_experienced_2_personality",
+    prompt="Hida Yamadera's Yu: choose a Personality to destroy",
+)
+def _resolve_hida_yamadera_dark_human_experienced_2_personality(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Destroy(chosen[0], Trait(source_id))]
+
+
+@choice_resolver(
+    "hida_yamadera_dark_human_experienced_2_first_attachment",
+    prompt="Hida Yamadera's Yu: choose an attachment to destroy",
+)
+def _resolve_hida_yamadera_dark_human_experienced_2_first_attachment(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return _hida_yamadera_dark_human_experienced_2_more_attachments(game, source_id, chosen, seat)
+
+
+@choice_resolver(
+    "hida_yamadera_dark_human_experienced_2_another_attachment",
+    prompt="Hida Yamadera's Yu: choose another attachment to destroy, or none",
+)
+def _resolve_hida_yamadera_dark_human_experienced_2_another_attachment(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """``resolver_context`` carries the attachments chosen so far."""
+    if not chosen:
+        return _hida_yamadera_dark_human_experienced_2_destroy(resolver_context, source_id)
+    return _hida_yamadera_dark_human_experienced_2_more_attachments(
+        game, source_id, (*resolver_context, *chosen), seat
+    )
+
+
+def _hida_yamadera_dark_human_experienced_2_more_attachments(
+    game: GameState, source_id: str, picked: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Ask for another attachment while one still fits under his Force, or destroy those picked."""
+    fitting = _hida_yamadera_dark_human_experienced_2_attachments(
+        game, game.table.cards_by_id[source_id], picked
+    )
+    if not fitting:
+        return _hida_yamadera_dark_human_experienced_2_destroy(picked, source_id)
+    resolver = "hida_yamadera_dark_human_experienced_2_another_attachment"
+    return [Choose(seat, fitting, 0, 1, resolver, source_id, resolver_context=picked)]
+
+
+def _hida_yamadera_dark_human_experienced_2_destroy(
+    picked: tuple[str, ...], source_id: str
+) -> list[Effect]:
+    return [Simultaneously(tuple(Destroy(card_id, Trait(source_id)) for card_id in picked))]
+
+
+@choice_resolver("hida_yamadera_dark_human_experienced_2_after")
+def _resolve_hida_yamadera_dark_human_experienced_2_after(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [
+        PlaceOnDeck((source_id,), DeckKey(seat, Side.DYNASTY)),
+        GainHonor(seat, -YAMADERA_HONOR_LOSS, source_id=source_id),
+    ]
 
 
 # --- Ninube Aitso, "Doji Yeiko" (Experienced) ---
