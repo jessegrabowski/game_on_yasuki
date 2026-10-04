@@ -20,6 +20,8 @@ _CARD_TAG = "duel:"
 _TOTAL_TAG = "duel-total"
 # The line naming who won, drawn once the duel is decided.
 _OUTCOME_TAG = "duel-outcome"
+# The band it is written on, tagged apart so a reader of the line gets the line and not a rectangle.
+_OUTCOME_BAND_TAG = "duel-outcome-band"
 # The button that dismisses a decided duel, tagged so a click can find it and a test can read it.
 _CONTINUE_TAG = "duel-continue"
 # The line marking which duelist has the option to focus or strike.
@@ -40,6 +42,8 @@ SIDE_MARGIN = 28
 SOURCE_INSET = 10
 # The band along the foot holding the outcome line and the panel's own button.
 FOOTER_H = 62
+# How far above the footer its own band starts, so the outcome line is not read off a card face.
+OUTCOME_PAD = 10
 # How wide the button that dismisses a decided duel is, and what it leaves above and below itself
 # inside the footer band.
 CONTINUE_W = 110
@@ -198,6 +202,15 @@ class DuelPanel(CardPanel):
         """
         if duel.step is DuelStep.FOCUSING:
             return
+        self.canvas.create_rectangle(
+            0,
+            height - FOOTER_H - OUTCOME_PAD,
+            width,
+            height,
+            fill=theme.SURFACE,
+            outline=theme.LINE_SOFT,
+            tags=(_OUTCOME_BAND_TAG,),
+        )
         self.canvas.create_text(
             width // 2,
             height - FOOTER_H,

@@ -204,3 +204,38 @@ def test_the_far_duelists_attachments_stay_on_the_panel(panel):
 
     assert all(box is not None for box in tops)
     assert min(box[1] for box in tops) >= 0
+
+
+def test_the_focus_fan_does_not_reach_the_outcome_band(panel):
+    # The band is drawn over whatever is behind it, so the outcome line stays readable, and the fan
+    # is laid out to stay clear of it anyway.
+    challenger = _side(
+        P1,
+        duelist=personality("hida", owner=P1),
+        focused=[personality(f"fv{index}", owner=P1) for index in range(4)],
+        total=5,
+    )
+    panel.refresh(
+        _duel(
+            step=DuelStep.ENDED, winners=(P1,), losers=(P2,), decided=True, challenger=challenger
+        ),
+        viewer=P1,
+    )
+
+    band = panel.canvas.bbox("duel-outcome-band")
+    fan = panel.canvas.bbox("duel:fv0")
+
+    assert band is not None and fan is not None
+    assert fan[3] <= band[1]
+
+
+def test_the_outcome_line_is_written_over_its_own_band(panel):
+    # Black text on a card face is unreadable, so the band has to be drawn under the line.
+    duel = _duel(step=DuelStep.ENDED, winners=(P1,), losers=(P2,), decided=True)
+    panel.refresh(duel, viewer=P1)
+
+    order = panel.canvas.find_all()
+    (band,) = panel.canvas.find_withtag("duel-outcome-band")
+    (line,) = panel.canvas.find_withtag("duel-outcome")
+
+    assert order.index(band) < order.index(line)
