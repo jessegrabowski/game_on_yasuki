@@ -29,6 +29,7 @@ yasuki_core.engine.rules.abilities.registry
     is_printed_ability
     may_attack
     may_stay_bowed
+    printed_abilities
     printed_ability_line
     register_ability
     register_interrupt

@@ -372,7 +372,7 @@ def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     confer, then the ones the rulebook confers on every card where it sits. A conferred ability
     yields to a granted one under the same key, which is how a card changes a rulebook ability for
     a while."""
-    printed = tuple(held for held in _ABILITIES.get(card.printed_id, ()) if in_force(held))
+    printed = printed_abilities(card)
     granted = tuple(
         GRANTED_ABILITIES[game.table.cards_by_id[grant.source_id].printed_id](
             game, card, grant.context
@@ -383,6 +383,13 @@ def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     shadowed = {held.key for held in granted}
     conferred = tuple(held for held in _conferred(game, card) if held.key not in shadowed)
     return (*printed, *granted, *conferred)
+
+
+def printed_abilities(card: L5RCard) -> tuple[Ability, ...]:
+    """The abilities registered for ``card``'s printed id and in force under the active ruleset,
+    without what grants, keywords or the rulebook add: what a grant copying a card's own ability
+    reads, since reading every ability from inside a grant would read the grant again."""
+    return tuple(held for held in _ABILITIES.get(card.printed_id, ()) if in_force(held))
 
 
 def _grants_to(recorded: Ongoing, card: L5RCard) -> TypeGuard[AbilityGrant | SeatAbilityGrant]:
