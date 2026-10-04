@@ -46,6 +46,7 @@ from yasuki_core.engine.rules.effects import (
     RangedAttack,
     Simultaneously,
     Straighten,
+    To,
     seppuku,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets, equips_from_discard
@@ -402,23 +403,26 @@ def _the_unicorn_expedition_effects(
 ) -> list[Effect]:
     """If they would be opposed, move the target to the current battlefield, straightening their
     unit as they move for the Invest 3, and then take an additional action from a card in it for
-    the Invest 2."""
+    the Invest 2. Both depend on the move happening, and the straightening is part of the same
+    occurrence as the move."""
     if not opposing_units_in_battle(game, source.owner):
         return []
     unit = unit_of(game, target)
     move = Move(target.id, Location.at_battlefield(game.attack.current))
+    contingent: list[Effect] = []
     if straighten:
-        effects: list[Effect] = [Simultaneously((move, *(Straighten(card.id) for card in unit)))]
-    else:
-        effects = [move]
+        contingent.extend(Straighten(card.id) for card in unit)
     if follow_up:
         follow_ups = frozenset(
             ActivateAbility(card.id, ability.key)
             for card in unit
             for ability in abilities_for(game, card)
         )
-        effects.append(AdditionalAction(source.owner, follow_ups))
-    return effects
+        contingent.append(AdditionalAction(source.owner, follow_ups))
+    if not contingent:
+        return [move]
+    moved = To(move, tuple(contingent))
+    return [Simultaneously((moved,))] if straighten else [moved]
 
 
 def _the_unicorn_expedition_cost(

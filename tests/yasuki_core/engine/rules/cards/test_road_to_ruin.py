@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.replay.game_log import replay
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
@@ -976,3 +977,16 @@ def test_invest_2_follows_up_only_with_a_card_in_the_moved_unit(expedition):
     _send_the_rider(expedition, "invest_2")
 
     assert expedition.legal_actions(P1) == [Pass(), HORSE_ACTION]
+
+
+def test_a_negated_move_buys_neither_invest(expedition):
+    expedition.game.ongoing.append(
+        Negation("probe", Duration.UNTIL_END_OF_TURN, effect_kind=Move, subject_id="rider")
+    )
+
+    _send_the_rider(expedition, "invest_5")
+
+    cards = expedition.game.table.cards_by_id
+    assert location_of(expedition.game.table, cards["rider"]).is_home
+    assert cards["rider"].bowed and cards["horse"].bowed
+    assert expedition.game.round.follow_ups is None
