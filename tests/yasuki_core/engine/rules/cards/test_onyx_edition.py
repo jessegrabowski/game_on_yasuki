@@ -445,6 +445,7 @@ def test_two_spearmen_discarded_together_are_each_offered_a_naga():
     assert isinstance(session.game.pending, ChooseNextTrigger)
     session.submit(P1, DecisionResponse(("spearmen",)))
     session.submit(P1, DecisionResponse(("shahai",)))
+    session.submit(P1, DecisionResponse(("spearmen2",)))
     session.submit(P1, DecisionResponse(("shahai2",)))
 
     game = session.game

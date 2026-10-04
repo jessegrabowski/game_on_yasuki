@@ -133,17 +133,19 @@ become a new effects frame on top carrying the trigger's own provenance. A trigg
 since left where it answers from, destroyed by an earlier sibling say, is dropped instead. A frame
 with nothing left is dropped, and the walk ends with the stack.
 
-When the triggers left belong to two or more cards, they conflict, and "the active player decides
-the order in which they happen" (CR, Timing Conflicts). The walk stashes itself and asks a
-{class}`~.ChooseNextTrigger`, and
-{func}`~yasuki_core.engine.rules.triggers.resume_trigger_order` fires the named card's trigger
-first. The chosen trigger resolves completely, and the active player is asked again while two or
-more cards are left. Each trigger's own questions stay its controller's (CR, Choices). One card's
-several triggers fire in collection order, and a rulebook trigger counts as the card its event
-names. A card in a hand is never a candidate, since naming it would show the active player what
-its owner holds. A card answers from a hand only to offer entering play, which may follow its
-condition immediately and may not be delayed (CR, Ring), so its triggers resolve before the others
-and before any order is asked, each asking its own controller.
+When two or more triggers are left, on one card or several, they conflict, and "the active player
+decides the order in which they happen" (CR, Timing Conflicts). The walk stashes itself and asks a
+{class}`~.ChooseNextTrigger` naming each trigger, its card and its printed trait, and
+{func}`~yasuki_core.engine.rules.triggers.resume_trigger_order` fires the named one first. The
+chosen trigger resolves completely, and the active player is asked again for every trigger of the
+occurrence, the last included, so nothing fires that the player did not activate. Before asking,
+the walk drops any trigger that would now do nothing. Each trigger's own questions stay its
+controller's (CR, Choices), a "you may" among them, and a rulebook trigger fires on the card its
+event names. A card in a hand is never a candidate, since naming it would show the active player what its
+owner holds. A card answers from a hand only to offer entering play, which may follow its condition
+immediately and may not be delayed (CR, Ring), so its triggers resolve before the others and before
+any order is asked, each asking its own controller. A lone trigger with nothing to conflict with
+fires without asking.
 
 Pushing each commit's events on top is what makes the walk depth-first, which is the order the CR
 gives: "Once a triggered trait starts, activate all its costs, targeting, and effects in sequence
@@ -458,24 +460,34 @@ triggers._trace.clear()
 those two effects in hand, ahead of the second trigger. Both apply, and the created Naga Follower's
 `EnteredPlay` is announced before anything else moves, because what an effect sets off resolves
 before the walk goes on. The rulebook's Invest trigger answers it, on the Follower the event names,
-and finds nothing Invested. Only then does the second trigger fire, alone now so nobody is asked to
-order it, return its own `Choose`, and pause the walk again. The stack reads the same as before
-because it is the same shape: the next turn under a fresh stash.
+and finds nothing Invested. The second trigger is still the occurrence's, so P1 is asked for it
+too, alone as it now is: the active player activates every trigger the occurrence woke. The stack
+reads the same as before because it is the same shape: the next turn under a fresh stash.
 
 ```python
 session.submit(P1, DecisionResponse(("shahai",)))
 
-assert isinstance(game.pending, ChooseCards)
+assert isinstance(game.pending, ChooseNextTrigger)
+assert game.pending.candidates == ("spearmen2",)
 assert [type(item).__name__ for item in game.stack] == ["BeginNextTurn", "ResumeCascade"]
 assert game.active is P1
-# The answer's two effects, the Follower entering play, then the second trigger.
+# The answer's two effects, then the Follower entering play.
 assert list(triggers._trace) == [
     "    banish spearmen",
     "    P1 creates naga on shahai",
     "EnteredPlay",
     "  naga (token-1) reacts",
-    "  spearmen_of_the_akasha (spearmen2) reacts",
 ]
+triggers._trace.clear()
+```
+
+**P1 activates the second Spearmen.** It fires, returns its own `Choose`, and pauses the walk again.
+
+```python
+session.submit(P1, DecisionResponse(("spearmen2",)))
+
+assert isinstance(game.pending, ChooseCards)
+assert list(triggers._trace) == ["  spearmen_of_the_akasha (spearmen2) reacts"]
 triggers._trace.clear()
 ```
 

@@ -29,6 +29,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
     ChooseCards,
     ChooseDiscard,
+    ChooseNextTrigger,
     ChooseOption,
     DecisionResponse,
 )
@@ -218,12 +219,18 @@ def _ikarichi_game(*, wind: str | None = None):
     return session
 
 
+def _resolve_arrival(session):
+    while isinstance(session.game.pending, ChooseNextTrigger):
+        session.submit(P1, DecisionResponse(session.game.pending.candidates[:1]))
+
+
 def test_ikarichi_invests_two_gold_for_an_undead_outrider():
     session = _ikarichi_game()
 
     session.act(P1, ActivateAbility("ikarichi", RECRUIT_WITH_INVEST))
     payment = session.game.pending
     pay(session, P1)
+    _resolve_arrival(session)
 
     game = session.game
     assert payment.amount == 7  # his five Gold Cost, plus the two the Invest charges
@@ -239,6 +246,7 @@ def test_the_kanpeki_dynasty_rides_him_in_for_nothing():
     session.act(P1, ActivateAbility("ikarichi", RECRUIT_WITH_INVEST))
     payment = session.game.pending
     pay(session, P1)
+    _resolve_arrival(session)
 
     game = session.game
     assert payment.amount == 5  # his Gold Cost alone
@@ -261,6 +269,7 @@ def test_ikarichi_costs_two_honor_however_he_arrives(key):
 
     session.act(P1, ActivateAbility("ikarichi", key))
     pay(session, P1)
+    _resolve_arrival(session)
 
     assert session.game.table.seats[P1].honor == -2
 

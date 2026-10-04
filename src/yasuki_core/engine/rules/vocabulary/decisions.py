@@ -775,24 +775,39 @@ class ChooseFocusEffect(DecisionRequest):
 
 @dataclass(frozen=True, slots=True)
 class ChooseNextTrigger(DecisionRequest):
-    """The active player must name the card whose triggered ability resolves next, when one
-    occurrence has triggered several: "If more than one of these things conflict, the active player
-    decides the order in which they happen" (CR, Timing Conflicts).
+    """The active player must name the triggered ability that resolves next, when one occurrence
+    has triggered several: "If more than one of these things conflict, the active player decides
+    the order in which they happen" (CR, Timing Conflicts).
 
-    The candidates are the cards with a triggered ability still to resolve, whoever controls them,
-    and the card the event names for a rulebook effect. A card in a hand is never one, since naming
-    it would show what its owner holds, and its abilities resolve after the rest. The seat picks one
-    at a time and is asked again while two or more are left. Each ability's own questions stay its
-    controller's (CR, Choices). There is no answer that declines, and none that backs out, since
-    what triggered them has already happened.
+    The candidates are keys for the triggered abilities still to resolve, whoever controls them,
+    the event's card's for a rulebook effect: the card's id, with ``#n`` appended where it has more
+    than one. A card in a hand is never among them, since naming it would show what its owner
+    holds. The seat is asked once for each, the last included. An ability its text makes optional
+    asks that question of its own controller once it resolves (CR, Choices), and nothing backs
+    out, since what triggered them has already happened.
+
+    Attributes
+    ----------
+    cards : tuple of str
+        The card each candidate fires on, in candidate order.
+    labels : tuple of str
+        Each candidate's name, its printed trait where it can be read, in candidate order.
+
+    Raises
+    ------
+    ValueError
+        If ``cards`` or ``labels`` does not name one entry per candidate.
     """
+
+    cards: tuple[str, ...] = ()
+    labels: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        if not len(self.cards) == len(self.labels) == len(self.candidates):
+            raise ValueError("a trigger window names a card and a label for each candidate")
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         return "Choose the next triggered ability to resolve"
-
-    @property
-    def confirm_label(self) -> str:
-        return "Resolve"
 
     def accepts(self, response: DecisionResponse) -> bool:
         return _chooses_exactly_one(self, response)

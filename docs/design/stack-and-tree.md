@@ -256,10 +256,11 @@ The walk announces every event in the occurrence before it fires anything, and c
 those events trigger, the cards' and the rulebook's. When it collects several, it asks each once
 whether it would do anything on the board the occurrence left, and drops those that would not.
 Then it fires the traits one at a time. A fired trait's effects become a new effects frame on top,
-so the trait and everything it sets off resolve before the next trait fires. While two or more
-cards outside a hand still have traits to fire, the walk stops and asks the active player with a
-{class}`~.ChooseNextTrigger`. A trait whose card has left where it answers from, such as a card an
-earlier trait destroyed, is dropped.
+so the trait and everything it sets off resolve before the next trait fires. Once two or more
+traits outside a hand are left to fire, the walk stops and asks the active player with a
+{class}`~.ChooseNextTrigger`, and keeps asking until every one of that occurrence's traits has
+been activated. A trait whose card has left where it answers from, such as a card an earlier trait
+destroyed, is dropped.
 
 The last field, `following`, holds what the state-based rules demanded after the effect that
 raised this occurrence. A Personality at zero Chi is destroyed as soon as the effect commits, but
@@ -485,6 +486,6 @@ trait sees the whole army still standing.
 When a step needs a player's answer, the walk freezes every frame as a {class}`~.ResumeCascade`
 and stops. The frames are the open path, and the open path is all that is left to do, so the answer
 resumes the walk from the top. An answer to an effect's question splices that answer's effects into
-the top effects frame. An answer to a {class}`~.ChooseNextTrigger` moves the named card's trait to
-the front of the top events frame. Players never see this stack or add to it, which is the
+the top effects frame. An answer to a {class}`~.ChooseNextTrigger` moves the named trait to the
+front of the top events frame. Players never see this stack or add to it, which is the
 difference between it and Magic's.

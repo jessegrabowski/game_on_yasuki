@@ -138,6 +138,7 @@ def test_the_active_player_orders_two_triggers_and_each_resolves_completely():
     fire(game, EnteredPlay(source.id))
     order = game.pending
     submit(game, DecisionResponse((rival.id,)))
+    submit(game, DecisionResponse((source.id,)))
 
     assert isinstance(order, ChooseNextTrigger) and order.seat is game.active
     assert order.candidates == (source.id, rival.id)

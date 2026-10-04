@@ -62,6 +62,12 @@ The search dialog is the fourth surface, for card candidates the board cannot ca
 {meth}`~.GameRunner.search_view` opens it when any candidate sits in a pile instead of in play,
 in a hand or in a Province. It lists each pile that holds a candidate, whole, with only the
 candidates takeable: the human's own decks and piles, and either seat's discard pile, which every
-player may see. A choice that also reaches cards in play, such as a {class}`~.ChooseNextTrigger`
-over one Personality still standing and one battle resolution destroyed, puts those in an "In
-play" pane, so every candidate is answerable from the one dialog.
+player may see. A choice that also reaches cards in play puts those in an "In play" pane, so every
+candidate is answerable from the one dialog.
+
+A {class}`~.ChooseNextTrigger` is no search and no selection. The cards with a trigger waiting are
+ringed in red, on the board and in the battle lanes, and a click on one opens its menu with an entry
+per trigger, worded as its printed trait, each activating its own at once. A trigger on a card off
+the board, in a discard pile say, is a button in the prompt box instead. The window has no Done:
+it closes once every trigger has been activated, and a trigger whose text says "you may" asks its
+own controller as it resolves.

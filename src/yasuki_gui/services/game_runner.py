@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
+    ChooseNextTrigger,
     Confirm,
     DecisionRequest,
     DecisionResponse,
@@ -260,8 +261,10 @@ class GameRunner:
         pending = self.pending
         if pending is None or not pending.candidates:
             return None
-        if isinstance(pending, Confirm):
-            return None  # a question is answered yes or no, wherever its subjects happen to sit
+        if isinstance(pending, Confirm | ChooseNextTrigger):
+            # A question is answered yes or no, and a trigger from its card or the prompt box,
+            # wherever the cards happen to sit.
+            return None
         if set(pending.candidates) <= set(self.looked_at()):
             return None  # the cards are in view in the look window, not down in a pile
         table = self.session.game.table
@@ -318,6 +321,10 @@ class GameRunner:
             if key.owner is self.human and key.role is ZoneRole.PROVINCE
             for card in zone.cards
         }
+
+    def on_the_board(self, card_id: str) -> bool:
+        """Whether a click can reach ``card_id``: in play, in the human's hand, or in a Province."""
+        return card_id in self._on_the_board()
 
     def _on_the_board(self) -> set[str]:
         """The human's cards a click can reach: what is in play, what is in hand, and whatever sits

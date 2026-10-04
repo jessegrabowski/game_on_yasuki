@@ -484,10 +484,10 @@ def test_the_active_player_orders_the_opponents_trigger_and_the_opponent_answers
 
     resolve_effects(game, [Simultaneously((Bow(mine.id), Bow(theirs.id)))])
     order = game.pending
-    action_sequence.submit(game, DecisionResponse((theirs.id,)))
+    action_sequence.submit(game, DecisionResponse((f"{theirs.id}#1",)))
 
     assert isinstance(order, ChooseNextTrigger) and order.seat is PlayerId.P1
-    assert set(order.candidates) == {mine.id, theirs.id}
+    assert set(order.cards) == {mine.id, theirs.id}
     assert isinstance(game.pending, ChooseCards) and game.pending.seat is PlayerId.P2
 
 
@@ -629,6 +629,8 @@ def test_a_conflict_inside_a_chosen_trigger_is_ordered_before_the_outer_one_fini
     action_sequence.submit(game, DecisionResponse((first.id,)))
     inner = game.pending
     action_sequence.submit(game, DecisionResponse(("P1-d",)))
+    action_sequence.submit(game, DecisionResponse(("P1-c",)))
+    action_sequence.submit(game, DecisionResponse(("P1-b",)))
 
     assert isinstance(outer, ChooseNextTrigger) and outer.candidates == ("P1-a", "P1-b")
     assert isinstance(inner, ChooseNextTrigger) and inner.candidates == ("P1-c", "P1-d")
@@ -646,15 +648,47 @@ def test_the_active_player_is_asked_again_between_one_cards_two_triggers(reactin
     reacting(EnteredPlay, "once_probe", lambda ctx: [AdjustCounter(ctx.card.id, WEALTH, 1)])
 
     fire(game, EnteredPlay("someone"))
-    action_sequence.submit(game, DecisionResponse((twice.id,)))
+    first = game.pending
+    action_sequence.submit(game, DecisionResponse((f"{twice.id}#1",)))
 
+    assert first.candidates == (f"{twice.id}#1", f"{twice.id}#2", once.id)
     assert isinstance(game.pending, ChooseNextTrigger)
     assert game.pending.candidates == (twice.id, once.id)
 
 
+def test_a_trigger_an_earlier_one_leaves_with_nothing_to_do_drops_out_of_the_window(reacting):
+    game = two_seat_game()
+    first = put_in_play(game, holding("P1-a", printed_id="token_probe"))
+    put_in_play(game, holding("P1-b", printed_id="token_probe"))
+    put_in_play(game, holding("P1-c", printed_id="untouched_probe"))
+    reacting(EnteredPlay, "token_probe", lambda ctx: [AdjustCounter(ctx.card.id, WEALTH, 1)])
+    reacting(
+        EnteredPlay,
+        "untouched_probe",
+        lambda ctx: [GainHonor(PlayerId.P1, 1)] if not first.counters else [],
+    )
+
+    fire(game, EnteredPlay("someone"))
+    action_sequence.submit(game, DecisionResponse((first.id,)))
+
+    assert game.pending.candidates == ("P1-b",)
+
+
+def test_a_trigger_window_refuses_a_key_it_did_not_offer(reacting):
+    game = two_seat_game()
+    for card_id in ("P1-a", "P1-b"):
+        put_in_play(game, holding(card_id, printed_id="key_probe"))
+    reacting(EnteredPlay, "key_probe", lambda ctx: [AdjustCounter(ctx.card.id, WEALTH, 1)])
+
+    fire(game, EnteredPlay("someone"))
+
+    with pytest.raises(ValueError, match="malformed answer"):
+        action_sequence.submit(game, DecisionResponse(("P1-a#1",)))
+
+
 def test_a_rulebook_effect_resolves_with_the_card_its_event_names(reacting):
-    # The rulebook's Honor loss for a dishonorable death is that Personality's candidate, after
-    # his own trait, so nobody is asked to order the two.
+    # The rulebook's Honor loss for a dishonorable death fires on that Personality, beside his own
+    # trait, and the active player orders the two (CR, Timing Conflicts).
     game = two_seat_game()
     doomed = put_in_play(game, personality("doomed", printed_id="dying_probe", personal_honor=2))
     doomed.dishonor()
@@ -665,6 +699,9 @@ def test_a_rulebook_effect_resolves_with_the_card_its_event_names(reacting):
     reacting(Destroyed, "dying_probe", _gain_for_his_own_death)
 
     resolve_effects(game, [Destroy(doomed.id, PlayerId.P2)])
+    assert game.pending.cards == (doomed.id, doomed.id)
+    action_sequence.submit(game, DecisionResponse(("doomed#2",)))
+    action_sequence.submit(game, DecisionResponse(("doomed",)))
 
     assert game.pending is None
     assert game.table.seats[PlayerId.P1].honor == -2
@@ -754,6 +791,7 @@ def test_one_event_fans_out_to_every_subscribed_card():
 
     fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
     action_sequence.submit(game, DecisionResponse((first.id,)))
+    action_sequence.submit(game, DecisionResponse((second.id,)))
 
     assert first.counters == {"wealth": 1} and second.counters == {"wealth": 1}
 
@@ -1156,6 +1194,7 @@ def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
     action_sequence.submit(game, DecisionResponse((wheat.id,)))
     assert isinstance(game.pending, ChooseCards)
     action_sequence.submit(game, DecisionResponse((other.id,)))
+    action_sequence.submit(game, DecisionResponse((probe.id,)))
 
     assert other.counters == {"wealth": 1}  # the choice resolved
     assert probe.counters == {"wealth": 1}  # the stashed trigger resumed and applied its effect
@@ -1811,6 +1850,7 @@ def test_a_groups_destructions_are_announced_together_and_ordered_by_the_active_
     )
     assert isinstance(game.pending, ChooseNextTrigger)
     action_sequence.submit(game, DecisionResponse((second.id,)))
+    action_sequence.submit(game, DecisionResponse((first.id,)))
 
     announced = [e.card_id for e in game.turn_events if isinstance(e, Destroying)]
     assert announced == [first.id, second.id]

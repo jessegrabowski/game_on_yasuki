@@ -53,6 +53,7 @@ from yasuki_core.ruleset import in_force
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import Counter
+from yasuki_core.game_pieces.text_split import split_text_box
 
 # A sanity bound on both fixpoint walks: a converging cascade drains in a handful of events, and
 # the state-based actions settle in a handful of rounds, so far more than this means a trigger
@@ -100,6 +101,39 @@ class Registration(NamedTuple):
     boundary: Boundary | None = None
 
 
+# How a client names a trigger waiting to fire: maps (game, the card it fires on) to its label.
+TriggerLabel = Callable[[GameState, L5RCard], str]
+
+
+def printed_trait(game: GameState, card: L5RCard) -> str:
+    """``card``'s printed trait when it prints exactly one, and otherwise "<name>'s triggered
+    ability"."""
+    traits = split_text_box(card.printed.text).traits
+    return traits[0] if len(traits) == 1 else f"{card.name}'s triggered ability"
+
+
+def trait_opening(prefix: str) -> TriggerLabel:
+    """A label reading the printed trait that opens with ``prefix``, as "Yu:" or "Invest"."""
+
+    def label(game: GameState, card: L5RCard) -> str:
+        traits = split_text_box(card.printed.text).traits
+        return next(
+            (trait for trait in traits if trait.startswith(prefix)), printed_trait(game, card)
+        )
+
+    return label
+
+
+# trigger -> how the active player is told its name. Filled as triggers are registered.
+_LABELS: dict[Trigger, TriggerLabel] = {}
+
+
+def trigger_label(game: GameState, card: L5RCard, trigger: Trigger) -> str:
+    """``trigger``'s name for the active player as it fires on ``card``: its registered label, or
+    the card's printed trait."""
+    return _LABELS.get(trigger, printed_trait)(game, card)
+
+
 # event type -> where the card must be -> printed id -> its registrations. Populated by the @on
 # decorators below, on import, and grouped by printed id so collection is a lookup rather than a
 # rebuild per event. A zone nothing registers for is never walked, so a hand is read only for an
@@ -114,6 +148,7 @@ def on(
     where: tuple[CardLocation, ...] = (CardLocation.BATTLEFIELD,),
     ruleset: str | None = None,
     boundary: Boundary | None = None,
+    label: TriggerLabel = printed_trait,
 ) -> Callable[[Trigger], Trigger]:
     """Register the decorated function as ``printed_id``'s trigger for ``event_type``.
 
@@ -133,6 +168,9 @@ def on(
     boundary : :class:`~yasuki_core.engine.rules.vocabulary.segments.Boundary`, optional
         Which edge of its own step the trigger answers. Required for an event announced at both
         edges, and refused for an event announced once.
+    label : callable, optional
+        Maps ``(game, card)`` to the trigger's name for the active player. Default the card's
+        printed trait.
 
     Raises
     ------
@@ -149,6 +187,7 @@ def on(
         raise ValueError(f"{event_type.__name__} fires once and has no boundary to answer")
 
     def register(trigger: Trigger) -> Trigger:
+        _LABELS[trigger] = label
         by_zone = _TRIGGERS.setdefault(event_type, {})
         registered = Registration(trigger, ruleset, boundary)
         for location in where:
@@ -232,11 +271,15 @@ def watch(
 _RULEBOOK_TRIGGERS: dict[type, list[Trigger]] = {}
 
 
-def rulebook_trigger(event_type: type) -> Callable[[Trigger], Trigger]:
+def rulebook_trigger(
+    event_type: type, *, label: TriggerLabel = printed_trait
+) -> Callable[[Trigger], Trigger]:
     """Register the decorated function as a rulebook trigger for ``event_type``, fired after the
-    card triggers for the same event with the card the event names as its context card."""
+    card triggers for the same event with the card the event names as its context card, and named
+    to the active player by ``label``."""
 
     def register(trigger: Trigger) -> Trigger:
+        _LABELS[trigger] = label
         _RULEBOOK_TRIGGERS.setdefault(event_type, []).append(trigger)
         return trigger
 
@@ -448,13 +491,15 @@ class _Effects:
 @dataclass(slots=True)
 class _Events:
     """One occurrence's events still to announce, the triggered traits they triggered still to
-    fire, each with the event it answers, the card the active player named to fire next, and the
-    events of the occurrence that follows this one, announced once this one has resolved."""
+    fire, each with the event it answers, the trigger the active player named to fire next, the
+    events of the occurrence that follows this one, announced once this one has resolved, and
+    whether the active player is ordering this occurrence's triggers."""
 
     queue: list[GameEvent]
     firing: list[tuple[L5RCard, Trigger, GameEvent]] = field(default_factory=list)
     chosen: str | None = None
     following: list[GameEvent] = field(default_factory=list)
+    ordering: bool = False
 
 
 _Frame = _Effects | _Events
@@ -604,13 +649,19 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             elif raised or demanded:
                 frames.append(_Events(raised, following=demanded))
             continue
-        top.firing = [entry for entry in top.firing if _still_collected(game, entry)]
+        top.firing = _still_collected(game, top.firing)
         if top.firing:
-            conflict = _conflict(game, top)
+            public = _public(game, top)
             entry_offer_first = _in_hand(game, top.firing[0][0])
-            if top.chosen is None and len(conflict) > 1 and not entry_offer_first:
+            ordering = top.ordering or len(public) > 1
+            if top.chosen is None and public and ordering and not entry_offer_first:
+                idle = [entry for entry in public.values() if not _acts(game, entry)]
+                if idle:
+                    top.firing = [entry for entry in top.firing if entry not in idle]
+                    continue
+                top.ordering = True
                 _stash(game, frames)
-                game.pending = ChooseNextTrigger(seat=game.active, candidates=conflict)
+                game.pending = _trigger_window(game, public)
                 return
             card, trigger, event = top.firing.pop(0)
             top.chosen = None
@@ -629,6 +680,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             if not top.queue:
                 frames.pop()
                 continue
+        top.ordering = False
         while top.queue:
             resolved += 1
             if resolved > _MAX_CASCADE:
@@ -724,11 +776,28 @@ def _announce(game: GameState, event: GameEvent) -> None:
 _Firing = tuple[L5RCard, Trigger, GameEvent]
 
 
-def _still_collected(game: GameState, entry: _Firing) -> bool:
-    """Whether the event in ``entry`` would still collect its trigger from its card, which a card
-    that has since left where it answers from no longer is."""
+def _still_collected(game: GameState, firing: list[_Firing]) -> list[_Firing]:
+    """The entries of ``firing`` whose event would still collect their trigger from their card,
+    which a card that has since left where it answers from no longer does. Each event is
+    collected once, however many entries answer it."""
+    collected: dict[int, list[tuple[L5RCard, Trigger]]] = {}
+    kept: list[_Firing] = []
+    for entry in firing:
+        card, trigger, event = entry
+        pairs = collected.get(id(event))
+        if pairs is None:
+            pairs = collected[id(event)] = _collect(game, event)
+        if any(held is card and answer == trigger for held, answer in pairs):
+            kept.append(entry)
+    return kept
+
+
+def _acts(game: GameState, entry: _Firing) -> bool:
+    """Whether ``entry`` would do something on the board as it now stands, which a trigger whose
+    condition an earlier one undid no longer does. Handlers never change the board, so asking one
+    is safe."""
     card, trigger, event = entry
-    return any(held is card and answer == trigger for held, answer in _collect(game, event))
+    return bool(list(trigger(TriggerContext(game, card, event))))
 
 
 def _triggered(game: GameState, firing: list[_Firing]) -> list[_Firing]:
@@ -752,10 +821,29 @@ def _in_hand(game: GameState, card: L5RCard) -> bool:
     )
 
 
-def _conflict(game: GameState, frame: _Events) -> tuple[str, ...]:
-    """The cards with a trigger still to fire that the active player may see, in collection
-    order."""
-    return tuple(dict.fromkeys(card.id for card, _, _ in frame.firing if not _in_hand(game, card)))
+def _public(game: GameState, frame: _Events) -> dict[str, _Firing]:
+    """The triggers still to fire that the active player may see, in collection order, each keyed
+    by its card's id, with ``#n`` appended where the card has more than one."""
+    seen = [entry for entry in frame.firing if not _in_hand(game, entry[0])]
+    per_card = collections.Counter(card.id for card, _, _ in seen)
+    counted: collections.Counter[str] = collections.Counter()
+    keyed: dict[str, _Firing] = {}
+    for entry in seen:
+        card_id = entry[0].id
+        counted[card_id] += 1
+        key = card_id if per_card[card_id] == 1 else f"{card_id}#{counted[card_id]}"
+        keyed[key] = entry
+    return keyed
+
+
+def _trigger_window(game: GameState, public: dict[str, _Firing]) -> ChooseNextTrigger:
+    """The active player's window over ``public``: each trigger with its card and label."""
+    return ChooseNextTrigger(
+        seat=game.active,
+        candidates=tuple(public),
+        cards=tuple(card.id for card, _, _ in public.values()),
+        labels=tuple(trigger_label(game, card, trigger) for card, trigger, _ in public.values()),
+    )
 
 
 def _held_from(effect: Effect, provenance: Provenance) -> Effect:
@@ -1055,15 +1143,19 @@ class EventsFrame:
     firing : tuple of (str, callable, GameEvent), optional
         The card id, trigger and event of each triggered trait still to fire. Default none.
     chosen : str or None, optional
-        The card the active player named, whose trigger stands first. Default None.
+        The trigger the active player named, which stands first. Default None.
     following : tuple of GameEvent, optional
         The events of the occurrence that follows this one. Default none.
+    ordering : bool, optional
+        Whether the active player is ordering this occurrence's triggers, and so is asked for each
+        until none they may see is left. Default False.
     """
 
     queue: tuple[GameEvent, ...]
     firing: tuple[tuple[str, Trigger, GameEvent], ...] = ()
     chosen: str | None = None
     following: tuple[GameEvent, ...] = ()
+    ordering: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -1099,7 +1191,9 @@ def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
             tuple(frame.pending), frame.provenance, frame.simultaneous, frame.announced
         )
     firing = tuple((card.id, trigger, event) for card, trigger, event in frame.firing)
-    return EventsFrame(tuple(frame.queue), firing, frame.chosen, tuple(frame.following))
+    return EventsFrame(
+        tuple(frame.queue), firing, frame.chosen, tuple(frame.following), frame.ordering
+    )
 
 
 def _thawed(game: GameState, frame: EffectsFrame | EventsFrame) -> _Frame:
@@ -1111,7 +1205,7 @@ def _thawed(game: GameState, frame: EffectsFrame | EventsFrame) -> _Frame:
         for card_id, trigger, event in frame.firing
         if card_id in game.table.cards_by_id
     ]
-    return _Events(list(frame.queue), firing, frame.chosen, list(frame.following))
+    return _Events(list(frame.queue), firing, frame.chosen, list(frame.following), frame.ordering)
 
 
 def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:
@@ -1197,17 +1291,17 @@ def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
 
 
 def resume_trigger_order(game: GameState, chosen: str) -> None:
-    """Pop the cascade a :class:`~.ChooseNextTrigger` paused and continue it, firing ``chosen``'s
-    next triggered trait first.
+    """Pop the cascade a :class:`~.ChooseNextTrigger` paused and continue it, firing the trigger
+    keyed ``chosen`` first.
 
     Raise ``RuntimeError`` if the stash is not the top of the stack, holds no events frame on top,
-    which that pause always leaves, or holds no trigger of ``chosen``.
+    which that pause always leaves, or holds no trigger keyed ``chosen``.
     """
     frames = _resumed_frames(game, _popped_stash(game))
     top = frames[-1]
     if not isinstance(top, _Events):
         raise RuntimeError("a trigger order resumed with no events frame on top")
-    entry = next((entry for entry in top.firing if entry[0].id == chosen), None)
+    entry = _public(game, top).get(chosen)
     if entry is None:
         raise RuntimeError(f"{chosen} has no trigger to resolve")
     top.firing.remove(entry)

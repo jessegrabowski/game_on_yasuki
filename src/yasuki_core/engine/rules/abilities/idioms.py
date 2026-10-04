@@ -29,10 +29,12 @@ from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
+    Trigger,
     TriggerContext,
     WatchedCondition,
     choice_resolver,
     on,
+    trait_opening,
     watch,
 )
 from yasuki_core.engine.rules.negation import would_negate
@@ -387,10 +389,16 @@ def register_yu(
         The name of the one ruleset the trait is in force under. Default None, for every arc.
     """
 
+    on(Destroying, printed_id, ruleset=ruleset, label=trait_opening("Yu:"))(_yu(effects))
+
+
+def _yu(effects: Callable[[TriggerContext], list[Effect]]) -> Trigger:
+    """The Yu trigger running ``effects`` where the datasheet's conditions hold."""
+
     def yu(ctx: TriggerContext) -> list[Effect]:
         return effects(ctx) if _yu_resolves(ctx) else []
 
-    on(Destroying, printed_id, ruleset=ruleset)(yu)
+    return yu
 
 
 def _yu_resolves(ctx: TriggerContext) -> bool:

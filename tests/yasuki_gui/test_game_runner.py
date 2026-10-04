@@ -784,8 +784,6 @@ def test_a_search_shows_every_card_in_the_piles_it_looked_through():
 
 
 def _trigger_order_runner(candidates: tuple[str, ...]) -> GameRunner:
-    """P1 asked to order triggers on a Personality of each seat in play and one of P2's in P2's
-    discard pile, the way battle resolution leaves the Personalities it destroyed."""
     state = TableState.empty_two_seat()
     put_in_play(state, register(state, personality("mine")))
     put_in_play(state, register(state, personality("theirs", owner=PlayerId.P2)))
@@ -793,7 +791,9 @@ def _trigger_order_runner(candidates: tuple[str, ...]) -> GameRunner:
     discard.add(register(state, personality("fallen", owner=PlayerId.P2)))
     discard.add(register(state, personality("earlier", owner=PlayerId.P2)))
     runner_ = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
-    runner_.session.game.pending = ChooseNextTrigger(seat=PlayerId.P1, candidates=candidates)
+    runner_.session.game.pending = ChooseNextTrigger(
+        seat=PlayerId.P1, candidates=candidates, cards=candidates, labels=candidates
+    )
     return runner_
 
 
@@ -803,14 +803,11 @@ def test_ordering_triggers_on_cards_in_play_is_answered_on_the_board():
     assert runner_.search_view() is None
 
 
-def test_ordering_a_trigger_on_a_card_in_the_opponents_discard_searches_that_pile():
+def test_a_trigger_on_a_card_in_a_discard_pile_is_not_a_search():
     runner_ = _trigger_order_runner(("mine", "fallen"))
 
-    search = runner_.search_view()
-
-    assert [card.id for card in search.panes["Discard"]] == ["fallen", "earlier"]
-    assert [card.id for card in search.panes["In play"]] == ["mine"]
-    assert search.choosable == {"mine", "fallen"}
+    assert runner_.search_view() is None
+    assert not runner_.on_the_board("fallen")
 
 
 def test_a_board_targeting_ability_takes_no_search_dialog():

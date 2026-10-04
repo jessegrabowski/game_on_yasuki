@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
     ChooseBattlefield,
     ChooseDistribution,
+    ChooseNextTrigger,
     ChooseOption,
     ChoosePayment,
     Confirm,
@@ -82,6 +83,9 @@ class Presenter:
         runner, field = self.host.runner, self.window.field
         self._spend_committed()
         pending = runner.pending
+        field.halo = (
+            frozenset(pending.cards) if isinstance(pending, ChooseNextTrigger) else frozenset()
+        )
         if isinstance(pending, ChoosePayment) and pending.amount == 0:
             # A cost of nothing is not a question: there is no producer to bow and no gold to
             # spend, so asking would put a prompt in front of the seat with one possible answer.
@@ -117,11 +121,12 @@ class Presenter:
             | Confirm
             | ChooseBattlefield
             | ChooseDebugSeat
-            | FocusOrStrike,
+            | FocusOrStrike
+            | ChooseNextTrigger,
         ):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
-            # amount is named on the prompt's spinner and a yes/no question on its buttons, so
-            # neither puts the board into selection mode.
+            # amount is named on the prompt's spinner, a yes/no question on its buttons and a
+            # trigger from its card's menu, so none of them puts the board into selection mode.
             field.begin_selection(
                 pending.candidates, render_bowed=isinstance(pending, ChoosePayment)
             )
@@ -225,6 +230,7 @@ class Presenter:
                 self._lane_buttons(),
                 selected=frozenset(window.field.selection),
                 stats=view.stats,
+                halo=window.field.halo,
             )
         self._show_duel(view)
         self._show_look()
@@ -274,6 +280,8 @@ class Presenter:
             if runner.can_cancel():
                 buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(), buttons
+        if isinstance(pending, ChooseNextTrigger):
+            return pending.prompt(), self._trigger_buttons(pending)
         if isinstance(pending, ChooseBattlefield):
             # Answered by the button under the lane it picks, not from here. The choice is about
             # the battlefields, and they are what the player is looking at when it is asked.
@@ -576,6 +584,9 @@ class Presenter:
         Segment. While an Interrupt is offered it is the ways the card can take it.
         """
         runner = self.host.runner
+        if isinstance(runner.pending, ChooseNextTrigger):
+            self.window.popup_at_pointer(self._trigger_entries(runner.pending, card_id))
+            return
         if isinstance(runner.pending, AssignUnits):
             # Right-clicking a card the player has not picked picks it, the way a file manager does:
             # the menu acts on the selection, and a menu that needed an invisible click first would
@@ -701,6 +712,32 @@ class Presenter:
         field.end_selection()
         self.window.relayout_panels()
         self.present()
+
+    def _trigger_entries(
+        self, pending: ChooseNextTrigger, card_id: str
+    ) -> list[tuple[str, Callable[[], None]]]:
+        """The triggered abilities waiting on ``card_id``, one menu entry each, every one
+        activating its own at once."""
+        return [
+            (label, lambda chosen=key: self.submit_answer((chosen,)))
+            for key, card, label in zip(pending.candidates, pending.cards, pending.labels)
+            if card == card_id
+        ]
+
+    def _trigger_buttons(self, pending: ChooseNextTrigger) -> list[ButtonSpec]:
+        """A button for each waiting trigger whose card is off the board, in a discard pile, say,
+        named for its card."""
+        runner = self.host.runner
+        table = self.host.session.game.table
+        return [
+            (
+                f"{table.cards_by_id[card].name}: {label}",
+                lambda chosen=key: self.submit_answer((chosen,)),
+                True,
+            )
+            for key, card, label in zip(pending.candidates, pending.cards, pending.labels)
+            if not runner.on_the_board(card)
+        ]
 
     def _offer(self, items: list[tuple[str, Action]]) -> None:
         """Put a click's available actions in a pointer menu, each entry taking its own action."""
