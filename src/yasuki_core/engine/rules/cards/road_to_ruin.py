@@ -1,3 +1,6 @@
+from dataclasses import replace
+from functools import partial
+
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named, has_compassion
@@ -10,10 +13,19 @@ from yasuki_core.engine.rules.abilities.model import (
     Interruption,
     itself,
 )
-from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.abilities.registry import (
+    abilities_for,
+    register_ability,
+    register_interrupt,
+)
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    BattleDesignator,
+)
 from yasuki_core.engine.rules.gold.self_grants import register_self_grant, SELF_GRANT
 from yasuki_core.engine.rules.effects import (
+    AdditionalAction,
     AdjustCounter,
     AskOption,
     AttackEffect,
@@ -26,10 +38,13 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantModifier,
     MeleeAttack,
+    Move,
     MoveToHand,
     Negated,
+    PayGold,
     PlaceInProvince,
     RangedAttack,
+    Simultaneously,
     Straighten,
     seppuku,
 )
@@ -57,7 +72,8 @@ from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.rules.units.membership import unit_of
+from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import MINUS_1F
@@ -352,6 +368,116 @@ def _resolve_the_forgotten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [CreateToken(FORGOTTEN_DEAD, seat, source_id, attach_to=chosen[0])]
+
+
+# --- The Unicorn Expedition ---
+
+# The two Invest traits, each a price and what it adds to the move: Invest 3 straightens the
+# target's unit as they move, and Invest 2 takes an additional action from a card in it after.
+# Either may be paid, or both together (CR, Invest).
+UNICORN_EXPEDITION_STRAIGHTEN = 3
+UNICORN_EXPEDITION_FOLLOW_UP = 2
+
+
+def _the_unicorn_expedition_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your Personalities away from the current battlefield, while an enemy unit there would
+    oppose them."""
+    attack = game.attack
+    if attack is None or attack.current is None or not opposing_units_in_battle(game, source.owner):
+        return []
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if location_of(game.table, card).battlefield != attack.current
+    ]
+
+
+def _the_unicorn_expedition_effects(
+    game: GameState,
+    source: L5RCard,
+    target: L5RCard,
+    *,
+    straighten: bool = False,
+    follow_up: bool = False,
+) -> list[Effect]:
+    """If they would be opposed, move the target to the current battlefield, straightening their
+    unit as they move for the Invest 3, and then take an additional action from a card in it for
+    the Invest 2."""
+    if not opposing_units_in_battle(game, source.owner):
+        return []
+    unit = unit_of(game, target)
+    move = Move(target.id, Location.at_battlefield(game.attack.current))
+    if straighten:
+        effects: list[Effect] = [Simultaneously((move, *(Straighten(card.id) for card in unit)))]
+    else:
+        effects = [move]
+    if follow_up:
+        follow_ups = frozenset(
+            ActivateAbility(card.id, ability.key)
+            for card in unit
+            for ability in abilities_for(game, card)
+        )
+        effects.append(AdditionalAction(source.owner, follow_ups))
+    return effects
+
+
+def _the_unicorn_expedition_cost(
+    game: GameState, source: L5RCard, *, invested: int
+) -> list[Effect]:
+    """The Invest paid on top of the action, which costs nothing of its own (CR, Invest)."""
+    return [PayGold(source.owner, invested, f"{source.name} Invest")]
+
+
+_THE_UNICORN_EXPEDITION = Ability(
+    timings=(ActionTiming.BATTLE,),
+    cost=no_cost,
+    targets=_the_unicorn_expedition_targets,
+    targeting_message="your Personality at any location",
+    effects=_the_unicorn_expedition_effects,
+    battle_designators=frozenset({BattleDesignator.ABSENT}),
+    targets_any_location=True,
+    located_at=(CardLocation.HAND,),
+    key="battle",
+)
+
+
+def _the_unicorn_expedition_invested(
+    invested: int, *, straighten: bool, follow_up: bool, label: str
+) -> Ability:
+    """The action with an Invest paid on top, adding what it buys."""
+    return replace(
+        _THE_UNICORN_EXPEDITION,
+        key=f"invest_{invested}",
+        label=label,
+        cost=partial(_the_unicorn_expedition_cost, invested=invested),
+        effects=partial(
+            _the_unicorn_expedition_effects, straighten=straighten, follow_up=follow_up
+        ),
+    )
+
+
+register_ability("the_unicorn_expedition", _THE_UNICORN_EXPEDITION)
+register_ability(
+    "the_unicorn_expedition",
+    _the_unicorn_expedition_invested(
+        UNICORN_EXPEDITION_FOLLOW_UP, straighten=False, follow_up=True, label="Invest 2"
+    ),
+)
+register_ability(
+    "the_unicorn_expedition",
+    _the_unicorn_expedition_invested(
+        UNICORN_EXPEDITION_STRAIGHTEN, straighten=True, follow_up=False, label="Invest 3"
+    ),
+)
+register_ability(
+    "the_unicorn_expedition",
+    _the_unicorn_expedition_invested(
+        UNICORN_EXPEDITION_STRAIGHTEN + UNICORN_EXPEDITION_FOLLOW_UP,
+        straighten=True,
+        follow_up=True,
+        label="Invest 5 (both)",
+    ),
+)
 
 
 # --- Unity of Spirit ---
