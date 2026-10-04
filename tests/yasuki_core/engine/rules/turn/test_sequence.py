@@ -44,6 +44,7 @@ from yasuki_core.engine.rules.battle import resolution
 from yasuki_core.engine.rules.duel import resolution as duel_resolution
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseDiscard,
+    ChooseNextTrigger,
     Confirm,
     DecisionResponse,
     LeaveBowed,
@@ -378,6 +379,8 @@ def test_two_pregame_permanents_that_pause_are_each_answered_before_the_turn_ope
     game = GameState.start(state, PlayerId.P1)
 
     sequence.begin_game(game)
+    assert isinstance(game.pending, ChooseNextTrigger) and bowed.bowed is True
+    action_sequence.submit(game, DecisionResponse(("P1-SH",)))
     assert game.pending is not None and bowed.bowed is True
     _answer(game)
     assert game.pending is not None and bowed.bowed is True
@@ -397,6 +400,8 @@ def test_two_cards_that_pause_on_straightening_are_answered_before_any_reveal(re
     game = GameState.start(state, PlayerId.P1)
 
     sequence.begin_game(game)
+    assert isinstance(game.pending, ChooseNextTrigger) and facedown.face_up is False
+    action_sequence.submit(game, DecisionResponse(("P1-a",)))
     assert game.pending is not None and facedown.face_up is False
     _answer(game)
     assert game.pending is not None and facedown.face_up is False

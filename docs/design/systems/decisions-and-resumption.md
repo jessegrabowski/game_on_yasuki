@@ -44,8 +44,9 @@ end-of-turn discard, cleared by the handler that ran the discard, and the turn p
    {class}`~yasuki_core.engine.rules.vocabulary.work.WorkItem` on `GameState.stack`. Nothing calls
    the next step directly after driving one.
 3. **One instant, one cascade.** Occurrences that happen at the same moment are announced together
-   with {func}`~.fire_all`. A loop over {func}`~.fire` says they happened one after another, and
-   the second call would start a fresh walk over the first one's question.
+   with {func}`~.fire_all`. A loop over {func}`~.fire` says they happened one after another, so
+   their triggers would never be ordered together, and the second call would start a fresh walk
+   over the first one's question.
 4. **Violations are loud.** Driving a cascade while a decision is pending raises, naming the driver
    and the request.
 
@@ -92,6 +93,14 @@ reacts to an event that has already happened, so its question has no action of i
 and the tape's nearest action is one that already resolved. The cascade marks the request
 `triggered` when it raises it on a trigger's behalf, and the mark follows the trigger's effects
 through a stash. Declining is how a seat says no to a "may" question a trait asks.
+
+A {class}`~.ChooseNextTrigger` is never backed out of either. It is the one decision whose seat is
+not the controller of what it decides: the active player names which of an occurrence's triggers
+resolves next, whoever's cards they are (CR, Timing Conflicts), and each trigger's own questions
+then go to its controller. It is asked whenever two or more cards' triggers would act, even when
+every order leads to the same board, such as two Rice Farms each taking a token as a turn begins.
+The CR gives the order to the active player without exception, so the engine does not judge which
+orders matter, and each such conflict is a decision point in every game the bots play.
 
 A request whose `reopens_on_cancel` is true backs out one decision instead of unwinding the
 action: the tape loses only the answer that raised it, and the question before it comes back on

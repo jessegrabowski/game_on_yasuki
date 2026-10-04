@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
     ChooseCards,
     ChooseDiscard,
+    ChooseNextTrigger,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.gold.production import effective_gold_production
@@ -190,17 +191,18 @@ def test_each_paused_frame_resumes_under_its_own_provenance():
     assert not game.table.cards_by_id["struck"].bowed
 
 
-def test_a_resumed_cascade_drops_the_triggers_of_cards_gone_from_the_table():
+def test_a_resumed_cascade_drops_the_triggers_of_cards_gone_from_the_table(reacting):
     game = two_seat_game()
-    put_in_play(game, personality("stayed"))
+    put_in_play(game, personality("stayed", printed_id="resume_probe"))
     reacted = []
 
     def record(ctx):
         reacted.append(ctx.card.id)
         return []
 
-    firing = (("gone", record), ("stayed", record))
-    events = EventsFrame((), TurnBoundary(PlayerId.P1, Boundary.BEGINNING), firing)
+    reacting(TurnBoundary, "resume_probe", record, boundary=Boundary.BEGINNING)
+    boundary = TurnBoundary(PlayerId.P1, Boundary.BEGINNING)
+    events = EventsFrame((), (("gone", record, boundary), ("stayed", record, boundary)))
     game.stack.append(ResumeCascade((events, EffectsFrame(()))))
 
     resume_paused_cascade(game, [])
@@ -222,11 +224,6 @@ def test_resuming_a_stash_with_no_events_frame_at_the_bottom_raises():
 
     with pytest.raises(RuntimeError, match="resumed with no events frame at the bottom"):
         resume_paused_cascade(game, [])
-
-
-def test_an_events_frame_fires_its_triggers_for_an_event():
-    with pytest.raises(ValueError, match="fire for an event"):
-        EventsFrame((), None, (("card", lambda ctx: []),))
 
 
 def test_a_negation_reaches_one_member_of_a_group_as_it_would_alone():
@@ -465,8 +462,99 @@ def test_discarding_a_card_already_in_the_discard_pile_announces_nothing(reactin
     assert told == []
 
 
+def test_the_active_player_orders_the_opponents_trigger_and_the_opponent_answers_it(reacting):
+    # CR, Timing Conflicts: "the active player decides the order", and CR, Choices: "In traits, the
+    # choice belongs to the player whose card it is".
+    game = two_seat_game()
+    mine = put_in_play(game, personality("P1-asker", printed_id="asking_probe"))
+    theirs = put_in_play(
+        game, personality("P2-asker", printed_id="asking_probe", owner=PlayerId.P2)
+    )
+
+    def _ask_own_controller(ctx):
+        return [Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id)]
+
+    reacting(Bowed, "asking_probe", _ask_own_controller)
+
+    resolve_effects(game, [Simultaneously((Bow(mine.id), Bow(theirs.id)))])
+    order = game.pending
+    action_sequence.submit(game, DecisionResponse((theirs.id,)))
+
+    assert isinstance(order, ChooseNextTrigger) and order.seat is PlayerId.P1
+    assert set(order.candidates) == {mine.id, theirs.id}
+    assert isinstance(game.pending, ChooseCards) and game.pending.seat is PlayerId.P2
+
+
+def test_a_trigger_that_would_do_nothing_is_not_offered_to_order():
+    game = two_seat_game()
+    first = _rice_farm(game, card_id="P1-farm-a")
+    second = _rice_farm(game, card_id="P1-farm-b")
+    _rice_farm(game, seat=PlayerId.P2, card_id="P2-farm")
+
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
+
+    assert isinstance(game.pending, ChooseNextTrigger)
+    assert game.pending.candidates == (first.id, second.id)
+
+
+def test_one_trigger_that_does_something_among_ones_that_do_not_is_not_asked_about():
+    game = two_seat_game()
+    farm = _rice_farm(game, card_id="P1-farm")
+    _rice_farm(game, seat=PlayerId.P2, card_id="P2-farm")
+
+    fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
+
+    assert game.pending is None
+    assert farm.counters == {"wealth": 1}
+
+
 def _gain_one_honor(ctx):
     return [GainHonor(PlayerId.P1, 1)]
+
+
+def test_a_card_in_a_hand_is_no_candidate_and_its_trigger_resolves_after_the_others(reacting):
+    game = two_seat_game()
+    mine = put_in_play(game, holding("P1-farm", printed_id="public_probe"))
+    held = register(
+        game.table,
+        L5RCard.of(
+            FatePrint,
+            id="P2-held",
+            name="F",
+            printed_id="hand_probe",
+            side=Side.FATE,
+            owner=PlayerId.P2,
+        ),
+    )
+    game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(held)
+
+    def _ask_the_holder(ctx):
+        return [Choose(PlayerId.P2, (), 0, 0, "test_sandwich", ctx.card.id)]
+
+    reacting(EnteredPlay, "public_probe", lambda ctx: [AdjustCounter(ctx.card.id, WEALTH, 1)])
+    reacting(EnteredPlay, "hand_probe", _ask_the_holder, where=(CardLocation.HAND,))
+
+    fire(game, EnteredPlay("someone"))
+
+    assert mine.counters == {"wealth": 1}
+    assert isinstance(game.pending, ChooseCards) and game.pending.seat is PlayerId.P2
+
+
+def test_a_trait_whose_condition_the_occurrence_did_not_meet_is_not_triggered_later(reacting):
+    game = two_seat_game()
+    enabler = put_in_play(game, holding("P1-a", printed_id="enabling_probe"))
+    put_in_play(game, holding("P1-b", printed_id="waiting_probe"))
+
+    def _gain_once_enabled(ctx):
+        return [GainHonor(PlayerId.P1, 1)] if enabler.counters else []
+
+    reacting(EnteredPlay, "enabling_probe", lambda ctx: [AdjustCounter(enabler.id, WEALTH, 1)])
+    reacting(EnteredPlay, "waiting_probe", _gain_once_enabled)
+
+    fire(game, EnteredPlay("someone"))
+
+    assert enabler.counters == {"wealth": 1}
+    assert game.table.seats[PlayerId.P1].honor == 0
 
 
 def test_what_the_rules_demand_after_an_effect_is_the_next_occurrence(reacting):
@@ -515,6 +603,81 @@ def test_a_moment_is_announced_after_what_its_lapse_left_has_been_reacted_to(rea
     assert doomed not in game.table.battlefield.cards
     assert game.pending is None
     assert game.table.seats[PlayerId.P1].honor == 2
+
+
+def test_a_conflict_inside_a_chosen_trigger_is_ordered_before_the_outer_one_finishes(reacting):
+    game = two_seat_game()
+    first = put_in_play(game, holding("P1-a", printed_id="entry_probe"))
+    put_in_play(game, holding("P1-b", printed_id="entry_probe"))
+    put_in_play(game, holding("P1-c", printed_id="counter_watch"))
+    put_in_play(game, holding("P1-d", printed_id="counter_watch"))
+
+    def _watch_the_first(ctx):
+        return [GainHonor(PlayerId.P1, 1)] if ctx.event.card_id == first.id else []
+
+    reacting(EnteredPlay, "entry_probe", lambda ctx: [AdjustCounter(ctx.card.id, WEALTH, 1)])
+    reacting(CounterChanged, "counter_watch", _watch_the_first)
+
+    fire(game, EnteredPlay("someone"))
+    outer = game.pending
+    action_sequence.submit(game, DecisionResponse((first.id,)))
+    inner = game.pending
+    action_sequence.submit(game, DecisionResponse(("P1-d",)))
+
+    assert isinstance(outer, ChooseNextTrigger) and outer.candidates == ("P1-a", "P1-b")
+    assert isinstance(inner, ChooseNextTrigger) and inner.candidates == ("P1-c", "P1-d")
+    assert game.pending is None and not game.stack
+    assert game.table.seats[PlayerId.P1].honor == 2
+    assert game.table.cards_by_id["P1-b"].counters == {"wealth": 1}
+
+
+def test_the_active_player_is_asked_again_between_one_cards_two_triggers(reacting):
+    game = two_seat_game()
+    twice = put_in_play(game, holding("P1-a", printed_id="twice_probe"))
+    once = put_in_play(game, holding("P1-b", printed_id="once_probe"))
+    reacting(EnteredPlay, "twice_probe", lambda ctx: [AdjustCounter(ctx.card.id, WEALTH, 1)])
+    reacting(EnteredPlay, "twice_probe", _gain_one_honor)
+    reacting(EnteredPlay, "once_probe", lambda ctx: [AdjustCounter(ctx.card.id, WEALTH, 1)])
+
+    fire(game, EnteredPlay("someone"))
+    action_sequence.submit(game, DecisionResponse((twice.id,)))
+
+    assert isinstance(game.pending, ChooseNextTrigger)
+    assert game.pending.candidates == (twice.id, once.id)
+
+
+def test_a_rulebook_effect_resolves_with_the_card_its_event_names(reacting):
+    # The rulebook's Honor loss for a dishonorable death is that Personality's candidate, after
+    # his own trait, so nobody is asked to order the two.
+    game = two_seat_game()
+    doomed = put_in_play(game, personality("doomed", printed_id="dying_probe", personal_honor=2))
+    doomed.dishonor()
+
+    def _gain_for_his_own_death(ctx):
+        return [GainHonor(PlayerId.P2, 1)] if ctx.event.card_id == ctx.card.id else []
+
+    reacting(Destroyed, "dying_probe", _gain_for_his_own_death)
+
+    resolve_effects(game, [Destroy(doomed.id, PlayerId.P2)])
+
+    assert game.pending is None
+    assert game.table.seats[PlayerId.P1].honor == -2
+    assert game.table.seats[PlayerId.P2].honor == 1
+
+
+def test_a_trigger_whose_card_an_earlier_one_destroyed_does_not_resolve(reacting):
+    game = two_seat_game()
+    killer = put_in_play(game, personality("P1-killer", printed_id="killing_probe"))
+    victim = put_in_play(game, personality("P1-victim", printed_id="victim_probe"))
+    reacting(EnteredPlay, "killing_probe", lambda ctx: [Destroy(victim.id, PlayerId.P1)])
+    reacting(EnteredPlay, "victim_probe", _gain_one_honor)
+
+    fire(game, EnteredPlay("someone"))
+    action_sequence.submit(game, DecisionResponse((killer.id,)))
+
+    assert victim not in game.table.battlefield.cards
+    assert game.table.seats[PlayerId.P1].honor == 0
+    assert game.pending is None
 
 
 def test_resolving_an_actions_own_effects_outside_the_interrupt_step_raises():
@@ -592,6 +755,7 @@ def test_one_event_fans_out_to_every_subscribed_card():
     second = _rice_farm(game, card_id="P1-farm-b")
 
     fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
+    action_sequence.submit(game, DecisionResponse((first.id,)))
 
     assert first.counters == {"wealth": 1} and second.counters == {"wealth": 1}
 
@@ -708,6 +872,7 @@ def test_aoki_draws_at_most_once_per_turn():
     _seed_fate_deck(game, PlayerId.P1, 3)
 
     fire(game, TurnBoundary(PlayerId.P1, Boundary.BEGINNING))
+    action_sequence.submit(game, DecisionResponse(("P1-farm-a",)))
 
     assert _hand_size(game, PlayerId.P1) == 1  # two CounterChanged events, one draw
 
@@ -982,16 +1147,16 @@ def _probe(game, seat=PlayerId.P1, card_id="P1-z-probe"):
 
 
 def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
-    # The probe also fires on the Wheat Farm's entry but sorts after it, so the pausing choice
-    # stashes the probe's trigger; resuming must run it and land its Wealth token, not merely drain
-    # the stack.
+    # The probe also fires on the Wheat Farm's entry, so the Wheat Farm's pausing choice stashes the
+    # probe's trigger, and resuming must run it and land its Wealth token, not merely drain the stack.
     game = two_seat_game()
     wheat = _wheat_farm(game, card_id="P1-a-wheat")
     other = _keyworded_farm(game, card_id="P1-other-farm")
     probe = _probe(game)
 
     fire(game, EnteredPlay(wheat.id))
-    assert isinstance(game.pending, ChooseCards)  # paused with the probe's trigger stashed
+    action_sequence.submit(game, DecisionResponse((wheat.id,)))
+    assert isinstance(game.pending, ChooseCards)
     action_sequence.submit(game, DecisionResponse((other.id,)))
 
     assert other.counters == {"wealth": 1}  # the choice resolved
@@ -1006,14 +1171,16 @@ def test_a_trigger_that_asks_stashes_the_event_and_the_triggers_left_to_fire():
     probe = _probe(game)
 
     fire(game, EnteredPlay(wheat.id))
+    action_sequence.submit(game, DecisionResponse((wheat.id,)))
 
     stash = game.stack[-1]
     assert isinstance(stash, ResumeCascade)
     events, effects = stash.frames
     assert isinstance(events, EventsFrame) and isinstance(effects, EffectsFrame)
-    assert events.event == EnteredPlay(wheat.id)
     assert events.queue == ()
-    assert events.firing[0][0] == probe.id
+    assert [(card_id, event) for card_id, _, event in events.firing] == [
+        (probe.id, EnteredPlay(wheat.id))
+    ]
     assert effects.provenance == Provenance(triggered=True)
 
 

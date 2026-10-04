@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
+    ChooseNextTrigger,
     ChooseOption,
     Confirm,
     DecisionResponse,
@@ -794,6 +795,8 @@ def test_two_culling_grounds_straightening_together_banish_both_servants():
     end_turn(session)
     assert set(session.game.pending.candidates) == {"grounds", "grounds2"}
     session.submit(P1, DecisionResponse(()))
+    assert isinstance(session.game.pending, ChooseNextTrigger)
+    session.submit(P1, DecisionResponse(("grounds",)))
 
     assert _servants_of(session) == []
     assert not session.game.stack and session.game.pending is None

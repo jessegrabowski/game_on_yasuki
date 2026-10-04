@@ -41,6 +41,7 @@ yasuki_core.engine.rules.triggers
     resolve_effects
     resume_cascade
     resume_paused_cascade
+    resume_trigger_order
     rulebook_trigger
     watch
 

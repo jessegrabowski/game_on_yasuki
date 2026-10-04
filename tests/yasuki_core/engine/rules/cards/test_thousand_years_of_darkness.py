@@ -31,13 +31,10 @@ def test_ashura_costs_five_honor_as_he_enters_play():
     assert game.table.seats[P1].honor == -5
 
 
-def test_ashura_destroyed_at_a_battlefield_reaches_followers_and_unguarded_personalities(reacting):
+def test_ashura_destroyed_at_a_battlefield_reaches_followers_and_unguarded_personalities():
     # Either army's: an ally, a bare enemy, and an enemy's Follower are reachable; the Personality
     # behind that Follower and the enemy at home are not.
-    seen: list[Trait | PlayerId] = []
-    reacting(Destroyed, "cause_probe", lambda ctx: seen.append(ctx.event.cause) or [])
     game = two_seat_game()
-    put_in_play(game, personality("probe", printed_id="cause_probe"))
     ashura = put_in_play(game, personality("ashura", printed_id="ashura"))
     ally = put_in_play(game, personality("ally"))
     bare = put_in_play(game, personality("bare", owner=P2))
@@ -60,9 +57,11 @@ def test_ashura_destroyed_at_a_battlefield_reaches_followers_and_unguarded_perso
         game.table.cards_by_id["guard"]
         in game.table.zones[ZoneKey(P2, ZoneRole.FATE_DISCARD)].cards
     )
-    # Ashura's trait destroys the Follower, and the probe answers that, before the probe's own
-    # reaction to Ashura (CR 20F, Timing).
-    assert seen == [Trait("ashura"), P2]
+    destroyed = [event for event in game.turn_events if isinstance(event, Destroyed)]
+    assert [(event.card_id, event.cause) for event in destroyed] == [
+        ("ashura", P2),
+        ("guard", Trait("ashura")),
+    ]
 
 
 def test_ashura_destroyed_at_home_reaches_nothing():

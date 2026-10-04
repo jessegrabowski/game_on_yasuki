@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     names_both_edges,
     opens_a_window,
 )
-from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS
+from yasuki_core.engine.rules.vocabulary.decisions import CHOICE_PROMPTS, ChooseNextTrigger
 from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     DelayedEffect,
@@ -406,13 +406,13 @@ class _Effects:
 
 @dataclass(slots=True)
 class _Events:
-    """Events a walk still has to fire to the triggered traits that answer them: the one in hand,
-    the triggers still to fire for it, the events queued behind it, and the events of the
-    occurrence that follows, announced once these have resolved."""
+    """One occurrence's events still to announce, the triggered traits they triggered still to
+    fire, each with the event it answers, the card the active player named to fire next, and the
+    events of the occurrence that follows this one, announced once this one has resolved."""
 
     queue: list[GameEvent]
-    event: GameEvent | None = None
-    firing: list[tuple[L5RCard, Trigger]] = field(default_factory=list)
+    firing: list[tuple[L5RCard, Trigger, GameEvent]] = field(default_factory=list)
+    chosen: str | None = None
     following: list[GameEvent] = field(default_factory=list)
 
 
@@ -440,11 +440,14 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
     is under way"). What the state-based rules then demand of the board is the occurrence that
     follows, announced once that frame's triggers have resolved. A :class:`~.Simultaneously` group
     is the exception: its members' events gather in one events frame beneath the group, which fires
-    once every member has happened. An events frame fires its next trigger as a new effects frame,
-    or pops its next queued event and collects that event's triggers. A frame with nothing left is
-    dropped, and the walk ends with the stack. An :class:`~.InterruptingEffect` pauses the walk: it
-    stashes the exact remainder (every frame, the paused one holding the effects after the one that
-    asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
+    once every member has happened. An events frame announces all of its occurrence's events and
+    collects every trait they trigger, dropping those that would do nothing when several were
+    collected. While the triggers left belong to two or more cards outside a hand, it pauses for the
+    active player's :class:`~.ChooseNextTrigger` (CR, Timing Conflicts). Otherwise it fires the next
+    as a new effects frame, unless its card has since left where it answers from. A frame with
+    nothing left is dropped, and the walk ends with the stack. An :class:`~.InterruptingEffect`
+    pauses the walk: it stashes the exact remainder (every frame, the paused one holding the effects
+    after the one that asked) as a :class:`~.ResumeCascade` and records that effect's decision, so
     :func:`~.resume_cascade` continues from precisely here once the seat answers. An effect with
     nothing to ask leaves the stash to drain behind the work it queued.
 
@@ -529,10 +532,16 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             elif raised or demanded:
                 frames.append(_Events(raised, following=demanded))
             continue
+        top.firing = [entry for entry in top.firing if _still_collected(game, entry)]
         if top.firing:
-            card, trigger = top.firing.pop(0)
+            conflict = _conflict(game, top)
+            if top.chosen is None and len(conflict) > 1:
+                _stash(game, frames)
+                game.pending = ChooseNextTrigger(seat=game.active, candidates=conflict)
+                return
+            card, trigger, event = top.firing.pop(0)
+            top.chosen = None
             _trace.append(f"  {card.printed_id} ({card.id}) reacts")
-            event = _reacted_to(top)
             effects = list(trigger(TriggerContext(game, card, event)))
             frames.append(_Effects(effects, Provenance(triggered=not opens_a_window(event))))
             continue
@@ -545,22 +554,18 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             if not top.queue:
                 frames.pop()
                 continue
-        resolved += 1
-        if resolved > _MAX_CASCADE:
-            raise RuntimeError(
-                f"trigger cascade did not converge after {_MAX_CASCADE} events:\n{_render_trace()}"
-            )
-        event = top.queue.pop(0)
-        game.turn_events += (event,)
-        # Kept for the Response Step, which asks what the action it follows actually did. What an
-        # Interrupt or a Response does inside its own round is its doing, not the action's, and
-        # the announcement that the action resolved is about it rather than by it.
-        inside_a_step = game.round.kind in STEP_ROUNDS
-        if not inside_a_step and not isinstance(event, ActionResolved | ConditionFulfilled):
-            game.action_events.append(event)
-        _trace.append(type(event).__name__)
-        top.event = event
-        top.firing = _collect(game, event)
+        while top.queue:
+            resolved += 1
+            if resolved > _MAX_CASCADE:
+                raise RuntimeError(
+                    f"trigger cascade did not converge after {_MAX_CASCADE} events:\n"
+                    f"{_render_trace()}"
+                )
+            event = top.queue.pop(0)
+            _announce(game, event)
+            top.firing.extend((card, trigger, event) for card, trigger in _collect(game, event))
+        if len(top.firing) > 1:
+            top.firing = _triggered(game, top.firing)
 
 
 def happens_as(game: GameState, first: Effect, committing: Effect) -> bool:
@@ -581,12 +586,52 @@ def _group_events(frames: list[_Frame]) -> _Events:
     return beneath
 
 
-def _reacted_to(frame: _Events) -> GameEvent:
-    """The event ``frame``'s triggers are firing for. Raise ``RuntimeError`` where it has none,
-    which no trigger can be collected without."""
-    if frame.event is None:
-        raise RuntimeError("a trigger is firing for no event")
-    return frame.event
+def _announce(game: GameState, event: GameEvent) -> None:
+    """Record ``event`` as having happened this turn, and as the action's doing where it is."""
+    game.turn_events += (event,)
+    # Kept for the Response Step, which asks what the action it follows actually did. What an
+    # Interrupt or a Response does inside its own round is its doing, not the action's, and the
+    # announcement that the action resolved is about it rather than by it.
+    inside_a_step = game.round.kind in STEP_ROUNDS
+    if not inside_a_step and not isinstance(event, ActionResolved | ConditionFulfilled):
+        game.action_events.append(event)
+    _trace.append(type(event).__name__)
+
+
+_Firing = tuple[L5RCard, Trigger, GameEvent]
+
+
+def _still_collected(game: GameState, entry: _Firing) -> bool:
+    """Whether the event in ``entry`` would still collect its trigger from its card, which a card
+    that has since left where it answers from no longer is."""
+    card, trigger, event = entry
+    return any(held is card and answer is trigger for held, answer in _collect(game, event))
+
+
+def _triggered(game: GameState, firing: list[_Firing]) -> list[_Firing]:
+    """The triggered traits in ``firing`` whose condition the occurrence met, which return effects
+    on the board it left, the public ones first. A trait that returns nothing was not triggered,
+    whatever a sibling's resolution makes of the board later. A card in a hand is no candidate the
+    active player may see, so its triggers resolve after the others. Handlers never change the
+    board, so asking one is safe."""
+    acting = [
+        (card, trigger, event)
+        for card, trigger, event in firing
+        if list(trigger(TriggerContext(game, card, event)))
+    ]
+    return sorted(acting, key=lambda entry: _in_hand(game, entry[0]))
+
+
+def _in_hand(game: GameState, card: L5RCard) -> bool:
+    return any(
+        card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards for seat in game.table.seats
+    )
+
+
+def _conflict(game: GameState, frame: _Events) -> tuple[str, ...]:
+    """The cards with a trigger still to fire that the active player may see, in collection
+    order."""
+    return tuple(dict.fromkeys(card.id for card, _, _ in frame.firing if not _in_hand(game, card)))
 
 
 def _held_from(effect: Effect, provenance: Provenance) -> Effect:
@@ -869,29 +914,24 @@ class EffectsFrame:
 
 @dataclass(frozen=True, slots=True)
 class EventsFrame:
-    """Events a paused cascade still has to fire to the triggered traits that answer them.
+    """One occurrence a paused cascade still has to announce and fire triggered traits for.
 
     Attributes
     ----------
     queue : tuple of GameEvent
-        The events still waiting behind ``event``.
-    event : GameEvent or None, optional
-        The event triggers are firing for, or None before the first is popped. Default None.
-    firing : tuple of (str, callable), optional
-        The card id and trigger of each subscriber still to fire for ``event``. Default none.
+        The occurrence's events still to announce.
+    firing : tuple of (str, callable, GameEvent), optional
+        The card id, trigger and event of each triggered trait still to fire. Default none.
+    chosen : str or None, optional
+        The card the active player named, whose trigger stands first. Default None.
     following : tuple of GameEvent, optional
         The events of the occurrence that follows this one. Default none.
     """
 
     queue: tuple[GameEvent, ...]
-    event: GameEvent | None = None
-    firing: tuple[tuple[str, Trigger], ...] = ()
+    firing: tuple[tuple[str, Trigger, GameEvent], ...] = ()
+    chosen: str | None = None
     following: tuple[GameEvent, ...] = ()
-
-    def __post_init__(self) -> None:
-        """Raise ValueError for triggers firing with no event to fire for."""
-        if self.firing and self.event is None:
-            raise ValueError("an events frame's triggers fire for an event")
 
 
 @dataclass(frozen=True, slots=True)
@@ -924,8 +964,8 @@ def _stash(game: GameState, frames: list[_Frame]) -> None:
 def _frozen(frame: _Frame) -> EffectsFrame | EventsFrame:
     if isinstance(frame, _Effects):
         return EffectsFrame(tuple(frame.pending), frame.provenance, frame.simultaneous)
-    firing = tuple((card.id, trigger) for card, trigger in frame.firing)
-    return EventsFrame(tuple(frame.queue), frame.event, firing, tuple(frame.following))
+    firing = tuple((card.id, trigger, event) for card, trigger, event in frame.firing)
+    return EventsFrame(tuple(frame.queue), firing, frame.chosen, tuple(frame.following))
 
 
 def _thawed(game: GameState, frame: EffectsFrame | EventsFrame) -> _Frame:
@@ -933,11 +973,11 @@ def _thawed(game: GameState, frame: EffectsFrame | EventsFrame) -> _Frame:
     if isinstance(frame, EffectsFrame):
         return _Effects(list(frame.effects), frame.provenance, frame.simultaneous)
     firing = [
-        (game.table.cards_by_id[card_id], trigger)
-        for card_id, trigger in frame.firing
+        (game.table.cards_by_id[card_id], trigger, event)
+        for card_id, trigger, event in frame.firing
         if card_id in game.table.cards_by_id
     ]
-    return _Events(list(frame.queue), frame.event, firing, list(frame.following))
+    return _Events(list(frame.queue), firing, frame.chosen, list(frame.following))
 
 
 def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:
@@ -948,14 +988,30 @@ def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect])
     Raise ``RuntimeError`` if the stash has no events frame at its bottom or no effects frame on
     top, which every pause leaves, before anything resumes.
     """
-    frames = [_thawed(game, frame) for frame in item.frames]
-    if not isinstance(frames[0], _Events):
-        raise RuntimeError("a paused cascade resumed with no events frame at the bottom")
+    frames = _resumed_frames(game, item)
     top = frames[-1]
     if not isinstance(top, _Effects):
         raise RuntimeError("a paused cascade resumed with no effects frame on top")
     top.pending[:0] = produced
     _advance(game, frames)
+
+
+def _resumed_frames(game: GameState, item: ResumeCascade) -> list[_Frame]:
+    """``item``'s frames for the walk to resume. Raise ``RuntimeError`` if there is no events frame
+    at the bottom, which every stash has."""
+    frames = [_thawed(game, frame) for frame in item.frames]
+    if not isinstance(frames[0], _Events):
+        raise RuntimeError("a paused cascade resumed with no events frame at the bottom")
+    return frames
+
+
+def _popped_stash(game: GameState) -> ResumeCascade:
+    """The stash on top of the work stack, which a pause always leaves there. Raise
+    ``RuntimeError`` if something else is."""
+    item = game.stack.pop()
+    if not isinstance(item, ResumeCascade):
+        raise RuntimeError("an answer resumed without its stashed cascade")
+    return item
 
 
 @dataclass(frozen=True, slots=True)
@@ -1003,10 +1059,27 @@ def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
     The stash is always the top of the stack: a choice pauses the walk the moment it is raised, and
     nothing pushes between the pause and the answer. Raise ``RuntimeError`` if it is not there.
     """
-    item = game.stack.pop()
-    if not isinstance(item, ResumeCascade):
-        raise RuntimeError("a card choice resumed without its stashed cascade")
-    resume_cascade(game, item, produced)
+    resume_cascade(game, _popped_stash(game), produced)
+
+
+def resume_trigger_order(game: GameState, chosen: str) -> None:
+    """Pop the cascade a :class:`~.ChooseNextTrigger` paused and continue it, firing ``chosen``'s
+    next triggered trait first.
+
+    Raise ``RuntimeError`` if the stash is not the top of the stack, holds no events frame on top,
+    which that pause always leaves, or holds no trigger of ``chosen``.
+    """
+    frames = _resumed_frames(game, _popped_stash(game))
+    top = frames[-1]
+    if not isinstance(top, _Events):
+        raise RuntimeError("a trigger order resumed with no events frame on top")
+    entry = next((entry for entry in top.firing if entry[0].id == chosen), None)
+    if entry is None:
+        raise RuntimeError(f"{chosen} has no trigger to resolve")
+    top.firing.remove(entry)
+    top.firing.insert(0, entry)
+    top.chosen = chosen
+    _advance(game, frames)
 
 
 def fire(game: GameState, event: GameEvent) -> None:

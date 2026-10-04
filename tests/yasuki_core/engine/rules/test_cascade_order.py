@@ -4,7 +4,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.game_events import CounterChanged, EnteredPlay
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment, DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseNextTrigger,
+    ChoosePayment,
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.effects import AdjustCounter
 from yasuki_core.engine.rules.rulebook.recruit import recruit_card
 from yasuki_core.engine.rules.turn.action_sequence import submit
@@ -123,20 +127,25 @@ def test_a_rulebook_trigger_fires_after_every_card_trigger_on_the_card_the_event
     assert FIRING_ORDER == [("recorder", "P1-a"), ("recorder", "P2-z"), ("rulebook", "P1-a")]
 
 
-def test_a_triggers_reactions_resolve_before_its_sibling_trigger_fires():
-    # CR 20F, Timing: a triggered trait resolves "even if another action or triggered trait is
-    # under way", so the watcher answers the first subscriber's gains before the recorder fires.
+def test_the_active_player_orders_two_triggers_and_each_resolves_completely():
+    # CR, Timing Conflicts: "the active player decides the order in which they happen", and each
+    # resolves with everything it sets off before the next (CR 20F, Timing).
     game = two_seat_game()
     source = put_in_play(game, holding("P1-a-source", printed_id="order_two_effects"))
-    put_in_play(game, holding("P1-b-recorder", printed_id="order_recorder"))
+    rival = put_in_play(game, holding("P1-b-rival", printed_id="order_two_effects"))
     put_in_play(game, holding("P1-c-watcher", printed_id="order_watcher"))
 
     fire(game, EnteredPlay(source.id))
+    order = game.pending
+    submit(game, DecisionResponse((rival.id,)))
 
+    assert isinstance(order, ChooseNextTrigger) and order.seat is game.active
+    assert order.candidates == (source.id, rival.id)
     assert FIRING_ORDER == [
+        ("watcher", "P1-b-rival", {"wealth": 1}),
+        ("watcher", "P1-b-rival", {"wealth": 1, "sincerity": 1}),
         ("watcher", "P1-a-source", {"wealth": 1}),
         ("watcher", "P1-a-source", {"wealth": 1, "sincerity": 1}),
-        ("recorder", "P1-b-recorder"),
     ]
 
 
