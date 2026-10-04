@@ -135,8 +135,9 @@ A {class}`~.Simultaneously` group is the one exception, for things that happen a
 empty events frame and the group's members above it as an effects frame of their own. Each member's
 events join that one events frame, so nothing reacts to any member until all of them have
 happened. A {class}`~.To` applies its `first` effect and then its `contingent` effects only if
-`first` raised an event, since "the second effect depends on the first effect actually happening"
-(CR, Independence of Effects).
+`first` actually happened, as {func}`~yasuki_core.engine.rules.triggers.happens_as` judges, since
+"the second effect depends on the first effect actually happening" (CR, Independence of
+Effects).
 
 `_settle_state_based_actions` runs after every effect, not once at the end. That is the order the
 Comprehensive Rules give, and it is why a Personality who dies as he arrives is dead before his
