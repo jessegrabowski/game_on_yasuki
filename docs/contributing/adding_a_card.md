@@ -16,6 +16,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "Before this card is destroyed..." | `@on(Destroying, id)`, checking the event names this card | none yet |
 | "Yu: ..." | `register_yu(id, effects)`, which applies the datasheet's conditions, with a targeted Yu reaching the battlefield on the event's `location` | {card}`Matsu Kurutta` |
 | "Your X have, 'Yu: ...'" | `register_granted_yu(id, reaches, effects)`, where `reaches(game, source, card)` names the cards the text gives the Yu, each resolving it as its own | {card}`Desperate Ground` |
+| "Give a target Personality, 'Yu: ...'" | a `GrantAbility` effect naming the card, and `register_granted_yu(id, given_by_effect, effects)` | {card}`The Head of My Enemy` |
 | An activated ability with a cost | `register_ability(id, Ability(...))` | {card}`Millet Farm` |
 | "Response: after X..." | `register_ability(id, Ability(timings=(ActionTiming.RESPONSE,), ...))` | {card}`Caravansary` |
 | "X have +NF while Y" for the rest of the turn | effects returning `GrantConditionalModifier(...)` | {card}`Flashy Technique` |
