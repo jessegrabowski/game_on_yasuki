@@ -164,12 +164,17 @@ class Destroying:
         Where the card stands.
     controller : PlayerId
         The seat that controls it.
+    leaves_with : str, optional
+        The Personality whose unit the card leaves play with (CR, Unit), for a card the destruction
+        does not name. A card that stops being in that unit before the destruction commits is not
+        destroyed by it. Default None, for the card the destruction names.
     """
 
     card_id: str
     cause: Cause
     location: Location
     controller: PlayerId
+    leaves_with: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

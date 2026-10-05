@@ -69,6 +69,7 @@ from tests.yasuki_core.engine.rules.cards.test_shattered_empire import (
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    combat_segment,
     dealt_table,
     end_phase,
     fate_card,
@@ -2234,5 +2235,52 @@ def test_a_ring_taken_from_the_open_discard_pile_leaves_the_pile_window():
         presenter.submit_answer(("guard",))
 
         assert not window.card_strip.showing
+    finally:
+        window.root.destroy()
+
+
+def test_a_declinable_choice_offers_decline_and_confirms_only_a_pick(board):
+    presenter, window, session = board
+    session.game.pending = ChooseCards(
+        seat=P1,
+        candidates=("of", "target"),
+        minimum=2,
+        maximum=2,
+        resolver="overwhelmed_units",
+        declinable=True,
+    )
+
+    presenter.present()
+    nothing_picked = _primary_enabled(window)
+    window.field.toggle_selection("of")
+    window.field.toggle_selection("target")
+    presenter.refresh()
+
+    assert _buttons(window)[:2] == ["Confirm", "Decline"]
+    assert nothing_picked is False
+    assert _primary_enabled(window) is True
+
+
+def test_a_follow_up_halos_the_cards_it_may_be_taken_from():
+    units = [
+        personality(
+            "soden", printed_id="yasuki_soden_captain_of_the_i_horokabe_i_experienced", force=4
+        ),
+        personality("enemy", owner=P2, force=4),
+    ]
+    session = combat_segment(units, {"soden": 0}, {"enemy": 0})
+    zealots = attachment(
+        "zealots", printed_id="ijathilu_zealots", attachment_type=AttachmentType.FOLLOWER, force=3
+    )
+    attached(session.game, zealots, "soden")
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    try:
+        presenter.act(ActivateAbility("soden"))
+        runner.submit(DecisionResponse(("enemy",)))
+        presenter.present()
+
+        assert window.field.halo == {"zealots"}
     finally:
         window.root.destroy()

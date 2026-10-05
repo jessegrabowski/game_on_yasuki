@@ -5,7 +5,8 @@ from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, GameEvent, PhaseStarted
-from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.units.composition import followers_of, is_follower
+from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.table import (
     DeckKey,
     Zone,
@@ -18,10 +19,8 @@ from yasuki_core.engine.table import (
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Element
-from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import (
-    AttachmentPrint,
     HoldingPrint,
     PersonalityPrint,
     RingPrint,
@@ -122,8 +121,7 @@ def attack_targets(game: GameState, source: L5RCard) -> list[str]:
     attack = game.attack
     if attack is None or attack.current is None:
         return []
-    enemy = attack.defender if source.owner is attack.attacker else attack.attacker
-    return attack_targets_at(game, attack.current, enemy)
+    return attack_targets_at(game, attack.current, attack.enemy_of(source.owner))
 
 
 def attack_targets_at(game: GameState, battlefield: int, seat: PlayerId) -> list[str]:
@@ -225,12 +223,7 @@ def followers_in_play(game: GameState) -> tuple[L5RCard, ...]:
     """Every Follower on the battlefield, either seat's -- the pool a card means by "a target
     Follower" with no side attached to it. The Follower counterpart of
     :func:`~.personalities_in_play`."""
-    return tuple(
-        card
-        for card in game.table.battlefield.cards
-        if isinstance(card.printed, AttachmentPrint)
-        and card.printed.attachment_type is AttachmentType.FOLLOWER
-    )
+    return tuple(card for card in game.table.battlefield.cards if is_follower(card))
 
 
 def owned_holdings(game: GameState, owner: PlayerId, keyword: str | None = None) -> list[L5RCard]:
@@ -279,6 +272,26 @@ def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]
     ]
 
 
+def army_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]:
+    """The cards of ``seat``'s units at ``battlefield``: each Personality followed by the cards
+    attached to him (CR, Army). What a card means by "your cards in this army", before its own
+    condition narrows them."""
+    return [
+        card
+        for personality in units_at(game, battlefield, seat)
+        for card in unit_of(game, personality)
+    ]
+
+
+def in_army_with(game: GameState, source: L5RCard, card: L5RCard) -> bool:
+    """Whether ``card`` is in the army of ``source``'s controller at ``source``'s battlefield, as
+    "your cards at this battlefield" reads. False while ``source`` is at home."""
+    here = location_of(game.table, source).battlefield
+    if here is None or card.owner is not source.owner:
+        return False
+    return any(member is card for member in army_at(game, here, source.owner))
+
+
 def terrains_at(game: GameState, battlefield: int) -> list[L5RCard]:
     """The Terrains in play at ``battlefield``, in play order. They stand there in neither side or
     army (CR, Side), so :func:`~.units_at` never counts one."""
@@ -304,8 +317,7 @@ def opposing_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]
     attack = game.attack
     if attack is None or attack.current is None:
         return ()
-    enemy = attack.attacker if seat is attack.defender else attack.defender
-    return tuple(card.id for card in units_at(game, attack.current, enemy))
+    return tuple(card.id for card in units_at(game, attack.current, attack.enemy_of(seat)))
 
 
 def opposed_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]:

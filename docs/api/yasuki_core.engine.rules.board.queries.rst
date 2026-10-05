@@ -7,6 +7,7 @@ yasuki_core.engine.rules.board.queries
 
 .. autosummary::
 
+    army_at
     attack_targets
     attack_targets_at
     controls_terrain_at
@@ -14,6 +15,7 @@ yasuki_core.engine.rules.board.queries
     favor_actions_this_turn
     followers_in_play
     has_keyword
+    in_army_with
     opposed_units_in_battle
     opposing_units_in_battle
     owned_carrying

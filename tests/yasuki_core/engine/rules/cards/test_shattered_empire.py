@@ -2119,3 +2119,71 @@ def test_ring_of_the_void_watches_only_under_the_shattered_empire_rules(monkeypa
 
     assert not _void_offered(session)
     assert not any(isinstance(event, ConditionFulfilled) for event in session.game.turn_events)
+
+
+# --- Binasa (Experienced) ---
+
+
+def _binasa_battle():
+    binasa = personality("binasa", printed_id="binasa_experienced", force=5, keywords=("Pearl",))
+    units = [binasa, personality("enemy", owner=P2, force=2)]
+    session = combat_segment(units, {"binasa": 0}, {"enemy": 0})
+    token_template(
+        session.game, "pearl_strategy", name="Pearl", card_type="Strategy", keywords=("Pearl",)
+    )
+    return session
+
+
+def _pearl_strategy(card_id: str) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id=card_id,
+        printed_id="pearl_strategy",
+        name="Pearl",
+        side=Side.FATE,
+        owner=P1,
+        keywords=("Pearl",),
+    )
+
+
+def test_binasa_gives_an_enemy_personality_a_yu_letting_you_create_a_pearl_strategy():
+    game = _binasa_battle().game
+
+    resolve_effects(game, [Destroy("enemy", P1)])
+    assert isinstance(game.pending, Confirm) and game.pending.seat is P1
+    submit(game, DecisionResponse(game.pending.candidates))
+
+    pearls = [card for card in game.table.battlefield.cards if card.name == "Pearl"]
+    assert [card.owner for card in pearls] == [P1]
+    assert location_of(game.table, pearls[0]).is_home
+
+
+def test_binasa_ranged_counts_your_pearl_strategies_and_may_straighten_a_pearl_card():
+    session = _binasa_battle()
+    game = session.game
+    put_in_play(game, _pearl_strategy("first"))
+    put_in_play(game, _pearl_strategy("second"))
+    resolve_effects(game, [Bow("binasa")])
+
+    session.act(P1, ActivateAbility("binasa"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+    session.submit(P1, DecisionResponse(()))
+    session.submit(P1, DecisionResponse(("binasa",)))
+
+    assert "enemy" not in {card.id for card in game.table.battlefield.cards}
+    assert not game.table.cards_by_id["binasa"].bowed
+
+
+def test_binasa_offers_no_pearl_card_his_ranged_destroyed():
+    session = _binasa_battle()
+    game = session.game
+    put_in_play(game, personality("pearl", owner=P2, force=0, keywords=("Pearl",)))
+    ops.set_location(game.table, game.table.cards_by_id["pearl"], Location.at_battlefield(0))
+    resolve_effects(game, [Bow("pearl")])
+
+    session.act(P1, ActivateAbility("binasa"))
+    session.submit(P1, DecisionResponse(("pearl",)))
+    session.submit(P1, DecisionResponse(()))
+
+    assert "pearl" not in {card.id for card in game.table.battlefield.cards}
+    assert game.pending is None

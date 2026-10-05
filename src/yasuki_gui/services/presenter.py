@@ -3,7 +3,15 @@ from typing import TypeGuard
 
 from yasuki_core.engine.debug import ChooseDebugSeat
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Action, DeclareAttack, Pass
+from yasuki_core.engine.rules.vocabulary.actions import (
+    Action,
+    ActivateAbility,
+    DeclareAttack,
+    Equip,
+    Pass,
+    PlayInterrupt,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DECK_TOP,
     STRIKE,
@@ -28,6 +36,7 @@ from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import build_print, side_of_record
+from yasuki_core.game_pieces.text_split import strip_markup
 from yasuki_gui.services.game_runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.labels import turn_context
@@ -83,9 +92,7 @@ class Presenter:
         runner, field = self.host.runner, self.window.field
         self._spend_committed()
         pending = runner.pending
-        field.halo = (
-            frozenset(pending.cards) if isinstance(pending, ChooseNextTrigger) else frozenset()
-        )
+        field.halo = self._halo()
         if isinstance(pending, ChoosePayment) and pending.amount == 0:
             # A cost of nothing is not a question: there is no producer to bow and no gold to
             # spend, so asking would put a prompt in front of the seat with one possible answer.
@@ -255,6 +262,21 @@ class Presenter:
             self.host.runner.looked_at()
         )
 
+    def _halo(self) -> frozenset[str]:
+        """The cards waiting on the player: those with a trigger to order, or those an additional
+        action may be taken from."""
+        runner = self.host.runner
+        pending = runner.pending
+        if isinstance(pending, ChooseNextTrigger):
+            return frozenset(pending.cards)
+        if pending is not None or runner.follow_up_source() is None:
+            return frozenset()
+        return frozenset(
+            action.card_id
+            for action in runner.legal_actions()
+            if isinstance(action, PlayStrategy | Equip | ActivateAbility | PlayInterrupt)
+        )
+
     def _prompt(self, view: GameView) -> tuple[str, list[ButtonSpec]]:
         """What the prompt box should say, and the buttons it should offer, for whatever the engine
         is waiting on."""
@@ -334,7 +356,13 @@ class Presenter:
                 if isinstance(pending, ChoosePayment)
                 else pending.accepts(answer)
             )
+            declinable = isinstance(pending, ChooseCards) and pending.declinable
+            if declinable:
+                # Declining is a button of its own, so the confirm lights only for a pick to make.
+                ready = ready and bool(answer.choices)
             board_buttons: list[ButtonSpec] = [(pending.confirm_label, self.confirm, ready)]
+            if declinable:
+                board_buttons.append(("Decline", lambda: self.submit_answer(()), True))
             if runner.can_cancel():
                 board_buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(answer), board_buttons
@@ -342,7 +370,7 @@ class Presenter:
         if source is not None:
             # An additional action: name the card that granted it, and word the pass as turning it
             # down, whether or not anything it allows can be taken right now.
-            return f"Follow-up action from {source.name}", [
+            return f"Follow-up action from {strip_markup(source.name)}", [
                 ("Decline follow-up action", lambda: self.act(Pass()), True)
             ]
         if view.responding_to is not None:

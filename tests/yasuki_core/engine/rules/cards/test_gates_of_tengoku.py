@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_AND_PROCLAIM, is_recruit
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.gates_of_tengoku import (
@@ -78,11 +78,13 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
     stronghold,
+    terrain_at,
     token_template,
     two_seat_game,
 )
 
 P1 = PlayerId.P1
+P2 = PlayerId.P2
 
 
 # --- Decree of the Hantei ---
@@ -1030,3 +1032,109 @@ def test_hida_yamadera_destroys_attachments_whose_total_gold_cost_stays_below_hi
 
     brute = game.table.cards_by_id["brute"]
     assert [card.id for card in attachments_of(game, brute)] == ["dear"]
+
+
+# --- Matsu Chizuki (Experienced) ---
+
+
+def _chizuki_battle(*, attacker: PlayerId = P1):
+    units = [
+        personality("chizuki", printed_id="matsu_chizuki_experienced", force=5),
+        personality("rager", force=2, keywords=("Berserker",)),
+        personality("weak", owner=P2, force=1),
+        personality("strong", owner=P2, force=3),
+    ]
+    ours, theirs = {"chizuki": 0, "rager": 0}, {"weak": 0, "strong": 0}
+    if attacker is P1:
+        return combat_segment(units, ours, theirs)
+    return combat_segment(units, theirs, ours, attacker=P2)
+
+
+def test_matsu_chizuki_gives_your_berserker_a_yu_against_an_enemy_unit_of_lower_force():
+    game = _chizuki_battle().game
+
+    resolve_effects(game, [Destroy("rager", P2)])
+    assert game.pending.candidates == ("weak",)
+    submit(game, DecisionResponse(("weak",)))
+
+    assert "weak" not in {card.id for card in game.table.battlefield.cards}
+
+
+def test_matsu_chizuki_gives_no_yu_to_a_card_without_berserker():
+    game = _chizuki_battle().game
+
+    resolve_effects(game, [Destroy("chizuki", P2)])
+
+    assert game.pending is None
+
+
+def test_matsu_chizuki_melee_3_is_offered_only_while_you_attack():
+    attacking = _chizuki_battle()
+    defending = _chizuki_battle(attacker=P2)
+    defending.act(P2, Pass())
+
+    attacking.act(P1, ActivateAbility("chizuki"))
+    attacking.submit(P1, DecisionResponse(("strong",)))
+
+    assert "strong" not in {card.id for card in attacking.game.table.battlefield.cards}
+    assert ActivateAbility("chizuki") not in defending.legal_actions(P1)
+
+
+# --- Struggle On ---
+
+
+def _struggle_on_battle(*, follower_keywords: tuple[str, ...] = ()):
+    units = [
+        personality("leader"),
+        personality("second"),
+        personality("home"),
+        personality("enemy", owner=P2),
+    ]
+    game = combat_segment(units, {"leader": 0, "second": 0}, {"enemy": 0}).game
+    spear = attachment("spear", attachment_type=AttachmentType.FOLLOWER, keywords=follower_keywords)
+    attached(game, spear, "leader")
+    terrain_at(game, "struggle_on", 0)
+    return game
+
+
+def test_struggle_on_moves_a_follower_out_of_its_dying_unit_to_a_personality_at_home():
+    game = _struggle_on_battle()
+
+    resolve_effects(game, [Destroy("leader", Rulebook.BATTLE_RESOLUTION)])
+    assert game.pending.candidates == ("home",)
+    submit(game, DecisionResponse(("home",)))
+
+    spear = game.table.cards_by_id["spear"]
+    assert spear.bowed and attachments_of(game, game.table.cards_by_id["home"]) == (spear,)
+    assert "leader" not in {card.id for card in game.table.battlefield.cards}
+    assert not any(isinstance(record, Negation) for record in game.ongoing)
+
+
+def test_struggle_on_negates_the_destruction_of_the_follower_it_names():
+    game = _struggle_on_battle()
+
+    resolve_effects(game, [Destroy("spear", P2)])
+    submit(game, DecisionResponse(("home",)))
+
+    assert attachments_of(game, game.table.cards_by_id["home"]) == (
+        game.table.cards_by_id["spear"],
+    )
+
+
+def test_struggle_on_lets_a_courage_follower_go_to_a_personality_away_from_home():
+    game = _struggle_on_battle(follower_keywords=("Courage",))
+
+    resolve_effects(game, [Destroy("spear", P2)])
+
+    assert set(game.pending.candidates) == {"second", "home"}
+
+
+def test_struggle_on_keeps_a_named_follower_with_its_personality_when_none_can_take_it():
+    game = _struggle_on_battle()
+    resolve_effects(game, [Destroy("home", P2)])
+
+    resolve_effects(game, [Destroy("spear", P2)])
+
+    spear = game.table.cards_by_id["spear"]
+    assert game.pending is None
+    assert spear.bowed and attachments_of(game, game.table.cards_by_id["leader"]) == (spear,)

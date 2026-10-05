@@ -30,7 +30,8 @@ from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Bow, Destroy, Simultaneously
+from yasuki_core.engine.rules.effects import AdjustCounter, Bow, Destroy, Simultaneously
+from yasuki_core.game_pieces.counters import counter_from_key
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
@@ -973,3 +974,53 @@ def test_a_personality_with_its_own_yu_under_desperate_ground_offers_both_by_the
         "Yu: Give your target Deathseeker a +1F token.",
         "Yu: Destroy a target enemy card without attachments.",
     }
+
+
+# --- The First Kengun ---
+
+
+def _first_kengun_battle():
+    units = [personality("leader"), personality("enemy", owner=PlayerId.P2, force=2)]
+    session = combat_segment(units, {"leader": 0}, {"enemy": 0})
+    kengun = attachment(
+        "kengun",
+        printed_id="the_first_kengun",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=2,
+        keywords=("Obsidian Legion",),
+    )
+    attached(session.game, kengun, "leader")
+    attached(session.game, attachment("katana", owner=PlayerId.P2, force=1), "enemy")
+    return session
+
+
+def test_the_first_kengun_gives_your_dying_follower_a_yu_that_adds_a_recruit_token():
+    game = _first_kengun_battle().game
+    attached(game, attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER), "leader")
+
+    resolve_effects(game, [Destroy("ashigaru", PlayerId.P2)])
+    assert game.pending.candidates == ("kengun",)
+    submit(game, DecisionResponse(("kengun",)))
+
+    assert game.table.cards_by_id["kengun"].counters.get("recruit") == 1
+
+
+def test_the_first_kengun_fear_reaches_an_item_with_its_recruit_tokens_and_destroys_it():
+    session = _first_kengun_battle()
+    resolve_effects(session.game, [AdjustCounter("kengun", counter_from_key("recruit"), 1)])
+
+    session.act(P1, ActivateAbility("kengun"))
+    assert set(session.game.pending.candidates) == {"enemy", "katana"}
+    session.submit(P1, DecisionResponse(("katana",)))
+
+    assert "katana" not in {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_the_first_kengun_fear_only_bows_a_personality():
+    session = _first_kengun_battle()
+    resolve_effects(session.game, [AdjustCounter("kengun", counter_from_key("recruit"), 2)])
+
+    session.act(P1, ActivateAbility("kengun"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+
+    assert session.game.table.cards_by_id["enemy"].bowed

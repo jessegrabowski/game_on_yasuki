@@ -15,6 +15,8 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
+    in_army_with,
+    army_at,
     owned_carrying,
     ATTACK_TARGET,
     attack_targets,
@@ -36,6 +38,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Destroy,
     DrawCard,
+    Fear,
     Effect,
     Evaluate,
     GainHonor,
@@ -55,7 +58,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.legality import location_permits
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -301,13 +304,8 @@ def _daidoji_kaede_granted_ability(
 
 def _desperate_ground_reaches(game: GameState, ground: L5RCard, card: L5RCard) -> bool:
     """Your Followers and Personalities at this battlefield."""
-    here = location_of(game.table, ground).battlefield
-    if here is None or card.owner is not ground.owner:
-        return False
-    return any(
-        card is unit or card in followers_of(game, unit)
-        for unit in units_at(game, here, ground.owner)
-    )
+    personality = isinstance(card.printed, PersonalityPrint)
+    return (personality or is_follower(card)) and in_army_with(game, ground, card)
 
 
 def _desperate_ground_yu(ctx: TriggerContext) -> list[Effect]:
@@ -461,9 +459,7 @@ def _tarkasha_fallen_naga_followers(game: GameState, seat: PlayerId) -> tuple[st
     return tuple(
         card.id
         for card in game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards
-        if isinstance(card.printed, AttachmentPrint)
-        and card.printed.attachment_type is AttachmentType.FOLLOWER
-        and keywords.NAGA in card.keywords
+        if is_follower(card) and keywords.NAGA in card.keywords
     )
 
 
@@ -531,6 +527,87 @@ def _tetsuo_hiyamako_experienced_entered_play(ctx: TriggerContext) -> list[Effec
         for _ in range(CLAW_COUNT)
     )
     return [Simultaneously(tuple(claws))]
+
+
+# --- The First Kengun ---
+
+KENGUN_RECRUIT = counter_from_key("recruit")
+# "may target Spells and Items": the attachments its Fear reaches beyond a Fear's own targets.
+KENGUN_ALSO_TARGETS = (AttachmentType.SPELL, AttachmentType.ITEM)
+
+
+def _the_first_kengun_reaches(game: GameState, kengun: L5RCard, card: L5RCard) -> bool:
+    """Your Followers in this army."""
+    return is_follower(card) and in_army_with(game, kengun, card)
+
+
+def _the_first_kengun_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Give a target Obsidian Legion Follower a +1F Recruit token." Either side's Obsidian
+    Legion Followers at the dying card's battlefield, since a targeted Yu reaches only that
+    battlefield (ShE datasheet, The Yu Trait)."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    game = ctx.game
+    targets = tuple(
+        card.id
+        for seat in game.table.seats
+        for card in army_at(game, battlefield, seat)
+        if is_follower(card) and has_keyword(game, card, keywords.OBSIDIAN_LEGION)
+    )
+    return (
+        [Choose(ctx.card.owner, targets, 1, 1, "the_first_kengun", ctx.card.id)] if targets else []
+    )
+
+
+register_granted_yu("the_first_kengun", _the_first_kengun_reaches, _the_first_kengun_yu)
+
+
+@choice_resolver(
+    "the_first_kengun",
+    prompt="The First Kengun's Yu: choose an Obsidian Legion Follower for a +1F Recruit token",
+)
+def _resolve_the_first_kengun(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [AdjustCounter(chosen[0], KENGUN_RECRUIT, 1)]
+
+
+def _the_first_kengun_targets(game: GameState, source: L5RCard) -> list[str]:
+    """What a Fear targets, and the enemy army's Spells and Items besides."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return []
+    attachments = (
+        card.id
+        for card in army_at(game, attack.current, attack.enemy_of(source.owner))
+        if isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type in KENGUN_ALSO_TARGETS
+    )
+    return [*attack_targets(game, source), *attachments]
+
+
+def _the_first_kengun_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Fear 0 with +1 strength per Recruit token, which destroys a Follower, Spell or Item it bows."""
+    strength = source.counters.get(KENGUN_RECRUIT.key, 0)
+    bowed = Bow(target.id)
+    if isinstance(target.printed, AttachmentPrint):
+        outcome = (bowed, Destroy(target.id, source.owner))
+    else:
+        outcome = (bowed,)
+    return [Fear(strength, target.id, source.owner, outcome=outcome)]
+
+
+register_ability(
+    "the_first_kengun",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_the_first_kengun_targets,
+        targeting_message=f"{ATTACK_TARGET}, or an enemy Spell or Item",
+        effects=_the_first_kengun_effects,
+    ),
+)
 
 
 # --- Togashi Bairei ---

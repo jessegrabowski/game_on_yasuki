@@ -54,7 +54,8 @@ in a group does not let both commit before the board is judged. Two effects the 
 into play, ..."), are a `To`, so the second applies only if the first actually happened.
 A trait acting before a card is destroyed ("before this card is destroyed", Yu) answers
 `Destroying`, which is announced before the destruction commits unless a negation in force will stop
-it. A group's destructions are announced together. A printed Yu registers with `register_yu`, which
+it. A group's destructions are announced together, and a unit member's names its Personality in
+`leaves_with`. A printed Yu registers with `register_yu`, which
 applies the datasheet's conditions for when Yu resolves, and a Yu one card gives others ("Your
 Followers at this battlefield have, 'Yu: ...'") with `register_granted_yu`, whose `reaches` names
 the cards that have it. A granted trigger fires as the reached card's own.

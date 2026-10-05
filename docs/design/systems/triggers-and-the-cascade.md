@@ -179,7 +179,8 @@ negate, since "the negation/substitution will always occur first". It then puts 
 the head of its frame, records the cards in the frame's `announced`, and pushes the announcement as
 an events frame. The traits it wakes resolve while the card still stands, and the effect commits
 when it comes back up, through the Interrupt modifications and the negation check like any other,
-so a negation one of those traits granted stops it.
+so a negation one of those traits granted stops it. A card leaving with a Personality's unit names
+him in `leaves_with`, and one a trait moves out of that unit before the commit stays in play.
 
 A group's destructions are announced together, as one occurrence, before any member commits. The
 walk forecasts every member, a `once` negation hiding only the first member it will spend itself

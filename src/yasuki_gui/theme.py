@@ -26,7 +26,9 @@ POWDER_BLUE = "#b0e0e6"  # the Sincerity counter badge, set apart from the gold 
 REVEAL = "#2563eb"  # a card shown to the opponent
 WARN = "#9c4a35"
 SELECT = "#2bb8c9"  # selection ring / marquee
-TRIGGER = "#d23c2c"  # the halo on a card with a triggered ability waiting to be activated
+TRIGGER = (
+    "#d23c2c"  # the halo on a card with a trigger or an additional action waiting on the player
+)
 
 # The center panel of the scroll each printed stat sits on, sampled off card scans and within three
 # points across Celestial, Emperor, Ivory and Twenty Festivals. A card's live Force and Chi are

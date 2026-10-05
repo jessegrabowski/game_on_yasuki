@@ -9,6 +9,7 @@ yasuki_core.engine.rules.units.composition
 
     followers_of
     in_a_unit
+    is_follower
     unit_force
     unit_keywords
 
