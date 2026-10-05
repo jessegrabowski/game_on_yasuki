@@ -122,8 +122,7 @@ def attack_targets(game: GameState, source: L5RCard) -> list[str]:
     attack = game.attack
     if attack is None or attack.current is None:
         return []
-    enemy = attack.defender if source.owner is attack.attacker else attack.attacker
-    return attack_targets_at(game, attack.current, enemy)
+    return attack_targets_at(game, attack.current, attack.enemy_of(source.owner))
 
 
 def attack_targets_at(game: GameState, battlefield: int, seat: PlayerId) -> list[str]:
@@ -304,8 +303,7 @@ def opposing_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]
     attack = game.attack
     if attack is None or attack.current is None:
         return ()
-    enemy = attack.attacker if seat is attack.defender else attack.defender
-    return tuple(card.id for card in units_at(game, attack.current, enemy))
+    return tuple(card.id for card in units_at(game, attack.current, attack.enemy_of(seat)))
 
 
 def opposed_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]:

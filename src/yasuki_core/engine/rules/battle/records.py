@@ -112,6 +112,14 @@ class AttackPhase:
             for index, info in enumerate(self.battlefields)
         )
 
+    def enemy_of(self, seat: PlayerId) -> PlayerId:
+        """The other side of the attack from ``seat``. Raise ``KeyError`` for a seat on neither."""
+        if seat is self.attacker:
+            return self.defender
+        if seat is self.defender:
+            return self.attacker
+        raise KeyError(f"{seat} is not in this attack")
+
     @property
     def current_province(self) -> ZoneKey:
         """The Province the battle now being fought sits at: what a card means by "the current

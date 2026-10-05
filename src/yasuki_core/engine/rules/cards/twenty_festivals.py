@@ -106,7 +106,7 @@ def _the_unassailable_fortress_of_the_crab_effects(
     attack = game.attack
     if attack is None or attack.current is None:
         return [Straighten(target.id)]
-    enemy = attack.attacker if source.owner is attack.defender else attack.defender
+    enemy = attack.enemy_of(source.owner)
     own_army = units_at(game, attack.current, source.owner)
     enemy_army = units_at(game, attack.current, enemy)
     outnumbered = len(own_army) < len(enemy_army)
