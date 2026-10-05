@@ -34,7 +34,9 @@ counts. Comparing against `card.printed.keywords` misses those.
 
 ## Battle
 
-{func}`~.units_at` is the units a seat has at one battlefield.
+{func}`~.units_at` is the units a seat has at one battlefield, and {func}`~.army_at` is their
+cards, each Personality followed by what is attached to him. {func}`~.in_army_with` asks whether a
+card is in that army at another card's battlefield, which is how "your X at this battlefield" reads.
 {func}`~.opposing_units_in_battle` is the enemy's in the battle being fought.
 {func}`~.attack_targets` is the predicate every attack card wants, and
 [Battle](battle.md) covers what it answers to.

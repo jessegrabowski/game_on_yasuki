@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
+    in_army_with,
     owned_carrying,
     ATTACK_TARGET,
     attack_targets,
@@ -301,13 +302,8 @@ def _daidoji_kaede_granted_ability(
 
 def _desperate_ground_reaches(game: GameState, ground: L5RCard, card: L5RCard) -> bool:
     """Your Followers and Personalities at this battlefield."""
-    here = location_of(game.table, ground).battlefield
-    if here is None or card.owner is not ground.owner:
-        return False
-    return any(
-        card is unit or card in followers_of(game, unit)
-        for unit in units_at(game, here, ground.owner)
-    )
+    personality = isinstance(card.printed, PersonalityPrint)
+    return (personality or is_follower(card)) and in_army_with(game, ground, card)
 
 
 def _desperate_ground_yu(ctx: TriggerContext) -> list[Effect]:

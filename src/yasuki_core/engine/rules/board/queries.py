@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, GameEvent, PhaseStarted
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower
+from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.table import (
     DeckKey,
     Zone,
@@ -269,6 +270,26 @@ def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]
         and isinstance(card.printed, PersonalityPrint)
         and location_of(game.table, card).battlefield == battlefield
     ]
+
+
+def army_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]:
+    """The cards of ``seat``'s units at ``battlefield``: each Personality followed by the cards
+    attached to him (CR, Army). What a card means by "your cards in this army", before its own
+    condition narrows them."""
+    return [
+        card
+        for personality in units_at(game, battlefield, seat)
+        for card in unit_of(game, personality)
+    ]
+
+
+def in_army_with(game: GameState, source: L5RCard, card: L5RCard) -> bool:
+    """Whether ``card`` is in the army of ``source``'s controller at ``source``'s battlefield, as
+    "your cards at this battlefield" reads. False while ``source`` is at home."""
+    here = location_of(game.table, source).battlefield
+    if here is None or card.owner is not source.owner:
+        return False
+    return any(member is card for member in army_at(game, here, source.owner))
 
 
 def terrains_at(game: GameState, battlefield: int) -> list[L5RCard]:
