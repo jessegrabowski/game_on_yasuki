@@ -939,7 +939,8 @@ class ChooseCards(DecisionRequest):
     declinable: bool = False
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        asked = CHOICE_PROMPTS.get(self.resolver) or self._asked()
+        registered = CHOICE_PROMPTS.get(self.resolver)
+        asked = self._asked() if registered is None else registered
         note = self.limit_note(partial)
         return f"{asked} ({note})" if note else asked
 

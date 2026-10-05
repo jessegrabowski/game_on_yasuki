@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
     CHOICE_PICKS,
+    CHOICE_PROMPTS,
     ChooseOption,
     ArrangeCards,
     ChooseAbilityTarget,
@@ -319,6 +320,16 @@ def test_the_target_prompt_names_the_condition_and_the_card():
 
     assert worded.prompt() == "Banish all Shadows: target your Monk"
     assert unworded.prompt() == "Millet Farm: target a card"
+
+
+def test_an_empty_registered_prompt_is_not_an_absent_one():
+    # choice_resolver stores a prompt under "is not None", so an empty one is a registered prompt
+    # and not an absent one. Falling back to the generic wording here would ignore the registration.
+    CHOICE_PROMPTS["probe_silent"] = ""
+    try:
+        assert ChooseCards(PlayerId.P1, _HAND, 0, 2, "probe_silent").prompt() == ""
+    finally:
+        CHOICE_PROMPTS.pop("probe_silent")
 
 
 def test_a_target_choice_of_several_takes_that_many_distinct_candidates():
