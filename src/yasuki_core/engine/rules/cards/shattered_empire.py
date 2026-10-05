@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, ignoring_bow_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     plays_clan,
     register_condition_entry,
+    register_granted_yu,
     register_entry,
     register_ring,
     enemy_units_ever_present,
@@ -64,6 +65,7 @@ from yasuki_core.engine.rules.board.counts_as import (
 )
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
+    army_at,
     attack_targets,
     controls_terrain_at,
     followers_in_play,
@@ -79,6 +81,7 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
+    Ask,
     Bow,
     Choose,
     CreateToken,
@@ -101,6 +104,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
     MoveToDeck,
     Negated,
+    RangedAttack,
     Rehonor,
     ShuffleDeck,
     SpendOncePerTurn,
@@ -150,10 +154,99 @@ from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, locat
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import (
+    ActionPrint,
     AttachmentPrint,
     FatePrint,
     PersonalityPrint,
     RingPrint,
+)
+
+
+# --- Binasa (Experienced) ---
+
+PEARL_STRATEGY = "pearl_strategy"
+BINASA_PEARL = "binasa_experienced_pearl"
+BINASA_STRAIGHTEN = "binasa_experienced_straighten"
+BINASA_STRAIGHTEN_OFFER = "binasa_experienced_straighten_offer"
+
+
+def _binasa_experienced_reaches(game: GameState, binasa: L5RCard, card: L5RCard) -> bool:
+    """Other players' Personalities."""
+    return card.owner is not binasa.owner and isinstance(card.printed, PersonalityPrint)
+
+
+def _binasa_experienced_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: The enemy leader may create a :pearl: Strategy in their home." The enemy leader is
+    the dying Personality's opponent in the battle."""
+    attack = ctx.game.attack
+    if attack is None:
+        return []
+    leader = attack.enemy_of(ctx.card.owner)
+    question = "Binasa's Yu: create a Pearl Strategy in your home?"
+    return [Ask(leader, question, BINASA_PEARL, subjects=(ctx.card.id,), source_id=ctx.card.id)]
+
+
+register_granted_yu("binasa_experienced", _binasa_experienced_reaches, _binasa_experienced_yu)
+
+
+@choice_resolver(BINASA_PEARL)
+def _binasa_experienced_pearl(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [CreateToken(PEARL_STRATEGY, seat, source_id)] if chosen else []
+
+
+def _binasa_experienced_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ ":ranged: with strength equal to your :pearl: Strategies. You may straighten a :pearl: card
+    at this battlefield." """
+    strength = sum(
+        1
+        for card in cards_in_play(game, source.owner)
+        if isinstance(card.printed, ActionPrint) and has_keyword(game, card, keywords.PEARL)
+    )
+    return [
+        RangedAttack(strength, target.id, source.owner),
+        Evaluate(BINASA_STRAIGHTEN_OFFER, source.id, source.owner),
+    ]
+
+
+@choice_resolver(BINASA_STRAIGHTEN_OFFER)
+def _binasa_experienced_straighten_offer(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The bowed :pearl: cards at Binasa's battlefield once the Ranged Attack has resolved."""
+    binasa = game.table.cards_by_id.get(source_id)
+    here = None if binasa is None else location_of(game.table, binasa).battlefield
+    if here is None:
+        return []
+    pearls = tuple(
+        card.id
+        for side in game.table.seats
+        for card in army_at(game, here, side)
+        if card.bowed and has_keyword(game, card, keywords.PEARL)
+    )
+    if not pearls:
+        return []
+    return [Choose(seat, pearls, 1, 1, BINASA_STRAIGHTEN, source_id, declinable=True)]
+
+
+@choice_resolver(BINASA_STRAIGHTEN, prompt="Binasa: you may choose a Pearl card to straighten")
+def _binasa_experienced_straighten(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Straighten(card_id) for card_id in chosen]
+
+
+register_ability(
+    "binasa_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_binasa_experienced_effects,
+        tireless=True,
+    ),
 )
 
 
