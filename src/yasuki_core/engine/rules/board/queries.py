@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, GameEvent, PhaseStarted
-from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.table import (
     DeckKey,
     Zone,
@@ -18,10 +18,8 @@ from yasuki_core.engine.table import (
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Element
-from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import (
-    AttachmentPrint,
     HoldingPrint,
     PersonalityPrint,
     RingPrint,
@@ -224,12 +222,7 @@ def followers_in_play(game: GameState) -> tuple[L5RCard, ...]:
     """Every Follower on the battlefield, either seat's -- the pool a card means by "a target
     Follower" with no side attached to it. The Follower counterpart of
     :func:`~.personalities_in_play`."""
-    return tuple(
-        card
-        for card in game.table.battlefield.cards
-        if isinstance(card.printed, AttachmentPrint)
-        and card.printed.attachment_type is AttachmentType.FOLLOWER
-    )
+    return tuple(card for card in game.table.battlefield.cards if is_follower(card))
 
 
 def owned_holdings(game: GameState, owner: PlayerId, keyword: str | None = None) -> list[L5RCard]:

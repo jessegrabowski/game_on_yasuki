@@ -55,7 +55,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.legality import location_permits
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
-from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -80,7 +80,7 @@ from yasuki_core.engine.rules.triggers import (
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH, counter_from_key
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
@@ -461,9 +461,7 @@ def _tarkasha_fallen_naga_followers(game: GameState, seat: PlayerId) -> tuple[st
     return tuple(
         card.id
         for card in game.table.zones[ZoneKey(seat, ZoneRole.FATE_DISCARD)].cards
-        if isinstance(card.printed, AttachmentPrint)
-        and card.printed.attachment_type is AttachmentType.FOLLOWER
-        and keywords.NAGA in card.keywords
+        if is_follower(card) and keywords.NAGA in card.keywords
     )
 
 

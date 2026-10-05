@@ -5,7 +5,15 @@ from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
+
+
+def is_follower(card: L5RCard) -> bool:
+    """Whether ``card`` is a Follower, wherever it is."""
+    return (
+        isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type is AttachmentType.FOLLOWER
+    )
 
 
 def followers_of(game: GameState, personality: L5RCard) -> tuple[L5RCard, ...]:
