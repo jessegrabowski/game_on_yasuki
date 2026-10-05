@@ -278,8 +278,8 @@ def test_the_target_prompt_names_the_condition_and_the_card():
     )
     unworded = ChooseAbilityTarget(PlayerId.P1, ("a",), "c", source_name="Millet Farm")
 
-    assert worded.prompt() == "Target your Monk for Banish all Shadows"
-    assert unworded.prompt() == "Target a card for Millet Farm"
+    assert worded.prompt() == "Banish all Shadows: target your Monk"
+    assert unworded.prompt() == "Millet Farm: target a card"
 
 
 def test_a_target_choice_of_several_takes_that_many_distinct_candidates():
@@ -576,7 +576,7 @@ def test_a_target_prompt_names_the_range_it_takes():
     )
 
     assert one.prompt() == "Target your Personality"
-    assert several.prompt() == "Target 1 to 2 of enemy Followers"
+    assert several.prompt() == "Target 1 or 2 of enemy Followers"
     assert exact.prompt() == "Target 2 of your Personalities"
 
 

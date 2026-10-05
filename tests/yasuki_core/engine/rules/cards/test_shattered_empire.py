@@ -1216,7 +1216,7 @@ def test_ring_of_air_asks_for_its_targets_without_restating_the_count():
 
     session.act(P1, ActivateAbility("air", "air"))
 
-    assert session.game.pending.prompt().startswith("Target 1 to 2 of your bowed cards in one unit")
+    assert session.game.pending.prompt().endswith("target 1 or 2 of your bowed cards in one unit")
 
 
 def test_ring_of_air_straightens_one_card_of_a_unit_of_one():

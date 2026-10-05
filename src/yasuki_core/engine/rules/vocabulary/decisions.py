@@ -503,14 +503,19 @@ class ChooseAbilityTarget(DecisionRequest):
     settled: PickedTargets = ()
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        wanted = self._wanted()
+        return f"{self.source_name}: target {wanted}" if self.source_name else f"Target {wanted}"
+
+    def _wanted(self) -> str:
+        """What the phrase takes, with the count in front of it where it takes more than one."""
         offered = self.targeting_message or ("a card" if self.maximum == 1 else "the cards offered")
         if self.maximum == 1:
-            asked = f"Target {offered}"
-        elif self.minimum == self.maximum:
-            asked = f"Target {self.minimum} of {offered}"
-        else:
-            asked = f"Target {self.minimum} to {self.maximum} of {offered}"
-        return f"{asked} for {self.source_name}" if self.source_name else asked
+            return offered
+        if self.minimum == self.maximum:
+            return f"{self.minimum} of {offered}"
+        if self.maximum == self.minimum + 1:
+            return f"{self.minimum} or {self.maximum} of {offered}"
+        return f"{self.minimum} to {self.maximum} of {offered}"
 
     def accepts(self, response: DecisionResponse) -> bool:
         choices = response.choices
