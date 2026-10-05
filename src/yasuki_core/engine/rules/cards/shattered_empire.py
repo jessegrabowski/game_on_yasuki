@@ -230,7 +230,7 @@ def _binasa_experienced_straighten_offer(
     return [Choose(seat, pearls, 1, 1, BINASA_STRAIGHTEN, source_id, declinable=True)]
 
 
-@choice_resolver(BINASA_STRAIGHTEN, prompt="Binasa: you may choose a Pearl card to straighten")
+@choice_resolver(BINASA_STRAIGHTEN, prompt="Binasa: choose a Pearl card to straighten, or decline")
 def _binasa_experienced_straighten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:

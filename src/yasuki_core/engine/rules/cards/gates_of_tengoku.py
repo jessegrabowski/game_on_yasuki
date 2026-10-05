@@ -352,7 +352,7 @@ register_granted_yu(
 
 @choice_resolver(
     "matsu_chizuki_experienced",
-    prompt="Matsu Chizuki's Yu: choose an enemy Personality whose unit has lower Force",
+    prompt="Matsu Chizuki's Yu: choose an enemy Personality to destroy",
 )
 def _resolve_matsu_chizuki_experienced(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
