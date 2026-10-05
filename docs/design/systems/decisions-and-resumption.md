@@ -29,15 +29,24 @@ the rules layer is what turns it down.
 The engine puts the request on `GameState.pending` and returns. Nothing polls, and nothing blocks.
 
 Any request that picks cards carries {class}`~.PickLimit` conditions on the set, which is how one
-phrase naming several cards stays one question. A limit answers two questions, kept apart because
-they come apart: {meth}`~.PickLimit.permits` says whether a card may still join what is picked, and
-{meth}`~.PickLimit.satisfied` whether what is picked is a legal answer. A ceiling
+phrase naming several cards stays one question. A limit answers several questions, kept apart
+because they come apart: {meth}`~.PickLimit.permits` says whether a card may still join what is
+picked, and {meth}`~.PickLimit.satisfied` whether what is picked is a legal answer. A ceiling
 ({class}`~.TotalAtMost`) refuses the pick that would break it, so its two answers agree. A floor
 refuses nothing and is unsatisfied until enough is picked, so they do not.
 {meth}`~.DecisionRequest.selectable` reports what a part-built answer may still grow by -- every
 candidate while nothing is picked, the rest of one part of a {class}`~.OneGroup` once something is
 -- and a client reads it to gray out the board the first pick ruled out. The picks themselves stay
 on offer, so clicking one again takes it back.
+
+{meth}`~.PickLimit.describe` answers one more, which is not about legality: what the prompt should
+say about the answer so far. {class}`~.TotalAtMost` reports its running total against the bound as
+`Selected 2F/5F`, because the arithmetic is the one thing the seat cannot read off the board.
+{class}`~.OneGroup` reports nothing, because the graying already shows it.
+{meth}`~.DecisionRequest.limit_note` joins what the limits say, and a prompt that carries it
+recomputes on every click. A card whose phrase has a limit leaves the condition to the note and
+keeps its `targeting_message` to the cards themselves, which is why Zaiberu asks for "the
+Personalities" and Desperate Melee for "the enemy Followers".
 
 The limits are plain data, computed when the request is raised. They have to be: a pending request
 is written to the tape and compared against the one a replay rebuilds, and a closure would not

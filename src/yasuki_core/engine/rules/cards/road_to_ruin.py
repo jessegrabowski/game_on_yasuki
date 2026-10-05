@@ -138,7 +138,7 @@ def _desperate_melee_limits(
         (follower_id, effective_gold_cost(game, game.table.cards_by_id[follower_id]))
         for follower_id in _desperate_melee_followers(game, source, picked)
     )
-    return (TotalAtMost(weights, bound),)
+    return (TotalAtMost(weights, bound, unit="GC"),)
 
 
 def _desperate_melee_effects(
@@ -170,9 +170,7 @@ register_ability(
                 candidates=_desperate_melee_followers,
                 count=_desperate_melee_count,
                 limits=_desperate_melee_limits,
-                targeting_message=(
-                    "the enemy Followers with total Gold Cost less than your Personality's"
-                ),
+                targeting_message="the enemy Followers",
             ),
         ),
         effects_for_groups=_desperate_melee_effects,

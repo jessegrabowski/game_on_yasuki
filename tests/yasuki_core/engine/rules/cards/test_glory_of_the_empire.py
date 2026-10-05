@@ -154,7 +154,7 @@ def test_the_challenge_is_targeted_at_a_courtier_standing_at_home():
 
     assert _announce_challenge(session) == ("courtier",)
     assert session.game.pending.prompt() == (
-        "Target your Courtier at any location for Inexplicable Challenge"
+        "Inexplicable Challenge: target your Courtier at any location"
     )
 
 

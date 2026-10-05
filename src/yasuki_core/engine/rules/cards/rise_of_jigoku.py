@@ -388,7 +388,7 @@ def _hida_zaiberu_experienced_limits(
     game: GameState, source: L5RCard, picked: PickedTargets
 ) -> tuple[PickLimit, ...]:
     weights = tuple((card.id, effective_force(game, card)) for card in personalities_in_play(game))
-    return (TotalAtMost(weights, _hida_zaiberu_experienced_bound(game, source)),)
+    return (TotalAtMost(weights, _hida_zaiberu_experienced_bound(game, source), unit="F"),)
 
 
 def _hida_zaiberu_experienced_effects(
@@ -414,7 +414,7 @@ register_ability(
                 candidates=_hida_zaiberu_experienced_targets,
                 count=_hida_zaiberu_experienced_count,
                 limits=_hida_zaiberu_experienced_limits,
-                targeting_message="the Personalities with total Force less than Zaiberu's",
+                targeting_message="the Personalities",
             ),
         ),
         effects_for_groups=_hida_zaiberu_experienced_effects,

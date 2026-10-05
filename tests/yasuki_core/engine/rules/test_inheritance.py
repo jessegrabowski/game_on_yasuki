@@ -139,7 +139,7 @@ def test_the_target_choice_offers_the_seats_own_holdings():
     assert isinstance(pending, ChooseAbilityTarget)
     assert pending.seat is P2
     assert pending.candidates == ("P2-farm",)  # not the opponent's
-    assert pending.prompt() == "Target your Holding for The Inheritance Rule"
+    assert pending.prompt() == "The Inheritance Rule: target your Holding"
 
 
 def test_it_is_offered_only_once_per_game():
