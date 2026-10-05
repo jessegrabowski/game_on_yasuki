@@ -334,7 +334,13 @@ class Presenter:
                 if isinstance(pending, ChoosePayment)
                 else pending.accepts(answer)
             )
+            declinable = isinstance(pending, ChooseCards) and pending.declinable
+            if declinable:
+                # Declining is a button of its own, so the confirm lights only for a pick to make.
+                ready = ready and bool(answer.choices)
             board_buttons: list[ButtonSpec] = [(pending.confirm_label, self.confirm, ready)]
+            if declinable:
+                board_buttons.append(("Decline", lambda: self.submit_answer(()), True))
             if runner.can_cancel():
                 board_buttons.append(("Cancel", self.cancel, True))
             return pending.prompt(answer), board_buttons

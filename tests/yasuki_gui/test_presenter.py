@@ -2236,3 +2236,25 @@ def test_a_ring_taken_from_the_open_discard_pile_leaves_the_pile_window():
         assert not window.card_strip.showing
     finally:
         window.root.destroy()
+
+
+def test_a_declinable_choice_offers_decline_and_confirms_only_a_pick(board):
+    presenter, window, session = board
+    session.game.pending = ChooseCards(
+        seat=P1,
+        candidates=("of", "target"),
+        minimum=2,
+        maximum=2,
+        resolver="overwhelmed_units",
+        declinable=True,
+    )
+
+    presenter.present()
+    nothing_picked = _primary_enabled(window)
+    window.field.toggle_selection("of")
+    window.field.toggle_selection("target")
+    presenter.refresh()
+
+    assert _buttons(window)[:2] == ["Confirm", "Decline"]
+    assert nothing_picked is False
+    assert _primary_enabled(window) is True
