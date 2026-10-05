@@ -1,9 +1,10 @@
 from yasuki_core.engine.players import PlayerId, Trait
-from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.costs import declare_amount
 from yasuki_core.engine.rules.abilities.idioms import (
     declarable_gold,
     register_event_entry,
+    register_granted_yu,
     register_yu,
 )
 from yasuki_core.engine.rules.abilities.model import (
@@ -14,6 +15,10 @@ from yasuki_core.engine.rules.abilities.model import (
 )
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_interrupt
 from yasuki_core.engine.rules.board.queries import (
+    in_army_with,
+    ATTACK_TARGET,
+    attack_targets,
+    has_keyword,
     owned_personalities,
     personalities_in_play,
     province_zones,
@@ -49,6 +54,7 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GainProvince,
     GrantCompassion,
+    MeleeAttack,
     Move,
     MoveToDeck,
     Negated,
@@ -68,8 +74,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.rules.units.membership import attachments_of
+from yasuki_core.engine.rules.units.composition import followers_of, unit_force
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import rightmost_province, sincerity_seed_targets
@@ -303,6 +309,78 @@ def _resolve_hida_yamadera_dark_human_experienced_2_after(
         PlaceOnDeck((source_id,), DeckKey(seat, Side.DYNASTY)),
         GainHonor(seat, -YAMADERA_HONOR_LOSS, source_id=source_id),
     ]
+
+
+# --- Matsu Chizuki (Experienced) ---
+
+CHIZUKI_MELEE = 3
+
+
+def _matsu_chizuki_experienced_reaches(game: GameState, chizuki: L5RCard, card: L5RCard) -> bool:
+    """Your Berserkers at Chizuki's battlefield."""
+    return has_keyword(game, card, keywords.BERSERKER) and in_army_with(game, chizuki, card)
+
+
+def _matsu_chizuki_experienced_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Destroy a target enemy Personality whose unit has lower total Force than this unit."
+    Enemy Personalities at the dying card's battlefield, since a targeted Yu reaches only that
+    battlefield (ShE datasheet, The Yu Trait), weighed against the unit the dying card is in."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    game, berserker = ctx.game, ctx.card
+    own = unit_force(game, attached_to(game, berserker) or berserker)
+    targets = tuple(
+        unit.id
+        for seat in game.table.seats
+        if seat is not berserker.owner
+        for unit in units_at(game, battlefield, seat)
+        if unit_force(game, unit) < own
+    )
+    if not targets:
+        return []
+    return [Choose(berserker.owner, targets, 1, 1, "matsu_chizuki_experienced", berserker.id)]
+
+
+register_granted_yu(
+    "matsu_chizuki_experienced", _matsu_chizuki_experienced_reaches, _matsu_chizuki_experienced_yu
+)
+
+
+@choice_resolver(
+    "matsu_chizuki_experienced",
+    prompt="Matsu Chizuki's Yu: choose an enemy Personality whose unit has lower Force",
+)
+def _resolve_matsu_chizuki_experienced(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Destroy(chosen[0], Trait(source_id))]
+
+
+def _matsu_chizuki_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """What a Melee Attack targets, while you are the Attacker."""
+    attack = game.attack
+    if attack is None or attack.attacker is not source.owner:
+        return []
+    return attack_targets(game, source)
+
+
+def _matsu_chizuki_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [MeleeAttack(CHIZUKI_MELEE, target.id, source.owner)]
+
+
+register_ability(
+    "matsu_chizuki_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_matsu_chizuki_experienced_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_matsu_chizuki_experienced_effects,
+    ),
+)
 
 
 # --- Ninube Aitso, "Doji Yeiko" (Experienced) ---

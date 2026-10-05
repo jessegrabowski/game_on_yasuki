@@ -83,6 +83,7 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1 = PlayerId.P1
+P2 = PlayerId.P2
 
 
 # --- Decree of the Hantei ---
@@ -1030,3 +1031,49 @@ def test_hida_yamadera_destroys_attachments_whose_total_gold_cost_stays_below_hi
 
     brute = game.table.cards_by_id["brute"]
     assert [card.id for card in attachments_of(game, brute)] == ["dear"]
+
+
+# --- Matsu Chizuki (Experienced) ---
+
+
+def _chizuki_battle(*, attacker: PlayerId = P1):
+    units = [
+        personality("chizuki", printed_id="matsu_chizuki_experienced", force=5),
+        personality("rager", force=2, keywords=("Berserker",)),
+        personality("weak", owner=P2, force=1),
+        personality("strong", owner=P2, force=3),
+    ]
+    ours, theirs = {"chizuki": 0, "rager": 0}, {"weak": 0, "strong": 0}
+    if attacker is P1:
+        return combat_segment(units, ours, theirs)
+    return combat_segment(units, theirs, ours, attacker=P2)
+
+
+def test_matsu_chizuki_gives_your_berserker_a_yu_against_an_enemy_unit_of_lower_force():
+    game = _chizuki_battle().game
+
+    resolve_effects(game, [Destroy("rager", P2)])
+    assert game.pending.candidates == ("weak",)
+    submit(game, DecisionResponse(("weak",)))
+
+    assert "weak" not in {card.id for card in game.table.battlefield.cards}
+
+
+def test_matsu_chizuki_gives_no_yu_to_a_card_without_berserker():
+    game = _chizuki_battle().game
+
+    resolve_effects(game, [Destroy("chizuki", P2)])
+
+    assert game.pending is None
+
+
+def test_matsu_chizuki_melee_3_is_offered_only_while_you_attack():
+    attacking = _chizuki_battle()
+    defending = _chizuki_battle(attacker=P2)
+    defending.act(P2, Pass())
+
+    attacking.act(P1, ActivateAbility("chizuki"))
+    attacking.submit(P1, DecisionResponse(("strong",)))
+
+    assert "strong" not in {card.id for card in attacking.game.table.battlefield.cards}
+    assert ActivateAbility("chizuki") not in defending.legal_actions(P1)
