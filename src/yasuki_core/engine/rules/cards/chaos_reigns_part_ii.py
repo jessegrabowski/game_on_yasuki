@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.board.queries import (
     in_army_with,
+    army_at,
     owned_carrying,
     ATTACK_TARGET,
     attack_targets,
@@ -37,6 +38,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     Destroy,
     DrawCard,
+    Fear,
     Effect,
     Evaluate,
     GainHonor,
@@ -81,7 +83,7 @@ from yasuki_core.engine.rules.triggers import (
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.counters import WEALTH, counter_from_key
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
@@ -525,6 +527,87 @@ def _tetsuo_hiyamako_experienced_entered_play(ctx: TriggerContext) -> list[Effec
         for _ in range(CLAW_COUNT)
     )
     return [Simultaneously(tuple(claws))]
+
+
+# --- The First Kengun ---
+
+KENGUN_RECRUIT = counter_from_key("recruit")
+# "may target Spells and Items": the attachments its Fear reaches beyond a Fear's own targets.
+KENGUN_ALSO_TARGETS = (AttachmentType.SPELL, AttachmentType.ITEM)
+
+
+def _the_first_kengun_reaches(game: GameState, kengun: L5RCard, card: L5RCard) -> bool:
+    """Your Followers in this army."""
+    return is_follower(card) and in_army_with(game, kengun, card)
+
+
+def _the_first_kengun_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Give a target Obsidian Legion Follower a +1F Recruit token." Either side's Obsidian
+    Legion Followers at the dying card's battlefield, since a targeted Yu reaches only that
+    battlefield (ShE datasheet, The Yu Trait)."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    game = ctx.game
+    targets = tuple(
+        card.id
+        for seat in game.table.seats
+        for card in army_at(game, battlefield, seat)
+        if is_follower(card) and has_keyword(game, card, keywords.OBSIDIAN_LEGION)
+    )
+    return (
+        [Choose(ctx.card.owner, targets, 1, 1, "the_first_kengun", ctx.card.id)] if targets else []
+    )
+
+
+register_granted_yu("the_first_kengun", _the_first_kengun_reaches, _the_first_kengun_yu)
+
+
+@choice_resolver(
+    "the_first_kengun",
+    prompt="The First Kengun's Yu: choose an Obsidian Legion Follower for a +1F Recruit token",
+)
+def _resolve_the_first_kengun(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [AdjustCounter(chosen[0], KENGUN_RECRUIT, 1)]
+
+
+def _the_first_kengun_targets(game: GameState, source: L5RCard) -> list[str]:
+    """What a Fear targets, and the enemy army's Spells and Items besides."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return []
+    attachments = (
+        card.id
+        for card in army_at(game, attack.current, attack.enemy_of(source.owner))
+        if isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type in KENGUN_ALSO_TARGETS
+    )
+    return [*attack_targets(game, source), *attachments]
+
+
+def _the_first_kengun_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Fear 0 with +1 strength per Recruit token, which destroys a Follower, Spell or Item it bows."""
+    strength = source.counters.get(KENGUN_RECRUIT.key, 0)
+    bowed = Bow(target.id)
+    if isinstance(target.printed, AttachmentPrint):
+        outcome = (bowed, Destroy(target.id, source.owner))
+    else:
+        outcome = (bowed,)
+    return [Fear(strength, target.id, source.owner, outcome=outcome)]
+
+
+register_ability(
+    "the_first_kengun",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_the_first_kengun_targets,
+        targeting_message=f"{ATTACK_TARGET}, or an enemy Spell or Item",
+        effects=_the_first_kengun_effects,
+    ),
+)
 
 
 # --- Togashi Bairei ---

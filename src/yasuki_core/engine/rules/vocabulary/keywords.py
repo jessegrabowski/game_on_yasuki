@@ -99,6 +99,7 @@ NINJA = "Ninja"
 # "Human" on a card is not a keyword: it names a Personality or Follower without this one
 # (CR, Human), so a card asking after Humans reads Nonhuman and negates it.
 NONHUMAN = "Nonhuman"
+OBSIDIAN_LEGION = "Obsidian Legion"
 ONI = "Oni"
 PORT = "Port"
 SAMURAI = "Samurai"
