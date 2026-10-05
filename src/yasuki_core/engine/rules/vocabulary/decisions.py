@@ -148,7 +148,13 @@ class TotalAtMost:
         return sum(cheapest[:count]) <= self.bound
 
     def describe(self, picked: tuple[str, ...]) -> str:
-        """The running total against the bound."""
+        """The running total against the bound, or nothing once the answer holds only cards this
+        limit does not weigh. A phrase whose halves are told apart by a :class:`~.OneGroup` carries
+        its total over one of them, and reporting a budget the answer cannot spend reads as though
+        there were more to pick."""
+        weighed = {card_id for card_id, _ in self.weights}
+        if picked and weighed.isdisjoint(picked):
+            return ""
         return f"Selected {self.total(picked)}{self.unit}/{self.bound}{self.unit}"
 
 
