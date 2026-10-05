@@ -69,6 +69,7 @@ from tests.yasuki_core.engine.rules.cards.test_shattered_empire import (
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    combat_segment,
     dealt_table,
     end_phase,
     fate_card,
@@ -2258,3 +2259,28 @@ def test_a_declinable_choice_offers_decline_and_confirms_only_a_pick(board):
     assert _buttons(window)[:2] == ["Confirm", "Decline"]
     assert nothing_picked is False
     assert _primary_enabled(window) is True
+
+
+def test_a_follow_up_halos_the_cards_it_may_be_taken_from():
+    units = [
+        personality(
+            "soden", printed_id="yasuki_soden_captain_of_the_i_horokabe_i_experienced", force=4
+        ),
+        personality("enemy", owner=P2, force=4),
+    ]
+    session = combat_segment(units, {"soden": 0}, {"enemy": 0})
+    zealots = attachment(
+        "zealots", printed_id="ijathilu_zealots", attachment_type=AttachmentType.FOLLOWER, force=3
+    )
+    attached(session.game, zealots, "soden")
+    runner = GameRunner(session, P1)
+    window = GameWindow(session.game.table, P1)
+    presenter = Presenter(FakeHost(runner), window)
+    try:
+        presenter.act(ActivateAbility("soden"))
+        runner.submit(DecisionResponse(("enemy",)))
+        presenter.present()
+
+        assert window.field.halo == {"zealots"}
+    finally:
+        window.root.destroy()

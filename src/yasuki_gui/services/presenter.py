@@ -3,7 +3,15 @@ from typing import TypeGuard
 
 from yasuki_core.engine.debug import ChooseDebugSeat
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import Action, DeclareAttack, Pass
+from yasuki_core.engine.rules.vocabulary.actions import (
+    Action,
+    ActivateAbility,
+    DeclareAttack,
+    Equip,
+    Pass,
+    PlayInterrupt,
+    PlayStrategy,
+)
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DECK_TOP,
     STRIKE,
@@ -84,9 +92,7 @@ class Presenter:
         runner, field = self.host.runner, self.window.field
         self._spend_committed()
         pending = runner.pending
-        field.halo = (
-            frozenset(pending.cards) if isinstance(pending, ChooseNextTrigger) else frozenset()
-        )
+        field.halo = self._halo()
         if isinstance(pending, ChoosePayment) and pending.amount == 0:
             # A cost of nothing is not a question: there is no producer to bow and no gold to
             # spend, so asking would put a prompt in front of the seat with one possible answer.
@@ -254,6 +260,21 @@ class Presenter:
         """Whether the pending question is one about the cards in view."""
         return isinstance(pending, ChooseCards | ArrangeCards) and set(pending.candidates) <= set(
             self.host.runner.looked_at()
+        )
+
+    def _halo(self) -> frozenset[str]:
+        """The cards waiting on the player: those with a trigger to order, or those an additional
+        action may be taken from."""
+        runner = self.host.runner
+        pending = runner.pending
+        if isinstance(pending, ChooseNextTrigger):
+            return frozenset(pending.cards)
+        if pending is not None or runner.follow_up_source() is None:
+            return frozenset()
+        return frozenset(
+            action.card_id
+            for action in runner.legal_actions()
+            if isinstance(action, PlayStrategy | Equip | ActivateAbility | PlayInterrupt)
         )
 
     def _prompt(self, view: GameView) -> tuple[str, list[ButtonSpec]]:
