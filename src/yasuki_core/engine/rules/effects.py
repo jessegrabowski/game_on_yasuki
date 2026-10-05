@@ -488,7 +488,13 @@ class Destroy(Effect):
             return ()
         location = location_of(game.table, card)
         return tuple(
-            Destroying(member.id, self.cause, location, member.owner)
+            Destroying(
+                member.id,
+                self.cause,
+                location,
+                member.owner,
+                leaves_with=None if member is card else card.id,
+            )
             for member in unit_of(game, card)
         )
 
