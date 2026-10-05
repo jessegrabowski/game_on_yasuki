@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
     ask_who_loses_honor,
     plays_clan,
     register_entry,
+    register_granted_yu,
     register_yu,
 )
 from yasuki_core.engine.rules.abilities.model import (
@@ -14,16 +15,22 @@ from yasuki_core.engine.rules.abilities.model import (
     TargetGroup,
     itself,
 )
-from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
+from yasuki_core.engine.rules.abilities.registry import (
+    abilities_for,
+    register_ability,
+    register_invest,
+)
 from yasuki_core.engine.rules.board.queries import (
+    in_army_with,
     ATTACK_TARGET,
+    army_at,
     attack_targets,
     owned_holdings,
     owned_personalities,
     personalities_in_play,
 )
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import permitted_timings_in
@@ -40,6 +47,7 @@ from yasuki_core.engine.rules.board.seats import (
     seat_wind,
 )
 from yasuki_core.engine.rules.effects import (
+    AdditionalAction,
     AdjustCounter,
     Arrange,
     Ask,
@@ -88,6 +96,7 @@ from yasuki_core.engine.rules.board.queries import (
     top_of_deck,
 )
 from yasuki_core.engine.rules.triggers import TriggerContext, caused_by, choice_resolver, on
+from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -874,6 +883,77 @@ register_ability(
         ),
         effects_for_groups=_with_regards_effects,
         located_at=(CardLocation.HAND,),
+    ),
+)
+
+
+# --- Yasuki Soden, Captain of the <i>Horokabe</i> (Experienced) ---
+
+SODEN_PENALTY = -3
+
+
+def _yasuki_soden_captain_of_the_i_horokabe_i_experienced_reaches(
+    game: GameState, soden: L5RCard, card: L5RCard
+) -> bool:
+    """Your Commanders and Courage Followers at Soden's battlefield."""
+    commander = has_keyword(game, card, keywords.COMMANDER)
+    courage = is_follower(card) and has_keyword(game, card, keywords.COURAGE)
+    return (commander or courage) and in_army_with(game, soden, card)
+
+
+def _yasuki_soden_captain_of_the_i_horokabe_i_experienced_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Draw a card." """
+    return [DrawCard(ctx.card.owner)]
+
+
+register_granted_yu(
+    "yasuki_soden_captain_of_the_i_horokabe_i_experienced",
+    _yasuki_soden_captain_of_the_i_horokabe_i_experienced_reaches,
+    _yasuki_soden_captain_of_the_i_horokabe_i_experienced_yu,
+)
+
+
+def _yasuki_soden_captain_of_the_i_horokabe_i_experienced_targets(
+    game: GameState, source: L5RCard
+) -> list[str]:
+    """The enemy army's cards."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return []
+    return [card.id for card in army_at(game, attack.current, attack.enemy_of(source.owner))]
+
+
+def _yasuki_soden_captain_of_the_i_horokabe_i_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Give the target -3F, then open an additional action to the Battle abilities of your
+    Followers in this army, when there is one to take."""
+    penalty = GrantModifier(
+        source.id, target.id, Stat.FORCE, SODEN_PENALTY, Duration.UNTIL_END_OF_TURN
+    )
+    here = location_of(game.table, source).battlefield
+    if here is None:
+        return [penalty]
+    follow_ups = frozenset(
+        ActivateAbility(card.id, ability.key)
+        for card in army_at(game, here, source.owner)
+        if is_follower(card)
+        for ability in abilities_for(game, card)
+        if ActionTiming.BATTLE in ability.timings
+    )
+    if not follow_ups:
+        return [penalty]
+    return [penalty, AdditionalAction(source.owner, source.id, follow_ups)]
+
+
+register_ability(
+    "yasuki_soden_captain_of_the_i_horokabe_i_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_yasuki_soden_captain_of_the_i_horokabe_i_experienced_targets,
+        targeting_message="an enemy card",
+        effects=_yasuki_soden_captain_of_the_i_horokabe_i_experienced_effects,
     ),
 )
 

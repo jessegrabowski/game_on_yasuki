@@ -1115,3 +1115,59 @@ def test_with_regards_leaves_its_merchants_unbowed_in_a_battle():
     assert not cards["first"].bowed and not cards["second"].bowed
     discard = session.game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)]
     assert "victim" in {card.id for card in discard.cards}
+
+
+# --- Yasuki Soden, Captain of the <i>Horokabe</i> (Experienced) ---
+
+
+def _soden_battle():
+    soden = personality(
+        "soden", printed_id="yasuki_soden_captain_of_the_i_horokabe_i_experienced", force=4
+    )
+    units = [
+        soden,
+        personality("captain", keywords=("Commander",)),
+        personality("enemy", owner=P2, force=4),
+    ]
+    session = combat_segment(units, {"soden": 0, "captain": 0}, {"enemy": 0})
+    zealots = attachment(
+        "zealots", printed_id="ijathilu_zealots", attachment_type=AttachmentType.FOLLOWER, force=3
+    )
+    attached(session.game, zealots, "soden")
+    return session
+
+
+def test_yasuki_soden_gives_your_dying_commander_a_yu_that_draws_a_card():
+    game = _soden_battle().game
+    game.table.decks[DeckKey(P1, Side.FATE)].cards = [fate_card("drawn", P1)]
+
+    resolve_effects(game, [Destroy("captain", P2)])
+
+    hand = game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == ["drawn"]
+
+
+@pytest.mark.parametrize(("follower_keywords", "drawn"), [(("Courage",), ["drawn"]), ((), [])])
+def test_yasuki_soden_gives_a_yu_to_a_courage_follower_only(follower_keywords, drawn):
+    game = _soden_battle().game
+    game.table.decks[DeckKey(P1, Side.FATE)].cards = [fate_card("drawn", P1)]
+    spear = attachment("spear", attachment_type=AttachmentType.FOLLOWER, keywords=follower_keywords)
+    attached(game, spear, "captain")
+
+    resolve_effects(game, [Destroy("spear", P2)])
+
+    hand = game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
+    assert [card.id for card in hand] == drawn
+
+
+def test_yasuki_soden_gives_an_enemy_minus_3_force_and_an_action_from_your_follower():
+    session = _soden_battle()
+
+    session.act(P1, ActivateAbility("soden"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+
+    offered = {
+        action for action in session.legal_actions(P1) if isinstance(action, ActivateAbility)
+    }
+    assert effective_force(session.game, session.game.table.cards_by_id["enemy"]) == 1
+    assert offered == {ActivateAbility("zealots")}
