@@ -596,10 +596,14 @@ def test_a_target_prompt_names_the_range_it_takes():
     exact = ChooseAbilityTarget(
         PlayerId.P1, ("a", "b"), "c", targeting_message="your Personalities", minimum=2, maximum=2
     )
+    wide = ChooseAbilityTarget(
+        PlayerId.P1, _HAND, "c", targeting_message="your Personalities", minimum=1, maximum=3
+    )
 
     assert one.prompt() == "Target your Personality"
     assert several.prompt() == "Target 1 or 2 of enemy Followers"
     assert exact.prompt() == "Target 2 of your Personalities"
+    assert wide.prompt() == "Target 1 to 3 of your Personalities"
 
 
 def test_backing_out_of_a_later_target_phrase_returns_to_the_one_before_it():

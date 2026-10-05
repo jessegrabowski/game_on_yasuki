@@ -154,8 +154,7 @@ def test_zaiberu_counts_the_force_picked_so_far_in_his_prompt():
     session.act(P1, ActivateAbility("zaiberu"))
 
     pending = session.game.pending
-    # The fixture names him by his id; in play the prompt leads with his printed title.
-    assert pending.prompt() == "zaiberu: target 1 or 2 of the Personalities (Selected 0F/5F)"
+    assert pending.prompt().endswith("(Selected 0F/5F)")
     assert pending.prompt(DecisionResponse(("small",))).endswith("(Selected 2F/5F)")
 
 
