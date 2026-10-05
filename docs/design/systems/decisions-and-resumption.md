@@ -129,8 +129,10 @@ through a stash. Declining is how a seat says no to a "may" question a trait ask
 A {class}`~.ChooseNextTrigger` is never backed out of either. It is the one decision whose seat is
 not the controller of what it decides: the active player names which of an occurrence's triggers
 resolves next, whoever's cards they are (CR, Timing Conflicts), and each trigger's own questions
-then go to its controller. It is asked whenever two or more cards' triggers would act, even when
-every order leads to the same board, such as two Rice Farms each taking a token as a turn begins.
+then go to its controller. It is asked whenever two or more triggers would act, on one card or
+several, and then once for each of them, even when every order leads to the same board, such as two
+Rice Farms each taking a token as a turn begins. Its answer names one trigger. A trigger its text
+makes optional asks that of its own controller once it resolves.
 The CR gives the order to the active player without exception, so the engine does not judge which
 orders matter, and each such conflict is a decision point in every game the bots play.
 

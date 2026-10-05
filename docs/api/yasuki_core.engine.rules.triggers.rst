@@ -10,6 +10,7 @@ yasuki_core.engine.rules.triggers
     AnnounceEvent
     EffectsFrame
     EventsFrame
+    GrantedTrigger
     HeldAction
     Registration
     ResumeCascade
@@ -31,10 +32,12 @@ yasuki_core.engine.rules.triggers
     enforce_state_based_actions
     fire
     fire_all
+    granted_trigger
     happens_as
     lapse_ongoing
     on
     pay_costs
+    printed_trait
     reach_moment
     resolve_action_effects
     resolve_choice
@@ -44,6 +47,8 @@ yasuki_core.engine.rules.triggers
     resume_paused_cascade
     resume_trigger_order
     rulebook_trigger
+    trait_opening
+    trigger_label
     watch
 
 .. automodule:: yasuki_core.engine.rules.triggers

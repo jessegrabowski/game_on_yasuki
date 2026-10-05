@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
-from yasuki_core.engine.debug import ChooseDebugSeat, PlaceDebugCard
+from yasuki_core.engine.debug import ChooseDebugSeat, PlaceDebugCard, TokenTemplates
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, PlayStrategy
 from yasuki_core.engine.rules.abilities.model import Ability, itself
@@ -97,6 +97,9 @@ class FakeHost:
     @property
     def session(self) -> EngineSession:
         return self.runner.session
+
+    def token_templates(self, card_id: str) -> TokenTemplates:
+        return ()
 
 
 def _grant_board() -> EngineSession:
@@ -279,19 +282,25 @@ def test_a_yes_no_question_is_asked_by_its_buttons(board):
     assert _buttons(window) == ["Yes", "No", "Cancel"]
 
 
-def test_the_order_of_triggers_on_the_board_is_picked_there_and_resolved_by_a_button(board):
+def test_waiting_triggers_are_ringed_and_each_offered_on_its_card(board):
     presenter, window, session = board
-    session.game.pending = ChooseNextTrigger(seat=P1, candidates=("of", "target"))
+    session.game.pending = ChooseNextTrigger(
+        seat=P1,
+        candidates=("of#1", "of#2", "target"),
+        cards=("of", "of", "target"),
+        labels=("Yu: Gain 1 Honor.", "Yu: Draw a card.", "After X, gain 1 Honor."),
+    )
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
 
     presenter.present()
-    unpicked = _buttons(window), _primary_enabled(window)
-    window.field.toggle_selection("of")
-    presenter.refresh()
+    presenter.on_card_activated("of")
 
-    assert window.field.selecting
+    assert not window.field.selecting
+    assert window.field.halo == {"of", "target"}
     assert _status(window) == "Choose the next triggered ability to resolve"
-    assert unpicked == (["Resolve"], False)
-    assert _primary_enabled(window)
+    assert _buttons(window) == []
+    assert [label for label, _ in offered] == ["Yu: Gain 1 Honor.", "Yu: Draw a card."]
 
 
 def test_a_limited_target_phrase_puts_the_rest_of_the_board_out_of_reach(board):

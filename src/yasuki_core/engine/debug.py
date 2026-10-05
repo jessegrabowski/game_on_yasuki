@@ -13,6 +13,11 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import CardPrint, PersonalityPrint
 
 
+# The templates of the tokens a debug card can create, by token card id, as a deck load fetches
+# them for the cards it deals.
+TokenTemplates = tuple[tuple[str, CardPrint], ...]
+
+
 @dataclass(frozen=True, slots=True)
 class DebugGold:
     """A developer's step: put ``amount`` Gold in ``seat``'s pool, from nowhere.
@@ -43,11 +48,15 @@ class DebugCard:
         The id the new card takes, chosen by the caller so a replay makes the same card.
     printed : CardPrint
         What the card is.
+    tokens : tuple of (str, CardPrint), optional
+        The templates of the tokens the card can create, by token card id, which a deck load would
+        have put on the table with the card. Default none.
     """
 
     seat: PlayerId
     card_id: str
     printed: CardPrint
+    tokens: TokenTemplates = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,11 +72,15 @@ class DebugPersonality:
         The id the new card takes, chosen by the caller so a replay makes the same card.
     printed : CardPrint
         What the Personality is. A print of any other type is refused when the step is applied.
+    tokens : tuple of (str, CardPrint), optional
+        The templates of the tokens the card can create, by token card id, which a deck load would
+        have put on the table with the card. Default none.
     """
 
     seat: PlayerId
     card_id: str
     printed: CardPrint
+    tokens: TokenTemplates = ()
 
 
 DebugStep = DebugGold | DebugCard | DebugPersonality
@@ -133,10 +146,12 @@ def apply_debug(game: GameState, step: DebugStep) -> None:
     match step:
         case DebugGold(seat=seat, amount=amount):
             game.gold[seat] = game.gold.get(seat, 0) + amount
-        case DebugCard(seat=seat, card_id=card_id, printed=printed):
+        case DebugCard(seat=seat, card_id=card_id, printed=printed, tokens=tokens):
             _add_card(game, seat, card_id, printed)
-        case DebugPersonality(seat=seat, card_id=card_id, printed=printed):
+            game.table.creatable_tokens.update(tokens)
+        case DebugPersonality(seat=seat, card_id=card_id, printed=printed, tokens=tokens):
             _ask_who_gets(game, seat, card_id, printed)
+            game.table.creatable_tokens.update(tokens)
     # No seat acted, so answering what the step asks is no action to hand the opportunity on from.
     game.asked_outside_action = game.pending is not None
 

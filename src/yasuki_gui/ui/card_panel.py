@@ -94,6 +94,7 @@ class CardPanel(FloatingPanel):
         stats: dict[str, dict[Stat, int]] | None = None,
         pickable: bool = True,
         peeked: bool = False,
+        halo: bool = False,
     ) -> str:
         """Draw ``card`` centered on ``x``, ``y`` and return the tag its sprite carries.
 
@@ -113,12 +114,14 @@ class CardPanel(FloatingPanel):
         peeked : bool, optional
             Whether to draw a face-down card face up and dimmed, for one this viewer alone may
             read. Default False.
+        halo : bool, optional
+            Whether to ring it as having a triggered ability waiting to be activated. Default False.
         """
         prefix = self.tag_prefix if pickable else self._shown_prefix
         visual = CardSpriteVisual(
             card, x, y, f"{prefix}{card.id}", images=self.images, stats=stats, peeked=peeked
         )
-        visual.draw(self.canvas, selected=selected)
+        visual.draw(self.canvas, selected=selected, halo=halo)
         self._drawn[visual.tag] = visual
         return visual.tag
 

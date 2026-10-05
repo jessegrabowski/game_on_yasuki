@@ -1,8 +1,12 @@
-from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.board.seats import seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import register_yu
+from yasuki_core.engine.rules.abilities.idioms import (
+    register_granted_yu,
+    register_terrain,
+    register_yu,
+)
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import (
     granted_ability,
@@ -20,6 +24,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_holdings,
     personalities_in_play,
     rings_in_play,
+    terrains_at,
     units_at,
 )
 from yasuki_core.engine.rules.effects import (
@@ -51,7 +56,7 @@ from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.legality import location_permits
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.rules.units.membership import attached_to
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
@@ -289,6 +294,55 @@ def _daidoji_kaede_granted_ability(
         targets=targets,
         effects=effects,
     )
+
+
+# --- Desperate Ground ---
+
+
+def _desperate_ground_reaches(game: GameState, ground: L5RCard, card: L5RCard) -> bool:
+    """Your Followers and Personalities at this battlefield."""
+    here = location_of(game.table, ground).battlefield
+    if here is None or card.owner is not ground.owner:
+        return False
+    return any(
+        card is unit or card in followers_of(game, unit)
+        for unit in units_at(game, here, ground.owner)
+    )
+
+
+def _desperate_ground_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Destroy a target enemy card without attachments." Enemy cards at the dying card's
+    battlefield, since a targeted Yu reaches only that battlefield (ShE datasheet, The Yu Trait):
+    the enemy's Personalities carrying nothing, every card attached to the enemy's units, and the
+    enemy's Terrain."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    game, owner = ctx.game, ctx.card.owner
+    enemies = [seat for seat in game.table.seats if seat is not owner]
+    units = [unit for seat in enemies for unit in units_at(game, battlefield, seat)]
+    attached = [card for unit in units for card in attachments_of(game, unit)]
+    targets = (
+        *(unit.id for unit in units if not attachments_of(game, unit)),
+        *(card.id for card in attached),
+        *(card.id for card in terrains_at(game, battlefield) if card.owner is not owner),
+    )
+    return [Choose(owner, targets, 1, 1, "desperate_ground", ctx.card.id)] if targets else []
+
+
+register_granted_yu("desperate_ground", _desperate_ground_reaches, _desperate_ground_yu)
+
+
+@choice_resolver(
+    "desperate_ground", prompt="Desperate Ground's Yu: choose an enemy card without attachments"
+)
+def _resolve_desperate_ground(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Destroy(chosen[0], Trait(source_id))]
+
+
+register_terrain("desperate_ground", ability_keywords=frozenset({keywords.TERRAIN}))
 
 
 # --- Fortified Farmlands ---

@@ -99,6 +99,9 @@ class FieldView(tk.Canvas):
 
         self._hotkeys: Hotkeys = DEFAULT_HOTKEYS
         self._selected: set[str] = set()
+        # The cards with a triggered ability waiting for the active player, ringed so they are found
+        # without hunting. Set by the presenter before each render.
+        self.halo: frozenset[str] = frozenset()
         self._marquee_start: tuple[int, int] | None = None
         self._marquee_rect: int | None = None
 
@@ -709,7 +712,7 @@ class FieldView(tk.Canvas):
             sp.stats = self._stats
             chosen = self._is_chosen(rc.id)
             sp.bowed_preview = chosen and self._selection_bows
-            sp.draw(self, selected=tag in self._selected or chosen)
+            sp.draw(self, selected=tag in self._selected or chosen, halo=rc.id in self.halo)
         self._sink_province_attachments()
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)

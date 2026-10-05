@@ -1,3 +1,4 @@
+import re
 from collections.abc import Callable
 from dataclasses import replace
 
@@ -29,10 +30,15 @@ from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import (
+    Reach,
+    Trigger,
     TriggerContext,
+    TriggerLabel,
     WatchedCondition,
     choice_resolver,
+    granted_trigger,
     on,
+    trait_opening,
     watch,
 )
 from yasuki_core.engine.rules.negation import would_negate
@@ -45,6 +51,7 @@ from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.ruleset import RingEntry, ring_entry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.game_pieces.text_split import strip_markup
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import RecruitRestriction
 
 # The key of the ability a Ring is discarded from hand to use.
@@ -387,10 +394,62 @@ def register_yu(
         The name of the one ruleset the trait is in force under. Default None, for every arc.
     """
 
+    on(Destroying, printed_id, ruleset=ruleset, label=trait_opening("Yu:"))(_yu(effects))
+
+
+def register_granted_yu(
+    printed_id: str,
+    reaches: Reach,
+    effects: Callable[[TriggerContext], list[Effect]],
+    *,
+    ruleset: str | None = None,
+) -> None:
+    """Register the Yu trait ``printed_id`` gives the cards ``reaches`` names, as "Your Followers
+    and Personalities at this battlefield have, 'Yu: ...'" reads. Each reached card resolves it as
+    its own Yu, under the conditions :func:`register_yu` states, with ``effects`` handed the
+    reached card as the context card.
+
+    Parameters
+    ----------
+    printed_id : str
+        The granting card's printed id.
+    reaches : callable
+        Maps ``(game, granting card, card)`` to whether the grant gives ``card`` the Yu now.
+    effects : callable
+        Maps the trigger context to the Yu effect.
+    ruleset : str, optional
+        The name of the one ruleset the grant is in force under. Default None, for every arc.
+    """
+    label = _granted_yu_label(printed_id)
+    granted_trigger(Destroying, printed_id, reaches=reaches, label=label, ruleset=ruleset)(
+        _yu(effects)
+    )
+
+
+# The Yu a granting card's text quotes, as in 'have, "Yu: Gain 1 Honor."'.
+_QUOTED_YU = re.compile(r'"(Yu:[^"]*)"')
+
+
+def _granted_yu_label(printed_id: str) -> TriggerLabel:
+    """A label reading the Yu that the granting card ``printed_id`` quotes, off a copy in play."""
+
+    def label(game: GameState, card: L5RCard) -> str:
+        source = next(
+            (held for held in game.table.battlefield.cards if held.printed_id == printed_id), None
+        )
+        quoted = None if source is None else _QUOTED_YU.search(strip_markup(source.printed.text))
+        return quoted.group(1) if quoted is not None else f"{card.name}'s Yu"
+
+    return label
+
+
+def _yu(effects: Callable[[TriggerContext], list[Effect]]) -> Trigger:
+    """The Yu trigger running ``effects`` where the datasheet's conditions hold."""
+
     def yu(ctx: TriggerContext) -> list[Effect]:
         return effects(ctx) if _yu_resolves(ctx) else []
 
-    on(Destroying, printed_id, ruleset=ruleset)(yu)
+    return yu
 
 
 def _yu_resolves(ctx: TriggerContext) -> bool:

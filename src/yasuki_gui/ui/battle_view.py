@@ -283,6 +283,7 @@ class BattleView(CardPanel):
         self._attack: AttackView | None = None
         self._pending: dict[int, PendingArmy] = {}
         self._selected: frozenset[str] = frozenset()
+        self._halo: frozenset[str] = frozenset()
         self._stats: dict[str, dict[Stat, int]] = {}
         # Whose side of the lane is the near one, following the board's habit of drawing the
         # seat being played at the bottom. None outside a seated game, where the Attacker is near.
@@ -303,6 +304,7 @@ class BattleView(CardPanel):
         selected: frozenset[str] = frozenset(),
         stats: dict[str, dict[Stat, int]] | None = None,
         viewer: PlayerId | None = None,
+        halo: frozenset[str] = frozenset(),
     ) -> None:
         """Redraw for ``attack``, or empty the view when there is none.
 
@@ -324,8 +326,12 @@ class BattleView(CardPanel):
         viewer : PlayerId, optional
             The seat being played, whose side of every lane is drawn as the near one. Default None,
             which draws the Attacker near.
+        halo : frozenset of str, optional
+            The ids of the cards with a triggered ability waiting to be activated, ringed. Default
+            empty.
         """
         self._attack = attack
+        self._halo = halo
         self._pending = pending or {}
         self._buttons = buttons or {}
         self._selected = selected
@@ -687,4 +693,5 @@ class BattleView(CardPanel):
             selected=card.id in self._selected,
             stats=self._stats,
             pickable=pickable,
+            halo=card.id in self._halo,
         )

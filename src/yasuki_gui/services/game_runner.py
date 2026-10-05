@@ -3,7 +3,7 @@ from typing import NamedTuple
 
 from yasuki_core.bots.agents import AutoAgent
 from yasuki_core.bots.policies import PassPolicy
-from yasuki_core.engine.debug import DebugCard, DebugGold, DebugPersonality
+from yasuki_core.engine.debug import DebugCard, DebugGold, DebugPersonality, TokenTemplates
 from yasuki_core.engine.driver import Controls, MAX_ACTIONS_PER_ROUND
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import legality
@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseCards,
+    ChooseNextTrigger,
     Confirm,
     DecisionRequest,
     DecisionResponse,
@@ -260,8 +261,10 @@ class GameRunner:
         pending = self.pending
         if pending is None or not pending.candidates:
             return None
-        if isinstance(pending, Confirm):
-            return None  # a question is answered yes or no, wherever its subjects happen to sit
+        if isinstance(pending, Confirm | ChooseNextTrigger):
+            # A question is answered yes or no, and a trigger from its card or the prompt box,
+            # wherever the cards happen to sit.
+            return None
         if set(pending.candidates) <= set(self.looked_at()):
             return None  # the cards are in view in the look window, not down in a pile
         table = self.session.game.table
@@ -318,6 +321,10 @@ class GameRunner:
             if key.owner is self.human and key.role is ZoneRole.PROVINCE
             for card in zone.cards
         }
+
+    def on_the_board(self, card_id: str) -> bool:
+        """Whether a click can reach ``card_id``: in play, in the human's hand, or in a Province."""
+        return card_id in self._on_the_board()
 
     def _on_the_board(self) -> set[str]:
         """The human's cards a click can reach: what is in play, what is in hand, and whatever sits
@@ -437,15 +444,17 @@ class GameRunner:
         """Put ``amount`` Gold in the human's pool from nowhere, on the tape."""
         self.session.debug(DebugGold(self.human, amount))
 
-    def debug_card(self, printed: CardPrint) -> None:
+    def debug_card(self, printed: CardPrint, tokens: TokenTemplates) -> None:
         """Put a new copy of ``printed`` on the table from nowhere, on the tape: a Fate card into
-        the human's hand, a Dynasty card into a Province the human then picks on the board."""
-        self.session.debug(DebugCard(self.human, self._next_debug_id(), printed))
+        the human's hand, a Dynasty card into a Province the human then picks on the board. The
+        templates of the ``tokens`` it can create come with it."""
+        self.session.debug(DebugCard(self.human, self._next_debug_id(), printed, tokens))
 
-    def debug_personality(self, printed: CardPrint) -> None:
+    def debug_personality(self, printed: CardPrint, tokens: TokenTemplates) -> None:
         """Put a new copy of the Personality ``printed`` straight into play from nowhere, on the
-        tape, under the player the human then picks on the board."""
-        self.session.debug(DebugPersonality(self.human, self._next_debug_id(), printed))
+        tape, under the player the human then picks on the board. The templates of the ``tokens``
+        it can create come with it."""
+        self.session.debug(DebugPersonality(self.human, self._next_debug_id(), printed, tokens))
 
     def _next_debug_id(self) -> str:
         """Counts the debug cards already on the table, so a replay makes the same one."""

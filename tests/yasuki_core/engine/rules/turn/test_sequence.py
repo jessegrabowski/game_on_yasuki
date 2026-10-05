@@ -389,7 +389,8 @@ def test_two_cards_that_pause_on_straightening_are_answered_before_any_reveal(re
     action_sequence.submit(game, DecisionResponse(("P1-a",)))
     assert game.pending is not None and facedown.face_up is False
     _answer(game)
-    assert game.pending is not None and facedown.face_up is False
+    assert isinstance(game.pending, ChooseNextTrigger) and facedown.face_up is False
+    action_sequence.submit(game, DecisionResponse(("P1-b",)))
     _answer(game)
 
     assert game.pending is None and facedown.face_up is True

@@ -1,12 +1,17 @@
 from yasuki_core.engine.rules.abilities.registry import fixed_invest_amount, invest_for
 from yasuki_core.engine.rules.effects import Effect
-from yasuki_core.engine.rules.triggers import TriggerContext, action_did, rulebook_trigger
+from yasuki_core.engine.rules.triggers import (
+    TriggerContext,
+    action_did,
+    rulebook_trigger,
+    trait_opening,
+)
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, Invested
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 
 
-@rulebook_trigger(EnteredPlay)
+@rulebook_trigger(EnteredPlay, label=trait_opening("Invest"))
 def resolve_invest(ctx: TriggerContext) -> list[Effect]:
     """After a card enters play, the Invest the action bringing it in paid for resolves, for the
     Gold Invested. The effects are the Invest trait's, not the action's (CR, Invest)."""

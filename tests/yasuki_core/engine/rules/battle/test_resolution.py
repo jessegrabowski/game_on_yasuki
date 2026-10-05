@@ -1363,6 +1363,7 @@ def test_a_tie_announces_both_armies_before_either_is_destroyed(reacting):
     pending = session.game.pending
     assert isinstance(pending, ChooseNextTrigger) and set(pending.candidates) == {"a", "d"}
     session.submit(PlayerId.P1, DecisionResponse(("a",)))
+    session.submit(PlayerId.P1, DecisionResponse(("d",)))
 
     assert not _in_play(session, "a") and not _in_play(session, "d")
     # Each side's trait saw the enemy still standing, then gained 2 for the card it destroyed.

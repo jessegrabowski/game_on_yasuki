@@ -11,6 +11,7 @@ from yasuki_gui.constants import (
     ART_TAG,
     BORDER_TAG,
     SELECT_TAG,
+    HALO_TAG,
     LABEL_TAG,
     NOTE_TAG,
     COUNTER_TAG,
@@ -20,6 +21,11 @@ from yasuki_gui.ui.images import load_image, load_back_image, ImageProvider
 from yasuki_gui.visuals.stats import draw_stat_stamps
 from yasuki_gui.visuals.visual import Visual, draw_counter_badges
 import tkinter as tk
+
+# The halo stands clear of the card's own border, so it reads as a mark on the card rather than
+# its edge.
+HALO_GAP = 3
+HALO_WIDTH = 3
 
 
 @dataclass
@@ -207,7 +213,20 @@ class CardSpriteVisual(Visual):
             tags=(self.tag, CARD_TAG, self._subtag(SELECT_TAG)),
         )
 
-    def draw(self, canvas: tk.Canvas, selected: bool = False) -> None:
+    def _draw_halo(self, canvas: tk.Canvas) -> None:
+        x, y = self.x, self.y
+        w, h = self.size
+        canvas.create_rectangle(
+            x - w // 2 - HALO_GAP,
+            y - h // 2 - HALO_GAP,
+            x + w // 2 + HALO_GAP,
+            y + h // 2 + HALO_GAP,
+            outline=theme.TRIGGER,
+            width=HALO_WIDTH,
+            tags=(self.tag, CARD_TAG, self._subtag(HALO_TAG)),
+        )
+
+    def draw(self, canvas: tk.Canvas, selected: bool = False, halo: bool = False) -> None:
         canvas.delete(self.tag)
 
         self._draw_art(canvas)
@@ -218,6 +237,8 @@ class CardSpriteVisual(Visual):
         self._draw_selection(canvas, selected)
 
         canvas.tag_raise(self._subtag(SELECT_TAG))
+        if halo:
+            self._draw_halo(canvas)
 
     def update_selection(self, canvas: tk.Canvas, selected: bool) -> None:
         self._draw_selection(canvas, selected)

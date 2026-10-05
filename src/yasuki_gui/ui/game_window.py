@@ -283,6 +283,7 @@ class GameWindow:
         buttons: dict[int, LaneButton] | None = None,
         selected: frozenset[str] = frozenset(),
         stats: dict[str, dict[Stat, int]] | None = None,
+        halo: frozenset[str] = frozenset(),
     ) -> None:
         """Float the battle over the board while ``attack`` is on, and take it away when it ends.
 
@@ -297,7 +298,13 @@ class GameWindow:
         board_w, board_h = widget_size(self.field)
         self.battle_view.open_over(0, 0, board_w, divider_y(board_h))
         self.battle_view.refresh(
-            attack, pending, buttons, selected=selected, stats=stats, viewer=self.field.seat
+            attack,
+            pending,
+            buttons,
+            selected=selected,
+            stats=stats,
+            viewer=self.field.seat,
+            halo=halo,
         )
 
     def show_duel(

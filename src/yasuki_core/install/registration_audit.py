@@ -64,6 +64,9 @@ def registered_card_ids() -> dict[str, frozenset[str]]:
             for by_card in by_zone.values()
             for card_id in by_card
         ),
+        "granted triggers": frozenset(
+            card_id for by_card in triggers._GRANTED_TRIGGERS.values() for card_id in by_card
+        ),
     }
 
 
@@ -535,6 +538,7 @@ VALIDATED_REGISTRIES = {
     "_INTERRUPTS",
     "CHI_DEATH_EXEMPT",
     "_TRIGGERS",
+    "_GRANTED_TRIGGERS",
     "_WATCHES",
 }
 
@@ -557,6 +561,7 @@ NOT_KEYED_BY_CARD = {
     "_AFTER_BATTLE_SEGMENT",  # the segment order
     "_ACTION_WORDING",  # keyed by action type, for describe_action
     "_RULEBOOK_TRIGGERS",  # keyed by event type: the rulebook's own triggers, no card behind them
+    "_LABELS",  # keyed by trigger: how the active player is told each one's name
     "WINDOWS",  # the event types a step fires before committing
     "STEP_ROUNDS",  # the round kinds that are a step inside a resolving action
     "ROUNDS_OVER_HELD_WORK",  # the round kinds that close into work held beneath them

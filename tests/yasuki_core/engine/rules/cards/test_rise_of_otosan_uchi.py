@@ -980,6 +980,7 @@ def test_two_culling_grounds_straightening_together_banish_both_servants():
     session.submit(P1, DecisionResponse(()))
     assert isinstance(session.game.pending, ChooseNextTrigger)
     session.submit(P1, DecisionResponse(("grounds",)))
+    session.submit(P1, DecisionResponse(("grounds2",)))
 
     assert _servants_of(session) == []
     assert not session.game.stack and session.game.pending is None
