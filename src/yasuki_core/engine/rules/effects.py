@@ -24,6 +24,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseOption,
     Confirm,
     DecisionRequest,
+    PickLimit,
+    answerable,
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.engine.rules.vocabulary.looks import Look
@@ -2890,6 +2892,9 @@ class Choose(InterruptingEffect):
     declinable : bool, optional
         Whether choosing nothing is an answer as well as a count within the bounds, as "may target
         and move home exactly two units" reads. Default False.
+    limits : tuple of :class:`~.PickLimit`, optional
+        What the cards picked together must satisfy beyond their number, for a phrase whose count
+        is not the whole of what it allows. Default none.
     """
 
     seat: PlayerId
@@ -2900,10 +2905,12 @@ class Choose(InterruptingEffect):
     source_id: str | None = None
     resolver_context: tuple[str, ...] = ()
     declinable: bool = False
+    limits: tuple[PickLimit, ...] = ()
 
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
-        """A cost that asks the seat to pick cannot be met with too few to pick from."""
-        return len(self.candidates) >= self.minimum
+        """A cost that asks the seat to pick cannot be met with too few to pick from, nor with none
+        its limits can seat."""
+        return answerable(self.candidates, self.minimum, self.limits)
 
     def describe(self) -> str:
         return (
@@ -2921,6 +2928,7 @@ class Choose(InterruptingEffect):
             source_id=self.source_id,
             resolver_context=self.resolver_context,
             declinable=self.declinable,
+            limits=self.limits,
         )
 
 

@@ -930,9 +930,11 @@ class ChooseCards(DecisionRequest):
     declinable: bool = False
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
-        registered = CHOICE_PROMPTS.get(self.resolver)
-        if registered is not None:
-            return registered
+        asked = CHOICE_PROMPTS.get(self.resolver) or self._asked()
+        note = self.limit_note(partial)
+        return f"{asked} ({note})" if note else asked
+
+    def _asked(self) -> str:
         cards = "card" if self.maximum == 1 else "cards"
         if self.minimum == 0:
             return f"Choose up to {self.maximum} {cards}"
@@ -949,6 +951,7 @@ class ChooseCards(DecisionRequest):
             len(distinct) == len(chosen)
             and self.minimum <= len(chosen) <= self.maximum
             and distinct <= set(self.candidates)
+            and all(limit.satisfied(chosen) for limit in self.limits)
         )
 
     @property
