@@ -405,9 +405,11 @@ def register_granted_yu(
     ruleset: str | None = None,
 ) -> None:
     """Register the Yu trait ``printed_id`` gives the cards ``reaches`` names, as "Your Followers
-    and Personalities at this battlefield have, 'Yu: ...'" reads. Each reached card resolves it as
-    its own Yu, under the conditions :func:`register_yu` states, with ``effects`` handed the
-    reached card as the context card.
+    and Personalities at this battlefield have, 'Yu: ...'" reads, or, with
+    :func:`~yasuki_core.engine.rules.triggers.given_by_effect`, the cards its effects gave it, as
+    "give a target Personality, 'Yu: ...'" reads. Each reached card resolves it as its own Yu,
+    under the conditions :func:`register_yu` states, with ``effects`` handed the reached card as the
+    context card.
 
     Parameters
     ----------
@@ -431,11 +433,13 @@ _QUOTED_YU = re.compile(r'"(Yu:[^"]*)"')
 
 
 def _granted_yu_label(printed_id: str) -> TriggerLabel:
-    """A label reading the Yu that the granting card ``printed_id`` quotes, off a copy in play."""
+    """A label reading the Yu that the granting card ``printed_id`` quotes, off any copy on the
+    table, since an effect's grant outlasts a Strategy discarded once it resolved."""
 
     def label(game: GameState, card: L5RCard) -> str:
         source = next(
-            (held for held in game.table.battlefield.cards if held.printed_id == printed_id), None
+            (held for held in game.table.cards_by_id.values() if held.printed_id == printed_id),
+            None,
         )
         quoted = None if source is None else _QUOTED_YU.search(strip_markup(source.printed.text))
         return quoted.group(1) if quoted is not None else f"{card.name}'s Yu"

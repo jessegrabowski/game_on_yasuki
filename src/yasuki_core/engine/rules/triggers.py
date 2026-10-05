@@ -35,7 +35,9 @@ from yasuki_core.engine.rules import state_based_actions
 from yasuki_core.engine.rules.negation import negate_committed, spend_once, would_negate
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, STEP_ROUNDS, Moment
+from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import (
+    AbilityGrant,
     CompassionGrant,
     ConditionalModifier,
     Duration,
@@ -200,6 +202,20 @@ def on(
 # Whether a granting card's text reaches a card: maps (game, granting card, card) to whether the
 # card has the trigger the text gives right now.
 Reach = Callable[[GameState, L5RCard, L5RCard], bool]
+
+
+def given_by_effect(game: GameState, source: L5RCard, card: L5RCard) -> bool:
+    """Whether an effect of ``source`` has given ``card`` its trigger, as "give a target
+    Personality, 'Yu: ...'" does: a :class:`~.AbilityGrant` from ``source`` naming ``card``, still
+    in force. The grant outlasts its source, so a Strategy discarded once it resolved still gives
+    the trigger."""
+    return any(
+        isinstance(recorded, AbilityGrant)
+        and recorded.source_id == source.id
+        and recorded.target_id == card.id
+        and grant_applies(game, recorded)
+        for recorded in game.ongoing
+    )
 
 
 class GrantedTrigger(NamedTuple):
@@ -489,20 +505,41 @@ def _held_until(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigge
 
 
 def _granted_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
-    """The triggers the granting cards in play give the card ``event`` names, wherever it now is,
-    for ``event``."""
+    """The triggers the card ``event`` names has been given for ``event``, wherever it now is: by
+    the granting cards in play, and by the effects of granting cards that have since left play."""
     by_source = _GRANTED_TRIGGERS.get(type(event))
     if not by_source:
         return []
     subject = _named_subject(game, event)
     if subject is None:
         return []
-    return [
+    granted_here = [
         (subject, granted.trigger)
         for source in game.table.battlefield.cards
         for granted in by_source.get(source.printed_id, ())
         if in_force(granted) and granted.reaches(game, source, subject)
     ]
+    return granted_here + [
+        (subject, granted.trigger)
+        for source in _departed_grantors(game, subject)
+        for granted in by_source.get(source.printed_id, ())
+        if in_force(granted) and granted.reaches is given_by_effect
+    ]
+
+
+def _departed_grantors(game: GameState, card: L5RCard) -> list[L5RCard]:
+    """The cards off the battlefield whose effects have given ``card`` a grant still in force."""
+    grantors = {
+        recorded.source_id
+        for recorded in game.ongoing
+        if isinstance(recorded, AbilityGrant)
+        and recorded.target_id == card.id
+        and grant_applies(game, recorded)
+    }
+    if not grantors:
+        return []
+    grantors.difference_update(held.id for held in game.table.battlefield.cards)
+    return [game.table.cards_by_id[source_id] for source_id in grantors]
 
 
 def _card_triggers(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:

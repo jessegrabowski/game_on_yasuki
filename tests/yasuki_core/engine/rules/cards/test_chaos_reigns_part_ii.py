@@ -1024,3 +1024,80 @@ def test_the_first_kengun_fear_only_bows_a_personality():
     session.submit(P1, DecisionResponse(("enemy",)))
 
     assert session.game.table.cards_by_id["enemy"].bowed
+
+
+# --- The Head of My Enemy (Experienced) ---
+
+
+def _head_of_my_enemy(state: TableState) -> L5RCard:
+    head = L5RCard.of(
+        ActionPrint,
+        id="head",
+        name="The Head of My Enemy",
+        printed_id="the_head_of_my_enemy_experienced",
+        side=Side.FATE,
+        owner=P1,
+        text='<b>Engage:</b> Give a target Personality, "Yu: The enemy leader takes :favor: and '
+        'gains 2 Honor."',
+    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, head))
+    return head
+
+
+def test_the_head_of_my_enemy_banishes_a_dead_enemy_to_give_your_personality_a_token():
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("mine"))
+    fallen = register(state, personality("fallen", owner=PlayerId.P2))
+    state.zones[ZoneKey(PlayerId.P2, ZoneRole.DYNASTY_DISCARD)].add(fallen)
+    _head_of_my_enemy(state)
+    session = EngineSession.start(state, P1)
+
+    session.act(P1, PlayStrategy("head", "banish"))
+    session.submit(P1, DecisionResponse(("fallen",)))
+    session.submit(P1, DecisionResponse(("mine",)))
+
+    discard = session.game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.DYNASTY_DISCARD)].cards
+    assert "fallen" not in {card.id for card in discard}
+    assert session.game.table.cards_by_id["mine"].counters == {"plus1f_plus1c": 1}
+
+
+def _head_of_my_enemy_engaged() -> EngineSession:
+    """P1's attack in its Engage Segment, with The Head of My Enemy played on P2's "guard"."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov", seat=P1, index=0)
+    province_card(state, "def-prov", seat=PlayerId.P2, index=0)
+    put_in_play(state, personality("raider", force=3))
+    put_in_play(state, personality("guard", owner=PlayerId.P2))
+    put_in_play(state, personality("watch", owner=PlayerId.P2))
+    _head_of_my_enemy(state)
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("raider@0",)))
+    session.submit(PlayerId.P2, DecisionResponse(("guard@0", "watch@0")))
+    session.submit(P1, DecisionResponse(("0",)))
+    session.act(PlayerId.P2, Pass())
+    session.act(P1, PlayStrategy("head", "yu"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    return session
+
+
+def test_the_head_of_my_enemy_gives_a_yu_that_outlasts_the_strategy():
+    session = _head_of_my_enemy_engaged()
+    honor = session.game.table.seats[P1].honor
+
+    resolve_effects(session.game, [Destroy("guard", P1)])
+
+    assert "head" not in {card.id for card in session.game.table.battlefield.cards}
+    assert session.game.favor_holder is P1
+    assert session.game.table.seats[P1].honor == honor + 2
+
+
+def test_the_head_of_my_enemy_gives_its_yu_to_the_target_alone():
+    session = _head_of_my_enemy_engaged()
+    honor = session.game.table.seats[P1].honor
+
+    resolve_effects(session.game, [Destroy("watch", P1)])
+
+    assert session.game.favor_holder is not P1
+    assert session.game.table.seats[P1].honor == honor

@@ -154,6 +154,12 @@ registers it under the granting card, with a `reaches` read saying which cards h
 trigger answers only events about the card it was given, and that card fires it as its own: it is
 ordered among the card's other triggers, and a card with two such triggers offers both.
 
+An effect can give a trigger too, as "Give a target Personality, 'Yu: ...'" reads. The effect
+records a {class}`~.GrantAbility` naming the card, and the granting card registers the trigger with
+{func}`~yasuki_core.engine.rules.triggers.given_by_effect` as its `reaches`. The record outlasts its
+source, so `_collect` also reads the records naming the card whose source has left play, as a
+Strategy has once it resolved.
+
 Pushing each commit's events on top is what makes the walk depth-first, which is the order the CR
 gives: "Once a triggered trait starts, activate all its costs, targeting, and effects in sequence
 before proceeding, even if another action or triggered trait is under way" (CR 20F, Timing).

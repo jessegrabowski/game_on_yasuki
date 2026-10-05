@@ -1,13 +1,18 @@
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
-from yasuki_core.engine.rules.board.seats import seat_controls_printed
+from yasuki_core.engine.rules.board.seats import opposing_seats, seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     register_granted_yu,
     register_terrain,
     register_yu,
 )
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, InvestAbility
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    InvestAbility,
+    TargetGroup,
+)
 from yasuki_core.engine.rules.abilities.registry import (
     granted_ability,
     register_ability,
@@ -24,6 +29,7 @@ from yasuki_core.engine.rules.board.queries import (
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_holdings,
+    owned_personalities,
     personalities_in_play,
     rings_in_play,
     terrains_at,
@@ -33,6 +39,7 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Ask,
     AskOption,
+    Banish,
     Bow,
     Choose,
     CreateToken,
@@ -54,6 +61,8 @@ from yasuki_core.engine.rules.effects import (
     Simultaneously,
     SpendOncePerTurn,
     Straighten,
+    TakeFavor,
+    To,
 )
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.legality import location_permits
@@ -73,18 +82,20 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.state import used_this_turn
+from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
     action_did,
     at_cap,
     choice_resolver,
+    given_by_effect,
     on,
 )
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.counters import WEALTH, counter_from_key
+from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, WEALTH, counter_from_key
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AttachmentPrint,
@@ -607,6 +618,101 @@ register_ability(
         targeting_message=f"{ATTACK_TARGET}, or an enemy Spell or Item",
         effects=_the_first_kengun_effects,
     ),
+)
+
+
+# --- The Head of My Enemy (Experienced) ---
+
+HEAD_HONOR = 2
+
+
+def _the_head_of_my_enemy_experienced_dead(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """Another player's dead or discarded Personalities, both of which lie in a Dynasty discard."""
+    return [
+        card.id
+        for seat in opposing_seats(game, source.owner)
+        for card in game.table.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)].cards
+        if isinstance(card.printed, PersonalityPrint)
+    ]
+
+
+def _the_head_of_my_enemy_experienced_yours(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    return [card.id for card in owned_personalities(game, source.owner)]
+
+
+def _the_head_of_my_enemy_experienced_banish_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """ "Banish another player's target dead or discarded Personality to give your target
+    Personality a +1F/+1C token." """
+    (dead,), (yours,) = groups
+    return [To(Banish(dead.id), (AdjustCounter(yours.id, PLUS_1F_PLUS_1C, 1),))]
+
+
+register_ability(
+    "the_head_of_my_enemy_experienced",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_the_head_of_my_enemy_experienced_dead,
+                targeting_message="another player's dead or discarded Personality",
+            ),
+            TargetGroup(
+                candidates=_the_head_of_my_enemy_experienced_yours,
+                targeting_message="your Personality",
+            ),
+        ),
+        effects_for_groups=_the_head_of_my_enemy_experienced_banish_effects,
+        located_at=(CardLocation.HAND,),
+        key="banish",
+    ),
+)
+
+
+def _the_head_of_my_enemy_experienced_yu_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _the_head_of_my_enemy_experienced_yu_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Give a target Personality, 'Yu: ...'" until the turn ends."""
+    return [GrantAbility(source.id, target.id, (), Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "the_head_of_my_enemy_experienced",
+    Ability(
+        timings=(ActionTiming.ENGAGE,),
+        cost=no_cost,
+        targets=_the_head_of_my_enemy_experienced_yu_targets,
+        targeting_message="a Personality",
+        effects=_the_head_of_my_enemy_experienced_yu_effects,
+        located_at=(CardLocation.HAND,),
+        key="yu",
+        printed_index=1,
+    ),
+)
+
+
+def _the_head_of_my_enemy_experienced_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: The enemy leader takes :favor: and gains 2 Honor." The enemy leader is the dying
+    Personality's opponent in the battle."""
+    attack = ctx.game.attack
+    if attack is None:
+        return []
+    leader = attack.enemy_of(ctx.card.owner)
+    return [TakeFavor(leader), GainHonor(leader, HEAD_HONOR, source_id=ctx.card.id)]
+
+
+register_granted_yu(
+    "the_head_of_my_enemy_experienced", given_by_effect, _the_head_of_my_enemy_experienced_yu
 )
 
 
