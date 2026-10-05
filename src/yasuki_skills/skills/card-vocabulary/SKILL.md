@@ -58,7 +58,9 @@ it. A group's destructions are announced together, and a unit member's names its
 `leaves_with`. A printed Yu registers with `register_yu`, which
 applies the datasheet's conditions for when Yu resolves, and a Yu one card gives others ("Your
 Followers at this battlefield have, 'Yu: ...'") with `register_granted_yu`, whose `reaches` names
-the cards that have it. A granted trigger fires as the reached card's own.
+the cards that have it. A granted trigger fires as the reached card's own. An effect that gives one
+("give a target Personality, 'Yu: ...'") records a `GrantAbility`, and the trigger registers with
+`given_by_effect` as its `reaches`.
 `docs/design/systems/effects.md` has the rules and the CR lines behind them.
 
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and

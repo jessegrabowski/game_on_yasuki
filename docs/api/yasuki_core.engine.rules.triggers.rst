@@ -32,6 +32,7 @@ yasuki_core.engine.rules.triggers
     enforce_state_based_actions
     fire
     fire_all
+    given_by_effect
     granted_trigger
     happens_as
     lapse_ongoing
