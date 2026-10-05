@@ -75,6 +75,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ProvinceDestroyed,
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
+from yasuki_core.engine.rules.vocabulary.decisions import OneGroup, PickLimit, TotalAtMost
 from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower, unit_force
@@ -148,10 +149,6 @@ def _resolve_decree_of_the_hantei_favor(
 
 YAMADERA_MOST_FORCE = 4
 YAMADERA_HONOR_LOSS = 1
-YAMADERA_PERSONALITY = "Destroy a target Personality without attachments and 4 or less Force"
-YAMADERA_ATTACHMENTS = (
-    "Destroy any number of target attachments with total Gold cost less than Yamadera's Force"
-)
 
 
 def _hida_yamadera_dark_human_experienced_2_yu(ctx: TriggerContext) -> list[Effect]:
@@ -160,31 +157,41 @@ def _hida_yamadera_dark_human_experienced_2_yu(ctx: TriggerContext) -> list[Effe
     destroyed, put him on top of your Dynasty deck and lose 1 Honor." Targets at his battlefield,
     since a targeted Yu reaches only that battlefield (ShE datasheet, The Yu Trait)."""
     game, yamadera = ctx.game, ctx.card
-    offered = (
-        (
-            YAMADERA_PERSONALITY,
-            _hida_yamadera_dark_human_experienced_2_personalities(game, yamadera),
-        ),
-        (
-            YAMADERA_ATTACHMENTS,
-            _hida_yamadera_dark_human_experienced_2_attachments(game, yamadera, ()),
-        ),
-    )
-    modes = tuple(mode for mode, targets in offered if targets)
-    asked = [
-        AskOption(
-            yamadera.owner,
-            modes,
-            "Hida Yamadera's Yu: choose what to destroy",
-            "hida_yamadera_dark_human_experienced_2",
-            yamadera.id,
-        )
-    ]
     after = Evaluate("hida_yamadera_dark_human_experienced_2_after", yamadera.id, yamadera.owner)
-    return [*(asked if modes else []), DelayedEffect(after, NextTime(Destroyed, yamadera.id))]
+    return [
+        *_hida_yamadera_dark_human_experienced_2_ask(game, yamadera),
+        DelayedEffect(after, NextTime(Destroyed, yamadera.id)),
+    ]
 
 
 register_yu("hida_yamadera_dark_human_experienced_2", _hida_yamadera_dark_human_experienced_2_yu)
+
+
+def _hida_yamadera_dark_human_experienced_2_ask(game: GameState, yamadera: L5RCard) -> list[Effect]:
+    """One question over both halves of the text, where the first card picked settles which half
+    was taken. Each Personality is its own group, so taking one leaves no second on offer, while
+    the attachments are one group that takes any number of them.
+    """
+    personalities = _hida_yamadera_dark_human_experienced_2_personalities(game, yamadera)
+    attachments = _hida_yamadera_dark_human_experienced_2_attachments(game, yamadera)
+    if not personalities and not attachments:
+        return []
+    groups = tuple((card_id,) for card_id in personalities)
+    budget: tuple[PickLimit, ...] = ()
+    if attachments:
+        groups = (*groups, attachments)
+        budget = (_hida_yamadera_dark_human_experienced_2_budget(game, yamadera, attachments),)
+    return [
+        Choose(
+            yamadera.owner,
+            (*personalities, *attachments),
+            minimum=1,
+            maximum=max(1, len(attachments)),
+            resolver="hida_yamadera_dark_human_experienced_2",
+            source_id=yamadera.id,
+            limits=(OneGroup(groups), *budget),
+        )
+    ]
 
 
 def _hida_yamadera_dark_human_experienced_2_units(
@@ -207,101 +214,40 @@ def _hida_yamadera_dark_human_experienced_2_personalities(
 
 
 def _hida_yamadera_dark_human_experienced_2_attachments(
-    game: GameState, yamadera: L5RCard, chosen: tuple[str, ...]
+    game: GameState, yamadera: L5RCard
 ) -> tuple[str, ...]:
-    """The attachments at Yamadera's battlefield that keep the total Gold cost of ``chosen`` and
-    themselves below his Force."""
-    spent = sum(effective_gold_cost(game, game.table.cards_by_id[card_id]) for card_id in chosen)
-    budget = effective_force(game, yamadera) - spent
+    """The attachments at his battlefield whose own Gold cost stays under his Force. One that
+    breaks the total by itself is in no legal answer, so it is never offered."""
+    budget = effective_force(game, yamadera)
     return tuple(
         attachment.id
         for card in _hida_yamadera_dark_human_experienced_2_units(game, yamadera)
         for attachment in attachments_of(game, card)
-        if attachment.id not in chosen and effective_gold_cost(game, attachment) < budget
+        if effective_gold_cost(game, attachment) < budget
     )
 
 
-@choice_resolver("hida_yamadera_dark_human_experienced_2")
+def _hida_yamadera_dark_human_experienced_2_budget(
+    game: GameState, yamadera: L5RCard, attachments: tuple[str, ...]
+) -> TotalAtMost:
+    """ "total Gold cost less than Yamadera's Force": one short of his Force is the most the
+    attachments picked together may carry."""
+    weights = tuple(
+        (card_id, effective_gold_cost(game, game.table.cards_by_id[card_id]))
+        for card_id in attachments
+    )
+    return TotalAtMost(weights, effective_force(game, yamadera) - 1, unit="GC")
+
+
+@choice_resolver(
+    "hida_yamadera_dark_human_experienced_2",
+    prompt="Hida Yamadera's Yu: destroy a Personality, or any number of attachments",
+)
 def _resolve_hida_yamadera_dark_human_experienced_2(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    yamadera = game.table.cards_by_id[source_id]
-    if chosen[0] == YAMADERA_PERSONALITY:
-        targets = _hida_yamadera_dark_human_experienced_2_personalities(game, yamadera)
-        return [
-            Choose(
-                seat, targets, 1, 1, "hida_yamadera_dark_human_experienced_2_personality", source_id
-            )
-        ]
-    targets = _hida_yamadera_dark_human_experienced_2_attachments(game, yamadera, ())
-    return [
-        Choose(
-            seat,
-            targets,
-            1,
-            1,
-            "hida_yamadera_dark_human_experienced_2_first_attachment",
-            source_id,
-        )
-    ]
-
-
-@choice_resolver(
-    "hida_yamadera_dark_human_experienced_2_personality",
-    prompt="Hida Yamadera's Yu: choose a Personality to destroy",
-)
-def _resolve_hida_yamadera_dark_human_experienced_2_personality(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [Destroy(chosen[0], Trait(source_id))]
-
-
-@choice_resolver(
-    "hida_yamadera_dark_human_experienced_2_first_attachment",
-    prompt="Hida Yamadera's Yu: choose an attachment to destroy",
-)
-def _resolve_hida_yamadera_dark_human_experienced_2_first_attachment(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return _hida_yamadera_dark_human_experienced_2_more_attachments(game, source_id, chosen, seat)
-
-
-@choice_resolver(
-    "hida_yamadera_dark_human_experienced_2_another_attachment",
-    prompt="Hida Yamadera's Yu: choose another attachment to destroy, or none",
-)
-def _resolve_hida_yamadera_dark_human_experienced_2_another_attachment(
-    game: GameState,
-    source_id: str,
-    chosen: tuple[str, ...],
-    seat: PlayerId,
-    resolver_context: tuple[str, ...] = (),
-) -> list[Effect]:
-    """``resolver_context`` carries the attachments chosen so far."""
-    if not chosen:
-        return _hida_yamadera_dark_human_experienced_2_destroy(resolver_context, source_id)
-    return _hida_yamadera_dark_human_experienced_2_more_attachments(
-        game, source_id, (*resolver_context, *chosen), seat
-    )
-
-
-def _hida_yamadera_dark_human_experienced_2_more_attachments(
-    game: GameState, source_id: str, picked: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """Ask for another attachment while one still fits under his Force, or destroy those picked."""
-    fitting = _hida_yamadera_dark_human_experienced_2_attachments(
-        game, game.table.cards_by_id[source_id], picked
-    )
-    if not fitting:
-        return _hida_yamadera_dark_human_experienced_2_destroy(picked, source_id)
-    resolver = "hida_yamadera_dark_human_experienced_2_another_attachment"
-    return [Choose(seat, fitting, 0, 1, resolver, source_id, resolver_context=picked)]
-
-
-def _hida_yamadera_dark_human_experienced_2_destroy(
-    picked: tuple[str, ...], source_id: str
-) -> list[Effect]:
-    return [Simultaneously(tuple(Destroy(card_id, Trait(source_id)) for card_id in picked))]
+    """One phrase destroys them, so they go at once."""
+    return [Simultaneously(tuple(Destroy(card_id, Trait(source_id)) for card_id in chosen))]
 
 
 @choice_resolver("hida_yamadera_dark_human_experienced_2_after")

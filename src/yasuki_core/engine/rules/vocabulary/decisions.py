@@ -78,6 +78,10 @@ class OneGroup:
     the same wording about one Province or one location. The first pick is free and settles which
     part the rest come from, and taking it back opens the choice up again.
 
+    A part of one card is how "a target Personality, or any number of target attachments" says
+    that the first half takes exactly one: picking that card leaves its part with nothing else in
+    it, so no second card may join it.
+
     Attributes
     ----------
     groups : tuple of tuple of str
