@@ -170,8 +170,7 @@ register_yu("hida_yamadera_dark_human_experienced_2", _hida_yamadera_dark_human_
 def _hida_yamadera_dark_human_experienced_2_ask(game: GameState, yamadera: L5RCard) -> list[Effect]:
     """One question over both halves of the text, where the first card picked settles which half
     was taken. Each Personality is its own group, so taking one leaves no second on offer, while
-    the attachments are one group that takes any number of them.
-    """
+    the attachments are one group that takes any number of them."""
     personalities = _hida_yamadera_dark_human_experienced_2_personalities(game, yamadera)
     attachments = _hida_yamadera_dark_human_experienced_2_attachments(game, yamadera)
     if not personalities and not attachments:

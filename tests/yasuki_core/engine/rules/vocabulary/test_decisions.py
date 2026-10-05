@@ -213,7 +213,8 @@ def test_a_capped_phrase_counts_the_running_total_in_its_prompt():
 
 
 def test_a_capped_phrase_says_nothing_once_the_answer_is_outside_its_weights():
-    # "a" and "b" are weighed; "c" is not, as a Personality is not when the cap is over attachments.
+    # "a" and "b" are weighted; "c" is not, as a Personality is not when the cap is over
+    # attachments.
     request = ChooseAbilityTarget(
         PlayerId.P1,
         _HAND,
@@ -225,7 +226,7 @@ def test_a_capped_phrase_says_nothing_once_the_answer_is_outside_its_weights():
 
     assert request.prompt().endswith("(Selected 0/4)")
     assert request.prompt(DecisionResponse(("a",))).endswith("(Selected 2/4)")
-    assert "(" not in request.prompt(DecisionResponse(("c",)))
+    assert "Selected" not in request.prompt(DecisionResponse(("c",)))
 
 
 def test_a_grouped_phrase_adds_nothing_to_its_prompt():

@@ -2893,8 +2893,7 @@ class Choose(InterruptingEffect):
         Whether choosing nothing is an answer as well as a count within the bounds, as "may target
         and move home exactly two units" reads. Default False.
     limits : tuple of :class:`~.PickLimit`, optional
-        What the cards picked together must satisfy beyond their number, for a phrase whose count
-        is not the whole of what it allows. Default none.
+        What the cards picked together must satisfy beyond their number. Default none.
     """
 
     seat: PlayerId
@@ -2908,8 +2907,8 @@ class Choose(InterruptingEffect):
     limits: tuple[PickLimit, ...] = ()
 
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
-        """A cost that asks the seat to pick cannot be met with too few to pick from, nor with none
-        its limits can seat."""
+        """A cost that asks the seat to pick cannot be met where no answer its limits allow
+        exists."""
         return answerable(self.candidates, self.minimum, self.limits)
 
     def describe(self) -> str:

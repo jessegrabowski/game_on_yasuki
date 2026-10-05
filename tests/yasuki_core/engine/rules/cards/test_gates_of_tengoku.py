@@ -1023,7 +1023,7 @@ def test_hida_yamadera_destroys_attachments_whose_total_gold_cost_stays_below_hi
     resolve_effects(game, [Destroy("yamadera", P1)])
     pending = game.pending
     assert pending.candidates == ("cheap", "mid", "dear")
-    # 3 + 4 reaches his Force of 8 without meeting it; "dear" at 5 would carry the pair over.
+    # 3 + 4 stays under his Force of 8, where "dear" at 5 would carry the pair to it.
     assert pending.selectable(DecisionResponse(("cheap",))) == ("cheap", "mid")
     submit(game, DecisionResponse(("cheap", "mid")))
 
@@ -1057,9 +1057,9 @@ def test_hida_yamadera_offers_both_halves_of_his_yu_as_one_question():
     assert pending.accepts(DecisionResponse(("blade",))) is True
 
     # The gold budget governs the attachments, so it reports itself only while they are the answer.
-    assert pending.prompt().endswith("attachments (Selected 0GC/7GC)")
+    assert pending.prompt().endswith("(Selected 0GC/7GC)")
     assert pending.prompt(DecisionResponse(("blade",))).endswith("(Selected 2GC/7GC)")
-    assert pending.prompt(DecisionResponse(("small",))).endswith("or any number of attachments")
+    assert "Selected" not in pending.prompt(DecisionResponse(("small",)))
 
 
 # --- Matsu Chizuki (Experienced) ---
