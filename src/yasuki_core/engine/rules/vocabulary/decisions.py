@@ -21,6 +21,11 @@ class PickLimit(Protocol):
     be asked. A ceiling refuses the pick that would break it, so its first two answers agree. A
     floor refuses nothing and is unsatisfied until enough is picked, so they do not.
 
+    :meth:`describe` answers a fourth, which is not about legality at all: what the prompt should
+    say about the answer so far. A limit that is pure arithmetic, such as a running total against
+    a bound, holds a figure the seat cannot read off the board, so it says it. A limit the graying
+    already shows says nothing.
+
     An implementation is plain data, read off the board when the question is raised, so that a
     pending request compares equal to the one a replay rebuilds.
     """
@@ -35,6 +40,11 @@ class PickLimit(Protocol):
 
     def admits(self, candidates: tuple[str, ...], count: int) -> bool:
         """Whether some ``count`` of ``candidates`` satisfies this limit."""
+        ...
+
+    def describe(self, picked: tuple[str, ...]) -> str:
+        """Where ``picked`` stands against this limit, for the prompt to carry, or the empty string
+        from a limit with nothing to add to what the board already shows."""
         ...
 
 
@@ -89,6 +99,11 @@ class OneGroup:
         offered = set(candidates)
         return any(len(offered.intersection(group)) >= count for group in self.groups)
 
+    def describe(self, picked: tuple[str, ...]) -> str:
+        """Nothing. Which part the first pick settled is what the board stops offering, and the
+        part has no name a limit holding only ids could put in a prompt."""
+        return ""
+
 
 @dataclass(frozen=True, slots=True)
 class TotalAtMost:
@@ -105,17 +120,25 @@ class TotalAtMost:
     bound : int
         The most the picks may total. A card reading "less than" passes one less than the figure
         it names.
+    unit : str, optional
+        The stat's abbreviation as a card writes it, appended to both figures the prompt reports:
+        "F", "GC". Default empty, bare numbers.
     """
 
     weights: tuple[tuple[str, int], ...]
     bound: int
+    unit: str = ""
+
+    def total(self, picked: tuple[str, ...]) -> int:
+        """What ``picked`` weighs between them."""
+        chosen = set(picked)
+        return sum(weight for card_id, weight in self.weights if card_id in chosen)
 
     def permits(self, picked: tuple[str, ...], candidate: str) -> bool:
         return self.satisfied((*picked, candidate))
 
     def satisfied(self, picked: tuple[str, ...]) -> bool:
-        chosen = set(picked)
-        return sum(weight for card_id, weight in self.weights if card_id in chosen) <= self.bound
+        return self.total(picked) <= self.bound
 
     def admits(self, candidates: tuple[str, ...], count: int) -> bool:
         """Whether the ``count`` lightest of ``candidates`` stay inside the bound, which is the
@@ -123,6 +146,10 @@ class TotalAtMost:
         weights = dict(self.weights)
         cheapest = sorted(weights.get(candidate, 0) for candidate in candidates)
         return sum(cheapest[:count]) <= self.bound
+
+    def describe(self, picked: tuple[str, ...]) -> str:
+        """The running total against the bound."""
+        return f"Selected {self.total(picked)}{self.unit}/{self.bound}{self.unit}"
 
 
 @dataclass(frozen=True, slots=True)
@@ -165,8 +192,9 @@ class DecisionRequest(ABC):
         answers cannot be taken back. Keyword-only. Default False.
     limits : tuple of :class:`~.PickLimit`, optional
         The conditions one phrase puts on the cards chosen together, beyond their number, which
-        :meth:`selectable` reads to narrow a board as it is answered. A request type that carries
-        them enforces them in its own ``accepts``. Keyword-only. Default none.
+        :meth:`selectable` reads to narrow a board as it is answered and :meth:`limit_note` reads
+        to word what they leave to say. A request type that carries them enforces them in its own
+        ``accepts``. Keyword-only. Default none.
     """
 
     seat: PlayerId
@@ -186,6 +214,12 @@ class DecisionRequest(ABC):
             for card_id in self.candidates
             if card_id in picked or all(limit.permits(picked, card_id) for limit in self.limits)
         )
+
+    def limit_note(self, partial: DecisionResponse = DecisionResponse()) -> str:
+        """What this request's limits have to say about ``partial``, for a prompt to carry
+        alongside its own wording. Empty when none of them has anything to add."""
+        notes = (limit.describe(partial.choices) for limit in self.limits)
+        return ", ".join(note for note in notes if note)
 
     @abstractmethod
     def accepts(self, response: DecisionResponse) -> bool:
@@ -504,7 +538,9 @@ class ChooseAbilityTarget(DecisionRequest):
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         wanted = self._wanted()
-        return f"{self.source_name}: target {wanted}" if self.source_name else f"Target {wanted}"
+        phrase = f"{self.source_name}: target {wanted}" if self.source_name else f"Target {wanted}"
+        note = self.limit_note(partial)
+        return f"{phrase} ({note})" if note else phrase
 
     def _wanted(self) -> str:
         """What the phrase takes, with the count in front of it where it takes more than one."""

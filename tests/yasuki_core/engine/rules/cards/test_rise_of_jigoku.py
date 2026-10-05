@@ -146,6 +146,19 @@ def test_zaiberu_will_not_bow_a_pair_whose_total_force_reaches_his():
     assert pending.selectable(DecisionResponse(("small",))) == ("small",)
 
 
+def test_zaiberu_counts_the_force_picked_so_far_in_his_prompt():
+    session = _zaiberu_game(
+        personality("small", force=2, owner=P2), personality("other", force=3, owner=P2)
+    )
+
+    session.act(P1, ActivateAbility("zaiberu"))
+
+    pending = session.game.pending
+    # The fixture names him by his id; in play the prompt leads with his printed title.
+    assert pending.prompt() == "zaiberu: target 1 or 2 of the Personalities (Selected 0F/5F)"
+    assert pending.prompt(DecisionResponse(("small",))).endswith("(Selected 2F/5F)")
+
+
 def test_zaiberu_does_not_offer_a_personality_whose_own_force_breaks_the_total():
     session = _zaiberu_game(
         personality("small", force=2, owner=P2), personality("huge", force=9, owner=P2)

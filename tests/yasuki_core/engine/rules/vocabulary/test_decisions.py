@@ -204,8 +204,22 @@ def test_a_candidate_outside_the_cap_is_never_offered_alone():
     assert request.accepts(DecisionResponse(("c",))) is False
 
 
-def test_limits_stack_and_all_of_them_have_to_hold():
-    request = ChooseAbilityTarget(
+def test_a_capped_phrase_counts_the_running_total_in_its_prompt():
+    request = _capped(bound=5)
+
+    assert request.prompt().endswith("(Selected 0/5)")
+    assert request.prompt(DecisionResponse(("a",))).endswith("(Selected 2/5)")
+    assert request.prompt(DecisionResponse(("a", "b"))).endswith("(Selected 5/5)")
+
+
+def test_a_grouped_phrase_adds_nothing_to_its_prompt():
+    request = _grouped(minimum=1, maximum=2)
+
+    assert request.prompt(DecisionResponse(("a",))) == "Target 1 or 2 of the cards offered"
+
+
+def _stacked() -> ChooseAbilityTarget:
+    return ChooseAbilityTarget(
         PlayerId.P1,
         _HAND,
         "src",
@@ -213,6 +227,14 @@ def test_limits_stack_and_all_of_them_have_to_hold():
         maximum=3,
         limits=(OneGroup((("a", "b"), ("c",))), TotalAtMost((("a", 2), ("b", 3), ("c", 1)), 4)),
     )
+
+
+def test_stacked_limits_word_only_what_they_have_to_say():
+    assert _stacked().prompt(DecisionResponse(("a",))).endswith("(Selected 2/4)")
+
+
+def test_limits_stack_and_all_of_them_have_to_hold():
+    request = _stacked()
 
     assert request.accepts(DecisionResponse(("a",))) is True
     assert request.accepts(DecisionResponse(("a", "b"))) is False  # one unit, but over the total
