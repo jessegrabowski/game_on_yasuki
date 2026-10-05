@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.projection import GameView, unit_view
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import build_print, side_of_record
+from yasuki_core.game_pieces.text_split import strip_markup
 from yasuki_gui.services.game_runner import SearchView
 from yasuki_gui.services.game_host import GameHost
 from yasuki_gui.labels import turn_context
@@ -348,7 +349,7 @@ class Presenter:
         if source is not None:
             # An additional action: name the card that granted it, and word the pass as turning it
             # down, whether or not anything it allows can be taken right now.
-            return f"Follow-up action from {source.name}", [
+            return f"Follow-up action from {strip_markup(source.name)}", [
                 ("Decline follow-up action", lambda: self.act(Pass()), True)
             ]
         if view.responding_to is not None:
