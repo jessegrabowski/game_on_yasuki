@@ -60,7 +60,9 @@ applies the datasheet's conditions for when Yu resolves, and a Yu one card gives
 Followers at this battlefield have, 'Yu: ...'") with `register_granted_yu`, whose `reaches` names
 the cards that have it. A granted trigger fires as the reached card's own. An effect that gives one
 ("give a target Personality, 'Yu: ...'") records a `GrantAbility`, and the trigger registers with
-`given_by_effect` as its `reaches`.
+`given_by_effect` as its `reaches`. A card letting a Yu resolve though its controller's own action
+destroyed the card registers a `YuWidening` with `register_yu_widening`, chosen when its text says
+"you may choose".
 `docs/design/systems/effects.md` has the rules and the CR lines behind them.
 
 Stats are computed rather than stored: a card's printed value is the starting point, and grants and
