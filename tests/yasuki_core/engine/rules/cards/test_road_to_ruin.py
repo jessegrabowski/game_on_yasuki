@@ -37,7 +37,9 @@ from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -1262,3 +1264,68 @@ def test_desperate_melee_destroys_your_own_followers_when_the_melee_reaches_none
     assert session.game.pending is None
     discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
     assert "mine_own" in {card.id for card in discard.cards}
+
+
+# --- "Is That All?" ---
+
+
+def _is_that_all(owner: PlayerId) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id="is_that_all",
+        name='"Is That All?"',
+        printed_id="is_that_all",
+        side=Side.FATE,
+        owner=owner,
+        keywords=(keywords.COURAGE,),
+    )
+
+
+@pytest.mark.parametrize(
+    ("feared", "bowed", "straightened"),
+    [("guard", True, True), ("ashigaru", True, False), ("giant", False, False)],
+    ids=["personality", "follower", "out_of_reach"],
+)
+def test_is_that_all_fears_at_the_bowed_personalitys_force(feared, bowed, straightened):
+    cards = [
+        personality("brave", force=3),
+        personality("guard", owner=P2, force=3),
+        personality("giant", owner=P2, force=4),
+        personality("escort", owner=P2, force=5),
+    ]
+    defenders = {"guard": 0, "giant": 0, "escort": 0}
+    session = combat_segment(cards, {"brave": 0}, defenders, in_hand=[_is_that_all(P1)])
+    game = session.game
+    follower = attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER, force=2)
+    attached(game, follower, "escort")
+    resolve_effects(game, [Bow("brave")])
+
+    session.act(P1, PlayStrategy("is_that_all", "fear"))
+    session.submit(P1, DecisionResponse(("brave",)))
+    session.submit(P1, DecisionResponse((feared,)))
+
+    assert game.pending is None
+    assert game.table.cards_by_id[feared].bowed is bowed
+    assert game.table.cards_by_id["brave"].bowed is not straightened
+
+
+def test_is_that_all_destroys_the_zero_cost_attachment_an_action_was_from():
+    trinket_ability = Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+    )
+    cards = [personality("raider", force=3), personality("guard", owner=P2, force=3)]
+    with probe_ability("trinket_probe", trinket_ability):
+        session = combat_segment(cards, {"raider": 0}, {"guard": 0}, in_hand=[_is_that_all(P2)])
+        game = session.game
+        trinket = attachment("trinket", printed_id="trinket_probe", gold_cost=0)
+        attached(game, trinket, "raider")
+
+        session.act(P1, ActivateAbility("trinket"))
+        assert game.round.kind is RoundKind.RESPONSE
+        session.act(P2, PlayStrategy("is_that_all", "destroy"))
+
+    assert "trinket" not in {card.id for card in game.table.battlefield.cards}
