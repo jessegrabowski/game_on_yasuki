@@ -886,12 +886,13 @@ def _tsudaos_grave_events(game: GameState, seat: PlayerId) -> tuple[str, ...]:
 
 def _tsudaos_grave_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Search for an Event. Both it and the Province it fills are named after the search, so the
-    action announces neither. Nothing to find is the whole action, since the Grave is spent by
-    then either way."""
+    action announces neither. The search itself is not optional, since the printed "may" governs
+    the refill. Nothing to find is the whole action, since the Grave is spent by then either
+    way."""
     found = _tsudaos_grave_events(game, source.owner)
     if not found:
         return []
-    return [Choose(source.owner, found, 1, 1, "tsudaos_grave_event", source.id, declinable=True)]
+    return [Choose(source.owner, found, 1, 1, "tsudaos_grave_event", source.id)]
 
 
 @choice_resolver("tsudaos_grave_event", prompt="Choose an Event to refill a Province with")
@@ -900,8 +901,6 @@ def _resolve_tsudaos_grave_event(
 ) -> list[Effect]:
     """Name the Province the Event refills, which the seat may decline to do. A Province is a slot
     rather than the card standing in it, so an empty one is as fillable as a full one."""
-    if not chosen:
-        return []
     slots = tuple(key.token for key, _ in province_zones(game, seat))
     return [
         Choose(

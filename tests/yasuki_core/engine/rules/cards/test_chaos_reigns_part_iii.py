@@ -1397,6 +1397,15 @@ def test_tsudaos_grave_fills_nothing_when_the_named_province_is_gone():
     assert "event" not in _on_board(session)
 
 
+def test_tsudaos_grave_makes_the_search_itself_mandatory():
+    """The printed "may" governs the refill, so only the second choice may be declined."""
+    session = _grave_game()
+
+    session.act(P1, ActivateAbility("grave"))
+
+    assert not session.game.pending.accepts(DecisionResponse(()))
+
+
 def test_tsudaos_grave_leaves_the_province_alone_when_the_refill_is_declined():
     session = _grave_game()
 
