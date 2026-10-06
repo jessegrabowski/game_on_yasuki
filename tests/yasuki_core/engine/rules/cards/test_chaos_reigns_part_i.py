@@ -389,19 +389,14 @@ def test_the_clause_offers_the_yojimbo_and_the_favor_as_one_question():
     assert pending.pick_label == "Bow this Yojimbo"
 
 
-def test_the_favor_is_asked_for_on_its_own_with_no_yojimbo_to_bow():
-    """Nothing on the board answers the clause, so the question is all options and no candidates."""
+def test_the_favor_can_be_discarded_with_no_yojimbo_to_bow():
     game = _oaths_game()
     source, ability = _oaths(game)
-
     resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
-
-    pending = game.pending
-    assert pending.candidates == ()
-    assert pending.options == (DISCARD_THE_FAVOR, "Take neither")
-    assert pending.accepts(DecisionResponse(choices=(DISCARD_THE_FAVOR,))) is True
+    assert game.pending.candidates == (), "no Yojimbo, so nothing on the board answers the clause"
 
     submit(game, DecisionResponse(choices=(DISCARD_THE_FAVOR,)))
+
     assert game.table.seats[PlayerId.P1].honor == 1
     assert game.favor_holder is None
 

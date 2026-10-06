@@ -109,11 +109,10 @@ def _honor_your_oaths_bowable_yojimbo(game: GameState, seat: PlayerId) -> tuple[
 def _honor_your_oaths_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Move the target home, then offer the clause that buys an honor and a card.
 
-    The Yojimbo are the question's cards and the Favor is an option beside them, so either way the
-    seat names one thing. Both ways are offered only when each can actually be met, so a seat with
-    no Yojimbo and no Favor is never asked a question it cannot answer. The discard is an effect
-    rather than a cost, so nothing may pay it in the Favor's place: "discarding the Favor can
-    happen only if you control it" (CR, Imperial Favor).
+    The two ways to buy it are offered together and only when each can actually be met, so a seat
+    with no Yojimbo and no Favor is never asked a question it cannot answer. The discard is an
+    effect rather than a cost, so nothing may pay it in the Favor's place: "discarding the Favor
+    can happen only if you control it" (CR, Imperial Favor).
     """
     seat = source.owner
     moved = [Move(target.id, Location.home(target.owner))]
