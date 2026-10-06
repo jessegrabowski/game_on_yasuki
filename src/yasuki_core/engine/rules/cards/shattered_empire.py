@@ -144,6 +144,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Bowed,
     DuelDeclared,
     DuelResolved,
+    EnteredPlay,
     FavorDiscarded,
     HonorChanged,
     TurnBoundary,
@@ -419,6 +420,32 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 
 
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
+
+
+# --- Lane of Immorality ---
+
+LANE_OF_IMMORALITY_HONOR_LOSS = 1
+
+
+def _lane_of_immorality_honor_loss(card: L5RCard) -> list[Effect]:
+    return [GainHonor(card.owner, -LANE_OF_IMMORALITY_HONOR_LOSS, source_id=card.id)]
+
+
+@on(EnteredPlay, "lane_of_immorality", ruleset=ruleset.SHATTERED_EMPIRE.name)
+def _lane_of_immorality_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After you Recruit this Holding, lose 1 Honor. Put into play any other way, it costs none."""
+    if ctx.event.card_id != ctx.card.id or not ctx.event.recruited:
+        return []
+    return _lane_of_immorality_honor_loss(ctx.card)
+
+
+# "After you bow this Holding": Bowed names no cause, so a bow from an opponent's card also costs
+# the Honor.
+@on(Bowed, "lane_of_immorality", ruleset=ruleset.SHATTERED_EMPIRE.name)
+def _lane_of_immorality_bowed(ctx: TriggerContext) -> list[Effect]:
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return _lane_of_immorality_honor_loss(ctx.card)
 
 
 # --- Matsu Gonshiro, Soul of Matsu Shimei ---

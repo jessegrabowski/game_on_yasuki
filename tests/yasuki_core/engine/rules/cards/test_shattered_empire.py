@@ -81,7 +81,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     focus_token,
 )
 from yasuki_core.engine.rules.vocabulary.actions import PlayInterrupt
-from yasuki_core.engine.rules.effects import Move, StartDuel
+from yasuki_core.engine.rules.effects import Move, StartDuel, Straighten
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from tests.yasuki_core.engine.rules.conftest import probe_ability
@@ -2208,3 +2208,33 @@ def test_konishi_gives_a_card_on_either_side_of_the_battle_minus_2_force():
 
     game = session.game
     assert effective_force(game, game.table.cards_by_id["guard"]) == 1
+
+
+# --- Lane of Immorality ---
+
+
+def test_recruiting_lane_of_immorality_loses_1_honor():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("mine", gold_production=2))
+    province_card(state, "lane", printed_id="lane_of_immorality", gold_cost=1, gold_production=2)
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill"))]
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+    honor = session.game.table.seats[P1].honor
+
+    session.act(P1, ActivateAbility("lane", RECRUIT))
+    pay(session, P1)
+
+    assert session.game.table.seats[P1].honor == honor - 1
+
+
+def test_each_bow_of_lane_of_immorality_loses_1_honor():
+    game = two_seat_game()
+    put_in_play(game, holding("lane", printed_id="lane_of_immorality", gold_production=2))
+    put_in_play(game, holding("other", printed_id="lane_of_immorality", gold_production=2))
+    honor = game.table.seats[P1].honor
+
+    resolve_effects(game, [Bow("lane"), Straighten("lane"), Bow("lane")])
+
+    assert game.table.seats[P1].honor == honor - 2
