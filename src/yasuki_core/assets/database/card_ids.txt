@@ -1,5 +1,4 @@
 10_koku
-10_koku_2
 1_000_cuts_technique
 20_koku
 50_koku
@@ -5242,7 +5241,6 @@ impetuous_challenge
 importune_kami
 impossible_force
 imposter
-imposter_2
 impressive_resilience
 impressment
 impromptu_duel
@@ -6766,7 +6764,6 @@ line_breaker
 link_to_the_heavens
 lion_advisor
 lion_ancestor
-lion_ancestor_2
 lion_and_unicorn
 lion_clan_deckbacker
 lion_detachment
@@ -11463,7 +11460,6 @@ the_falling_darkness
 the_false_hoturi
 the_false_naleesh
 the_false_nimuro_experienced_2
-the_false_nimuro_experienced_2_2
 the_false_path
 the_false_route
 the_false_shikei
@@ -13700,7 +13696,6 @@ yoritomo_naoto_bio
 yoritomo_naoto_experienced
 yoritomo_ninsei_broken_wave_city_governor
 yoritomo_nintai
-yoritomo_nintai_2
 yoritomo_nishigori
 yoritomo_nodoteki
 yoritomo_okan

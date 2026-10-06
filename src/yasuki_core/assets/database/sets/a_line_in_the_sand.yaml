@@ -1673,7 +1673,7 @@ cards:
   gold_production: 0
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Sensei
   decks:

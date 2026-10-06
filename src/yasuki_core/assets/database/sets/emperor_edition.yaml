@@ -5284,7 +5284,7 @@ cards:
 - title: Kitsu Tamasine
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -5801,8 +5801,7 @@ cards:
   artist: Noah Bradley
   flavor_text: <i>Within the Second City, the Phoenix delved into all manner of lore once overlooked.</i>
   collector_number: '412'
-- id: lion_ancestor
-  title: Lion Ancestor
+- title: Lion Ancestor
   types:
   - Personality
   - Proxy

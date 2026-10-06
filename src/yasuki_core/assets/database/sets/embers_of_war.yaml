@@ -342,7 +342,7 @@ cards:
 - title: Celestial Sword of the Lion
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Item
   decks:
@@ -1807,7 +1807,7 @@ cards:
 - title: Kitsu Miro
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -1951,8 +1951,7 @@ cards:
   flavor_text: <i>Let the Akodo plan. The Matsu will destroy.</i>
   collector_number: '2'
   designer: Thomas
-- id: lion_ancestor
-  title: Lion Ancestor
+- title: Lion Ancestor
   types:
   - Personality
   - Proxy

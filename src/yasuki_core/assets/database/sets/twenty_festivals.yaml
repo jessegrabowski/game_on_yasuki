@@ -9419,8 +9419,7 @@ cards:
     Mantis.</i>
   collector_number: '108'
   designer: Julien
-- id: yoritomo_nintai
-  title: Yoritomo Nintai
+- title: Yoritomo Nintai
   types:
   - Personality
   decks:

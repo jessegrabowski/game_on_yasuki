@@ -4707,7 +4707,7 @@ cards:
   gold_production: 0
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Sensei
   decks:
@@ -5122,7 +5122,7 @@ cards:
 - title: Kitsu Hayako
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -5232,7 +5232,7 @@ cards:
 - title: Kitsu Suzaki, Child of Prophecy
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:

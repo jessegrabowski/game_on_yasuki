@@ -1,6 +1,6 @@
 set: Ivory Edition
 images:
-- card_id: 10_koku_2
+- card_id: 10_koku
   printing_id: ivory_edition
   files:
   - role: front
@@ -978,7 +978,7 @@ images:
   - role: front
     file: imperial_summons.jpg
     sha256: c7fd549509c75bbacf265b2f3171e05d2a8e39d3464244f3fd3dc94bdb65ea36
-- card_id: imposter_2
+- card_id: imposter
   printing_id: ivory_edition
   files:
   - role: front
@@ -1254,7 +1254,7 @@ images:
   - role: front
     file: light_yari.jpg
     sha256: 0842bfe5a7fa1281417ff2729af7fc4e5c978e12a9f007beaa25a45c47f9d921
-- card_id: lion_ancestor_2
+- card_id: lion_ancestor
   printing_id: ivory_edition
   files:
   - role: front
@@ -2046,7 +2046,7 @@ images:
   - role: front
     file: the_exquisite_palace_of_the_crane.jpg
     sha256: 6013e01e7c60c3871bdd0d2353d2f42198d9704a0523097e2051d072c91b19c6
-- card_id: the_false_nimuro_experienced_2_2
+- card_id: the_false_nimuro_experienced_2
   printing_id: ivory_edition
   files:
   - role: front

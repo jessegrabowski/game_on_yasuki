@@ -2475,7 +2475,7 @@ cards:
 - title: Offering Reverence
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Event
   decks:

@@ -1,7 +1,6 @@
 set: Ivory Edition
 cards:
-- id: 10_koku_2
-  title: 10 Koku
+- title: 10 Koku
   types:
   - Other
   decks:
@@ -3897,8 +3896,7 @@ cards:
     victorious general. Though he did not trust the young heir, the Akodo's honor dictated that he must
     obey.
   collector_number: '317'
-- id: imposter_2
-  title: Imposter
+- title: Imposter
   types:
   - Personality
   - Proxy
@@ -5083,8 +5081,7 @@ cards:
     defense against aggressive forces. In the hands <br>of a samurai, it is a tactical instrument of death.</i>
   collector_number: '237'
   designer: Bryan
-- id: lion_ancestor_2
-  title: Lion Ancestor
+- title: Lion Ancestor
   types:
   - Personality
   - Proxy
@@ -8466,8 +8463,7 @@ cards:
   collector_number: '365'
   doublesided: true
   gold_production: 4
-- id: the_false_nimuro_experienced_2_2
-  title: The False Nimuro
+- title: The False Nimuro
   types:
   - Personality
   - Proxy

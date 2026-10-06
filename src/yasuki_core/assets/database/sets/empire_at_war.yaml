@@ -2270,8 +2270,7 @@ cards:
   artist: Mike Capprotti
   flavor_text: <i>"It may not look like much, but it will serve you well." - Tamori Kuroko</i>
   collector_number: '8'
-- id: lion_ancestor
-  title: Lion Ancestor
+- title: Lion Ancestor
   types:
   - Personality
   - Proxy

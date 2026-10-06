@@ -2316,7 +2316,7 @@ images:
   - role: front
     file: yoritomo_murai.jpg
     sha256: a2619d1f8d960552ca2cda4b5ea16ecd3481d3a702242c006bd189d6d2bb520a
-- card_id: yoritomo_nintai_2
+- card_id: yoritomo_nintai
   printing_id: shattered_empire
   files:
   - role: front

@@ -1,7 +1,6 @@
 set: Promotional – Gold
 cards:
-- id: 10_koku
-  title: 10 Koku
+- title: 10 Koku
   types:
   - Other
   decks:

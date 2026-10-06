@@ -1933,8 +1933,7 @@ cards:
   rarity: Uncommon
   artist: Arkady Roytman
   collector_number: '82'
-- id: lion_ancestor
-  title: Lion Ancestor
+- title: Lion Ancestor
   types:
   - Personality
   - Proxy

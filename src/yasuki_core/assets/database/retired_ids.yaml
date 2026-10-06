@@ -2,4 +2,8 @@
 # that is gone. Saved decks and exported decklists keep the ids and names they were written with,
 # so a retired id resolves to its successor instead of failing. `pixi run card-index` refuses to
 # drop an id from card_ids.txt that is not listed here.
-{}
+yoritomo_nintai_2: yoritomo_nintai
+10_koku_2: 10_koku
+imposter_2: imposter
+lion_ancestor_2: lion_ancestor
+the_false_nimuro_experienced_2_2: the_false_nimuro_experienced_2

@@ -4843,7 +4843,7 @@ cards:
 - title: Kitsu Nishi
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -10078,8 +10078,7 @@ cards:
   collector_number: '140'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- id: yoritomo_nintai_2
-  title: Yoritomo Nintai
+- title: Yoritomo Nintai
   types:
   - Personality
   decks:

@@ -1496,7 +1496,7 @@ cards:
 - title: Kitsu Sorano
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -2112,7 +2112,7 @@ cards:
 - title: Our Ancestor's Call
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Spell
   decks:
@@ -3324,7 +3324,7 @@ cards:
 - title: Two-Fold Virtue
   creates:
   - imposter
-  - imposter_2
+  - imposter
   types:
   - Strategy
   decks:

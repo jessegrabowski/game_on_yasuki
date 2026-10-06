@@ -1477,8 +1477,7 @@ cards:
   flavor_text: <i>"The Unicorn may be astonished to hear this, but we too breed horses."</i>
   collector_number: '42'
   designer: Loki
-- id: imposter
-  title: Imposter
+- title: Imposter
   types:
   - Personality
   - Proxy
@@ -2200,7 +2199,7 @@ cards:
 - title: Matsu Nimuro
   creates:
   - the_false_nimuro_experienced_2
-  - the_false_nimuro_experienced_2_2
+  - the_false_nimuro_experienced_2
   types:
   - Personality
   decks:
@@ -3365,8 +3364,7 @@ cards:
     she felt the sin of hate in her heart.</i>
   collector_number: '10'
   designer: Loki
-- id: the_false_nimuro_experienced_2
-  title: The False Nimuro
+- title: The False Nimuro
   types:
   - Personality
   - Proxy
