@@ -15,7 +15,6 @@ yasuki_core.install.yaml_to_sql
 
     ability_rows
     build_revisions
-    card_slug
     load_cards
     mrp_text
     parse_collector_numbers

@@ -6,7 +6,6 @@ from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.yaml_to_sql import (
     ability_rows,
     build_revisions,
-    card_slug,
     mrp_text,
     parse_collector_numbers,
     _apply_current_revision,
@@ -28,6 +27,7 @@ _PRINT_COLS = [
     "card_id",
     "printing_id",
     "set_id",
+    "subtitle",
     "rarity",
     "flavor_text",
     "rules_text",
@@ -74,20 +74,6 @@ def test_experience_level(extended_title, expected):
 )
 def test_coerce_date(raw, expected):
     assert coerce_date(raw) == expected
-
-
-@pytest.mark.parametrize(
-    "title, expected",
-    [
-        ("Refugees", "refugees"),
-        ("Bayushi Kachiko • Experienced", "bayushi_kachiko_experienced"),
-        ("Crimson & Jade", "crimson_and_jade"),
-        ("Akodo's Grave", "akodos_grave"),
-        ("A Good Day to Die", "a_good_day_to_die"),
-    ],
-)
-def test_card_slug(title, expected):
-    assert card_slug(title) == expected
 
 
 @pytest.mark.parametrize(
@@ -243,10 +229,12 @@ def test_print_columns_maps_print_text_to_rules_text_slot():
         "print_text": "reworded on this printing",
         "flavor_text": "flavor",
         "rarity": "Uncommon",
+        "subtitle": "Soul of Bayushi Kurumi",
     }
     row = dict(zip(_PRINT_COLS, _print_columns(entry, "cid", "some_set", 7)))
     assert row["rules_text"] == "reworded on this printing"
     assert row["flavor_text"] == "flavor"  # the printing's own text does not clobber flavor
+    assert row["subtitle"] == "Soul of Bayushi Kurumi"
     assert (row["card_id"], row["printing_id"], row["set_id"]) == ("cid", "some_set", 7)
 
 

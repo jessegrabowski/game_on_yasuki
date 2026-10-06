@@ -14,28 +14,17 @@ def write_set(cards_dir, name, cards):
     (cards_dir / f"{name}.yaml").write_text(yaml.safe_dump({"set": name, "cards": cards}))
 
 
-def test_ids_come_from_explicit_id_then_extended_title_then_title(tmp_path):
-    # The first entry carries all three, so the assertion pins the precedence and not merely that
-    # each source works on its own.
+def test_an_explicit_id_wins_over_the_derived_one(tmp_path):
     write_set(
         tmp_path,
-        "imperial",
+        "shattered_empire",
         [
-            {
-                "title": "Ancestral Sword",
-                "extended_title": "Ancestral Sword of the Crab",
-                "id": "ancestral_sword_promo",
-            },
-            {"title": "Shosuro Aoki", "extended_title": "Shosuro Aoki Experienced"},
-            {"title": "Modest Farm"},
+            {"id": "bayushi_akane", "title": "Bayushi Akane", "subtitle": "Soul of Bayushi Kurumi"},
+            {"title": "Shosuro Aoki", "keywords": ["Experienced"]},
         ],
     )
 
-    assert card_ids(tmp_path) == [
-        "ancestral_sword_promo",
-        "modest_farm",
-        "shosuro_aoki_experienced",
-    ]
+    assert card_ids(tmp_path) == ["bayushi_akane", "shosuro_aoki_experienced"]
 
 
 def test_a_reverse_face_gets_its_own_suffixed_id(tmp_path):

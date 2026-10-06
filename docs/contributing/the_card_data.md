@@ -28,21 +28,29 @@ worked trigger in [Reacting to events](reacting_to_events.md):
 
 ## The id is derived, and it is not in the file
 
-Nothing in that entry is the card's id, and the id is what every handler keys on. It is computed:
+Nothing in that entry is the card's id, and the id is what every handler keys on. It is computed
+from the printing's extended title, which is its title, then its subtitle, then the qualifier its
+Experienced keyword prints:
 
-```{literalinclude} ../../src/yasuki_core/install/card_index.py
-:start-at: card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
-:end-at: card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
-:dedent: 12
+```{literalinclude} ../../src/yasuki_core/card_identity.py
+:pyobject: extended_title
+:language: python
+```
+
+```{literalinclude} ../../src/yasuki_core/card_identity.py
+:pyobject: card_id
 :language: python
 ```
 
 `card_slug` lowercases, turns `&` into `and`, drops apostrophes, and replaces every other run of
-non-alphanumerics with an underscore. So `Rice Farm` is `rice_farm`, and
-`Iweko Miaka, Princess of Rokugan` is `iweko_miaka_princess_of_rokugan`.
+non-alphanumerics with an underscore. So `Rice Farm` is `rice_farm`, and Iweko Miaka with the
+subtitle `Princess of Rokugan` is `iweko_miaka_princess_of_rokugan`.
 
-An explicit `id:` appears on 245 of 20,136 entries. They are tokens and proxies, where two
-different cards would otherwise slug the same. A back face takes the front's id plus `__back`.
+A subtitle is not part of the card's title for play (CR, Card Subtitles), and it belongs to the
+printing: a reprint may add one that the card's earlier printings lack. Such a printing pins the
+card's existing id with an explicit `id:`, so the reprint stays the same card. An explicit `id:`
+appears on 259 of 20,135 entries. Besides those pins, they are tokens, proxies and cards whose
+title another card already slugs to. A back face takes the front's id plus `__back`.
 
 Two consequences for a card author. You cannot read a card's id off the file, so derive it or look
 it up in `src/yasuki_core/assets/database/card_ids.txt`, which lists every one. And a handler keyed

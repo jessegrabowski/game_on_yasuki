@@ -53,7 +53,8 @@ cards:
   collector_number: '144'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Agasha Gifu
+- id: agasha_gifu
+  title: Agasha Gifu
   subtitle: Arikura-no-baba
   types:
   - Personality
@@ -710,7 +711,8 @@ cards:
   collector_number: '289'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Bayushi Akane
+- id: bayushi_akane
+  title: Bayushi Akane
   subtitle: Soul of Bayushi Kurumi
   types:
   - Personality
@@ -1857,7 +1859,8 @@ cards:
   collector_number: '180'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daigotsu Geiko
+- id: daigotsu_geiko
+  title: Daigotsu Geiko
   subtitle: Soul of Daigotsu Keigo
   types:
   - Personality
@@ -1973,7 +1976,8 @@ cards:
   collector_number: '184'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daigotsu Roburo
+- id: daigotsu_roburo
+  title: Daigotsu Roburo
   subtitle: Soul of Daigotsu Bundoru
   types:
   - Personality
@@ -5371,7 +5375,8 @@ cards:
   collector_number: '127'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Matsu Tayuko
+- id: matsu_tayuko
+  title: Matsu Tayuko
   subtitle: Soul of Matsu Aoiko
   types:
   - Personality
@@ -5587,7 +5592,8 @@ cards:
   collector_number: '103'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Mirumoto Niwa
+- id: mirumoto_niwa
+  title: Mirumoto Niwa
   subtitle: Soul of Mirumoto Kei
   types:
   - Personality
@@ -5617,7 +5623,8 @@ cards:
   collector_number: '104'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Mirumoto Nokkai
+- id: mirumoto_nokkai
+  title: Mirumoto Nokkai
   subtitle: Soul of Mirumoto Tsuge
   types:
   - Personality
@@ -8057,7 +8064,8 @@ cards:
   collector_number: '272'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Tairao
+- id: tairao
+  title: Tairao
   subtitle: Soul of Chuda Rintaro
   types:
   - Personality
@@ -8121,7 +8129,8 @@ cards:
   collector_number: '107'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Tangen's Lies
+- id: tangens_i_lies_i_experienced
+  title: Tangen's Lies
   types:
   - Holding
   decks:
@@ -8800,7 +8809,8 @@ cards:
   collector_number: '109'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Togashi Korimi
+- id: togashi_korimi
+  title: Togashi Korimi
   subtitle: Soul of Togashi Oki
   types:
   - Personality

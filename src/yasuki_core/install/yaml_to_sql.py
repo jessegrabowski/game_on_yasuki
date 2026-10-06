@@ -10,6 +10,8 @@ from psycopg.types.json import Json
 
 from yasuki_core.game_pieces.counters import ALL_COUNTERS
 from yasuki_core.install.format_metadata import populate_format_metadata
+from yasuki_core import card_identity
+from yasuki_core.card_identity import card_slug
 from yasuki_core.install.card_index import LOCAL_SET_SUFFIX
 from yasuki_core.install.sets_to_sql import coerce_date, set_slug
 from yasuki_core.game_pieces.text_split import ability_keywords, split_text_box
@@ -34,12 +36,6 @@ STAT_FIELDS = (
     "starting_honor",
     "gold_production",
 )
-
-
-def card_slug(text: str) -> str:
-    """Slug used as the card id when the YAML entry carries no explicit `id`."""
-    s = text.lower().replace("&", "and").replace("'", "")
-    return re.sub(r"[^a-z0-9]+", "_", s).strip("_")
 
 
 def parse_collector_numbers(raw: str | None) -> list[tuple[str | None, int]]:
@@ -259,6 +255,7 @@ def _print_columns(entry: dict, card_id: str, printing_id: str, set_id: int) -> 
         card_id,
         printing_id,
         set_id,
+        entry.get("subtitle"),
         entry.get("rarity"),
         entry.get("flavor_text"),
         entry.get("print_text"),
@@ -447,10 +444,8 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
 
             printings_seen: dict[str, int] = {}
             for entry in data.get("cards", []):
-                extended_title = entry.get("extended_title") or entry["title"]
-                card_id = entry.get("id") or card_slug(extended_title)
-                if entry.get("is_back"):
-                    card_id += "__back"
+                extended_title = card_identity.extended_title(entry)
+                card_id = card_identity.card_id(entry)
 
                 entry_text = entry.get("text")
                 if entry_text:
@@ -673,9 +668,10 @@ def _insert_all(
     cur.executemany(
         """
         INSERT INTO prints (
-          card_id, printing_id, set_id, rarity, flavor_text, rules_text, back_title, back_flavor,
-          artist, designer, collector_number_raw, publisher, publisher_url, doublesided, legal_date
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+          card_id, printing_id, set_id, subtitle, rarity, flavor_text, rules_text, back_title,
+          back_flavor, artist, designer, collector_number_raw, publisher, publisher_url, doublesided,
+          legal_date
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (card_id, printing_id) DO NOTHING
         """,
         print_rows,

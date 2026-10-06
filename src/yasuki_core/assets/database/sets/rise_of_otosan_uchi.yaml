@@ -106,7 +106,8 @@ cards:
   collector_number: '45'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Toshiki
+- id: akodo_toshiki
+  title: Akodo Toshiki
   subtitle: Bushido Master
   types:
   - Personality

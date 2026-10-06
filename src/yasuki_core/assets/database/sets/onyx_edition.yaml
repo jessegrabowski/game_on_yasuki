@@ -8415,7 +8415,8 @@ cards:
   collector_number: '114'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Tangen's Lies
+- id: tangens_i_lies_i_experienced
+  title: Tangen's Lies
   types:
   - Holding
   decks:

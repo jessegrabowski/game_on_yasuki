@@ -65,11 +65,13 @@ logical `card_id`, so every deck and search result updates automatically.
 
 ### Add a New Printing of an Existing Card
 
-A card is one row keyed by `card_id` (a slug of its extended title). Each YAML **entry** is one
-printing. To add a printing, add another entry with the same title in the new set's YAML, plus its
-image manifest entry. Same-set reprints get suffixed printing ids (`<slug>`, `<slug>_2`, ...). Distinct
-gameplay versions (e.g. Experienced) need a distinct `extended_title` so they slug to a distinct
-`card_id` instead of merging.
+A card is one row keyed by `card_id`, a slug of its extended title: the title, then the subtitle,
+then the qualifier its Experienced keyword prints. Each YAML **entry** is one printing. To add a
+printing, add another entry with the same title in the new set's YAML, plus its image manifest
+entry. Same-set reprints get suffixed printing ids (`<slug>`, `<slug>_2`, ...). Distinct gameplay
+versions (e.g. Experienced) slug to distinct ids through their Experienced keyword. A reprint that
+adds a subtitle its card's earlier printings lack pins the card's id with an explicit `id:`, or it
+would become a different card. Each printing keeps its own subtitle in `prints.subtitle`.
 
 ### How a Card's Canonical Text Is Chosen, and Per-Printing Wording
 
@@ -179,8 +181,8 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 `title`, `types`, `decks`, `keywords`, `text`, stat fields (`gold_cost`, `focus`, `force`, `chi`,
 `personal_honor`, `honor_requirement`, `province_strength`, `starting_honor`, `gold_production`),
 `legality`, `rarity`, `artist`, `designer`, `flavor_text`, `print_text`, `collector_number`,
-`publisher`, `publisher_url`. Optional identity: `id` (explicit card id), `extended_title`
-(experience disambiguation), `is_back` (flip-card back face). Optional: `errata` (list),
+`publisher`, `publisher_url`. Optional identity: `id` (explicit card id), `subtitle` (this
+printing's subtitle), `is_back` (flip-card back face). Optional: `errata` (list),
 `errata_text` (a legacy free-text note, distinct from the structured `errata:` list).
 
 ### `card_abilities` columns

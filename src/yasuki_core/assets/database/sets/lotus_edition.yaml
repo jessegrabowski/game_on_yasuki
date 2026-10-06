@@ -3994,7 +3994,8 @@ cards:
   artist: William O'Connor
   flavor_text: <i>"A soul driven by Lady Moon's rage will meet his destiny without failure."</i>
   collector_number: '104'
-- title: Hitomi Munoto
+- id: hitomi_munoto_experienced
+  title: Hitomi Munoto
   types:
   - Personality
   decks:

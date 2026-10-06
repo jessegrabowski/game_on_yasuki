@@ -176,6 +176,9 @@ CREATE TABLE prints (
   printing_id          TEXT NOT NULL,
   set_id               INTEGER REFERENCES l5r_sets(set_id),
 
+  -- The smaller-font subtitle in this printing's title bar. Not part of the card's title for play
+  -- (CR, Card Subtitles), and a reprint may add one its card's earlier printings lack.
+  subtitle             TEXT,
   rarity               TEXT,
   flavor_text          TEXT,
   -- This printing's own rules wording, kept only when it differs from the card's canonical text

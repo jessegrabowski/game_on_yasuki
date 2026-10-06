@@ -2143,7 +2143,8 @@ cards:
   collector_number: '97'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Oracle of Thunder, Iuchi Namida
+- id: oracle_of_thunder_iuchi_namida
+  title: Oracle of Thunder, Iuchi Namida
   types:
   - Holding
   decks:

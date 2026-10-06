@@ -34,6 +34,7 @@ yasuki_core
     yasuki_core.bots.queries <yasuki_core.bots.queries>
     yasuki_core.card_art <yasuki_core.card_art>
     yasuki_core.card_diff <yasuki_core.card_diff>
+    yasuki_core.card_identity <yasuki_core.card_identity>
     yasuki_core.database <yasuki_core.database>
     yasuki_core.deck_pdf <yasuki_core.deck_pdf>
     yasuki_core.decklist <yasuki_core.decklist>

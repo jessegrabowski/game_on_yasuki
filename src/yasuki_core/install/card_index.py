@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from yasuki_core import DATABASE_DIR
+from yasuki_core import card_identity
 from yasuki_core.yaml_io import read_yaml
 
 DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
@@ -28,10 +29,8 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
     """
     Every card entry in every set file, in filename order.
 
-    Ids are derived exactly as :func:`yasuki_core.install.yaml_to_sql.load_cards` derives them: an
-    explicit ``id``, or a slug of the extended title, with ``__back`` appended for the reverse face
-    of a double-faced card. Every consumer reads the data through here, so the derivation has one
-    definition and cannot drift between them.
+    Ids come from :func:`~yasuki_core.card_identity.card_id`, the one derivation the loader
+    uses too.
 
     Local set files are skipped. The committed index has to match a fresh clone, which holds none of
     them, so a card only one machine has must not reach it.
@@ -46,10 +45,6 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
     ValueError
         If ``cards_dir`` holds no set files, or if one of them is not a set file.
     """
-    # Imported here rather than at module scope: yaml_to_sql pulls in the Postgres driver, and
-    # read_index is on the pre-commit path, where the cost buys nothing.
-    from yasuki_core.install.yaml_to_sql import card_slug
-
     yaml_files = sorted(
         path for path in cards_dir.glob("*.yaml") if not path.name.endswith(LOCAL_SET_SUFFIX)
     )
@@ -62,9 +57,7 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
             raise ValueError(f"{yaml_file} is not a set file")
         for entry in data.get("cards", []):
             title = entry["title"]
-            card_id = entry.get("id") or card_slug(entry.get("extended_title") or title)
-            if entry.get("is_back"):
-                card_id += "__back"
+            card_id = card_identity.card_id(entry)
             keywords = tuple(entry.get("keywords") or ())
             creates = tuple(entry.get("creates") or ())
             text = entry.get("text") or ""

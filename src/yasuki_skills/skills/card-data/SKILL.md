@@ -33,9 +33,9 @@ loads one into the other and does nothing where a row already exists, so an edit
 invisible until `pixi run install-db --force`. Fixing a card by editing the database is always
 wrong: the next reload overwrites it.
 
-A card's id is derived from its printed title by `card_slug` rather than written down. Renaming a
-card therefore renames its id, which orphans every handler, token and rulebook exception keyed on
-the old one. `card_ids.txt` is the committed index of all of them; regenerate it with
+A card's id is derived from its printed title, subtitle and experience by `card_slug` rather than
+written down. Renaming a card therefore renames its id, which orphans every handler, token and
+rulebook exception keyed on the old one. `card_ids.txt` is the committed index of all of them; regenerate it with
 `pixi run card-index` after changing set YAML and commit the result.
 
 An erratum appends to the card's revision history and mirrors the newest text onto the card itself,
