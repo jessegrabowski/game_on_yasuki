@@ -12,6 +12,8 @@ from yasuki_core.engine.rules.abilities.idioms import (
     register_ring,
     register_trait_entry,
     register_yu,
+    register_yu_widening,
+    YuWidening,
 )
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.abilities.registry import printed_line_without_cost, abilities_for
@@ -379,6 +381,76 @@ def test_no_yu_resolves_for_a_destruction_the_trait_does_not_name(board):
 
     assert game.table.seats[PlayerId.P2].honor == honor
     assert not _standing(game, "yu")
+
+
+# Test-only widenings: the controller's own action resolves their cards' Yu, outright or by choice.
+def _covers_your_cards(game, source, card):
+    return card.owner is source.owner
+
+
+register_yu_widening("widening_probe", YuWidening(covers=_covers_your_cards, chosen=False))
+register_yu_widening("chosen_widening_probe", YuWidening(covers=_covers_your_cards, chosen=True))
+register_yu("empty_yu_probe", lambda ctx: [])
+
+
+def test_an_outright_widening_resolves_the_yu_beside_a_chosen_one():
+    game = _in_combat()
+    put_in_play(game, personality("outright", owner=PlayerId.P2, printed_id="widening_probe"))
+    put_in_play(game, personality("chosen", owner=PlayerId.P2, printed_id="chosen_widening_probe"))
+    honor = game.table.seats[PlayerId.P2].honor
+
+    resolve_effects(game, [Destroy("yu", PlayerId.P2)])
+
+    assert game.pending is None
+    assert game.table.seats[PlayerId.P2].honor == honor + 1
+
+
+def _chosen_widening_negated():
+    game = _in_combat()
+    put_in_play(game, personality("chosen", owner=PlayerId.P2, printed_id="chosen_widening_probe"))
+    negation = Negation("chosen", END_OF_TURN, effect_kind=Destroy, subject_id="yu")
+    resolve_effects(game, [GrantNegation(negation)])
+    return game, "yu"
+
+
+def _opponents_widening():
+    game = _in_combat()
+    put_in_play(game, personality("theirs", printed_id="widening_probe"))
+    return game, "yu"
+
+
+def _widening_outside_battle():
+    game = two_seat_game()
+    put_in_play(game, personality("yu", owner=PlayerId.P2, printed_id="yu_probe"))
+    put_in_play(game, personality("outright", owner=PlayerId.P2, printed_id="widening_probe"))
+    return game, "yu"
+
+
+def _chosen_widening_over_an_empty_yu():
+    game = _in_combat()
+    put_in_play(game, personality("empty", owner=PlayerId.P2, printed_id="empty_yu_probe"))
+    put_in_play(game, personality("chosen", owner=PlayerId.P2, printed_id="chosen_widening_probe"))
+    return game, "empty"
+
+
+@pytest.mark.parametrize(
+    "board",
+    [
+        _chosen_widening_negated,
+        _opponents_widening,
+        _widening_outside_battle,
+        _chosen_widening_over_an_empty_yu,
+    ],
+    ids=["negated", "opponents-widening", "outside-battle", "empty-yu"],
+)
+def test_a_widening_raises_nothing_where_the_yu_would_not_resolve(board):
+    game, dying = board()
+    honor = game.table.seats[PlayerId.P2].honor
+
+    resolve_effects(game, [Destroy(dying, PlayerId.P2)])
+
+    assert game.pending is None
+    assert game.table.seats[PlayerId.P2].honor == honor
 
 
 def test_a_negation_granted_before_the_yu_resolves_prevents_it(reacting):

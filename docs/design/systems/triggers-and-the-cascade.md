@@ -192,8 +192,9 @@ A Yu resolves only for a destruction by battle resolution or by another player's
 unless a card in play widens it. {class}`~.YuWidening`, registered with `register_yu_widening`,
 reaches the cards whose Yu resolves though their controller's own action destroyed them: always,
 as A Good Day to Die's "Your cards' Yu effects trigger even when destroyed by your actions" reads,
-or at the controller's choice, as "you may choose to have the trait trigger" reads. A chosen Yu
-asks its controller as it fires, and resolves on a yes.
+or at the controller's choice, as "you may choose to have the trait trigger" reads. Either way the
+destruction still has to come during battle. A chosen Yu asks its controller as it fires, unless it
+would do nothing, and resolves on a yes.
 
 A group's destructions are announced together, as one occurrence, before any member commits. The
 walk forecasts every member, a `once` negation hiding only the first member it will spend itself

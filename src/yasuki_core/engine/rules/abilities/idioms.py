@@ -395,6 +395,12 @@ def register_yu(
         Maps the trigger context to the Yu effect.
     ruleset : str, optional
         The name of the one ruleset the trait is in force under. Default None, for every arc.
+
+    Raises
+    ------
+    ValueError
+        If ``printed_id`` already has a Yu, since the choice a :class:`YuWidening` offers is keyed
+        by the card.
     """
 
     label = trait_opening("Yu:")
@@ -427,6 +433,12 @@ def register_granted_yu(
         Maps the trigger context to the Yu effect.
     ruleset : str, optional
         The name of the one ruleset the grant is in force under. Default None, for every arc.
+
+    Raises
+    ------
+    ValueError
+        If ``printed_id`` already grants a Yu, since the choice a :class:`YuWidening` offers is
+        keyed by the granting card.
     """
     label = _granted_yu_label(printed_id)
     granted_trigger(Destroying, printed_id, reaches=reaches, label=label, ruleset=ruleset)(
@@ -436,7 +448,9 @@ def register_granted_yu(
 
 class YuWidening(NamedTuple):
     """A card's text letting a Yu resolve though its controller's own action destroyed the card, as
-    "Your cards' Yu effects trigger even when destroyed by your actions" reads.
+    "Your cards' Yu effects trigger even when destroyed by your actions" reads. It replaces only
+    "another player's": the destruction still has to come during battle (ShE datasheet, The Yu
+    Trait).
 
     Attributes
     ----------
@@ -488,6 +502,8 @@ def _yu(
             case _YuResolution.RESOLVES:
                 return effects(ctx)
             case _YuResolution.CHOSEN:
+                if not effects(ctx):
+                    return []
                 card = ctx.card
                 question = (
                     f'Your action is destroying {card.name}. Resolve its "{label(ctx.game, card)}"?'
