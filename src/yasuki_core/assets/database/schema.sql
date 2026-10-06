@@ -10,12 +10,14 @@ CREATE TYPE card_type AS ENUM (
 );
 
 
--- `card_id` is a slug of the extended title, with a numeric suffix when two cards would collide.
+-- `card_id` is a slug of the extended title, unless the YAML pins it with an explicit `id`: a reprint
+-- keeping its card's id, a token, or a card sharing its title with another, tagged with the
+-- `short_id` of the set that first printed it.
 -- Multi-valued attributes (clan, type, deck) live in junction tables; source fields without a
 -- dedicated column go in `extra`.
 CREATE TABLE cards (
   card_id           TEXT PRIMARY KEY,            -- slug, e.g. 'bayushi_kachiko_exp'
-  slug              TEXT NOT NULL,                  -- display / URL only
+  slug              TEXT NOT NULL,                  -- slug of extended_title, a decklist name key
   name              TEXT NOT NULL,                  -- title
   extended_title    TEXT NOT NULL,                  -- formattedtitle (experience-disambiguated)
   -- Experience rank parsed from extended_title, for ordering a name's versions: Inexperienced (-1),
@@ -281,7 +283,7 @@ CREATE INDEX idx_prints_rules_text_trgm ON prints USING gin (rules_text gin_trgm
 CREATE INDEX idx_cards_name             ON cards (name);
 CREATE INDEX idx_cards_name_normalized  ON cards (name_normalized);
 CREATE INDEX idx_cards_lower_name       ON cards (lower(name));
-CREATE INDEX idx_cards_lower_ext_title  ON cards (lower(extended_title));
+CREATE INDEX idx_cards_slug             ON cards (slug);
 -- Backs the default card ordering (base name, then experience version) with an index scan instead
 -- of a full sort. Must match _NAME_TIEBREAK in database.py.
 CREATE INDEX idx_cards_sort             ON cards (split_part(name, ',', 1), experience, extended_title);
