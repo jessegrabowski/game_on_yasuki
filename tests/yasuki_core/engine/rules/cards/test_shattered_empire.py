@@ -2187,3 +2187,24 @@ def test_binasa_offers_no_pearl_card_his_ranged_destroyed():
 
     assert "pearl" not in {card.id for card in game.table.battlefield.cards}
     assert game.pending is None
+
+
+# --- Daigotsu Konishi ---
+
+
+def test_konishi_gives_a_card_on_either_side_of_the_battle_minus_2_force():
+    cards = [
+        personality("konishi", printed_id="daigotsu_konishi", force=3),
+        personality("guard", owner=P2, force=3),
+        personality("reserve", owner=P2, force=3),
+    ]
+    session = combat_segment(cards, {"konishi": 0}, {"guard": 0})
+    follower = attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER, force=1)
+    attached(session.game, follower, "guard")
+
+    session.act(P1, ActivateAbility("konishi"))
+    assert set(session.game.pending.candidates) == {"konishi", "guard", "ashigaru"}
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert effective_force(game, game.table.cards_by_id["guard"]) == 1

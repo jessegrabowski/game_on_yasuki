@@ -299,6 +299,39 @@ register_ability(
 )
 
 
+# --- Daigotsu Konishi ---
+
+KONISHI_FORCE_PENALTY = 2
+
+
+def _daigotsu_konishi_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Any Follower or Personality, since the card names no side. The Rules of Location keep a
+    Battle ability's targets to the battle being fought."""
+    return [card.id for card in (*personalities_in_play(game), *followers_in_play(game))]
+
+
+def _daigotsu_konishi_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The text gives the change no duration, so it runs to the end of the turn (CR, Ongoing)."""
+    return [
+        GrantModifier(
+            source.id, target.id, Stat.FORCE, -KONISHI_FORCE_PENALTY, Duration.UNTIL_END_OF_TURN
+        )
+    ]
+
+
+register_ability(
+    "daigotsu_konishi",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_daigotsu_konishi_targets,
+        targeting_message="a Follower or Personality",
+        effects=_daigotsu_konishi_effects,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
 # --- Doji Meiji, Regent (Experienced) ---
 
 
