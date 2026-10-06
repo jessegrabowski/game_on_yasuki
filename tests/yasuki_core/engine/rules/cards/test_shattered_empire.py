@@ -33,7 +33,7 @@ from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, Pu
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
-from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
+from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
 from yasuki_core.engine.rules.effects import GainHonor, GrantNegation, TakeFavor
 from yasuki_core.engine.rules.vocabulary.game_events import ConditionFulfilled
 from yasuki_core.engine.rules.legality import recruit_cost
@@ -2238,3 +2238,39 @@ def test_each_bow_of_lane_of_immorality_loses_1_honor():
     resolve_effects(game, [Bow("lane"), Straighten("lane"), Bow("lane")])
 
     assert game.table.seats[P1].honor == honor - 2
+
+
+# --- Seppun Blade ---
+
+
+@pytest.mark.parametrize(
+    ("defenders", "hand"),
+    [({"guard": 0}, ["held", "top"]), ({}, ["top"])],
+    ids=["opposed", "unopposed"],
+)
+def test_seppun_blade_discards_only_while_unopposed_and_always_draws(defenders, hand):
+    cards = [personality("hero", force=3), personality("guard", owner=P2, force=3)]
+    held = [fate_card("held", P1)]
+    session = combat_segment(cards, {"hero": 0}, defenders, in_hand=held)
+    game = session.game
+    attached(game, attachment("blade", printed_id="seppun_blade", force_modifier=2), "hero")
+    game.table.decks[DeckKey(P1, Side.FATE)].cards = [register(game.table, fate_card("top", P1))]
+
+    session.act(P1, ActivateAbility("blade"))
+
+    assert game.pending is None
+    assert [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards] == hand
+    assert game.table.cards_by_id["blade"].bowed
+
+
+def test_seppun_blade_reads_whether_its_personality_is_opposed_as_it_resolves():
+    cards = [personality("hero", force=3), personality("guard", owner=P2, force=3)]
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0}, in_hand=[fate_card("held", P1)])
+    game = session.game
+    blade = attached(game, attachment("blade", printed_id="seppun_blade"), "hero")
+    game.table.decks[DeckKey(P1, Side.FATE)].cards = [register(game.table, fate_card("top", P1))]
+    effects = ability_for(game, blade).effects(game, blade, blade)
+
+    resolve_effects(game, [Move("guard", Location.home(P2)), *effects])
+
+    assert [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards] == ["top"]

@@ -782,6 +782,38 @@ register_ring(
 )
 
 
+# --- Seppun Blade ---
+
+
+def _seppun_blade_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Discard a card unless this Personality is opposed, then draw a card." """
+    return [Evaluate("seppun_blade_discard", source.id, source.owner), DrawCard(source.owner)]
+
+
+@choice_resolver("seppun_blade_discard")
+def _resolve_seppun_blade_discard(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The discard, unless the bearer is opposed as it would resolve."""
+    bearer = attached_to(game, game.table.cards_by_id[source_id])
+    if bearer is not None and bearer.id in opposed_units_in_battle(game, seat):
+        return []
+    return [DiscardFromHand(seat, 1, seat, seat)]
+
+
+register_ability(
+    "seppun_blade",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=itself,
+        effects=_seppun_blade_effects,
+        hits_every_target=True,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
 # --- Shinjo Mayuko, Soul of Shinjo Wei ---
 
 MAYUKO_FIRST_MELEE = 4
