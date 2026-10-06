@@ -240,9 +240,11 @@ def test_cards_sharing_a_title_may_not_share_a_set(tmp_path):
         },
     )
 
-    assert "aulus_goc and aulus_goc_2 share the title 'aulus' and the set 'Gates of Chaos'" in (
-        " ".join(problems)
-    )
+    assert problems == [
+        "aulus_goc and aulus_goc_2 share the title 'aulus' and the set 'Gates of Chaos', so a "
+        "decklist line cannot tell them apart",
+        "aulus_goc_2 shares its title with ['aulus_goc']; give every printing the id 'aulus_goc'",
+    ]
 
 
 def test_the_first_printing_by_release_date_names_the_tag(tmp_path):
