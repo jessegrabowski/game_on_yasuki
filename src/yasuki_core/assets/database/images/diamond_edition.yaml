@@ -582,7 +582,7 @@ images:
   - role: front
     file: doji_tanitsu_experienced_2.jpg
     sha256: 397a5feaccce74a6886cc48a454b854d8dd3e7b9a88dd1413f33c31af5f44840
-- card_id: doom_of_fu_leng
+- card_id: doom_of_fu_leng_aod
   printing_id: diamond_edition
   files:
   - role: front

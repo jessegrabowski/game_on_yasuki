@@ -750,7 +750,7 @@ images:
   - role: front
     file: the_company_you_keep.jpg
     sha256: f37779bb1a5e47ee15a5392392fd0770483d147555ab9c7bfacd2479c9bce7c6
-- card_id: the_first_legion
+- card_id: the_first_legion_aof
   printing_id: an_onis_fury
   files:
   - role: front

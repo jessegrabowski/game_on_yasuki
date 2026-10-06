@@ -1,6 +1,6 @@
 set: 'Siege: Clan War'
 cards:
-- id: a_terrible_oath_2
+- id: a_terrible_oath_scw
   title: A Terrible Oath
   types:
   - Clock
@@ -51,7 +51,7 @@ cards:
   artist: Mario Wibisono
   flavor_text: <i>"For redemption."</i>
   collector_number: '55'
-- id: beiden_pass_2
+- id: beiden_pass_scw
   title: Beiden Pass
   types:
   - Territory
@@ -70,7 +70,7 @@ cards:
     each other.</i>
   collector_number: '2'
   designer: Bryan
-- id: black_wind_from_the_soul_2
+- id: black_wind_from_the_soul_scw
   title: Black Wind from the Soul
   types:
   - Clock
@@ -255,7 +255,7 @@ cards:
   flavor_text: <i>"Filial piety is a virtue, no? All this for the head of my household."</i>
   collector_number: '21'
   designer: Bryan
-- id: dark_divination_2
+- id: dark_divination_scw
   title: Dark Divination
   types:
   - Clock
@@ -321,7 +321,7 @@ cards:
   artist: Jason Engle
   flavor_text: <i>"For she who holds my heart."</i>
   collector_number: '49'
-- id: doom_of_fu_leng_2
+- id: doom_of_fu_leng_scw
   title: Doom of Fu Leng
   types:
   - Clock
@@ -875,7 +875,7 @@ cards:
   flavor_text: <i>"Fortunes! Get it off! Get it off of me before it… ARRRRGH!"</i>
   collector_number: '30'
   designer: Bryan
-- id: return_of_the_fallen_lord_2
+- id: return_of_the_fallen_lord_scw
   title: Return of the Fallen Lord
   types:
   - Clock
@@ -914,7 +914,7 @@ cards:
     perish if you wish. In fact, I can guarantee that much."</i>
   collector_number: '32'
   designer: Bryan
-- id: scorpion_clan_coup_2
+- id: scorpion_clan_coup_scw
   title: Scorpion Clan Coup
   types:
   - Territory
@@ -929,7 +929,7 @@ cards:
     No man could escape his fate. So how could an Empire?</i>
   collector_number: '1'
   designer: Bryan
-- id: shapeshifting_2
+- id: shapeshifting_scw
   title: Shapeshifting
   types:
   - Clock
@@ -977,7 +977,7 @@ cards:
     at their approach.</i>
   collector_number: '41'
   designer: Bryan
-- id: the_12th_black_scroll_2
+- id: the_12th_black_scroll_scw
   title: The 12th Black Scroll
   types:
   - Clock
@@ -1070,7 +1070,7 @@ cards:
     Crane Champion. Was nothing sacred? Had all of Heaven turned its back?</i>
   collector_number: '4'
   designer: Bryan
-- id: the_eighth_legion_2
+- id: the_eighth_legion_scw
   title: The Eighth Legion
   types:
   - Personality
@@ -1113,7 +1113,7 @@ cards:
   flavor_text: <i>The smallest of the ten great legions, the Fifth Legion is well known for its high number
     of shugenja, and thus its versatility.</i>
   collector_number: '62'
-- id: the_first_legion_2
+- id: the_first_legion_scw
   title: The First Legion
   types:
   - Personality
@@ -1211,7 +1211,7 @@ cards:
   artist: Conceptopolis
   flavor_text: <i>"For destiny."</i>
   collector_number: '56'
-- id: the_iron_citadel_2
+- id: the_iron_citadel_scw
   title: The Iron Citadel
   types:
   - Clock
@@ -1227,7 +1227,7 @@ cards:
     Junzo's army, an unspeakable horde of walking dead, monstrous oni, and hopelessly Tainted mortals.</i>
   collector_number: '2'
   designer: Bryan
-- id: the_jade_hand_2
+- id: the_jade_hand_scw
   title: The Jade Hand
   types:
   - Item
@@ -1269,7 +1269,7 @@ cards:
   flavor_text: <i>Alone among the great legions, the Ninth Legion employs significant naval forces as
     well as its normal infantry make-up.</i>
   collector_number: '66'
-- id: the_obsidian_hand_2
+- id: the_obsidian_hand_scw
   title: The Obsidian Hand
   types:
   - Item
@@ -1429,7 +1429,7 @@ cards:
   flavor_text: <i>A thousand years led to this moment.<br>The next thousand rest on its outcome.<br>Seven
     souls oppose a living god.<br>And an entire realm rests in the balance.</i>
   collector_number: '71'
-- id: the_walking_horror_of_fu_leng_2
+- id: the_walking_horror_of_fu_leng_scw
   title: The Walking Horror of Fu Leng
   types:
   - Clock
@@ -1446,7 +1446,7 @@ cards:
     would hunt him for years, trying to purge the shame of his existence.</i>
   collector_number: '4'
   designer: Bryan
-- id: the_wasting_disease_2
+- id: the_wasting_disease_scw
   title: The Wasting Disease
   types:
   - Clock
@@ -1555,7 +1555,7 @@ cards:
   artist: Sergio Camarena
   flavor_text: <i>"For Rokugan."</i>
   collector_number: '52'
-- id: touch_of_despair_2
+- id: touch_of_despair_scw
   title: Touch of Despair
   types:
   - Clock
@@ -1570,7 +1570,7 @@ cards:
     proudest and most powerful of the Elemental Masters, was consumed by the seventh's scroll's madness.</i>
   collector_number: '7'
   designer: Bryan
-- id: touch_of_fu_leng_2
+- id: touch_of_fu_leng_scw
   title: Touch of Fu Leng
   types:
   - Clock

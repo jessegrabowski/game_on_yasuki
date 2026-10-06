@@ -900,7 +900,7 @@ images:
   - role: front
     file: the_dread_kar.jpg
     sha256: 96b36d891ccbe629aefbe7aa9f2f4191204ab08ef7510292c662ae8372de7ac6
-- card_id: the_eighth_legion
+- card_id: the_eighth_legion_hrb
   printing_id: the_harbinger
   files:
   - role: front

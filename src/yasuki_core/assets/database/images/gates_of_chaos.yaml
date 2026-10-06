@@ -90,7 +90,7 @@ images:
   - role: front
     file: ashalan_ambush.jpg
     sha256: 839b9f21900e0425c8bf82fa224b20e9667ba1c541859b04bef9809168fa2cdc
-- card_id: aulus
+- card_id: aulus_goc
   printing_id: gates_of_chaos
   files:
   - role: front

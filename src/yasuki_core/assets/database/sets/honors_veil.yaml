@@ -629,7 +629,7 @@ cards:
   collector_number: '56'
 - title: Daigotsu Masahiko
   creates:
-  - ashigaru_2
+  - ashigaru_sote
   - ashigaru_defender
   types:
   - Personality

@@ -36,7 +36,7 @@ images:
   - role: front
     file: arrows_from_the_woods.jpg
     sha256: 7e8dcd9835b764d4414ec50634353c18a931f8329dec0117c29b5768c96f9bd2
-- card_id: ashigaru
+- card_id: ashigaru_shl
   printing_id: shadowlands
   files:
   - role: front
@@ -144,7 +144,7 @@ images:
   - role: front
     file: crystal_arrow.jpg
     sha256: d1a3930a1c0abeab18fab976b4f96bf5a98b043db700cc4bf7c562d42ea99df3
-- card_id: dark_divination
+- card_id: dark_divination_shl
   printing_id: shadowlands
   files:
   - role: front
@@ -660,7 +660,7 @@ images:
   - role: front
     file: shagara.jpg
     sha256: 9162596317a964264a443b7f0eabec47266a1353b89692cb6e4bac6607144824
-- card_id: shapeshifting
+- card_id: shapeshifting_shl
   printing_id: shadowlands
   files:
   - role: front
@@ -816,7 +816,7 @@ images:
   - role: front
     file: the_nameless_one.jpg
     sha256: 24eb27ba923820e40739f180068ca2d23a955c526f55d6aa94d3790c706f06aa
-- card_id: the_obsidian_hand
+- card_id: the_obsidian_hand_shl
   printing_id: shadowlands
   files:
   - role: front
@@ -864,13 +864,13 @@ images:
   - role: front
     file: tomb_of_jade.jpg
     sha256: 347f13f7cb5a99d21193a192567e131a9d95c5b23329a49d2a2cc19d3e08dde8
-- card_id: touch_of_despair
+- card_id: touch_of_despair_shl
   printing_id: shadowlands
   files:
   - role: front
     file: touch_of_despair.jpg
     sha256: 4facfab6731705bdf8d48bf460cb741c5cb2bc29fd643d586b3138c57a908edb
-- card_id: touch_of_fu_leng
+- card_id: touch_of_fu_leng_shl
   printing_id: shadowlands
   files:
   - role: front

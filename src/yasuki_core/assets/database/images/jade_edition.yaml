@@ -84,7 +84,7 @@ images:
   - role: front
     file: ashamana.jpg
     sha256: a2b7d9d5b09b57a562498aa69f3b80a58076bd484c145439c97b2cf8ee429c67
-- card_id: ashigaru
+- card_id: ashigaru_shl
   printing_id: jade_edition
   files:
   - role: front
@@ -1308,7 +1308,7 @@ images:
   - role: front
     file: ratling_conscripts.jpg
     sha256: 100b38f7f57d584c1fdcc86ccba700be2170420972fbc83a9d8680cdc3fd4d71
-- card_id: ratling_pack
+- card_id: ratling_pack_imp
   printing_id: jade_edition
   files:
   - role: front

@@ -666,7 +666,7 @@ images:
   - role: front
     file: forest_kitsune.jpg
     sha256: 9116454e4daaaa0e0ffad70deff65c4a176b7203a1362adecdb8c3fadd141102
-- card_id: forgotten_legacy_2
+- card_id: forgotten_legacy_20f
   printing_id: twenty_festivals
   files:
   - role: front

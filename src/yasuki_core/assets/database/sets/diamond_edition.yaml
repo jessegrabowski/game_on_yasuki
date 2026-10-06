@@ -2281,7 +2281,7 @@ cards:
   flavor_text: <i>"I do not forget my promises, my lady," Tanitsu whispered. "I will serve you for the
     rest of my days."</i>
   collector_number: '86'
-- id: doom_of_fu_leng
+- id: doom_of_fu_leng_aod
   title: Doom of Fu Leng
   types:
   - Spell

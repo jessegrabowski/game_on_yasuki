@@ -786,7 +786,7 @@ images:
   - role: front
     file: the_field_of_the_winds.jpg
     sha256: 8aff659c18ff0db5394521974c79f3d1d8c08aa83790ef5342ec67febbb70b14
-- card_id: the_jade_hand
+- card_id: the_jade_hand_imp
   printing_id: celestial_edition_15
   files:
   - role: front

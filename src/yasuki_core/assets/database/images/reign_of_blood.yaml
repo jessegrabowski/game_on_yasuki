@@ -54,7 +54,7 @@ images:
   - role: front
     file: barley_farm.jpg
     sha256: 80056c44e2e49c0918b2b62d4740f48a6b604773e946394eb4ac099c47d87552
-- card_id: battle_hardened_2
+- card_id: battle_hardened_rob
   printing_id: reign_of_blood
   files:
   - role: front

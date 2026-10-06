@@ -114,7 +114,7 @@ cards:
   collector_number: '17'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- id: aulus_2
+- id: aulus_cr3
   creates:
   - gaijin_yodotai_follower_1f
   title: Aulus

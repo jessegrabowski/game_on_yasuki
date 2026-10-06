@@ -18,7 +18,7 @@ images:
   - role: front
     file: bashers_club.jpg
     sha256: 2abcab22e225ce6138e10b4ea466af1c7a42a9ab37a10b2968605355ad89fccc
-- card_id: battle_hardened
+- card_id: battle_hardened_he5
   printing_id: the_hidden_emperor_episode_5
   files:
   - role: front

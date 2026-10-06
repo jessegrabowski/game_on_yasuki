@@ -174,7 +174,7 @@ cards:
   artist: Mark A.W. Jackson
   flavor_text: <i>He spends his life in prayer. He will atone for the sins of the Lion, but his heart
     remains with the Kitsu who followed Tsanuri to the south.</i>
-- id: ashigaru_2
+- id: ashigaru_sote
   title: Ashigaru
   types:
   - Follower
@@ -3139,7 +3139,7 @@ cards:
   flavor_text: <i>"The Empire will fall unless the Great Clans of the Empire stand beside us and fight.
     It is the end of the Age of Man-seize your destiny or step aside!" - Toku, champion of the Monkey
     Clan</i>
-- id: ratling_pack_2
+- id: ratling_pack_sote
   title: Ratling Pack
   types:
   - Follower

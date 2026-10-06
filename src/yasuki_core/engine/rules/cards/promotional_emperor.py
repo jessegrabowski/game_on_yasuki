@@ -13,7 +13,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 
 # --- Colonial Farm ---
 
-ASHIGARU = "ashigaru_2"
+ASHIGARU = "ashigaru_sote"
 ASHIGARU_COST = 3
 
 

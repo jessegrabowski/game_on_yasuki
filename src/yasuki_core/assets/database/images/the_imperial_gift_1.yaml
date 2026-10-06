@@ -174,7 +174,7 @@ images:
   - role: front
     file: scholarly_attendant.jpg
     sha256: ed5a6d0a47a824d3e2eb1f34a72598562d2974f19716806ad98e51238405fce2
-- card_id: scorpion_clan_coup
+- card_id: scorpion_clan_coup_ig1
   printing_id: the_imperial_gift_1
   files:
   - role: front

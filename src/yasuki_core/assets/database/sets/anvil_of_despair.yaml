@@ -571,7 +571,7 @@ cards:
   - Legacy
   rarity: Rare
   artist: Ben Peck
-- id: doom_of_fu_leng
+- id: doom_of_fu_leng_aod
   grants:
   - corruption
   title: Doom of Fu Leng
@@ -1851,7 +1851,7 @@ cards:
   artist: Randy Elliott
 - title: Refugees
   creates:
-  - ashigaru_2
+  - ashigaru_sote
   - ashigaru_defender
   - peasant
   types:

@@ -27,7 +27,7 @@ cards:
   artist: Malcolm McClinton
   flavor_text: <i>"The Wall is not made of stone, but the courage of Crab samurai." - Hida Kuon</i>
   collector_number: '1'
-- id: a_terrible_oath
+- id: a_terrible_oath_fkn
   title: A Terrible Oath
   types:
   - Spell
@@ -810,7 +810,7 @@ cards:
   flavor_text: <i>Despite a shortage of rice in their lands, the Scorpion defy the Crab in battle and
     in court.</i>
   collector_number: '143'
-- id: beiden_pass
+- id: beiden_pass_fkn
   title: Beiden Pass
   types:
   - Region

@@ -16,7 +16,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 # --- Refugees ---
 
 # "The target's controller may pay :g1:" and what it buys, as the card prints them.
-ASHIGARU = "ashigaru_2"
+ASHIGARU = "ashigaru_sote"
 ASHIGARU_GOLD = 1
 
 

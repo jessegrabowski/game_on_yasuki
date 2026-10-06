@@ -6,7 +6,7 @@ images:
   - role: front
     file: a_black_scroll_is_opened.jpg
     sha256: baa34f20f51dc1fd9b8a982c8c06434bc5c962b25659bbaba8d919ffcd831da6
-- card_id: a_terrible_oath
+- card_id: a_terrible_oath_fkn
   printing_id: forbidden_knowledge
   files:
   - role: front
@@ -66,7 +66,7 @@ images:
   - role: front
     file: bayushi_shoju.jpg
     sha256: 13cc33ed2ae404ccef5ddd317cae51fd147d09f595e12b67bdac5edd84699a5e
-- card_id: beiden_pass
+- card_id: beiden_pass_fkn
   printing_id: forbidden_knowledge
   files:
   - role: front
@@ -78,7 +78,7 @@ images:
   - role: front
     file: black_market.jpg
     sha256: d1a4f4f7717f1d029f959c443d11342dcf1dd83ba14a0c017c958297fbcb3166
-- card_id: black_wind_from_the_soul
+- card_id: black_wind_from_the_soul_fkn
   printing_id: forbidden_knowledge
   files:
   - role: front
@@ -546,7 +546,7 @@ images:
   - role: front
     file: reserve_movement.jpg
     sha256: 8e1c6cfd3a27b8283bc394c3638daa82b31f12e6514afb34d42f6a6ae559abad
-- card_id: return_of_the_fallen_lord
+- card_id: return_of_the_fallen_lord_fkn
   printing_id: forbidden_knowledge
   files:
   - role: front
@@ -714,7 +714,7 @@ images:
   - role: front
     file: the_imperial_standard.jpg
     sha256: abdf26bd622baa1f22dd79b61f4066f18ed6b0635301f7bf6d42717da42f41df
-- card_id: the_iron_citadel
+- card_id: the_iron_citadel_fkn
   printing_id: forbidden_knowledge
   files:
   - role: front
@@ -792,13 +792,13 @@ images:
   - role: front
     file: the_towers_of_isawa_castle.jpg
     sha256: b0e34cd4b0b502def9a1174fee0ecc87368e0f057374954846535f418087441a
-- card_id: the_walking_horror_of_fu_leng
+- card_id: the_walking_horror_of_fu_leng_fkn
   printing_id: forbidden_knowledge
   files:
   - role: front
     file: the_walking_horror_of_fu_leng.jpg
     sha256: f9c84a47802fab6f99e6e6e6f154b66cc9c31ae010fa48c8a90dd176ff7f6dae
-- card_id: the_wasting_disease
+- card_id: the_wasting_disease_fkn
   printing_id: forbidden_knowledge
   files:
   - role: front

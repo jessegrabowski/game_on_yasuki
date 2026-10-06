@@ -318,7 +318,7 @@ cards:
   - Legacy
   rarity: Common
   artist: Tom Baxa
-- id: ashigaru
+- id: ashigaru_shl
   title: Ashigaru
   types:
   - Follower
@@ -5295,7 +5295,7 @@ cards:
   - Legacy
   rarity: Common
   artist: Randy Elliott
-- id: ratling_pack
+- id: ratling_pack_imp
   title: Ratling Pack
   types:
   - Follower

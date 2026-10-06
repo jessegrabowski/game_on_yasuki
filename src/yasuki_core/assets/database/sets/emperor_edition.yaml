@@ -3304,7 +3304,7 @@ cards:
   flavor_text: <i>"Unlike some other clans, we keep a close watch on our holdings in the new lands, to
     prevent embarrassing incidents from occurring." - Yasuki Jinn-Kuen</i>
   collector_number: '300'
-- id: forgotten_legacy
+- id: forgotten_legacy_emp
   title: Forgotten Legacy
   types:
   - Other

@@ -4542,7 +4542,7 @@ cards:
   artist: Randy Elliott
   flavor_text: <i>Like a swarm they were, overcoming the samurai as if they were standing still. - Iuchi
     Junzo</i>
-- id: ratling_pack
+- id: ratling_pack_imp
   title: Ratling Pack
   types:
   - Follower
@@ -5847,7 +5847,7 @@ cards:
   artist: Randy Gallegos
   flavor_text: <i>The lightning came down as if brought by the Thunder God's hand. He turned then, to
     look at me.</i>
-- id: the_jade_hand
+- id: the_jade_hand_imp
   title: The Jade Hand
   types:
   - Item

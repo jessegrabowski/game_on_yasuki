@@ -1,6 +1,6 @@
 set: 'Siege: Clan War'
 images:
-- card_id: a_terrible_oath_2
+- card_id: a_terrible_oath_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -12,13 +12,13 @@ images:
   - role: front
     file: bayushi_kachiko_seven_thunder_experienced_2cw.jpg
     sha256: cf3499a7dabbb1d2bef21cb4bece6b4af6a4d94b61c25b8fe0d589e5a2622151
-- card_id: beiden_pass_2
+- card_id: beiden_pass_scw
   printing_id: siege_clan_war
   files:
   - role: front
     file: beiden_pass_2.jpg
     sha256: 3df78496cbc164dd237fab0c1dd99d0ebcf9c67f3ddcb71ac7c75bda78f303a9
-- card_id: black_wind_from_the_soul_2
+- card_id: black_wind_from_the_soul_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -72,7 +72,7 @@ images:
   - role: front
     file: dark_daughter_of_fu_leng_experienced.jpg
     sha256: 74945cc16ae5dcb1b7c2f2cdb97968c34cab4dd6f52db21e455635650dbd6e99
-- card_id: dark_divination_2
+- card_id: dark_divination_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -90,7 +90,7 @@ images:
   - role: front
     file: doji_hoturi_seven_thunder_experienced_2cw.jpg
     sha256: 24b2dd8325932c1e75483c49cc4e6438fa04eaa77486ac0285b1e9b3046847b6
-- card_id: doom_of_fu_leng_2
+- card_id: doom_of_fu_leng_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -222,7 +222,7 @@ images:
   - role: front
     file: parasite.jpg
     sha256: 9b63dea7d18092dc97b839cd92b615da51043bf5b5a5bbfc011bfc94d31530c4
-- card_id: return_of_the_fallen_lord_2
+- card_id: return_of_the_fallen_lord_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -234,13 +234,13 @@ images:
   - role: front
     file: rite_of_binding.jpg
     sha256: baaa870813322a4767b5dd0af15305d27a3527b05febe329d7d9f76390d0f457
-- card_id: scorpion_clan_coup_2
+- card_id: scorpion_clan_coup_scw
   printing_id: siege_clan_war
   files:
   - role: front
     file: scorpion_clan_coup_2.jpg
     sha256: e43575f482edfdec8ced68b0a98a80c5c23acec90a74843a9d537c233e5f0832
-- card_id: shapeshifting_2
+- card_id: shapeshifting_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -258,7 +258,7 @@ images:
   - role: front
     file: terrifying_presence.jpg
     sha256: b6fb395b6b39a6f8cb9074173bddf1777068fecaad17de189cfea40f7acbad73
-- card_id: the_12th_black_scroll_2
+- card_id: the_12th_black_scroll_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -288,7 +288,7 @@ images:
   - role: front
     file: the_crane_lands.jpg
     sha256: e2eb097e0dd592820502335a1e083d0271590e0eb1c78cffa7259ec4f7b91dea
-- card_id: the_eighth_legion_2
+- card_id: the_eighth_legion_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -300,7 +300,7 @@ images:
   - role: front
     file: the_fifth_legion.jpg
     sha256: 89ff19312a332390dd99f5d7e4025e3ae82e3491448c4d553912e657ba078ef1
-- card_id: the_first_legion_2
+- card_id: the_first_legion_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -324,13 +324,13 @@ images:
   - role: front
     file: the_hooded_ronin_descendant_of_shinsei_experiencedcw.jpg
     sha256: 07c012c72d990a3175e39a4d6064220e4c1a95d7452426cc8c05c6c7b869d011
-- card_id: the_iron_citadel_2
+- card_id: the_iron_citadel_scw
   printing_id: siege_clan_war
   files:
   - role: front
     file: the_iron_citadel_2.jpg
     sha256: 378ebb1de3be27ae477352755d877bc4be5a8c422b717df001927db6008669f7
-- card_id: the_jade_hand_2
+- card_id: the_jade_hand_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -342,7 +342,7 @@ images:
   - role: front
     file: the_ninth_legion.jpg
     sha256: 5eb1f9fc786217e42128345264d3e431041d053c3c0320b9e606bc8535a77152
-- card_id: the_obsidian_hand_2
+- card_id: the_obsidian_hand_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -390,13 +390,13 @@ images:
   - role: front
     file: the_throne_room.jpg
     sha256: b16815cf19d2c053aff2ff746900fb9f023f1069428ace09e20fcc110beb52d0
-- card_id: the_walking_horror_of_fu_leng_2
+- card_id: the_walking_horror_of_fu_leng_scw
   printing_id: siege_clan_war
   files:
   - role: front
     file: the_walking_horror_of_fu_leng_2.jpg
     sha256: 2bed78c8b261100f5adcaf00ec948d60158778615c9a42705dd98726cd2b74dd
-- card_id: the_wasting_disease_2
+- card_id: the_wasting_disease_scw
   printing_id: siege_clan_war
   files:
   - role: front
@@ -420,13 +420,13 @@ images:
   - role: front
     file: toturi_seven_thunder_experienced_2cw.jpg
     sha256: f931b2046d0542c4d4a7e1bc06f13ae8be3c140aa3a97e9af70242b6cd9b06b5
-- card_id: touch_of_despair_2
+- card_id: touch_of_despair_scw
   printing_id: siege_clan_war
   files:
   - role: front
     file: touch_of_despair_2.jpg
     sha256: f0b5421a9526f4f00d8fde3c63fab807ce4fef9be767c3f495e3e58cdacbe4f4
-- card_id: touch_of_fu_leng_2
+- card_id: touch_of_fu_leng_scw
   printing_id: siege_clan_war
   files:
   - role: front

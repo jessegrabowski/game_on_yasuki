@@ -42,7 +42,7 @@ images:
   - role: front
     file: bayushi_dozan.jpg
     sha256: 7fc504396162ed26f056b8d4e0c28f50db0a479011f2cd59384acb30c0ffe9e8
-- card_id: beiden_pass
+- card_id: beiden_pass_fkn
   printing_id: promotional_cwf
   files:
   - role: front

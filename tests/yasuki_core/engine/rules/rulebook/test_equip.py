@@ -177,7 +177,7 @@ def test_a_created_follower_is_not_held_back_by_a_weapon():
     ashigaru = AttachmentPrint(
         name="Ashigaru",
         side=Side.FATE,
-        printed_id="ashigaru_2",
+        printed_id="ashigaru_sote",
         attachment_type=AttachmentType.FOLLOWER,
         force=1,
     )

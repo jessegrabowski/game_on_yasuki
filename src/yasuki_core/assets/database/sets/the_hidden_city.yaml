@@ -2510,7 +2510,7 @@ cards:
   collector_number: '135'
 - title: Set'tchr'foo
   creates:
-  - ratling_pack_2
+  - ratling_pack_sote
   types:
   - Personality
   decks:

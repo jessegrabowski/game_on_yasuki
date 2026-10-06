@@ -49,8 +49,11 @@ subtitle `Princess of Rokugan` is `iweko_miaka_princess_of_rokugan`.
 A subtitle is not part of the card's title for play (CR, Card Subtitles), and it belongs to the
 printing: a reprint may add one that the card's earlier printings lack. Such a printing pins the
 card's existing id with an explicit `id:`, so the reprint stays the same card. An explicit `id:`
-appears on 259 of 20,135 entries. Besides those pins, they are tokens, proxies and cards whose
-title another card already slugs to. A back face takes the front's id plus `__back`.
+appears on 246 of 20,135 entries. Besides those pins, they are tokens, whose ids describe their
+stats, and cards sharing their extended title with another card. Each of those ends in the
+`short_id` that `set_info.yaml` gives the set that first printed it, as `aulus_goc` and
+`aulus_cr3` do, and `pixi run card-index` refuses a shared title without them. A back face takes the
+front's id plus `__back`.
 
 Two consequences for a card author. You cannot read a card's id off the file, so derive it or look
 it up in `src/yasuki_core/assets/database/card_ids.txt`, which lists every one. And a handler keyed

@@ -2678,7 +2678,7 @@ cards:
   artist: William O'Connor
   flavor_text: <i>"A mercenary, hiring mercenaries?" - Ichiro Akemi</i>
   collector_number: '108'
-- id: the_first_legion
+- id: the_first_legion_aof
   title: The First Legion
   types:
   - Follower

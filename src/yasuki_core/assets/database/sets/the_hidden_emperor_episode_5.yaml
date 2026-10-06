@@ -51,7 +51,7 @@ cards:
   artist: Heather Bruton
   flavor_text: <i>Of the goblin referred to in Mokuna's guide as Ropputu, all that is known was that he
     lived to be the ripe old age of twelve before his children ate him.</i>
-- id: battle_hardened
+- id: battle_hardened_he5
   title: Battle Hardened
   types:
   - Strategy

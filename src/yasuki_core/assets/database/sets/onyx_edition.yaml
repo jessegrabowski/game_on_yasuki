@@ -1470,7 +1470,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Colonial Farm
   creates:
-  - ashigaru_2
+  - ashigaru_sote
   - ashigaru_defender
   - peasant
   types:

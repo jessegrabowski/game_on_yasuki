@@ -36,7 +36,12 @@ def _refugees_battle(
     plain Personality, and the Defender sends one carrying a Follower and keeps one at home."""
     state = TableState.empty_two_seat()
     token_template(
-        state, "ashigaru_2", name="Ashigaru", card_type="Follower", keywords=("Ashigaru",), force=1
+        state,
+        "ashigaru_sote",
+        name="Ashigaru",
+        card_type="Follower",
+        keywords=("Ashigaru",),
+        force=1,
     )
     province_card(state, "atk-prov0", seat=ATTACKER, index=0)
     province_card(state, "def-prov0", seat=DEFENDER, index=0)

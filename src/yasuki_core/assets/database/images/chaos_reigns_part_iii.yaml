@@ -30,7 +30,7 @@ images:
   - role: front
     file: ashutosh.jpg
     sha256: 33eb6ceacc77a9b2743fad54b98d1fcfd9c8160c329004f32ed1de7ae4ee8c0a
-- card_id: aulus_2
+- card_id: aulus_cr3
   printing_id: chaos_reigns_part_iii
   files:
   - role: front

@@ -3061,7 +3061,7 @@ cards:
   artist: Charles Urbach
   flavor_text: <i>The Three Armies will live on.</i>
   collector_number: '394'
-- id: the_jade_hand
+- id: the_jade_hand_imp
   title: The Jade Hand
   types:
   - Item

@@ -596,7 +596,7 @@ cards:
   flavor_text: <i>"I think you might find your argument more effective if you remind the Lion ambassador
     of the writings of sensei Akodo Tishikaru, my lord."</i>
   collector_number: '26'
-- id: scorpion_clan_coup
+- id: scorpion_clan_coup_ig1
   title: Scorpion Clan Coup
   types:
   - Other

@@ -648,7 +648,7 @@ cards:
   designer: Loki
 - title: Conscription Officer
   creates:
-  - ashigaru_2
+  - ashigaru_sote
   - ashigaru_defender
   - peasant
   types:

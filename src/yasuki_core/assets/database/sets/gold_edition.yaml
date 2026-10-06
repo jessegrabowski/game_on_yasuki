@@ -7995,7 +7995,7 @@ cards:
   rarity: Common
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Don't talk honor to us. History of your Empire, one big oni-summoning ritual is!</i>
-- id: ratling_pack
+- id: ratling_pack_imp
   title: Ratling Pack
   types:
   - Follower

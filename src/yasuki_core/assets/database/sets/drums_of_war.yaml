@@ -2118,7 +2118,7 @@ cards:
   collector_number: '85'
 - title: Reinforcements Arrive
   creates:
-  - ashigaru_2
+  - ashigaru_sote
   - ashigaru_defender
   types:
   - Strategy

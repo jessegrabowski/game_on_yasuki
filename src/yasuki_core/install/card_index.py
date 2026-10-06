@@ -13,6 +13,8 @@ DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
 # them: the card index skips them, and they register their own set metadata as they load.
 LOCAL_SET_SUFFIX = ".local.yaml"
 DEFAULT_INDEX_PATH = DATABASE_DIR / "card_ids.txt"
+DEFAULT_SET_INFO_PATH = DATABASE_DIR / "set_info.yaml"
+TOKENS_SET = "Tokens"
 
 
 class SetEntry(NamedTuple):
@@ -23,6 +25,7 @@ class SetEntry(NamedTuple):
     keywords: tuple[str, ...]
     creates: tuple[str, ...]
     text: str
+    extended_title: str
 
 
 def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
@@ -61,7 +64,10 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
             keywords = tuple(entry.get("keywords") or ())
             creates = tuple(entry.get("creates") or ())
             text = entry.get("text") or ""
-            yield SetEntry(yaml_file, data["set"], card_id, title, keywords, creates, text)
+            extended_title = card_identity.extended_title(entry)
+            yield SetEntry(
+                yaml_file, data["set"], card_id, title, keywords, creates, text, extended_title
+            )
 
 
 def card_ids(cards_dir: Path) -> list[str]:
@@ -98,6 +104,66 @@ def card_ids(cards_dir: Path) -> list[str]:
     return sorted(titles_by_id)
 
 
+def untagged_title_ties(
+    cards_dir: Path = DEFAULT_CARDS_PATH, set_info_path: Path = DEFAULT_SET_INFO_PATH
+) -> list[str]:
+    """
+    One line per card that shares its extended title with another card and lacks the id that sets
+    them apart.
+
+    A decklist naming that title cannot tell such cards apart, so each carries an explicit id ending
+    in the ``short_id`` of the set that first printed it, as in ``aulus_goc`` and ``aulus_cr3``.
+    Tokens are exempt: no decklist names one, and their ids already describe their stats.
+
+    Parameters
+    ----------
+    cards_dir : path, optional
+        Directory of per-set YAML files. Default is the packaged ``sets`` directory.
+    set_info_path : path, optional
+        The arc-grouped set metadata carrying each set's release date and ``short_id``. Default is
+        the packaged ``set_info.yaml``.
+
+    Returns
+    -------
+    list of str
+        Sorted problem descriptions, empty when every shared title is told apart.
+    """
+    sets = {
+        entry["set_name"]: entry
+        for arc in read_yaml(set_info_path)["arcs"]
+        for entry in arc["sets"]
+    }
+    printed_in: dict[str, list[str]] = {}
+    slug_of: dict[str, str] = {}
+    for entry in iter_set_entries(cards_dir):
+        if entry.card_id.endswith("__back"):
+            continue
+        printed_in.setdefault(entry.card_id, []).append(entry.set_name)
+        slug_of.setdefault(entry.card_id, card_identity.card_slug(entry.extended_title))
+
+    sharing: dict[str, list[str]] = {}
+    for card_id, set_names in printed_in.items():
+        if set(set_names) != {TOKENS_SET}:
+            sharing.setdefault(slug_of[card_id], []).append(card_id)
+
+    problems = []
+    for slug, card_ids_sharing in sharing.items():
+        if len(card_ids_sharing) < 2:
+            continue
+        for card_id in card_ids_sharing:
+            first = min(
+                printed_in[card_id],
+                key=lambda name: str(sets[name].get("release_date") or "9999"),
+            )
+            expected = f"{slug}_{sets[first]['short_id']}"
+            if card_id != expected:
+                problems.append(
+                    f"{card_id} shares its title with {sorted(set(card_ids_sharing) - {card_id})}; "
+                    f"give every printing the id {expected!r}"
+                )
+    return sorted(problems)
+
+
 def write_index(
     cards_dir: Path = DEFAULT_CARDS_PATH,
     index_path: Path = DEFAULT_INDEX_PATH,
@@ -122,9 +188,12 @@ def write_index(
     Raises
     ------
     ValueError
-        If the YAML no longer derives an id the existing index holds and that id is not retired.
+        If the YAML no longer derives an id the existing index holds and that id is not retired, or
+        if two cards share an extended title without the ids that set them apart.
     """
     ids = card_ids(cards_dir)
+    if ties := untagged_title_ties(cards_dir):
+        raise ValueError("\n".join(ties))
     if index_path.exists():
         retired = card_identity.retired_ids() if retired is None else retired
         dropped = read_index(index_path) - set(ids) - retired.keys()

@@ -3545,7 +3545,7 @@ cards:
   flavor_text: <i>"An enigma even among the Spider. Some say he hails from a distant land, but I think
     he merely has nothing to say." - Tetsuo</i>
   collector_number: '66'
-- id: the_eighth_legion
+- id: the_eighth_legion_hrb
   title: The Eighth Legion
   types:
   - Follower

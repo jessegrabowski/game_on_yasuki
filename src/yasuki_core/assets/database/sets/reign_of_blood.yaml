@@ -230,7 +230,7 @@ cards:
   flavor_text: <i>"You would be surprised how quickly these peasents can work when given appropriate encouragement,"
     Atsuki said with a thin smile.</i>
   collector_number: '26'
-- id: battle_hardened_2
+- id: battle_hardened_rob
   title: Battle-Hardened
   types:
   - Strategy

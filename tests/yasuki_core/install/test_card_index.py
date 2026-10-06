@@ -7,6 +7,7 @@ from yasuki_core.install.card_index import (
     card_ids,
     iter_set_entries,
     read_index,
+    untagged_title_ties,
     write_index,
 )
 
@@ -156,3 +157,46 @@ def test_every_retired_id_is_gone_and_names_a_card_that_exists():
 
     assert committed.isdisjoint(retired)
     assert all(current_id(card_id) in committed | {None} for card_id in retired)
+
+
+def _aulus_sets(tmp_path, *, follower_id=None, personality_id=None):
+    cards_dir = tmp_path / "sets"
+    cards_dir.mkdir()
+    write_set(cards_dir, "Gates of Chaos", [{"title": "Aulus", "id": follower_id}])
+    write_set(cards_dir, "Chaos Reigns Part III", [{"title": "Aulus", "id": personality_id}])
+    set_info = tmp_path / "set_info.yaml"
+    set_info.write_text(
+        yaml.safe_dump(
+            {
+                "arcs": [
+                    {
+                        "name": "Arc",
+                        "sets": [
+                            {"set_name": "Gates of Chaos", "short_id": "goc"},
+                            {"set_name": "Chaos Reigns Part III", "short_id": "cr3"},
+                        ],
+                    }
+                ]
+            }
+        )
+    )
+    return cards_dir, set_info
+
+
+def test_two_cards_sharing_a_title_must_each_carry_their_first_sets_id(tmp_path):
+    cards_dir, set_info = _aulus_sets(tmp_path, personality_id="aulus_2")
+
+    assert untagged_title_ties(cards_dir, set_info) == [
+        "aulus shares its title with ['aulus_2']; give every printing the id 'aulus_goc'",
+        "aulus_2 shares its title with ['aulus']; give every printing the id 'aulus_cr3'",
+    ]
+
+
+def test_cards_sharing_a_title_pass_once_each_carries_its_sets_id(tmp_path):
+    cards_dir, set_info = _aulus_sets(tmp_path, follower_id="aulus_goc", personality_id="aulus_cr3")
+
+    assert untagged_title_ties(cards_dir, set_info) == []
+
+
+def test_no_committed_card_shares_a_title_without_its_sets_id():
+    assert untagged_title_ties() == []

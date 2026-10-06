@@ -966,7 +966,7 @@ images:
   - role: front
     file: footsteps_of_madness.jpg
     sha256: 18983dc5f1058c293c415551efd7ed2eb8694f38fea2e8529503bc347e999f70
-- card_id: forgotten_legacy
+- card_id: forgotten_legacy_emp
   printing_id: emperor_edition
   files:
   - role: front

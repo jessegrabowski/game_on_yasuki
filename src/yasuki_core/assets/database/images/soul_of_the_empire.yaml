@@ -48,7 +48,7 @@ images:
   - role: front
     file: ashida.jpg
     sha256: d4b82da27d6d073fede847e9b5c9a422c01adc92d94225f6d09c2627529e586d
-- card_id: ashigaru_2
+- card_id: ashigaru_sote
   printing_id: soul_of_the_empire
   files:
   - role: front
@@ -825,7 +825,7 @@ images:
   - role: front
     file: rank_hath_privilege.jpg
     sha256: 164544793b9704daa8a53b590298b7eb1f7d11fe437e89ac25c10466514424ee
-- card_id: ratling_pack_2
+- card_id: ratling_pack_sote
   printing_id: soul_of_the_empire
   files:
   - role: front
