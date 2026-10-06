@@ -858,6 +858,19 @@ register_ability(
 )
 
 
+# --- The Desiccated ---
+
+DESICCATED_HONOR_LOSS = 3
+
+
+@on(EnteredPlay, "the_desiccated", ruleset=ruleset.SHATTERED_EMPIRE.name)
+def _the_desiccated_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After this Follower enters play, lose 3 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -DESICCATED_HONOR_LOSS, source_id=ctx.card.id)]
+
+
 # --- The Enlightened Path of the Dragon ---
 
 # The key a target Ring's ability or Interrupt is copied under, for the additional action taken

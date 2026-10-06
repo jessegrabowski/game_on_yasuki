@@ -2274,3 +2274,37 @@ def test_seppun_blade_reads_whether_its_personality_is_opposed_as_it_resolves():
     resolve_effects(game, [Move("guard", Location.home(P2)), *effects])
 
     assert [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards] == ["top"]
+
+
+# --- The Desiccated ---
+
+
+def test_equipping_the_desiccated_from_the_discard_pile_loses_3_honor():
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("hero"))
+    put_in_play(state, holding("mine", gold_production=4))
+    earlier = attachment(
+        "earlier", printed_id="the_desiccated", attachment_type=AttachmentType.FOLLOWER
+    )
+    attached(state, earlier, "hero")
+    desiccated = attachment(
+        "desiccated",
+        printed_id="the_desiccated",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=3,
+        gold_cost=4,
+    )
+    state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(register(state, desiccated))
+    session = EngineSession.start(state, P1)
+    honor = session.game.table.seats[P1].honor
+
+    session.act(P1, Equip("desiccated"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    game = session.game
+    assert [card.id for card in attachments_of(game, game.table.cards_by_id["hero"])] == [
+        "earlier",
+        "desiccated",
+    ]
+    assert game.table.seats[P1].honor == honor - 3
