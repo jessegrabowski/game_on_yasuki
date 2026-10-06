@@ -7,6 +7,7 @@
       "value": "DYNASTY"
     },
     "printed_id": "modest_farm",
+    "title": "",
     "clan": "crab",
     "clans": {
       "__tuple__": [
@@ -84,6 +85,7 @@
       "value": "STRONGHOLD"
     },
     "printed_id": "sh",
+    "title": "",
     "clan": null,
     "clans": {
       "__tuple__": []
@@ -137,6 +139,7 @@
           "value": "STRONGHOLD"
         },
         "printed_id": "sh__back",
+        "title": "",
         "clan": null,
         "clans": {
           "__tuple__": []

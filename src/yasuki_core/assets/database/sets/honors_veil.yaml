@@ -141,7 +141,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Bakin • Experienced 2
   clans:
   - Lion
   keywords:
@@ -297,7 +296,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Eisaku • Experienced
   clans:
   - Scorpion
   keywords:
@@ -357,7 +355,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nomen • Experienced
   clans:
   - Scorpion
   keywords:
@@ -540,7 +537,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Takihiro • Experienced
   clans:
   - Crane
   keywords:
@@ -629,7 +625,7 @@ cards:
   collector_number: '56'
 - title: Daigotsu Masahiko
   creates:
-  - ashigaru_2
+  - ashigaru_sote
   - ashigaru_defender
   types:
   - Personality
@@ -1325,7 +1321,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Aki • Experienced
   clans:
   - Crab
   keywords:
@@ -1852,7 +1847,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsuki Taiko • Experienced
   clans:
   - Dragon
   keywords:
@@ -1914,7 +1908,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsune Ryukan • Experienced
   clans:
   - Mantis
   keywords:
@@ -2665,7 +2658,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Tsukimi • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -3447,7 +3439,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Hotako • Experienced
   clans:
   - Spider
   keywords:
@@ -3531,7 +3522,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Yoyonagi • Experienced
   clans:
   - Mantis
   keywords:

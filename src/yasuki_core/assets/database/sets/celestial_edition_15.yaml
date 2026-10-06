@@ -33,7 +33,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Kage • Experienced
   clans:
   - Lion
   keywords:
@@ -156,7 +155,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Eisaku • Experienced
   clans:
   - Scorpion
   keywords:
@@ -187,7 +185,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kachiko • Inexperienced
   clans:
   - Scorpion
   keywords:
@@ -893,7 +890,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Hoturi • Experienced
   clans:
   - Crane
   keywords:
@@ -1286,7 +1282,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kuon • Experienced 6
   clans:
   - Crab
   keywords:
@@ -1446,7 +1441,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Aki • Experienced
   clans:
   - Crab
   keywords:
@@ -1754,7 +1748,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Toshimoko • Experienced
   clans:
   - Crane
   keywords:
@@ -1787,7 +1780,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kan'ok'ticheck • Experienced
   clans:
   - Ratling
   keywords:
@@ -1940,7 +1932,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsuki Taiko • Experienced
   clans:
   - Dragon
   keywords:
@@ -2038,7 +2029,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Yori • Experienced
   keywords:
   - Unique
   - Experienced
@@ -2227,7 +2217,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Chagatai • Experienced 4
   clans:
   - Unicorn
   keywords:
@@ -2263,7 +2252,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Gaheris • Experienced
   clans:
   - Unicorn
   - Moto
@@ -2753,7 +2741,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shikibu no Oni • Experienced
   keywords:
   - Experienced Oni no Shikibu
   - Unique
@@ -3061,7 +3048,7 @@ cards:
   artist: Charles Urbach
   flavor_text: <i>The Three Armies will live on.</i>
   collector_number: '394'
-- id: the_jade_hand
+- id: the_jade_hand_imp
   title: The Jade Hand
   types:
   - Item
@@ -3213,7 +3200,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Satsu • Experienced
   clans:
   - Dragon
   keywords:
@@ -3250,7 +3236,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Yokuni • Experienced
   clans:
   - Dragon
   keywords:
@@ -3362,7 +3347,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Etsui • Experienced
   clans:
   - Mantis
   keywords:
@@ -3608,7 +3592,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo • Experienced 2
   clans:
   - Mantis
   keywords:

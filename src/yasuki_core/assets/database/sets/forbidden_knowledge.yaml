@@ -17,7 +17,7 @@ cards:
   artist: Wackwitz & Daily
   flavor_text: <i>Deep in the heart of the Shadowlands, Junzo opens another scroll, and the souls of all
     of Rokugan's shugenja shudder.</i>
-- id: a_terrible_oath
+- id: a_terrible_oath_fkn
   grants:
   - corruption
   - oath
@@ -241,7 +241,7 @@ cards:
   artist: Ron Spencer
   flavor_text: <i>Kachiko forbid him to use the spell on her husband's remains, but Bantaro's master had
     other plans...</i>
-- id: beiden_pass
+- id: beiden_pass_fkn
   title: Beiden Pass
   types:
   - Region
@@ -280,7 +280,7 @@ cards:
   errata_text: Errata'd to clarify that the Honor loss is not a cost of Gold production.
   rarity: Common
   artist: Nicola Leonard
-- id: black_wind_from_the_soul
+- id: black_wind_from_the_soul_fkn
   grants:
   - corruption
   title: Black Wind From the Soul
@@ -466,7 +466,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Dairya • Experienced
   clans:
   - Toturi's Army
   keywords:
@@ -932,7 +931,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Ujiaki • Experienced
   clans:
   - Lion
   keywords:
@@ -999,7 +997,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Uona • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1114,7 +1111,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Toshimoko • Experienced
   clans:
   - Crane
   keywords:
@@ -1268,7 +1264,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Yori • Experienced
   keywords:
   - Unique
   - Experienced
@@ -1419,7 +1414,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Daini • Experienced
   clans:
   - Dragon
   - Toturi's Army
@@ -1898,7 +1892,7 @@ cards:
   rarity: Uncommon
   artist: Wackwitz & Daily
   flavor_text: <i>Awaiting the hungry with full stomachs, that is mastering strength. - Sun Tzu</i>
-- id: return_of_the_fallen_lord
+- id: return_of_the_fallen_lord_fkn
   grants:
   - corruption
   title: Return of the Fallen Lord
@@ -1991,7 +1985,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shahadet • Experienced
   clans:
   - Naga
   keywords:
@@ -2428,7 +2421,7 @@ cards:
   - Rain of Blood (Diamond)
   rarity: Rare
   artist: Douglas Shuler
-- id: the_iron_citadel
+- id: the_iron_citadel_fkn
   grants:
   - corruption
   title: The Iron Citadel
@@ -2655,7 +2648,7 @@ cards:
   - Legacy
   rarity: Rare
   artist: Tom Biondolillo
-- id: the_walking_horror_of_fu_leng
+- id: the_walking_horror_of_fu_leng_fkn
   grants:
   - corruption
   title: The Walking Horror of Fu Leng
@@ -2681,7 +2674,7 @@ cards:
   - Legacy
   rarity: Rare
   artist: Matt Wilson
-- id: the_wasting_disease
+- id: the_wasting_disease_fkn
   grants:
   - corruption
   - wasting
@@ -2943,7 +2936,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yogo Junzo • Experienced
   keywords:
   - Unique
   - Experienced

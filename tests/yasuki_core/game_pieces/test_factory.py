@@ -665,3 +665,23 @@ def test_the_imperial_favor_record_builds_a_rulebook_print_on_the_fate_side():
 
 def test_a_marker_token_sharing_the_proxy_type_still_builds_a_fate_print():
     assert type(build_print(_other_proxy_record("token_wealth"))) is FatePrint
+
+
+def test_the_line_set_tells_apart_cards_sharing_a_title():
+    def aulus(card_id, set_name, print_id):
+        return {
+            "card_id": card_id,
+            "name": "Aulus",
+            "extended_title": "Aulus",
+            "types": ["Personality"],
+            "decks": ["Dynasty"],
+            "prints": [{"print_id": print_id, "set_name": set_name, "image_path": None}],
+        }
+
+    records = [
+        aulus("aulus_goc", "Gates of Chaos", 40),
+        aulus("aulus_cr3", "Chaos Reigns Part III", 41),
+    ]
+    deck = parse_deck_yaml("Dynasty:\n  - Aulus [Chaos Reigns Part III]\n")
+
+    assert resolve_decklist(deck, records, PlayerId.P1).dynasty[0].printed_id == "aulus_cr3"

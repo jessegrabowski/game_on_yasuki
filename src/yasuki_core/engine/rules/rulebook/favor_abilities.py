@@ -112,12 +112,6 @@ def _favor_cost(extra: SeatCost | None) -> Callable[[GameState, L5RCard], list[E
     return cost
 
 
-def _on_your_turn(game: GameState, source: L5RCard) -> list[str]:
-    """The proxy itself while its seat is the active one. An ability reading "If it is your turn"
-    needs this, since an Open designator does not restrict it to the active seat on its own."""
-    return itself(game, source) if source.owner is game.active else []
-
-
 def _draw(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [DrawCard(seat=source.owner)]
 
@@ -245,11 +239,10 @@ register_ability(
     ONYX_FAVOR_PROXY_ID,
     _favor_ability(
         key=DISCARD_TO_DRAW,
-        timing=ActionTiming.OPEN,
+        timing=ActionTiming.LIMITED,
         label="Political Open, :favor:: If it is your turn, discard a Fate card to draw a card.",
         effects=_draw,
         extra_cost=_discard_a_fate_card,
-        targets=_on_your_turn,
     ),
 )
 register_ability(

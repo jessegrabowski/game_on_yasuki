@@ -20,12 +20,12 @@ cards:
   collector_number: '48'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Atsutane, Ivory Champion
+- title: Akodo Atsutane
+  subtitle: Ivory Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Atsutane, Ivory Champion • Experienced
   clans:
   - Lion
   keywords:
@@ -85,7 +85,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asahina Tsienko • Experienced
   clans:
   - Crane
   keywords:
@@ -160,7 +159,8 @@ cards:
   collector_number: '42'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Bayushi Akinari, "The Devil of Nihai Tower"
+- title: Bayushi Akinari
+  subtitle: '"The Devil of Nihai Tower"'
   types:
   - Personality
   decks:
@@ -191,7 +191,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Fuyuko • Experienced 3
   clans:
   - Scorpion
   keywords:
@@ -430,12 +429,12 @@ cards:
   collector_number: '4'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Gojiro, Tetsubo Master
+- title: Hida Gojiro
+  subtitle: Tetsubo Master
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Gojiro, Tetsubo Master • Experienced
   clans:
   - Crab
   keywords:
@@ -596,12 +595,12 @@ cards:
   collector_number: '25'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Isawa Kosea, Master of Earth
+- title: Isawa Kosea
+  subtitle: Master of Earth
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Kosea, Master of Earth • Experienced
   clans:
   - Phoenix
   keywords:
@@ -630,7 +629,8 @@ cards:
   collector_number: '26'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kakita Tatewaki, Bishonen
+- title: Kakita Tatewaki
+  subtitle: Bishonen
   types:
   - Personality
   decks:
@@ -695,7 +695,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Kinuye's Garden • Experienced
   keywords:
   - Temple
   - Experienced
@@ -714,7 +713,7 @@ cards:
   collector_number: '5'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kitsu Kouki • Experienced
+- title: Kitsu Kouki
   types:
   - Personality
   decks:
@@ -740,7 +739,8 @@ cards:
   collector_number: '21'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kitsuki Miro, Dogged Investigator
+- title: Kitsuki Miro
+  subtitle: Dogged Investigator
   types:
   - Personality
   decks:
@@ -774,7 +774,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsune Yamazaru • Experienced
   clans:
   - Naga
   - Fox
@@ -828,7 +827,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: M'rika • Experienced 2
   clans:
   - Spider
   keywords:
@@ -907,7 +905,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Tsuda • Experienced 2
   clans:
   - Dragon
   keywords:
@@ -934,7 +931,8 @@ cards:
   collector_number: '17'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Miya Tamiyo, Herald of the Hantei
+- title: Miya Tamiyo
+  subtitle: Herald of the Hantei
   types:
   - Personality
   decks:
@@ -959,14 +957,14 @@ cards:
   collector_number: '32'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Khedai, Head Priest of the Second City
+- title: Moto Khedai
+  subtitle: Head Priest of the Second City
   grants:
   - minus1f
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Khedai, Head Priest of the Second City • Experienced
   clans:
   - Unicorn
   keywords:
@@ -1045,7 +1043,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Personal Assassin • Experienced
   keywords:
   - Assassin
   - Ninja
@@ -1343,7 +1340,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: The Masters' Guard • Experienced
   keywords:
   - Yojimbo
   - Experienced
@@ -1395,7 +1391,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Kimiono • Experienced
   clans:
   - Unicorn
   keywords:
@@ -1426,7 +1421,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Wako • Experienced
   keywords:
   - Mercenary
   - Pirate
@@ -1444,7 +1438,8 @@ cards:
   collector_number: '41'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yasuki Angosu, Master Coin
+- title: Yasuki Angosu
+  subtitle: Master Coin
   types:
   - Personality
   decks:
@@ -1480,7 +1475,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yasuki Shairei • Experienced
   clans:
   - Crab
   keywords:
@@ -1503,7 +1497,8 @@ cards:
   collector_number: '12'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Saigo, Master Silk
+- title: Yoritomo Saigo
+  subtitle: Master Silk
   types:
   - Personality
   decks:

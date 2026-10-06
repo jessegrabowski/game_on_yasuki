@@ -167,7 +167,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Shaido • Experienced
   clans:
   - Lion
   keywords:
@@ -316,7 +315,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Balash • Experienced 2
   clans:
   - Naga
   keywords:
@@ -380,7 +378,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Manora • Experienced
   clans:
   - Scorpion
   keywords:
@@ -533,7 +530,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Chuda Tairao • Experienced
   clans:
   - Spider
   keywords:
@@ -698,7 +694,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Tametaka • Experienced 3
   clans:
   - Crane
   keywords:
@@ -774,7 +769,8 @@ cards:
   collector_number: '98'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Dashmar, Venerable Lord
+- title: Dashmar
+  subtitle: Venerable Lord
   types:
   - Personality
   decks:
@@ -862,7 +858,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Norime • Experienced
   clans:
   - Crane
   keywords:
@@ -1416,12 +1411,12 @@ cards:
   collector_number: '134'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Isawa Koiso, Master of Fire
+- title: Isawa Koiso
+  subtitle: Master of Fire
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Koiso, Master of Fire • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1481,14 +1476,14 @@ cards:
   collector_number: '54'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Isawa Tsumaro, Master of Air
+- title: Isawa Tsumaro
+  subtitle: Master of Air
   creates:
   - tsumaros_illusion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tsumaro, Master of Air • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1717,7 +1712,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsuki Masamitsu • Experienced
   clans:
   - Dragon
   keywords:
@@ -1750,7 +1744,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsune Beiko • Experienced
   clans:
   - Mantis
   keywords:
@@ -1911,12 +1904,12 @@ cards:
   collector_number: '101'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Lord of the Kumo, The Great Sea Spider
+- title: Lord of the Kumo
+  subtitle: The Great Sea Spider
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Lord of the Kumo, The Great Sea Spider • Experienced 2
   clans:
   - Spider
   keywords:
@@ -2034,7 +2027,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mara • Experienced 2
   clans:
   - Naga
   keywords:
@@ -2093,7 +2085,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Iairimi • Experienced
   clans:
   - Lion
   keywords:
@@ -2229,7 +2220,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moshi Madohime • Experienced
   clans:
   - Mantis
   keywords:
@@ -2383,7 +2373,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ninube Shiho • Experienced
   clans:
   - Ninja
   - Spider
@@ -2766,7 +2755,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shahadet • Experienced 3
   clans:
   - Naga
   keywords:
@@ -2871,7 +2859,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Saeki • Experienced
   clans:
   - Unicorn
   keywords:
@@ -3024,7 +3011,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Saigyo • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -3465,7 +3451,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Kaito • Experienced
   clans:
   - Mantis
   keywords:
@@ -3571,7 +3556,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Sayaka • Experienced
   clans:
   - Unicorn
   keywords:
@@ -3598,12 +3582,12 @@ cards:
   collector_number: '83'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Utaku Zo Sia, Imperial Regent
+- title: Utaku Zo Sia
+  subtitle: Imperial Regent
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Zo Sia, Imperial Regent • Experienced
   clans:
   - Unicorn
   keywords:
@@ -3853,7 +3837,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Dairu • Experienced
   clans:
   - Mantis
   keywords:
@@ -3886,7 +3869,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Harumi • Experienced
   clans:
   - Mantis
   keywords:
@@ -3914,12 +3896,12 @@ cards:
   collector_number: '49'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Hiromi, the Final Storm
+- title: Yoritomo Hiromi
+  subtitle: the Final Storm
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Hiromi, the Final Storm • Experienced 3
   clans:
   - Mantis
   keywords:
@@ -3948,12 +3930,12 @@ cards:
   collector_number: '50'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Zenathaar, Warrior of the Bright Eye
+- title: Zenathaar
+  subtitle: Warrior of the Bright Eye
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Zenathaar, Warrior of the Bright Eye • Experienced
   clans:
   - Naga
   keywords:
@@ -3980,7 +3962,8 @@ cards:
   collector_number: '77'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Zerai, the Fleshless
+- title: Zerai
+  subtitle: the Fleshless
   creates:
   - zombie
   types:

@@ -256,7 +256,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Irezu • Experienced
   clans:
   - Scorpion
   keywords:
@@ -282,7 +281,8 @@ cards:
   flavor_text: <i>"If Sihung couldn't kill me, no Lion will!"</i>
   collector_number: '56'
   designer: Bryan
-- title: Bayushi Iyashi, Lady Sorrow
+- title: Bayushi Iyashi
+  subtitle: Lady Sorrow
   types:
   - Personality
   decks:
@@ -393,7 +393,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Br'nn • Experienced
   keywords:
   - Experienced
   - Nonhuman
@@ -830,7 +829,8 @@ cards:
     mere entertainment. They are warnings."</i>
   collector_number: '28'
   designer: Randy
-- title: Doji Takato, the Manipulator
+- title: Doji Takato
+  subtitle: the Manipulator
   types:
   - Personality
   decks:
@@ -1297,7 +1297,8 @@ cards:
   flavor_text: <i>"Choose your sin, my lord," she whispered. "We have all that you might desire."</i>
   collector_number: '7'
   designer: Jeremy
-- title: Ide Hideshi, Topaz Champion
+- title: Ide Hideshi
+  subtitle: Topaz Champion
   types:
   - Personality
   decks:
@@ -1359,7 +1360,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Ayumi • Experienced
   clans:
   - Lion
   keywords:
@@ -1488,7 +1488,8 @@ cards:
     Seiken will sit upon the throne, or I will die in the attempt!"</i>
   collector_number: '50'
   designer: Loki
-- title: Isawa Tenkawa, the Scholar
+- title: Isawa Tenkawa
+  subtitle: the Scholar
   types:
   - Personality
   decks:
@@ -1517,7 +1518,8 @@ cards:
     and will always have my service if you wish it."</i>
   collector_number: '51'
   designer: Jeremy
-- title: Iweko Miaka, the Princess
+- title: Iweko Miaka
+  subtitle: the Princess
   types:
   - Personality
   decks:
@@ -1621,7 +1623,8 @@ cards:
     travel poems?"</i>
   collector_number: '84'
   designer: Jeremy
-- title: Kaiu Akemi, the Diplomat
+- title: Kaiu Akemi
+  subtitle: the Diplomat
   types:
   - Personality
   decks:
@@ -1684,7 +1687,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Keppo • Experienced
   keywords:
   - Experienced
   - Goblin
@@ -1713,7 +1715,7 @@ cards:
 - title: Kitsu Suzaki
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -1798,7 +1800,8 @@ cards:
   flavor_text: <i>"Where are you going? Do you not want to meet my new friend? You're being rude!"</i>
   collector_number: '44'
   designer: Julien
-- title: Kokujin Dairu, Student of the Dark Lotus
+- title: Kokujin Dairu
+  subtitle: Student of the Dark Lotus
   types:
   - Personality
   decks:
@@ -1827,7 +1830,8 @@ cards:
   flavor_text: <i>"The Empire has forgotten us, master. They will be reminded soon enough."</i>
   collector_number: '63'
   designer: Jeremy
-- title: Kokujin Kuchika, Blood of the Dark Lotus
+- title: Kokujin Kuchika
+  subtitle: Blood of the Dark Lotus
   types:
   - Personality
   decks:
@@ -1947,7 +1951,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Hachiro • Experienced
   clans:
   - Lion
   keywords:
@@ -1976,7 +1979,8 @@ cards:
     echoed from a thousand throats.</i>
   collector_number: '41'
   designer: Jeremy
-- title: Matsu Misato, the Hatamoto
+- title: Matsu Misato
+  subtitle: the Hatamoto
   types:
   - Personality
   decks:
@@ -2694,7 +2698,8 @@ cards:
     moment as the arrow loosed, and it rushed back in a flood of blood.</i>
   collector_number: '139'
   designer: Randy
-- title: Shiba Kintaro, the Remembered
+- title: Shiba Kintaro
+  subtitle: the Remembered
   types:
   - Personality
   decks:
@@ -2839,7 +2844,8 @@ cards:
     but in her heart of hearts she knew she would not die this day.</i>
   collector_number: '78'
   designer: Jeremy
-- title: Shosuro Yamazaki, the Master Courtier
+- title: Shosuro Yamazaki
+  subtitle: the Master Courtier
   types:
   - Personality
   decks:
@@ -3182,7 +3188,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Abbot • Experienced 3
   keywords:
   - Experienced 3 Yasuki Jinn-Kuen
   - Unique
@@ -3272,7 +3277,8 @@ cards:
     their cities ground to dust," the other answered.</i>
   collector_number: '17'
   designer: Julien
-- title: Togashi Gozato, the Wise Monk
+- title: Togashi Gozato
+  subtitle: the Wise Monk
   types:
   - Personality
   decks:
@@ -3701,12 +3707,12 @@ cards:
   flavor_text: <i>"Stand up, men! I am an Akodo, and we have never known defeat!"</i>
   collector_number: '152'
   designer: Jeremy
-- title: Yasuki Makoto, Imperial Advisor
+- title: Yasuki Makoto
+  subtitle: Imperial Advisor
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yasuki Makoto, Imperial Advisor • Experienced
   clans:
   - Crab
   keywords:

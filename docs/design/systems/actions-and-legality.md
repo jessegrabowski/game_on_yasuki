@@ -65,6 +65,11 @@ abilities {func}`~.register_entry` and {func}`~.register_event_entry` build, and
 CR's Experienced exception to Unique is overlaying, which is not modeled, so an Experienced
 version entering normally is refused like any other copy.
 
+A card's title is the one it prints, without its subtitle (CR, Card Subtitles), so Akodo Kano,
+Clan Champion and Akodo Kano, the Lion's Fang share one. {func}`~.titles` also counts the title an
+"Experienced [#] Name" keyword names, so The Sorrow, which prints "Experienced Bayushi Tenzan", is a
+copy of Bayushi Tenzan for Unique and Singular.
+
 ## Where a card plugs in
 
 A card does not register legality. It names a timing and returns a target list, and everything

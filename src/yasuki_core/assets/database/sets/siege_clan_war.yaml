@@ -1,6 +1,6 @@
 set: 'Siege: Clan War'
 cards:
-- id: a_terrible_oath_2
+- id: a_terrible_oath_scw
   title: A Terrible Oath
   types:
   - Clock
@@ -15,14 +15,14 @@ cards:
     corruption.</i>
   collector_number: '10'
   designer: Bryan
-- title: Bayushi Kachiko, Seven Thunder
+- title: Bayushi Kachiko
+  subtitle: Seven Thunder
   grants:
   - minus1f_minus1c
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kachiko, Seven Thunder • Experienced 2CW
   clans:
   - Scorpion
   keywords:
@@ -51,7 +51,7 @@ cards:
   artist: Mario Wibisono
   flavor_text: <i>"For redemption."</i>
   collector_number: '55'
-- id: beiden_pass_2
+- id: beiden_pass_scw
   title: Beiden Pass
   types:
   - Territory
@@ -70,7 +70,7 @@ cards:
     each other.</i>
   collector_number: '2'
   designer: Bryan
-- id: black_wind_from_the_soul_2
+- id: black_wind_from_the_soul_scw
   title: Black Wind from the Soul
   types:
   - Clock
@@ -108,7 +108,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupt Geisha House • Experienced
   keywords:
   - Experienced
   - Geisha House
@@ -130,7 +129,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupt Gold Mines • Experienced
   keywords:
   - Experienced
   - Mine
@@ -150,7 +148,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupt Stables • Experienced
   keywords:
   - Experienced
   - Shadowlands
@@ -170,7 +167,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupted Copper Mine • Experienced
   keywords:
   - Experienced
   - Mine
@@ -192,7 +188,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupted Iron Mine • Experienced
   keywords:
   - Experienced
   - Mine
@@ -213,7 +208,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupted Silver Mine • Experienced
   keywords:
   - Experienced
   - Mine
@@ -234,7 +228,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Dark Daughter of Fu Leng • Experienced
   keywords:
   - Experienced
   - Nonhuman
@@ -255,7 +248,7 @@ cards:
   flavor_text: <i>"Filial piety is a virtue, no? All this for the head of my household."</i>
   collector_number: '21'
   designer: Bryan
-- id: dark_divination_2
+- id: dark_divination_scw
   title: Dark Divination
   types:
   - Clock
@@ -287,12 +280,12 @@ cards:
     outcome would be their deaths.</i>
   collector_number: '36'
   designer: Bryan
-- title: Doji Hoturi, Seven Thunder
+- title: Doji Hoturi
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Hoturi, Seven Thunder • Experienced 2CW
   clans:
   - Crane
   keywords:
@@ -321,7 +314,7 @@ cards:
   artist: Jason Engle
   flavor_text: <i>"For she who holds my heart."</i>
   collector_number: '49'
-- id: doom_of_fu_leng_2
+- id: doom_of_fu_leng_scw
   title: Doom of Fu Leng
   types:
   - Clock
@@ -352,12 +345,12 @@ cards:
     forever staining their souls.</i>
   collector_number: '37'
   designer: Bryan
-- title: Fu Leng, the Ninth Kami
+- title: Fu Leng
+  subtitle: the Ninth Kami
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Fu Leng, the Ninth Kami • Experienced
   keywords:
   - Duelist
   - Unique
@@ -406,12 +399,12 @@ cards:
     hero of the Clan War, the slayer of Yogo Junzo, and now sits among the stars with Kamoko. It is an
     honor justly deserved.</i>
   collector_number: '68'
-- title: Hida Yakamo, Seven Thunder
+- title: Hida Yakamo
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Yakamo, Seven Thunder • Experienced 2CW
   clans:
   - Crab
   keywords:
@@ -515,12 +508,12 @@ cards:
     black scrolls. Yet their good intentions could not spare them the dire consequences.</i>
   collector_number: '3'
   designer: Bryan
-- title: Isawa Tadaka, Seven Thunder
+- title: Isawa Tadaka
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tadaka, Seven Thunder • Experienced 2CW
   clans:
   - Phoenix
   keywords:
@@ -553,12 +546,12 @@ cards:
   artist: Diego Gisbert Llorens
   flavor_text: <i>"For a brighter future."</i>
   collector_number: '54'
-- title: Isawa Tanayama, the Necromancer
+- title: Isawa Tanayama
+  subtitle: the Necromancer
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tanayama, the Necromancer • ExperiencedCW
   keywords:
   - ExperiencedCW
   - Shadowlands
@@ -579,12 +572,12 @@ cards:
   flavor_text: <i>"What secrets are more precious than those of life beyond death?"</i>
   collector_number: '23'
   designer: Bryan
-- title: Isawa Tsuke, Master of Fire
+- title: Isawa Tsuke
+  subtitle: Master of Fire
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tsuke, Master of Fire • ExperiencedCW
   clans:
   - Phoenix
   keywords:
@@ -629,12 +622,12 @@ cards:
   flavor_text: <i>"You took my lord from me," Junzo whispered. "I will take all you have in repayment."</i>
   collector_number: '43'
   designer: Bryan
-- title: Kuni Yori, the Corruptor
+- title: Kuni Yori
+  subtitle: the Corruptor
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Yori, the Corruptor • Inexperienced
   clans:
   - Crab
   keywords:
@@ -661,7 +654,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kyojin • Experienced
   keywords:
   - Duelist
   - Expendable
@@ -690,7 +682,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kyoso no Oni • ExperiencedCW
   keywords:
   - ExperiencedCW
   - Nonhuman
@@ -736,12 +727,12 @@ cards:
   flavor_text: <i>"We could expend forces to break their lines, yes, but why bother?" - Hida Kisada</i>
   collector_number: '29'
   designer: Bryan
-- title: Mirumoto Hitomi, Seven Thunder
+- title: Mirumoto Hitomi
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Hitomi, Seven Thunder • Experienced 2CW
   clans:
   - Dragon
   keywords:
@@ -775,7 +766,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Tsume • ExperiencedCW
   keywords:
   - Commander
   - ExperiencedCW
@@ -795,14 +785,14 @@ cards:
   flavor_text: <i>"You call us the Dark Moto. You are wrong. We are the true Moto."</i>
   collector_number: '26'
   designer: Bryan
-- title: Otaku Kamoko, Seven Thunder
+- title: Otaku Kamoko
+  subtitle: Seven Thunder
   creates:
   - hachiman
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otaku Kamoko, Seven Thunder • Experienced 2CW
   clans:
   - Unicorn
   keywords:
@@ -875,7 +865,7 @@ cards:
   flavor_text: <i>"Fortunes! Get it off! Get it off of me before it… ARRRRGH!"</i>
   collector_number: '30'
   designer: Bryan
-- id: return_of_the_fallen_lord_2
+- id: return_of_the_fallen_lord_scw
   title: Return of the Fallen Lord
   types:
   - Clock
@@ -914,7 +904,7 @@ cards:
     perish if you wish. In fact, I can guarantee that much."</i>
   collector_number: '32'
   designer: Bryan
-- id: scorpion_clan_coup_2
+- id: scorpion_clan_coup_scw
   title: Scorpion Clan Coup
   types:
   - Territory
@@ -929,7 +919,7 @@ cards:
     No man could escape his fate. So how could an Empire?</i>
   collector_number: '1'
   designer: Bryan
-- id: shapeshifting_2
+- id: shapeshifting_scw
   title: Shapeshifting
   types:
   - Clock
@@ -977,7 +967,7 @@ cards:
     at their approach.</i>
   collector_number: '41'
   designer: Bryan
-- id: the_12th_black_scroll_2
+- id: the_12th_black_scroll_scw
   title: The 12th Black Scroll
   types:
   - Clock
@@ -1070,7 +1060,7 @@ cards:
     Crane Champion. Was nothing sacred? Had all of Heaven turned its back?</i>
   collector_number: '4'
   designer: Bryan
-- id: the_eighth_legion_2
+- id: the_eighth_legion_scw
   title: The Eighth Legion
   types:
   - Personality
@@ -1113,7 +1103,7 @@ cards:
   flavor_text: <i>The smallest of the ten great legions, the Fifth Legion is well known for its high number
     of shugenja, and thus its versatility.</i>
   collector_number: '62'
-- id: the_first_legion_2
+- id: the_first_legion_scw
   title: The First Legion
   types:
   - Personality
@@ -1160,7 +1150,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: The Hidden Heart of Iuchiban • ExperiencedCW
   keywords:
   - Unique
   - ExperiencedCW
@@ -1177,12 +1166,12 @@ cards:
   flavor_text: <i>Some weapons were too terrible for either side.</i>
   collector_number: '31'
   designer: Bryan
-- title: The Hooded Ronin, Descendant of Shinsei
+- title: The Hooded Ronin
+  subtitle: Descendant of Shinsei
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Hooded Ronin, Descendant of Shinsei • ExperiencedCW
   keywords:
   - Duelist
   - Unique
@@ -1211,7 +1200,7 @@ cards:
   artist: Conceptopolis
   flavor_text: <i>"For destiny."</i>
   collector_number: '56'
-- id: the_iron_citadel_2
+- id: the_iron_citadel_scw
   title: The Iron Citadel
   types:
   - Clock
@@ -1227,7 +1216,7 @@ cards:
     Junzo's army, an unspeakable horde of walking dead, monstrous oni, and hopelessly Tainted mortals.</i>
   collector_number: '2'
   designer: Bryan
-- id: the_jade_hand_2
+- id: the_jade_hand_scw
   title: The Jade Hand
   types:
   - Item
@@ -1269,7 +1258,7 @@ cards:
   flavor_text: <i>Alone among the great legions, the Ninth Legion employs significant naval forces as
     well as its normal infantry make-up.</i>
   collector_number: '66'
-- id: the_obsidian_hand_2
+- id: the_obsidian_hand_scw
   title: The Obsidian Hand
   types:
   - Item
@@ -1429,7 +1418,7 @@ cards:
   flavor_text: <i>A thousand years led to this moment.<br>The next thousand rest on its outcome.<br>Seven
     souls oppose a living god.<br>And an entire realm rests in the balance.</i>
   collector_number: '71'
-- id: the_walking_horror_of_fu_leng_2
+- id: the_walking_horror_of_fu_leng_scw
   title: The Walking Horror of Fu Leng
   types:
   - Clock
@@ -1446,7 +1435,7 @@ cards:
     would hunt him for years, trying to purge the shame of his existence.</i>
   collector_number: '4'
   designer: Bryan
-- id: the_wasting_disease_2
+- id: the_wasting_disease_scw
   title: The Wasting Disease
   types:
   - Clock
@@ -1483,12 +1472,12 @@ cards:
     Every man is but a bolt of lightning. Mortals can kill gods.</i>
   collector_number: '6'
   designer: Bryan
-- title: Togashi Yokuni, Kami
+- title: Togashi Yokuni
+  subtitle: Kami
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Yokuni, Kami • Experienced 2CW
   clans:
   - Dragon
   keywords:
@@ -1519,12 +1508,12 @@ cards:
   artist: Adam Schumpert
   flavor_text: <i>"For my plans."</i>
   collector_number: '51'
-- title: Toturi, Seven Thunder
+- title: Toturi
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Toturi, Seven Thunder • Experienced 2CW
   clans:
   - Toturi's Army
   keywords:
@@ -1555,7 +1544,7 @@ cards:
   artist: Sergio Camarena
   flavor_text: <i>"For Rokugan."</i>
   collector_number: '52'
-- id: touch_of_despair_2
+- id: touch_of_despair_scw
   title: Touch of Despair
   types:
   - Clock
@@ -1570,7 +1559,7 @@ cards:
     proudest and most powerful of the Elemental Masters, was consumed by the seventh's scroll's madness.</i>
   collector_number: '7'
   designer: Bryan
-- id: touch_of_fu_leng_2
+- id: touch_of_fu_leng_scw
   title: Touch of Fu Leng
   types:
   - Clock
@@ -1591,7 +1580,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsukuro • Experienced
   keywords:
   - Commander
   - Experienced
@@ -1631,12 +1619,12 @@ cards:
     your back on! It is not a mistake you will live to regret, fools!"</i>
   collector_number: '42'
   designer: Bryan
-- title: Yogo Junzo, The Betrayer
+- title: Yogo Junzo
+  subtitle: The Betrayer
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yogo Junzo, The Betrayer • Experienced 2CW
   keywords:
   - Experienced 2CW
   - Unique
@@ -1660,12 +1648,12 @@ cards:
   flavor_text: <i>"I sought to serve, loyally. I have found one worthy of that loyalty."</i>
   collector_number: '28'
   designer: Bryan
-- title: Yoritomo, Son of Storms
+- title: Yoritomo
+  subtitle: Son of Storms
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo, Son of Storms • ExperiencedCW
   clans:
   - Mantis
   keywords:

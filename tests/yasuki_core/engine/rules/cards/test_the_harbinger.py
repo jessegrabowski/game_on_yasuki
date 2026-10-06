@@ -16,7 +16,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ArrangeCards,
-    ChooseAbilityTarget,
     ChooseCards,
     DecisionResponse,
 )
@@ -130,10 +129,8 @@ def test_the_limit_resets_with_the_turn():
 
 
 def _doubt_game(deck: tuple[str, ...] = ("a", "b", "c", "d", "e")) -> EngineSession:
-    """P1 holding Banish All Doubt, an unbowed Tactician, and a Fate deck reading ``deck`` from the
-    top."""
+    """P1 holding Banish All Doubt and a Fate deck reading ``deck`` from the top."""
     state = TableState.empty_two_seat()
-    put_in_play(state, personality("tactician", keywords=("Tactician",)))
     state.zones[ZoneKey(P1, ZoneRole.HAND)].add(
         register(
             state,
@@ -159,16 +156,9 @@ def _fate_deck(session: EngineSession) -> list[str]:
     return [card.id for card in reversed(session.game.table.decks[DeckKey(P1, Side.FATE)].cards)]
 
 
-def _play_to_the_look(session: EngineSession) -> None:
-    session.act(P1, PlayStrategy("doubt"))
-    pending = session.game.pending
-    assert isinstance(pending, ChooseAbilityTarget) and pending.candidates == ("tactician",)
-    session.submit(P1, DecisionResponse(("tactician",)))
-
-
 def test_banish_all_doubt_takes_one_of_four_and_puts_the_rest_on_the_bottom_in_order():
     session = _doubt_game()
-    _play_to_the_look(session)
+    session.act(P1, PlayStrategy("doubt"))
     pending = session.game.pending
     assert isinstance(pending, ChooseCards) and pending.candidates == ("a", "b", "c", "d")
     assert pending.minimum == 1
@@ -182,13 +172,12 @@ def test_banish_all_doubt_takes_one_of_four_and_puts_the_rest_on_the_bottom_in_o
     hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards
     assert [card.id for card in hand] == ["c"]
     assert _fate_deck(session) == ["e", "d", "a", "b"]
-    assert not session.game.table.cards_by_id["tactician"].bowed
     assert session.log.replay() == session.game
 
 
 def test_keeping_the_order_puts_them_on_the_bottom_as_they_were_looked_at():
     session = _doubt_game()
-    _play_to_the_look(session)
+    session.act(P1, PlayStrategy("doubt"))
     session.submit(P1, DecisionResponse(("a",)))
     pending = session.game.pending
 
@@ -201,7 +190,7 @@ def test_banish_all_doubt_on_an_empty_deck_asks_nothing():
     """A look of nothing is not a question, so the action resolves with no effect at all."""
     session = _doubt_game(deck=())
 
-    _play_to_the_look(session)
+    session.act(P1, PlayStrategy("doubt"))
 
     assert session.game.pending is None
     assert session.game.look is None
@@ -209,7 +198,7 @@ def test_banish_all_doubt_on_an_empty_deck_asks_nothing():
 
 def test_banish_all_doubt_on_a_single_card_takes_it_with_nothing_left_for_the_bottom():
     session = _doubt_game(deck=("only",))
-    _play_to_the_look(session)
+    session.act(P1, PlayStrategy("doubt"))
 
     session.submit(P1, DecisionResponse(("only",)))
 

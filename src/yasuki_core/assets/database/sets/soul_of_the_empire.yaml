@@ -5,7 +5,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Air Dragon • Experienced
   keywords:
   - Cavalry
   - Unique
@@ -174,7 +173,7 @@ cards:
   artist: Mark A.W. Jackson
   flavor_text: <i>He spends his life in prayer. He will atone for the sins of the Lion, but his heart
     remains with the Kitsu who followed Tsanuri to the south.</i>
-- id: ashigaru_2
+- id: ashigaru_sote
   title: Ashigaru
   types:
   - Follower
@@ -198,7 +197,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Aramoro • Experienced 3
   clans:
   - Ninja
   - Scorpion
@@ -227,7 +225,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Goshiu • Experienced 3
   clans:
   - Scorpion
   keywords:
@@ -254,7 +251,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Hisa • Experienced 3
   clans:
   - Scorpion
   keywords:
@@ -688,7 +684,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Rekai • Experienced 2
   clans:
   - Crane
   keywords:
@@ -735,7 +730,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Dairya • Experienced 3
   clans:
   - Toturi's Army
   keywords:
@@ -880,7 +874,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Kuwanan • Experienced 3
   clans:
   - Crane
   keywords:
@@ -928,7 +921,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Dragon of Fire • Experienced
   keywords:
   - Cavalry
   - Experienced Fire Dragon
@@ -977,7 +969,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Earth Dragon • Experienced
   keywords:
   - Cavalry
   - Unique
@@ -1296,7 +1287,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ginawa • Experienced 3
   clans:
   - Toturi's Army
   keywords:
@@ -1338,7 +1328,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Goju Adorai • Experienced
   clans:
   - Ninja
   keywords:
@@ -1400,7 +1389,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Tsuru • Experienced
   clans:
   - Crab
   keywords:
@@ -1451,7 +1439,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hitomi Iyojin • Experienced
   clans:
   - Dragon
   keywords:
@@ -1478,7 +1465,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hoshi Eisai • Experienced
   clans:
   - Brotherhood of Shinsei
   - Dragon
@@ -1537,7 +1523,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hoshi Wayan • Experienced 2
   clans:
   - Brotherhood of Shinsei
   - Dragon
@@ -1612,7 +1597,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ide Tadaji • Experienced
   clans:
   - Unicorn
   keywords:
@@ -1746,7 +1730,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tomo • Experienced 2
   clans:
   - Phoenix
   - Spirit
@@ -1798,7 +1781,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Jama Suru • Experienced
   keywords:
   - Unique
   - Bloodspeaker
@@ -1846,7 +1828,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kage • Experienced 5
   keywords:
   - Experienced 5
   - Tactician
@@ -1896,7 +1877,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Yoshi • Experienced 3
   clans:
   - Crane
   - Spirit
@@ -2008,7 +1988,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsu Motso • Experienced 2
   clans:
   - Lion
   keywords:
@@ -2117,7 +2096,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kyoso no Oni • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -2299,7 +2277,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Agetoki • Experienced 2
   clans:
   - Lion
   - Spirit
@@ -2356,7 +2333,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Taki • Experienced
   clans:
   - Dragon
   keywords:
@@ -2425,7 +2401,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Gaheris • Experienced
   clans:
   - Unicorn
   - Moto
@@ -2501,7 +2476,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mukami • Experienced 2
   clans:
   - Mantis
   - Wasp
@@ -2571,7 +2545,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Naka Kuro • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -2621,7 +2594,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ninja Mystic • Experienced 3
   clans:
   - Ninja
   keywords:
@@ -2647,7 +2619,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ninja Shadow-Walker • Experienced 2
   clans:
   - Ninja
   keywords:
@@ -2871,7 +2842,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Oni no Okura • Experienced 2
   clans:
   - Lion
   keywords:
@@ -2920,7 +2890,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otaku Kamoko • Experienced 4
   clans:
   - Unicorn
   keywords:
@@ -3139,7 +3108,7 @@ cards:
   flavor_text: <i>"The Empire will fall unless the Great Clans of the Empire stand beside us and fight.
     It is the end of the Age of Man-seize your destiny or step aside!" - Toku, champion of the Monkey
     Clan</i>
-- id: ratling_pack_2
+- id: ratling_pack_sote
   title: Ratling Pack
   types:
   - Follower
@@ -3295,7 +3264,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Seppun Toshiken • Experienced 2
   clans:
   - Toturi's Army
   keywords:
@@ -3391,7 +3359,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Tsukune • Experienced 3
   clans:
   - Phoenix
   keywords:
@@ -3429,7 +3396,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Hanari • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -3712,7 +3678,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Suana • Experienced 2
   clans:
   - Brotherhood of Shinsei
   keywords:
@@ -3974,7 +3939,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Grey Crane • Experienced 3
   keywords:
   - Double Chi
   - Experienced 3
@@ -4232,7 +4196,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Thunder Dragon • Experienced
   keywords:
   - Cavalry
   - Unique
@@ -4282,7 +4245,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Mitsu • Experienced 2
   clans:
   - Brotherhood of Shinsei
   - Dragon
@@ -4342,7 +4304,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Toku • Experienced 3
   clans:
   - Toturi's Army
   - Monkey
@@ -4398,7 +4359,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Toturi the First • Experienced 4
   clans:
   - Spirit
   - Toturi's Army
@@ -4521,7 +4481,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Void Dragon • Experienced
   keywords:
   - Cavalry
   - Unique
@@ -4570,7 +4529,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Water Dragon • Experienced
   keywords:
   - Cavalry
   - Unique
@@ -4664,7 +4622,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yasuki Nokatsu • Experienced 2
   clans:
   - Crab
   keywords:
@@ -4725,7 +4682,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo • Experienced 3
   clans:
   - Mantis
   keywords:
@@ -4754,7 +4710,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Furikae • Experienced
   clans:
   - Mantis
   - Spirit

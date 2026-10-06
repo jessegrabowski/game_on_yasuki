@@ -90,7 +90,7 @@ images:
   - role: front
     file: ashamana.jpg
     sha256: dee607d51043f1412d7ec0b0d9792e9659b55460d7bd6d44a4e50c008c67ab55
-- card_id: ashigaru
+- card_id: ashigaru_shl
   printing_id: pearl_edition
   files:
   - role: front
@@ -1416,7 +1416,7 @@ images:
   - role: front
     file: ratling_conscripts.jpg
     sha256: b7b9f1e03030f09e2dd02788a36ed433673b77d2cfa574d007685562f56a712d
-- card_id: ratling_pack
+- card_id: ratling_pack_imp
   printing_id: pearl_edition
   files:
   - role: front

@@ -2100,7 +2100,7 @@ images:
   - role: front
     file: ratling_conjuror.jpg
     sha256: c59919da2dcb1a266472bc1b3628e07ff53f45410cb98861313faa410efddec7
-- card_id: ratling_pack
+- card_id: ratling_pack_imp
   printing_id: gold_edition
   files:
   - role: front

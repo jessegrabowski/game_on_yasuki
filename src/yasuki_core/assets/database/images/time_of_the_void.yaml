@@ -1056,7 +1056,7 @@ images:
   - role: front
     file: teeth_of_the_serpent.jpg
     sha256: 28bb2593f195a781134da9ad5974b88c9675bf55d8c92399fe01c5df2e4e93b6
-- card_id: the_12th_black_scroll
+- card_id: the_12th_black_scroll_totv
   printing_id: time_of_the_void
   files:
   - role: front

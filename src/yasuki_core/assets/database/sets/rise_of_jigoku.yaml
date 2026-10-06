@@ -258,7 +258,8 @@ cards:
   collector_number: '56'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Bayushi Norimasa, Blade of the Black Cabal
+- title: Bayushi Norimasa
+  subtitle: Blade of the Black Cabal
   types:
   - Personality
   decks:
@@ -289,7 +290,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Blade of Truths • Experienced
   keywords:
   - Sword
   - Two-Handed
@@ -514,12 +514,12 @@ cards:
   collector_number: '128'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daidoji Akeha, Iron Crane
+- title: Daidoji Akeha
+  subtitle: Iron Crane
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Akeha, Iron Crane • Experienced
   clans:
   - Crane
   keywords:
@@ -573,7 +573,8 @@ cards:
   collector_number: '79'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daidoji Nerishma, Topaz Champion
+- title: Daidoji Nerishma
+  subtitle: Topaz Champion
   types:
   - Personality
   decks:
@@ -662,7 +663,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Hashibei • Experienced
   clans:
   - Spider
   keywords:
@@ -993,7 +993,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Hawk Riders • Experienced
   keywords:
   - Bandit
   - Yobanjin
@@ -1055,7 +1054,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Heichi Tochiko • Experienced
   clans:
   - Boar
   keywords:
@@ -1140,7 +1138,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Zaiberu • Experienced
   clans:
   - Crab
   keywords:
@@ -1236,7 +1233,8 @@ cards:
   collector_number: '9'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hiruma Tetsuya, Secret Heart
+- title: Hiruma Tetsuya
+  subtitle: Secret Heart
   types:
   - Personality
   decks:
@@ -1464,7 +1462,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Nomura • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1722,12 +1719,11 @@ cards:
 - title: Kitsu Miro
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsu Miro • Experienced
   clans:
   - Lion
   keywords:
@@ -1785,7 +1781,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Kolat Oyabun • Experienced
   keywords:
   - Kolat
   - Retainer
@@ -1808,7 +1803,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Seifukusha • Experienced
   clans:
   - Crab
   keywords:
@@ -2355,7 +2349,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Radakast • Experienced 3
   clans:
   - Naga
   keywords:
@@ -2640,7 +2633,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Shinjo Archers • Experienced
   keywords:
   - Scout
   - Cavalry
@@ -2691,7 +2683,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Nobunaga • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2720,7 +2711,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shokansuru • Experienced
   clans:
   - Spider
   keywords:
@@ -2839,7 +2829,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Soshi Kitaiko • Experienced
   clans:
   - Scorpion
   keywords:
@@ -3094,7 +3083,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Crimson Mountain Oni • Experienced
   keywords:
   - Nonhuman
   - Oni
@@ -3275,7 +3263,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Shao • Experienced
   clans:
   - Dragon
   keywords:
@@ -3379,7 +3366,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Kinuyo • Experienced
   clans:
   - Wasp
   keywords:
@@ -3804,7 +3790,8 @@ cards:
   collector_number: '165'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yasuki Umi-Ushi, First Magistrate
+- title: Yasuki Umi-Ushi
+  subtitle: First Magistrate
   types:
   - Personality
   decks:
@@ -3882,7 +3869,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Minoko • Experienced
   clans:
   - Naga
   keywords:

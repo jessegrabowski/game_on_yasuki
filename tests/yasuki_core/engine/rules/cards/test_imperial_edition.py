@@ -390,8 +390,8 @@ def test_touch_of_death_destroys_a_bowed_personality_with_lower_chi():
 
     table = session.game.table
     assert table.cards_by_id["victim0"] not in table.battlefield.cards
-    assert table.cards_by_id["caster"].bowed is True  # half the cost
-    assert table.cards_by_id["spell"] not in table.battlefield.cards  # the other half
+    assert table.cards_by_id["caster"].bowed is True
+    assert table.cards_by_id["spell"] not in table.battlefield.cards
 
 
 def test_touch_of_death_does_not_target_a_personality_with_higher_chi():

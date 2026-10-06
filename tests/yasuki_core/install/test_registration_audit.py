@@ -12,7 +12,9 @@ from yasuki_core.engine.rules import cards
 from yasuki_core.engine.rules.turn import action_sequence  # noqa: F401
 from yasuki_core.install import registration_audit
 from yasuki_core.install.card_index import read_index
+from yasuki_core.game_pieces.text_split import split_text_box
 from yasuki_core.install.registration_audit import (
+    _registered_designators,
     unprinted_registrations,
     mislabeled_abilities,
     unvalidated_registries,
@@ -329,6 +331,21 @@ def test_an_index_on_an_ability_of_another_designator_is_reported():
     assert _unprinted(banish_all_shadows=[_unlabeled(timings=(ActionTiming.BATTLE,))]) == [
         "abilities: banish_all_shadows names printed ability 0, which is Limited where the "
         "registration is Battle"
+    ]
+
+
+def test_open_if_it_is_not_your_turn_stays_open():
+    [ability] = split_text_box("Open: If it is not your turn, bow a target Personality.").abilities
+
+    assert _registered_designators(ability) == {"Open"}
+
+
+def test_open_if_it_is_your_turn_is_registered_as_limited():
+    # Poorly Placed Garden prints "Open, :bow:: If it is your turn, gain 2 Honor."
+    assert _unprinted(poorly_placed_garden=[_unlabeled()]) == []
+    assert _unprinted(poorly_placed_garden=[_unlabeled(timings=(ActionTiming.OPEN,))]) == [
+        "abilities: poorly_placed_garden names printed ability 0, which is Limited where the "
+        "registration is Open"
     ]
 
 

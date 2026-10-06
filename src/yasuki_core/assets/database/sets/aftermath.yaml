@@ -86,7 +86,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Kano • Experienced
   clans:
   - Lion
   keywords:
@@ -119,7 +118,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Uehara • Experienced
   clans:
   - Lion
   keywords:
@@ -654,7 +652,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Tametaka • Experienced 2
   clans:
   - Crane
   keywords:
@@ -749,7 +746,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Kanpeki • Experienced 2
   clans:
   - Spider
   keywords:
@@ -906,7 +902,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Tatsuki • Experienced
   clans:
   - Crane
   keywords:
@@ -1190,7 +1185,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kaiji • Experienced
   clans:
   - Crab
   keywords:
@@ -1639,7 +1633,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kaiu Esumi • Experienced
   clans:
   - Crab
   keywords:
@@ -1756,7 +1749,7 @@ cards:
 - title: Kitsu Tamao
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -1821,7 +1814,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsune Kichi • Experienced
   keywords:
   - Unique
   - Earth
@@ -1855,7 +1847,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsune Merihiko • Experienced
   clans:
   - Mantis
   keywords:
@@ -2227,7 +2218,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Kalen • Experienced
   clans:
   - Dragon
   keywords:
@@ -2364,7 +2354,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Natsumi • Experienced
   clans:
   - Phoenix
   keywords:
@@ -2769,7 +2758,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Kinto • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -3218,7 +3206,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Sorrow • Experienced
   clans:
   - Scorpion
   keywords:
@@ -3367,7 +3354,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Noboru • Experienced 2
   clans:
   - Dragon
   keywords:
@@ -3778,7 +3764,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Yashinko • Experienced
   clans:
   - Mantis
   keywords:

@@ -476,7 +476,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: City of Night • Experienced
   keywords:
   - Experienced
   - Library
@@ -619,7 +618,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Endo • Experienced
   clans:
   - Spider
   keywords:
@@ -652,7 +650,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Yuhmi • Experienced 2
   clans:
   - Spider
   keywords:
@@ -798,7 +795,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Natsuyo • Experienced
   clans:
   - Crane
   keywords:
@@ -827,7 +823,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Soeka • Experienced
   clans:
   - Crane
   keywords:
@@ -1482,12 +1477,12 @@ cards:
     time?" She could not continue for laughing.</i>
   collector_number: '53'
   designer: Randy
-- title: Isawa Norimichi, Elemental Master
+- title: Isawa Norimichi
+  subtitle: Elemental Master
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Norimichi, Elemental Master • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -1630,7 +1625,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Daitsu • Experienced
   clans:
   - Crane
   keywords:
@@ -1746,7 +1740,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Ki-Rin's Shrine • Experienced 2
   keywords:
   - Experienced 2
   - Kharmic
@@ -1857,7 +1850,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Renyu • Experienced 4
   clans:
   - Crab
   keywords:
@@ -2125,7 +2117,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Tayuko • Experienced
   clans:
   - Lion
   keywords:
@@ -2324,7 +2315,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Chinua • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2891,7 +2881,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Kakei • Experienced
   clans:
   - Phoenix
   keywords:
@@ -2982,7 +2971,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shinsei's Last Hope • Experienced
   keywords:
   - Experienced
   text: <b>Battle, :bow::</b> Give a target enemy Follower or Personality -2F. If the target is Shadowlands
@@ -3031,7 +3019,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Kayo • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -3093,7 +3080,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Sons of Gusai • Experienced
   keywords:
   - Courage
   - Experienced
@@ -3207,7 +3193,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tamori Daiishu • Experienced
   clans:
   - Dragon
   keywords:
@@ -3291,7 +3276,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tetsuo • Experienced 2
   keywords:
   - Conqueror
   - Experienced 2
@@ -3503,7 +3487,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: The Mountainborn • Experienced
   keywords:
   - Experienced Bound Spirit
   - Earth
@@ -3693,7 +3676,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Taito • Experienced
   clans:
   - Mantis
   keywords:

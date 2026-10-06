@@ -150,16 +150,13 @@ def test_the_kharmic_draw_is_no_favor_ability_though_it_shares_the_key(game):
 
 
 @pytest.mark.parametrize(
-    ("arc", "key", "designator"),
-    [
-        (ruleset.SHATTERED_EMPIRE, "discard_to_draw", ActionTiming.OPEN),
-        (ruleset.IMPERIAL, "draw", ActionTiming.LIMITED),
-    ],
+    ("arc", "key"),
+    [(ruleset.SHATTERED_EMPIRE, "discard_to_draw"), (ruleset.IMPERIAL, "draw")],
     ids=["shattered_empire", "imperial"],
 )
-def test_the_shared_draw_ability_is_designated_differently_by_arc(game, key, designator):
-    # Pre-Gold the draw is a Limited, and ShE makes it an Open restricted to your own turn.
-    assert legality.timings_of(game, _favor(game, key)) == {designator}
+def test_the_shared_draw_ability_is_limited_in_every_arc(game, key):
+    # Pre-Gold prints Limited, and ShE prints "Open: If it is your turn", which is the same action.
+    assert legality.timings_of(game, _favor(game, key)) == {ActionTiming.LIMITED}
 
 
 @pytest.mark.parametrize(

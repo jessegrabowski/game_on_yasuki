@@ -196,13 +196,11 @@ def _lobby_bow(
 
 
 def _onyx_lobby_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The proxy itself on the seat's own turn, when the seat's Family Honor is higher than each
-    other player's. "If it is your turn" is printed because an Open designator would otherwise let
-    another seat's player Lobby."""
+    """The proxy itself when the seat's Family Honor is higher than each other player's."""
     seat = source.owner
-    if seat is not game.active or not _may_take_lobby(game, seat):
+    if not _may_take_lobby(game, seat) or not has_highest_lobby_honor(game, seat):
         return []
-    return itself(game, source) if has_highest_lobby_honor(game, seat) else []
+    return itself(game, source)
 
 
 def _onyx_lobby_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -212,7 +210,7 @@ def _onyx_lobby_effects(game: GameState, source: L5RCard, target: L5RCard) -> li
 register_ability(
     ONYX_LOBBY_PROXY_ID,
     Ability(
-        timings=(ActionTiming.OPEN,),
+        timings=(ActionTiming.LIMITED,),
         label=(
             "Political Open: If it is your turn and you have higher Family Honor than each other "
             "player, bow your target unbowed Personality with 1 or more Personal Honor to take the "

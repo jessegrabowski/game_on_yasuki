@@ -111,12 +111,12 @@ cards:
   collector_number: '103'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Eirasu, the Irredeemable
+- title: Akodo Eirasu
+  subtitle: the Irredeemable
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Eirasu, the Irredeemable • Experienced
   clans:
   - Lion
   keywords:
@@ -220,7 +220,8 @@ cards:
   collector_number: '50'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Asako Miyabi, Master of Water
+- title: Asako Miyabi
+  subtitle: Master of Water
   grants:
   - minus1f
   - plus1f
@@ -305,7 +306,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nomen • Experienced 3
   clans:
   - Scorpion
   keywords:
@@ -769,7 +769,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Atsushi • Experienced 2
   clans:
   - Spider
   keywords:
@@ -794,12 +793,12 @@ cards:
   collector_number: '64'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daigotsu Shikenuro, the Silk Fever
+- title: Daigotsu Shikenuro
+  subtitle: the Silk Fever
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Shikenuro, the Silk Fever • Experienced
   clans:
   - Spider
   keywords:
@@ -945,7 +944,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Natsuyo • Experienced 2
   clans:
   - Crane
   keywords:
@@ -1171,12 +1169,12 @@ cards:
   collector_number: '136'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Kurabi, Vanguard of the Damned
+- title: Hida Kurabi
+  subtitle: Vanguard of the Damned
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kurabi, Vanguard of the Damned • Experienced
   clans:
   - Crab
   keywords:
@@ -1257,7 +1255,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Tensin • Experienced
   clans:
   - Crab
   keywords:
@@ -1310,7 +1307,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Houhou • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1560,12 +1556,12 @@ cards:
   collector_number: '97'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Iweko Ayameko, the Iron Empress
+- title: Iweko Ayameko
+  subtitle: the Iron Empress
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Iweko Ayameko, the Iron Empress • Experienced
   keywords:
   - Imperial
   - Samurai
@@ -1624,12 +1620,12 @@ cards:
   collector_number: '22'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kaiu Gorobei, Master of the Engines
+- title: Kaiu Gorobei
+  subtitle: Master of the Engines
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kaiu Gorobei, Master of the Engines • Experienced
   clans:
   - Crab
   keywords:
@@ -1677,7 +1673,8 @@ cards:
   collector_number: '98'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kakita Harudei, Drunkard
+- title: Kakita Harudei
+  subtitle: Drunkard
   types:
   - Personality
   decks:
@@ -2023,7 +2020,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Tayuko • Experienced 2
   clans:
   - Lion
   keywords:
@@ -2205,7 +2201,8 @@ cards:
   collector_number: '70'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Zi Feng, Villain
+- title: Moto Zi Feng
+  subtitle: Villain
   types:
   - Personality
   decks:
@@ -2328,12 +2325,12 @@ cards:
   collector_number: '88'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Otomo Suikihime, Second City Governor
+- title: Otomo Suikihime
+  subtitle: Second City Governor
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otomo Suikihime, Second City Governor • Experienced 2
   keywords:
   - Courtier
   - Imperial
@@ -2676,7 +2673,8 @@ cards:
   collector_number: '145'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shiba Tetsunori, Revered Sensei
+- title: Shiba Tetsunori
+  subtitle: Revered Sensei
   types:
   - Personality
   decks:
@@ -2738,12 +2736,12 @@ cards:
   collector_number: '72'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shosuro Hotaka, Governor's Advisor
+- title: Shosuro Hotaka
+  subtitle: Governor's Advisor
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Hotaka, Governor's Advisor • Experienced
   clans:
   - Scorpion
   keywords:
@@ -3023,7 +3021,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tamori Junya • Experienced
   clans:
   - Dragon
   keywords:
@@ -3078,7 +3075,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Teskath • Experienced
   clans:
   - Naga
   keywords:
@@ -3198,7 +3194,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: The Little Bear • Experienced 3
   keywords:
   - Retainer
   - Experienced 3 Hida Kisada
@@ -3269,7 +3264,7 @@ cards:
 - title: The Spirit Ascends
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Spell
   decks:
@@ -3437,7 +3432,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Sakiko • Experienced 2
   clans:
   - Unicorn
   keywords:

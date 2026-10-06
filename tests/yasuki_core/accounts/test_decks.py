@@ -2,6 +2,7 @@ import pytest
 
 from yasuki_core.accounts import decks
 from yasuki_core.accounts.decks import DeckCard
+from yasuki_core.card_identity import name_index
 
 # Card records shaped like get_cards_by_names output, the contract the serializer resolves against.
 RECORDS = [
@@ -16,7 +17,7 @@ RECORDS = [
     {"card_id": "kisada_alt", "name": "Kisada Alt", "types": ["Personality"], "clans": ["Crab"]},
     {"card_id": "ambush", "name": "Ambush", "types": ["Strategy"], "clans": []},
 ]
-NAME_INDEX = decks.build_name_index(RECORDS)
+NAME_INDEX = name_index(RECORDS)
 RECORDS_BY_ID = {record["card_id"]: record for record in RECORDS}
 KNOWN_IDS = set(RECORDS_BY_ID)
 
@@ -29,11 +30,6 @@ Dynasty:
 Fate:
   - 2x Ambush
 """
-
-
-def test_name_index_keys_on_both_name_and_extended_title():
-    assert NAME_INDEX["hida kisada"]["card_id"] == "hida_kisada"
-    assert NAME_INDEX["hida kisada - experienced"]["card_id"] == "hida_kisada"
 
 
 def test_resolve_assigns_ids_sides_and_denormalized_names():
@@ -171,3 +167,11 @@ def _insert_card(conn, deck_id, card_id, card_name, *, art_donor=None):
             "VALUES (%s, %s, %s, 'dynasty', 1, %s)",
             (deck_id, card_id, card_name, art_donor),
         )
+
+
+def test_a_stored_retired_id_reads_as_its_successor_and_is_no_orphan():
+    # retired_ids.yaml retires ashigaru, the Shadowlands Follower, to ashigaru_shl.
+    stored = decks.to_rows([DeckCard("ashigaru", "Ashigaru", "dynasty", 1)], deck_id=1)
+
+    assert decks.from_rows(stored)[0].card_id == "ashigaru_shl"
+    assert decks.orphan_card_ids({"ashigaru"}, {"ashigaru_shl"}) == set()

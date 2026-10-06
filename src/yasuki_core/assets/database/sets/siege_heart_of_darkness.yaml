@@ -532,12 +532,12 @@ cards:
   flavor_text: <i>"The Shahismael is hunger and madness given form," the Siminoth said. "His ambition
     will see him victorious, or utterly eradicated; nothing else."</i>
   collector_number: '28'
-- title: The Dark Naga, the Heart of Darkness
+- title: The Dark Naga
+  subtitle: the Heart of Darkness
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Dark Naga, the Heart of Darkness • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -604,12 +604,12 @@ cards:
   flavor_text: <i>The Phoenix warrior slid from his blade and lay broken on the ground. "The blood of
     mammals reeks, but the sight of it is beautiful."</i>
   collector_number: '20'
-- title: The Quelsa, the Forbidden Jakla
+- title: The Quelsa
+  subtitle: the Forbidden Jakla
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Quelsa, the Forbidden Jakla • Experienced
   keywords:
   - Unique
   - Cobra
@@ -654,12 +654,12 @@ cards:
   flavor_text: <i>Only a handful of Constrictors survived the Great Sleep. Of those who survived, one
     fell under the sway of the Dark Naga. It was an unparalleled tragedy.</i>
   collector_number: '22'
-- title: The Shakash, the Will of the Knot
+- title: The Shakash
+  subtitle: the Will of the Knot
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Shakash, the Will of the Knot • Experienced 2
   keywords:
   - Conqueror
   - Experienced 2
@@ -680,12 +680,12 @@ cards:
   artist: Conceptopolis
   flavor_text: <i>"Such weak creatures. So fragile. So unworthy to hold dominion over the world."</i>
   collector_number: '23'
-- title: The Sleepless One, Keeper of the Pearl
+- title: The Sleepless One
+  subtitle: Keeper of the Pearl
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Sleepless One, Keeper of the Pearl • Experienced
   keywords:
   - Unique
   - Abomination

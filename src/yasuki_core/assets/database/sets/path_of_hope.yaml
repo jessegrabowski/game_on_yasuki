@@ -309,7 +309,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kageki • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -780,7 +779,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Jun'ai • Experienced
   clans:
   - Crane
   keywords:
@@ -818,7 +816,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Kazo • Experienced
   clans:
   - Crane
   keywords:
@@ -1064,7 +1061,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Golden Obi of the Sun Goddess • Experienced
   keywords:
   - Unique
   - Experienced
@@ -1574,7 +1570,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Tsuken • Experienced
   clans:
   - Crane
   keywords:
@@ -1677,7 +1672,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kokujin • Experienced 3
   clans:
   - Brotherhood of Shinsei
   keywords:
@@ -1907,7 +1901,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Masae • Experienced
   clans:
   - Dragon
   keywords:
@@ -2033,7 +2026,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Tsume • Experienced 3
   keywords:
   - Cavalry
   - Experienced 3
@@ -2560,7 +2552,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Mikado • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -3178,7 +3169,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Water Dragon • Experienced 2
   keywords:
   - Cavalry
   - Experienced 2

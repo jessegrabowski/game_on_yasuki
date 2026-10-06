@@ -157,7 +157,7 @@ cards:
   flavor_text: <i>"Hantei the XXXIX, the Young Prince, declared that the Scorpion were to be destroyed,
     as the Akodo house was to be hunted. Thus, the Emperor cursed his enemies... and rewarded his greatest
     friends." - II.II</i>
-- id: beiden_pass
+- id: beiden_pass_fkn
   title: Beiden Pass
   types:
   - Region

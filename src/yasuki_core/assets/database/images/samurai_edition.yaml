@@ -6,7 +6,7 @@ images:
   - role: front
     file: a_new_wall.jpg
     sha256: 474bc63d0780eb117d078db8d3c7d8313994ec61e7d83304ded28dc56857b228
-- card_id: a_terrible_oath
+- card_id: a_terrible_oath_fkn
   printing_id: samurai_edition
   files:
   - role: front
@@ -186,7 +186,7 @@ images:
   - role: front
     file: bayushi_tsimaru_experienced.jpg
     sha256: c831d4e72e23b2c0e772fccb94691b40ef28787e5e6ee256fc4db9b2bb702bf8
-- card_id: beiden_pass
+- card_id: beiden_pass_fkn
   printing_id: samurai_edition
   files:
   - role: front

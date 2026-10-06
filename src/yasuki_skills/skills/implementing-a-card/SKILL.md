@@ -31,7 +31,8 @@ Tests go beside the code, at `tests/yasuki_core/engine/rules/cards/test_<set>.py
 
 ## What it does
 
-`card_slug` derives the card's id from its printed title, and every registry keys on it.
+`card_slug` derives the card's id from its printed title, subtitle and experience, and every
+registry keys on it.
 `src/yasuki_core/assets/database/card_ids.txt` is the committed list of all of them.
 
 Read the card's text, find the shape, pick the hook. The table in

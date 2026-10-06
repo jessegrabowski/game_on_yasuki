@@ -270,10 +270,6 @@ def _kitsune_rumiko_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [] if has_compassion(game, source.owner, source) else bow_cost(game, source)
 
 
-def _kitsune_rumiko_targets(game: GameState, source: L5RCard) -> list[str]:
-    return itself(game, source) if game.active is source.owner else []
-
-
 def _kitsune_rumiko_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Gain 1 Honor, or 2 Honor if your Sensei is Beiko Sensei."""
     amount = (
@@ -285,9 +281,9 @@ def _kitsune_rumiko_effects(game: GameState, source: L5RCard, target: L5RCard) -
 register_ability(
     "kitsune_rumiko",
     Ability(
-        timings=(ActionTiming.OPEN,),
+        timings=(ActionTiming.LIMITED,),
         cost=_kitsune_rumiko_cost,
-        targets=_kitsune_rumiko_targets,
+        targets=itself,
         effects=_kitsune_rumiko_effects,
         hits_every_target=True,
     ),

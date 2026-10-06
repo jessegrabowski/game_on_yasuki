@@ -24,7 +24,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Aramoro • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -248,7 +247,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hitomi Kokujin • Experienced
   clans:
   - Dragon
   keywords:
@@ -339,7 +337,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Ryozo • Experienced
   clans:
   - Lion
   keywords:
@@ -438,7 +435,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Yori • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -821,7 +817,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Grey Crane • Experienced 2
   keywords:
   - Double Chi
   - Experienced 2 Kakita Toshimoko
@@ -903,7 +898,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Hoshi • Experienced
   keywords:
   - Cavalry
   - Unique

@@ -113,7 +113,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Tadenori • Experienced 2
   clans:
   - Lion
   keywords:
@@ -278,7 +277,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kamnan • Experienced
   clans:
   - Scorpion
   keywords:
@@ -907,7 +905,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Yasuyo • Experienced 2
   clans:
   - Crane
   keywords:
@@ -1589,7 +1586,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Todori • Experienced
   clans:
   - Crab
   keywords:
@@ -2185,7 +2181,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Naka Tokei • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -2510,7 +2505,7 @@ cards:
   collector_number: '135'
 - title: Set'tchr'foo
   creates:
-  - ratling_pack_2
+  - ratling_pack_sote
   types:
   - Personality
   decks:
@@ -2581,7 +2576,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Aikune • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -3252,7 +3246,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Nobumoto • Experienced
   clans:
   - Mantis
   keywords:

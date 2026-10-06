@@ -191,6 +191,28 @@ class TestSerializeDeck:
 
 
 class TestImportDeckYaml:
+    def test_the_line_set_tells_apart_cards_sharing_a_title(self):
+        cards = {
+            card_id: {
+                "card_id": card_id,
+                "name": "Aulus",
+                "extended_title": "Aulus",
+                "types": ["Personality"],
+                "decks": ["Dynasty"],
+            }
+            for card_id in ("aulus_goc", "aulus_cr3")
+        }
+        prints = {
+            "aulus_goc": [{"print_id": 40, "set_name": "Gates of Chaos"}],
+            "aulus_cr3": [{"print_id": 41, "set_name": "Chaos Reigns Part III"}],
+        }
+        yaml = "name: T\ndynasty:\n  - Aulus [Chaos Reigns Part III]"
+
+        state, _, _author, unresolved = import_deck_yaml(yaml, MockRepository(cards, prints))
+
+        assert unresolved == []
+        assert state.cards == {"aulus_cr3": [(41, 1)]}
+
     def test_imports_simple_deck(self, repo):
         yaml = "name: Test\nfate:\n  - Ambush [Imperial Edition]"
         state, name, _author, unresolved = import_deck_yaml(yaml, repo)

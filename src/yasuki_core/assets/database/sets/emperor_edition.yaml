@@ -371,7 +371,6 @@ cards:
   - Celestial
   decks:
   - Dynasty
-  extended_title: Akodo's Guidance • Experienced
   keywords:
   - Unique
   - Experienced
@@ -1343,7 +1342,6 @@ cards:
   - Celestial
   decks:
   - Dynasty
-  extended_title: Bayushi's Guidance • Experienced
   keywords:
   - Unique
   - Experienced
@@ -2244,7 +2242,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Kanpeki • Experienced
   clans:
   - Spider
   keywords:
@@ -2814,7 +2811,6 @@ cards:
   - Celestial
   decks:
   - Dynasty
-  extended_title: Doji's Guidance • Experienced
   keywords:
   - Unique
   - Experienced
@@ -3304,7 +3300,7 @@ cards:
   flavor_text: <i>"Unlike some other clans, we keep a close watch on our holdings in the new lands, to
     prevent embarrassing incidents from occurring." - Yasuki Jinn-Kuen</i>
   collector_number: '300'
-- id: forgotten_legacy
+- id: forgotten_legacy_emp
   title: Forgotten Legacy
   types:
   - Other
@@ -4111,7 +4107,6 @@ cards:
   - Celestial
   decks:
   - Dynasty
-  extended_title: Hida's Guidance • Experienced
   keywords:
   - Unique
   - Experienced
@@ -4627,7 +4622,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Kimi • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -5284,7 +5278,7 @@ cards:
 - title: Kitsu Tamasine
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -5620,7 +5614,6 @@ cards:
   - Stronghold
   decks:
   - Pre-Game
-  extended_title: Kyuden Hida • Experienced
   clans:
   - Crab
   keywords:
@@ -5665,7 +5658,6 @@ cards:
   - Stronghold
   decks:
   - Pre-Game
-  extended_title: Kyuden Kitsune • Experienced
   clans:
   - Mantis
   keywords:
@@ -5692,7 +5684,6 @@ cards:
   - Stronghold
   decks:
   - Pre-Game
-  extended_title: Kyuden Otomo • Experienced
   clans:
   - Crane
   keywords:
@@ -5801,8 +5792,7 @@ cards:
   artist: Noah Bradley
   flavor_text: <i>Within the Second City, the Phoenix delved into all manner of lore once overlooked.</i>
   collector_number: '412'
-- id: lion_ancestor
-  title: Lion Ancestor
+- title: Lion Ancestor
   types:
   - Personality
   - Proxy
@@ -6123,7 +6113,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Ichizo • Experienced
   clans:
   - Dragon
   keywords:
@@ -8031,7 +8020,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Tsukimi • Experienced 4
   clans:
   - Phoenix
   keywords:
@@ -8075,7 +8063,6 @@ cards:
   - Celestial
   decks:
   - Dynasty
-  extended_title: Shiba's Guidance • Experienced
   keywords:
   - Unique
   - Experienced
@@ -8283,7 +8270,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Ki-Chang • Experienced
   clans:
   - Unicorn
   keywords:
@@ -8376,7 +8362,6 @@ cards:
   - Celestial
   decks:
   - Dynasty
-  extended_title: Shinjo's Guidance • Experienced
   keywords:
   - Unique
   - Experienced
@@ -9570,7 +9555,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tetsuo • Experienced
   clans:
   - Spider
   keywords:
@@ -10262,7 +10246,6 @@ cards:
   - Stronghold
   decks:
   - Pre-Game
-  extended_title: The Temple of Death • Experienced
   clans:
   - Unicorn
   keywords:
@@ -10507,7 +10490,6 @@ cards:
   - Celestial
   decks:
   - Dynasty
-  extended_title: Togashi's Guidance • Experienced
   keywords:
   - Unique
   - Experienced
@@ -11576,7 +11558,6 @@ cards:
   - Stronghold
   decks:
   - Pre-Game
-  extended_title: Yasuki Palaces • Experienced
   clans:
   - Crab
   keywords:
@@ -11856,7 +11837,6 @@ cards:
   - Celestial
   decks:
   - Dynasty
-  extended_title: Yoritomo's Guidance • Experienced
   keywords:
   - Unique
   - Experienced

@@ -299,7 +299,7 @@ cards:
   - Legacy
   rarity: Common
   artist: Tom Baxa
-- id: ashigaru
+- id: ashigaru_shl
   title: Ashigaru
   types:
   - Follower
@@ -1166,7 +1166,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Uji • Experienced
   clans:
   - Crane
   keywords:
@@ -1353,7 +1352,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Kuwanan • Experienced
   clans:
   - Crane
   keywords:
@@ -1960,7 +1958,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ginawa • Experienced
   clans:
   - Toturi's Army
   keywords:
@@ -2166,7 +2163,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida O-Ushi • Experienced
   clans:
   - Crab
   keywords:
@@ -2242,7 +2238,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Yakamo • Experienced 2
   clans:
   - Crab
   keywords:
@@ -2321,7 +2316,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hitomi • Experienced 2
   clans:
   - Dragon
   keywords:
@@ -2536,7 +2530,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Tsanuri • Experienced
   clans:
   - Lion
   keywords:
@@ -2788,7 +2781,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isha • Experienced
   clans:
   - Naga
   keywords:
@@ -2838,7 +2830,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Iuchi Karasu • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2937,7 +2928,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kage • Experienced 2
   keywords:
   - Experienced 2 Akodo Kage
   - Unique
@@ -2987,7 +2977,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Yoshi • Experienced
   clans:
   - Crane
   keywords:
@@ -3016,7 +3005,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kappuksu • Experienced
   keywords:
   - Experienced Goblin Warmonger
   - Unique
@@ -3109,7 +3097,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsu Motso • Experienced
   clans:
   - Lion
   keywords:
@@ -3269,7 +3256,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Yori • Experienced
   keywords:
   - Unique
   - Experienced
@@ -3527,7 +3513,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Agetoki • Experienced
   clans:
   - Lion
   keywords:
@@ -3582,7 +3567,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Hiroru • Experienced
   clans:
   - Ninja
   - Toturi's Army
@@ -3690,7 +3674,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Daini • Experienced
   clans:
   - Dragon
   - Toturi's Army
@@ -3768,7 +3751,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mitsu • Experienced
   clans:
   - Brotherhood of Shinsei
   - Toturi's Army
@@ -3799,7 +3781,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moshi Wakiza • Experienced
   clans:
   - Mantis
   - Centipede
@@ -4481,7 +4462,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otaku Kamoko • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -4717,7 +4697,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Qamar • Experienced
   clans:
   - Naga
   keywords:
@@ -4748,7 +4727,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Radakast • Experienced
   clans:
   - Naga
   keywords:
@@ -4842,7 +4820,7 @@ cards:
   - Legacy
   rarity: Common
   artist: Randy Elliott
-- id: ratling_pack
+- id: ratling_pack_imp
   title: Ratling Pack
   types:
   - Follower
@@ -5349,7 +5327,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shahadet • Experienced
   clans:
   - Naga
   keywords:
@@ -5421,7 +5398,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shashakar • Experienced
   clans:
   - Naga
   keywords:
@@ -5449,7 +5425,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Tsukune • Experienced
   clans:
   - Phoenix
   keywords:
@@ -5500,7 +5475,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Morito • Experienced
   clans:
   - Unicorn
   keywords:
@@ -6639,7 +6613,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Toku • Experienced
   clans:
   - Toturi's Army
   keywords:
@@ -7051,7 +7024,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yasuki Taka • Experienced
   clans:
   - Crab
   keywords:
@@ -7080,7 +7052,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yodin • Experienced
   clans:
   - Brotherhood of Shinsei
   keywords:
@@ -7108,7 +7079,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo • Experienced
   clans:
   - Mantis
   keywords:
@@ -7266,7 +7236,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoshi • Experienced
   clans:
   - Brotherhood of Shinsei
   keywords:

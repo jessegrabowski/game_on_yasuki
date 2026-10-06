@@ -5,7 +5,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: '"The Deathless" • Experienced'
   keywords:
   - Experienced
   - Unique
@@ -72,12 +71,12 @@ cards:
   collector_number: '44'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Kano, Clan Champion
+- title: Akodo Kano
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Kano, Clan Champion • Experienced 3
   clans:
   - Lion
   keywords:
@@ -106,7 +105,8 @@ cards:
   collector_number: '45'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Toshiki
+- id: akodo_toshiki
+  title: Akodo Toshiki
   subtitle: Bushido Master
   types:
   - Personality
@@ -155,7 +155,8 @@ cards:
   collector_number: '124'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Asahina Takuma, Twin Forks Governor
+- title: Asahina Takuma
+  subtitle: Twin Forks Governor
   types:
   - Personality
   decks:
@@ -270,7 +271,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ashan • Experienced
   clans:
   - Naga
   keywords:
@@ -322,14 +322,14 @@ cards:
   collector_number: '85'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Bayushi Kanihime, Clan Champion
+- title: Bayushi Kanihime
+  subtitle: Clan Champion
   grants:
   - poison
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kanihime, Clan Champion • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -643,7 +643,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Ryushi • Experienced
   clans:
   - Crane
   keywords:
@@ -676,7 +675,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Shimizu • Experienced
   clans:
   - Crane
   keywords:
@@ -709,7 +707,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Shaoru • Experienced
   clans:
   - Spider
   keywords:
@@ -771,7 +768,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of Air • Experienced
   keywords:
   - Experienced
   - Unique
@@ -807,7 +803,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of Earth • Experienced
   keywords:
   - Experienced
   - Unique
@@ -845,7 +840,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of Fire • Experienced
   keywords:
   - Experienced
   - Unique
@@ -883,7 +877,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of Water • Experienced
   keywords:
   - Experienced
   - Unique
@@ -922,7 +915,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of the Void • Experienced
   keywords:
   - Experienced
   - Unique
@@ -1300,7 +1292,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Forests of Shinomen • Experienced
   keywords:
   - Forest
   - Experienced
@@ -1337,12 +1328,12 @@ cards:
   collector_number: '135'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Goju Keirei, "Bayushi Karyudo"
+- title: Goju Keirei
+  subtitle: '"Bayushi Karyudo"'
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Goju Keirei, "Bayushi Karyudo" • Experienced 2
   clans:
   - Ninja
   - Scorpion
@@ -1369,14 +1360,14 @@ cards:
   collector_number: '64'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Gusai Ichido, Clan Champion
+- title: Gusai Ichido
+  subtitle: Clan Champion
   grants:
   - wealth
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gusai Ichido, Clan Champion • Experienced
   clans:
   - Mantis
   keywords:
@@ -1484,7 +1475,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kanjouteki • Experienced
   clans:
   - Crab
   keywords:
@@ -1513,7 +1503,8 @@ cards:
   collector_number: '26'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Nageki, Sister of Sorrow
+- title: Hida Nageki
+  subtitle: Sister of Sorrow
   types:
   - Personality
   decks:
@@ -1539,12 +1530,12 @@ cards:
   collector_number: '27'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Toranosuke, Clan Champion
+- title: Hida Toranosuke
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Toranosuke, Clan Champion • Experienced 3
   clans:
   - Crab
   keywords:
@@ -1574,7 +1565,8 @@ cards:
   collector_number: '28'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Ugokanai, Sumai Master
+- title: Hida Ugokanai
+  subtitle: Sumai Master
   types:
   - Personality
   decks:
@@ -1598,7 +1590,8 @@ cards:
   collector_number: '29'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: House of Suikihime, Otomo Suikihime
+- title: House of Suikihime
+  subtitle: Otomo Suikihime
   types:
   - Wind
   decks:
@@ -1712,7 +1705,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Orinoko • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1762,7 +1754,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Iweko Honor Guard • Experienced
   keywords:
   - Nonhuman
   - Undead
@@ -1785,12 +1776,12 @@ cards:
   collector_number: '91'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Iweko Miaka, Princess of Rokugan
+- title: Iweko Miaka
+  subtitle: Princess of Rokugan
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Iweko Miaka, Princess of Rokugan • Experienced
   keywords:
   - Courtier
   - Imperial
@@ -1918,7 +1909,8 @@ cards:
   collector_number: '37'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kano's Alliance, Akodo Kano
+- title: Kano's Alliance
+  subtitle: Akodo Kano
   types:
   - Wind
   decks:
@@ -2024,7 +2016,6 @@ cards:
   - Event
   decks:
   - Dynasty
-  extended_title: Kisada's Funeral • Experienced
   keywords:
   - Experienced
   - Unique
@@ -2070,12 +2061,11 @@ cards:
 - title: Kitsu Watanabe
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsu Watanabe • Experienced
   clans:
   - Lion
   keywords:
@@ -2134,7 +2124,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kokujin Sato • Experienced
   clans:
   - Spider
   keywords:
@@ -2281,7 +2270,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Gakuya • Experienced
   clans:
   - Lion
   keywords:
@@ -2422,7 +2410,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Daigoro • Experienced
   clans:
   - Spider
   keywords:
@@ -2477,7 +2464,8 @@ cards:
   collector_number: '75'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Yanshuo, Speaker for the Dead
+- title: Moto Yanshuo
+  subtitle: Speaker for the Dead
   types:
   - Personality
   decks:
@@ -2619,7 +2607,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otomo Terumoto • Experienced
   keywords:
   - Courtier
   - Daimyo
@@ -2688,7 +2675,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Profaned Temple • Experienced
   keywords:
   - Experienced Sanctified Temple
   - Shadowlands
@@ -2755,7 +2741,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Purusha • Experienced
   clans:
   - Naga
   keywords:
@@ -2927,7 +2912,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Sandayu • Experienced
   clans:
   - Dragon
   keywords:
@@ -3061,7 +3045,8 @@ cards:
   collector_number: '92'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shiba Tamashii, Clan Champion
+- title: Shiba Tamashii
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
@@ -3115,7 +3100,8 @@ cards:
   collector_number: '16'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shinjo Saeki, Clan Champion
+- title: Shinjo Saeki
+  subtitle: Clan Champion
   creates:
   - cavalry
   - cavalry_token
@@ -3127,7 +3113,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Saeki, Clan Champion • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -3282,7 +3267,8 @@ cards:
   collector_number: '93'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Soshi Aoto, Master Assassin
+- title: Soshi Aoto
+  subtitle: Master Assassin
   grants:
   - poison
   types:
@@ -3545,7 +3531,8 @@ cards:
   collector_number: '119'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: The Kanpeki Dynasty, Hantei XL
+- title: The Kanpeki Dynasty
+  subtitle: Hantei XL
   types:
   - Wind
   decks:
@@ -3589,7 +3576,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Nameless One • Experienced
   clans:
   - Phoenix
   keywords:
@@ -3619,7 +3605,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: The Terrible Standard of Fu Leng • Experienced
   keywords:
   - Standard
   - Experienced
@@ -3642,12 +3627,12 @@ cards:
   collector_number: '103'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Togashi Higaru, Clan Champion
+- title: Togashi Higaru
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Higaru, Clan Champion • Experienced 3
   clans:
   - Dragon
   keywords:
@@ -3713,7 +3698,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Nakahara • Experienced
   clans:
   - Dragon
   keywords:
@@ -3745,7 +3729,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Toshi Ranbo • Experienced
   keywords:
   - Imperial
   - Ruin
@@ -3806,12 +3789,12 @@ cards:
   collector_number: '157'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Utaku Kazue, Shinjo's Shame
+- title: Utaku Kazue
+  subtitle: Shinjo's Shame
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Kazue, Shinjo's Shame • Experienced
   clans:
   - Unicorn
   keywords:
@@ -4068,12 +4051,12 @@ cards:
   collector_number: '31'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Minoko, Clan Champion
+- title: Yoritomo Minoko
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Minoko, Clan Champion • Experienced 2
   clans:
   - Mantis
   keywords:
@@ -4102,7 +4085,8 @@ cards:
   collector_number: '53'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Ninsei, Broken Wave City Governor
+- title: Yoritomo Ninsei
+  subtitle: Broken Wave City Governor
   creates:
   - mercenary_ronin_personality_2_2_1
   types:
@@ -4129,7 +4113,8 @@ cards:
   collector_number: '54'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Seiki, Clan Champion
+- title: Yoritomo Seiki
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
@@ -4161,14 +4146,14 @@ cards:
   collector_number: '55'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Zenathaar, Warrior of the Bright Eye
+- title: Zenathaar
+  subtitle: Warrior of the Bright Eye
   creates:
   - naga_warrior
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Zenathaar, Warrior of the Bright Eye • Experienced 2
   clans:
   - Naga
   keywords:

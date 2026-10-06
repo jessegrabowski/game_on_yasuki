@@ -677,7 +677,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Sunetra • Experienced
   clans:
   - Scorpion
   keywords:
@@ -2189,7 +2188,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Kurohito • Experienced 2
   clans:
   - Crane
   keywords:
@@ -2252,7 +2250,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Tanitsu • Experienced 2
   clans:
   - Crane
   keywords:
@@ -2281,7 +2278,7 @@ cards:
   flavor_text: <i>"I do not forget my promises, my lady," Tanitsu whispered. "I will serve you for the
     rest of my days."</i>
   collector_number: '86'
-- id: doom_of_fu_leng
+- id: doom_of_fu_leng_aod
   title: Doom of Fu Leng
   types:
   - Spell
@@ -3576,7 +3573,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kuon • Experienced 3
   clans:
   - Crab
   keywords:
@@ -3609,7 +3605,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Reiha • Experienced
   clans:
   - Crab
   keywords:
@@ -3964,7 +3959,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hoshi Wayan • Experienced 2
   clans:
   - Brotherhood of Shinsei
   - Dragon
@@ -4532,7 +4526,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Jama Suru • Experienced
   keywords:
   - Unique
   - Bloodspeaker
@@ -4727,7 +4720,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Mai • Experienced
   clans:
   - Crane
   keywords:
@@ -4803,7 +4795,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kan'ok'ticheck • Experienced
   clans:
   - Ratling
   keywords:
@@ -4943,7 +4934,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Ki-Rin's Shrine • Experienced
   keywords:
   - Unique
   - Experienced
@@ -5769,7 +5759,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Nimuro • Experienced
   clans:
   - Lion
   keywords:
@@ -6086,7 +6075,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Chagatai • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -8014,7 +8002,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Mirabu • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -8046,7 +8033,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Ningen • Experienced
   clans:
   - Phoenix
   keywords:
@@ -8456,7 +8442,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Toson • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -9136,7 +9121,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tamori Shaitung • Experienced
   clans:
   - Dragon
   keywords:
@@ -9235,7 +9219,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Te'tik'kir • Experienced
   clans:
   - Ratling
   keywords:
@@ -9939,7 +9922,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Satsu • Experienced
   clans:
   - Dragon
   keywords:
@@ -10158,7 +10140,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Hiro • Experienced
   clans:
   - Mantis
   keywords:
@@ -11167,7 +11148,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Kumiko • Experienced
   clans:
   - Mantis
   keywords:
@@ -11198,7 +11178,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Masasue • Experienced
   clans:
   - Mantis
   keywords:

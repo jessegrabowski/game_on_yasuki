@@ -9,6 +9,7 @@ from psycopg_pool import ConnectionPool
 
 import logging
 
+from yasuki_core.card_identity import card_slug, current_id
 from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS
 from yasuki_core.search.compile_sql import (
     ALL_CLANS_MARKER,
@@ -453,10 +454,10 @@ def get_card_revisions(card_id: str) -> list[dict]:
 
 def get_cards_by_names(names: list[str]) -> list[dict]:
     """
-    Fetch cards matching a list of names, including their prints.
+    Fetch the cards a list of decklist names could resolve to, including their prints.
 
-    Matches against both ``name`` and ``extended_title`` (case-insensitive).
-    Used for deck import to resolve human-readable names to card records.
+    Matches each name's slug, and the successor of a retired id, against card ids and the slugs of
+    extended titles, the keys :func:`~yasuki_core.card_identity.resolve_name` resolves through.
 
     Parameters
     ----------
@@ -471,16 +472,17 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
     """
     if not names:
         return []
-    lower_names = [n.lower() for n in names]
+    slugs = [card_slug(name) for name in names]
+    slugs += [successor for slug in slugs if (successor := current_id(slug)) not in (None, slug)]
     select_sql, _ = _card_select()
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
                 f"{select_sql} "
-                "WHERE (lower(c.name) = ANY(%s) OR lower(c.extended_title) = ANY(%s)) "
+                "WHERE (c.card_id = ANY(%s) OR c.slug = ANY(%s)) "
                 "AND NOT c.is_back "
                 "ORDER BY split_part(c.name, ',', 1) ASC, c.experience ASC, c.extended_title ASC",
-                (lower_names, lower_names),
+                (slugs, slugs),
             )
             cards = cur.fetchall()
             _attach_prints(cur, cards)

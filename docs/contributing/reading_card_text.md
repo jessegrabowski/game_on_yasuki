@@ -32,16 +32,27 @@ datasheet wins. Every entry below names which settles it.
 
 ## A keyword before the timing is not part of the timing
 
-{card}`Touch of Death` reads *"Maho Limited: Bow this Shugenja and destroy this Spell to destroy a
-target bowed Personality with equal or lower Chi."*
+{card}`Banish All Doubt` reads *"Tactical Open: Look at the top four cards of your Fate deck. Put
+one of them in your hand and put the other three on the bottom of your deck in any order."*
 
-It looks like `Maho Limited` is a designator of its own. It is a **Limited** ability on a card
-carrying the Maho keyword, and the prefix restricts nothing, neither who may use it nor what it may
-target. The datasheet gives the rendering rule: a Spell with the Air and Water keywords and an
+It looks like `Tactical Open` is a designator of its own. It is an **Open** ability carrying the
+Tactical keyword, and the prefix restricts nothing, neither who may use it nor what it may target. The datasheet gives the rendering rule: a Spell with the Air and Water keywords and an
 action reading "Open: Draw a card" prints as "Air Water Open: Draw a card".
 
 `Favor Limited` is the real exception. It is a genuine compound tied to the Imperial Favor, and the
 Comprehensive Rules give it its own entry.
+
+## "Open: If it is your turn" is a Limited ability
+
+Shattered Empire retires the Limited designator and prints its restriction as a condition instead.
+{card}`Poorly Placed Garden` reads *"Open, :bow:: If it is your turn, gain 2 Honor."* An Open action
+any player may take, whose text then allows only the active player, is the Limited action the older
+arcs print. Register it as `ActionTiming.LIMITED`, and leave the turn out of `targets`. The
+registration audit reads an Open ability whose text opens on "If it is your turn" as Limited, so an
+`OPEN` registration of it fails. A longer condition such as the Onyx Lobby's "If it is your turn and
+you have higher Family Honor" is Limited too, and only the part after "and" belongs in `targets`.
+
+"If it is not your turn" is the opposite restriction and stays Open.
 
 ## The bow icon bows the card the ability is on
 

@@ -27,7 +27,7 @@ cards:
   artist: Malcolm McClinton
   flavor_text: <i>"The Wall is not made of stone, but the courage of Crab samurai." - Hida Kuon</i>
   collector_number: '1'
-- id: a_terrible_oath
+- id: a_terrible_oath_fkn
   title: A Terrible Oath
   types:
   - Spell
@@ -183,7 +183,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akuma no Oni • Experienced 2
   keywords:
   - Experienced 2 Oni no Akuma
   - Unique
@@ -408,7 +407,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Takakazu • Experienced
   clans:
   - Phoenix
   keywords:
@@ -724,7 +722,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Paneki • Experienced 4
   clans:
   - Scorpion
   keywords:
@@ -784,7 +781,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Tsimaru • Experienced
   clans:
   - Scorpion
   keywords:
@@ -810,7 +806,7 @@ cards:
   flavor_text: <i>Despite a shortage of rice in their lands, the Scorpion defy the Crab in battle and
     in court.</i>
   collector_number: '143'
-- id: beiden_pass
+- id: beiden_pass_fkn
   title: Beiden Pass
   types:
   - Region
@@ -1026,7 +1022,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Brothers in Arms • Experienced
   keywords:
   - Unique
   - Experienced
@@ -1901,7 +1896,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu • Experienced 2
   clans:
   - Spider
   keywords:
@@ -2216,7 +2210,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Domotai • Experienced 3
   clans:
   - Crane
   keywords:
@@ -2308,7 +2301,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Jun'ai • Experienced
   clans:
   - Crane
   keywords:
@@ -3208,7 +3200,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Daizu • Experienced
   clans:
   - Crab
   keywords:
@@ -3320,7 +3311,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kuon • Experienced 5
   clans:
   - Crab
   keywords:
@@ -3351,7 +3341,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Sozen • Experienced
   clans:
   - Crab
   keywords:
@@ -3647,7 +3636,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Yasuko • Experienced
   clans:
   - Lion
   keywords:
@@ -3923,7 +3911,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Ochiai • Experienced
   clans:
   - Phoenix
   keywords:
@@ -4195,7 +4182,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Katsu • Experienced
   clans:
   - Spider
   keywords:
@@ -4732,7 +4718,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kyoso no Oni • Experienced 3
   keywords:
   - Enlightened
   - Experienced 3
@@ -4994,7 +4979,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Aoiko • Experienced
   clans:
   - Lion
   keywords:
@@ -5134,7 +5118,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Yoshino • Experienced 2
   clans:
   - Lion
   keywords:
@@ -5295,7 +5278,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Mareshi • Experienced
   clans:
   - Dragon
   - Naga
@@ -5489,7 +5471,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Chagatai • Experienced 5
   clans:
   - Unicorn
   keywords:
@@ -5645,7 +5626,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Muketsu • Experienced
   clans:
   - Spider
   keywords:
@@ -5777,7 +5757,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Omoni • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -6758,7 +6737,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Ningen • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -6868,7 +6846,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Xushen • Experienced
   clans:
   - Unicorn
   keywords:
@@ -8388,7 +8365,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Ieshige • Experienced
   clans:
   - Dragon
   keywords:
@@ -8526,7 +8502,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Satsu • Experienced 4
   clans:
   - Dragon
   keywords:
@@ -8796,7 +8771,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Nobumoto • Experienced
   clans:
   - Mantis
   keywords:
@@ -8829,7 +8803,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Okame • Experienced
   clans:
   - Mantis
   keywords:
@@ -9169,7 +9142,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Yu-Pan • Experienced
   clans:
   - Unicorn
   keywords:
@@ -9787,7 +9759,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Naizen • Experienced 2
   clans:
   - Mantis
   keywords:

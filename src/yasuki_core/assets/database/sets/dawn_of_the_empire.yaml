@@ -550,7 +550,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Konishiko • Experienced 7
   clans:
   - Crane
   keywords:
@@ -890,7 +889,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Atarasi • Experienced 7
   clans:
   - Crab
   keywords:
@@ -1080,7 +1078,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa • Experienced 7
   clans:
   - Phoenix
   keywords:
@@ -1136,7 +1133,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Isawa's Last Wish • Inexperienced
   keywords:
   - Unique
   - Inexperienced
@@ -1432,7 +1428,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu • Experienced 7
   clans:
   - Lion
   keywords:
@@ -1486,7 +1481,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto • Experienced 7
   clans:
   - Dragon
   keywords:
@@ -1645,7 +1639,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Onnotangu's Hand • Inexperienced
   keywords:
   - Inexperienced The Obsidian Hand
   - Unique
@@ -1670,7 +1663,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otaku • Experienced 7
   clans:
   - Unicorn
   keywords:
@@ -1987,7 +1979,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro • Experienced 7
   clans:
   - Ninja
   - Scorpion
@@ -2266,7 +2257,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The First Oni • Inexperienced
   keywords:
   - Unique
   - Disciple
@@ -2628,7 +2618,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yogo • Experienced
   clans:
   - Scorpion
   keywords:

@@ -526,10 +526,6 @@ def _kengun_grounds_entered_play(ctx: TriggerContext) -> list[Effect]:
 
 
 def _kengun_grounds_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Nobody while it is not the controller's turn. The ability's own condition is read before it
-    is offered rather than resolving into nothing."""
-    if game.active is not source.owner:
-        return []
     zombie = game.table.creatable_tokens[ZOMBIE_FOLLOWER]
     return [target.id for target in creation_targets(game, source.owner, zombie)]
 
@@ -547,7 +543,7 @@ def _kengun_grounds_effects(game: GameState, source: L5RCard, target: L5RCard) -
 register_ability(
     "kengun_grounds",
     Ability(
-        timings=(ActionTiming.OPEN,),
+        timings=(ActionTiming.LIMITED,),
         cost=bow_cost,
         targets=_kengun_grounds_targets,
         targeting_message="your Personality",

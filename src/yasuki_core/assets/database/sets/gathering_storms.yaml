@@ -269,7 +269,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gusai Kuniken • Experienced
   clans:
   - Mantis
   keywords:
@@ -487,7 +486,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ide Hideshi • Experienced
   clans:
   - Unicorn
   keywords:
@@ -1018,7 +1016,8 @@ cards:
   collector_number: '35'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Watanabe Maki, First Mate
+- title: Watanabe Maki
+  subtitle: First Mate
   types:
   - Personality
   decks:
@@ -1190,12 +1189,12 @@ cards:
   collector_number: '23'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Waito, the Salty Dog
+- title: Yoritomo Waito
+  subtitle: the Salty Dog
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Waito, the Salty Dog • Experienced
   clans:
   - Mantis
   keywords:
@@ -1246,7 +1245,8 @@ cards:
   collector_number: '25'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Yusako, Hiromi's Legacy Captain
+- title: Yoritomo Yusako
+  subtitle: Hiromi's Legacy Captain
   types:
   - Personality
   decks:

@@ -6,7 +6,7 @@ from docutils.parsers.rst.states import Inliner
 from sphinx.application import Sphinx
 
 from yasuki_core.install.card_index import read_index
-from yasuki_core.install.yaml_to_sql import card_slug
+from yasuki_core.card_identity import card_slug
 
 
 @functools.cache

@@ -1,6 +1,6 @@
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass
 from yasuki_core.engine.rules.vocabulary.decisions import ArrangeCards, DecisionResponse
 from yasuki_core.engine.rules.gold.self_grants import maximum_gold_production, untaken_self_grant
 from yasuki_core.engine.rules.vocabulary.game_events import ProducingGold
@@ -16,6 +16,7 @@ from tests.yasuki_core.engine.builders import (
     attachment,
     dealt_table,
     end_phase,
+    end_turn,
     fate_card,
     holding,
     personality,
@@ -234,6 +235,15 @@ def test_divination_bowl_looks_at_three_and_puts_them_back_in_the_order_given():
     assert _fate_deck(session) == ["b", "c", "a", "d"]
     assert session.game.look is None
     assert session.log.replay() == session.game
+
+
+def test_divination_bowl_is_offered_on_another_seats_turn():
+    session = _bowl_game()
+    end_turn(session)
+    session.act(P2, Pass())
+
+    assert session.game.round.priority is P1
+    assert ActivateAbility("bowl", "look") in session.legal_actions(P1)
 
 
 def test_divination_bowl_draws_and_destroys_itself():

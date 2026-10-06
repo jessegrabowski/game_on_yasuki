@@ -10,6 +10,8 @@ from psycopg.types.json import Json
 
 from yasuki_core.game_pieces.counters import ALL_COUNTERS
 from yasuki_core.install.format_metadata import populate_format_metadata
+from yasuki_core import card_identity
+from yasuki_core.card_identity import card_slug
 from yasuki_core.install.card_index import LOCAL_SET_SUFFIX
 from yasuki_core.install.sets_to_sql import coerce_date, set_slug
 from yasuki_core.game_pieces.text_split import ability_keywords, split_text_box
@@ -34,12 +36,6 @@ STAT_FIELDS = (
     "starting_honor",
     "gold_production",
 )
-
-
-def card_slug(text: str) -> str:
-    """Slug used as the card id when the YAML entry carries no explicit `id`."""
-    s = text.lower().replace("&", "and").replace("'", "")
-    return re.sub(r"[^a-z0-9]+", "_", s).strip("_")
 
 
 def parse_collector_numbers(raw: str | None) -> list[tuple[str | None, int]]:
@@ -207,7 +203,7 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[list,
         card_slug(extended_title),
         title,
         extended_title,
-        normalize_name(title),
+        normalize_name(card_identity.subtitled_title(entry)),
         entry.get("text", "") or "",
         stats["gold_cost"],
         stats["focus"],
@@ -259,6 +255,7 @@ def _print_columns(entry: dict, card_id: str, printing_id: str, set_id: int) -> 
         card_id,
         printing_id,
         set_id,
+        entry.get("subtitle"),
         entry.get("rarity"),
         entry.get("flavor_text"),
         entry.get("print_text"),
@@ -317,24 +314,23 @@ def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) 
         cards[front_id][_BACK_CARD_ID_COL] = back_id
 
 
-def mrp_text(dated_texts: list[tuple[datetime.date | None, str]]) -> str | None:
-    """The rules text from the most-recently-released printing (the MRP standard). Each element is a
-    ``(release_date, text)`` pair for one printing that carries text. A null date sorts oldest so a
-    dated printing always wins over an undated one. Return None for an empty list.
+def most_recent_printing[T](dated: list[tuple[datetime.date | None, T]]) -> T | None:
+    """The value from the most-recently-released printing (the MRP standard). A null date sorts
+    oldest so a dated printing always wins over an undated one.
 
     Parameters
     ----------
-    dated_texts : list of tuple of (date or None, str)
-        One ``(release_date, text)`` pair per printing of the card that has non-empty text.
+    dated : list of tuple of (date or None, object)
+        One ``(release_date, value)`` pair per printing of the card.
 
     Returns
     -------
-    text : str or None
-        The text on the newest printing, or None if there are no printings.
+    object or None
+        The value on the newest printing, or None if there are no printings.
     """
-    if not dated_texts:
+    if not dated:
         return None
-    return max(dated_texts, key=lambda dt: dt[0] or datetime.date.min)[1]
+    return max(dated, key=lambda pair: pair[0] or datetime.date.min)[1]
 
 
 def ability_rows(card_id: str, text: str) -> list[tuple]:
@@ -425,10 +421,11 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     # win.
     errata_map: dict[str, list[dict]] = {}
 
-    # The Most-Recent-Printing standard: a card's standing rules text is the text on its newest
-    # printing, not whichever set file happens to sort first. Collect every printing's text per card
-    # and fold the most recent onto the card row once every file is read.
-    latest_text: dict[str, list[tuple[datetime.date | None, str]]] = {}
+    # The Most-Recent-Printing standard (CR, Cardinal Rule 2): a card is what its newest printing
+    # says, not whichever set file happens to sort first. Every printing is collected, and the card
+    # row is built from the newest once every file is read. Rules text folds separately, from the
+    # newest printing that carries any.
+    printings: dict[str, list[tuple[datetime.date | None, dict]]] = {}
 
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute("SELECT set_name, set_id, set_slug, release_date FROM l5r_sets")
@@ -447,36 +444,12 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
 
             printings_seen: dict[str, int] = {}
             for entry in data.get("cards", []):
-                extended_title = entry.get("extended_title") or entry["title"]
-                card_id = entry.get("id") or card_slug(extended_title)
-                if entry.get("is_back"):
-                    card_id += "__back"
+                card_id = card_identity.card_id(entry)
+                printings.setdefault(card_id, []).append((set_date, entry))
 
-                entry_text = entry.get("text")
-                if entry_text:
-                    latest_text.setdefault(card_id, []).append((set_date, entry_text))
-
-                if card_id not in cards:
-                    cards[card_id], _ = _card_columns(card_id, extended_title, entry)
-                    card_names[card_id] = entry["title"]
-                    if entry.get("is_back"):
-                        back_ids.add(card_id)
-                    clan_links.update((card_id, c) for c in entry.get("clans", []))
-                    type_links.update((card_id, t) for t in entry.get("types", []))
-                    deck_links.update((card_id, d) for d in entry.get("decks", []))
-                    for kw in entry.get("keywords", []):
-                        keywords.add(kw)
-                        keyword_links.add((card_id, kw))
-                    # The CR reads a Strategy with a Political ability as a Political Strategy, so
-                    # an ability's keyword classifies its card. Kept apart from the printed ones
-                    # until every printing has been read, since a later set may print what an
-                    # earlier one only implied.
-                    for kw in ability_keywords(entry.get("text") or ""):
-                        keywords.add(kw)
-                        inherited_links.add((card_id, kw))
-                    for fmt in entry.get("legality", []):
-                        formats.add(fmt)
-                        legality_links.add((card_id, fmt))
+                for fmt in entry.get("legality", []):
+                    formats.add(fmt)
+                    legality_links.add((card_id, fmt))
 
                 for erratum in entry.get("errata", []):
                     errata_map.setdefault(card_id, []).append(
@@ -497,6 +470,19 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                     entry.get("collector_number")
                 )
 
+        for card_id, dated_entries in printings.items():
+            entry = most_recent_printing(dated_entries)
+            cards[card_id], _ = _card_columns(card_id, card_identity.extended_title(entry), entry)
+            card_names[card_id] = entry["title"]
+            if entry.get("is_back"):
+                back_ids.add(card_id)
+            clan_links.update((card_id, c) for c in entry.get("clans", []))
+            type_links.update((card_id, t) for t in entry.get("types", []))
+            deck_links.update((card_id, d) for d in entry.get("decks", []))
+            for kw in entry.get("keywords", []):
+                keywords.add(kw)
+                keyword_links.add((card_id, kw))
+
         _link_and_validate_back_faces(cards, card_names, back_ids)
         _validate_creates(cards, creates_links)
         _validate_grants(cards, grants_links)
@@ -504,9 +490,11 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
         # Set each card's standing rules text to its most-recent printing (MRP standard). This runs
         # before errata folding so an erratum, being the newest revision, still wins over the
         # printing.
-        for card_id, dated_texts in latest_text.items():
-            text = mrp_text(dated_texts)
-            if text is not None and card_id in cards:
+        for card_id, dated_entries in printings.items():
+            dated_texts = [
+                (date, entry["text"]) for date, entry in dated_entries if entry.get("text")
+            ]
+            if (text := most_recent_printing(dated_texts)) is not None:
                 cards[card_id][_RULES_TEXT_COL] = text
 
         # Fold each errata'd card's newest revision onto its cards row so every existing read path
@@ -537,6 +525,13 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             for card_id, columns in cards.items()
             for row in ability_rows(card_id, columns[_RULES_TEXT_COL] or "")
         ]
+        # The CR reads a Strategy with a Political ability as a Political Strategy, so an ability's
+        # keyword classifies its card. Read from the same folded text, and kept apart from the
+        # printed keywords.
+        for card_id, columns in cards.items():
+            for kw in ability_keywords(columns[_RULES_TEXT_COL] or ""):
+                keywords.add(kw)
+                inherited_links.add((card_id, kw))
 
         _insert_all(
             cur,
@@ -673,9 +668,10 @@ def _insert_all(
     cur.executemany(
         """
         INSERT INTO prints (
-          card_id, printing_id, set_id, rarity, flavor_text, rules_text, back_title, back_flavor,
-          artist, designer, collector_number_raw, publisher, publisher_url, doublesided, legal_date
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+          card_id, printing_id, set_id, subtitle, rarity, flavor_text, rules_text, back_title,
+          back_flavor, artist, designer, collector_number_raw, publisher, publisher_url, doublesided,
+          legal_date
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (card_id, printing_id) DO NOTHING
         """,
         print_rows,

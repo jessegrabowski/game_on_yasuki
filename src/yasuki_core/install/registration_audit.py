@@ -34,7 +34,7 @@ from yasuki_core.install.card_index import (
     iter_set_entries,
     read_index,
 )
-from yasuki_core.game_pieces.text_split import split_text_box
+from yasuki_core.game_pieces.text_split import Ability as TextBoxAbility, split_text_box
 
 DEFAULT_SET_INFO_PATH = DATABASE_DIR / "set_info.yaml"
 
@@ -214,10 +214,15 @@ _DESIGNATORS = (
 # A printed designator whose registration goes by another name: the older arcs print Reaction for
 # the action the ShE datasheet calls a Response, and the engine registers both as RESPONSE.
 _AS_REGISTERED = {"Reaction": "Response"}
+# The ShE templating of a Limited action: an Open designator whose text opens on the turn condition.
+_ON_YOUR_TURN = re.compile(r"If it is your turn\b")
 
 
-def _registered_designators(printed: Sequence[str]) -> frozenset[str]:
-    return frozenset(_AS_REGISTERED.get(word, word) for word in printed)
+def _registered_designators(ability: TextBoxAbility) -> frozenset[str]:
+    words = frozenset(_AS_REGISTERED.get(word, word) for word in ability.designators)
+    if "Open" in words and _ON_YOUR_TURN.match(ability.text):
+        return (words - {"Open"}) | {"Limited"}
+    return words
 
 
 _QUALIFIERS = (
@@ -326,7 +331,7 @@ def printed_abilities(
         for ability in split_text_box(entry.text).abilities:
             printed.setdefault(entry.card_id, set()).add(
                 (
-                    _registered_designators(ability.designators),
+                    _registered_designators(ability),
                     frozenset(ability.keywords),
                     frozenset(ability.modifiers),
                 )
@@ -520,11 +525,11 @@ def unprinted_registrations(
                 )
                 continue
             ability = printed[index]
-            designators = _registered_designators(ability.designators)
+            designators = _registered_designators(ability)
             if designators and not timings <= designators:
                 problems.append(
                     f"abilities: {name} names printed ability {index}, which is "
-                    f"{'/'.join(ability.designators)} where the registration is "
+                    f"{'/'.join(sorted(designators))} where the registration is "
                     f"{'/'.join(sorted(timings))}"
                 )
     return sorted(problems)

@@ -10,7 +10,7 @@ from sphinx.util.docutils import SphinxDirective
 
 from yasuki_core import DATABASE_DIR
 from yasuki_core.install.card_index import read_index
-from yasuki_core.install.yaml_to_sql import card_slug
+from yasuki_core.card_identity import card_slug
 
 IMAGES_DIR = DATABASE_DIR / "images"
 

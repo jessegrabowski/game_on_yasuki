@@ -78,6 +78,11 @@ clan:Crane -type:event                          # Crane, excluding events
 `AND` binds tighter than `OR`, so `a OR b c` means `a OR (b AND c)`. Parentheses
 override that. Queries are case-insensitive (`clan:crane` = `clan:Crane`).
 
+A card's name is its title, and a subtitle is not part of it (CR, Card Subtitles). An exact match
+takes either form: `!"Hida Kozan"` finds every card titled Hida Kozan, and
+`!"Hida Kozan, Voice of the Empress"` finds the one with that subtitle. `name:` and a bare word
+search the subtitle too.
+
 `-` works on any field: `-type:event`, `-clan:crane`, `-artist:Hara`,
 `-format>=diamond`. For an inequality it is the strict complement of the positive
 filter. `-format>=diamond` means "legal in **no** format at or after diamond"

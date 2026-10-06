@@ -180,7 +180,7 @@ images:
   - role: front
     file: disrupted_resources.jpg
     sha256: 613327f645d729cb4fe22daf1ff374eabb7cdd61d7a2a6dfa11fbbb42b7c8896
-- card_id: doom_of_fu_leng
+- card_id: doom_of_fu_leng_aod
   printing_id: anvil_of_despair
   files:
   - role: front

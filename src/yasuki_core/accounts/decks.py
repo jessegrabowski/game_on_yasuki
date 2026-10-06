@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import psycopg
 
 from yasuki_core.decklist import parse_deck_yaml
+from yasuki_core.card_identity import NameIndex, current_id, resolve_name
 
 # The three deck sections, in display order. A section name is also the persisted ``side`` value, so
 # the parser keys, the YAML headers, and the deck_cards.side check constraint stay in lockstep.
@@ -55,32 +56,7 @@ def _display_name(record: dict) -> str:
     return record.get("extended_title") or record["name"]
 
 
-def build_name_index(records: list[dict]) -> dict[str, dict]:
-    """Index card records by lowercased name and extended title, the keys a decklist resolves by.
-
-    Mirrors how ``get_cards_by_names`` matches, so a name written either way resolves to the same
-    record.
-
-    Parameters
-    ----------
-    records : list of dict
-        Card records, each carrying ``card_id``, ``name``, and optionally ``extended_title``.
-
-    Returns
-    -------
-    index : dict mapping str to dict
-        Lowercased name and extended title both mapping to their record.
-    """
-    index: dict[str, dict] = {}
-    for record in records:
-        index[record["name"].lower()] = record
-        extended = record.get("extended_title")
-        if extended:
-            index[extended.lower()] = record
-    return index
-
-
-def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCard]:
+def resolve_deck_cards(parsed: dict, name_index: NameIndex[dict]) -> list[DeckCard]:
     """Resolve a parsed name-based decklist into validated, id-based deck cards.
 
     This is both the save-time serializer and its validation: every named card (and every art-swap
@@ -93,8 +69,8 @@ def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCa
     parsed : dict
         The output of ``parse_deck_yaml``: ``pre_game`` / ``dynasty`` / ``fate`` lists of entries,
         each ``{name, count, set_name, art}`` where ``art`` is ``{name, set_name}`` or None.
-    name_index : dict mapping str to dict
-        Lowercased name/title to card record, as built by ``build_name_index``.
+    name_index : :class:`~yasuki_core.card_identity.NameIndex`
+        The candidate cards, as built by :func:`~yasuki_core.card_identity.name_index`.
 
     Returns
     -------
@@ -113,14 +89,14 @@ def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCa
 
     for side in SIDES:
         for entry in parsed.get(side, []):
-            record = name_index.get(entry["name"].lower())
+            record = resolve_name(name_index, entry["name"], entry.get("set_name"))
             if record is None:
                 unknown.append(entry["name"])
                 continue
             donor_id = donor_set = None
             art = entry.get("art")
             if art:
-                donor = name_index.get(art["name"].lower())
+                donor = resolve_name(name_index, art["name"], art.get("set_name"))
                 if donor is None:
                     unknown.append(art["name"])
                     continue
@@ -227,16 +203,24 @@ def to_rows(cards: list[DeckCard], deck_id: int) -> list[dict]:
     ]
 
 
+def stored_as_current(card_id: str | None) -> str | None:
+    """A stored id read as the id it names today. One retired with no successor stays as stored,
+    so the orphan sweep still finds it."""
+    if card_id is None:
+        return None
+    return current_id(card_id) or card_id
+
+
 def from_rows(rows: list[dict]) -> list[DeckCard]:
-    """The deck cards reconstructed from ``deck_cards`` rows."""
+    """The deck cards reconstructed from ``deck_cards`` rows, a retired id read as its successor."""
     return [
         DeckCard(
-            card_id=row["card_id"],
+            card_id=stored_as_current(row["card_id"]),
             card_name=row["card_name"],
             side=row["side"],
             quantity=row["quantity"],
             set_name=row["set_name"],
-            art_donor_card_id=row["art_donor_card_id"],
+            art_donor_card_id=stored_as_current(row["art_donor_card_id"]),
             art_donor_set=row["art_donor_set"],
         )
         for row in rows
@@ -304,7 +288,7 @@ def to_yaml(
     return "\n".join(lines) + "\n"
 
 
-def deck_from_yaml(text: str, name_index: dict[str, dict]) -> list[DeckCard]:
+def deck_from_yaml(text: str, name_index: NameIndex[dict]) -> list[DeckCard]:
     """Parse and resolve a YAML decklist in one step. The import-and-validate entry point."""
     return resolve_deck_cards(parse_deck_yaml(text), name_index)
 
@@ -321,10 +305,12 @@ def stored_card_ids(conn: psycopg.Connection) -> set[str]:
 
 
 def orphan_card_ids(stored_ids: set[str], known_ids: set[str]) -> set[str]:
-    """The stored card ids absent from the card database. The post-rebuild integrity sweep.
+    """The stored card ids that name no card in the card database, a retired id read as its
+    successor. The post-rebuild integrity sweep.
 
-    A non-empty result means a card-DB rebuild dropped or renamed an id some deck still references.
-    Those decks need re-linking (by the denormalized ``card_name``) before the id vanishes for good.
+    A non-empty result means a card-DB rebuild dropped an id some deck still references without
+    retiring it to a successor. Those decks need re-linking (by the denormalized ``card_name``)
+    before the id vanishes for good.
 
     Parameters
     ----------
@@ -336,6 +322,6 @@ def orphan_card_ids(stored_ids: set[str], known_ids: set[str]) -> set[str]:
     Returns
     -------
     orphans : set of str
-        Ids in ``stored_ids`` but not in ``known_ids``.
+        Ids in ``stored_ids``, each read through the retired list, that are not in ``known_ids``.
     """
-    return stored_ids - known_ids
+    return {stored_as_current(card_id) for card_id in stored_ids} - known_ids

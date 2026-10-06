@@ -1,7 +1,6 @@
 set: Ivory Edition
 cards:
-- id: 10_koku_2
-  title: 10 Koku
+- title: 10 Koku
   types:
   - Other
   decks:
@@ -218,12 +217,12 @@ cards:
     brilliant minds. We are fortunate that he continues to teach." - Moto Naleesh</i>
   collector_number: '254'
   designer: Bryan
-- title: Akodo Dairuko, the Steel Lion
+- title: Akodo Dairuko
+  subtitle: the Steel Lion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Dairuko, the Steel Lion • Experienced 2
   clans:
   - Lion
   keywords:
@@ -447,7 +446,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Crab Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -474,7 +472,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Crane Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -501,7 +498,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Dragon Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -528,7 +524,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Lion Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -555,7 +550,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Mantis Clan • Experienced
   keywords:
   - Armor
   - Experienced Yoritomo's Armor
@@ -582,7 +576,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Phoenix Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -609,7 +602,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Scorpion Clan • Experienced
   keywords:
   - Armor
   - Experienced Shoju's Armor
@@ -662,7 +654,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Unicorn Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -1075,12 +1066,12 @@ cards:
   artist: Edwin David
   flavor_text: <i>"And now, you will tell no one."</i>
   collector_number: '139'
-- title: Bayushi Nitoshi, the Poison Mask
+- title: Bayushi Nitoshi
+  subtitle: the Poison Mask
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nitoshi, the Poison Mask • Experienced 2
   clans:
   - Ninja
   - Scorpion
@@ -1774,12 +1765,12 @@ cards:
   flavor_text: <i>"I have no quarrel with you, Crab. If you choose to force the issue, it will be by your
     own action that your life reaches its end."</i>
   collector_number: '149'
-- title: Daigotsu Kanpeki, the Shadow Emperor
+- title: Daigotsu Kanpeki
+  subtitle: the Shadow Emperor
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Kanpeki, the Shadow Emperor • Experienced 3
   clans:
   - Spider
   keywords:
@@ -2264,12 +2255,12 @@ cards:
   flavor_text: <i>"I think an important point has been overlooked."</i>
   collector_number: '78'
   designer: Bryan
-- title: Doji Makoto, the Smiling Blade
+- title: Doji Makoto
+  subtitle: the Smiling Blade
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Makoto, the Smiling Blade • Experienced
   clans:
   - Crane
   keywords:
@@ -3311,12 +3302,12 @@ cards:
   artist: Immar Palomera
   flavor_text: <i>"I make sure to have the final say in every argument and the final blow in any fight."</i>
   collector_number: '58'
-- title: Hida Kisada, the Little Bear
+- title: Hida Kisada
+  subtitle: the Little Bear
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kisada, the Little Bear • Experienced
   clans:
   - Crab
   keywords:
@@ -3897,8 +3888,7 @@ cards:
     victorious general. Though he did not trust the young heir, the Akodo's honor dictated that he must
     obey.
   collector_number: '317'
-- id: imposter_2
-  title: Imposter
+- title: Imposter
   types:
   - Personality
   - Proxy
@@ -4276,7 +4266,8 @@ cards:
   flavor_text: <i>"How glorious the mountains are! What wisdom can be found here! Small wonder the Togashi
     build their monasteries on great heights."</i>
   collector_number: '129'
-- title: Isawa Shunryu, the Infinite Eye
+- title: Isawa Shunryu
+  subtitle: the Infinite Eye
   types:
   - Personality
   decks:
@@ -5083,8 +5074,7 @@ cards:
     defense against aggressive forces. In the hands <br>of a samurai, it is a tactical instrument of death.</i>
   collector_number: '237'
   designer: Bryan
-- id: lion_ancestor_2
-  title: Lion Ancestor
+- title: Lion Ancestor
   types:
   - Personality
   - Proxy
@@ -5683,12 +5673,12 @@ cards:
   artist: Michael Phillippi
   flavor_text: <i>"My family may have forgotten, but I? I will never forget."</i>
   collector_number: '87'
-- title: Mirumoto Shikei, the Laughing Dragon
+- title: Mirumoto Shikei
+  subtitle: the Laughing Dragon
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Shikei, the Laughing Dragon • Experienced
   clans:
   - Dragon
   keywords:
@@ -5891,12 +5881,12 @@ cards:
   artist: Jason Behnke
   flavor_text: <i>"Are you so sure of your strength, friend? Come test it against my blade."</i>
   collector_number: '179'
-- title: Moto Naleesh, the Living Goddess
+- title: Moto Naleesh
+  subtitle: the Living Goddess
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Naleesh, the Living Goddess • Experienced
   clans:
   - Unicorn
   keywords:
@@ -7289,12 +7279,12 @@ cards:
   artist: Jason Engle
   flavor_text: <i>"I am not a shugenja, but the Void gives me all things."</i>
   collector_number: '134'
-- title: Shiba Tsukimi, the Blind Phoenix
+- title: Shiba Tsukimi
+  subtitle: the Blind Phoenix
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Tsukimi, the Blind Phoenix • Experienced 5
   clans:
   - Phoenix
   keywords:
@@ -8466,14 +8456,12 @@ cards:
   collector_number: '365'
   doublesided: true
   gold_production: 4
-- id: the_false_nimuro_experienced_2_2
-  title: The False Nimuro
+- title: The False Nimuro
   types:
   - Personality
   - Proxy
   decks:
   - Other
-  extended_title: The False Nimuro • Experienced 2
   clans:
   - Lion
   keywords:
@@ -9888,12 +9876,12 @@ cards:
   artist: Jaime Jones
   flavor_text: '"Your father intends to visit me soon," the spirit said. Nitoshi narrowed his eyes.'
   collector_number: '148'
-- title: Yoritomo Hiromi, the Growing Storm
+- title: Yoritomo Hiromi
+  subtitle: the Growing Storm
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Hiromi, the Growing Storm • Experienced 2
   clans:
   - Mantis
   keywords:

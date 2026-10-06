@@ -29,7 +29,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Agasha Chieh • Experienced
   clans:
   - Phoenix
   keywords:
@@ -230,7 +229,7 @@ cards:
   flavor_text: <i>"You would be surprised how quickly these peasents can work when given appropriate encouragement,"
     Atsuki said with a thin smile.</i>
   collector_number: '26'
-- id: battle_hardened_2
+- id: battle_hardened_rob
   title: Battle-Hardened
   types:
   - Strategy
@@ -253,7 +252,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Atsuki • Experienced
   clans:
   - Scorpion
   keywords:
@@ -1873,7 +1871,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Omen • Experienced
   clans:
   - Crab
   keywords:
@@ -3327,7 +3324,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Kitao • Experienced 2
   clans:
   - Mantis
   keywords:

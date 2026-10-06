@@ -17,6 +17,7 @@ yasuki_core.install.card_index
     iter_set_entries
     main
     read_index
+    untagged_title_ties
     write_index
 
 .. automodule:: yasuki_core.install.card_index

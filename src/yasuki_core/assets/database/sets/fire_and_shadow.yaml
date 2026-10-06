@@ -199,7 +199,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Aramasu • Experienced 2
   clans:
   - Mantis
   keywords:
@@ -228,7 +227,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Aramoro • Experienced 2
   clans:
   - Ninja
   - Scorpion
@@ -728,7 +726,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Chomei • Experienced
   clans:
   - Crane
   - Mantis
@@ -1123,7 +1120,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Rohiteki • Experienced
   clans:
   - Crab
   keywords:
@@ -1167,7 +1163,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hitomi Bujun • Experienced
   clans:
   - Dragon
   keywords:
@@ -1317,7 +1312,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Gunjin • Experienced
   clans:
   - Lion
   keywords:
@@ -1531,7 +1525,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Ichiro • Experienced
   clans:
   - Crane
   keywords:
@@ -1781,7 +1774,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kumo • Experienced
   clans:
   - Spirit
   keywords:
@@ -1918,7 +1910,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mara • Experienced
   clans:
   - Naga
   keywords:
@@ -2035,7 +2026,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Sukune • Experienced
   clans:
   - Dragon
   keywords:
@@ -2314,7 +2304,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ninja Shadow-Walker • Experienced
   clans:
   - Ninja
   keywords:
@@ -2395,7 +2384,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Oni no Okura • Experienced
   keywords:
   - Unique
   - Experienced
@@ -2766,7 +2754,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ryosei • Experienced 2
   clans:
   - Mantis
   - Fox
@@ -2922,7 +2909,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Seppun Toshiken • Experienced
   clans:
   - Toturi's Army
   keywords:
@@ -3010,7 +2996,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Gensui • Experienced
   clans:
   - Phoenix
   keywords:
@@ -3495,7 +3480,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Jodome • Experienced
   clans:
   - Brotherhood of Shinsei
   - Dragon
@@ -3589,7 +3573,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi • Experienced 2
   clans:
   - Mantis
   - Wasp
@@ -3644,7 +3627,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Xieng Chi • Experienced
   clans:
   - Unicorn
   keywords:

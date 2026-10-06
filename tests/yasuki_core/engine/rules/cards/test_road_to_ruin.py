@@ -798,7 +798,9 @@ def test_rumiko_gains_two_with_beiko_sensei():
 def test_rumiko_is_withheld_on_the_other_seats_turn():
     session = _rumiko_session()
     end_turn(session)
+    session.act(PlayerId.P2, Pass())
 
+    assert session.game.round.priority is P1
     assert ActivateAbility("rumiko") not in session.legal_actions(P1)
 
 

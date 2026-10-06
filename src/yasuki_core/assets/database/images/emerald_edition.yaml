@@ -1296,7 +1296,7 @@ images:
   - role: front
     file: ratling_bushi.jpg
     sha256: 72499f07bf39b19363987c45fb88fdd452bf29aa236a531698435f9186cb1fa9
-- card_id: ratling_pack
+- card_id: ratling_pack_imp
   printing_id: emerald_edition
   files:
   - role: front
@@ -1662,7 +1662,7 @@ images:
   - role: front
     file: the_fury_of_osano_wo.jpg
     sha256: 09c913a40131b953b7447f33e8b32265285b7f98b05758e5c4e98c186b505952
-- card_id: the_jade_hand
+- card_id: the_jade_hand_imp
   printing_id: emerald_edition
   files:
   - role: front

@@ -1,7 +1,6 @@
 set: Promotional – Gold
 cards:
-- id: 10_koku
-  title: 10 Koku
+- title: 10 Koku
   types:
   - Other
   decks:
@@ -60,7 +59,7 @@ cards:
     - Daughter of the Bear, Part II</i>
 - title: A'ichtr'foo
   creates:
-  - ratling_pack_2
+  - ratling_pack_sote
   types:
   - Personality
   decks:
@@ -549,7 +548,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Earth • Experienced
   keywords:
   - Unique
   - Dark Oracle
@@ -573,7 +571,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Fire • Experienced
   keywords:
   - Unique
   - Dark Oracle
@@ -848,7 +845,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Helm of Thunder • Experienced
   keywords:
   - Experienced Dragon Helm
   - Unique
@@ -1328,7 +1324,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Porcelain Mask of Fu Leng • Experienced
   keywords:
   - Unique
   - Experienced

@@ -2,10 +2,16 @@ import yaml
 import pytest
 
 from yasuki_core import DATABASE_DIR
+from yasuki_core.card_identity import current_id, retired_ids
 from yasuki_core.install.images_to_sql import CARD_BACKS
 
 IMAGES_DIR = DATABASE_DIR / "images"
 MANIFESTS = sorted(IMAGES_DIR.glob("*.yaml"))
+
+# A renamed card's image files keep the name they were stored under, its retired id.
+FORMER_IDS: dict[str, list[str]] = {}
+for retired in retired_ids():
+    FORMER_IDS.setdefault(current_id(retired), []).append(retired)
 
 
 def test_manifests_exist():
@@ -30,7 +36,8 @@ def test_manifest_shape(manifest):
         assert files[0]["role"] == "front"
         for file_info in files:
             assert file_info["role"] in {"front", "back"}
-            assert file_info["file"].startswith(image["card_id"])
+            names = (image["card_id"], *FORMER_IDS.get(image["card_id"], ()))
+            assert file_info["file"].startswith(names)
             assert len(file_info["sha256"]) == 64
 
 

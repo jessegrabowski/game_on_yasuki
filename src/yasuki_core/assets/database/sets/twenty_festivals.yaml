@@ -216,7 +216,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Air Dragon • Experienced 3
   keywords:
   - Cavalry
   - Experienced 3
@@ -312,7 +311,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Kenaro • Experienced
   clans:
   - Lion
   keywords:
@@ -647,7 +645,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Tsunefusa • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1006,7 +1003,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Toshimo • Experienced
   clans:
   - Scorpion
   keywords:
@@ -1611,7 +1607,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Atsushi • Experienced
   clans:
   - Spider
   keywords:
@@ -2168,7 +2163,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Earth Dragon • Experienced 2
   keywords:
   - Cavalry
   - Experienced 2
@@ -2655,7 +2649,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Fire Dragon • Experienced 3
   keywords:
   - Cavalry
   - Experienced 3
@@ -2731,7 +2724,7 @@ cards:
   collector_number: '12'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- id: forgotten_legacy_2
+- id: forgotten_legacy_20f
   title: Forgotten Legacy
   types:
   - Holding
@@ -3147,7 +3140,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Goju Yurishi • Experienced 2
   clans:
   - Ninja
   - Spider
@@ -3916,7 +3908,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Uzuyumi • Experienced
   clans:
   - Phoenix
   keywords:
@@ -4132,7 +4123,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kaiu Watsuki • Experienced
   clans:
   - Crab
   keywords:
@@ -4339,7 +4329,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Ujirou • Experienced
   clans:
   - Crane
   keywords:
@@ -4687,7 +4676,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Renyu • Experienced 3
   clans:
   - Crab
   keywords:
@@ -5325,12 +5313,12 @@ cards:
   artist: Jason Juta
   flavor_text: <i>"Peace in the Colonies, my friend. The Dragon will brook no more of this pointless conflict."</i>
   collector_number: '76'
-- title: Mirumoto Tsuda, Emerald Champion
+- title: Mirumoto Tsuda
+  subtitle: Emerald Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Tsuda, Emerald Champion • Experienced
   clans:
   - Dragon
   keywords:
@@ -5385,7 +5373,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moshi Ikako • Experienced
   clans:
   - Mantis
   keywords:
@@ -5557,12 +5544,12 @@ cards:
     lack of a horse will not save him."'
   collector_number: '175'
   designer: Duncan
-- title: Moto Taigo, Shogun
+- title: Moto Taigo
+  subtitle: Shogun
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Taigo, Shogun • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -5856,7 +5843,8 @@ cards:
   flavor_text: There are those whose souls have been lost to the Nothing, but who serve neither Goju nor
     Ninube.
   collector_number: '164'
-- title: Okuma, Beiko's Bear
+- title: Okuma
+  subtitle: Beiko's Bear
   types:
   - Proxy
   - Personality
@@ -7100,7 +7088,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Tae-hyun • Experienced
   clans:
   - Unicorn
   keywords:
@@ -7787,7 +7774,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tamori Seiken • Experienced
   clans:
   - Dragon
   keywords:
@@ -9073,7 +9059,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Void Dragon • Experienced 3
   keywords:
   - Cavalry
   - Experienced 3
@@ -9198,7 +9183,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Water Dragon • Experienced 3
   keywords:
   - Cavalry
   - Experienced 3
@@ -9363,7 +9347,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Matsuo • Experienced
   clans:
   - Mantis
   keywords:
@@ -9419,8 +9402,7 @@ cards:
     Mantis.</i>
   collector_number: '108'
   designer: Julien
-- id: yoritomo_nintai
-  title: Yoritomo Nintai
+- title: Yoritomo Nintai
   types:
   - Personality
   decks:

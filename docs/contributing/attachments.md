@@ -19,10 +19,12 @@ and are not the same cost.
 :language: python
 ```
 
-{card}`Touch of Death` charges both:
+{card}`Touch of Death` charges the written-out form, "Bow this Shugenja to destroy a target bowed
+Personality", and destroys itself as part of the effect:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/cards/imperial_edition.py
-:pyobject: _touch_of_death_cost
+:start-at: def _touch_of_death_effects(
+:end-at: cost=bow_parent_cost,
 :language: python
 ```
 

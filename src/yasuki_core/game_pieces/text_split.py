@@ -27,7 +27,7 @@ _ICON_BODY = r"[A-Za-z0-9_*]+:"
 _ICON = f":{_ICON_BODY}"
 _DESIG = "|".join(sorted(DESIGNATORS))
 _TAGS = re.compile(r"<[^>]+>")
-_BREAK = re.compile(r"<br\s*/?>")
+_BREAK = re.compile(r"<br\s*/?>|\n")
 
 # [keywords] [designator(/designator...)] [, cost [or cost]] :
 _ANCHOR = re.compile(
@@ -173,8 +173,8 @@ def _anchors(plain: str) -> list[re.Match]:
 
 
 def _abilities(text: str) -> list[Ability]:
-    """Abilities segment on ``<br>`` exactly as traits do, so a break the card prints is a boundary
-    the prefix match can see."""
+    """Abilities segment on line breaks exactly as traits do, so a break the card prints is a
+    boundary the prefix match can see."""
     out: list[Ability] = []
     for segment in _segments(text):
         out.extend(_segment_abilities(strip_markup(segment)))
@@ -319,9 +319,9 @@ def _pull_reminders(text: str) -> tuple[str, list[str]]:
 def split_text_box(text: str) -> TextBox:
     """Decompose a card's text box into its traits and abilities.
 
-    ``<br>`` is honored as a hard boundary while it is in the data, but nothing depends on markup:
-    abilities are found by their designator and traits fall back to sentence boundaries, so the
-    same split holds once the tags are gone.
+    A line break, written as a newline or as ``<br>`` while that markup is in the data, is a hard
+    boundary. Nothing else depends on markup: abilities are found by their designator and traits
+    fall back to sentence boundaries, so the same split holds once the tags are gone.
 
     Parameters
     ----------

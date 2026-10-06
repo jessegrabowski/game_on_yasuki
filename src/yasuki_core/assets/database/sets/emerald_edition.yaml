@@ -4636,7 +4636,7 @@ cards:
   artist: Randy Elliott
   flavor_text: <i>Like a swarm they were, overcoming the samurai as if they were standing still. - Iuchi
     Daiyu</i>
-- id: ratling_pack
+- id: ratling_pack_imp
   title: Ratling Pack
   types:
   - Follower
@@ -5972,7 +5972,7 @@ cards:
   rarity: Common
   artist: Randy Gallegos
   flavor_text: <i>Lightning flickered from the Shugenja's fingers, and I knew the samurai was doomed.</i>
-- id: the_jade_hand
+- id: the_jade_hand_imp
   title: The Jade Hand
   types:
   - Item

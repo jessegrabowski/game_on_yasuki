@@ -4647,7 +4647,7 @@ cards:
   rarity: Uncommon
   artist: Randy Elliott
   flavor_text: <i>"Their courage is only matched by their numbers." - Hida Tsuru</i>
-- id: ratling_pack
+- id: ratling_pack_imp
   title: Ratling Pack
   types:
   - Follower
@@ -5973,7 +5973,7 @@ cards:
   rarity: Common
   artist: Randy Gallegos
   flavor_text: <i>"Fire has no secrets, only painful finality of truth." - Isawa Tsuke</i>
-- id: the_jade_hand
+- id: the_jade_hand_imp
   title: The Jade Hand
   types:
   - Item

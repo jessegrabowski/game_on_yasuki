@@ -53,7 +53,7 @@ register_ability(
     "divination_bowl",
     Ability(
         key="look",
-        timings=(ActionTiming.LIMITED,),
+        timings=(ActionTiming.OPEN,),
         cost=bow_cost,
         targets=itself,
         hits_every_target=True,
@@ -65,7 +65,7 @@ register_ability(
     Ability(
         printed_index=1,
         key="draw_and_destroy",
-        timings=(ActionTiming.LIMITED,),
+        timings=(ActionTiming.OPEN,),
         cost=bow_cost,
         targets=itself,
         hits_every_target=True,

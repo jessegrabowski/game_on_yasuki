@@ -63,21 +63,21 @@ def test_presence_flags_are_null_checks():
     assert "c.errata_text IS NOT NULL" in errata
 
 
-def test_name_exact_matches_whole_name_case_insensitively():
+def test_name_exact_matches_the_title_or_the_title_with_its_subtitle():
     clause, params = build_card_filter(filter_options={"name_exact": ["Doji Hoturi"]})
-    assert "lower(c.name) = lower(%s)" in clause
-    assert params == ["Doji Hoturi"]
+    assert "(lower(c.name) = lower(%s) OR c.name_normalized = %s)" in clause
+    assert params == ["Doji Hoturi", "doji hoturi"]
 
 
-def test_name_exact_excludes_negates_the_equality():
+def test_name_exact_excludes_negates_both_equalities():
     clause, params = build_card_filter(filter_options={"name_exact_excludes": ["Doji Hoturi"]})
-    assert "lower(c.name) != lower(%s)" in clause
-    assert params == ["Doji Hoturi"]
+    assert "(lower(c.name) != lower(%s) AND c.name_normalized != %s)" in clause
+    assert params == ["Doji Hoturi", "doji hoturi"]
 
 
 def test_bare_excludes_negates_the_broad_union():
     clause, params = build_card_filter(filter_options={"bare_excludes": ["doji"]})
-    assert "NOT (c.name ILIKE" in clause
+    assert "NOT (c.extended_title ILIKE" in clause
     assert _PRINT_EXISTS in clause
     assert params == ["%doji%"] * 4
 
@@ -147,7 +147,7 @@ def test_compile_term_returns_a_single_condition_bare():
 
 def test_compile_term_bare_word_uses_the_broad_union():
     sql, params = compile_term(parse_token("crane"))
-    assert sql.startswith("(c.name ILIKE")
+    assert sql.startswith("(c.extended_title ILIKE")
     assert _PRINT_EXISTS in sql
     assert params == ["%crane%"] * 4
 

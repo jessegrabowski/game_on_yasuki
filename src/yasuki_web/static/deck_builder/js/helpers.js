@@ -20,6 +20,13 @@ export function stripUnique(name) {
   return (name || '').replace(/^[\u25C6\u2022]\s*/, '');
 }
 
+// The key /cards/lookup returns a decklist line's card under: the name lowercased, then the line's
+// set in brackets when it gives one. The set is what tells apart two cards that share a title.
+export function lookupKey(name, setName) {
+  const key = stripUnique(name).toLowerCase();
+  return setName ? `${key} [${setName}]` : key;
+}
+
 // The deck-builder bucket a card belongs to: FATE, DYNASTY, or PRE_GAME (strongholds, senseis,
 // anything not in the Fate or Dynasty deck). Derived from the card's `decks` array.
 export function deckSide(card) {

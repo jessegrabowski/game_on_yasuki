@@ -53,7 +53,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Tsudoken • Experienced 2
   clans:
   - Lion
   keywords:
@@ -201,7 +200,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Chukage • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -238,7 +236,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Kaitoko • Experienced
   clans:
   - Phoenix
   keywords:
@@ -326,7 +323,8 @@ cards:
     incursion."</i>
   collector_number: '70'
   designer: Loki
-- title: Asukai, the Tireless
+- title: Asukai
+  subtitle: the Tireless
   types:
   - Personality
   decks:
@@ -365,7 +363,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Bamboo Harvesters • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -409,7 +406,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kachiko • ExperiencedCoM
   clans:
   - Scorpion
   keywords:
@@ -444,7 +440,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kahoku • Experienced 2
   clans:
   - Scorpion
   keywords:
@@ -478,7 +473,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nitoshi • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -537,7 +531,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Blood of the Preserver • Experienced
   keywords:
   - Unique
   - Experienced
@@ -564,7 +557,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Border Keep • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -658,7 +650,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Arakan • Experienced
   clans:
   - Spider
   keywords:
@@ -692,7 +683,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Gyoken • Experienced 3
   clans:
   - Spider
   keywords:
@@ -810,7 +800,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Hakuseki • Experienced 3
   clans:
   - Crane
   keywords:
@@ -846,7 +835,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Hoturi • Inexperienced
   clans:
   - Crane
   keywords:
@@ -1123,7 +1111,8 @@ cards:
   flavor_text: <i>Even heretics have their uses.</i>
   collector_number: '16'
   designer: Thomas
-- title: Hamuro, the Wise
+- title: Hamuro
+  subtitle: the Wise
   types:
   - Personality
   decks:
@@ -1160,7 +1149,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hantei XVI • Inexperienced
   keywords:
   - Unique
   - Emperor
@@ -1214,7 +1202,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Heart of Fudo • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -1242,7 +1229,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida O-Ushi • Inexperienced
   clans:
   - Crab
   keywords:
@@ -1292,12 +1278,12 @@ cards:
     Kingdom's history." - Asako Chukage</i>
   collector_number: '115'
   designer: Loki
-- title: Hiruma Nikaru, the Flesh Eater
+- title: Hiruma Nikaru
+  subtitle: the Flesh Eater
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Nikaru, the Flesh Eater • Experienced 2
   clans:
   - Crab
   keywords:
@@ -1349,7 +1335,8 @@ cards:
   artist: Franz Vohwinkel
   flavor_text: <i>"You want to see it?! You want to see the darkness we have held at bay?!"</i>
   collector_number: '139'
-- title: Ichiro Otani, the Stone Breaker
+- title: Ichiro Otani
+  subtitle: the Stone Breaker
   types:
   - Personality
   decks:
@@ -1386,7 +1373,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Aimi • Experienced
   clans:
   - Lion
   keywords:
@@ -1449,7 +1435,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Natsu • Experienced
   clans:
   - Lion
   keywords:
@@ -1477,8 +1462,7 @@ cards:
   flavor_text: <i>"The Unicorn may be astonished to hear this, but we too breed horses."</i>
   collector_number: '42'
   designer: Loki
-- id: imposter
-  title: Imposter
+- title: Imposter
   types:
   - Personality
   - Proxy
@@ -1552,7 +1536,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tsuke • ExperiencedCoM
   clans:
   - Phoenix
   keywords:
@@ -1588,7 +1571,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Iuchi Karasu • Inexperienced
   clans:
   - Unicorn
   keywords:
@@ -1646,7 +1628,8 @@ cards:
   flavor_text: <i>"The Lords of Death, the Kami - all delusions! Now I see what is real!"</i>
   collector_number: '73'
   designer: Duncan
-- title: Jikoji, Fist of Stone
+- title: Jikoji
+  subtitle: Fist of Stone
   types:
   - Personality
   decks:
@@ -1701,14 +1684,14 @@ cards:
     - Kakita Ichigiku</i>
   collector_number: '100'
   designer: Loki
-- title: Kakita Hideo, the Fallen Keeper
+- title: Kakita Hideo
+  subtitle: the Fallen Keeper
   grants:
   - plus1f
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Hideo, the Fallen Keeper • Experienced 2
   clans:
   - Crane
   keywords:
@@ -1741,7 +1724,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Ichigiku • Experienced
   clans:
   - Crane
   keywords:
@@ -1770,7 +1752,8 @@ cards:
     Perhaps that is why I find her so fascinating." - Kitsuki Kinaro</i>
   collector_number: '32'
   designer: Loki
-- title: Kasuga Aizawa, the Razor's Edge
+- title: Kasuga Aizawa
+  subtitle: the Razor's Edge
   types:
   - Personality
   decks:
@@ -1800,7 +1783,8 @@ cards:
   flavor_text: <i>"The world is vaster by far than most samurai ever realize. There are wonders and threats
     that most can never imagine. P'an Ku? Fudo? Mere annoyances compared to some."</i>
   collector_number: '24'
-- title: Kimura, Forgiver of Sins
+- title: Kimura
+  subtitle: Forgiver of Sins
   types:
   - Personality
   decks:
@@ -1836,7 +1820,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsuki Daisuke • Experienced 2
   clans:
   - Dragon
   keywords:
@@ -1869,7 +1852,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsuki Kinaro • Experienced
   clans:
   - Dragon
   keywords:
@@ -2030,7 +2012,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kokujin • Inexperienced
   keywords:
   - Duelist
   - Unique
@@ -2058,7 +2039,8 @@ cards:
   flavor_text: <i>"Is madness a thing that can be perfected?" - Daigotsu Kanpeki</i>
   collector_number: '74'
   designer: Duncan
-- title: Komori Miyano, the Shadow Wing
+- title: Komori Miyano
+  subtitle: the Shadow Wing
   creates:
   - bat
   types:
@@ -2100,7 +2082,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Renyu • Experienced 2
   clans:
   - Crab
   keywords:
@@ -2200,12 +2181,11 @@ cards:
 - title: Matsu Nimuro
   creates:
   - the_false_nimuro_experienced_2
-  - the_false_nimuro_experienced_2_2
+  - the_false_nimuro_experienced_2
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Nimuro • Experienced 2
   clans:
   - Lion
   keywords:
@@ -2284,7 +2264,8 @@ cards:
     are steeled against the insidious touch of madness.</i>
   collector_number: '127'
   designer: Loki
-- title: Morito Inoue, Scourge of the Plains
+- title: Morito Inoue
+  subtitle: Scourge of the Plains
   types:
   - Personality
   decks:
@@ -2321,7 +2302,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moshi Tomiko • Experienced
   clans:
   - Mantis
   keywords:
@@ -2353,7 +2333,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Ming-Gwok • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2384,12 +2363,12 @@ cards:
     great interest…"</i>
   collector_number: '85'
   designer: Bryan
-- title: Moto Taigo, the Skull Taker
+- title: Moto Taigo
+  subtitle: the Skull Taker
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Taigo, the Skull Taker • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2498,7 +2477,8 @@ cards:
   artist: Sam Flegal
   flavor_text: <i>"None of you are worthy of your lives."</i>
   collector_number: '146'
-- title: Nishoji, the Steel-Eyed
+- title: Nishoji
+  subtitle: the Steel-Eyed
   types:
   - Personality
   decks:
@@ -2550,7 +2530,8 @@ cards:
     forward, heads held high.</i>
   collector_number: '128'
   designer: Duncan
-- title: Okazaki, Breaker of Wills
+- title: Okazaki
+  subtitle: Breaker of Wills
   types:
   - Personality
   decks:
@@ -2582,12 +2563,12 @@ cards:
   flavor_text: <i>"Your dissembling is entertaining but ultimately futile. Speak the truth. It is inevitable."</i>
   collector_number: '47'
   designer: Bryan
-- title: Otomo Suikihime, Queen of Fools
+- title: Otomo Suikihime
+  subtitle: Queen of Fools
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otomo Suikihime, Queen of Fools • Experienced
   keywords:
   - Unique
   - Courtier
@@ -2642,7 +2623,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: P'an Ku • Experienced
   keywords:
   - Cavalry
   - Unique
@@ -2837,7 +2817,8 @@ cards:
     and suffering on an undreamt of scale.</i>
   collector_number: '8'
   designer: Loki
-- title: Rokkaku, Master of Scrolls
+- title: Rokkaku
+  subtitle: Master of Scrolls
   types:
   - Personality
   decks:
@@ -2868,7 +2849,8 @@ cards:
   flavor_text: <i>"Secrets. More precious than any treasure."</i>
   collector_number: '61'
   designer: Duncan
-- title: Sengmai, the Unbreakable
+- title: Sengmai
+  subtitle: the Unbreakable
   types:
   - Personality
   decks:
@@ -2903,7 +2885,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Iaimiko • Experienced
   clans:
   - Phoenix
   keywords:
@@ -2937,7 +2918,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Tselu • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2997,7 +2977,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Kameyoi • Experienced
   clans:
   - Scorpion
   keywords:
@@ -3136,7 +3115,8 @@ cards:
     plans.</i>
   collector_number: '65'
   designer: Duncan
-- title: Suzume Shindo, the Final Blade
+- title: Suzume Shindo
+  subtitle: the Final Blade
   types:
   - Personality
   decks:
@@ -3289,7 +3269,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Dark Naga • Experienced
   keywords:
   - Unique
   - Champion
@@ -3321,7 +3300,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: The Egg of P'an Ku • Experienced
   keywords:
   - Unique
   - Experienced
@@ -3365,14 +3343,12 @@ cards:
     she felt the sin of hate in her heart.</i>
   collector_number: '10'
   designer: Loki
-- id: the_false_nimuro_experienced_2
-  title: The False Nimuro
+- title: The False Nimuro
   types:
   - Personality
   - Proxy
   decks:
   - Other
-  extended_title: The False Nimuro • Experienced 2
   clans:
   - Lion
   keywords:
@@ -3483,7 +3459,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Shakash • Experienced
   keywords:
   - Conqueror
   - Unique
@@ -3551,7 +3526,8 @@ cards:
   flavor_text: <i>"Ours is a proud history, and we shall prove worthy of the name this day."</i>
   collector_number: '96'
   designer: Duncan
-- title: Tochiko, the Jagged Tusk of Death
+- title: Tochiko
+  subtitle: the Jagged Tusk of Death
   types:
   - Personality
   decks:
@@ -3589,7 +3565,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Mitsu • Inexperienced
   clans:
   - Dragon
   keywords:
@@ -3620,12 +3595,12 @@ cards:
     him shall there be." - Mirumoto Shikei</i>
   collector_number: '37'
   designer: Thomas
-- title: Togashi Noboru, the Shattered Star
+- title: Togashi Noboru
+  subtitle: the Shattered Star
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Noboru, the Shattered Star • Experienced
   clans:
   - Dragon
   keywords:
@@ -3653,7 +3628,8 @@ cards:
   flavor_text: <i>"Father was a fool to cast this aside. I alone know what is best."</i>
   collector_number: '38'
   designer: Thomas
-- title: Toku Saiga, the Metal Storm
+- title: Toku Saiga
+  subtitle: the Metal Storm
   types:
   - Personality
   decks:
@@ -3684,7 +3660,8 @@ cards:
   flavor_text: <i>"There are few who approve of me. No matter. I will laugh and laugh at the looks on
     their faces when they fall to the ground, helpless before my blades."</i>
   collector_number: '66'
-- title: Tonbo Inuyama, the Eye of Tomorrow
+- title: Tonbo Inuyama
+  subtitle: the Eye of Tomorrow
   types:
   - Personality
   decks:
@@ -3715,7 +3692,8 @@ cards:
   artist: Héctor Herrera
   flavor_text: <i>"You see coins," he said, eyes dancing. "I see windows into tomorrow."</i>
   collector_number: '57'
-- title: Tsi Hayamizu, the Hand of Steel
+- title: Tsi Hayamizu
+  subtitle: the Hand of Steel
   types:
   - Personality
   decks:
@@ -3744,7 +3722,8 @@ cards:
   flavor_text: <i>"The wise man knows worthy weapons are made with purity. Not just of the steel, but
     of the spirit and body as well. No pile of filthy Shosuro money will make me forget that."</i>
   collector_number: '81'
-- title: Tsiang, the Benevolent
+- title: Tsiang
+  subtitle: the Benevolent
   types:
   - Personality
   decks:
@@ -3783,7 +3762,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi • Inexperienced
   clans:
   - Mantis
   - Wasp
@@ -3859,7 +3837,8 @@ cards:
   flavor_text: <i>No one mind could ever hope to contain the burden of P'an Ku's madness.</i>
   collector_number: '136'
   designer: Duncan
-- title: Usagi Seki, the Untouchable
+- title: Usagi Seki
+  subtitle: the Untouchable
   types:
   - Personality
   decks:
@@ -3896,7 +3875,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yasuki Tono • Experienced
   clans:
   - Crab
   keywords:
@@ -3954,7 +3932,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Kanaye • Experienced
   clans:
   - Mantis
   keywords:
@@ -3989,7 +3966,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Minori • Experienced
   clans:
   - Mantis
   keywords:
@@ -4050,7 +4026,8 @@ cards:
   artist: Chris Pritchard
   flavor_text: <i>"They are mine. Understand? All of this is mine!"</i>
   collector_number: '143'
-- title: Yunmen, the Whisper
+- title: Yunmen
+  subtitle: the Whisper
   types:
   - Personality
   decks:
@@ -4087,7 +4064,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Zansho • Experienced
   keywords:
   - Conqueror
   - Unique

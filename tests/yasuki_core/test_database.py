@@ -6,6 +6,7 @@ from yasuki_core.database import (
     mask_dsn,
     search_cards,
     get_card_by_id,
+    query_cards_by_legality,
     query_all_prints,
     get_prints_by_card_id,
     query_cards_filtered,
@@ -122,6 +123,23 @@ def test_a_cards_grant_lands_in_card_grants_counter():
             ("courts_of_otosan_uchi",),
         )
         assert "wealth" in {row["counter_key"] for row in cur.fetchall()}
+
+
+def test_a_card_takes_its_stats_from_its_newest_printing():
+    # Heavy Infantry costs 8 in every printing before Shattered Empire, which prints 7. The older
+    # printings' set files sort first, so this fails if file order picks the card's stats.
+    assert get_card_by_id("heavy_infantry")["gold_cost"] == 7
+
+
+def test_a_card_takes_its_clans_from_its_newest_printing():
+    # Beiko Sensei's older printings name Crab and Unicorn, and Shattered Empire, the newest, Akasha.
+    assert get_card_by_id("beiko_sensei")["clans"] == ["Akasha"]
+
+
+def test_a_card_is_legal_wherever_any_of_its_printings_is():
+    # Yoritomo Nintai's Twenty Festivals and Shattered Empire printings list different formats.
+    assert "yoritomo_nintai" in query_cards_by_legality("A Brother's Destiny (Twenty Festivals)")
+    assert "yoritomo_nintai" in query_cards_by_legality("Shattered Empire")
 
 
 def test_query_all_prints_returns_multiple_prints_per_card():

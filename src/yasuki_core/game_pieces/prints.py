@@ -37,6 +37,8 @@ class CardPrint:
     # The stable printed identity: the database card slug, shared by every copy and printing.
     # Per-card effect handlers key off it.
     printed_id: str
+    # The title for play, without the subtitle or experience the name shows (CR, Card Subtitles).
+    title: str = ""
     clan: str | None = None
     clans: tuple[str, ...] = ()
     keywords: tuple[str, ...] = ()

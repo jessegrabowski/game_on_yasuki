@@ -218,12 +218,12 @@ cards:
   collector_number: '55'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Dairuko, Clan Champion
+- title: Akodo Dairuko
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Dairuko, Clan Champion • Experienced 3
   clans:
   - Lion
   keywords:
@@ -279,7 +279,8 @@ cards:
   collector_number: '236'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Ketsu, Soul of Akodo Uehara
+- title: Akodo Ketsu
+  subtitle: Soul of Akodo Uehara
   types:
   - Personality
   decks:
@@ -330,7 +331,8 @@ cards:
   collector_number: '122'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Motetsu, Soul of Akodo Moromao
+- title: Akodo Motetsu
+  subtitle: Soul of Akodo Moromao
   types:
   - Personality
   decks:
@@ -390,7 +392,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Akodo Tactical School • Experienced
   keywords:
   - Dojo
   - Experienced
@@ -792,7 +793,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Atsuto • Experienced
   clans:
   - Scorpion
   keywords:
@@ -823,7 +823,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Fuyuko • Experienced 2
   clans:
   - Scorpion
   keywords:
@@ -901,12 +900,12 @@ cards:
   collector_number: '154'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Bayushi Nitoshi, Clan Champion
+- title: Bayushi Nitoshi
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nitoshi, Clan Champion • Experienced 3
   clans:
   - Ninja
   - Scorpion
@@ -941,7 +940,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nomen • Experienced 2
   clans:
   - Scorpion
   keywords:
@@ -1416,7 +1414,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Chuda Ruri • Experienced 2
   clans:
   - Spider
   keywords:
@@ -1470,7 +1467,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Colonial Farm
   creates:
-  - ashigaru_2
+  - ashigaru_sote
   - ashigaru_defender
   - peasant
   types:
@@ -1759,7 +1756,8 @@ cards:
   collector_number: '91'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daidoji Yoshun, Soul of Daidoji Kagami
+- title: Daidoji Yoshun
+  subtitle: Soul of Daidoji Kagami
   types:
   - Personality
   decks:
@@ -1791,7 +1789,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Churo • Experienced
   clans:
   - Spider
   keywords:
@@ -1907,7 +1904,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Isoroku • Experienced
   clans:
   - Spider
   keywords:
@@ -1934,12 +1930,12 @@ cards:
   collector_number: '173'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daigotsu Kanpeki, Clan Champion
+- title: Daigotsu Kanpeki
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Kanpeki, Clan Champion • Experienced 5
   clans:
   - Spider
   keywords:
@@ -2503,7 +2499,8 @@ cards:
   collector_number: '241'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Doji Aoi, Soul of Doji Chitose
+- title: Doji Aoi
+  subtitle: Soul of Doji Chitose
   types:
   - Personality
   decks:
@@ -2556,7 +2553,8 @@ cards:
   collector_number: '94'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Doji Kaishime, Soul of Doji Shikatsu
+- title: Doji Kaishime
+  subtitle: Soul of Doji Shikatsu
   grants:
   - plus1f
   types:
@@ -2585,12 +2583,12 @@ cards:
   collector_number: '95'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Doji Makoto, Clan Champion
+- title: Doji Makoto
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Makoto, Clan Champion • Experienced 2
   clans:
   - Crane
   keywords:
@@ -3003,7 +3001,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Festering Pit of Fu Leng • Experienced
   keywords:
   - Experienced
   - Unique
@@ -3342,7 +3339,8 @@ cards:
   collector_number: '217'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Harukaze, the Confidant
+- title: Harukaze
+  subtitle: the Confidant
   types:
   - Personality
   decks:
@@ -3483,12 +3481,12 @@ cards:
   collector_number: '319'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Heichi Tadama, Favored by the Celestial Dragon
+- title: Heichi Tadama
+  subtitle: Favored by the Celestial Dragon
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Heichi Tadama, Favored by the Celestial Dragon • Experienced
   clans:
   - Crab
   - Boar
@@ -3541,12 +3539,12 @@ cards:
   collector_number: '76'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Kisada, Clan Champion
+- title: Hida Kisada
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kisada, Clan Champion • Experienced 2
   clans:
   - Crab
   keywords:
@@ -3575,7 +3573,8 @@ cards:
   collector_number: '77'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Sazaren, Soul of Hida Sozen
+- title: Hida Sazaren
+  subtitle: Soul of Hida Sozen
   types:
   - Personality
   decks:
@@ -3600,7 +3599,8 @@ cards:
   collector_number: '78'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Shunsuke, Soul of Hida Tenshu
+- title: Hida Shunsuke
+  subtitle: Soul of Hida Tenshu
   types:
   - Personality
   decks:
@@ -3691,7 +3691,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Toranosuke • Experienced 2
   clans:
   - Crab
   keywords:
@@ -3721,7 +3720,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Hida War College • Experienced
   keywords:
   - Dojo
   - Experienced
@@ -3740,7 +3738,8 @@ cards:
   collector_number: '23'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Yurike, Soul of Hida Rikyu
+- title: Hida Yurike
+  subtitle: Soul of Hida Rikyu
   types:
   - Personality
   decks:
@@ -3764,7 +3763,8 @@ cards:
   collector_number: '83'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hiruma Misiko, Soul of Hiruma Sakimi
+- title: Hiruma Misiko
+  subtitle: Soul of Hiruma Sakimi
   types:
   - Personality
   decks:
@@ -3976,7 +3976,8 @@ cards:
   collector_number: '372'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Ikoma Haru, Soul of Ikoma Hagio
+- title: Ikoma Haru
+  subtitle: Soul of Ikoma Hagio
   types:
   - Personality
   decks:
@@ -4301,7 +4302,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Hibana • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -4327,7 +4327,8 @@ cards:
   collector_number: '139'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Isawa Ichimon, Soul of Isawa Takino
+- title: Isawa Ichimon
+  subtitle: Soul of Isawa Takino
   types:
   - Personality
   decks:
@@ -4472,12 +4473,12 @@ cards:
   collector_number: '143'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Isawa Shunryu, Master of the Void
+- title: Isawa Shunryu
+  subtitle: Master of the Void
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Shunryu, Master of the Void • Experienced
   clans:
   - Phoenix
   keywords:
@@ -4510,7 +4511,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isha • Experienced 2
   clans:
   - Naga
   keywords:
@@ -4624,7 +4624,8 @@ cards:
   collector_number: '63'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Jihime, Soul of Jinako
+- title: Jihime
+  subtitle: Soul of Jinako
   types:
   - Personality
   decks:
@@ -4707,7 +4708,7 @@ cards:
   gold_production: 0
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Sensei
   decks:
@@ -4758,7 +4759,8 @@ cards:
   collector_number: '87'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kaiu Gairoa, Soul of Kaiu Genji
+- title: Kaiu Gairoa
+  subtitle: Soul of Kaiu Genji
   types:
   - Personality
   decks:
@@ -4823,7 +4825,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Daitsu • Experienced 2
   clans:
   - Crane
   keywords:
@@ -4850,7 +4851,8 @@ cards:
   collector_number: '101'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kakita Karoe, Soul of Kakita Nara
+- title: Kakita Karoe
+  subtitle: Soul of Kakita Nara
   types:
   - Personality
   decks:
@@ -4879,7 +4881,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Kakita Kenjutsu School • Experienced
   keywords:
   - Dojo
   - Experienced
@@ -4932,7 +4933,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Shinichi • Experienced 2
   clans:
   - Crane
   keywords:
@@ -4987,7 +4987,8 @@ cards:
   collector_number: '185'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kento, Soul of Butoken
+- title: Kento
+  subtitle: Soul of Butoken
   types:
   - Personality
   decks:
@@ -5015,7 +5016,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Keppo • Experienced
   keywords:
   - Experienced
   - Goblin
@@ -5122,7 +5122,7 @@ cards:
 - title: Kitsu Hayako
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
@@ -5175,7 +5175,8 @@ cards:
   collector_number: '127'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kitsu Kishimori, Soul of Kitsu Katsuko
+- title: Kitsu Kishimori
+  subtitle: Soul of Kitsu Katsuko
   types:
   - Personality
   decks:
@@ -5229,15 +5230,15 @@ cards:
   collector_number: '129'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kitsu Suzaki, Child of Prophecy
+- title: Kitsu Suzaki
+  subtitle: Child of Prophecy
   creates:
   - lion_ancestor
-  - lion_ancestor_2
+  - lion_ancestor
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsu Suzaki, Child of Prophecy • Experienced
   clans:
   - Lion
   keywords:
@@ -5695,7 +5696,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Rishou • Experienced
   clans:
   - Lion
   keywords:
@@ -5850,7 +5850,8 @@ cards:
   collector_number: '32'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Mirumoto Asakura, Soul of Mirumoto Kijima
+- title: Mirumoto Asakura
+  subtitle: Soul of Mirumoto Kijima
   types:
   - Personality
   decks:
@@ -5877,7 +5878,8 @@ cards:
   collector_number: '105'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Mirumoto Ezunuki, Soul of Mirumoto Ezuno
+- title: Mirumoto Ezunuki
+  subtitle: Soul of Mirumoto Ezuno
   types:
   - Personality
   decks:
@@ -5905,7 +5907,8 @@ cards:
   collector_number: '106'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Mirumoto Hichi, Soul of Mirumoto Kuroki
+- title: Mirumoto Hichi
+  subtitle: Soul of Mirumoto Kuroki
   types:
   - Personality
   decks:
@@ -6054,7 +6057,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Rokai • Experienced
   clans:
   - Dragon
   keywords:
@@ -6080,12 +6082,12 @@ cards:
   collector_number: '112'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Mirumoto Shikei, Clan Champion
+- title: Mirumoto Shikei
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Shikei, Clan Champion • Experienced 2
   clans:
   - Dragon
   keywords:
@@ -6199,7 +6201,8 @@ cards:
   collector_number: '190'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Baitsu, Soul of Moto Hotei
+- title: Moto Baitsu
+  subtitle: Soul of Moto Hotei
   types:
   - Personality
   decks:
@@ -6279,12 +6282,12 @@ cards:
   collector_number: '196'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Chinua, Imperial Legion Commander
+- title: Moto Chinua
+  subtitle: Imperial Legion Commander
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Chinua, Imperial Legion Commander • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -6368,7 +6371,8 @@ cards:
   collector_number: '200'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Jurgaghan, Soul of Moto Chai
+- title: Moto Jurgaghan
+  subtitle: Soul of Moto Chai
   types:
   - Personality
   decks:
@@ -6393,12 +6397,12 @@ cards:
   collector_number: '201'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Naleesh, Clan Champion
+- title: Moto Naleesh
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Naleesh, Clan Champion • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -6466,7 +6470,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Nergui • Experienced
   clans:
   - Unicorn
   keywords:
@@ -6965,12 +6968,12 @@ cards:
   collector_number: '228'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Qamar, Clan Champion
+- title: Qamar
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Qamar, Clan Champion • Experienced 2
   clans:
   - Naga
   keywords:
@@ -7734,7 +7737,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Kakei • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -7762,7 +7764,8 @@ cards:
   collector_number: '146'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shiba Kintaro, the Remembered
+- title: Shiba Kintaro
+  subtitle: the Remembered
   types:
   - Personality
   decks:
@@ -7822,12 +7825,12 @@ cards:
   collector_number: '148'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shiba Tsukimi, Clan Champion
+- title: Shiba Tsukimi
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Tsukimi, Clan Champion • Experienced 6
   clans:
   - Phoenix
   keywords:
@@ -7886,7 +7889,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shinjo Riding Stables • Experienced
   keywords:
   - Dojo
   - Stable
@@ -7964,7 +7966,8 @@ cards:
   collector_number: '157'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shosuro Mayako, Soul of Shosuro Maru
+- title: Shosuro Mayako
+  subtitle: Soul of Shosuro Maru
   types:
   - Personality
   decks:
@@ -8415,12 +8418,12 @@ cards:
   collector_number: '114'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Tangen's Lies
+- id: tangens_i_lies_i_experienced
+  title: Tangen's Lies
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Tangen's <i>Lies</i> • Experienced
   keywords:
   - Experienced
   - Unique
@@ -8444,7 +8447,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tausha • Experienced
   clans:
   - Naga
   keywords:
@@ -8545,7 +8547,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: The Akasha • Experienced
   keywords:
   - Naga
   - Purified
@@ -9033,7 +9034,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Higaru • Experienced 2
   clans:
   - Dragon
   keywords:
@@ -9144,7 +9144,8 @@ cards:
   collector_number: '378'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Togashi Sato, Soul of Togashi Gato
+- title: Togashi Sato
+  subtitle: Soul of Togashi Gato
   types:
   - Personality
   decks:
@@ -9489,7 +9490,8 @@ cards:
   collector_number: '51'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Utaku Anzu, Soul of Utaku Tayoi
+- title: Utaku Anzu
+  subtitle: Soul of Utaku Tayoi
   types:
   - Personality
   decks:
@@ -9516,7 +9518,8 @@ cards:
   collector_number: '207'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Utaku Gorou, Stablemaster
+- title: Utaku Gorou
+  subtitle: Stablemaster
   creates:
   - cavalry
   - cavalry_token
@@ -9548,7 +9551,8 @@ cards:
   collector_number: '208'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Utaku Isuka, Soul of Otaku Kamoko
+- title: Utaku Isuka
+  subtitle: Soul of Otaku Kamoko
   types:
   - Personality
   decks:
@@ -9910,7 +9914,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Yamigatai • Experienced
   keywords:
   - Armor
   - Experienced Armor of Osano-Wo
@@ -10028,7 +10031,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yogo Mizoguchi • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -10152,7 +10154,8 @@ cards:
   collector_number: '366'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Zenko, Soul of Zanaru
+- title: Zenko
+  subtitle: Soul of Zanaru
   types:
   - Personality
   decks:

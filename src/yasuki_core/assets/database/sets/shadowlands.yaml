@@ -117,7 +117,7 @@ cards:
   artist: Ernie Chan
   flavor_text: <i>We charged into the Crab army, but the air was filled with flashing death, and when
     I saw her fall from her steed, I knew we were doomed. - Shinjo Tokoru</i>
-- id: ashigaru
+- id: ashigaru_shl
   title: Ashigaru
   types:
   - Follower
@@ -512,7 +512,7 @@ cards:
   artist: Wackwitz & Daily
   flavor_text: <i>"A white fire struck the thing down. I felt all the fear in my heart burn as well."
     - Shisobi's Tale</i>
-- id: dark_divination
+- id: dark_divination_shl
   grants:
   - minus1c
   title: Dark Divination
@@ -705,7 +705,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Hoturi • Experienced
   clans:
   - Crane
   keywords:
@@ -1374,7 +1373,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tadaka • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1590,7 +1588,7 @@ cards:
     mandibles.</i>
 - title: Levy Troops
   creates:
-  - ashigaru_2
+  - ashigaru_sote
   - ashigaru_defender
   types:
   - Strategy
@@ -1750,7 +1748,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Hitomi • Experienced
   clans:
   - Dragon
   keywords:
@@ -1978,7 +1975,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otaku Kamoko • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2383,7 +2379,7 @@ cards:
   artist: Brian Snoddy
   flavor_text: <i>"'Lose your fear of them!" he called out to the Phoenix samurai. "They are not your
     ancestors, they are only dead men! Fight or we will be lost!'"</i>
-- id: shapeshifting
+- id: shapeshifting_shl
   grants:
   - corruption
   title: Shapeshifting
@@ -2949,7 +2945,7 @@ cards:
   artist: Ron Spencer
   flavor_text: <i>Once an Elemental Master, now his name has been stricken from the Histories of the Phoenix
     and his daughter carries out his duty.</i>
-- id: the_obsidian_hand
+- id: the_obsidian_hand_shl
   title: The Obsidian Hand
   types:
   - Item
@@ -3123,7 +3119,7 @@ cards:
   artist: Bryon Wackwitz
   flavor_text: <i>The words were read and the air turned thick with the sounds of screams as the creatures
     were entombed in bodies of jade - trapped forever in a prison of pain. - Mirumoto Daini</i>
-- id: touch_of_despair
+- id: touch_of_despair_shl
   grants:
   - corruption
   title: Touch of Despair
@@ -3146,7 +3142,7 @@ cards:
   artist: Bryon Wackwitz
   flavor_text: <i>My doom you have chased, my end you have sought My evil embraced, in my web you are
     caught.</i>
-- id: touch_of_fu_leng
+- id: touch_of_fu_leng_shl
   grants:
   - corruption
   title: Touch of Fu Leng

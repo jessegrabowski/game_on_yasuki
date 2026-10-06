@@ -97,14 +97,15 @@ def test_onyx_deals_the_open_lobby_proxy_it_passes_on_to_shattered_empire():
     assert ruleset.SHATTERED_EMPIRE.rulebook_proxies == ruleset.ONYX.rulebook_proxies
 
 
-@pytest.mark.parametrize(
-    ("printed_id", "timing"),
-    [(ONYX_LOBBY_PROXY_ID, ActionTiming.OPEN), (IMPERIAL_LOBBY_PROXY_ID, ActionTiming.LIMITED)],
-)
-def test_each_arcs_lobby_is_a_political_rulebook_ability_under_its_designator(printed_id, timing):
+@pytest.mark.parametrize("printed_id", [ONYX_LOBBY_PROXY_ID, IMPERIAL_LOBBY_PROXY_ID])
+def test_each_arcs_lobby_is_a_political_limited_rulebook_ability(printed_id):
+    # Onyx prints "Political Open: If it is your turn", which registers as Limited.
     [ability] = ability_registrations()[printed_id]
 
-    assert (ability.timings, ability.keywords) == ((timing,), frozenset({keywords.POLITICAL}))
+    assert (ability.timings, ability.keywords) == (
+        (ActionTiming.LIMITED,),
+        frozenset({keywords.POLITICAL}),
+    )
     assert ability.from_rulebook
 
 
@@ -132,8 +133,8 @@ def test_the_cost_offers_every_personality_that_could_pay(arc):
 
 
 def test_the_onyx_lobby_is_not_offered_on_another_seats_turn():
-    # ShE datasheet: "If it is your turn". The rival holds priority in the open round, so the
-    # round permits them an Open action, and only the printed condition withholds the Lobby.
+    # ShE datasheet: "If it is your turn", registered as Limited. The rival holds priority in the
+    # open round, so only that timing withholds the Lobby.
     game = _game(p1_honor=5, p2_honor=10)
     put_in_play(game, personality("courtier", owner=P2, personal_honor=2))
     game.round = replace(game.round, priority=P2)

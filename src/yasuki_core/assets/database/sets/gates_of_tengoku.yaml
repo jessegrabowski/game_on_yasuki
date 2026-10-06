@@ -63,12 +63,12 @@ cards:
   collector_number: '68'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Motetsu, Scourge of the Scorpion
+- title: Akodo Motetsu
+  subtitle: Scourge of the Scorpion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Motetsu, Scourge of the Scorpion • Experienced
   clans:
   - Lion
   keywords:
@@ -97,7 +97,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Nojima • Experienced
   clans:
   - Lion
   keywords:
@@ -126,7 +125,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Along the Coast at Midnight • Experienced
   keywords:
   - Courage
   - Experienced
@@ -148,7 +146,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Dotari • Experienced
   clans:
   - Phoenix
   keywords:
@@ -200,7 +197,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Mifuyu • Experienced
   clans:
   - Scorpion
   keywords:
@@ -225,7 +221,8 @@ cards:
   collector_number: '40'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Bayushi Waietto, Tanuki Clan Champion
+- title: Bayushi Waietto
+  subtitle: Tanuki Clan Champion
   types:
   - Personality
   decks:
@@ -264,7 +261,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Bend Like a Reed • Experienced
   keywords:
   - Experienced
   text: As a Focus Effect, give your Personality in this duel +2 to their duel stat if facing a Personality
@@ -308,7 +304,6 @@ cards:
   - Spell
   decks:
   - Fate
-  extended_title: Blood of Isawa's Tribe • Experienced
   keywords:
   - Experienced
   - Kharmic
@@ -326,12 +321,12 @@ cards:
   collector_number: '63'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Br'nn, the Eternal
+- title: Br'nn
+  subtitle: the Eternal
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Br'nn, the Eternal • Experienced 2
   clans:
   - Naga
   keywords:
@@ -389,7 +384,6 @@ cards:
   - Event
   decks:
   - Dynasty
-  extended_title: Call of Thunder • Experienced
   keywords:
   - Experienced
   - Unique
@@ -411,7 +405,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Ujirou • Experienced
   clans:
   - Crane
   keywords:
@@ -443,7 +436,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Ryuko • Experienced
   clans:
   - Spider
   keywords:
@@ -465,7 +457,8 @@ cards:
   collector_number: '43'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Dangai Sensei, Tanuki Clan Tattoo Master
+- title: Dangai Sensei
+  subtitle: Tanuki Clan Tattoo Master
   gold_production: 0
   types:
   - Sensei
@@ -492,12 +485,12 @@ cards:
   collector_number: '98'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Dark Oracle of Air, Soshi Yoshihara
+- title: Dark Oracle of Air
+  subtitle: Soshi Yoshihara
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Air, Soshi Yoshihara • Experienced 2
   keywords:
   - Oracle
   - Retainer
@@ -519,14 +512,14 @@ cards:
   collector_number: '4'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Dark Oracle of Earth, The Broken Man
+- title: Dark Oracle of Earth
+  subtitle: The Broken Man
   grants:
   - minus1gp
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Earth, The Broken Man • Experienced 2
   keywords:
   - Oracle
   - Retainer
@@ -549,12 +542,12 @@ cards:
   collector_number: '5'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Dark Oracle of Fire, Tamori Wotan
+- title: Dark Oracle of Fire
+  subtitle: Tamori Wotan
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Fire, Tamori Wotan • Experienced 3
   keywords:
   - Oracle
   - Retainer
@@ -577,14 +570,14 @@ cards:
   collector_number: '6'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Dark Oracle of Water, Hida Saiyuki
+- title: Dark Oracle of Water
+  subtitle: Hida Saiyuki
   grants:
   - erosion
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Water, Hida Saiyuki • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -669,7 +662,8 @@ cards:
   collector_number: '74'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Doji Muroken, Master Steel
+- title: Doji Muroken
+  subtitle: Master Steel
   types:
   - Personality
   decks:
@@ -746,7 +740,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Gift of the Emperor • Experienced
   keywords:
   - Imperial
   - Experienced
@@ -792,7 +785,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gusai Haruna • Experienced
   clans:
   - Mantis
   keywords:
@@ -820,7 +812,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida O-Win • Experienced
   clans:
   - Crab
   - Tanuki
@@ -847,12 +838,12 @@ cards:
   collector_number: '22'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Yamadera, Dark Human
+- title: Hida Yamadera
+  subtitle: Dark Human
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Yamadera, Dark Human • Experienced 2
   clans:
   - Crab
   keywords:
@@ -906,7 +897,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Kaname • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -956,12 +946,12 @@ cards:
   collector_number: '79'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Iweko Shibatsu, the Shattered Prince
+- title: Iweko Shibatsu
+  subtitle: the Shattered Prince
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Iweko Shibatsu, the Shattered Prince • Experienced
   keywords:
   - Imperial
   - Experienced
@@ -984,12 +974,12 @@ cards:
   collector_number: '49'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Jinn-Kuen, Dark Abbot of Fu Leng
+- title: Jinn-Kuen
+  subtitle: Dark Abbot of Fu Leng
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Jinn-Kuen, Dark Abbot of Fu Leng • Experienced 4
   keywords:
   - Cultist
   - Monk
@@ -1076,7 +1066,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Mitohime • Experienced
   clans:
   - Crane
   keywords:
@@ -1127,7 +1116,8 @@ cards:
   collector_number: '20'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Karan Bhatt, Ruhmalite Advisor
+- title: Karan Bhatt
+  subtitle: Ruhmalite Advisor
   types:
   - Holding
   decks:
@@ -1151,12 +1141,12 @@ cards:
   collector_number: '101'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Ketsuen, Armor of the Shadow Warrior
+- title: Ketsuen
+  subtitle: Armor of the Shadow Warrior
   types:
   - Item
   decks:
   - Fate
-  extended_title: Ketsuen, Armor of the Shadow Warrior • Experienced 2
   keywords:
   - Armor
   - Experienced 2 Armor of Shadows
@@ -1205,7 +1195,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Kiba • Experienced
   keywords:
   - Dog
   - Nonhuman
@@ -1236,7 +1225,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsune Kohaki • Experienced
   clans:
   - Naga
   - Fox
@@ -1269,7 +1257,6 @@ cards:
   - Spell
   decks:
   - Fate
-  extended_title: Mantle of Flame • Experienced
   keywords:
   - Experienced
   - Fire
@@ -1294,7 +1281,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Chizuki • Experienced
   clans:
   - Lion
   keywords:
@@ -1365,12 +1351,12 @@ cards:
   collector_number: '65'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Ninube Aitso, "Doji Yeiko"
+- title: Ninube Aitso
+  subtitle: '"Doji Yeiko"'
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ninube Aitso, "Doji Yeiko" • Experienced
   clans:
   - Crane
   - Ninja
@@ -1397,12 +1383,12 @@ cards:
   collector_number: '44'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Oracle of Air, Isawa Koizumi
+- title: Oracle of Air
+  subtitle: Isawa Koizumi
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of Air, Isawa Koizumi • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -1424,12 +1410,12 @@ cards:
   collector_number: '8'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Oracle of Earth, Mirumoto Saori
+- title: Oracle of Earth
+  subtitle: Mirumoto Saori
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of Earth, Mirumoto Saori • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -1450,12 +1436,12 @@ cards:
   collector_number: '9'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Oracle of Fire, Kakita Ibara
+- title: Oracle of Fire
+  subtitle: Kakita Ibara
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of Fire, Kakita Ibara • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -1477,14 +1463,14 @@ cards:
   collector_number: '10'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Oracle of Water, Agasha Kyokuta
+- title: Oracle of Water
+  subtitle: Agasha Kyokuta
   creates:
   - flooded_terrain
   types:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of Water, Agasha Kyokuta • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -1591,7 +1577,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ruby of Iuchiban • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -1613,14 +1598,14 @@ cards:
   collector_number: '59'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Sasada, Pearl Champion
+- title: Sasada
+  subtitle: Pearl Champion
   creates:
   - orochi_follower_2f
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Sasada, Pearl Champion • Experienced
   clans:
   - Mantis
   keywords:
@@ -1670,12 +1655,12 @@ cards:
   collector_number: '54'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shiba Kintaro, the Remembered
+- title: Shiba Kintaro
+  subtitle: the Remembered
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Kintaro, the Remembered • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1759,7 +1744,8 @@ cards:
   collector_number: '42'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shoubai, Ancestral Weapon of the Mantis
+- title: Shoubai
+  subtitle: Ancestral Weapon of the Mantis
   types:
   - Item
   decks:
@@ -1812,7 +1798,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shrine of Compassion • Experienced
   keywords:
   - Temple
   - Experienced
@@ -1838,7 +1823,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shrine of Courage • Experienced
   keywords:
   - Temple
   - Experienced
@@ -1886,7 +1870,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shrine of Duty • Experienced
   keywords:
   - Temple
   - Experienced
@@ -1993,12 +1976,12 @@ cards:
   collector_number: '87'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Susumu Neya, Heart of Vengeance
+- title: Susumu Neya
+  subtitle: Heart of Vengeance
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Susumu Neya, Heart of Vengeance • Experienced
   clans:
   - Spider
   keywords:
@@ -2295,14 +2278,14 @@ cards:
   collector_number: '96'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Togashi Noritada, Defender of the High House
+- title: Togashi Noritada
+  subtitle: Defender of the High House
   grants:
   - fire
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Noritada, Defender of the High House • Experienced
   clans:
   - Dragon
   keywords:
@@ -2332,7 +2315,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Togashi's Daisho • Experienced
   keywords:
   - Sword
   - Two-Handed
@@ -2385,7 +2367,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Tsuruchi Technique • Experienced
   keywords:
   - Experienced
   text: <b>Kata Open:</b> Put this Kata into play. Discard your other Kata in play.<br><b>Interrupt, :bow::</b>
@@ -2406,7 +2387,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Yurio • Experienced
   clans:
   - Tanuki
   - Wasp
@@ -2434,7 +2414,8 @@ cards:
   collector_number: '51'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Utaku Gorou, Colonial Stablemaster
+- title: Utaku Gorou
+  subtitle: Colonial Stablemaster
   creates:
   - cavalry
   - cavalry_token
@@ -2446,7 +2427,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Gorou, Colonial Stablemaster • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2519,7 +2499,8 @@ cards:
   collector_number: '67'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Robusuta, Master of Gaijin Pepper
+- title: Yoritomo Robusuta
+  subtitle: Master of Gaijin Pepper
   grants:
   - explosive
   types:

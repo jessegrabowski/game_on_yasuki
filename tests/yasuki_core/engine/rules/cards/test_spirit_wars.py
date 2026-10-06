@@ -1,6 +1,6 @@
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, Pass
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
@@ -51,8 +51,7 @@ def _garden_game(printed_id: str = "poorly_placed_garden") -> EngineSession:
 
 
 def test_poorly_placed_garden_enters_play_unbowed():
-    """ "Enters play unbowed" overrides the rule that a Holding enters play bowed, and it has to,
-    or the Limited ability that bows it as a cost could never be paid the turn it arrives."""
+    # Otherwise its bow-cost ability could not be paid the turn it arrives.
     session = _garden_game()
 
     assert not session.game.table.cards_by_id["garden"].bowed
@@ -66,8 +65,8 @@ def test_a_holding_without_that_text_still_enters_play_bowed():
 
 
 def test_poorly_placed_garden_bows_itself_for_two_honor():
-    # Built in play rather than Recruited: the ability is Limited, so it is offered in the Action
-    # phase, and a Recruit happens in the Dynasty phase after it has closed.
+    # Built in play rather than Recruited: the ability is offered in the Action phase, and a
+    # Recruit happens in the Dynasty phase after it has closed.
     state = TableState.empty_two_seat()
     put_in_play(
         state,
@@ -82,3 +81,19 @@ def test_poorly_placed_garden_bows_itself_for_two_honor():
 
     assert session.game.table.seats[P1].honor == 2
     assert session.game.table.cards_by_id["garden"].bowed
+
+
+def test_poorly_placed_garden_is_not_offered_on_another_players_turn():
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        register(
+            state,
+            holding("garden", printed_id="poorly_placed_garden", owner=P1, gold_cost=5),
+        ),
+    )
+    session = EngineSession.start(state, PlayerId.P2)
+    session.act(PlayerId.P2, Pass())
+
+    assert session.game.round.priority is P1
+    assert ActivateAbility("garden") not in session.legal_actions(P1)

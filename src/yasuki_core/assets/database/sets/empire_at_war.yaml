@@ -273,7 +273,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Jutsushi • Experienced
   clans:
   - Scorpion
   keywords:
@@ -336,7 +335,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Miyako • Experienced 2
   clans:
   - Scorpion
   keywords:
@@ -572,7 +570,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Yaichiro • Experienced
   clans:
   - Crane
   keywords:
@@ -632,7 +629,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Hotako • Experienced 2
   clans:
   - Spider
   keywords:
@@ -664,7 +660,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Shaiko • Experienced
   clans:
   - Spider
   keywords:
@@ -1446,7 +1441,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Benjiro • Experienced 2
   clans:
   - Crab
   keywords:
@@ -1615,7 +1609,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Hiruma House Guard • Experienced
   keywords:
   - Unique
   - Experienced
@@ -1668,7 +1661,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Todori • Experienced 3
   clans:
   - Crab
   keywords:
@@ -1777,7 +1769,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Hagio • Experienced
   clans:
   - Lion
   keywords:
@@ -1964,7 +1955,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Kimi • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -2270,8 +2260,7 @@ cards:
   artist: Mike Capprotti
   flavor_text: <i>"It may not look like much, but it will serve you well." - Tamori Kuroko</i>
   collector_number: '8'
-- id: lion_ancestor
-  title: Lion Ancestor
+- title: Lion Ancestor
   types:
   - Personality
   - Proxy
@@ -2457,7 +2446,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Kenzo • Experienced 2
   clans:
   - Dragon
   keywords:
@@ -3019,7 +3007,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Morihiko • Experienced
   clans:
   - Phoenix
   keywords:
@@ -3050,7 +3037,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Dun • Experienced
   clans:
   - Unicorn
   keywords:
@@ -3605,7 +3591,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Nobumoto • Experienced 2
   clans:
   - Mantis
   keywords:
@@ -3637,7 +3622,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Shisuken • Experienced
   clans:
   - Mantis
   keywords:
@@ -3864,7 +3848,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Fujiko • Experienced
   clans:
   - Unicorn
   keywords:

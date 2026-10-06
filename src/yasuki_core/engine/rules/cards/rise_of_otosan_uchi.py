@@ -540,9 +540,7 @@ register_no_enlightenment("dark_ring_of_air_experienced")
 
 
 def _dark_ring_of_air_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Every Personality in play, on your turn. The card does not ask for an unbowed one."""
-    if game.active is not source.owner:
-        return []
+    """Every Personality in play. The card does not ask for an unbowed one."""
     return [card.id for card in personalities_in_play(game)]
 
 
@@ -558,7 +556,7 @@ register_ring(
     "dark_ring_of_air_experienced",
     ability=Ability(
         printed_index=1,
-        timings=(ActionTiming.OPEN,),
+        timings=(ActionTiming.LIMITED,),
         cost=bow_cost,
         targets=_dark_ring_of_air_experienced_targets,
         effects=_dark_ring_of_air_experienced_effects,

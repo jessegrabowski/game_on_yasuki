@@ -200,7 +200,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Bairei • Experienced 4
   clans:
   - Phoenix
   keywords:
@@ -462,7 +461,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Chuda Mishime • Experienced 2
   clans:
   - Spider
   keywords:
@@ -604,7 +602,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Akagi • Experienced 2
   clans:
   - Crane
   keywords:
@@ -719,7 +716,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Setsuko • Experienced
   clans:
   - Spider
   keywords:
@@ -887,7 +883,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Hakuseki • Experienced
   clans:
   - Crane
   keywords:
@@ -1216,7 +1211,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gutobo • Experienced
   keywords:
   - Unique
   - Experienced
@@ -1434,7 +1428,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Yaheiko • Experienced
   clans:
   - Crab
   keywords:
@@ -1796,7 +1789,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Ochiai • Experienced 3
   clans:
   - Phoenix
   keywords:
@@ -2017,7 +2009,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Kenji • Experienced
   clans:
   - Lion
   keywords:
@@ -2051,7 +2042,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Mikura • Experienced
   clans:
   - Lion
   keywords:
@@ -2866,7 +2856,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Ki-Chang • Experienced
   clans:
   - Unicorn
   keywords:
@@ -3745,7 +3734,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Gidayu • Experienced
   clans:
   - Mantis
   keywords:
@@ -3973,7 +3961,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Yu-Pan • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -4068,7 +4055,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yogo Rieko • Experienced
   clans:
   - Ninja
   - Scorpion

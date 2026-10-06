@@ -6,17 +6,10 @@ rule the others follow.
 Every other hook is a decorator on a function. This one is a plain call, and its second argument is
 a dataclass carrying five callables. {card}`Poorly Placed Garden` is the plainest complete one:
 
-```python
-register_ability(
-    "poorly_placed_garden",
-    Ability(
-        timings=(ActionTiming.LIMITED,),
-        cost=bow_cost,
-        targets=_poorly_placed_garden_targets,
-        effects=_poorly_placed_garden_effects,
-        hits_every_target=True,
-    ),
-)
+```{literalinclude} ../../../src/yasuki_core/engine/rules/cards/spirit_wars.py
+:start-at: register_ability(
+:end-before: "# --- Wasp Sensei ---"
+:language: python
 ```
 
 The shape is deliberate. An ability is four things that have to travel together, and a decorator on

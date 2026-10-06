@@ -1,11 +1,13 @@
 import pytest
 import yaml
 
+from yasuki_core.card_identity import current_id, retired_ids
 from yasuki_core.install.card_index import (
     DEFAULT_CARDS_PATH,
     card_ids,
     iter_set_entries,
     read_index,
+    untagged_title_ties,
     write_index,
 )
 
@@ -14,28 +16,17 @@ def write_set(cards_dir, name, cards):
     (cards_dir / f"{name}.yaml").write_text(yaml.safe_dump({"set": name, "cards": cards}))
 
 
-def test_ids_come_from_explicit_id_then_extended_title_then_title(tmp_path):
-    # The first entry carries all three, so the assertion pins the precedence and not merely that
-    # each source works on its own.
+def test_an_explicit_id_wins_over_the_derived_one(tmp_path):
     write_set(
         tmp_path,
-        "imperial",
+        "shattered_empire",
         [
-            {
-                "title": "Ancestral Sword",
-                "extended_title": "Ancestral Sword of the Crab",
-                "id": "ancestral_sword_promo",
-            },
-            {"title": "Shosuro Aoki", "extended_title": "Shosuro Aoki Experienced"},
-            {"title": "Modest Farm"},
+            {"id": "bayushi_akane", "title": "Bayushi Akane", "subtitle": "Soul of Bayushi Kurumi"},
+            {"title": "Shosuro Aoki", "keywords": ["Experienced"]},
         ],
     )
 
-    assert card_ids(tmp_path) == [
-        "ancestral_sword_promo",
-        "modest_farm",
-        "shosuro_aoki_experienced",
-    ]
+    assert card_ids(tmp_path) == ["bayushi_akane", "shosuro_aoki_experienced"]
 
 
 def test_a_reverse_face_gets_its_own_suffixed_id(tmp_path):
@@ -80,6 +71,14 @@ def test_a_collision_across_two_set_files_is_caught(tmp_path):
 
     with pytest.raises(ValueError, match="both claim id 'courtier_0_3_2'"):
         card_ids(tmp_path)
+
+
+def test_a_reprint_may_retitle_its_card_by_pinning_the_id(tmp_path):
+    write_set(tmp_path, "ivory", [{"title": "Tairao"}])
+    write_set(tmp_path, "shattered_empire", [{"id": "tairao", "title": "Chuda Tairao"}])
+    write_set(tmp_path, "onyx", [{"title": "Faith In My Clan"}, {"title": "Faith in My Clan"}])
+
+    assert card_ids(tmp_path) == ["faith_in_my_clan", "tairao"]
 
 
 def test_a_file_that_is_not_a_set_names_itself_in_the_error(tmp_path):
@@ -148,3 +147,139 @@ def test_the_committed_index_matches_the_card_yaml():
 
     assert committed - current == set(), f"index names cards the YAML no longer has; {remedy}"
     assert current - committed == set(), f"YAML has cards the index is missing; {remedy}"
+
+
+def test_regenerating_the_index_refuses_to_drop_an_id_that_is_not_retired(tmp_path):
+    index_path = tmp_path / "card_ids.txt"
+    index_path.write_text("aulus\nmodest_farm\n")
+    write_set(tmp_path, "gold", [{"title": "Modest Farm"}])
+
+    with pytest.raises(ValueError, match="aulus"):
+        write_index(tmp_path, index_path, retired={})
+    assert write_index(tmp_path, index_path, retired={"aulus": None}) == 1
+
+
+def test_every_retired_id_is_gone_and_names_a_card_that_exists():
+    committed = read_index()
+    retired = retired_ids()
+
+    assert committed.isdisjoint(retired)
+    assert all(current_id(card_id) in committed | {None} for card_id in retired)
+
+
+SETS = {"Gates of Chaos": "goc", "Chaos Reigns Part III": "cr3", "Ivory Edition": "ivory"}
+RELEASED = {"Gates of Chaos": "2013-09-01", "Ivory Edition": "2014-03-24"}
+AULUS_RETIRED = {"aulus": "aulus_goc"}
+
+
+def _ties(tmp_path, cards_by_set, retired=AULUS_RETIRED):
+    cards_dir = tmp_path / "sets"
+    cards_dir.mkdir()
+    for set_name, cards in cards_by_set.items():
+        write_set(cards_dir, set_name, cards)
+    entries = [
+        {"set_name": name, "short_id": short_id, "release_date": RELEASED.get(name)}
+        for name, short_id in SETS.items()
+    ] + [{"set_name": "Tokens", "short_id": "tok"}]
+    set_info = tmp_path / "set_info.yaml"
+    set_info.write_text(yaml.safe_dump({"arcs": [{"name": "Arc", "sets": entries}]}))
+    return untagged_title_ties(cards_dir, set_info, retired)
+
+
+def test_two_cards_sharing_a_title_must_each_carry_their_first_sets_id(tmp_path):
+    problems = _ties(
+        tmp_path,
+        {
+            "Gates of Chaos": [{"title": "Aulus"}],
+            "Chaos Reigns Part III": [{"title": "Aulus", "id": "aulus_2"}],
+        },
+    )
+
+    assert problems == [
+        "aulus shares its title with ['aulus_2']; give every printing the id 'aulus_goc'",
+        "aulus_2 shares its title with ['aulus']; give every printing the id 'aulus_cr3'",
+    ]
+
+
+def test_cards_sharing_a_title_pass_once_each_carries_its_sets_id(tmp_path):
+    problems = _ties(
+        tmp_path,
+        {
+            "Gates of Chaos": [{"title": "Aulus", "id": "aulus_goc"}],
+            "Chaos Reigns Part III": [{"title": "Aulus", "id": "aulus_cr3"}],
+        },
+    )
+
+    assert problems == []
+
+
+def test_a_shared_title_must_be_retired_to_one_of_its_cards(tmp_path):
+    problems = _ties(
+        tmp_path,
+        {
+            "Gates of Chaos": [{"title": "Aulus", "id": "aulus_goc"}],
+            "Chaos Reigns Part III": [{"title": "Aulus", "id": "aulus_cr3"}],
+        },
+        retired={},
+    )
+
+    assert problems == [
+        "'aulus' is shared by ['aulus_cr3', 'aulus_goc']; retire it to the card a decklist line "
+        "naming no set means"
+    ]
+
+
+def test_cards_sharing_a_title_may_not_share_a_set(tmp_path):
+    problems = _ties(
+        tmp_path,
+        {
+            "Gates of Chaos": [
+                {"title": "Aulus", "id": "aulus_goc"},
+                {"title": "Aulus", "id": "aulus_goc_2"},
+            ],
+        },
+    )
+
+    assert problems == [
+        "aulus_goc and aulus_goc_2 share the title 'aulus' and the set 'Gates of Chaos', so a "
+        "decklist line cannot tell them apart",
+        "aulus_goc_2 shares its title with ['aulus_goc']; give every printing the id 'aulus_goc'",
+    ]
+
+
+def test_the_first_printing_by_release_date_names_the_tag(tmp_path):
+    # Gates of Chaos sorts after Chaos Reigns Part III by file name but was released first, and an
+    # undated set counts as the latest.
+    problems = _ties(
+        tmp_path,
+        {
+            "Chaos Reigns Part III": [{"title": "Aulus", "id": "aulus_goc"}],
+            "Gates of Chaos": [{"title": "Aulus", "id": "aulus_goc"}],
+            "Ivory Edition": [{"title": "Aulus", "id": "aulus_ivory"}],
+        },
+    )
+
+    assert problems == []
+
+
+def test_tokens_sharing_a_title_are_exempt(tmp_path):
+    tokens = [
+        {"title": "Courtier", "id": "courtier_0_3_2"},
+        {"title": "Courtier", "id": "courtier_0_2_2"},
+    ]
+
+    assert _ties(tmp_path, {"Tokens": tokens}, retired={}) == []
+
+
+def test_a_shared_title_in_a_set_with_no_short_id_names_its_file(tmp_path):
+    cards = {
+        "Gates of Chaos": [{"title": "Aulus", "id": "aulus_goc"}],
+        "Unknown": [{"title": "Aulus"}],
+    }
+
+    with pytest.raises(ValueError, match="Unknown.yaml: set_info.yaml gives the set 'Unknown' no"):
+        _ties(tmp_path, cards)
+
+
+def test_no_committed_card_shares_a_title_without_its_sets_id():
+    assert untagged_title_ties() == []

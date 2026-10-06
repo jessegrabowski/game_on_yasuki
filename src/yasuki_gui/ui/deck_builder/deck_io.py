@@ -3,6 +3,7 @@ import re
 
 from yasuki_core.card_art import CustomPrint
 from yasuki_core.decklist import parse_deck_yaml
+from yasuki_core.card_identity import name_index, resolve_name
 from yasuki_gui.ui.deck_builder.deck_data import card_in_side
 
 YAML_SECTIONS = [
@@ -158,22 +159,21 @@ def import_deck_yaml(
     from yasuki_gui.ui.deck_builder.deck_data import DeckState
 
     parsed = parse_deck_yaml(text)
-    cards_by_ext = _build_name_index(repository)
+    cards_by_slug = name_index(
+        repository.cards_by_id.values(),
+        sets_of=lambda card: [p["set_name"] for p in repository.get_prints(card["card_id"])],
+    )
 
     state = DeckState()
     unresolved = []
-
-    section_sides = {"pre_game": None, "dynasty": "DYNASTY", "fate": "FATE"}
 
     for section, entries in [
         ("pre_game", parsed["pre_game"]),
         ("dynasty", parsed["dynasty"]),
         ("fate", parsed["fate"]),
     ]:
-        expected_side = section_sides[section]
-
         for entry in entries:
-            card, card_id = _resolve_card(entry["name"], cards_by_ext, expected_side, repository)
+            card, card_id = _resolve_card(entry["name"], entry["set_name"], cards_by_slug)
             if not card:
                 unresolved.append(entry["name"])
                 continue
@@ -193,7 +193,7 @@ def import_deck_yaml(
             print_id = matched_print["print_id"]
             if entry.get("art"):
                 custom_id = _resolve_custom_print(
-                    card_id, print_id, entry["art"], cards_by_ext, repository
+                    card_id, print_id, entry["art"], cards_by_slug, repository
                 )
                 if custom_id is not None:
                     print_id = custom_id
@@ -206,13 +206,13 @@ def import_deck_yaml(
     return state, parsed["name"], parsed["author"], unresolved
 
 
-def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_ext, repository):
+def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_slug, repository):
     """Register the art-swap recipe for an ``{art: ...}`` entry. Return its id or None if
     unresolved."""
-    donor = cards_by_ext.get(art["name"].lower())
+    donor = resolve_name(cards_by_slug, art["name"], art["set_name"])
     if not donor:
         return None
-    _, donor_card_id = donor
+    donor_card_id = donor["card_id"]
 
     donor_prints = repository.get_prints(donor_card_id)
     donor_print = None
@@ -229,33 +229,11 @@ def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_e
     return repository.register_custom_print(recipe)
 
 
-def _build_name_index(repository) -> dict[str, tuple[dict, str]]:
-    """
-    Build a case-insensitive name -> (card, card_id) index.
-
-    Keys by extended_title first, then name as fallback (no overwrite).
-    """
-    index: dict[str, tuple[dict, str]] = {}
-
-    for card_id, card in repository.cards_by_id.items():
-        key = (card.get("extended_title") or card.get("name", "")).lower()
-        if key:
-            index[key] = (card, card_id)
-
-    for card_id, card in repository.cards_by_id.items():
-        name_key = card.get("name", "").lower()
-        if name_key and name_key not in index:
-            index[name_key] = (card, card_id)
-
-    return index
-
-
-def _resolve_card(name, cards_by_ext, expected_side, repository):
-    key = name.lower()
-    result = cards_by_ext.get(key)
-    if not result:
+def _resolve_card(name, set_name, cards_by_slug):
+    card = resolve_name(cards_by_slug, name, set_name)
+    if card is None:
         return None, None
-    return result
+    return card, card["card_id"]
 
 
 def _quote_value(s: str) -> str:

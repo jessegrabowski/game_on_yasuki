@@ -8,8 +8,16 @@ import {
   esc,
   deckSide,
   primaryDeck,
+  lookupKey,
   stripUnique,
 } from '../../../src/yasuki_web/static/deck_builder/js/helpers.js';
+
+describe('lookupKey', () => {
+  it('keys a line by its lowercased name, then its set when it gives one', () => {
+    assert.equal(lookupKey('◆ Aulus', 'Chaos Reigns Part III'), 'aulus [Chaos Reigns Part III]');
+    assert.equal(lookupKey('Aulus', null), 'aulus');
+  });
+});
 
 describe('stripUnique', () => {
   it('drops the unique marker so a display name resolves to the stored name', () => {

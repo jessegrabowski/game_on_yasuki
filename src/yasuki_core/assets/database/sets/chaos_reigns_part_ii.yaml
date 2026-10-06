@@ -43,12 +43,12 @@ cards:
   collector_number: '1'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Agasha Uzeko, Master of Water
+- title: Agasha Uzeko
+  subtitle: Master of Water
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Agasha Uzeko, Master of Water • Experienced
   clans:
   - Phoenix
   keywords:
@@ -127,7 +127,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Be Prepared to Dig Two Graves • Experienced
   keywords:
   - Edict
   - Experienced
@@ -262,7 +261,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Nio • Experienced
   clans:
   - Crane
   keywords:
@@ -328,7 +326,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Defenders of the Wall • Experienced
   keywords:
   - Siege
   - Courage
@@ -364,7 +361,8 @@ cards:
   collector_number: '69'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Doji Koshiro, Bastion of the Morning Sun
+- title: Doji Koshiro
+  subtitle: Bastion of the Morning Sun
   types:
   - Personality
   decks:
@@ -488,7 +486,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Hiruma Castle • Experienced
   keywords:
   - Experienced
   - Fortification
@@ -512,7 +509,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Tomoe • Experienced
   clans:
   - Crab
   keywords:
@@ -538,7 +534,8 @@ cards:
   collector_number: '15'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hoji Misato, Wicked Eyes
+- title: Hoji Misato
+  subtitle: Wicked Eyes
   types:
   - Personality
   decks:
@@ -572,7 +569,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Hoshi's Claw • Experienced
   keywords:
   - Tattooed
   - Experienced
@@ -591,7 +587,8 @@ cards:
   collector_number: '54'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hotaru Okane, the Last Light
+- title: Hotaru Okane
+  subtitle: the Last Light
   grants:
   - plus1f
   types:
@@ -642,12 +639,12 @@ cards:
   collector_number: '70'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Ikoma Satoru, Shogun
+- title: Ikoma Satoru
+  subtitle: Shogun
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Satoru, Shogun • Experienced 2
   clans:
   - Lion
   keywords:
@@ -674,7 +671,8 @@ cards:
   collector_number: '27'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Isawa Eijiri, Warmonger
+- title: Isawa Eijiri
+  subtitle: Warmonger
   types:
   - Personality
   decks:
@@ -705,7 +703,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Taisho • Experienced
   clans:
   - Phoenix
   - Tanuki
@@ -740,7 +737,6 @@ cards:
   - Spell
   decks:
   - Fate
-  extended_title: Jade Strike • Experienced
   keywords:
   - Experienced
   - Earth
@@ -808,7 +804,8 @@ cards:
   collector_number: '59'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kitsune Toshitaka, Fox Clan Champion
+- title: Kitsune Toshitaka
+  subtitle: Fox Clan Champion
   types:
   - Personality
   decks:
@@ -839,7 +836,8 @@ cards:
   collector_number: '11'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kuni Tanken, Master of the White Tower
+- title: Kuni Tanken
+  subtitle: Master of the White Tower
   types:
   - Personality
   decks:
@@ -940,14 +938,14 @@ cards:
   collector_number: '6'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Buyan, Death's Messenger
+- title: Moto Buyan
+  subtitle: Death's Messenger
   grants:
   - minus1ps
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Buyan, Death's Messenger • Experienced
   clans:
   - Unicorn
   keywords:
@@ -1003,12 +1001,12 @@ cards:
   collector_number: '47'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Qatun, Savior of the Khol Wall
+- title: Moto Qatun
+  subtitle: Savior of the Khol Wall
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Qatun, Savior of the Khol Wall • Experienced
   clans:
   - Unicorn
   keywords:
@@ -1150,12 +1148,12 @@ cards:
   collector_number: '8'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shahadet, Warlord
+- title: Shahadet
+  subtitle: Warlord
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shahadet, Warlord • Experienced 4
   clans:
   - Naga
   keywords:
@@ -1181,12 +1179,12 @@ cards:
   collector_number: '12'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shiba Tetsunori, Revered Sensei
+- title: Shiba Tetsunori
+  subtitle: Revered Sensei
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Tetsunori, Revered Sensei • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1239,12 +1237,12 @@ cards:
   collector_number: '49'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shosuro Aoki, "Yoritomo Kayoko"
+- title: Shosuro Aoki
+  subtitle: '"Yoritomo Kayoko"'
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Aoki, "Yoritomo Kayoko" • Experienced
   clans:
   - Mantis
   - Ninja
@@ -1277,7 +1275,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Keiichi • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -1310,7 +1307,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Miiko • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -1342,7 +1338,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Riiko • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -1416,7 +1411,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Susumu Geiko • Experienced
   clans:
   - Spider
   keywords:
@@ -1467,7 +1461,8 @@ cards:
   collector_number: '51'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Suzume Ryosuke, Clan Champion
+- title: Suzume Ryosuke
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
@@ -1561,7 +1556,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tetsuo Hiyamako • Experienced
   clans:
   - Spider
   keywords:
@@ -1585,12 +1579,12 @@ cards:
   collector_number: '44'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Tetsuo, Clan Champion
+- title: Tetsuo
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tetsuo, Clan Champion • Experienced 3
   clans:
   - Spider
   keywords:
@@ -1624,7 +1618,6 @@ cards:
   - Stronghold
   decks:
   - Pre-Game
-  extended_title: The Austere Valley of the Sparrow • Experienced
   clans:
   - Sparrow
   keywords:
@@ -1679,7 +1672,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: The Head of My Enemy • Experienced
   keywords:
   - Experienced
   text: '<b>Open:</b> Banish another player''s target dead or discarded Personality to give your target
@@ -1792,12 +1784,12 @@ cards:
   collector_number: '23'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Togashi Noboru, the Shattered Star
+- title: Togashi Noboru
+  subtitle: the Shattered Star
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Noboru, the Shattered Star • Experienced 3
   clans:
   - Dragon
   keywords:
@@ -1832,7 +1824,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Reisa • Experienced
   clans:
   - Dragon
   keywords:
@@ -1884,7 +1875,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Tsuko's Heart • Experienced
   keywords:
   - Ancestor
   - Bushido Virtue
@@ -1928,7 +1918,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Wasureta • Experienced
   clans:
   - Lion
   keywords:
@@ -1993,14 +1982,14 @@ cards:
   collector_number: '79'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yabe no Oni, Blessed Abomination
+- title: Yabe no Oni
+  subtitle: Blessed Abomination
   creates:
   - oni_personality_2_1
   types:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yabe no Oni, Blessed Abomination • Experienced
   keywords:
   - Cultist
   - Nonhuman
@@ -2030,7 +2019,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Sumiteru • Experienced
   clans:
   - Mantis
   keywords:
@@ -2082,7 +2070,6 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Asahina Akikusa
-  extended_title: Asahina Akikusa • Experienced
   types:
   - Personality
   decks:
@@ -2134,7 +2121,6 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 
 - title: The Austere Valley of the Sparrow
-  extended_title: The Austere Valley of the Sparrow • Experienced
   is_back: true
   types:
   - Stronghold
