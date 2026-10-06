@@ -112,6 +112,7 @@ _BASE_PRINT_FIELDS = (
     "name",
     "side",
     "printed_id",
+    "title",
     "clan",
     "clans",
     "keywords",

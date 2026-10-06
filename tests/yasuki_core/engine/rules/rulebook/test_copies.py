@@ -44,12 +44,14 @@ def _titled_personality(
     name: str | None = None,
     is_unique: bool = True,
     keywords: tuple[str, ...] = (),
+    play_title: str = "",
 ) -> L5RCard:
     return L5RCard.of(
         PersonalityPrint,
         id=card_id,
         name=name or title,
         printed_id=title,
+        title=play_title,
         side=Side.DYNASTY,
         owner=owner,
         is_unique=is_unique,
@@ -142,6 +144,30 @@ def test_a_unique_experienced_version_may_join_a_non_unique_base():
     session = _dynasty_phase(_titled_personality("held", is_unique=False), province=experienced)
 
     assert ActivateAbility("hitomi_x", RECRUIT) in session.legal_actions(P1)
+
+
+def test_a_subtitle_does_not_make_a_second_title():
+    # CR, Card Subtitles: Akodo Kano, Clan Champion and Akodo Kano, the Lion's Fang are both titled
+    # Akodo Kano, though their ids differ.
+    held = _titled_personality("held", title="akodo_kano_clan_champion", play_title="Akodo Kano")
+    dup = _titled_personality("dup", title="akodo_kano_the_lions_fang", play_title="Akodo Kano")
+    session = _dynasty_phase(held, province=dup)
+
+    assert ActivateAbility("dup", RECRUIT) not in session.legal_actions(P1)
+
+
+def test_an_experienced_keyword_naming_another_title_shares_that_title():
+    # CR, Experienced: The Sorrow prints "Experienced Bayushi Tenzan".
+    held = _titled_personality("held", title="bayushi_tenzan", play_title="Bayushi Tenzan")
+    sorrow = _titled_personality(
+        "sorrow",
+        title="the_sorrow_experienced",
+        play_title="The Sorrow",
+        keywords=("Experienced Bayushi Tenzan",),
+    )
+    session = _dynasty_phase(held, province=sorrow)
+
+    assert ActivateAbility("sorrow", RECRUIT) not in session.legal_actions(P1)
 
 
 def test_a_unique_attachment_beside_its_copy_is_not_offered_to_equip():

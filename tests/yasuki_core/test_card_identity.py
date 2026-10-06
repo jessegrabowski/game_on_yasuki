@@ -4,6 +4,7 @@ from yasuki_core.card_identity import (
     card_id,
     card_slug,
     current_id,
+    experience_alias,
     experience_label,
     extended_title,
     name_index,
@@ -41,6 +42,18 @@ def test_experience_label_keeps_the_level_and_set_code_and_drops_an_alternate_ti
     keyword, expected
 ):
     assert experience_label(["Unique", keyword]) == expected
+
+
+@pytest.mark.parametrize(
+    "keyword, expected",
+    [
+        ("Experienced Bayushi Tenzan", "Bayushi Tenzan"),
+        ("Experienced 2 Shinjo Yokatsu", "Shinjo Yokatsu"),
+    ]
+    + [(keyword, None) for keyword in ("Experienced", "Experienced 2KYD", "ExperiencedCoM")],
+)
+def test_experience_alias_is_the_title_an_experienced_keyword_names(keyword, expected):
+    assert experience_alias(["Unique", keyword]) == expected
 
 
 def test_a_card_without_an_experience_keyword_has_no_label():

@@ -21,13 +21,23 @@ def card_slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", s).strip("_")
 
 
+def _experience_keyword(keywords: Iterable[str]) -> re.Match[str] | None:
+    """The first Experienced or Inexperienced keyword among ``keywords``, matched."""
+    return next(filter(None, map(_EXPERIENCE.match, keywords)), None)
+
+
 def experience_label(keywords: Iterable[str]) -> str | None:
     """The experience qualifier among ``keywords``, such as "Experienced 2KYD", or None for a card
     printing no Experienced or Inexperienced keyword."""
-    for keyword in keywords:
-        if match := _EXPERIENCE.match(keyword):
-            return match.group()
-    return None
+    match = _experience_keyword(keywords)
+    return match.group() if match else None
+
+
+def experience_alias(keywords: Iterable[str]) -> str | None:
+    """The other card's title an Experienced or Inexperienced keyword names, as "Bayushi Tenzan" in
+    "Experienced Bayushi Tenzan", or None where the keyword names none."""
+    match = _experience_keyword(keywords)
+    return match.string[match.end() :].strip() or None if match else None
 
 
 def subtitled_title(entry: Mapping) -> str:

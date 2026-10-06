@@ -10,7 +10,7 @@ yasuki_core.engine.rules.rulebook.copies
     copy_may_enter
     may_enter_as_singular
     may_enter_as_unique
-    printed_title
+    titles
 
 .. automodule:: yasuki_core.engine.rules.rulebook.copies
     :members:
