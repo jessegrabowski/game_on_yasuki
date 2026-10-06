@@ -305,10 +305,12 @@ def stored_card_ids(conn: psycopg.Connection) -> set[str]:
 
 
 def orphan_card_ids(stored_ids: set[str], known_ids: set[str]) -> set[str]:
-    """The stored card ids absent from the card database. The post-rebuild integrity sweep.
+    """The stored card ids that name no card in the card database, a retired id read as its
+    successor. The post-rebuild integrity sweep.
 
-    A non-empty result means a card-DB rebuild dropped or renamed an id some deck still references.
-    Those decks need re-linking (by the denormalized ``card_name``) before the id vanishes for good.
+    A non-empty result means a card-DB rebuild dropped an id some deck still references without
+    retiring it to a successor. Those decks need re-linking (by the denormalized ``card_name``)
+    before the id vanishes for good.
 
     Parameters
     ----------
@@ -320,6 +322,6 @@ def orphan_card_ids(stored_ids: set[str], known_ids: set[str]) -> set[str]:
     Returns
     -------
     orphans : set of str
-        Ids in ``stored_ids`` but not in ``known_ids``.
+        Ids in ``stored_ids``, each read through the retired list, that are not in ``known_ids``.
     """
-    return stored_ids - known_ids
+    return {stored_as_current(card_id) for card_id in stored_ids} - known_ids

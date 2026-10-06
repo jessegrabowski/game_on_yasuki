@@ -167,3 +167,11 @@ def _insert_card(conn, deck_id, card_id, card_name, *, art_donor=None):
             "VALUES (%s, %s, %s, 'dynasty', 1, %s)",
             (deck_id, card_id, card_name, art_donor),
         )
+
+
+def test_a_stored_retired_id_reads_as_its_successor_and_is_no_orphan():
+    # retired_ids.yaml retires ashigaru, the Shadowlands Follower, to ashigaru_shl.
+    stored = decks.to_rows([DeckCard("ashigaru", "Ashigaru", "dynasty", 1)], deck_id=1)
+
+    assert decks.from_rows(stored)[0].card_id == "ashigaru_shl"
+    assert decks.orphan_card_ids({"ashigaru"}, {"ashigaru_shl"}) == set()
