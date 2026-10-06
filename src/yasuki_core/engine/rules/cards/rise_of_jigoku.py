@@ -53,6 +53,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Effect,
     Evaluate,
+    Fear,
     GainHonor,
     GrantKeyword,
     GrantModifier,
@@ -93,6 +94,67 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
+
+
+# --- A Terrible Glory ---
+
+TERRIBLE_GLORY_FORCE = 3
+TERRIBLE_GLORY_FEAR = 3
+
+
+def _a_terrible_glory_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Your opposed Samurai at the battle being fought."""
+    return [
+        card_id
+        for card_id in opposed_units_in_battle(game, source.owner)
+        if has_keyword(game, game.table.cards_by_id[card_id], keywords.SAMURAI)
+    ]
+
+
+def _a_terrible_glory_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The +3F runs to the end of the turn, as a change with no printed duration does (CR,
+    Ongoing)."""
+    return [
+        GrantModifier(
+            source.id, target.id, Stat.FORCE, TERRIBLE_GLORY_FORCE, Duration.UNTIL_END_OF_TURN
+        ),
+        Evaluate("a_terrible_glory_shadowlands", source.id, source.owner, (target.id,)),
+    ]
+
+
+@choice_resolver("a_terrible_glory_shadowlands")
+def _resolve_a_terrible_glory_shadowlands(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "If they are Shadowlands, Fear 3", read as the Fear would resolve. The Fear targets among
+    what stands at the battle then, as any Fear does, and is not raised when nothing there can be
+    targeted."""
+    if not has_keyword(game, game.table.cards_by_id[chosen[0]], keywords.SHADOWLANDS):
+        return []
+    feared = attack_targets(game, game.table.cards_by_id[source_id])
+    if not feared:
+        return []
+    return [Choose(seat, tuple(feared), 1, 1, "a_terrible_glory_fear", source_id)]
+
+
+@choice_resolver("a_terrible_glory_fear", prompt="Fear 3: choose its target")
+def _resolve_a_terrible_glory_fear(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Fear(TERRIBLE_GLORY_FEAR, chosen[0], seat)]
+
+
+register_ability(
+    "a_terrible_glory",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_a_terrible_glory_targets,
+        targeting_message="your opposed Samurai",
+        effects=_a_terrible_glory_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
 
 
 # --- Blood of Fu Leng ---

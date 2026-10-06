@@ -28,7 +28,14 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as 
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.gold.production import effective_gold_production
-from yasuki_core.engine.rules.effects import Destroy, Discard, GainHonor, PayGold, RangedAttack
+from yasuki_core.engine.rules.effects import (
+    Destroy,
+    Discard,
+    GainHonor,
+    GrantKeyword,
+    PayGold,
+    RangedAttack,
+)
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Minimum, Modifier, Stat
 from yasuki_core.engine.rules.triggers import resolve_effects
@@ -1659,3 +1666,70 @@ def test_worn_jingasa_is_not_offered_once_the_action_targets_another_instead():
         session.submit(P1, DecisionResponse(("yojimbo",)))
 
         assert PlayInterrupt("jingasa") not in session.legal_actions(P1)
+
+
+# --- A Terrible Glory ---
+
+
+def _terrible_glory_battle(samurai_keywords: tuple[str, ...]) -> EngineSession:
+    """P1's 2F Personality carrying ``samurai_keywords`` faces P2's 3F guard in the Combat Segment,
+    with A Terrible Glory in P1's hand."""
+    glory = L5RCard.of(
+        ActionPrint,
+        id="glory",
+        name="A Terrible Glory",
+        printed_id="a_terrible_glory",
+        side=Side.FATE,
+        owner=P1,
+    )
+    cards = [
+        personality("samurai", force=2, keywords=samurai_keywords),
+        personality("guard", owner=P2, force=3),
+    ]
+    return combat_segment(cards, {"samurai": 0}, {"guard": 0}, in_hand=[glory])
+
+
+def _play_terrible_glory(session: EngineSession) -> None:
+    session.act(P1, PlayStrategy("glory"))
+    session.submit(P1, DecisionResponse(("samurai",)))
+
+
+def test_a_terrible_glory_gives_a_shadowlands_samurai_force_and_fear_3():
+    session = _terrible_glory_battle((keywords.SAMURAI, keywords.SHADOWLANDS))
+
+    _play_terrible_glory(session)
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert game.pending is None
+    assert effective_force(game, game.table.cards_by_id["samurai"]) == 5
+    assert game.table.cards_by_id["guard"].bowed
+
+
+def test_a_terrible_glory_raises_no_fear_for_a_samurai_without_shadowlands():
+    session = _terrible_glory_battle((keywords.SAMURAI,))
+
+    _play_terrible_glory(session)
+
+    game = session.game
+    assert game.pending is None
+    assert effective_force(game, game.table.cards_by_id["samurai"]) == 5
+    assert not game.table.cards_by_id["guard"].bowed
+
+
+def test_a_terrible_glory_targets_only_a_samurai():
+    session = _terrible_glory_battle((keywords.SHADOWLANDS,))
+
+    assert PlayStrategy("glory") not in session.legal_actions(P1)
+
+
+def test_a_terrible_glory_reads_shadowlands_as_its_fear_would_resolve():
+    session = _terrible_glory_battle((keywords.SAMURAI,))
+    game = session.game
+    glory, samurai = game.table.cards_by_id["glory"], game.table.cards_by_id["samurai"]
+    effects = ability_for(game, glory).effects(game, glory, samurai)
+    shadowlands = GrantKeyword("glory", "samurai", keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN)
+
+    resolve_effects(game, [shadowlands, *effects])
+
+    assert game.pending.candidates == ("guard",)
