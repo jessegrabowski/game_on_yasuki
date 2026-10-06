@@ -167,7 +167,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nitoshi • Inexperienced
   clans:
   - Scorpion
   keywords:
@@ -248,7 +247,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Border Keep • Inexperienced
   keywords:
   - Unique
   - Inexperienced
@@ -1048,7 +1046,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Tsukimi • Experienced 3.5
   clans:
   - Phoenix
   keywords:
@@ -1229,7 +1226,6 @@ cards:
   - Stronghold
   decks:
   - Pre-Game
-  extended_title: The Sacred Temple of the Phoenix • Inexperienced
   clans:
   - Phoenix
   keywords:
@@ -1296,7 +1292,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsubo • Experienced
   keywords:
   - Experienced Tsubo the Drunk
   - Unique

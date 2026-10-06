@@ -136,7 +136,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akasha, Legacy of the Naga • Experienced 3
   clans:
   - Naga
   keywords:
@@ -168,7 +167,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Eirasu, The Irredeemable • Experienced 2
   clans:
   - Lion
   keywords:
@@ -226,7 +224,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Kano, Clan Champion • Experienced 3
   clans:
   - Lion
   keywords:
@@ -340,7 +337,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Akodo Tactical School • Experienced
   keywords:
   - Dojo
   - Experienced
@@ -747,7 +743,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Fuyuko • Experienced 2
   clans:
   - Scorpion
   keywords:
@@ -775,7 +770,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kanihime, Clan Champion • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -896,7 +890,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nomen • Experienced 2
   clans:
   - Scorpion
   keywords:
@@ -1028,7 +1021,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Binasa • Experienced
   clans:
   - Naga
   keywords:
@@ -1335,7 +1327,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Chuda Tairao, Snake Clan Champion • Experienced 2
   clans:
   - Spider
   - Snake
@@ -1773,7 +1764,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Arakan • Experienced 2
   clans:
   - Spider
   keywords:
@@ -1805,7 +1795,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Churo • Experienced
   clans:
   - Spider
   keywords:
@@ -2015,7 +2004,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Shaoru, Clan Champion • Experienced 2
   clans:
   - Spider
   keywords:
@@ -2075,7 +2063,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Deeds, Not Words • Experienced
   keywords:
   - Experienced
   text: As a Focus Effect, if the duel's participants are at a battlefield, give this Strategy +2FV, give
@@ -2498,7 +2485,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Meiji, Regent • Experienced
   clans:
   - Crane
   keywords:
@@ -3169,7 +3155,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gusai Natsuko, the Sea's Bane • Experienced
   clans:
   - Mantis
   keywords:
@@ -3409,7 +3394,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Genda • Experienced
   clans:
   - Crab
   keywords:
@@ -3466,7 +3450,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Ryusei, Unbroken • Experienced
   clans:
   - Crab
   keywords:
@@ -3598,7 +3581,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Toranosuke, Clan Champion • Experienced 3
   clans:
   - Crab
   keywords:
@@ -3632,7 +3614,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Hida War College • Experienced
   keywords:
   - Dojo
   - Experienced
@@ -3824,7 +3805,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hoji Momiji • Experienced
   clans:
   - Mantis
   keywords:
@@ -4201,7 +4181,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Hinata • Experienced
   clans:
   - Phoenix
   keywords:
@@ -4318,7 +4297,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Koiso, Leader of the Council • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -4662,7 +4640,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Kakita Kenjutsu School • Experienced
   keywords:
   - Dojo
   - Experienced
@@ -4713,7 +4690,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Ujirou, Pathfinder • Experienced 2
   clans:
   - Crane
   keywords:
@@ -4848,7 +4824,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsu Nishi • Experienced
   clans:
   - Lion
   keywords:
@@ -5071,7 +5046,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Lies, Lies, Lies... • Experienced
   keywords:
   - Experienced
   text: '<b>Political Open:</b> If your Family Honor is lower than its starting value, gain 4 Honor. Banish
@@ -5665,7 +5639,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Nokkai • Experienced
   clans:
   - Dragon
   keywords:
@@ -5725,7 +5698,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Ajinai, Harbinger • Experienced
   clans:
   - Unicorn
   keywords:
@@ -5812,7 +5784,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Chinua, The Ki-Rin's Rage • Experienced 3
   clans:
   - Unicorn
   keywords:
@@ -6365,7 +6336,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Plains of Otosan Uchi • Experienced
   keywords:
   - Imperial
   - Experienced
@@ -7229,7 +7199,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Kudome, Council Guardian • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -7405,7 +7374,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shinjo Riding Stables • Experienced
   keywords:
   - Dojo
   - Stable
@@ -7431,7 +7399,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Saeki, Clan Champion • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -7715,7 +7682,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Soban • Experienced
   clans:
   - Naga
   keywords:
@@ -7747,7 +7713,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Soshi Rei, Obstructor • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -8135,7 +8100,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Tangen's <i>Lies</i> • Experienced
   keywords:
   - Experienced
   - Unique
@@ -8159,7 +8123,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tausha • Experienced
   clans:
   - Naga
   keywords:
@@ -8193,7 +8156,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Teardrop Island • Experienced
   keywords:
   - Port
   - Experienced
@@ -8264,7 +8226,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: The Akasha • Experienced
   keywords:
   - Naga
   - Purified
@@ -8750,7 +8711,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Higaru, Clan Champion • Experienced 3
   clans:
   - Dragon
   keywords:
@@ -8894,7 +8854,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Toa • Experienced
   clans:
   - Dragon
   keywords:
@@ -9521,7 +9480,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Crab • Experienced
   keywords:
   - Edict
   - Courage
@@ -9542,7 +9500,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Crane • Experienced
   keywords:
   - Edict
   - Experienced
@@ -9563,7 +9520,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Dragon • Experienced
   keywords:
   - Edict
   - Experienced
@@ -9607,7 +9563,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Lion • Experienced
   keywords:
   - Edict
   - Experienced
@@ -9629,7 +9584,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Mantis • Experienced
   keywords:
   - Edict
   - Courage
@@ -9649,7 +9603,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Phoenix • Experienced
   keywords:
   - Edict
   - Experienced
@@ -9669,7 +9622,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Scorpion • Experienced
   keywords:
   - Edict
   - Experienced
@@ -9690,7 +9642,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Spider • Experienced
   keywords:
   - Edict
   - Courage
@@ -9712,7 +9663,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Way of the Unicorn • Experienced
   keywords:
   - Edict
   - Courage
@@ -9888,7 +9838,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Yamigatai • Experienced
   keywords:
   - Armor
   - Experienced Armor of Osano-Wo
@@ -10022,7 +9971,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Minoko, Clan Champion • Experienced 3
   clans:
   - Mantis
   keywords:

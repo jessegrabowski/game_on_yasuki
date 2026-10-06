@@ -104,7 +104,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Anvil of Despair • Experienced
   keywords:
   - Unique
   - Experienced
@@ -674,7 +673,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Yajinden • Experienced 2
   clans:
   - Spider
   keywords:
@@ -1752,7 +1750,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Sawao • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -1818,7 +1815,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: K'mee • Experienced 2
   clans:
   - Ratling
   keywords:
@@ -1903,7 +1899,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kan'ok'ticheck • Experienced 3
   clans:
   - Ratling
   keywords:
@@ -2372,7 +2367,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Kei • Experienced
   clans:
   - Dragon
   keywords:
@@ -2785,7 +2779,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Samarhad • Experienced
   clans:
   - Ratling
   keywords:
@@ -2958,7 +2951,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Maru • Experienced 2
   clans:
   - Scorpion
   keywords:
@@ -3130,7 +3122,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tadaka no Oni • Experienced
   keywords:
   - Experienced Oni no Tadaka
   - Unique

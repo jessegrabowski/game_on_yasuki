@@ -230,7 +230,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Chukage • Experienced
   clans:
   - Phoenix
   keywords:
@@ -325,7 +324,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Rikate • Experienced
   clans:
   - Phoenix
   keywords:
@@ -422,7 +420,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Shibata • Experienced
   clans:
   - Scorpion
   keywords:
@@ -542,7 +539,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Celestial Sword of the Dragon • Experienced
   keywords:
   - Unique
   - Weapon
@@ -571,7 +567,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Celestial Sword of the Mantis • Experienced
   keywords:
   - Unique
   - Weapon
@@ -599,7 +594,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Celestial Sword of the Scorpion • Experienced
   keywords:
   - Unique
   - Weapon
@@ -950,7 +944,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Dragon Tattoo • Experienced
   keywords:
   - Experienced
   - Fire
@@ -1143,7 +1136,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Goju Yurishi • Experienced
   clans:
   - Ninja
   - Spider
@@ -1288,7 +1280,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Nitani • Experienced
   clans:
   - Crab
   keywords:
@@ -1922,7 +1913,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Koyama • Experienced
   clans:
   - Lion
   keywords:
@@ -2067,7 +2057,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Houken • Experienced
   clans:
   - Dragon
   keywords:
@@ -2343,7 +2332,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Naka Mahatsu • Experienced
   keywords:
   - Experienced Mahatsu
   - Unique
@@ -2953,7 +2941,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Hawado • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -3362,7 +3349,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Thunder Dragon • Experienced 2
   clans:
   - Mantis
   keywords:
@@ -3494,7 +3480,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Nobukatsu • Experienced
   clans:
   - Mantis
   keywords:
@@ -3856,7 +3841,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yasuki Tsujiken • Experienced
   clans:
   - Crab
   keywords:

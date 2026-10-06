@@ -22,7 +22,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kachiko, Seven Thunder • Experienced 2CW
   clans:
   - Scorpion
   keywords:
@@ -108,7 +107,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupt Geisha House • Experienced
   keywords:
   - Experienced
   - Geisha House
@@ -130,7 +128,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupt Gold Mines • Experienced
   keywords:
   - Experienced
   - Mine
@@ -150,7 +147,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupt Stables • Experienced
   keywords:
   - Experienced
   - Shadowlands
@@ -170,7 +166,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupted Copper Mine • Experienced
   keywords:
   - Experienced
   - Mine
@@ -192,7 +187,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupted Iron Mine • Experienced
   keywords:
   - Experienced
   - Mine
@@ -213,7 +207,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Corrupted Silver Mine • Experienced
   keywords:
   - Experienced
   - Mine
@@ -234,7 +227,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Dark Daughter of Fu Leng • Experienced
   keywords:
   - Experienced
   - Nonhuman
@@ -292,7 +284,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Hoturi, Seven Thunder • Experienced 2CW
   clans:
   - Crane
   keywords:
@@ -357,7 +348,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Fu Leng, the Ninth Kami • Experienced
   keywords:
   - Duelist
   - Unique
@@ -411,7 +401,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Yakamo, Seven Thunder • Experienced 2CW
   clans:
   - Crab
   keywords:
@@ -520,7 +509,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tadaka, Seven Thunder • Experienced 2CW
   clans:
   - Phoenix
   keywords:
@@ -558,7 +546,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tanayama, the Necromancer • ExperiencedCW
   keywords:
   - ExperiencedCW
   - Shadowlands
@@ -584,7 +571,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tsuke, Master of Fire • ExperiencedCW
   clans:
   - Phoenix
   keywords:
@@ -634,7 +620,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kuni Yori, the Corruptor • Inexperienced
   clans:
   - Crab
   keywords:
@@ -661,7 +646,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kyojin • Experienced
   keywords:
   - Duelist
   - Expendable
@@ -690,7 +674,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kyoso no Oni • ExperiencedCW
   keywords:
   - ExperiencedCW
   - Nonhuman
@@ -741,7 +724,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Hitomi, Seven Thunder • Experienced 2CW
   clans:
   - Dragon
   keywords:
@@ -775,7 +757,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Tsume • ExperiencedCW
   keywords:
   - Commander
   - ExperiencedCW
@@ -802,7 +783,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otaku Kamoko, Seven Thunder • Experienced 2CW
   clans:
   - Unicorn
   keywords:
@@ -1160,7 +1140,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: The Hidden Heart of Iuchiban • ExperiencedCW
   keywords:
   - Unique
   - ExperiencedCW
@@ -1182,7 +1161,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Hooded Ronin, Descendant of Shinsei • ExperiencedCW
   keywords:
   - Duelist
   - Unique
@@ -1488,7 +1466,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Yokuni, Kami • Experienced 2CW
   clans:
   - Dragon
   keywords:
@@ -1524,7 +1501,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Toturi, Seven Thunder • Experienced 2CW
   clans:
   - Toturi's Army
   keywords:
@@ -1591,7 +1567,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsukuro • Experienced
   keywords:
   - Commander
   - Experienced
@@ -1636,7 +1611,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yogo Junzo, The Betrayer • Experienced 2CW
   keywords:
   - Experienced 2CW
   - Unique
@@ -1665,7 +1639,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo, Son of Storms • ExperiencedCW
   clans:
   - Mantis
   keywords:

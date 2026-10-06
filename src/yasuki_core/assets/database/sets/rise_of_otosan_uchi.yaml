@@ -5,7 +5,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: '"The Deathless" • Experienced'
   keywords:
   - Experienced
   - Unique
@@ -77,7 +76,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Kano, Clan Champion • Experienced 3
   clans:
   - Lion
   keywords:
@@ -271,7 +269,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ashan • Experienced
   clans:
   - Naga
   keywords:
@@ -330,7 +327,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Kanihime, Clan Champion • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -644,7 +640,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Ryushi • Experienced
   clans:
   - Crane
   keywords:
@@ -677,7 +672,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Shimizu • Experienced
   clans:
   - Crane
   keywords:
@@ -710,7 +704,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Shaoru • Experienced
   clans:
   - Spider
   keywords:
@@ -772,7 +765,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of Air • Experienced
   keywords:
   - Experienced
   - Unique
@@ -808,7 +800,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of Earth • Experienced
   keywords:
   - Experienced
   - Unique
@@ -846,7 +837,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of Fire • Experienced
   keywords:
   - Experienced
   - Unique
@@ -884,7 +874,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of Water • Experienced
   keywords:
   - Experienced
   - Unique
@@ -923,7 +912,6 @@ cards:
   - Ring
   decks:
   - Fate
-  extended_title: Dark Ring of the Void • Experienced
   keywords:
   - Experienced
   - Unique
@@ -1301,7 +1289,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Forests of Shinomen • Experienced
   keywords:
   - Forest
   - Experienced
@@ -1343,7 +1330,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Goju Keirei, "Bayushi Karyudo" • Experienced 2
   clans:
   - Ninja
   - Scorpion
@@ -1377,7 +1363,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gusai Ichido, Clan Champion • Experienced
   clans:
   - Mantis
   keywords:
@@ -1485,7 +1470,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kanjouteki • Experienced
   clans:
   - Crab
   keywords:
@@ -1545,7 +1529,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Toranosuke, Clan Champion • Experienced 3
   clans:
   - Crab
   keywords:
@@ -1713,7 +1696,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Orinoko • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1763,7 +1745,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Iweko Honor Guard • Experienced
   keywords:
   - Nonhuman
   - Undead
@@ -1791,7 +1772,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Iweko Miaka, Princess of Rokugan • Experienced
   keywords:
   - Courtier
   - Imperial
@@ -2025,7 +2005,6 @@ cards:
   - Event
   decks:
   - Dynasty
-  extended_title: Kisada's Funeral • Experienced
   keywords:
   - Experienced
   - Unique
@@ -2076,7 +2055,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsu Watanabe • Experienced
   clans:
   - Lion
   keywords:
@@ -2135,7 +2113,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kokujin Sato • Experienced
   clans:
   - Spider
   keywords:
@@ -2282,7 +2259,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Gakuya • Experienced
   clans:
   - Lion
   keywords:
@@ -2423,7 +2399,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Daigoro • Experienced
   clans:
   - Spider
   keywords:
@@ -2620,7 +2595,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Otomo Terumoto • Experienced
   keywords:
   - Courtier
   - Daimyo
@@ -2689,7 +2663,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Profaned Temple • Experienced
   keywords:
   - Experienced Sanctified Temple
   - Shadowlands
@@ -2756,7 +2729,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Purusha • Experienced
   clans:
   - Naga
   keywords:
@@ -2928,7 +2900,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Sandayu • Experienced
   clans:
   - Dragon
   keywords:
@@ -3128,7 +3099,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shinjo Saeki, Clan Champion • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -3590,7 +3560,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Nameless One • Experienced
   clans:
   - Phoenix
   keywords:
@@ -3620,7 +3589,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: The Terrible Standard of Fu Leng • Experienced
   keywords:
   - Standard
   - Experienced
@@ -3648,7 +3616,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Higaru, Clan Champion • Experienced 3
   clans:
   - Dragon
   keywords:
@@ -3714,7 +3681,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Nakahara • Experienced
   clans:
   - Dragon
   keywords:
@@ -3746,7 +3712,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Toshi Ranbo • Experienced
   keywords:
   - Imperial
   - Ruin
@@ -3812,7 +3777,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Kazue, Shinjo's Shame • Experienced
   clans:
   - Unicorn
   keywords:
@@ -4074,7 +4038,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Minoko, Clan Champion • Experienced 2
   clans:
   - Mantis
   keywords:
@@ -4169,7 +4132,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Zenathaar, Warrior of the Bright Eye • Experienced 2
   clans:
   - Naga
   keywords:

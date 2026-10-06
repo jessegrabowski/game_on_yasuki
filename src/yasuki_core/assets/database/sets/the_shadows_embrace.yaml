@@ -66,7 +66,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asahina Keigo • Experienced
   clans:
   - Crane
   keywords:
@@ -234,7 +233,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Waru • Experienced
   clans:
   - Scorpion
   keywords:
@@ -374,7 +372,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Celestial Sword of the Crab • Experienced
   keywords:
   - Unique
   - Weapon
@@ -401,7 +398,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Celestial Sword of the Crane • Experienced
   keywords:
   - Unique
   - Weapon
@@ -428,7 +424,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Celestial Sword of the Phoenix • Experienced
   keywords:
   - Unique
   - Weapon
@@ -504,7 +499,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Chuda Hitaka • Experienced
   keywords:
   - Experienced Hitaka
   - Unique
@@ -1146,7 +1140,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hiruma Nikaru • Experienced
   clans:
   - Crab
   keywords:
@@ -1383,7 +1376,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Tadanobu • Experienced
   clans:
   - Crane
   keywords:
@@ -1501,7 +1493,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsu Sorano • Experienced
   clans:
   - Lion
   keywords:
@@ -1687,7 +1678,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Longtooth • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2471,7 +2461,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Kudome • Experienced
   clans:
   - Phoenix
   keywords:
@@ -2641,7 +2630,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Keirei • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -3218,7 +3206,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Korimi • Experienced
   clans:
   - Dragon
   keywords:
@@ -3273,7 +3260,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Kosoko • Experienced
   clans:
   - Mantis
   keywords:
@@ -3629,7 +3615,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yamazaki • Experienced
   clans:
   - Spider
   keywords:
@@ -3662,7 +3647,6 @@ cards:
   - Spell
   decks:
   - Fate
-  extended_title: Yari of Air • Experienced
   keywords:
   - Air
   - Experienced

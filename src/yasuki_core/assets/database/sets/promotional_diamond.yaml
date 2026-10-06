@@ -50,7 +50,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akasha • Experienced
   clans:
   - Naga
   - Unicorn
@@ -101,7 +100,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ambition • Experienced
   keywords:
   - Unique
   - Weapon
@@ -149,7 +147,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Sunetra • Experienced
   clans:
   - Scorpion
   keywords:
@@ -413,7 +410,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Kurohito • Experienced 2
   clans:
   - Crane
   keywords:
@@ -607,7 +603,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kuon • Experienced 3
   clans:
   - Crab
   keywords:
@@ -954,7 +949,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kan'ok'ticheck • Experienced
   clans:
   - Ratling
   keywords:
@@ -1145,7 +1139,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kihei • Experienced
   keywords:
   - Cavalry
   - Unique
@@ -1336,7 +1329,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Nimuro • Experienced
   clans:
   - Lion
   keywords:
@@ -1435,7 +1427,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Chagatai • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -1787,7 +1778,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ruby of Iuchiban • Experienced
   keywords:
   - Unique
   - Experienced
@@ -1812,7 +1802,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ryokan's Sword • Experienced
   keywords:
   - Unique
   - Weapon
@@ -1943,7 +1932,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shadow Dragon • Experienced
   clans:
   - Ninja
   keywords:
@@ -2011,7 +1999,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Mirabu • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -2513,7 +2500,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: The Daimyo's Gift • Experienced
   keywords:
   - Experienced Gifts and Favors
   - Unique
@@ -2645,7 +2631,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Satsu • Experienced
   clans:
   - Dragon
   keywords:
@@ -3089,7 +3074,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Kumiko • Experienced
   clans:
   - Mantis
   keywords:

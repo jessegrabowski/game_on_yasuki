@@ -26,7 +26,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Dairuko, the Steel Lion • Experienced 2
   clans:
   - Lion
   keywords:
@@ -59,7 +58,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Crab Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -85,7 +83,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Crane Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -111,7 +108,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Dragon Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -137,7 +133,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Lion Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -163,7 +158,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Mantis Clan • Experienced
   keywords:
   - Armor
   - Experienced Yoritomo's Armor
@@ -189,7 +183,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Phoenix Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -215,7 +208,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Scorpion Clan • Experienced
   keywords:
   - Armor
   - Experienced Shoju's Armor
@@ -266,7 +258,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancestral Armor of the Unicorn Clan • Experienced
   keywords:
   - Armor
   - Unique
@@ -313,7 +304,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Bamboo Harvesters • Experienced
   keywords:
   - Unique
   - Experienced
@@ -338,7 +328,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Nitoshi, the Poison Mask • Experienced 2
   clans:
   - Ninja
   - Scorpion
@@ -417,7 +406,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Border Keep • Experienced
   keywords:
   - Unique
   - Experienced
@@ -578,7 +566,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Kanpeki, the Shadow Emperor • Experienced 3
   clans:
   - Spider
   keywords:
@@ -637,7 +624,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Makoto, the Smiling Blade • Experienced
   clans:
   - Crane
   keywords:
@@ -772,7 +758,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kisada, the Little Bear • Experienced
   clans:
   - Crab
   keywords:
@@ -954,7 +939,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Shikei, the Laughing Dragon • Experienced
   clans:
   - Dragon
   keywords:
@@ -991,7 +975,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Naleesh, the Living Goddess • Experienced
   clans:
   - Unicorn
   keywords:
@@ -1507,7 +1490,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yoritomo Hiromi, the Growing Storm • Experienced 2
   clans:
   - Mantis
   keywords:

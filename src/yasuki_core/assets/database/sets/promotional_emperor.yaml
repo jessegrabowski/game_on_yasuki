@@ -251,7 +251,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ancient Armor of the Qamar • Experienced
   keywords:
   - Armor
   - Unique
@@ -472,7 +471,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Battle Standard of the Naga • Experienced
   keywords:
   - Unique
   - Experienced
@@ -772,7 +770,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Chikara • Experienced 2
   keywords:
   - Duelist
   - Experienced 2
@@ -958,7 +955,6 @@ cards:
   - Personality
   decks: &id012
   - Dynasty
-  extended_title: Daigotsu Kanpeki • Experienced
   clans: &id013
   - Spider
   keywords: &id014
@@ -990,7 +986,6 @@ cards:
 - title: Daigotsu Kanpeki
   types: *id011
   decks: *id012
-  extended_title: Daigotsu Kanpeki • Experienced
   clans: *id013
   keywords: *id014
   text: '<b>Reaction:</b> After the resolution of a Battle action from a Strategy, if Kanpeki performed
@@ -1649,7 +1644,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Fudo • Experienced
   keywords:
   - Conqueror
   - Unique
@@ -1759,7 +1753,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gakku • Experienced
   keywords:
   - Unique
   - Devourer of Gods
@@ -2016,7 +2009,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Heart of Fudo • Experienced
   keywords:
   - Unique
   - Experienced
@@ -3036,7 +3028,6 @@ cards:
   - Stronghold
   decks:
   - Pre-Game
-  extended_title: Kyuden Kitsune • Experienced
   clans:
   - Mantis
   keywords:
@@ -3225,7 +3216,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Mantle of the Jade Champion • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -3676,7 +3666,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of the Void • Experienced
   keywords:
   - Unique
   - Experienced
@@ -4542,7 +4531,6 @@ cards:
   - Personality
   decks: &id037
   - Dynasty
-  extended_title: Shiba Tsukimi • Experienced 4
   clans: &id038
   - Phoenix
   keywords: &id039
@@ -4575,7 +4563,6 @@ cards:
 - title: Shiba Tsukimi
   types: *id036
   decks: *id037
-  extended_title: Shiba Tsukimi • Experienced 4
   clans: *id038
   keywords: *id039
   text: '<b>Reaction:</b> Twice per battle, after the resolution of another player''s Battle action: Tsukimi
@@ -5060,7 +5047,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tamahime • Experienced
   keywords:
   - Tactician
   - Unique
@@ -5427,7 +5413,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: The Emerald Armor • Experienced 2
   keywords:
   - Armor
   - Experienced 2
@@ -5553,7 +5538,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: The Isha's Yumi • Experienced
   keywords:
   - Unique
   - Weapon
@@ -5816,7 +5800,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: The Pearl-Encrusted Staff of the Cobras • Experienced
   keywords:
   - Experienced Pearl-Encrusted Staff
   - Unique
@@ -5982,7 +5965,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: The Topaz Armor • Experienced
   keywords:
   - Armor
   - Unique

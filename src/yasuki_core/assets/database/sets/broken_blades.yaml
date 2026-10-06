@@ -173,7 +173,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asahina Sekawa • Experienced
   clans:
   - Crane
   keywords:
@@ -660,7 +659,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Air • Experienced
   keywords:
   - Unique
   - Air
@@ -1008,7 +1006,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Kuon • Experienced 2
   clans:
   - Crab
   keywords:
@@ -1041,7 +1038,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Reiha • Experienced
   clans:
   - Crab
   keywords:
@@ -1273,7 +1269,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Otemi • Experienced
   clans:
   - Lion
   keywords:
@@ -2553,7 +2548,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shosuro Yudoka • Experienced
   clans:
   - Ninja
   - Scorpion
@@ -2652,7 +2646,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tamori Shaitung • Experienced
   clans:
   - Dragon
   keywords:
@@ -3280,7 +3273,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yogo Tjeki • Experienced
   clans:
   - Ninja
   - Scorpion

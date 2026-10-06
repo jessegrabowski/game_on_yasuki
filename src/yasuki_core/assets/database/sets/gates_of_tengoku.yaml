@@ -68,7 +68,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Motetsu, Scourge of the Scorpion • Experienced
   clans:
   - Lion
   keywords:
@@ -97,7 +96,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Akodo Nojima • Experienced
   clans:
   - Lion
   keywords:
@@ -126,7 +124,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Along the Coast at Midnight • Experienced
   keywords:
   - Courage
   - Experienced
@@ -148,7 +145,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Dotari • Experienced
   clans:
   - Phoenix
   keywords:
@@ -200,7 +196,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Mifuyu • Experienced
   clans:
   - Scorpion
   keywords:
@@ -264,7 +259,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Bend Like a Reed • Experienced
   keywords:
   - Experienced
   text: As a Focus Effect, give your Personality in this duel +2 to their duel stat if facing a Personality
@@ -308,7 +302,6 @@ cards:
   - Spell
   decks:
   - Fate
-  extended_title: Blood of Isawa's Tribe • Experienced
   keywords:
   - Experienced
   - Kharmic
@@ -331,7 +324,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Br'nn, the Eternal • Experienced 2
   clans:
   - Naga
   keywords:
@@ -389,7 +381,6 @@ cards:
   - Event
   decks:
   - Dynasty
-  extended_title: Call of Thunder • Experienced
   keywords:
   - Experienced
   - Unique
@@ -411,7 +402,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daidoji Ujirou • Experienced
   clans:
   - Crane
   keywords:
@@ -443,7 +433,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Daigotsu Ryuko • Experienced
   clans:
   - Spider
   keywords:
@@ -497,7 +486,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Air, Soshi Yoshihara • Experienced 2
   keywords:
   - Oracle
   - Retainer
@@ -526,7 +514,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Earth, The Broken Man • Experienced 2
   keywords:
   - Oracle
   - Retainer
@@ -554,7 +541,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Fire, Tamori Wotan • Experienced 3
   keywords:
   - Oracle
   - Retainer
@@ -584,7 +570,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Dark Oracle of Water, Hida Saiyuki • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -746,7 +731,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Gift of the Emperor • Experienced
   keywords:
   - Imperial
   - Experienced
@@ -792,7 +776,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gusai Haruna • Experienced
   clans:
   - Mantis
   keywords:
@@ -820,7 +803,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida O-Win • Experienced
   clans:
   - Crab
   - Tanuki
@@ -852,7 +834,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hida Yamadera, Dark Human • Experienced 2
   clans:
   - Crab
   keywords:
@@ -906,7 +887,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Kaname • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -961,7 +941,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Iweko Shibatsu, the Shattered Prince • Experienced
   keywords:
   - Imperial
   - Experienced
@@ -989,7 +968,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Jinn-Kuen, Dark Abbot of Fu Leng • Experienced 4
   keywords:
   - Cultist
   - Monk
@@ -1076,7 +1054,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Mitohime • Experienced
   clans:
   - Crane
   keywords:
@@ -1156,7 +1133,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ketsuen, Armor of the Shadow Warrior • Experienced 2
   keywords:
   - Armor
   - Experienced 2 Armor of Shadows
@@ -1205,7 +1181,6 @@ cards:
   - Follower
   decks:
   - Fate
-  extended_title: Kiba • Experienced
   keywords:
   - Dog
   - Nonhuman
@@ -1236,7 +1211,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsune Kohaki • Experienced
   clans:
   - Naga
   - Fox
@@ -1269,7 +1243,6 @@ cards:
   - Spell
   decks:
   - Fate
-  extended_title: Mantle of Flame • Experienced
   keywords:
   - Experienced
   - Fire
@@ -1294,7 +1267,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Matsu Chizuki • Experienced
   clans:
   - Lion
   keywords:
@@ -1370,7 +1342,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ninube Aitso, "Doji Yeiko" • Experienced
   clans:
   - Crane
   - Ninja
@@ -1402,7 +1373,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of Air, Isawa Koizumi • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -1429,7 +1399,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of Earth, Mirumoto Saori • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -1455,7 +1424,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of Fire, Kakita Ibara • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -1484,7 +1452,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Oracle of Water, Agasha Kyokuta • Experienced
   keywords:
   - Oracle
   - Retainer
@@ -1591,7 +1558,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Ruby of Iuchiban • Experienced 2
   keywords:
   - Experienced 2
   - Unique
@@ -1620,7 +1586,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Sasada, Pearl Champion • Experienced
   clans:
   - Mantis
   keywords:
@@ -1675,7 +1640,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Shiba Kintaro, the Remembered • Experienced
   clans:
   - Phoenix
   keywords:
@@ -1812,7 +1776,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shrine of Compassion • Experienced
   keywords:
   - Temple
   - Experienced
@@ -1838,7 +1801,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shrine of Courage • Experienced
   keywords:
   - Temple
   - Experienced
@@ -1886,7 +1848,6 @@ cards:
   - Holding
   decks:
   - Dynasty
-  extended_title: Shrine of Duty • Experienced
   keywords:
   - Temple
   - Experienced
@@ -1998,7 +1959,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Susumu Neya, Heart of Vengeance • Experienced
   clans:
   - Spider
   keywords:
@@ -2302,7 +2262,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Noritada, Defender of the High House • Experienced
   clans:
   - Dragon
   keywords:
@@ -2332,7 +2291,6 @@ cards:
   - Item
   decks:
   - Fate
-  extended_title: Togashi's Daisho • Experienced
   keywords:
   - Sword
   - Two-Handed
@@ -2385,7 +2343,6 @@ cards:
   - Strategy
   decks:
   - Fate
-  extended_title: Tsuruchi Technique • Experienced
   keywords:
   - Experienced
   text: <b>Kata Open:</b> Put this Kata into play. Discard your other Kata in play.<br><b>Interrupt, :bow::</b>
@@ -2406,7 +2363,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Tsuruchi Yurio • Experienced
   clans:
   - Tanuki
   - Wasp
@@ -2446,7 +2402,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Gorou, Colonial Stablemaster • Experienced
   clans:
   - Unicorn
   keywords:

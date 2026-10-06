@@ -64,7 +64,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Asako Shino • Experienced
   clans:
   - Phoenix
   keywords:
@@ -188,7 +187,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Akane • Experienced
   clans:
   - Scorpion
   keywords:
@@ -244,7 +242,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Bayushi Iyashi, Lady Sorrow • Experienced
   clans:
   - Scorpion
   - Mantis
@@ -367,7 +364,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Celestial Dragon, Guardian of Tengoku • Experienced
   keywords:
   - Dragon
   - Nonhuman
@@ -586,7 +582,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Doji Maya • Experienced
   clans:
   - Crane
   - Scorpion
@@ -855,7 +850,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Gusai Ichido • Experienced 2
   clans:
   - Mantis
   keywords:
@@ -935,7 +929,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hantei XL, The Glorious Emperor • Experienced 6
   keywords:
   - Imperial
   - Monk
@@ -965,7 +958,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hardayal • Experienced
   clans:
   - Naga
   keywords:
@@ -1051,7 +1043,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Hoji Wakuni, Pawn • Experienced
   clans:
   - Mantis
   keywords:
@@ -1098,7 +1089,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ijathilu • Experienced
   clans:
   - Naga
   keywords:
@@ -1154,7 +1144,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Ayumu, Clan Champion • Experienced 2
   clans:
   - Lion
   keywords:
@@ -1188,7 +1177,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ikoma Kunisada • Experienced
   clans:
   - Lion
   keywords:
@@ -1271,7 +1259,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Isawa Tsumaro, Master of Air • Experienced 2
   clans:
   - Phoenix
   keywords:
@@ -1358,7 +1345,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kaiu Gairoa • Experienced
   clans:
   - Crab
   keywords:
@@ -1458,7 +1444,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kakita Shinichi • Experienced 3
   clans:
   - Crane
   keywords:
@@ -1605,7 +1590,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Kitsuki Miro, Dogged Investigator • Experienced
   clans:
   - Dragon
   keywords:
@@ -1886,7 +1870,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Mirumoto Shikei • Experienced 3
   keywords:
   - Monk
   - Naga
@@ -1977,7 +1960,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Moto Ogaru, Realmborn of Chikushudo • Experienced
   clans:
   - Unicorn
   keywords:
@@ -2048,7 +2030,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Ninube Aitso, "Kakita Ikura" • Experienced 2
   clans:
   - Crane
   - Spider
@@ -2252,7 +2233,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Renyu, Apocalypse • Experienced 5
   keywords:
   - Insane
   - Shugenja
@@ -2330,7 +2310,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Sarassa • Experienced
   clans:
   - Mantis
   keywords:
@@ -2519,7 +2498,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Soshi Aoto, Master Assassin • Experienced
   clans:
   - Scorpion
   keywords:
@@ -2728,7 +2706,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: The Dark Horseman, Obsidian Legion • Experienced
   clans:
   - Spider
   keywords:
@@ -2877,7 +2854,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Kyo • Experienced
   clans:
   - Dragon
   keywords:
@@ -2906,7 +2882,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Togashi Tashishai, Emissary • Experienced
   clans:
   - Dragon
   keywords:
@@ -3064,7 +3039,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Utaku Sayaka • Experienced 2
   clans:
   - Unicorn
   keywords:
@@ -3174,7 +3148,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Waietto, Tanuki Clan Champion • Experienced
   clans:
   - Tanuki
   keywords:
@@ -3275,7 +3248,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  extended_title: Yasuki Soden, Captain of the <i>Horokabe</i> • Experienced
   clans:
   - Crab
   keywords:
@@ -3350,7 +3322,6 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Ancestral Sword of Hantei
-  extended_title: The Ancestral Sword of Hantei • Experienced 2
   types:
   - Item
   decks:
@@ -3378,7 +3349,6 @@ cards:
 - title: Poisoned Weapon
   grants:
   - poison
-  extended_title: Poisoned Weapon • Experienced
   types:
   - Strategy
   decks:
