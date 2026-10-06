@@ -89,6 +89,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     BattleEnded,
     Destroyed,
     Dishonored,
+    DuelDeclared,
     EnteredPlay,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
@@ -134,7 +135,9 @@ def _a_good_day_to_die_2_winner(
     duel = decided_duel(game)
     if duel is None:
         return []
-    destroyed = {event.card_id for event in game.turn_events if isinstance(event, Destroyed)}
+    events = game.turn_events
+    declared = max(index for index, event in enumerate(events) if isinstance(event, DuelDeclared))
+    destroyed = {event.card_id for event in events[declared:] if isinstance(event, Destroyed)}
     if not any(duel.duelist_of(loser) in destroyed for loser in duel.outcome.losers):
         return []
     return [Destroy(duel.duelist_of(winner), seat) for winner in duel.outcome.winners]
