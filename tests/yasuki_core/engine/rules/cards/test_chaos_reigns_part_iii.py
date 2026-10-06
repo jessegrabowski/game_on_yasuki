@@ -1263,3 +1263,62 @@ def test_a_good_day_to_die_destroys_a_battle_duels_winner_only_with_its_loser(lo
     on_table = {card.id for card in session.game.table.battlefield.cards}
     assert session.game.duel.outcome.winners == (P1,)
     assert ("raider" in on_table) is not loser_destroyed
+
+
+# --- The Taisen Sorrow ---
+
+
+def _sorrow_game():
+    """The Event face-up in P1's Province, over a board of Personalities at a range of Gold Costs
+    and a Follower on each side of the line."""
+    game = two_seat_game()
+    province_card(game, "sorrow", printed_id="the_taisen_sorrow", name="The Taisen Sorrow")
+    put_in_play(game, personality("cheap", gold_cost=4))
+    put_in_play(game, personality("dear", gold_cost=5))
+    put_in_play(game, personality("tainted", gold_cost=2, keywords=("Shadowlands",)))
+    put_in_play(game, personality("their-cheap", owner=P2, gold_cost=1))
+    put_in_play(game, personality("host", owner=P2, gold_cost=9))
+    attached(game, attachment("levy", attachment_type=AttachmentType.FOLLOWER, gold_cost=3), "host")
+    attached(
+        game,
+        attachment(
+            "oni",
+            owner=P2,
+            attachment_type=AttachmentType.FOLLOWER,
+            gold_cost=1,
+            keywords=("Shadowlands",),
+        ),
+        "host",
+    )
+    return EngineSession.start(game.table, P1)
+
+
+def _on_board(session):
+    return {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_the_taisen_sorrow_destroys_cheap_personalities_on_every_side():
+    session = _sorrow_game()
+
+    session.act(P1, ActivateAbility("sorrow"))
+
+    assert {"cheap", "their-cheap"}.isdisjoint(_on_board(session))
+    assert {"dear", "tainted", "host"} <= _on_board(session)
+
+
+def test_the_taisen_sorrow_spares_shadowlands_followers_and_takes_the_rest():
+    session = _sorrow_game()
+
+    session.act(P1, ActivateAbility("sorrow"))
+
+    assert "levy" not in _on_board(session)
+    assert "oni" in _on_board(session)
+
+
+def test_the_taisen_sorrow_banishes_itself_rather_than_discarding():
+    session = _sorrow_game()
+
+    session.act(P1, ActivateAbility("sorrow"))
+
+    banished = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_BANISH)]
+    assert [card.id for card in banished.cards] == ["sorrow"]

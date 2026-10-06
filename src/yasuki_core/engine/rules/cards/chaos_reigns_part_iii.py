@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     army_at,
     attack_targets,
+    followers_in_play,
     owned_holdings,
     owned_personalities,
     personalities_in_play,
@@ -55,6 +56,7 @@ from yasuki_core.engine.rules.effects import (
     Arrange,
     Ask,
     AskOption,
+    Banish,
     Bow,
     Choose,
     CreateToken,
@@ -827,6 +829,41 @@ register_ability(
         targets=_tanuki_band_targets,
         effects=_tanuki_band_effects,
         hits_every_target=True,
+    ),
+)
+
+
+# --- The Taisen Sorrow ---
+
+
+TAISEN_SORROW_MAX_GOLD_COST = 4
+
+
+def _the_taisen_sorrow_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Every cheap Personality and Follower that is not Shadowlands goes at once, the Event after
+    them. A Personality takes his unit with him, so a Follower that left with its Personality is
+    gone by the time its own destruction resolves."""
+    swept = [
+        card
+        for card in (*personalities_in_play(game), *followers_in_play(game))
+        if keywords.SHADOWLANDS not in effective_keywords(game, card)
+        and effective_gold_cost(game, card) <= TAISEN_SORROW_MAX_GOLD_COST
+    ]
+    return [
+        Simultaneously(tuple(Destroy(card.id, source.owner) for card in swept)),
+        Banish(source.id),
+    ]
+
+
+register_ability(
+    "the_taisen_sorrow",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        effects=_the_taisen_sorrow_effects,
+        hits_every_target=True,
+        located_at=(CardLocation.PROVINCE,),
     ),
 )
 
