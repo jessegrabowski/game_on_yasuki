@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAbilityTarget,
     ChooseNextTrigger,
+    Confirm,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
@@ -1101,3 +1102,43 @@ def test_the_head_of_my_enemy_gives_its_yu_to_the_target_alone():
 
     assert session.game.favor_holder is not P1
     assert session.game.table.seats[P1].honor == honor
+
+
+# --- Isawa Eijiri, Warmonger ---
+
+
+def _eijiri_battle():
+    units = [
+        personality(
+            "eijiri", printed_id="isawa_eijiri_warmonger", force=5, keywords=("Shugenja", "Fire")
+        ),
+        personality("enemy", owner=PlayerId.P2),
+    ]
+    game = combat_segment(units, {"eijiri": 0}, {"enemy": 0}).game
+    blaze = attachment("blaze", attachment_type=AttachmentType.SPELL, keywords=("Fire",))
+    attached(game, blaze, "eijiri")
+    return game
+
+
+def _eijiri_empowered(game) -> bool:
+    eijiri = game.table.cards_by_id["eijiri"]
+    return effective_force(game, eijiri) == 7 and has_keyword(game, eijiri, keywords.CONQUEROR)
+
+
+def test_isawa_eijiri_gives_his_fire_spell_a_yu_empowering_your_fire_shugenja():
+    game = _eijiri_battle()
+
+    resolve_effects(game, [Destroy("blaze", PlayerId.P2)])
+
+    assert _eijiri_empowered(game)
+
+
+@pytest.mark.parametrize(("answer", "empowered"), [(("blaze",), True), ((), False)])
+def test_isawa_eijiri_lets_you_choose_his_spells_yu_when_your_action_destroys_it(answer, empowered):
+    game = _eijiri_battle()
+
+    resolve_effects(game, [Destroy("blaze", P1)])
+    assert isinstance(game.pending, Confirm) and game.pending.seat is P1
+    submit(game, DecisionResponse(answer))
+
+    assert _eijiri_empowered(game) is empowered
