@@ -125,11 +125,14 @@ class NameIndex[R: Mapping]:
         The slug of an extended title two or more cards share, to those cards.
     sets_of : callable
         The names of the sets a card was printed in.
+    retired : mapping of str to str or None
+        Retired id to successor, the list both the keys and the lookup follow.
     """
 
     by_slug: Mapping[str, R]
     sharing: Mapping[str, tuple[R, ...]]
     sets_of: Callable[[R], Iterable[str]]
+    retired: Mapping[str, str | None]
 
 
 def name_index[R: Mapping](
@@ -169,14 +172,11 @@ def name_index[R: Mapping](
         if slug not in retired:
             by_slug.setdefault(slug, record)
     sharing = {slug: tuple(cards) for slug, cards in titled.items() if len(cards) > 1}
-    return NameIndex(by_slug, sharing, sets_of)
+    return NameIndex(by_slug, sharing, sets_of, retired)
 
 
 def resolve_name[R: Mapping](
-    index: NameIndex[R],
-    name: str,
-    set_name: str | None = None,
-    retired: Mapping[str, str | None] | None = None,
+    index: NameIndex[R], name: str, set_name: str | None = None
 ) -> R | None:
     """The record a decklist line names.
 
@@ -191,8 +191,6 @@ def resolve_name[R: Mapping](
         The card name the line gives.
     set_name : str, optional
         The set the line gives, if any.
-    retired : mapping of str to str or None, optional
-        Retired id to successor. Default is the committed list, :func:`retired_ids`.
 
     Returns
     -------
@@ -206,5 +204,5 @@ def resolve_name[R: Mapping](
                 return record
     if slug in index.by_slug:
         return index.by_slug[slug]
-    successor = current_id(slug, retired)
+    successor = current_id(slug, index.retired)
     return index.by_slug.get(successor) if successor is not None else None

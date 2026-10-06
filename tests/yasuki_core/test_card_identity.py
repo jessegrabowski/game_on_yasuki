@@ -132,17 +132,19 @@ def test_a_decklist_naming_a_retired_id_resolves_to_its_successor():
     nintai = {"card_id": "yoritomo_nintai", "name": "Yoritomo Nintai"}
     index = name_index([nintai], RETIRED)
 
-    assert resolve_name(index, "Yoritomo Nintai 2", RETIRED) is nintai
-    assert resolve_name(index, "Lost", RETIRED) is None
+    assert resolve_name(index, "Yoritomo Nintai 2") is nintai
+    assert resolve_name(index, "Lost") is None
 
 
 def test_a_retired_id_is_not_answered_by_another_cards_extended_title():
     follower = {"card_id": "aulus_goc", "name": "Aulus", "extended_title": "Aulus"}
     personality = {"card_id": "aulus_cr3", "name": "Aulus", "extended_title": "Aulus"}
-    retired = {"aulus": "aulus_goc"}
-    index = name_index([personality, follower], retired)
+    # The committed list retires aulus to the Follower, so the Personality here proves this one is
+    # the list that is read.
+    retired = {"aulus": "aulus_cr3"}
+    index = name_index([follower, personality], retired)
 
-    assert resolve_name(index, "Aulus", retired) is follower
+    assert resolve_name(index, "Aulus") is personality
 
 
 FOLLOWER = {
@@ -168,4 +170,4 @@ def test_the_line_set_tells_apart_cards_sharing_a_title(set_name, expected):
     retired = {"aulus": "aulus_goc"}
     index = name_index([PERSONALITY, FOLLOWER], retired)
 
-    assert resolve_name(index, "Aulus", set_name, retired) is expected
+    assert resolve_name(index, "Aulus", set_name) is expected
