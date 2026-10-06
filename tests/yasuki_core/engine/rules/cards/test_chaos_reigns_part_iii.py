@@ -7,7 +7,8 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Destroy, Dishonor
+from yasuki_core.engine.rules.effects import DelayedEffect, Destroy, Dishonor, Evaluate, StartDuel
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
@@ -32,6 +33,9 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseNextTrigger,
     ChooseOption,
     DecisionResponse,
+    FocusOrStrike,
+    STRIKE,
+    focus_token,
 )
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.stats.card_values import effective_force
@@ -50,6 +54,7 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import ActionPrint, WindPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.cards.test_shattered_empire import _ring_battle
 from tests.yasuki_core.engine.rules.cards.test_lotus_edition import (
     _answer_everything,
     _hired_killer,
@@ -62,6 +67,7 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     end_turn,
     fate_card,
+    focus_card,
     holding,
     pay,
     personality,
@@ -69,6 +75,7 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
     stronghold,
+    terrain_at,
     token_template,
     two_seat_game,
 )
@@ -1171,3 +1178,62 @@ def test_yasuki_soden_gives_an_enemy_minus_3_force_and_an_action_from_your_follo
     }
     assert effective_force(session.game, session.game.table.cards_by_id["enemy"]) == 1
     assert offered == {ActivateAbility("zealots")}
+
+
+# --- A Good Day to Die (2) ---
+
+
+def _kurutta_battle():
+    units = [
+        personality("kurutta", printed_id="matsu_kurutta", keywords=("Deathseeker",)),
+        personality("enemy", owner=P2),
+    ]
+    return combat_segment(units, {"kurutta": 0}, {"enemy": 0}).game
+
+
+def test_a_good_day_to_die_resolves_a_yu_your_own_action_destroyed():
+    without = _kurutta_battle()
+    with_good_day = _kurutta_battle()
+    terrain_at(with_good_day, "a_good_day_to_die_2", 0)
+
+    resolve_effects(without, [Destroy("kurutta", P1)])
+    resolve_effects(with_good_day, [Destroy("kurutta", P1)])
+
+    assert without.pending is None
+    assert isinstance(with_good_day.pending, ChooseCards)
+
+
+GOOD_DAY_PROBE = "probe_battle_duel_destroying_the_loser"
+GOOD_DAY_PROBE_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle: challenge a target enemy Personality, and destroy the loser",
+    cost=no_cost,
+    targets=lambda game, source: ["guard"],
+    effects=lambda game, source, target: [
+        StartDuel(source.id, target.id, source.id),
+        DelayedEffect(
+            Evaluate("sanctioned_duel_loser", source.id, source.owner), DUEL_CONSEQUENCES
+        ),
+    ],
+)
+
+
+def test_a_good_day_to_die_focused_in_a_battle_duel_destroys_the_winner_with_the_loser():
+    good_day = focus_card("good_day", P1, 2, printed_id="a_good_day_to_die_2")
+    with probe_ability(GOOD_DAY_PROBE, GOOD_DAY_PROBE_ABILITY):
+        session = _ring_battle(
+            raider_printed_id=GOOD_DAY_PROBE,
+            raider_chi=5,
+            held=(good_day, focus_card("P2-fv", P2, 1)),
+        )
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+        while isinstance(session.game.pending, FocusOrStrike):
+            pending = session.game.pending
+            wanted = focus_token("good_day" if pending.seat is P1 else "P2-fv")
+            answer = wanted if wanted in pending.candidates else STRIKE
+            session.submit(pending.seat, DecisionResponse((answer,)))
+
+    on_table = {card.id for card in session.game.table.battlefield.cards}
+    assert session.game.duel.outcome.winners == (P1,)
+    assert {"raider", "guard"}.isdisjoint(on_table)

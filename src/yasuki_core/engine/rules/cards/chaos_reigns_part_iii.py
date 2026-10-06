@@ -4,9 +4,12 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     ask_who_loses_honor,
     plays_clan,
+    YuWidening,
     register_entry,
     register_granted_yu,
+    register_terrain,
     register_yu,
+    register_yu_widening,
 )
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
@@ -55,6 +58,7 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     CreateToken,
+    DelayedEffect,
     Destroy,
     Discard,
     DiscardFromHand,
@@ -62,6 +66,7 @@ from yasuki_core.engine.rules.effects import (
     DrawCard,
     Effect,
     EndLook,
+    Evaluate,
     Fear,
     LookAtTop,
     GainHonor,
@@ -96,12 +101,58 @@ from yasuki_core.engine.rules.board.queries import (
     top_of_deck,
 )
 from yasuki_core.engine.rules.triggers import TriggerContext, caused_by, choice_resolver, on
+from yasuki_core.engine.rules.duel.focus_effects import focus_effect
+from yasuki_core.engine.rules.duel.procedure import decided_duel
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import PersonalityPrint
+
+
+# --- A Good Day to Die (2) ---
+
+GOOD_DAY_WINNER = "a_good_day_to_die_2_winner"
+
+
+@focus_effect("a_good_day_to_die_2")
+def _a_good_day_to_die_2_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
+    """ "As a Focus Effect, if the duel is during battle and the loser is destroyed, destroy the
+    winner." Read once the duel's consequences have applied, which is where a loser is destroyed."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return []
+    return [DelayedEffect(Evaluate(GOOD_DAY_WINNER, card.id, card.owner), DUEL_CONSEQUENCES)]
+
+
+@choice_resolver(GOOD_DAY_WINNER)
+def _a_good_day_to_die_2_winner(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    duel = decided_duel(game)
+    if duel is None:
+        return []
+    destroyed = {event.card_id for event in game.turn_events if isinstance(event, Destroyed)}
+    if not any(duel.duelist_of(loser) in destroyed for loser in duel.outcome.losers):
+        return []
+    return [Destroy(duel.duelist_of(winner), seat) for winner in duel.outcome.winners]
+
+
+def _a_good_day_to_die_2_covers(game: GameState, good_day: L5RCard, card: L5RCard) -> bool:
+    """Your cards' Yu effects trigger even when destroyed by your actions."""
+    return card.owner is good_day.owner
+
+
+register_yu_widening(
+    "a_good_day_to_die_2", YuWidening(covers=_a_good_day_to_die_2_covers, chosen=False)
+)
+register_terrain(
+    "a_good_day_to_die_2",
+    timings=(ActionTiming.ENGAGE,),
+    ability_keywords=frozenset({keywords.TERRAIN}),
+)
 
 
 # --- Bayushi Gihei ---
