@@ -144,6 +144,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Bowed,
     DuelDeclared,
     DuelResolved,
+    EnteredPlay,
     FavorDiscarded,
     HonorChanged,
     TurnBoundary,
@@ -299,6 +300,39 @@ register_ability(
 )
 
 
+# --- Daigotsu Konishi ---
+
+KONISHI_FORCE_PENALTY = 2
+
+
+def _daigotsu_konishi_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Any Follower or Personality, since the card names no side. The Rules of Location keep a
+    Battle ability's targets to the battle being fought."""
+    return [card.id for card in (*personalities_in_play(game), *followers_in_play(game))]
+
+
+def _daigotsu_konishi_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The text gives the change no duration, so it runs to the end of the turn (CR, Ongoing)."""
+    return [
+        GrantModifier(
+            source.id, target.id, Stat.FORCE, -KONISHI_FORCE_PENALTY, Duration.UNTIL_END_OF_TURN
+        )
+    ]
+
+
+register_ability(
+    "daigotsu_konishi",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_daigotsu_konishi_targets,
+        targeting_message="a Follower or Personality",
+        effects=_daigotsu_konishi_effects,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
 # --- Doji Meiji, Regent (Experienced) ---
 
 
@@ -386,6 +420,32 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 
 
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
+
+
+# --- Lane of Immorality ---
+
+LANE_OF_IMMORALITY_HONOR_LOSS = 1
+
+
+def _lane_of_immorality_honor_loss(card: L5RCard) -> list[Effect]:
+    return [GainHonor(card.owner, -LANE_OF_IMMORALITY_HONOR_LOSS, source_id=card.id)]
+
+
+@on(EnteredPlay, "lane_of_immorality", ruleset=ruleset.SHATTERED_EMPIRE.name)
+def _lane_of_immorality_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After you Recruit this Holding, lose 1 Honor. Put into play any other way, it costs none."""
+    if ctx.event.card_id != ctx.card.id or not ctx.event.recruited:
+        return []
+    return _lane_of_immorality_honor_loss(ctx.card)
+
+
+# "After you bow this Holding": Bowed names no cause, so a bow from an opponent's card also costs
+# the Honor.
+@on(Bowed, "lane_of_immorality", ruleset=ruleset.SHATTERED_EMPIRE.name)
+def _lane_of_immorality_bowed(ctx: TriggerContext) -> list[Effect]:
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return _lane_of_immorality_honor_loss(ctx.card)
 
 
 # --- Matsu Gonshiro, Soul of Matsu Shimei ---
@@ -722,6 +782,38 @@ register_ring(
 )
 
 
+# --- Seppun Blade ---
+
+
+def _seppun_blade_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Discard a card unless this Personality is opposed, then draw a card." """
+    return [Evaluate("seppun_blade_discard", source.id, source.owner), DrawCard(source.owner)]
+
+
+@choice_resolver("seppun_blade_discard")
+def _resolve_seppun_blade_discard(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The discard, unless the bearer is opposed as it would resolve."""
+    bearer = attached_to(game, game.table.cards_by_id[source_id])
+    if bearer is not None and bearer.id in opposed_units_in_battle(game, seat):
+        return []
+    return [DiscardFromHand(seat, 1, seat, seat)]
+
+
+register_ability(
+    "seppun_blade",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=itself,
+        effects=_seppun_blade_effects,
+        hits_every_target=True,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
 # --- Shinjo Mayuko, Soul of Shinjo Wei ---
 
 MAYUKO_FIRST_MELEE = 4
@@ -764,6 +856,19 @@ register_ability(
         effects=_shinjo_mayuko_soul_of_shinjo_wei_effects,
     ),
 )
+
+
+# --- The Desiccated ---
+
+DESICCATED_HONOR_LOSS = 3
+
+
+@on(EnteredPlay, "the_desiccated", ruleset=ruleset.SHATTERED_EMPIRE.name)
+def _the_desiccated_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After this Follower enters play, lose 3 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -DESICCATED_HONOR_LOSS, source_id=ctx.card.id)]
 
 
 # --- The Enlightened Path of the Dragon ---

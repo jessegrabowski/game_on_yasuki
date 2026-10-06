@@ -33,7 +33,7 @@ from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, Pu
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
-from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
+from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
 from yasuki_core.engine.rules.effects import GainHonor, GrantNegation, TakeFavor
 from yasuki_core.engine.rules.vocabulary.game_events import ConditionFulfilled
 from yasuki_core.engine.rules.legality import recruit_cost
@@ -81,7 +81,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     focus_token,
 )
 from yasuki_core.engine.rules.vocabulary.actions import PlayInterrupt
-from yasuki_core.engine.rules.effects import Move, StartDuel
+from yasuki_core.engine.rules.effects import Move, StartDuel, Straighten
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from tests.yasuki_core.engine.rules.conftest import probe_ability
@@ -2187,3 +2187,124 @@ def test_binasa_offers_no_pearl_card_his_ranged_destroyed():
 
     assert "pearl" not in {card.id for card in game.table.battlefield.cards}
     assert game.pending is None
+
+
+# --- Daigotsu Konishi ---
+
+
+def test_konishi_gives_a_card_on_either_side_of_the_battle_minus_2_force():
+    cards = [
+        personality("konishi", printed_id="daigotsu_konishi", force=3),
+        personality("guard", owner=P2, force=3),
+        personality("reserve", owner=P2, force=3),
+    ]
+    session = combat_segment(cards, {"konishi": 0}, {"guard": 0})
+    follower = attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER, force=1)
+    attached(session.game, follower, "guard")
+
+    session.act(P1, ActivateAbility("konishi"))
+    assert set(session.game.pending.candidates) == {"konishi", "guard", "ashigaru"}
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert effective_force(game, game.table.cards_by_id["guard"]) == 1
+
+
+# --- Lane of Immorality ---
+
+
+def test_recruiting_lane_of_immorality_loses_1_honor():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("mine", gold_production=2))
+    province_card(state, "lane", printed_id="lane_of_immorality", gold_cost=1, gold_production=2)
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill"))]
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+    honor = session.game.table.seats[P1].honor
+
+    session.act(P1, ActivateAbility("lane", RECRUIT))
+    pay(session, P1)
+
+    assert session.game.table.seats[P1].honor == honor - 1
+
+
+def test_each_bow_of_lane_of_immorality_loses_1_honor():
+    game = two_seat_game()
+    put_in_play(game, holding("lane", printed_id="lane_of_immorality", gold_production=2))
+    put_in_play(game, holding("other", printed_id="lane_of_immorality", gold_production=2))
+    honor = game.table.seats[P1].honor
+
+    resolve_effects(game, [Bow("lane"), Straighten("lane"), Bow("lane")])
+
+    assert game.table.seats[P1].honor == honor - 2
+
+
+# --- Seppun Blade ---
+
+
+@pytest.mark.parametrize(
+    ("defenders", "hand"),
+    [({"guard": 0}, ["held", "top"]), ({}, ["top"])],
+    ids=["opposed", "unopposed"],
+)
+def test_seppun_blade_discards_only_while_unopposed_and_always_draws(defenders, hand):
+    cards = [personality("hero", force=3), personality("guard", owner=P2, force=3)]
+    held = [fate_card("held", P1)]
+    session = combat_segment(cards, {"hero": 0}, defenders, in_hand=held)
+    game = session.game
+    attached(game, attachment("blade", printed_id="seppun_blade", force_modifier=2), "hero")
+    game.table.decks[DeckKey(P1, Side.FATE)].cards = [register(game.table, fate_card("top", P1))]
+
+    session.act(P1, ActivateAbility("blade"))
+
+    assert game.pending is None
+    assert [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards] == hand
+    assert game.table.cards_by_id["blade"].bowed
+
+
+def test_seppun_blade_reads_whether_its_personality_is_opposed_as_it_resolves():
+    cards = [personality("hero", force=3), personality("guard", owner=P2, force=3)]
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0}, in_hand=[fate_card("held", P1)])
+    game = session.game
+    blade = attached(game, attachment("blade", printed_id="seppun_blade"), "hero")
+    game.table.decks[DeckKey(P1, Side.FATE)].cards = [register(game.table, fate_card("top", P1))]
+    effects = ability_for(game, blade).effects(game, blade, blade)
+
+    resolve_effects(game, [Move("guard", Location.home(P2)), *effects])
+
+    assert [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards] == ["top"]
+
+
+# --- The Desiccated ---
+
+
+def test_equipping_the_desiccated_from_the_discard_pile_loses_3_honor():
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("hero"))
+    put_in_play(state, holding("mine", gold_production=4))
+    earlier = attachment(
+        "earlier", printed_id="the_desiccated", attachment_type=AttachmentType.FOLLOWER
+    )
+    attached(state, earlier, "hero")
+    desiccated = attachment(
+        "desiccated",
+        printed_id="the_desiccated",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=3,
+        gold_cost=4,
+    )
+    state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(register(state, desiccated))
+    session = EngineSession.start(state, P1)
+    honor = session.game.table.seats[P1].honor
+
+    session.act(P1, Equip("desiccated"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    game = session.game
+    assert [card.id for card in attachments_of(game, game.table.cards_by_id["hero"])] == [
+        "earlier",
+        "desiccated",
+    ]
+    assert game.table.seats[P1].honor == honor - 3

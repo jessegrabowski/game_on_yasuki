@@ -874,6 +874,18 @@ def test_the_capital_replays_to_the_same_board():
     assert replay(session.log) == session.game
 
 
+def test_the_capitals_fear_reads_the_battle_as_it_resolves():
+    session = _dark_capital_in_combat()
+    game = session.game
+    capital, raider = game.table.cards_by_id["capital"], game.table.cards_by_id["raider"]
+    effects = ability_for(game, capital).effects(game, capital, raider)
+
+    resolve_effects(game, [Move("guard", Location.home(P2)), *effects])
+
+    assert game.pending is None
+    assert not game.table.cards_by_id["guard"].bowed
+
+
 # --- The Sacred Ground of the Phoenix ---
 
 SACRED_GROUND = "the_sacred_ground_of_the_phoenix"
