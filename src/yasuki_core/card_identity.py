@@ -76,7 +76,8 @@ def card_id(entry: Mapping) -> str:
 
 @cache
 def retired_ids(path: Path = RETIRED_IDS_PATH) -> dict[str, str | None]:
-    """Each retired card id mapped to the id that replaced it, or to None for a card that is gone."""
+    """Each retired card id mapped to the id that replaced it, or to None for a card that is
+    gone."""
     return read_yaml(path) or {}
 
 
@@ -97,15 +98,16 @@ def current_id(card_id: str, retired: Mapping[str, str | None] | None = None) ->
         If the retired ids form a cycle.
     """
     retired = retired_ids() if retired is None else retired
-    seen = set()
-    while card_id in retired:
-        if card_id in seen:
-            raise ValueError(f"retired card ids form a cycle through {card_id!r}")
-        seen.add(card_id)
-        card_id = retired[card_id]
-        if card_id is None:
+    current, seen = card_id, set()
+    while current in retired:
+        if current in seen:
+            raise ValueError(f"retired card ids form a cycle through {current!r}")
+        seen.add(current)
+        successor = retired[current]
+        if successor is None:
             return None
-    return card_id
+        current = successor
+    return current
 
 
 def printed_sets(record: Mapping) -> list[str]:
