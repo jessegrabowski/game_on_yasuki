@@ -800,17 +800,29 @@ def _the_dark_capital_of_the_spider_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     """ "Give a target Personality Shadowlands. If they are yours, Fear equal to their Force.
-    Otherwise, take an additional action." The Fear targets the way any Fear does, chosen as it
-    resolves, and is not raised when nothing at the battle can be targeted."""
-    effects: list[Effect] = [
-        GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN)
-    ]
+    Otherwise, take an additional action." """
+    shadowlands = GrantKeyword(
+        source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN
+    )
     if target.owner is not source.owner:
-        return [*effects, AdditionalAction(source.owner, source.id)]
-    feared = attack_targets(game, source)
-    if feared:
-        effects.append(Choose(source.owner, tuple(feared), 1, 1, DARK_CAPITAL_FEAR, target.id))
-    return effects
+        return [shadowlands, AdditionalAction(source.owner, source.id)]
+    fear = Evaluate(
+        "the_dark_capital_of_the_spider_fear_target", source.id, source.owner, (target.id,)
+    )
+    return [shadowlands, fear]
+
+
+@choice_resolver("the_dark_capital_of_the_spider_fear_target")
+def _resolve_the_dark_capital_of_the_spider_fear_target(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The Fear targets the way any Fear does, among what stands at the battle as it resolves, and
+    is not raised when nothing there can be targeted. ``chosen`` is the Personality whose Force it
+    reads."""
+    feared = attack_targets(game, game.table.cards_by_id[source_id])
+    if not feared:
+        return []
+    return [Choose(seat, tuple(feared), 1, 1, DARK_CAPITAL_FEAR, chosen[0])]
 
 
 @choice_resolver(DARK_CAPITAL_FEAR, prompt="Fear equal to their Force: choose its target")
