@@ -29,9 +29,10 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.idioms import register_yu
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import AdjustCounter, Bow, Destroy, Simultaneously
+from yasuki_core.engine.rules.effects import AdjustCounter, Bow, Destroy, GainHonor, Simultaneously
 from yasuki_core.game_pieces.counters import counter_from_key
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
@@ -1142,3 +1143,18 @@ def test_isawa_eijiri_lets_you_choose_his_spells_yu_when_your_action_destroys_it
     submit(game, DecisionResponse(answer))
 
     assert _eijiri_empowered(game) is empowered
+
+
+# A test-only Spell printing its own Yu, outside the Fire Spells Eijiri gives one to.
+register_yu("eijiri_spell_probe", lambda ctx: [GainHonor(ctx.card.owner, 1)])
+
+
+def test_isawa_eijiri_offers_the_choice_for_any_of_his_spells_with_a_yu():
+    game = _eijiri_battle()
+    ward = attachment("ward", printed_id="eijiri_spell_probe", attachment_type=AttachmentType.SPELL)
+    attached(game, ward, "eijiri")
+
+    resolve_effects(game, [Destroy("ward", P1)])
+    submit(game, DecisionResponse(("ward",)))
+
+    assert game.table.seats[P1].honor == 1

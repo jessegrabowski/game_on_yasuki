@@ -68,7 +68,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.legality import location_permits
-from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets, is_spell
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
@@ -379,11 +379,7 @@ EIJIRI_FORCE = 2
 
 def _isawa_eijiri_warmonger_spell(game: GameState, eijiri: L5RCard, card: L5RCard) -> bool:
     """Whether ``card`` is one of Eijiri's Spells."""
-    return (
-        isinstance(card.printed, AttachmentPrint)
-        and card.printed.attachment_type is AttachmentType.SPELL
-        and attached_to(game, card) is eijiri
-    )
+    return is_spell(card) and attached_to(game, card) is eijiri
 
 
 def _isawa_eijiri_warmonger_reaches(game: GameState, eijiri: L5RCard, card: L5RCard) -> bool:
