@@ -3,9 +3,11 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, ke
 from yasuki_core.engine.rules.board.seats import opposing_seats, seat_controls_printed
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
+    YuWidening,
     register_granted_yu,
     register_terrain,
     register_yu,
+    register_yu_widening,
 )
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
@@ -66,7 +68,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.legality import location_permits
-from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets, is_spell
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
@@ -368,6 +370,53 @@ def _fortified_farmlands_keywords(
     step for it to be taken in.
     """
     return ("Renew",) if seat_controls_printed(game, seat, "Farm", other_than=card) else ()
+
+
+# --- Isawa Eijiri, Warmonger ---
+
+EIJIRI_FORCE = 2
+
+
+def _isawa_eijiri_warmonger_spell(game: GameState, eijiri: L5RCard, card: L5RCard) -> bool:
+    """Whether ``card`` is one of Eijiri's Spells."""
+    return is_spell(card) and attached_to(game, card) is eijiri
+
+
+def _isawa_eijiri_warmonger_reaches(game: GameState, eijiri: L5RCard, card: L5RCard) -> bool:
+    """Eijiri's :fire: Spells."""
+    return _isawa_eijiri_warmonger_spell(game, eijiri, card) and has_keyword(
+        game, card, keywords.FIRE
+    )
+
+
+def _isawa_eijiri_warmonger_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Give your :fire: Shugenja +2F and Conqueror." Every one in play, since the effect
+    names no target."""
+    game, source = ctx.game, ctx.card
+    shugenja = (
+        card
+        for card in game.table.battlefield.cards
+        if card.owner is source.owner
+        and has_keyword(game, card, keywords.FIRE)
+        and has_keyword(game, card, keywords.SHUGENJA)
+    )
+    return [
+        effect
+        for card in shugenja
+        for effect in (
+            GrantModifier(source.id, card.id, Stat.FORCE, EIJIRI_FORCE, Duration.UNTIL_END_OF_TURN),
+            GrantKeyword(source.id, card.id, keywords.CONQUEROR, Duration.UNTIL_END_OF_TURN),
+        )
+    ]
+
+
+register_granted_yu(
+    "isawa_eijiri_warmonger", _isawa_eijiri_warmonger_reaches, _isawa_eijiri_warmonger_yu
+)
+register_yu_widening(
+    "isawa_eijiri_warmonger",
+    YuWidening(covers=_isawa_eijiri_warmonger_spell, chosen=True),
+)
 
 
 # --- Matsu Kurutta ---

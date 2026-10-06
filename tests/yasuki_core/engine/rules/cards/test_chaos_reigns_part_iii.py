@@ -7,7 +7,15 @@ from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.effects import Destroy, Dishonor
+from yasuki_core.engine.rules.effects import (
+    DelayedEffect,
+    Destroy,
+    Dishonor,
+    Effect,
+    Evaluate,
+    StartDuel,
+)
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
@@ -32,6 +40,9 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseNextTrigger,
     ChooseOption,
     DecisionResponse,
+    FocusOrStrike,
+    STRIKE,
+    focus_token,
 )
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.stats.card_values import effective_force
@@ -40,7 +51,8 @@ from yasuki_core.engine.rules.stats.province_strength import effective_province_
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.replay.game_log import replay
-from yasuki_core.engine.rules.triggers import fire, resolve_effects
+from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.triggers import choice_resolver, fire, resolve_effects
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
@@ -62,6 +74,7 @@ from tests.yasuki_core.engine.builders import (
     end_phase,
     end_turn,
     fate_card,
+    focus_card,
     holding,
     pay,
     personality,
@@ -69,6 +82,7 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
     stronghold,
+    terrain_at,
     token_template,
     two_seat_game,
 )
@@ -1171,3 +1185,81 @@ def test_yasuki_soden_gives_an_enemy_minus_3_force_and_an_action_from_your_follo
     }
     assert effective_force(session.game, session.game.table.cards_by_id["enemy"]) == 1
     assert offered == {ActivateAbility("zealots")}
+
+
+# --- A Good Day to Die (2) ---
+
+
+def _kurutta_battle():
+    units = [
+        personality("kurutta", printed_id="matsu_kurutta", keywords=("Deathseeker",)),
+        personality("enemy", owner=P2),
+    ]
+    return combat_segment(units, {"kurutta": 0}, {"enemy": 0}).game
+
+
+def test_a_good_day_to_die_resolves_a_yu_your_own_action_destroyed():
+    without = _kurutta_battle()
+    with_good_day = _kurutta_battle()
+    terrain_at(with_good_day, "a_good_day_to_die_2", 0)
+
+    resolve_effects(without, [Destroy("kurutta", P1)])
+    resolve_effects(with_good_day, [Destroy("kurutta", P1)])
+
+    assert without.pending is None
+    assert with_good_day.pending.resolver == "matsu_kurutta"
+
+
+GOOD_DAY_PROBE = "probe_battle_duel"
+
+
+@choice_resolver("probe_destroy_duel_loser")
+def _resolve_probe_destroy_duel_loser(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    duel = game.duel
+    return [Destroy(duel.duelist_of(loser), seat) for loser in duel.outcome.losers]
+
+
+def _battle_duel(*, loser_destroyed: bool) -> Ability:
+    """A Battle challenge of the guard whose consequence destroys the loser, or does nothing."""
+
+    def effects(game, source, target):
+        challenge = [StartDuel(source.id, target.id, source.id)]
+        if not loser_destroyed:
+            return challenge
+        destroy = Evaluate("probe_destroy_duel_loser", source.id, source.owner)
+        return [*challenge, DelayedEffect(destroy, DUEL_CONSEQUENCES)]
+
+    return Ability(
+        timings=(ActionTiming.BATTLE,),
+        label="Battle: challenge the guard to a duel",
+        cost=no_cost,
+        targets=lambda game, source: ["guard"],
+        effects=effects,
+    )
+
+
+@pytest.mark.parametrize("loser_destroyed", [True, False])
+def test_a_good_day_to_die_destroys_a_battle_duels_winner_only_with_its_loser(loser_destroyed):
+    units = [
+        personality("raider", printed_id=GOOD_DAY_PROBE, chi=5),
+        personality("guard", owner=P2),
+    ]
+    hand = [
+        focus_card("good_day", P1, 2, printed_id="a_good_day_to_die_2"),
+        focus_card("P2-fv", P2, 1),
+    ]
+    with probe_ability(GOOD_DAY_PROBE, _battle_duel(loser_destroyed=loser_destroyed)):
+        session = combat_segment(units, {"raider": 0}, {"guard": 0}, in_hand=hand)
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+        while isinstance(session.game.pending, FocusOrStrike):
+            pending = session.game.pending
+            wanted = focus_token("good_day" if pending.seat is P1 else "P2-fv")
+            answer = wanted if wanted in pending.candidates else STRIKE
+            session.submit(pending.seat, DecisionResponse((answer,)))
+
+    on_table = {card.id for card in session.game.table.battlefield.cards}
+    assert session.game.duel.outcome.winners == (P1,)
+    assert ("raider" in on_table) is not loser_destroyed

@@ -3,6 +3,12 @@ yasuki_core.engine.rules.abilities.idioms
 
 .. currentmodule:: yasuki_core.engine.rules.abilities.idioms
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    YuWidening
+
 .. rubric:: Functions
 
 .. autosummary::

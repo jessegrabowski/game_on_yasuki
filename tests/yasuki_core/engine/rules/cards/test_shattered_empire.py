@@ -2308,3 +2308,72 @@ def test_equipping_the_desiccated_from_the_discard_pile_loses_3_honor():
         "desiccated",
     ]
     assert game.table.seats[P1].honor == honor - 3
+
+
+# --- Daigotsu Arakan (Experienced 2) ---
+
+
+def _arakan_engaged() -> EngineSession:
+    """P1's attack in its Engage Segment, with Arakan, Kurutta and a Follower on Kurutta at the
+    battlefield, and the Defender passed so P1 holds the opportunity."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov", seat=P1, index=0)
+    province_card(state, "def-prov", seat=P2, index=0)
+    put_in_play(state, personality("arakan", printed_id="daigotsu_arakan_experienced_2", force=6))
+    put_in_play(
+        state, personality("kurutta", printed_id="matsu_kurutta", keywords=("Deathseeker",))
+    )
+    put_in_play(state, personality("guard", owner=P2))
+    attached(state, attachment("spear", attachment_type=AttachmentType.FOLLOWER), "kurutta")
+    token_template(
+        state,
+        "undead_follower_2f",
+        name="Undead",
+        card_type="Follower",
+        keywords=("Nonhuman", "Undead", "Shadowlands"),
+        force=2,
+    )
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("arakan@0", "kurutta@0")))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    session.submit(P1, DecisionResponse(("0",)))
+    session.act(P2, Pass())
+    return session
+
+
+@pytest.mark.parametrize("accept", [True, False])
+def test_daigotsu_arakan_lets_you_choose_a_yu_your_action_destroyed_at_his_battlefield(accept):
+    game = _arakan_engaged().game
+
+    resolve_effects(game, [Destroy("kurutta", P1)])
+    asked = game.pending
+    submit(game, DecisionResponse(asked.candidates if accept else ()))
+
+    assert isinstance(asked, Confirm) and asked.seat is P1
+    yu_resolving = game.pending is not None and game.pending.resolver == "matsu_kurutta"
+    assert yu_resolving is accept
+
+
+def test_daigotsu_arakan_offers_no_choice_for_your_card_away_from_his_battlefield():
+    game = _arakan_engaged().game
+    put_in_play(
+        game, personality("homebody", printed_id="matsu_kurutta", keywords=("Deathseeker",))
+    )
+
+    resolve_effects(game, [Destroy("homebody", P1)])
+
+    assert game.pending is None
+
+
+def test_daigotsu_arakans_engage_gives_his_army_a_yu_creating_an_undead_follower():
+    session = _arakan_engaged()
+    session.act(P1, ActivateAbility("arakan"))
+    game = session.game
+
+    resolve_effects(game, [Destroy("spear", P2)])
+    submit(game, DecisionResponse(("arakan",)))
+
+    undead = attachments_of(game, game.table.cards_by_id["arakan"])
+    assert [card.name for card in undead] == ["Undead"]

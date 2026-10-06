@@ -6,11 +6,13 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, ignoring_bow_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     plays_clan,
     register_condition_entry,
+    YuWidening,
     register_granted_yu,
     register_entry,
     register_ring,
     enemy_units_ever_present,
     register_trait_entry,
+    register_yu_widening,
     resolved_favor_actions,
 )
 from yasuki_core.engine.rules.abilities.model import (
@@ -70,6 +72,7 @@ from yasuki_core.engine.rules.board.queries import (
     controls_terrain_at,
     followers_in_play,
     has_keyword,
+    in_army_with,
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_personalities,
@@ -93,6 +96,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     EndLook,
     Evaluate,
+    GrantAbility,
     GrantDuelStat,
     GrantProvinceStrength,
     GainHonor,
@@ -125,7 +129,14 @@ from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.interrupts import INTERRUPT_TAG, answered_by
 from yasuki_core.engine.rules.legality import permitted_timings_in
-from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.triggers import (
+    TriggerContext,
+    action_did,
+    choice_resolver,
+    given_by_effect,
+    on,
+)
+from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcome
 from yasuki_core.engine.rules.turn.structure import (
@@ -298,6 +309,69 @@ register_ability(
         hits_every_target=True,
     ),
 )
+
+
+# --- Daigotsu Arakan (Experienced 2) ---
+
+UNDEAD_FOLLOWER = "undead_follower_2f"
+
+
+register_yu_widening("daigotsu_arakan_experienced_2", YuWidening(covers=in_army_with, chosen=True))
+
+
+def _daigotsu_arakan_experienced_2_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Give your Followers and Personalities in this army, 'Yu: ...'" until the turn ends."""
+    here = location_of(game.table, source).battlefield
+    if here is None:
+        return []
+    return [
+        GrantAbility(source.id, card.id, (), Duration.UNTIL_END_OF_TURN)
+        for card in army_at(game, here, source.owner)
+        if is_follower(card) or isinstance(card.printed, PersonalityPrint)
+    ]
+
+
+register_ability(
+    "daigotsu_arakan_experienced_2",
+    Ability(
+        timings=(ActionTiming.ENGAGE,),
+        cost=no_cost,
+        targets=itself,
+        effects=_daigotsu_arakan_experienced_2_effects,
+        hits_every_target=True,
+    ),
+)
+
+
+def _daigotsu_arakan_experienced_2_yu(ctx: TriggerContext) -> list[Effect]:
+    """ "Yu: Create a 2F Nonhuman Undead :shadowlands: Follower and attach it to your target
+    Personality." Your Personalities at the dying card's battlefield, since a targeted Yu reaches
+    only that battlefield (ShE datasheet, The Yu Trait)."""
+    battlefield = ctx.event.location.battlefield
+    if battlefield is None:
+        return []
+    owner = ctx.card.owner
+    targets = tuple(card.id for card in units_at(ctx.game, battlefield, owner))
+    if not targets:
+        return []
+    return [Choose(owner, targets, 1, 1, "daigotsu_arakan_experienced_2", ctx.card.id)]
+
+
+register_granted_yu(
+    "daigotsu_arakan_experienced_2", given_by_effect, _daigotsu_arakan_experienced_2_yu
+)
+
+
+@choice_resolver(
+    "daigotsu_arakan_experienced_2",
+    prompt="Daigotsu Arakan's Yu: choose your Personality to take an Undead Follower",
+)
+def _resolve_daigotsu_arakan_experienced_2(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [CreateToken(UNDEAD_FOLLOWER, seat, source_id, attach_to=chosen[0])]
 
 
 # --- Daigotsu Konishi ---

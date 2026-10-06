@@ -1,7 +1,10 @@
 import re
+from enum import Enum
+from typing import NamedTuple
 from collections.abc import Callable
 from dataclasses import replace
 
+from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Label
@@ -392,9 +395,18 @@ def register_yu(
         Maps the trigger context to the Yu effect.
     ruleset : str, optional
         The name of the one ruleset the trait is in force under. Default None, for every arc.
+
+    Raises
+    ------
+    ValueError
+        If ``printed_id`` already has a Yu, since the choice a :class:`YuWidening` offers is keyed
+        by the card.
     """
 
-    on(Destroying, printed_id, ruleset=ruleset, label=trait_opening("Yu:"))(_yu(effects))
+    label = trait_opening("Yu:")
+    on(Destroying, printed_id, ruleset=ruleset, label=label)(
+        _yu(effects, label, f"{printed_id}_yu_chosen")
+    )
 
 
 def register_granted_yu(
@@ -421,11 +433,42 @@ def register_granted_yu(
         Maps the trigger context to the Yu effect.
     ruleset : str, optional
         The name of the one ruleset the grant is in force under. Default None, for every arc.
+
+    Raises
+    ------
+    ValueError
+        If ``printed_id`` already grants a Yu, since the choice a :class:`YuWidening` offers is
+        keyed by the granting card.
     """
     label = _granted_yu_label(printed_id)
     granted_trigger(Destroying, printed_id, reaches=reaches, label=label, ruleset=ruleset)(
-        _yu(effects)
+        _yu(effects, label, f"{printed_id}_granted_yu_chosen")
     )
+
+
+class YuWidening(NamedTuple):
+    """A card's text letting a Yu resolve though its controller's own action destroyed the card, as
+    "Your cards' Yu effects trigger even when destroyed by your actions" reads. It replaces only
+    "another player's": the destruction still has to come during battle (ShE datasheet, The Yu
+    Trait).
+
+    Attributes
+    ----------
+    covers : callable
+        Maps ``(game, widening card, card)`` to whether the text reaches ``card``'s Yu now.
+    chosen : bool
+        Whether the controller chooses each time, as "you may choose to have the trait trigger
+        even if your action destroyed it" reads, rather than the Yu always resolving.
+    """
+
+    covers: Reach
+    chosen: bool
+
+
+YU_WIDENINGS: HandlerRegistry[YuWidening] = HandlerRegistry(
+    "Yu widenings", "already widens when a Yu resolves"
+)
+register_yu_widening = YU_WIDENINGS.make_register()
 
 
 # The Yu a granting card's text quotes, as in 'have, "Yu: Gain 1 Honor."'.
@@ -447,29 +490,91 @@ def _granted_yu_label(printed_id: str) -> TriggerLabel:
     return label
 
 
-def _yu(effects: Callable[[TriggerContext], list[Effect]]) -> Trigger:
-    """The Yu trigger running ``effects`` where the datasheet's conditions hold."""
+def _yu(
+    effects: Callable[[TriggerContext], list[Effect]], label: TriggerLabel, resolver: str
+) -> Trigger:
+    """The Yu trigger running ``effects`` where the datasheet's conditions hold, or asking its
+    controller first where a card lets them choose to resolve it. ``resolver`` names the choice
+    that resolves it on a yes."""
 
     def yu(ctx: TriggerContext) -> list[Effect]:
-        return effects(ctx) if _yu_resolves(ctx) else []
+        match _yu_resolution(ctx):
+            case _YuResolution.RESOLVES:
+                return effects(ctx)
+            case _YuResolution.CHOSEN:
+                if not effects(ctx):
+                    return []
+                card = ctx.card
+                question = (
+                    f'Your action is destroying {card.name}. Resolve its "{label(ctx.game, card)}"?'
+                )
+                return [Ask(card.owner, question, resolver, subjects=(card.id,), source_id=card.id)]
+            case _YuResolution.NONE:
+                return []
+
+    @choice_resolver(resolver)
+    def resolve_chosen(
+        game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+    ) -> list[Effect]:
+        if not chosen:
+            return []
+        card = game.table.cards_by_id[source_id]
+        return effects(TriggerContext(game, card, _announced_destroying(game, source_id)))
 
     return yu
 
 
-def _yu_resolves(ctx: TriggerContext) -> bool:
+class _YuResolution(Enum):
+    RESOLVES = "resolves"
+    CHOSEN = "chosen"
+    NONE = "none"
+
+
+def _yu_resolution(ctx: TriggerContext) -> _YuResolution:
+    """Whether the Yu resolves, waits on its controller's choice, or does not resolve at all."""
     event = ctx.event
     if event.card_id != ctx.card.id:
-        return False
-    if not (event.cause is Rulebook.BATTLE_RESOLUTION or _by_another_player_in_battle(ctx)):
-        return False
-    return not would_negate(ctx.game, Destroy(event.card_id, event.cause), Provenance(), [])
+        return _YuResolution.NONE
+    resolution = _by_cause(ctx)
+    if resolution is _YuResolution.NONE:
+        return resolution
+    negated = would_negate(ctx.game, Destroy(event.card_id, event.cause), Provenance(), [])
+    return _YuResolution.NONE if negated else resolution
 
 
-def _by_another_player_in_battle(ctx: TriggerContext) -> bool:
-    attack = ctx.game.attack
+def _by_cause(ctx: TriggerContext) -> _YuResolution:
+    """What the destruction's cause makes of the Yu, before any negation is read: battle resolution
+    and another player's action in battle resolve it, and the controller's own action in battle
+    does where a card in play widens it."""
     cause = ctx.event.cause
-    in_battle = attack is not None and attack.current is not None
-    return in_battle and isinstance(cause, PlayerId) and cause is not ctx.event.controller
+    if cause is Rulebook.BATTLE_RESOLUTION:
+        return _YuResolution.RESOLVES
+    if not isinstance(cause, PlayerId) or not _in_battle(ctx.game):
+        return _YuResolution.NONE
+    if cause is not ctx.event.controller:
+        return _YuResolution.RESOLVES
+    widenings = [
+        widening
+        for source in ctx.game.table.battlefield.cards
+        if (widening := YU_WIDENINGS.get(source.printed_id)) is not None
+        and widening.covers(ctx.game, source, ctx.card)
+    ]
+    if any(not widening.chosen for widening in widenings):
+        return _YuResolution.RESOLVES
+    return _YuResolution.CHOSEN if widenings else _YuResolution.NONE
+
+
+def _announced_destroying(game: GameState, card_id: str) -> Destroying:
+    """The latest announcement that ``card_id`` is about to be destroyed."""
+    return next(
+        event
+        for event in reversed(game.turn_events)
+        if isinstance(event, Destroying) and event.card_id == card_id
+    )
+
+
+def _in_battle(game: GameState) -> bool:
+    return game.attack is not None and game.attack.current is not None
 
 
 # The choice of which Terrain a Terrain entering play destroys, when more than one is there.
