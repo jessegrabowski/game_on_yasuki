@@ -2,620 +2,736 @@ arcs:
 - name: Clan Wars
   sets:
   - set_name: Pre-Imperial
+    short_id: pre
     release_date: 1995-08-01
     size: 84
     border: Red-Orange unbroken line
     notes: Cards made available at GenCon prior to commercial release.
   - set_name: Imperial Edition
+    short_id: imp
     release_date: 1995-10-01
     featured_factions: Crab, Crane, Dragon, Lion, Phoenix, Unicorn
     size: 309
     border: Yellow-Red broken line
     notes: First base set. Included "Ancestral Swords" for each clan.
   - set_name: Shadowlands
+    short_id: shl
     release_date: 1996-05-01
     featured_factions: Naga, Scorpion
     size: 155
     border: Purple & Green swirls
   - set_name: Forbidden Knowledge
+    short_id: fkn
     release_date: 1996-08-01
     size: 150
     border: Rust-colored swirls
     notes: Introduced Region card type and Ritual spells.
   - set_name: Emerald Edition
+    short_id: emr
     release_date: 1996-08-01
     featured_factions: Same as Imperial Edition
     size: 312
     border: Black marble
     notes: Second base set. Included "Ancestral Armors" for each clan.
   - set_name: Battle of Beiden Pass
+    short_id: bbp
     release_date: 1996-11-01
     featured_factions: Crab, Dragon
     size: 118
     border: Black
     notes: '"Learn to Play" boxed set.'
   - set_name: Anvil of Despair
+    short_id: aod
     release_date: 1996-12-01
     featured_factions: Junzo's Horde, Toturi's Army
     size: 152
     border: Blue swirls
     notes: Introduced Ancestor card type.
   - set_name: Crimson & Jade
+    short_id: cnj
     release_date: 1997-04-01
     featured_factions: Brotherhood, Yoritomo's Alliance
     size: 161
     border: Green
     notes: Introduced Kiho card type.
   - set_name: Obsidian Edition
+    short_id: obs
     release_date: 1997-08-01
     featured_factions: Same as Imperial Edition
     size: 312
     border: Brown marble
     notes: Third base set. Included "Ancestral Standards" for each clan. Introduced actual cards for Strongholds, instead of using back of deck box.
   - set_name: Time of the Void
+    short_id: totv
     release_date: 1997-09-01
     featured_factions: Crab, Phoenix
     size: 229
     border: Brown with white cracks
     notes: Included "story-backed" stronghold cards for the twelve factions at the uncommon rarity level.
   - set_name: Scorpion Clan Coup, Scroll 1
+    short_id: scc1
     release_date: 1997-12-01
     featured_factions: Scorpion
     size: 53
     border: Black with red cracks
     notes: '"Prequel" expansion, released in 3 monthly installments as part of the "Rolling Thunder" campaign. These did not have rares.'
   - set_name: Scorpion Clan Coup, Scroll 2
+    short_id: scc2
     release_date: 1998-01-01
     size: 50
     border: '"'
   - set_name: Scorpion Clan Coup, Scroll 3
+    short_id: scc3
     release_date: 1998-02-01
     featured_factions: Lion
     size: 52
     border: '"'
   - set_name: Promotional – Imperial
+    short_id: pimp
     release_date: 1996-01-01
     code: Promo
   - set_name: Promotional – CWF
+    short_id: pcwf
     release_date: 1997-06-01
     code: Promo
 - name: Hidden Emperor - "Jade"
   sets:
   - set_name: Jade Edition
+    short_id: jade
     release_date: 1998-05-01
     featured_factions: Brotherhood, Crab, Crane, Dragon, Lion, Naga, Phoenix, Scorpion, Shadowlands, Toturi's Army, Unicorn, Yoritomo's Alliance
     size: 330
     border: Green waves
     notes: Fourth base set. Included "Clan Charters" for each clan.
   - set_name: The Hidden Emperor, Episode 1
+    short_id: he1
     release_date: 1998-06-01
     featured_factions: Naga
     size: 52
     border: Wood grain
     notes: The Hidden Emperor expansion was released in small monthly episodes as part of the "Rolling Thunder" campaign. These had two levels of uncommon rather than true rares.
   - set_name: The Hidden Emperor, Episode 2
+    short_id: he2
     release_date: 1998-07-01
     featured_factions: Dragon
     size: 52
     border: Wood grain
   - set_name: The Hidden Emperor, Episode 3
+    short_id: he3
     release_date: 1998-08-01
     featured_factions: Monk
     size: 52
     border: Wood grain
   - set_name: The Hidden Emperor, Episode 4
+    short_id: he4
     release_date: 1998-09-01
     featured_factions: Unicorn
     size: 52
     border: Wood grain
   - set_name: The Hidden Emperor, Episode 5
+    short_id: he5
     release_date: 1998-10-01
     featured_factions: Mantis
     size: 52
     border: Wood grain
   - set_name: The Hidden Emperor, Episode 6
+    short_id: he6
     release_date: 1998-11-01
     featured_factions: Crane
     size: 52
     border: Wood grain
   - set_name: 'The Hidden Emperor: The Dark Journey Home'
+    short_id: djh
     release_date: 1999-02-01
     featured_factions: Ninja, Phoenix, Toturi's Army
     size: 154
     border: Wood grain
   - set_name: Pearl Edition
+    short_id: pearl
     release_date: 1999-05-01
     featured_factions: Same as Jade Edition
     size: 364
     border: Purple ripples
     notes: Fifth base set. First to feature revised card design. Included "Clan Weapons" for each clan.
   - set_name: Siege of Sleeping Mountain
+    short_id: ssm
     release_date: 1999-05-01
     featured_factions: Brotherhood & Dragon, Naga & Toturi's Army
     size: 64
     border: Red-Green ovals
     notes: '"Learn to Play" set including two pairs of decks.'
   - set_name: Honor Bound
+    short_id: hbd
     release_date: 1999-06-01
     featured_factions: Crab, Scorpion, Shadowlands
     size: 173
     border: Red whorls
     notes: Introduced Sensei card type. Included "Clan War Saga" foils reprinting older cards.
   - set_name: Ambition's Debt
+    short_id: abd
     release_date: 1999-11-01
     featured_factions: Lion, Naga, Shadowlands
     size: 180
     border: Dark blue whorls
     notes: Included "Clan War Saga" foils reprinting older cards.
   - set_name: Fire & Shadow
+    short_id: fns
     release_date: 2000-03-01
     featured_factions: Brotherhood, Dragon, Yoritomo's Alliance
     size: 186
     border: Olive whorls
     notes: Included "Clan War Saga" foils reprinting older cards.
   - set_name: Top Deck Booster
+    short_id: tdb
     release_date: 2000-03-01
     size: 20
     border: Black
     notes: Simplified cards included in demo booster for Top Deck Magazine.
   - set_name: Heroes of Rokugan
+    short_id: hor
     release_date: 2000-05-01
     size: 27
     border: Golden spheres
     notes: First direct to player set. Packaged in cloth covered box and binder. These cards also had the Gold bug.
   - set_name: Soul of the Empire
+    short_id: sote
     release_date: 2000-06-01
     featured_factions: Crane, Toturi's Army, Unicorn
     size: 200
     border: Dark green whorls
     notes: Included token cards with red backs.  Included "story-backed" stronghold cards for the thirteen legal factions at the uncommon rarity level.
   - set_name: Storms Over Matsu Palace
+    short_id: somp
     release_date: 2000-06-01
     featured_factions: Lion, Unicorn
     size: 55
     border: Black and red
     notes: '"Learn to Play" set.'
   - set_name: Spirit Wars
+    short_id: spw
     release_date: 2000-11-01
     featured_factions: Lion, Phoenix, Spirit
     size: 197
     border: Thick red diagonal lines
     notes: Some cards in this set also featured the Gold bug. First set to feature new card backs.
   - set_name: Promotional – Jade
+    short_id: pjade
     release_date: 1999-06-01
     code: Promo
 - name: Four Winds - "Gold"
   sets:
   - set_name: Gold Edition
+    short_id: gld
     release_date: 2001-06-01
     featured_factions: Crab, Crane, Dragon, Lion, Phoenix, Scorpion, Shadowlands, Unicorn
     size: 541
     code: GE
     notes: Sixth base set. Introduced Wind card type. Included "Celestial Swords" for each clan.
   - set_name: A Perfect Cut
+    short_id: apc
     release_date: 2001-09-01
     featured_factions: Crab, Crane, Scorpion
     size: 155
     code: APC
   - set_name: An Oni's Fury
+    short_id: aof
     release_date: 2001-12-01
     featured_factions: Dragon, Shadowlands, Unicorn
     size: 156
     code: AOF
     notes: Reprints in this set are not marked with an expansion code.
   - set_name: Dark Allies
+    short_id: dka
     release_date: 2002-04-01
     featured_factions: Lion, Mantis, Phoenix
     size: 161
     code: DA
     notes: Yoritomo's Alliance Officially Changed To Mantis Clan
   - set_name: The L5R Experience
+    short_id: l5rx
     release_date: 2002-06-01
     featured_factions: Crane, Scorpion
     size: 62
     code: L5R EXP.
     notes: Free "Learn to Play" set.
   - set_name: Broken Blades
+    short_id: bkb
     release_date: 2002-08-01
     featured_factions: Crab, Scorpion, Unicorn
     size: 156
     code: BB
   - set_name: 1,000 Years of Darkness
+    short_id: kyd
     release_date: 2002-09-01
     size: 94
     code: KYD
     notes: Direct to player set. Included binder. Some cards also had Diamond bug.
   - set_name: The Fall of Otosan Uchi
+    short_id: fou
     release_date: 2002-12-01
     featured_factions: Crane, Dragon, Mantis
     size: 156
     code: FOU
     notes: Cards also had Diamond bug.
   - set_name: Heaven & Earth
+    short_id: hae
     release_date: 2003-04-01
     featured_factions: Lion, Phoenix, Shadowlands
     size: 157
     code: H&E
     notes: Cards also had Diamond bug.
   - set_name: Winds of Change
+    short_id: woc
     release_date: 2003-08-01
     featured_factions: Crab, Mantis, Ratling
     size: 155
     code: WoC
     notes: Cards also had Diamond bug.
   - set_name: Promotional – Gold
+    short_id: pgold
     release_date: 2002-06-01
     code: Promo
 - name: Rain of Blood - "Diamond"
   sets:
   - set_name: Diamond Edition
+    short_id: dmd
     release_date: 2003-10-01
     featured_factions: Crab, Crane, Dragon, Lion, Mantis, Phoenix, Ratling, Scorpion, Shadowlands, Unicorn
     size: 487
     code: DE
     notes: Seventh base set. Included "Celestial Swords" for each clan.
   - set_name: Training Grounds
+    short_id: tgr
     release_date: 2003-11-01
     featured_factions: Lion, Shadowlands
     size: 95
     code: TG
     notes: '"Learn to play" set.'
   - set_name: Reign of Blood
+    short_id: rob
     release_date: 2003-12-01
     featured_factions: Dragon, Phoenix, Unicorn
     size: 157
     code: RoB
   - set_name: The Hidden City
+    short_id: thc
     release_date: 2004-04-01
     featured_factions: Crab, Lion, Ratling
     size: 156
     code: HC
   - set_name: Wrath of the Emperor
+    short_id: wote
     release_date: 2004-08-01
     featured_factions: Crane, Scorpion, Shadowlands
     size: 156
     code: WotE
   - set_name: Dawn of the Empire
+    short_id: dote
     release_date: 2004-11-01
     size: 108
     code: DotE
     notes: Direct to player set. Included binder.  Most cards also had Lotus bug.
   - set_name: Web of Lies
+    short_id: wol
     release_date: 2004-12-01
     featured_factions: Mantis, Phoenix, Unicorn
     size: 156
     code: WoL
     notes: Cards also had Lotus bug.
   - set_name: Enemy of My Enemy
+    short_id: eome
     release_date: 2005-04-01
     featured_factions: Crab, Dragon, Ratling
     size: 156
     code: EoME
     notes: Cards also had Lotus bug.
   - set_name: Code of Bushido
+    short_id: cob
     release_date: 2005-08-01
     featured_factions: Crane, Lion, Scorpion
     size: 156
     code: CoB
     notes: Cards also had Lotus bug.
   - set_name: Promotional – Diamond
+    short_id: pdia
     release_date: 2004-06-01
     code: Promo
 - name: Age of Enlightenment - "Lotus"
   sets:
   - set_name: Lotus Edition
+    short_id: lts
     release_date: 2005-10-01
     featured_factions: Crab, Crane, Dragon, Lion, Mantis, Phoenix, Ratling, Scorpion, Shadowlands, Unicorn
     size: 500
     code: LE
     notes: Eighth base set. Included "Clan Swords" for each clan. All cards in the Crane starter deck were initially released separately in an all-foil deck to commemorate 2005 GenCon victory.
   - set_name: Path of Hope
+    short_id: poh
     release_date: 2006-01-01
     featured_factions: Crab, Crane, Shadowlands
     size: 156
     code: PoH
   - set_name: Drums of War
+    short_id: dow
     release_date: 2006-05-01
     featured_factions: Dragon, Lion, Unicorn
     size: 156
     code: DoW
   - set_name: Training Grounds 2
+    short_id: tg2
     release_date: 2006-07-01
     featured_factions: Crane, Dragon
     size: 112
     code: TG2
     notes: '"Learn to Play" set.'
   - set_name: Test of Enlightenment
+    short_id: toe
     release_date: 2006-07-01
     size: 124
     code: ToE
     notes: Direct to player set.
   - set_name: Rise of the Shogun
+    short_id: rots
     release_date: 2006-09-01
     featured_factions: Mantis, Phoenix, Scorpion
     size: 156
     code: RotS
   - set_name: Khan's Defiance
+    short_id: knd
     release_date: 2007-01-01
     featured_factions: Crab, Crane, Ratling
     size: 156
     code: KD
     notes: Cards also had Samurai bug.
   - set_name: Tomorrow
+    short_id: tom
     release_date: 2007-03-01
     featured_factions: Ratling
     size: 56
     code: Tomorrow
     notes: Cards also had Samurai bug, All foil set including the 2006 World Championship deck and 21 new cards.
   - set_name: The Truest Test
+    short_id: ttt
     release_date: 2007-05-01
     featured_factions: Dragon, Spider, Unicorn
     size: 156
     code: TTT
     notes: Cards also had Samurai bug.
   - set_name: Promotional – Lotus
+    short_id: plotus
     release_date: 2006-06-01
     code: Promo
 - name: Race for the Throne - "Samurai"
   sets:
   - set_name: Samurai Edition
+    short_id: sam
     release_date: 2007-07-01
     featured_factions: Crab, Crane, Dragon, Lion, Mantis, Phoenix, Scorpion, Spider, Unicorn
     size: 412
     code: Samurai
     notes: Ninth base set. Included unique armors for each clan.
   - set_name: Crab vs. Lion
+    short_id: cvl
     release_date: 2008-01-01
     featured_factions: Crab, Lion
     notes: Two-player starter box. Release date approximate — verify.
   - set_name: Stronger than Steel
+    short_id: sts
     release_date: 2007-10-01
     featured_factions: Lion, Mantis, Phoenix
     size: 157
     code: STS
   - set_name: Test of the Emerald and Jade Championships
+    short_id: ejc
     release_date: 2007-12-01
     size: 52
     code: E&JC
     notes: Direct to player set.
   - set_name: Honor's Veil
+    short_id: hnv
     release_date: 2008-02-01
     featured_factions: Crane, Dragon, Scorpion
     size: 156
     code: HV
   - set_name: Words and Deeds
+    short_id: wnd
     release_date: 2008-05-01
     featured_factions: Crab, Spider, Unicorn
     size: 166
     code: W&D
   - set_name: Samurai Edition Banzai
+    short_id: seb
     featured_factions: Same as Samurai Edition
     notes: Tenth base set. Reprint of Samurai Edition with bonus rares from expansions.  Cards had a 2008 copyright date instead of 2007; rares from other expansions included a star symbol but no set numbers.
   - set_name: The Heaven's Will
+    short_id: thw
     release_date: 2008-10-01
     featured_factions: Dragon, Lion, Mantis
     size: 166
     code: THW
   - set_name: Glory of the Empire
+    short_id: gote
     release_date: 2009-01-01
     featured_factions: Crab, Crane, Phoenix
     size: 166
     code: GotE
     notes: Dual Bug (Samurai & Celestial). First to feature revised card design.
   - set_name: The Imperial Gift 1
+    short_id: ig1
     release_date: 2009-01-01
     size: 28
     code: Imperial Gift I
     notes: Free expansion, Dual Bug (Samural & Celestial)
   - set_name: Death at Koten
+    short_id: dak
     release_date: 2009-04-01
     size: 84
     code: DaK
     notes: Direct to player set, Dual Bug (Samurai & Celestial)
   - set_name: Promotional – Samurai
+    short_id: psam
     release_date: 2008-03-01
     code: Promo
 - name: Destroyer War - "Celestial"
   sets:
   - set_name: Celestial Edition
+    short_id: cel
     release_date: 2009-06-01
     featured_factions: Crab, Crane, Dragon, Lion, Mantis, Phoenix, Scorpion, Spider, Unicorn
     size: 395
     code: Celestial
     notes: Eleventh base set. Included heavenly weapons for each clan.
   - set_name: The Imperial Gift 2
+    short_id: ig2
     release_date: 2009-08-01
     size: 82
     code: IG 2
     notes: Free expansion.  Packaged as two unaligned decks, with some cards reprinted from other Celestial-legal expansions, designed to be played against each other.
   - set_name: Path of the Destroyer
+    short_id: potd
     release_date: 2009-08-01
     featured_factions: Scorpion, Spider, Unicorn
     size: 166
     code: PotD
     notes: Introduces Celestial card type.
   - set_name: The Harbinger
+    short_id: hrb
     release_date: 2010-01-01
     featured_factions: Dragon, Mantis, Phoenix
     size: 176
     code: TH
   - set_name: Celestial Edition 15
+    short_id: ce15
     release_date: 2010-03-01
     featured_factions: Same as Celestial Edition
     size: 154
     code: CE 15
     notes: Twelfth base set. Reprint of Celestial Edition including bonus rares from earlier expansions, a non-legal "Flashback" reprint of an earlier card, and a "Celestial Mempo" for each clan.
   - set_name: The Plague War
+    short_id: tpw
     release_date: 2010-05-01
     featured_factions: Crab, Crane, Lion
     size: 176
     code: TPW
   - set_name: The Imperial Gift 3
+    short_id: ig3
     release_date: 2010-08-01
     size: 44
     code: Imperial Gift 3
     notes: 'Free expansion '
   - set_name: Battle of Kyuden Tonbo
+    short_id: bokt
     release_date: 2010-09-01
     featured_factions: Dragon, Lion
     size: 91
     code: BoKT
     notes: '"Learn to Play" set'
   - set_name: Empire at War
+    short_id: eaw
     release_date: 2010-09-01
     featured_factions: Dragon, Scorpion, Unicorn
     size: 176
     code: EaW
   - set_name: The Dead of Winter
+    short_id: tdow
     release_date: 2011-01-01
     featured_factions: Crane, Mantis, Spider
     size: 164
     code: TDoW
   - set_name: Before the Dawn
+    short_id: btd
     release_date: 2011-05-01
     featured_factions: Crab, Lion, Phoenix
     size: 156
     code: BtD
     notes: Dual Bug (Celestial & Emperor)
   - set_name: Forgotten Legacy
+    short_id: fgl
     release_date: 2011-07-01
     size: 90
     code: FL
     notes: Direct to player set, Dual Bug (Celestial & Emperor), 6 "Eternity" bug  cards
   - set_name: Second City
+    short_id: scy
     release_date: 2011-09-01
     featured_factions: Dragon, Mantis, Scorpion
     size: 156
     code: SC
     notes: Dual Bug (Celestial & Emperor)
   - set_name: Promotional – Celestial
+    short_id: pcel
     release_date: 2010-06-01
     code: Promo
 - name: Age of Conquest - "Emperor"
   sets:
   - set_name: Emperor Edition
+    short_id: emp
     release_date: 2012-02-01
     featured_factions: Crab, Crane, Dragon, Lion, Mantis, Phoenix, Scorpion, Spider, Unicorn
     size: 428
     code: EE
     notes: Thirteenth base set.  Included new family House Guards and a Celestial for each clan.
   - set_name: Emperor Edition Demo Decks
+    short_id: eedd
     release_date: 2012-02-01
     notes: Learn-to-play demo decks. Release date approximate — verify.
   - set_name: Embers of War
+    short_id: eow
     release_date: 2012-05-01
     featured_factions: Lion, Spider, Unicorn
     size: 159
     code: EoW
   - set_name: The Shadow's Embrace
+    short_id: tse
     release_date: 2012-07-01
     featured_factions: Crab, Crane, Phoenix
     size: 159
     code: TSE
     notes: Factory Set
   - set_name: Seeds of Decay
+    short_id: sod
     release_date: 2012-10-01
     featured_factions: Dragon, Mantis, Scorpion
     size: 159
     code: SoD
   - set_name: Honor and Treachery
+    short_id: hat
     release_date: 2012-12-01
     featured_factions: Phoenix, Scorpion
     size: 84
     code: HaT
     notes: '"Learn to Play" set'
   - set_name: 'Emperor Edition: Gempukku'
+    short_id: eeg
     release_date: 2013-01-01
     featured_factions: Same as Emperor Edition
     size: 18
     code: EE Gempukku
     notes: Reprinted cards from BtD, SC, EE, EoW, SoD. Boosters contained rares only.  Starter decks included an Experienced Personality for each clan, decided upon by a player vote from the Emperor Edition starters, as well as a card-draw Holding for each clan.
   - set_name: Torn Asunder
+    short_id: tas
     release_date: 2013-02-01
     size: 156
     code: TA
     notes: The first expansion not to include featured clan starter decks since Forbidden Knowledge.
   - set_name: Coils of Madness
+    short_id: com
     release_date: 2013-05-01
     size: 147
     code: CoM
     notes: Dual Bug (Emperor & Ivory), switches to new Emperor bug.  Factory set includes all cards (including Emperor-legal only) except nine Premium rarity Personalities.  Booster packs include only Ivory-legal cards, including full-bleed art versions of non-Unique cards, and foil versions of Unique cards.
   - set_name: Gates of Chaos
+    short_id: goc
     release_date: 2013-09-01
     size: 150
     code: GoC
     notes: Dual Bug (Emperor & Ivory).  First expansion to include foil rares since The Heaven's Will.
   - set_name: Aftermath
+    short_id: aft
     release_date: 2013-12-01
     size: 150
     code: AM
     notes: Dual Bug (Emperor & Ivory)
   - set_name: Promotional – Emperor
+    short_id: pemp
     release_date: 2012-06-01
     code: Promo
 - name: A Brother's Destiny - "Ivory"
   sets:
   - set_name: A Matter of Honor
+    short_id: amoh
     release_date: 2013-12-18
     featured_factions: Crab, Lion
     size: 55
     code: AMoH
     notes: '"Learn to Play" set'
   - set_name: Ivory Edition
+    short_id: ivory
     release_date: 2014-03-24
     featured_factions: Crab, Crane, Dragon, Lion, Mantis, Phoenix, Scorpion, Spider, Unicorn
     size: 372
     code: Ivory
     notes: Fourteenth base set. Reintroduced Sensei card type. Included experienced "Ancestral Armors" for each clan. Marks the switch from expansions using 11-card booster packs to 16-card booster packs, to foster L5R Draft tournament environment.
   - set_name: The Coming Storm
+    short_id: tcs
     release_date: 2014-06-09
     size: 185
     code: TCS
   - set_name: A Line in the Sand
+    short_id: alits
     release_date: 2014-09-28
     size: 156
     code: ALitS
   - set_name: The New Order
+    short_id: tno
     release_date: 2014-12-01
     size: 156
     code: TNO
   - set_name: The Currency of War
+    short_id: tcw
     release_date: 2015-01-05
     featured_factions: Crane, Mantis
     size: 57
     code: TCW
     notes: '"Learn to Play" set'
   - set_name: Twenty Festivals
+    short_id: 20f
     release_date: 2015-03-27
     featured_factions: Same as Ivory Edition
     size: 372
     code: 20F
     notes: Dual Bug (Ivory & Onyx). Fifteenth base set.
   - set_name: Thunderous Acclaim
+    short_id: tha
     release_date: 2015-07-21
     size: 156
     code: THA
     notes: Dual Bug (Ivory & Onyx).
   - set_name: Evil Portents
+    short_id: evp
     release_date: 2015-11-09
     size: 165
     code: EP
     notes: Dual Bug (Ivory & Onyx).
   - set_name: The Blackest Storm
+    short_id: tbs
     release_date: 2018-01-01
     digital: true
     size: 168
     code: TBS
     notes: Dual Bug (Ivory & Onyx).
   - set_name: Promotional – Ivory
+    short_id: pivory
     release_date: 2014-06-01
     code: Promo
   - set_name: Promotional – Twenty Festivals
+    short_id: p20f
     release_date: 2015-06-01
     code: Promo
 - name: Onyx Edition
   sets:
   - set_name: Hidden Forest War
+    short_id: hfw
     release_date: 2023-01-01
     digital: true
     featured_factions: Akasha, Spider
@@ -623,6 +739,7 @@ arcs:
     code: HFW
     notes: '"Learn to Play" set'
   - set_name: Onyx Edition
+    short_id: onyx
     release_date: 2023-01-01
     digital: true
     featured_factions: Akasha, Crab, Crane, Dragon, Lion, Phoenix, Scorpion, Spider, Unicorn
@@ -630,18 +747,21 @@ arcs:
     code: Onyx
     notes: Sixteenth base set. Completed and released by "Onyx Lives!" Project by some of the original CCG Designers. Dual Bug (Onyx & Shattered Empire).
   - set_name: Rise of Jigoku
+    short_id: roj
     release_date: 2023-01-01
     digital: true
     size: 166
     code: RoJ
     notes: Completed and released by "Onyx Lives!" Project by some of the original CCG Designers. Dual Bug (Onyx & Shattered Empire).
   - set_name: Road to Ruin
+    short_id: rtr
     release_date: 2023-01-01
     digital: true
     size: 157
     code: RtR
     notes: Completed and released by "Onyx Lives!" Project by some of the original CCG Designers. Dual Bug (Onyx & Shattered Empire).
   - set_name: Rise of Otosan Uchi
+    short_id: rou
     release_date: 2023-01-01
     digital: true
     size: 166
@@ -650,6 +770,7 @@ arcs:
 - name: Shattered Empire
   sets:
   - set_name: Gathering Storms
+    short_id: gst
     release_date: 2024-03-01
     digital: true
     featured_factions: Mantis
@@ -657,18 +778,21 @@ arcs:
     code: GS
     notes: Released by "Onyx Lives!" Project by some of the original CCG Designers.
   - set_name: Chaos Reigns Part I
+    short_id: cr1
     release_date: 2024-05-01
     digital: true
     size: 54
     code: CRI
     notes: Released by "Onyx Lives!" Project by some of the original CCG Designers.
   - set_name: Gates of Tengoku
+    short_id: got
     release_date: 2024-09-01
     digital: true
     size: 101
     code: GoT
     notes: Released by "Onyx Lives!" Project by some of the original CCG Designers.
   - set_name: Shattered Empire
+    short_id: she
     release_date: 2025-02-01
     digital: true
     featured_factions: Akasha, Crab, Crane, Dragon, Lion, Mantis, Phoenix, Scorpion, Spider, Unicorn
@@ -676,6 +800,7 @@ arcs:
     code: ShE
     notes: Seventeenth base set. Released by "Onyx Lives!" Project by some of the original CCG Designers.
   - set_name: Chaos Reigns Part II
+    short_id: cr2
     release_date: 2025-05-01
     digital: true
     featured_factions: Sparrow
@@ -683,28 +808,33 @@ arcs:
     code: CRII
     notes: Released by "Onyx Lives!" Project by some of the original CCG Designers.
   - set_name: Chaos Reigns Part III
+    short_id: cr3
     code: CRIII
     notes: Released by "Onyx Lives!" Project by some of the original CCG Designers.
 - name: Three Dynasties
   sets:
   - set_name: Three Dynasties
+    short_id: 3dy
     code: 3D
     notes: Eighteenth base set. Released by "Onyx Lives!" Project by some of the original CCG Designers.
 - name: Other
   sets:
   - set_name: War of Honor
+    short_id: woh
     release_date: 2011-06-01
     featured_factions: Dragon, Lion, Phoenix, Scorpion
     size: 127
     code: WoH
     notes: Self-contained multiplayer L5R variant. Some cards in this game had the Celestial and/or Emperor bugs.
   - set_name: 'Siege: Heart of Darkness'
+    short_id: shod
     release_date: 2014-09-01
     featured_factions: Dark Naga, Mantis, Phoenix, Scorpion
     size: 41
     code: S:HoD
     notes: Self-contained cooperative L5R variant, with multiple players opposing a challenge deck piloted by another player.  The Dark Naga challenge deck includes new cards with no arc legality; the three pre-constructed decks include cards legal throughout the Ivory arc, from Coils of Madness through A Line in the Sand.  Introduces Clock and Territory card types, which are only relevant to the Siege format.
   - set_name: 'Siege: Clan War'
+    short_id: scw
     release_date: 2015-09-01
     featured_factions: Yogo Junzo, Brotherhood of Shinsei, Toturi’s Army, Yoritomo’s Alliance
     size: 77
@@ -713,5 +843,6 @@ arcs:
 - name: Tokens
   sets:
   - set_name: Tokens
+    short_id: tok
     digital: true
     notes: Synthetic home for created-card and marker token proxies; not a real product.
