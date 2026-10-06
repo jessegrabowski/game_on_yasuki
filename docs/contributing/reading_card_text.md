@@ -32,12 +32,11 @@ datasheet wins. Every entry below names which settles it.
 
 ## A keyword before the timing is not part of the timing
 
-{card}`Touch of Death` reads *"Maho Limited: Bow this Shugenja and destroy this Spell to destroy a
-target bowed Personality with equal or lower Chi."*
+{card}`Banish All Doubt` reads *"Tactical Open: Look at the top four cards of your Fate deck. Put
+one of them in your hand and put the other three on the bottom of your deck in any order."*
 
-It looks like `Maho Limited` is a designator of its own. It is a **Limited** ability on a card
-carrying the Maho keyword, and the prefix restricts nothing, neither who may use it nor what it may
-target. The datasheet gives the rendering rule: a Spell with the Air and Water keywords and an
+It looks like `Tactical Open` is a designator of its own. It is an **Open** ability carrying the
+Tactical keyword, and the prefix restricts nothing, neither who may use it nor what it may target. The datasheet gives the rendering rule: a Spell with the Air and Water keywords and an
 action reading "Open: Draw a card" prints as "Air Water Open: Draw a card".
 
 `Favor Limited` is the real exception. It is a genuine compound tied to the Imperial Favor, and the
