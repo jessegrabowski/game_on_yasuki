@@ -167,43 +167,116 @@ def test_every_retired_id_is_gone_and_names_a_card_that_exists():
     assert all(current_id(card_id) in committed | {None} for card_id in retired)
 
 
-def _aulus_sets(tmp_path, *, follower_id=None, personality_id=None):
+SETS = {"Gates of Chaos": "goc", "Chaos Reigns Part III": "cr3", "Ivory Edition": "ivory"}
+RELEASED = {"Gates of Chaos": "2013-09-01", "Ivory Edition": "2014-03-24"}
+AULUS_RETIRED = {"aulus": "aulus_goc"}
+
+
+def _ties(tmp_path, cards_by_set, retired=AULUS_RETIRED):
     cards_dir = tmp_path / "sets"
     cards_dir.mkdir()
-    write_set(cards_dir, "Gates of Chaos", [{"title": "Aulus", "id": follower_id}])
-    write_set(cards_dir, "Chaos Reigns Part III", [{"title": "Aulus", "id": personality_id}])
+    for set_name, cards in cards_by_set.items():
+        write_set(cards_dir, set_name, cards)
+    entries = [
+        {"set_name": name, "short_id": short_id, "release_date": RELEASED.get(name)}
+        for name, short_id in SETS.items()
+    ] + [{"set_name": "Tokens", "short_id": "tok"}]
     set_info = tmp_path / "set_info.yaml"
-    set_info.write_text(
-        yaml.safe_dump(
-            {
-                "arcs": [
-                    {
-                        "name": "Arc",
-                        "sets": [
-                            {"set_name": "Gates of Chaos", "short_id": "goc"},
-                            {"set_name": "Chaos Reigns Part III", "short_id": "cr3"},
-                        ],
-                    }
-                ]
-            }
-        )
-    )
-    return cards_dir, set_info
+    set_info.write_text(yaml.safe_dump({"arcs": [{"name": "Arc", "sets": entries}]}))
+    return untagged_title_ties(cards_dir, set_info, retired)
 
 
 def test_two_cards_sharing_a_title_must_each_carry_their_first_sets_id(tmp_path):
-    cards_dir, set_info = _aulus_sets(tmp_path, personality_id="aulus_2")
+    problems = _ties(
+        tmp_path,
+        {
+            "Gates of Chaos": [{"title": "Aulus"}],
+            "Chaos Reigns Part III": [{"title": "Aulus", "id": "aulus_2"}],
+        },
+    )
 
-    assert untagged_title_ties(cards_dir, set_info) == [
+    assert problems == [
         "aulus shares its title with ['aulus_2']; give every printing the id 'aulus_goc'",
         "aulus_2 shares its title with ['aulus']; give every printing the id 'aulus_cr3'",
     ]
 
 
 def test_cards_sharing_a_title_pass_once_each_carries_its_sets_id(tmp_path):
-    cards_dir, set_info = _aulus_sets(tmp_path, follower_id="aulus_goc", personality_id="aulus_cr3")
+    problems = _ties(
+        tmp_path,
+        {
+            "Gates of Chaos": [{"title": "Aulus", "id": "aulus_goc"}],
+            "Chaos Reigns Part III": [{"title": "Aulus", "id": "aulus_cr3"}],
+        },
+    )
 
-    assert untagged_title_ties(cards_dir, set_info) == []
+    assert problems == []
+
+
+def test_a_shared_title_must_be_retired_to_one_of_its_cards(tmp_path):
+    problems = _ties(
+        tmp_path,
+        {
+            "Gates of Chaos": [{"title": "Aulus", "id": "aulus_goc"}],
+            "Chaos Reigns Part III": [{"title": "Aulus", "id": "aulus_cr3"}],
+        },
+        retired={},
+    )
+
+    assert problems == [
+        "'aulus' is shared by ['aulus_cr3', 'aulus_goc']; retire it to the card a decklist line "
+        "naming no set means"
+    ]
+
+
+def test_cards_sharing_a_title_may_not_share_a_set(tmp_path):
+    problems = _ties(
+        tmp_path,
+        {
+            "Gates of Chaos": [
+                {"title": "Aulus", "id": "aulus_goc"},
+                {"title": "Aulus", "id": "aulus_goc_2"},
+            ],
+        },
+    )
+
+    assert "aulus_goc and aulus_goc_2 share the title 'aulus' and the set 'Gates of Chaos'" in (
+        " ".join(problems)
+    )
+
+
+def test_the_first_printing_by_release_date_names_the_tag(tmp_path):
+    # Gates of Chaos sorts after Chaos Reigns Part III by file name but was released first, and an
+    # undated set counts as the latest.
+    problems = _ties(
+        tmp_path,
+        {
+            "Chaos Reigns Part III": [{"title": "Aulus", "id": "aulus_goc"}],
+            "Gates of Chaos": [{"title": "Aulus", "id": "aulus_goc"}],
+            "Ivory Edition": [{"title": "Aulus", "id": "aulus_ivory"}],
+        },
+    )
+
+    assert problems == []
+
+
+def test_tokens_sharing_a_title_are_exempt(tmp_path):
+    tokens = [
+        {"title": "Courtier", "id": "courtier_0_3_2"},
+        {"title": "Courtier", "id": "courtier_0_2_2"},
+    ]
+
+    assert _ties(tmp_path, {"Tokens": tokens}, retired={}) == []
+
+
+def test_a_shared_title_in_a_set_with_no_short_id_names_its_file(tmp_path):
+    cards = {
+        "Gates of Chaos": [{"title": "Aulus", "id": "aulus_goc"}],
+        "Unknown": [{"title": "Aulus"}],
+    }
+
+    with pytest.raises(ValueError, match="Unknown.yaml: set_info.yaml gives the set 'Unknown' no"):
+        _ties(tmp_path, cards)
 
 
 def test_no_committed_card_shares_a_title_without_its_sets_id():

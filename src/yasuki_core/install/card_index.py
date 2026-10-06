@@ -121,15 +121,19 @@ def card_ids(cards_dir: Path) -> list[str]:
 
 
 def untagged_title_ties(
-    cards_dir: Path = DEFAULT_CARDS_PATH, set_info_path: Path = DEFAULT_SET_INFO_PATH
+    cards_dir: Path = DEFAULT_CARDS_PATH,
+    set_info_path: Path = DEFAULT_SET_INFO_PATH,
+    retired: Mapping[str, str | None] | None = None,
 ) -> list[str]:
     """
-    One line per card that shares its extended title with another card and lacks the id that sets
-    them apart.
+    One line per problem with cards that share an extended title.
 
-    A decklist naming that title cannot tell such cards apart, so each carries an explicit id ending
-    in the ``short_id`` of the set that first printed it, as in ``aulus_goc`` and ``aulus_cr3``.
-    Tokens are exempt: no decklist names one, and their ids already describe their stats.
+    A decklist naming a shared title cannot tell its cards apart by name, so each carries an
+    explicit id ending in the ``short_id`` of the set that first printed it, as in ``aulus_goc`` and
+    ``aulus_cr3``. The bare title's slug is retired to the card a line without a set names, and no
+    two of the cards share a set, so the set a line names picks one. Each card's extended title is
+    its newest printing's, as the loader reads it. Tokens are exempt: no decklist names one, and
+    their ids already describe their stats.
 
     Parameters
     ----------
@@ -138,45 +142,78 @@ def untagged_title_ties(
     set_info_path : path, optional
         The arc-grouped set metadata carrying each set's release date and ``short_id``. Default is
         the packaged ``set_info.yaml``.
+    retired : mapping of str to str or None, optional
+        Retired id to successor. Default is the committed list,
+        :func:`~yasuki_core.card_identity.retired_ids`.
 
     Returns
     -------
     list of str
         Sorted problem descriptions, empty when every shared title is told apart.
+
+    Raises
+    ------
+    ValueError
+        If a card sharing a title, or reprinted, is in a set ``set_info_path`` gives no
+        ``short_id``.
     """
+    retired = card_identity.retired_ids() if retired is None else retired
     sets = {
         entry["set_name"]: entry
         for arc in read_yaml(set_info_path)["arcs"]
         for entry in arc["sets"]
     }
-    printed_in: dict[str, list[str]] = {}
-    slug_of: dict[str, str] = {}
+    printings: dict[str, list[SetEntry]] = {}
     for entry in iter_set_entries(cards_dir):
         if entry.card_id.endswith("__back"):
             continue
-        printed_in.setdefault(entry.card_id, []).append(entry.set_name)
-        slug_of.setdefault(entry.card_id, card_identity.card_slug(entry.extended_title))
+        printings.setdefault(entry.card_id, []).append(entry)
+
+    def set_of(entry: SetEntry) -> dict:
+        if "short_id" not in sets.get(entry.set_name, {}):
+            raise ValueError(
+                f"{entry.source}: {set_info_path.name} gives the set {entry.set_name!r} no short_id"
+            )
+        return sets[entry.set_name]
+
+    def released(entry: SetEntry, undated: str) -> str:
+        return str(set_of(entry).get("release_date") or undated)
 
     sharing: dict[str, list[str]] = {}
-    for card_id, set_names in printed_in.items():
-        if set(set_names) != {TOKENS_SET}:
-            sharing.setdefault(slug_of[card_id], []).append(card_id)
+    for card_id, entries in printings.items():
+        if {entry.set_name for entry in entries} == {TOKENS_SET}:
+            continue
+        # The loader counts an undated set as the oldest when it picks the newest printing.
+        newest = (
+            entries[0] if len(entries) == 1 else max(entries, key=lambda e: released(e, "0000"))
+        )
+        sharing.setdefault(card_identity.card_slug(newest.extended_title), []).append(card_id)
 
     problems = []
     for slug, card_ids_sharing in sharing.items():
         if len(card_ids_sharing) < 2:
             continue
-        for card_id in card_ids_sharing:
-            first = min(
-                printed_in[card_id],
-                key=lambda name: str(sets[name].get("release_date") or "9999"),
+        if slug not in retired:
+            problems.append(
+                f"{slug!r} is shared by {sorted(card_ids_sharing)}; retire it to the card a "
+                f"decklist line naming no set means"
             )
-            expected = f"{slug}_{sets[first]['short_id']}"
+        set_holder: dict[str, str] = {}
+        for card_id in card_ids_sharing:
+            first = min(printings[card_id], key=lambda entry: released(entry, "9999"))
+            expected = f"{slug}_{set_of(first)['short_id']}"
             if card_id != expected:
                 problems.append(
                     f"{card_id} shares its title with {sorted(set(card_ids_sharing) - {card_id})}; "
                     f"give every printing the id {expected!r}"
                 )
+            for set_name in {entry.set_name for entry in printings[card_id]}:
+                holder = set_holder.setdefault(set_name, card_id)
+                if holder != card_id:
+                    problems.append(
+                        f"{holder} and {card_id} share the title {slug!r} and the set "
+                        f"{set_name!r}, so a decklist line cannot tell them apart"
+                    )
     return sorted(problems)
 
 
