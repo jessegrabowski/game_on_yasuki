@@ -59,7 +59,7 @@ from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, loc
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.prints import ActionPrint, WindPrint
+from yasuki_core.game_pieces.prints import ActionPrint, EventPrint, WindPrint
 
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.rules.cards.test_lotus_edition import (
@@ -1322,3 +1322,96 @@ def test_the_taisen_sorrow_banishes_itself_rather_than_discarding():
 
     banished = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_BANISH)]
     assert [card.id for card in banished.cards] == ["sorrow"]
+
+
+# --- Tsudao's Grave ---
+
+
+def _grave_game(*, in_deck=True, in_discard=False):
+    """The Grave in play, an occupied Province beside it, and an Event to find in the Dynasty deck,
+    the discard pile, or neither."""
+    game = two_seat_game()
+    put_in_play(game, holding("grave", printed_id="tsudaos_grave"))
+    province_card(game, "standing", gold_cost=2, index=1)
+    event = register(
+        game.table,
+        L5RCard.of(
+            EventPrint, id="event", printed_id="event", name="E", side=Side.DYNASTY, owner=P1
+        ),
+    )
+    if in_deck:
+        game.table.decks[DeckKey(P1, Side.DYNASTY)].cards = [event]
+    if in_discard:
+        game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)].add(event)
+    return EngineSession.start(game.table, P1)
+
+
+def _grave_province(session, index):
+    return [
+        card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, index)].cards
+    ]
+
+
+def test_tsudaos_grave_refills_the_named_province_face_up_with_what_it_found():
+    session = _grave_game()
+
+    session.act(P1, ActivateAbility("grave"))
+    session.submit(P1, DecisionResponse(("event",)))
+    session.submit(P1, DecisionResponse((ZoneKey(P1, ZoneRole.PROVINCE, 1).token,)))
+
+    assert _grave_province(session, 1) == ["event"]
+    assert session.game.table.cards_by_id["event"].face_up
+
+
+def test_tsudaos_grave_discards_the_card_already_standing_in_that_province():
+    session = _grave_game()
+
+    session.act(P1, ActivateAbility("grave"))
+    session.submit(P1, DecisionResponse(("event",)))
+    session.submit(P1, DecisionResponse((ZoneKey(P1, ZoneRole.PROVINCE, 1).token,)))
+
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
+    assert "standing" in {card.id for card in discard.cards}
+
+
+def test_tsudaos_grave_searches_the_discard_pile_as_well_as_the_deck():
+    session = _grave_game(in_deck=False, in_discard=True)
+
+    session.act(P1, ActivateAbility("grave"))
+
+    assert session.game.pending.candidates == ("event",)
+
+
+def test_tsudaos_grave_fills_nothing_when_the_named_province_is_gone():
+    """The Province is named at one decision and filled at the next, so it can be destroyed in
+    between."""
+    session = _grave_game()
+    session.act(P1, ActivateAbility("grave"))
+    session.submit(P1, DecisionResponse(("event",)))
+    named = ZoneKey(P1, ZoneRole.PROVINCE, 1)
+    del session.game.table.zones[named]
+
+    session.submit(P1, DecisionResponse((named.token,)))
+
+    assert session.game.pending is None
+    assert "event" not in _on_board(session)
+
+
+def test_tsudaos_grave_leaves_the_province_alone_when_the_refill_is_declined():
+    session = _grave_game()
+
+    session.act(P1, ActivateAbility("grave"))
+    session.submit(P1, DecisionResponse(("event",)))
+    session.submit(P1, DecisionResponse(()))
+
+    assert _grave_province(session, 1) == ["standing"]
+    assert session.game.pending is None
+
+
+def test_tsudaos_grave_is_spent_even_when_the_search_finds_nothing():
+    session = _grave_game(in_deck=False)
+
+    session.act(P1, ActivateAbility("grave"))
+
+    assert session.game.pending is None
+    assert "grave" not in _on_board(session)

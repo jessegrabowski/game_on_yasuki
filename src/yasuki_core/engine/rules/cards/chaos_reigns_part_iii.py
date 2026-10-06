@@ -109,10 +109,10 @@ from yasuki_core.engine.rules.duel.procedure import decided_duel
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.vocabulary import keywords
-from yasuki_core.engine.table import DeckKey, Location, location_of
+from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.prints import PersonalityPrint
+from yasuki_core.game_pieces.prints import EventPrint, PersonalityPrint
 
 
 # --- A Good Day to Die (2) ---
@@ -864,6 +864,89 @@ register_ability(
         effects=_the_taisen_sorrow_effects,
         hits_every_target=True,
         located_at=(CardLocation.PROVINCE,),
+    ),
+)
+
+
+# --- Tsudao's Grave ---
+
+
+def _tsudaos_grave_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [Destroy(source.id, source.owner)]
+
+
+def _tsudaos_grave_events(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The Events in ``seat``'s Dynasty deck and discard pile, which the search reaches alike."""
+    searched = (
+        *game.table.decks[DeckKey(seat, Side.DYNASTY)].cards,
+        *game.table.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)].cards,
+    )
+    return tuple(card.id for card in searched if isinstance(card.printed, EventPrint))
+
+
+def _tsudaos_grave_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Search for an Event. Both it and the Province it fills are named after the search, so the
+    action announces neither. Nothing to find is the whole action, since the Grave is spent by
+    then either way."""
+    found = _tsudaos_grave_events(game, source.owner)
+    if not found:
+        return []
+    return [Choose(source.owner, found, 1, 1, "tsudaos_grave_event", source.id, declinable=True)]
+
+
+@choice_resolver("tsudaos_grave_event", prompt="Choose an Event to refill a Province with")
+def _resolve_tsudaos_grave_event(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Name the Province the Event refills, which the seat may decline to do. A Province is a slot
+    rather than the card standing in it, so an empty one is as fillable as a full one."""
+    if not chosen:
+        return []
+    slots = tuple(key.token for key, _ in province_zones(game, seat))
+    return [
+        Choose(
+            seat=seat,
+            candidates=slots,
+            minimum=1,
+            maximum=1,
+            resolver="tsudaos_grave_province",
+            source_id=source_id,
+            resolver_context=chosen,
+            declinable=True,
+        )
+    ]
+
+
+@choice_resolver("tsudaos_grave_province", prompt="Choose the Province to refill")
+def _resolve_tsudaos_grave_province(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """Clear the Province and put the Event there face-up. The card already standing there is
+    discarded to make room, since a full Province takes nothing. A Province named here and gone
+    by the time the seat answers takes nothing either."""
+    if not chosen:
+        return []
+    (found,) = resolver_context
+    province = ZoneKey.from_token(chosen[0])
+    zone = game.table.zones.get(province)
+    if zone is None:
+        return []
+    standing = tuple(Discard(card.id, seat) for card in zone.cards)
+    return [*standing, PlaceInProvince(found, province)]
+
+
+register_ability(
+    "tsudaos_grave",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=_tsudaos_grave_cost,
+        targets=itself,
+        effects=_tsudaos_grave_effects,
+        hits_every_target=True,
     ),
 )
 
