@@ -72,6 +72,7 @@ from yasuki_core.engine.rules.board.queries import (
     controls_terrain_at,
     followers_in_play,
     has_keyword,
+    in_army_with,
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_personalities,
@@ -315,20 +316,7 @@ register_ability(
 UNDEAD_FOLLOWER = "undead_follower_2f"
 
 
-def _daigotsu_arakan_experienced_2_covers(game: GameState, arakan: L5RCard, card: L5RCard) -> bool:
-    """Your cards at Arakan's battlefield."""
-    here = location_of(game.table, arakan).battlefield
-    return (
-        here is not None
-        and card.owner is arakan.owner
-        and location_of(game.table, card).battlefield == here
-    )
-
-
-register_yu_widening(
-    "daigotsu_arakan_experienced_2",
-    YuWidening(covers=_daigotsu_arakan_experienced_2_covers, chosen=True),
-)
+register_yu_widening("daigotsu_arakan_experienced_2", YuWidening(covers=in_army_with, chosen=True))
 
 
 def _daigotsu_arakan_experienced_2_effects(

@@ -2343,15 +2343,17 @@ def _arakan_engaged() -> EngineSession:
     return session
 
 
-def test_daigotsu_arakan_lets_you_choose_a_yu_your_action_destroyed_at_his_battlefield():
+@pytest.mark.parametrize("accept", [True, False])
+def test_daigotsu_arakan_lets_you_choose_a_yu_your_action_destroyed_at_his_battlefield(accept):
     game = _arakan_engaged().game
 
     resolve_effects(game, [Destroy("kurutta", P1)])
     asked = game.pending
-    submit(game, DecisionResponse(asked.candidates))
+    submit(game, DecisionResponse(asked.candidates if accept else ()))
 
     assert isinstance(asked, Confirm) and asked.seat is P1
-    assert game.pending.candidates == ("kurutta",)
+    yu_resolving = game.pending is not None and game.pending.resolver == "matsu_kurutta"
+    assert yu_resolving is accept
 
 
 def test_daigotsu_arakan_offers_no_choice_for_your_card_away_from_his_battlefield():
