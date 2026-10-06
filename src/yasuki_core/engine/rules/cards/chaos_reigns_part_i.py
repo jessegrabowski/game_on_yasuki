@@ -10,7 +10,6 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAb
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
-    AskOption,
     Bow,
     Choose,
     DiscardFavor,
@@ -85,7 +84,6 @@ register_ability(
 # --- Honor Your Oaths ---
 
 OATHS_HONOR = 1
-BOW_A_YOJIMBO = "Bow your target Yojimbo"
 DECLINE_SECOND_CLAUSE = "Take neither"
 
 
@@ -117,59 +115,46 @@ def _honor_your_oaths_effects(game: GameState, source: L5RCard, target: L5RCard)
     can happen only if you control it" (CR, Imperial Favor).
     """
     seat = source.owner
-    options: list[str] = []
-    if _honor_your_oaths_bowable_yojimbo(game, seat):
-        options.append(BOW_A_YOJIMBO)
-    if game.favor_holder is seat:
-        options.append(DISCARD_THE_FAVOR)
     moved = [Move(target.id, Location.home(target.owner))]
-    if not options:
+    yojimbo = _honor_your_oaths_bowable_yojimbo(game, seat)
+    favor = (DISCARD_THE_FAVOR,) if game.favor_holder is seat else ()
+    if not yojimbo and not favor:
         return moved
-    question = "Gain 1 Honor and draw a card by paying which?"
-    offer = AskOption(
-        seat,
-        (*options, DECLINE_SECOND_CLAUSE),
-        question,
-        "honor_your_oaths_second_clause",
-        source.id,
-    )
-    return [*moved, offer]
+    return [
+        *moved,
+        Choose(
+            seat,
+            yojimbo,
+            minimum=1,
+            maximum=1,
+            resolver="honor_your_oaths_second_clause",
+            source_id=source.id,
+            options=(*favor, DECLINE_SECOND_CLAUSE),
+        ),
+    ]
 
 
 def _honor_your_oaths_reward(seat: PlayerId) -> list[Effect]:
     return [GainHonor(seat, OATHS_HONOR), DrawCard(seat)]
 
 
-@choice_resolver("honor_your_oaths_second_clause")
+@choice_resolver(
+    "honor_your_oaths_second_clause",
+    prompt="Gain 1 Honor and draw a card by paying which?",
+    pick="Bow this Yojimbo",
+)
 def _resolve_honor_your_oaths_second_clause(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """Resolve whichever half the seat named. Neither makes this a Favor action: the Favor icon is
     a cost only in an action's cost block, and here it is in the effect text (ShE datasheet, The
     Favor Icon)."""
-    if not chosen or chosen[0] == DECLINE_SECOND_CLAUSE:
+    (answer,) = chosen
+    if answer == DECLINE_SECOND_CLAUSE:
         return []
-    if chosen[0] == DISCARD_THE_FAVOR:
+    if answer == DISCARD_THE_FAVOR:
         return [DiscardFavor(seat), *_honor_your_oaths_reward(seat)]
-    return [
-        Choose(
-            seat,
-            _honor_your_oaths_bowable_yojimbo(game, seat),
-            1,
-            1,
-            "honor_your_oaths_yojimbo",
-            source_id,
-        )
-    ]
-
-
-@choice_resolver(
-    "honor_your_oaths_yojimbo", prompt="Bow your Yojimbo to gain 1 Honor and draw a card"
-)
-def _resolve_honor_your_oaths_yojimbo(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [Bow(chosen[0]), *_honor_your_oaths_reward(seat)] if chosen else []
+    return [Bow(answer), *_honor_your_oaths_reward(seat)]
 
 
 register_ability(

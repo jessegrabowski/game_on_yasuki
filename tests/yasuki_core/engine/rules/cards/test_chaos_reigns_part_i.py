@@ -343,9 +343,10 @@ def test_nothing_may_discard_the_favor_in_the_seats_place():
 
     resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
 
-    assert game.pending is not None
-    assert DISCARD_THE_FAVOR not in game.pending.candidates
-    assert "Bow your target Yojimbo" in game.pending.candidates
+    pending = game.pending
+    assert pending is not None
+    assert pending.candidates == ("kakita",)
+    assert pending.options == ("Take neither",)
 
 
 def test_bowing_the_yojimbo_instead_leaves_the_favor_untouched():
@@ -354,7 +355,6 @@ def test_bowing_the_yojimbo_instead_leaves_the_favor_untouched():
     game.action = ActivateAbility(source.id)
 
     resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
-    submit(game, DecisionResponse(choices=("Bow your target Yojimbo",)))
     submit(game, DecisionResponse(choices=("kakita",)))
 
     assert game.table.cards_by_id["kakita"].bowed
@@ -374,6 +374,31 @@ def test_the_second_clause_can_be_declined():
     assert game.table.seats[PlayerId.P1].honor == 0
     assert game.favor_holder is PlayerId.P1
     assert not game.table.cards_by_id["kakita"].bowed
+
+
+def test_the_clause_offers_the_yojimbo_and_the_favor_as_one_question():
+    game = _oaths_game(yojimbo=True)
+    source, ability = _oaths(game)
+
+    resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
+
+    pending = game.pending
+    assert pending.candidates == ("kakita",)
+    assert pending.options == (DISCARD_THE_FAVOR, "Take neither")
+    assert pending.prompt() == "Gain 1 Honor and draw a card by paying which?"
+    assert pending.pick_label == "Bow this Yojimbo"
+
+
+def test_the_favor_can_be_discarded_with_no_yojimbo_to_bow():
+    game = _oaths_game()
+    source, ability = _oaths(game)
+    resolve_effects(game, ability.effects(game, source, game.table.cards_by_id["guard"]))
+    assert game.pending.candidates == (), "no Yojimbo, so nothing on the board answers the clause"
+
+    submit(game, DecisionResponse(choices=(DISCARD_THE_FAVOR,)))
+
+    assert game.table.seats[PlayerId.P1].honor == 1
+    assert game.favor_holder is None
 
 
 def test_honor_your_oaths_is_offered_from_hand_during_a_battle():
