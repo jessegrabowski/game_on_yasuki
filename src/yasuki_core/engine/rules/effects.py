@@ -2894,6 +2894,9 @@ class Choose(InterruptingEffect):
         and move home exactly two units" reads. Default False.
     limits : tuple of :class:`~.PickLimit`, optional
         What the cards picked together must satisfy beyond their number. Default none.
+    options : tuple of str, optional
+        Named answers offered beside the cards, for a text whose alternative is not on the board.
+        Default none.
     """
 
     seat: PlayerId
@@ -2905,11 +2908,12 @@ class Choose(InterruptingEffect):
     resolver_context: tuple[str, ...] = ()
     declinable: bool = False
     limits: tuple[PickLimit, ...] = ()
+    options: tuple[str, ...] = ()
 
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """A cost that asks the seat to pick cannot be met where no answer its limits allow
-        exists."""
-        return answerable(self.candidates, self.minimum, self.limits)
+        exists. An option is an answer of its own, so one on offer is enough."""
+        return bool(self.options) or answerable(self.candidates, self.minimum, self.limits)
 
     def describe(self) -> str:
         return (
@@ -2928,6 +2932,7 @@ class Choose(InterruptingEffect):
             resolver_context=self.resolver_context,
             declinable=self.declinable,
             limits=self.limits,
+            options=self.options,
         )
 
 

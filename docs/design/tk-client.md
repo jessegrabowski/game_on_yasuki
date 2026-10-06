@@ -53,6 +53,11 @@ is offered where those cards are drawn, and the prompt box keeps only what is le
 the worked example: `FocusOrStrike` offers one focus per hand card and one on the Fate deck, and the
 prompt box carries the strike alone.
 
+A {class}`~.ChooseCards` carrying `options` splits the same way, and
+{meth}`~.ChooseCards.names_one_answer` is what says so. {card}`Tamori Tsushima` gives each Ring in
+hand an entry worded by the resolver's registered pick, and the prompt box carries the Yojimbo.
+Naming either is the whole answer, so there is no confirm and no selection mode.
+
 The board's selection mode is the third surface, for a decision answered by picking cards already in
 play. A decision whose candidates are not card ids must never reach it. `begin_selection` matches
 candidates against card ids, so a request carrying anything else highlights nothing and strands the

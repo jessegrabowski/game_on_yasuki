@@ -929,6 +929,10 @@ class ChooseCards(DecisionRequest):
     declinable : bool, optional
         Whether choosing nothing is an answer as well as a count within the bounds, as "may target
         and move home exactly two units" reads. Default False.
+    options : tuple of str, optional
+        Named answers offered beside the cards, for a text whose alternative is not on the board:
+        Tamori Tsushima creates a Yojimbo instead of putting a Ring into play. One of them is a
+        whole answer, so a request carrying them takes one card at a time. Default none.
     """
 
     minimum: int
@@ -937,6 +941,7 @@ class ChooseCards(DecisionRequest):
     source_id: str | None = None
     resolver_context: tuple[str, ...] = ()
     declinable: bool = False
+    options: tuple[str, ...] = ()
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         registered = CHOICE_PROMPTS.get(self.resolver)
@@ -956,6 +961,8 @@ class ChooseCards(DecisionRequest):
         chosen = response.choices
         if not chosen and self.declinable:
             return True
+        if len(chosen) == 1 and chosen[0] in self.options:
+            return True
         distinct = set(chosen)
         return (
             len(distinct) == len(chosen)
@@ -968,6 +975,13 @@ class ChooseCards(DecisionRequest):
     def pick_label(self) -> str:
         """What picking one card does, as a client words the entry it offers on the card."""
         return CHOICE_PICKS.get(self.resolver, "Choose")
+
+    @property
+    def names_one_answer(self) -> bool:
+        """Whether the seat answers by naming one thing, a card or one of ``options``. Such a
+        question has nothing to confirm, so a client offers each card's own entry on the card and
+        each option on a button, rather than putting the board into selection mode."""
+        return bool(self.options)
 
     @property
     def cancellable(self) -> bool:
