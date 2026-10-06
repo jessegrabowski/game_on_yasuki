@@ -26,6 +26,7 @@ class SetEntry(NamedTuple):
     creates: tuple[str, ...]
     text: str
     extended_title: str
+    pinned: bool
 
 
 def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
@@ -65,8 +66,17 @@ def iter_set_entries(cards_dir: Path) -> Iterator[SetEntry]:
             creates = tuple(entry.get("creates") or ())
             text = entry.get("text") or ""
             extended_title = card_identity.extended_title(entry)
+            pinned = bool(entry.get("id"))
             yield SetEntry(
-                yaml_file, data["set"], card_id, title, keywords, creates, text, extended_title
+                yaml_file,
+                data["set"],
+                card_id,
+                title,
+                keywords,
+                creates,
+                text,
+                extended_title,
+                pinned,
             )
 
 
@@ -89,19 +99,25 @@ def card_ids(cards_dir: Path) -> list[str]:
     ValueError
         If two different cards claim one id, or if the set files hold no cards at all.
     """
-    titles_by_id: dict[str, str] = {}
+    # Reprints repeat an id legitimately; two *different* cards sharing one never do. Token ids are
+    # stat-descriptive (`courtier_0_3_2`), so that is where a genuine clash is likeliest. Both this
+    # index and load_cards keep whichever came first, silently. A reprint may retitle its card, and
+    # then it pins the id its earlier printings derive, so pinned and derived titles are compared
+    # only among themselves.
+    derived: dict[str, SetEntry] = {}
+    pinned: dict[str, SetEntry] = {}
     for entry in iter_set_entries(cards_dir):
-        # Reprints repeat an id legitimately; two *different* cards sharing one never do. Token ids
-        # are stat-descriptive (`courtier_0_3_2`), so that is where a genuine clash is likeliest.
-        # Both this index and load_cards keep whichever came first, silently.
-        claimed = titles_by_id.setdefault(entry.card_id, entry.title)
-        if claimed != entry.title:
+        claims = pinned if entry.pinned else derived
+        first = claims.setdefault(entry.card_id, entry)
+        if card_identity.card_slug(first.title) != card_identity.card_slug(entry.title):
             raise ValueError(
-                f"{entry.source}: {claimed!r} and {entry.title!r} both claim id {entry.card_id!r}"
+                f"{entry.source}: {first.title!r} and {entry.title!r} "
+                f"both claim id {entry.card_id!r}"
             )
-    if not titles_by_id:
+    ids = derived.keys() | pinned.keys()
+    if not ids:
         raise ValueError(f"No card ids found in {cards_dir}")
-    return sorted(titles_by_id)
+    return sorted(ids)
 
 
 def untagged_title_ties(

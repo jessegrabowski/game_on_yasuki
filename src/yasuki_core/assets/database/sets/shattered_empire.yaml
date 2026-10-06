@@ -2758,7 +2758,7 @@ cards:
   collector_number: '240'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Faith In My Clan
+- title: Faith in My Clan
   types:
   - Strategy
   decks:
@@ -8087,7 +8087,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - id: tairao
-  title: Tairao
+  title: Chuda Tairao
   subtitle: Soul of Chuda Rintaro
   types:
   - Personality
@@ -10221,7 +10221,9 @@ cards:
   collector_number: '365'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Zenathaar
+- id: zenathaar
+  title: Zenathaar
+  subtitle: Warrior of the Bright Eye
   types:
   - Personality
   decks:

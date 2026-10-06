@@ -73,6 +73,14 @@ def test_a_collision_across_two_set_files_is_caught(tmp_path):
         card_ids(tmp_path)
 
 
+def test_a_reprint_may_retitle_its_card_by_pinning_the_id(tmp_path):
+    write_set(tmp_path, "ivory", [{"title": "Tairao"}])
+    write_set(tmp_path, "shattered_empire", [{"id": "tairao", "title": "Chuda Tairao"}])
+    write_set(tmp_path, "onyx", [{"title": "Faith In My Clan"}, {"title": "Faith in My Clan"}])
+
+    assert card_ids(tmp_path) == ["faith_in_my_clan", "tairao"]
+
+
 def test_a_file_that_is_not_a_set_names_itself_in_the_error(tmp_path):
     # An empty YAML parses to None, which would otherwise surface as an AttributeError naming no
     # file and leaving whoever hits it to bisect 130 of them.
