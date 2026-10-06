@@ -20,6 +20,7 @@ yasuki_core.accounts.decks
     from_rows
     orphan_card_ids
     resolve_deck_cards
+    stored_as_current
     stored_card_ids
     summarize
     to_rows

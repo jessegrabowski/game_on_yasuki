@@ -1,0 +1,5 @@
+# Card ids that no longer name a card, each mapped to the id that replaced it, or to null for a card
+# that is gone. Saved decks and exported decklists keep the ids and names they were written with,
+# so a retired id resolves to its successor instead of failing. `pixi run card-index` refuses to
+# drop an id from card_ids.txt that is not listed here.
+{}

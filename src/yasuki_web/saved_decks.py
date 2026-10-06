@@ -97,7 +97,7 @@ def _public_deck(deck: dict) -> dict:
         "format": deck["format"],
         "description": deck["description"],
         "visibility": deck["visibility"],
-        "stronghold_card_id": deck["stronghold_card_id"],
+        "stronghold_card_id": decks.stored_as_current(deck["stronghold_card_id"]),
         "clan": deck["clan"],
         "dynasty_count": deck["dynasty_count"],
         "fate_count": deck["fate_count"],

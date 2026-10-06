@@ -9,7 +9,7 @@ from psycopg_pool import ConnectionPool
 
 import logging
 
-from yasuki_core.card_identity import card_slug
+from yasuki_core.card_identity import card_slug, current_id
 from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS
 from yasuki_core.search.compile_sql import (
     ALL_CLANS_MARKER,
@@ -456,8 +456,8 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
     """
     Fetch the cards a list of decklist names could resolve to, including their prints.
 
-    Matches each name's slug against card ids and the slugs of extended titles, the keys
-    :func:`~yasuki_core.card_identity.resolve_name` resolves through.
+    Matches each name's slug, and the successor of a retired id, against card ids and the slugs of
+    extended titles, the keys :func:`~yasuki_core.card_identity.resolve_name` resolves through.
 
     Parameters
     ----------
@@ -473,6 +473,7 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
     if not names:
         return []
     slugs = [card_slug(name) for name in names]
+    slugs += [successor for slug in slugs if (successor := current_id(slug)) not in (None, slug)]
     select_sql, _ = _card_select()
     with get_db_connection() as conn:
         with conn.cursor() as cur:

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import psycopg
 
 from yasuki_core.decklist import parse_deck_yaml
-from yasuki_core.card_identity import resolve_name
+from yasuki_core.card_identity import current_id, resolve_name
 
 # The three deck sections, in display order. A section name is also the persisted ``side`` value, so
 # the parser keys, the YAML headers, and the deck_cards.side check constraint stay in lockstep.
@@ -203,16 +203,24 @@ def to_rows(cards: list[DeckCard], deck_id: int) -> list[dict]:
     ]
 
 
+def stored_as_current(card_id: str | None) -> str | None:
+    """A stored id read as the id it names today. One retired with no successor stays as stored,
+    so the orphan sweep still finds it."""
+    if card_id is None:
+        return None
+    return current_id(card_id) or card_id
+
+
 def from_rows(rows: list[dict]) -> list[DeckCard]:
-    """The deck cards reconstructed from ``deck_cards`` rows."""
+    """The deck cards reconstructed from ``deck_cards`` rows, a retired id read as its successor."""
     return [
         DeckCard(
-            card_id=row["card_id"],
+            card_id=stored_as_current(row["card_id"]),
             card_name=row["card_name"],
             side=row["side"],
             quantity=row["quantity"],
             set_name=row["set_name"],
-            art_donor_card_id=row["art_donor_card_id"],
+            art_donor_card_id=stored_as_current(row["art_donor_card_id"]),
             art_donor_set=row["art_donor_set"],
         )
         for row in rows

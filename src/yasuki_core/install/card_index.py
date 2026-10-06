@@ -1,5 +1,5 @@
 import argparse
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from pathlib import Path
 from typing import NamedTuple
 
@@ -98,9 +98,16 @@ def card_ids(cards_dir: Path) -> list[str]:
     return sorted(titles_by_id)
 
 
-def write_index(cards_dir: Path = DEFAULT_CARDS_PATH, index_path: Path = DEFAULT_INDEX_PATH) -> int:
+def write_index(
+    cards_dir: Path = DEFAULT_CARDS_PATH,
+    index_path: Path = DEFAULT_INDEX_PATH,
+    retired: Mapping[str, str | None] | None = None,
+) -> int:
     """
     Regenerate the committed card-id index from the YAML and return how many ids it holds.
+
+    Saved decks and exported decklists hold card ids, so an id may leave the index only once it is
+    listed as retired, with the id that replaces it.
 
     Parameters
     ----------
@@ -108,8 +115,24 @@ def write_index(cards_dir: Path = DEFAULT_CARDS_PATH, index_path: Path = DEFAULT
         Directory of per-set YAML files. Default is the packaged ``sets`` directory.
     index_path : path, optional
         File to write, one id per line. Default is the packaged ``card_ids.txt``.
+    retired : mapping of str to str or None, optional
+        Retired id to successor. Default is the committed list,
+        :func:`~yasuki_core.card_identity.retired_ids`.
+
+    Raises
+    ------
+    ValueError
+        If the YAML no longer derives an id the existing index holds and that id is not retired.
     """
     ids = card_ids(cards_dir)
+    if index_path.exists():
+        retired = card_identity.retired_ids() if retired is None else retired
+        dropped = read_index(index_path) - set(ids) - retired.keys()
+        if dropped:
+            raise ValueError(
+                f"The card YAML no longer derives {sorted(dropped)}. List each in "
+                f"{card_identity.RETIRED_IDS_PATH.name} with the id that replaces it, or null."
+            )
     index_path.write_text("\n".join(ids) + "\n", encoding="utf-8")
     return len(ids)
 

@@ -3,6 +3,7 @@ import pytest
 from yasuki_core.card_identity import (
     card_id,
     card_slug,
+    current_id,
     experience_label,
     extended_title,
     name_index,
@@ -98,3 +99,34 @@ def test_an_id_wins_over_another_cards_extended_title():
     impostor = {"card_id": "impostor", "name": "Bayushi Akane", "extended_title": "Bayushi Akane"}
 
     assert resolve_name(name_index([impostor, AKANE]), "Bayushi Akane") is AKANE
+
+
+RETIRED = {"yoritomo_nintai_2": "yoritomo_nintai", "old_name": "yoritomo_nintai_2", "lost": None}
+
+
+def test_a_retired_id_follows_its_chain_to_the_card_it_names_today():
+    assert current_id("old_name", RETIRED) == "yoritomo_nintai"
+    assert current_id("yoritomo_nintai", RETIRED) == "yoritomo_nintai"
+    assert current_id("lost", RETIRED) is None
+
+
+def test_retired_ids_that_loop_are_an_error():
+    with pytest.raises(ValueError, match="cycle"):
+        current_id("a", {"a": "b", "b": "a"})
+
+
+def test_a_decklist_naming_a_retired_id_resolves_to_its_successor():
+    nintai = {"card_id": "yoritomo_nintai", "name": "Yoritomo Nintai"}
+    index = name_index([nintai], RETIRED)
+
+    assert resolve_name(index, "Yoritomo Nintai 2", RETIRED) is nintai
+    assert resolve_name(index, "Lost", RETIRED) is None
+
+
+def test_a_retired_id_is_not_answered_by_another_cards_extended_title():
+    follower = {"card_id": "aulus_goc", "name": "Aulus", "extended_title": "Aulus"}
+    personality = {"card_id": "aulus_cr3", "name": "Aulus", "extended_title": "Aulus"}
+    retired = {"aulus": "aulus_goc"}
+    index = name_index([personality, follower], retired)
+
+    assert resolve_name(index, "Aulus", retired) is follower

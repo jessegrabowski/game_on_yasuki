@@ -1,6 +1,7 @@
 import pytest
 import yaml
 
+from yasuki_core.card_identity import current_id, retired_ids
 from yasuki_core.install.card_index import (
     DEFAULT_CARDS_PATH,
     card_ids,
@@ -137,3 +138,21 @@ def test_the_committed_index_matches_the_card_yaml():
 
     assert committed - current == set(), f"index names cards the YAML no longer has; {remedy}"
     assert current - committed == set(), f"YAML has cards the index is missing; {remedy}"
+
+
+def test_regenerating_the_index_refuses_to_drop_an_id_that_is_not_retired(tmp_path):
+    index_path = tmp_path / "card_ids.txt"
+    index_path.write_text("aulus\nmodest_farm\n")
+    write_set(tmp_path, "gold", [{"title": "Modest Farm"}])
+
+    with pytest.raises(ValueError, match="aulus"):
+        write_index(tmp_path, index_path, retired={})
+    assert write_index(tmp_path, index_path, retired={"aulus": None}) == 1
+
+
+def test_every_retired_id_is_gone_and_names_a_card_that_exists():
+    committed = read_index()
+    retired = retired_ids()
+
+    assert committed.isdisjoint(retired)
+    assert all(current_id(card_id) in committed | {None} for card_id in retired)

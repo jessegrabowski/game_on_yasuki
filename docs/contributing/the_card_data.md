@@ -57,6 +57,15 @@ it up in `src/yasuki_core/assets/database/card_ids.txt`, which lists every one. 
 on a guess registers happily and never fires, which the `registration-audit` pre-commit hook
 catches by naming the nearest real id.
 
+## An id never silently disappears
+
+Saved decks store card ids, and exported decklists name cards by the extended title they showed when
+the deck was written. So an id that stops deriving from the YAML, because a title changed or two
+cards were merged, is listed in `src/yasuki_core/assets/database/retired_ids.yaml` with the id that
+replaces it, or `null` for a card that is gone. `pixi run card-index` refuses to drop an id from
+`card_ids.txt` that is not listed there. Decklist import and saved decks read a retired id as its
+successor, so old decks keep loading the card they meant.
+
 ## Card-level against printing-level
 
 A card is one logical thing printed many times. `Rice Farm` is one row in `cards`, keyed by that

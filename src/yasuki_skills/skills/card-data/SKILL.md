@@ -21,6 +21,8 @@ description: >
 - `src/yasuki_core/assets/database/set_info.yaml`, `counters.yaml`: set metadata
 - `src/yasuki_core/assets/database/images/`: one image manifest per printing
 - `src/yasuki_core/assets/database/card_ids.txt`: the generated index of every card id
+- `src/yasuki_core/assets/database/retired_ids.yaml`: every id that stopped deriving, with its
+  successor
 - `src/yasuki_core/assets/database/schema.sql`: the PostgreSQL schema
 - `src/yasuki_core/install/`: the load pipeline: `install_db.py`, `yaml_to_sql.py`,
   `sets_to_sql.py`, `images_to_sql.py`, `card_index.py`, `registration_audit.py`
@@ -35,8 +37,10 @@ wrong: the next reload overwrites it.
 
 A card's id is derived from its printed title, subtitle and experience by `card_slug` rather than
 written down. Renaming a card therefore renames its id, which orphans every handler, token and
-rulebook exception keyed on the old one. `card_ids.txt` is the committed index of all of them; regenerate it with
-`pixi run card-index` after changing set YAML and commit the result.
+rulebook exception keyed on the old one. `card_ids.txt` is the committed index of all of them;
+regenerate it with `pixi run card-index` after changing set YAML and commit the result. An id that
+stops deriving goes in `retired_ids.yaml` with the id that replaces it, so saved decks and old
+decklists keep finding the card.
 
 An erratum appends to the card's revision history and mirrors the newest text onto the card itself,
 so the old text stays readable rather than being overwritten. Errata art is an ordinary card image:
@@ -45,6 +49,8 @@ a file in the set's image directory and an entry in that printing's manifest.
 ## What checks it
 
 - `card-index` (pre-commit, and a test): `card_ids.txt` matches the set YAML, in both directions
+- `pixi run card-index` refuses to drop an id that `retired_ids.yaml` does not list, and a test
+  checks every retired id is gone and names a card that exists
 - `registration-audit` (pre-commit, and a test in CI): every registered handler names a real card
 - The `{card}` role in the docs: a card title deriving to an id the index does not hold fails the
   documentation build
