@@ -2327,3 +2327,41 @@ def test_tsushima_offers_his_rings_and_his_yojimbo_as_one_question():
     assert pending.pick_label == (
         "Put this Ring into play, it does not count towards an Enlightenment Victory"
     )
+
+
+# --- Daigotsu Rin ---
+
+
+def test_rin_puts_an_undead_follower_from_the_fate_deck_into_the_discard_pile():
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1, gold_production=4)))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    state.decks[DeckKey(P1, Side.FATE)].cards = [
+        register(state, attachment(card_id, attachment_type=attachment_type, keywords=carried))
+        for card_id, attachment_type, carried in (
+            ("zombie", AttachmentType.FOLLOWER, ("Undead",)),
+            ("ashigaru", AttachmentType.FOLLOWER, ()),
+            ("bone_blade", AttachmentType.ITEM, ("Undead",)),
+        )
+    ]
+    rin = register(state, personality("rin", printed_id="daigotsu_rin", force=3, gold_cost=4))
+    rin.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(rin)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+    session.act(P1, ActivateAbility("rin", RECRUIT))
+    pay(session, P1)
+
+    session.act(P1, ActivateAbility("rin"))
+    assert session.game.pending.candidates == ("zombie",)
+    session.submit(P1, DecisionResponse(("zombie",)))
+
+    table = session.game.table
+    assert [card.id for card in table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards] == ["zombie"]
+    assert {card.id for card in table.decks[DeckKey(P1, Side.FATE)].cards} == {
+        "ashigaru",
+        "bone_blade",
+    }

@@ -107,6 +107,7 @@ SAMURAI = "Samurai"
 SHADOWLANDS = "Shadowlands"
 SIEGE = "Siege"
 TACTICIAN = "Tactician"
+UNDEAD = "Undead"
 YOJIMBO = "Yojimbo"
 # The clan, not the creature: the "<X> Clan" column, per the note at the top of this module.
 TANUKI_CLAN = "Tanuki Clan"

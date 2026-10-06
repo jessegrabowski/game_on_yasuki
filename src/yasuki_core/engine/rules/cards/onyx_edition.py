@@ -44,6 +44,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     DelayedEffect,
     Destroy,
+    Discard,
     DiscardFromHand,
     DrawCard,
     Effect,
@@ -61,6 +62,7 @@ from yasuki_core.engine.rules.effects import (
     PutIntoPlay,
     RevokeGrants,
     Show,
+    ShuffleDeck,
     Simultaneously,
     SpendOncePerTurn,
     StartDuel,
@@ -137,6 +139,46 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY
+
+
+# --- Daigotsu Rin ---
+
+
+def _daigotsu_rin_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Himself, once the action just resolved Recruited him."""
+    return [source.id] if action_recruited(game, source.id) else []
+
+
+def _daigotsu_rin_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """A deck holding no Undead Follower is still searched, and shuffled after (CR, Search)."""
+    seat = source.owner
+    undead = tuple(
+        card.id
+        for card in game.table.decks[DeckKey(seat, Side.FATE)].cards
+        if is_follower(card) and has_keyword(game, card, keywords.UNDEAD)
+    )
+    if not undead:
+        return [ShuffleDeck(DeckKey(seat, Side.FATE))]
+    return [Choose(seat, undead, 1, 1, "daigotsu_rin", source.id)]
+
+
+@choice_resolver("daigotsu_rin", prompt="Put an Undead Follower into your discard pile")
+def _resolve_daigotsu_rin(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Discard(chosen[0], seat), ShuffleDeck(DeckKey(seat, Side.FATE))]
+
+
+register_ability(
+    "daigotsu_rin",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=no_cost,
+        targets=_daigotsu_rin_targets,
+        effects=_daigotsu_rin_effects,
+        hits_every_target=True,
+    ),
+)
 
 
 # --- Daytiba ---
