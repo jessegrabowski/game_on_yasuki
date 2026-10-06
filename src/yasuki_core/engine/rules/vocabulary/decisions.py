@@ -78,6 +78,10 @@ class OneGroup:
     the same wording about one Province or one location. The first pick is free and settles which
     part the rest come from, and taking it back opens the choice up again.
 
+    A part of one card is how "a target Personality, or any number of target attachments" says
+    that its first half takes exactly one. Picking that card leaves its part with nothing else in
+    it, so no second card may join it.
+
     Attributes
     ----------
     groups : tuple of tuple of str
@@ -148,7 +152,12 @@ class TotalAtMost:
         return sum(cheapest[:count]) <= self.bound
 
     def describe(self, picked: tuple[str, ...]) -> str:
-        """The running total against the bound."""
+        """The running total against the bound, or nothing once the answer holds only cards this
+        limit does not weigh, which is the half of a :class:`~.OneGroup` phrase its total does not
+        govern."""
+        weighted = {card_id for card_id, _ in self.weights}
+        if picked and weighted.isdisjoint(picked):
+            return ""
         return f"Selected {self.total(picked)}{self.unit}/{self.bound}{self.unit}"
 
 
@@ -931,8 +940,11 @@ class ChooseCards(DecisionRequest):
 
     def prompt(self, partial: DecisionResponse = DecisionResponse()) -> str:
         registered = CHOICE_PROMPTS.get(self.resolver)
-        if registered is not None:
-            return registered
+        asked = self._asked() if registered is None else registered
+        note = self.limit_note(partial)
+        return f"{asked} ({note})" if note else asked
+
+    def _asked(self) -> str:
         cards = "card" if self.maximum == 1 else "cards"
         if self.minimum == 0:
             return f"Choose up to {self.maximum} {cards}"
@@ -949,6 +961,7 @@ class ChooseCards(DecisionRequest):
             len(distinct) == len(chosen)
             and self.minimum <= len(chosen) <= self.maximum
             and distinct <= set(self.candidates)
+            and all(limit.satisfied(chosen) for limit in self.limits)
         )
 
     @property

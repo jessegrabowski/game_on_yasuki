@@ -78,6 +78,13 @@ missing piece was one moment, and the duel has no consequence machinery of its o
 The duel's focus procedure had a setup hook that its only implementation answered with an empty
 list, and `focus_sources` did nothing but forward to the procedure. Both were deleted.
 
+Hida Yamadera's Yu asked twice: an `AskOption` naming which half of its text to take, then a
+`Choose` over that half, and the attachment half asked again for every further attachment. One
+`Choose` carries both halves now. The two halves take different counts, which looked like a
+per-group maximum on `OneGroup`, a term Yamadera would have been the only caller of. A part of one
+card says the same thing, because picking it leaves nothing in its part to join it. Four resolvers
+became one.
+
 ## In review
 
 These are the signs a change added where it could have composed:

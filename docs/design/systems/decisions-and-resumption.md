@@ -48,6 +48,14 @@ recomputes on every click. A card whose phrase has a limit leaves the condition 
 keeps its `targeting_message` to the cards themselves, which is why Zaiberu asks for "the
 Personalities" and Desperate Melee for "the enemy Followers".
 
+A {class}`~.TotalAtMost` says nothing once the answer holds only cards it does not weigh, which is
+what lets one question carry a text whose halves take different counts. Hida Yamadera's Yu destroys
+"a target Personality without attachments and 4 or less Force, or any number of target attachments
+with total Gold cost less than Yamadera's Force", and both halves are offered together: each
+Personality is its own part of a {class}`~.OneGroup`, so picking one leaves nothing to join it,
+while the attachments are one part the gold budget caps. The first card clicked settles which half
+was taken, and the budget reports itself only while the answer is attachments.
+
 The limits are plain data, computed when the request is raised. They have to be: a pending request
 is written to the tape and compared against the one a replay rebuilds, and a closure would not
 compare equal. Nothing can move between the raising and the answer anyway, because the cascade is

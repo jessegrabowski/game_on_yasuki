@@ -8,8 +8,6 @@ from yasuki_core.engine.rules.cards.gates_of_tengoku import (
     EXPLOSIVE,
     SASADAS_OROCHI,
     THUNDER_VETERAN,
-    YAMADERA_ATTACHMENTS,
-    YAMADERA_PERSONALITY,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     Confirm,
@@ -999,7 +997,6 @@ def test_hida_yamadera_destroys_a_small_personality_then_returns_to_his_dynasty_
     game = combat_segment(units, {"brute": 0, "small": 0}, {"yamadera": 0}).game
 
     resolve_effects(game, [Destroy("yamadera", P1)])
-    submit(game, DecisionResponse((YAMADERA_PERSONALITY,)))
     assert game.pending.candidates == ("small",)
     submit(game, DecisionResponse(("small",)))
 
@@ -1024,14 +1021,45 @@ def test_hida_yamadera_destroys_attachments_whose_total_gold_cost_stays_below_hi
         attached(game, attachment(card_id, gold_cost=cost), "brute")
 
     resolve_effects(game, [Destroy("yamadera", P1)])
-    assert game.pending.candidates == (YAMADERA_ATTACHMENTS,)
-    submit(game, DecisionResponse((YAMADERA_ATTACHMENTS,)))
-    submit(game, DecisionResponse(("cheap",)))
-    assert game.pending.candidates == ("mid",)
-    submit(game, DecisionResponse(("mid",)))
+    pending = game.pending
+    assert pending.candidates == ("cheap", "mid", "dear")
+    # 3 + 4 stays under his Force of 8, where "dear" at 5 would carry the pair to it.
+    assert pending.selectable(DecisionResponse(("cheap",))) == ("cheap", "mid")
+    submit(game, DecisionResponse(("cheap", "mid")))
 
     brute = game.table.cards_by_id["brute"]
     assert [card.id for card in attachments_of(game, brute)] == ["dear"]
+
+
+def test_hida_yamadera_offers_both_halves_of_his_yu_as_one_question():
+    units = [
+        personality("brute", force=9),
+        personality("small", force=3),
+        personality("other", force=4),
+        personality(
+            "yamadera",
+            owner=PlayerId.P2,
+            printed_id="hida_yamadera_dark_human_experienced_2",
+            force=8,
+        ),
+    ]
+    game = combat_segment(units, {"brute": 0, "small": 0, "other": 0}, {"yamadera": 0}).game
+    attached(game, attachment("blade", gold_cost=2), "brute")
+
+    resolve_effects(game, [Destroy("yamadera", P1)])
+
+    pending = game.pending
+    assert pending.candidates == ("small", "other", "blade")
+    # Each Personality is its own group, so the first one picked is the whole answer.
+    assert pending.selectable(DecisionResponse(("small",))) == ("small",)
+    assert pending.accepts(DecisionResponse(("small", "other"))) is False
+    assert pending.accepts(DecisionResponse(("small", "blade"))) is False
+    assert pending.accepts(DecisionResponse(("blade",))) is True
+
+    # The gold budget governs the attachments, so it reports itself only while they are the answer.
+    assert pending.prompt().endswith("(Selected 0GC/7GC)")
+    assert pending.prompt(DecisionResponse(("blade",))).endswith("(Selected 2GC/7GC)")
+    assert "Selected" not in pending.prompt(DecisionResponse(("small",)))
 
 
 # --- Matsu Chizuki (Experienced) ---

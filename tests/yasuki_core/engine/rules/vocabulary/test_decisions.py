@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import cards  # noqa: F401
 from yasuki_core.engine.rules.vocabulary.decisions import (
     CHOICE_PICKS,
+    CHOICE_PROMPTS,
     ChooseOption,
     ArrangeCards,
     ChooseAbilityTarget,
@@ -212,6 +213,23 @@ def test_a_capped_phrase_counts_the_running_total_in_its_prompt():
     assert request.prompt(DecisionResponse(("a", "b"))).endswith("(Selected 5/5)")
 
 
+def test_a_capped_phrase_says_nothing_once_the_answer_is_outside_its_weights():
+    # "a" and "b" are weighted; "c" is not, as a Personality is not when the cap is over
+    # attachments.
+    request = ChooseAbilityTarget(
+        PlayerId.P1,
+        _HAND,
+        "src",
+        minimum=1,
+        maximum=3,
+        limits=(TotalAtMost((("a", 2), ("b", 3)), 4),),
+    )
+
+    assert request.prompt().endswith("(Selected 0/4)")
+    assert request.prompt(DecisionResponse(("a",))).endswith("(Selected 2/4)")
+    assert "Selected" not in request.prompt(DecisionResponse(("c",)))
+
+
 def test_a_grouped_phrase_adds_nothing_to_its_prompt():
     request = _grouped(minimum=1, maximum=2)
 
@@ -302,6 +320,16 @@ def test_the_target_prompt_names_the_condition_and_the_card():
 
     assert worded.prompt() == "Banish all Shadows: target your Monk"
     assert unworded.prompt() == "Millet Farm: target a card"
+
+
+def test_an_empty_registered_prompt_is_not_an_absent_one():
+    # choice_resolver stores a prompt under "is not None", so an empty one is a registered prompt
+    # and not an absent one. Falling back to the generic wording here would ignore the registration.
+    CHOICE_PROMPTS["probe_silent"] = ""
+    try:
+        assert ChooseCards(PlayerId.P1, _HAND, 0, 2, "probe_silent").prompt() == ""
+    finally:
+        CHOICE_PROMPTS.pop("probe_silent")
 
 
 def test_a_target_choice_of_several_takes_that_many_distinct_candidates():
