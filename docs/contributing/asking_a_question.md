@@ -187,6 +187,10 @@ candidate on the card itself and each option on a button, so the board never ent
 and there is nothing to confirm. Register a `pick=` alongside the `prompt=`, since the pick is what
 words the entry on the card.
 
+A question may be all options and no candidates. {card}`Honor Your Oaths` offers its Yojimbo as
+cards and the Imperial Favor as an option, and a seat holding the Favor with no Yojimbo to bow is
+asked with an empty `candidates`. An option is an answer of its own, so the question still has one.
+
 Do not ask the mode first where one of the modes is a card the seat can point at. That asks twice
 for one decision, and the second question repeats what the first already settled.
 
