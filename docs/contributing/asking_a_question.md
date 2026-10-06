@@ -171,6 +171,25 @@ keyword parameter, and only a resolver whose card supplies one needs to. When th
 direction, as in "a target player loses 3 Honor", {func}`~.ask_who_loses_honor` asks the one
 question that is left. {card}`Hungry Moon` and {card}`Bayushi Gihei` call it.
 
+## A card, or an answer that is not one
+
+Where one half of a text is a card and the other is not, {class}`~.Choose` takes both at once.
+Its `options` are the answers that are not cards, and the seat names one thing: a candidate, or
+an option. {card}`Tamori Tsushima` puts a Ring from hand into play or creates a Yojimbo instead:
+
+```{literalinclude} ../../src/yasuki_core/engine/rules/cards/onyx_edition.py
+:pyobject: _tamori_tsushima_effects
+:language: python
+```
+
+One resolver answers both, because the answer is one name either way. The client offers each
+candidate on the card itself and each option on a button, so the board never enters selection mode
+and there is nothing to confirm. Register a `pick=` alongside the `prompt=`, since the pick is what
+words the entry on the card.
+
+Do not ask the mode first where one of the modes is a card the seat can point at. That asks twice
+for one decision, and the second question repeats what the first already settled.
+
 ## How many go where
 
 {class}`~.AskDistribution` hands out several things among several recipients.

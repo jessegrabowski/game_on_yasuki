@@ -36,7 +36,6 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesi
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
-    AskOption,
     Banish,
     Bow,
     Choose,
@@ -616,7 +615,6 @@ def _resolve_spearmen_of_the_akasha(
 TAMORI_TSUSHIMA_GOLD = 3
 DRAGON_YOJIMBO = "dragon_yojimbo_personality_2_2_2"
 TAMORI_TSUSHIMA_CREATE = "Create and Recruit a Samurai Yojimbo"
-TAMORI_TSUSHIMA_RING = "Put a Ring from your hand into play"
 
 
 def _tamori_tsushima_cost(game: GameState, source: L5RCard) -> list[Effect]:
@@ -632,15 +630,18 @@ def _tamori_tsushima_effects(game: GameState, source: L5RCard, target: L5RCard) 
     """Create and Recruit (without further cost) a 2F/2C/3GC/2PH Samurai Yojimbo Dragon Clan
     Personality, or put a Ring from your hand into play. With no Ring in hand there is nothing to
     choose between."""
-    if not _tamori_tsushima_rings(game, source.id):
+    rings = _tamori_tsushima_rings(game, source.id)
+    if not rings:
         return [_tamori_tsushima_yojimbo(source.owner, source.id)]
     return [
-        AskOption(
+        Choose(
             source.owner,
-            (TAMORI_TSUSHIMA_CREATE, TAMORI_TSUSHIMA_RING),
-            "Create and Recruit a Samurai Yojimbo, or put a Ring from your hand into play?",
-            "tamori_tsushima",
-            source.id,
+            rings,
+            minimum=1,
+            maximum=1,
+            resolver="tamori_tsushima",
+            source_id=source.id,
+            options=(TAMORI_TSUSHIMA_CREATE,),
         )
     ]
 
@@ -660,25 +661,21 @@ def _tamori_tsushima_rings(game: GameState, source_id: str) -> tuple[str, ...]:
     )
 
 
-@choice_resolver("tamori_tsushima")
+@choice_resolver(
+    "tamori_tsushima",
+    prompt="Pick a Ring to put into play",
+    pick="Put this Ring into play, it does not count towards an Enlightenment Victory",
+)
 def _resolve_tamori_tsushima(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    if chosen[0] == TAMORI_TSUSHIMA_CREATE:
-        return [_tamori_tsushima_yojimbo(seat, source_id)]
-    rings = _tamori_tsushima_rings(game, source_id)
-    return [Choose(seat, rings, 1, 1, "tamori_tsushima_ring", source_id)]
-
-
-@choice_resolver("tamori_tsushima_ring", prompt="Choose a Ring to put into play")
-def _resolve_tamori_tsushima_ring(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     """If the Ring enters play, while it remains in play it does not count towards an
     Enlightenment Victory. It enters under the exclusion, so the victory never sees it without."""
-    (ring,) = chosen
-    excluded = EnlightenmentExclusion(source_id, ring, Duration.PERMANENT)
-    return [PutIntoPlay(ring, entering_under=(excluded,))]
+    (answer,) = chosen
+    if answer == TAMORI_TSUSHIMA_CREATE:
+        return [_tamori_tsushima_yojimbo(seat, source_id)]
+    excluded = EnlightenmentExclusion(source_id, answer, Duration.PERMANENT)
+    return [PutIntoPlay(answer, entering_under=(excluded,))]
 
 
 register_ability(

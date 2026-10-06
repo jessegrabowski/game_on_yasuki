@@ -58,7 +58,6 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
     LION_ANCESTOR,
     NAGA_FOLLOWER,
     TAMORI_TSUSHIMA_CREATE,
-    TAMORI_TSUSHIMA_RING,
 )
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
@@ -2029,8 +2028,22 @@ def test_a_ring_tsushima_puts_into_play_does_not_count_towards_enlightenment():
     )
 
     _respond_with_tsushima(session)
-    session.submit(P1, DecisionResponse((TAMORI_TSUSHIMA_RING,)))
     session.submit(P1, DecisionResponse(("void",)))
 
     assert "void" in _in_play(session)
     assert session.game.game_over is False
+
+
+def test_tsushima_offers_his_rings_and_his_yojimbo_as_one_question():
+    session = _tsushima_game(held=(_element_ring("void", Element.VOID),))
+
+    _respond_with_tsushima(session)
+
+    pending = session.game.pending
+    assert pending.candidates == ("void",)
+    assert pending.options == (TAMORI_TSUSHIMA_CREATE,)
+    assert pending.prompt() == "Pick a Ring to put into play"
+    # What words the Ring's own entry, since one click is the whole answer and nothing is confirmed.
+    assert pending.pick_label == (
+        "Put this Ring into play, it does not count towards an Enlightenment Victory"
+    )
