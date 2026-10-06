@@ -2365,3 +2365,29 @@ def test_rin_puts_an_undead_follower_from_the_fate_deck_into_the_discard_pile():
         "ashigaru",
         "bone_blade",
     }
+
+
+# --- Daigotsu Hiromu ---
+
+
+@pytest.mark.parametrize(
+    ("answer", "kept"), [("Bow it", True), ("Destroy it", False)], ids=["bow", "destroy"]
+)
+def test_hiromu_spends_his_follower_on_a_melee_equal_to_its_force(answer, kept):
+    cards = [
+        personality("hiromu", printed_id="daigotsu_hiromu", force=1),
+        personality("guard", owner=P2, force=3),
+    ]
+    session = combat_segment(cards, {"hiromu": 0}, {"guard": 0})
+    game = session.game
+    follower = attachment("ogre", attachment_type=AttachmentType.FOLLOWER, force=3)
+    attached(game, follower, "hiromu")
+
+    session.act(P1, ActivateAbility("hiromu"))
+    session.submit(P1, DecisionResponse(("ogre",)))
+    session.submit(P1, DecisionResponse((answer,)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert game.pending is None
+    assert ("ogre" in _in_play(session)) is kept
+    assert "guard" not in _in_play(session)

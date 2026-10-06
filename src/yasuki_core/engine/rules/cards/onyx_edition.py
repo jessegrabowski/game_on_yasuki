@@ -55,6 +55,7 @@ from yasuki_core.engine.rules.effects import (
     GrantKeyword,
     GrantModifier,
     GrantSeatAbility,
+    MeleeAttack,
     Move,
     MoveToDeck,
     Negated,
@@ -139,6 +140,83 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY
+
+
+# --- Daigotsu Hiromu ---
+
+HIROMU_BOW = "Bow it"
+HIROMU_DESTROY = "Destroy it"
+
+
+def _daigotsu_hiromu_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [
+        card.id
+        for card in game.table.battlefield.cards
+        if card.owner is source.owner and is_follower(card)
+    ]
+
+
+def _daigotsu_hiromu_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """A bowed Follower cannot be bowed again, so only its destruction is offered."""
+    options = (HIROMU_DESTROY,) if target.bowed else (HIROMU_BOW, HIROMU_DESTROY)
+    return [
+        AskOption(
+            source.owner,
+            options,
+            f"Bow or destroy {target.name}?",
+            "daigotsu_hiromu",
+            source.id,
+            resolver_context=(target.id,),
+        )
+    ]
+
+
+@choice_resolver("daigotsu_hiromu")
+def _resolve_daigotsu_hiromu(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """The Melee is made only if the Follower bowed or was destroyed (CR, Independence of Effects),
+    at the Force it had before it went. The Melee targets as any Melee does, and is not raised when
+    nothing at the battle can be targeted."""
+    (follower_id,) = resolver_context
+    follower = game.table.cards_by_id[follower_id]
+    paid = Bow(follower_id) if chosen[0] == HIROMU_BOW else Destroy(follower_id, seat)
+    attacked = tuple(attack_targets(game, game.table.cards_by_id[source_id]))
+    if not attacked:
+        return [paid]
+    strength = str(effective_force(game, follower))
+    melee = Choose(seat, attacked, 1, 1, "daigotsu_hiromu_melee", source_id, (strength,))
+    return [To(paid, (melee,))]
+
+
+@choice_resolver(
+    "daigotsu_hiromu_melee", prompt="Melee equal to the Follower's Force: choose its target"
+)
+def _resolve_daigotsu_hiromu_melee(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    (strength,) = resolver_context
+    return [MeleeAttack(int(strength), chosen[0], seat)]
+
+
+register_ability(
+    "daigotsu_hiromu",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_daigotsu_hiromu_targets,
+        targeting_message="your Follower",
+        effects=_daigotsu_hiromu_effects,
+    ),
+)
 
 
 # --- Daigotsu Rin ---
