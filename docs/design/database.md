@@ -71,14 +71,18 @@ printing, add another entry with the same title in the new set's YAML, plus its 
 entry. Same-set reprints get suffixed printing ids (`<slug>`, `<slug>_2`, ...). Distinct gameplay
 versions (e.g. Experienced) slug to distinct ids through their Experienced keyword. A reprint that
 adds a subtitle its card's earlier printings lack pins the card's id with an explicit `id:`, or it
-would become a different card. Each printing keeps its own subtitle in `prints.subtitle`.
+would become a different card. The card row shows the newest printing's extended title, and each
+printing keeps its own subtitle in `prints.subtitle`.
 
 ### How a Card's Canonical Text Is Chosen, and Per-Printing Wording
 
-A card has one canonical `rules_text` on its `cards` row, chosen by the **most-recent-printing (MRP)
-standard**: across all of a card's entries, the `text:` from the newest-released printing wins (an
-erratum, being newer still, then overrides it). Every read path and the primary search use this one
-value.
+A card's `cards` row follows the **most-recent-printing (MRP) standard** (CR, Cardinal Rule 2):
+its stats, keywords, clans, types, decks and extended title come from its newest-released printing,
+and its `rules_text` from the newest printing that carries any text. An erratum, being newer still,
+then overrides the text and stats. Printings in sets with the same release date are ordered by set
+file name, and a set with no release date counts as oldest. Legality is the exception: a card is
+legal in every format any of its printings lists. Every read path and the primary search use these
+values.
 
 When a specific printing's wording genuinely differs (a reprint reworded the ability) and you want
 that phrasing preserved and searchable, add an optional `print_text:` to that printing's entry:

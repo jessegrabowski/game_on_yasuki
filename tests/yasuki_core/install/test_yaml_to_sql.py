@@ -6,7 +6,7 @@ from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.yaml_to_sql import (
     ability_rows,
     build_revisions,
-    mrp_text,
+    most_recent_printing,
     parse_collector_numbers,
     _apply_current_revision,
     _BACK_CARD_ID_COL,
@@ -206,22 +206,22 @@ def test_apply_current_revision_overrides_text_and_accumulates_stats():
     assert row[_STAT_COL["chi"]] == 5  # overridden by the later erratum
 
 
-def test_mrp_text_picks_the_newest_printing():
+def test_most_recent_printing_picks_the_newest_printing():
     dated = [
         (datetime.date(1998, 1, 1), "samurai edition text"),
         (datetime.date(2025, 2, 1), "shattered empire text"),
         (datetime.date(2023, 1, 1), "onyx edition text"),
     ]
-    assert mrp_text(dated) == "shattered empire text"
+    assert most_recent_printing(dated) == "shattered empire text"
 
 
-def test_mrp_text_treats_null_date_as_oldest():
+def test_most_recent_printing_treats_null_date_as_oldest():
     dated = [(None, "undated printing"), (datetime.date(2014, 6, 9), "dated printing")]
-    assert mrp_text(dated) == "dated printing"
+    assert most_recent_printing(dated) == "dated printing"
 
 
-def test_mrp_text_returns_none_for_no_printings():
-    assert mrp_text([]) is None
+def test_most_recent_printing_returns_none_for_no_printings():
+    assert most_recent_printing([]) is None
 
 
 def test_print_columns_maps_print_text_to_rules_text_slot():

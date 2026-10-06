@@ -124,6 +124,12 @@ def test_a_cards_grant_lands_in_card_grants_counter():
         assert "wealth" in {row["counter_key"] for row in cur.fetchall()}
 
 
+def test_a_card_takes_its_stats_from_its_newest_printing():
+    # Heavy Infantry costs 8 in every printing before Shattered Empire, which prints 7. The older
+    # printings' set files sort first, so this fails if file order picks the card's stats.
+    assert get_card_by_id("heavy_infantry")["gold_cost"] == 7
+
+
 def test_query_all_prints_returns_multiple_prints_per_card():
     prints = query_all_prints()
     assert len(prints) > 0
