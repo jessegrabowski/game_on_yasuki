@@ -50,3 +50,32 @@ def card_id(entry: Mapping) -> str:
     with ``__back`` appended for the reverse face of a double-faced card."""
     base = entry.get("id") or card_slug(extended_title(entry))
     return f"{base}__back" if entry.get("is_back") else base
+
+
+def name_index[R: Mapping](records: Iterable[R]) -> dict[str, R]:
+    """Index card records by the slugs a decklist name resolves through.
+
+    A deck file names a card by the extended title it showed when the deck was written, and that
+    slugs to the card's id unless a later reprint added a subtitle to the title the card shows. Ids
+    are keyed first, then the slug of each card's current extended title, so an id always wins.
+
+    Parameters
+    ----------
+    records : iterable of mapping
+        Card records, each carrying ``card_id``, ``name`` and optionally ``extended_title``.
+
+    Returns
+    -------
+    dict mapping str to mapping
+        Slug to card record, for :func:`resolve_name`.
+    """
+    records = list(records)
+    index = {record["card_id"]: record for record in records}
+    for record in records:
+        index.setdefault(card_slug(record.get("extended_title") or record["name"]), record)
+    return index
+
+
+def resolve_name[R](index: Mapping[str, R], name: str) -> R | None:
+    """The record a decklist ``name`` names in ``index``, or None for a name no card answers to."""
+    return index.get(card_slug(name))

@@ -24,6 +24,7 @@ from yasuki_core.game_pieces.prints import (
     WindPrint,
 )
 from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS, AttachmentType, Element, Side
+from yasuki_core.card_identity import name_index, resolve_name
 
 # The print each database card type resolves to, per deck section. A section the record's type is
 # unknown in falls back to that section's base print.
@@ -98,14 +99,14 @@ def resolve_decklist(
     resolved : ResolvedDeck
         The per-section card instances plus any entry names absent from ``records``.
     """
-    index = _name_index(records)
+    index = name_index(records)
     by_id = {record["card_id"]: record for record in (*records, *(backs or ()))}
     resolved = ResolvedDeck()
     sections = {"pre_game": resolved.pre_game, "dynasty": resolved.dynasty, "fate": resolved.fate}
     next_id = 0
     for section, target in sections.items():
         for entry in parsed.get(section, []):
-            record = index.get(entry["name"].lower())
+            record = resolve_name(index, entry["name"])
             if record is None:
                 resolved.unresolved.append(entry["name"])
                 continue
@@ -181,16 +182,6 @@ def build_token_templates(token_records: dict[str, dict]) -> dict[str, CardPrint
     return {token_id: build_print(record) for token_id, record in token_records.items()}
 
 
-def _name_index(records: list[dict]) -> dict[str, dict]:
-    """Case-insensitive name -> record index, keyed by extended title first, then plain name."""
-    index: dict[str, dict] = {}
-    for record in records:
-        index.setdefault((record.get("extended_title") or record["name"]).lower(), record)
-    for record in records:
-        index.setdefault(record["name"].lower(), record)
-    return index
-
-
 def _classify(section: str, card_type: str | None) -> tuple[type[CardPrint], Side]:
     """The print class a record of ``card_type`` filed under ``section`` describes, and its side."""
     if section == "dynasty":
@@ -218,7 +209,7 @@ def _art_swap(
     Everything the browser canvas needs to recomposite the borrowed art onto the recipient frame.
     Returns None when the donor card or a usable donor print is absent, leaving the recipient's own
     art to stand."""
-    donor_record = name_index.get(art["name"].lower())
+    donor_record = resolve_name(name_index, art["name"])
     if donor_record is None:
         return None
     donor_print = _select_print(donor_record, art.get("set_name"))

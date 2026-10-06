@@ -8,6 +8,7 @@ from yasuki_web import auth, saved_decks
 from yasuki_web.main import app
 
 from yasuki_core.accounts import decks, sessions, users
+from yasuki_core.card_identity import name_index
 
 # A small card universe shaped like get_cards_by_names output, the contract the save path resolves
 # against. The card DB is faked so these tests don't depend on real card data.
@@ -72,7 +73,7 @@ def _variant_keys(cards: list[dict]) -> set[tuple]:
 
 
 def _expected_keys() -> set[tuple]:
-    resolved = decks.deck_from_yaml(DECK_YAML, decks.build_name_index(RECORDS))
+    resolved = decks.deck_from_yaml(DECK_YAML, name_index(RECORDS))
     return {
         (c.card_id, c.side, c.quantity, c.set_name, c.art_donor_card_id, c.art_donor_set)
         for c in resolved
@@ -92,7 +93,7 @@ def test_save_list_and_read_round_trip_the_cards(client, accounts_conn):
     assert _variant_keys(read["cards"]) == _expected_keys()
     # The returned YAML, re-resolved, is the same deck the lobby would load. The pick path matches
     # the direct YAML path.
-    relisted = decks.deck_from_yaml(read["yaml"], decks.build_name_index(RECORDS))
+    relisted = decks.deck_from_yaml(read["yaml"], name_index(RECORDS))
     assert {(c.card_id, c.quantity, c.art_donor_card_id) for c in relisted} == {
         (c["card_id"], c["quantity"], c["art_donor_card_id"]) for c in read["cards"]
     }

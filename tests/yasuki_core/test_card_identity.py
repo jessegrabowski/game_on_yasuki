@@ -1,6 +1,13 @@
 import pytest
 
-from yasuki_core.card_identity import card_id, card_slug, experience_label, extended_title
+from yasuki_core.card_identity import (
+    card_id,
+    card_slug,
+    experience_label,
+    extended_title,
+    name_index,
+    resolve_name,
+)
 
 
 @pytest.mark.parametrize(
@@ -56,3 +63,38 @@ def test_a_reverse_face_appends_its_suffix_to_an_explicit_id():
     assert card_id({"id": "kyuden_hida", "title": "Kyuden Hida", "is_back": True}) == (
         "kyuden_hida__back"
     )
+
+
+# Bayushi Akane's newest printing added a subtitle, so the card pins an id its extended title no
+# longer slugs to. The Experienced version shares the bare title.
+AKANE = {
+    "card_id": "bayushi_akane",
+    "name": "Bayushi Akane",
+    "extended_title": "Bayushi Akane, Soul of Bayushi Kurumi",
+}
+AKANE_EXPERIENCED = {
+    "card_id": "bayushi_akane_experienced",
+    "name": "Bayushi Akane",
+    "extended_title": "Bayushi Akane • Experienced",
+}
+INDEX = name_index([AKANE_EXPERIENCED, AKANE])
+
+
+@pytest.mark.parametrize(
+    "name",
+    ["Bayushi Akane", "bayushi akane", "Bayushi Akane, Soul of Bayushi Kurumi"],
+    ids=["exported-before-the-reprint", "lowercased", "exported-after-the-reprint"],
+)
+def test_a_name_resolves_by_its_slug_whichever_extended_title_was_exported(name):
+    assert resolve_name(INDEX, name) is AKANE
+
+
+def test_a_shared_bare_title_never_falls_through_to_another_version():
+    assert resolve_name(INDEX, "Bayushi Akane • Experienced") is AKANE_EXPERIENCED
+    assert resolve_name(name_index([AKANE_EXPERIENCED]), "Bayushi Akane") is None
+
+
+def test_an_id_wins_over_another_cards_extended_title():
+    impostor = {"card_id": "impostor", "name": "Bayushi Akane", "extended_title": "Bayushi Akane"}
+
+    assert resolve_name(name_index([impostor, AKANE]), "Bayushi Akane") is AKANE

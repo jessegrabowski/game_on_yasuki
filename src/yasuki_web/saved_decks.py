@@ -14,6 +14,7 @@ from yasuki_core.accounts.db import get_accounts_connection
 from yasuki_core.accounts.decks import DeckCard, DeckSummary, UnknownCardError
 from yasuki_core.database import card_display_names, get_cards_by_names
 from yasuki_core.decklist import parse_deck_yaml
+from yasuki_core.card_identity import name_index
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -61,7 +62,7 @@ def _resolve_deck(yaml_text: str) -> tuple[list[DeckCard], DeckSummary]:
     """
     parsed = parse_deck_yaml(yaml_text)
     records = get_cards_by_names(list(_deck_names(parsed)))
-    cards = decks.resolve_deck_cards(parsed, decks.build_name_index(records))
+    cards = decks.resolve_deck_cards(parsed, name_index(records))
     if not cards:
         raise DeckLimitError("Deck has no recognizable cards")
     if len(cards) > MAX_DECK_ENTRIES:

@@ -16,7 +16,6 @@ yasuki_core.accounts.decks
 .. autosummary::
 
     assert_card_ids_known
-    build_name_index
     deck_from_yaml
     from_rows
     orphan_card_ids

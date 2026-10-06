@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import psycopg
 
 from yasuki_core.decklist import parse_deck_yaml
+from yasuki_core.card_identity import resolve_name
 
 # The three deck sections, in display order. A section name is also the persisted ``side`` value, so
 # the parser keys, the YAML headers, and the deck_cards.side check constraint stay in lockstep.
@@ -55,31 +56,6 @@ def _display_name(record: dict) -> str:
     return record.get("extended_title") or record["name"]
 
 
-def build_name_index(records: list[dict]) -> dict[str, dict]:
-    """Index card records by lowercased name and extended title, the keys a decklist resolves by.
-
-    Mirrors how ``get_cards_by_names`` matches, so a name written either way resolves to the same
-    record.
-
-    Parameters
-    ----------
-    records : list of dict
-        Card records, each carrying ``card_id``, ``name``, and optionally ``extended_title``.
-
-    Returns
-    -------
-    index : dict mapping str to dict
-        Lowercased name and extended title both mapping to their record.
-    """
-    index: dict[str, dict] = {}
-    for record in records:
-        index[record["name"].lower()] = record
-        extended = record.get("extended_title")
-        if extended:
-            index[extended.lower()] = record
-    return index
-
-
 def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCard]:
     """Resolve a parsed name-based decklist into validated, id-based deck cards.
 
@@ -94,7 +70,7 @@ def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCa
         The output of ``parse_deck_yaml``: ``pre_game`` / ``dynasty`` / ``fate`` lists of entries,
         each ``{name, count, set_name, art}`` where ``art`` is ``{name, set_name}`` or None.
     name_index : dict mapping str to dict
-        Lowercased name/title to card record, as built by ``build_name_index``.
+        Slug to card record, as built by :func:`~yasuki_core.card_identity.name_index`.
 
     Returns
     -------
@@ -113,14 +89,14 @@ def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCa
 
     for side in SIDES:
         for entry in parsed.get(side, []):
-            record = name_index.get(entry["name"].lower())
+            record = resolve_name(name_index, entry["name"])
             if record is None:
                 unknown.append(entry["name"])
                 continue
             donor_id = donor_set = None
             art = entry.get("art")
             if art:
-                donor = name_index.get(art["name"].lower())
+                donor = resolve_name(name_index, art["name"])
                 if donor is None:
                     unknown.append(art["name"])
                     continue

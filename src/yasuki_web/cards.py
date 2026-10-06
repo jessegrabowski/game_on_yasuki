@@ -21,6 +21,7 @@ from yasuki_core.database import (
 from yasuki_core.search.compile_sql import build_search_filters
 from yasuki_core.card_art import back_era_for_set, classify, load_art_layout
 from yasuki_core.card_diff import unified_diff
+from yasuki_core.card_identity import name_index, resolve_name
 from yasuki_web.rate_limit import limiter
 
 logger = logging.getLogger(__name__)
@@ -118,21 +119,20 @@ async def lookup_cards_by_name(
     """
     Look up cards by name for deck import.
 
-    Matches against both name and extended_title (case-insensitive) and returns
-    each card with its full list of prints for set-specific resolution.
+    Resolves each name as :func:`~yasuki_core.card_identity.resolve_name` does and returns the
+    card it names, keyed by the name lowercased, with its full list of prints for set-specific
+    resolution. A name no card answers to is absent.
     """
     if len(name) > 200:
         raise HTTPException(status_code=400, detail="Too many names (max 200)")
     try:
         cards = await to_thread(get_cards_by_names, name)
-        by_name: dict[str, dict] = {}
-        for card in cards:
-            key = (card.get("extended_title") or card["name"]).lower()
-            by_name[key] = card
-        for card in cards:
-            name_key = card["name"].lower()
-            if name_key not in by_name:
-                by_name[name_key] = card
+        index = name_index(cards)
+        by_name = {
+            requested.lower(): card
+            for requested in name
+            if (card := resolve_name(index, requested)) is not None
+        }
         return {"cards": by_name, "found": len(cards)}
     except Exception as e:
         logger.error(f"Error looking up cards by name: {e}")

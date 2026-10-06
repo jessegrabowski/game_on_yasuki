@@ -11,6 +11,8 @@ yasuki_core.card_identity
     card_slug
     experience_label
     extended_title
+    name_index
+    resolve_name
 
 .. automodule:: yasuki_core.card_identity
     :members:
