@@ -35,6 +35,18 @@ def test_list_cards_shape(client):
         assert card["default_print_id"] is None or isinstance(card["default_print_id"], int)
 
 
+def test_a_subtitle_is_searchable_by_name_and_exact_match(client):
+    def ids(search):
+        return {
+            c["card_id"]
+            for c in client.get("/api/cards", params={"search": search}).json()["cards"]
+        }
+
+    assert "hida_kozan_voice_of_the_empress" in ids('name:"Voice of the Empress"')
+    assert ids('!"Hida Kozan"') == {"hida_kozan", "hida_kozan_voice_of_the_empress"}
+    assert ids('!"Hida Kozan, Voice of the Empress"') == {"hida_kozan_voice_of_the_empress"}
+
+
 def test_lookup_tells_apart_cards_sharing_a_title_by_set(client):
     body = client.get(
         "/api/cards/lookup?name=Aulus&set=Chaos+Reigns+Part+III&name=Ambush&set="

@@ -22,6 +22,7 @@ yasuki_core.card_identity
     printed_sets
     resolve_name
     retired_ids
+    subtitled_title
 
 .. automodule:: yasuki_core.card_identity
     :members:

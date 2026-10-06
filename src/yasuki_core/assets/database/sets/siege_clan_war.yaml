@@ -15,7 +15,8 @@ cards:
     corruption.</i>
   collector_number: '10'
   designer: Bryan
-- title: Bayushi Kachiko, Seven Thunder
+- title: Bayushi Kachiko
+  subtitle: Seven Thunder
   grants:
   - minus1f_minus1c
   types:
@@ -279,7 +280,8 @@ cards:
     outcome would be their deaths.</i>
   collector_number: '36'
   designer: Bryan
-- title: Doji Hoturi, Seven Thunder
+- title: Doji Hoturi
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
@@ -343,7 +345,8 @@ cards:
     forever staining their souls.</i>
   collector_number: '37'
   designer: Bryan
-- title: Fu Leng, the Ninth Kami
+- title: Fu Leng
+  subtitle: the Ninth Kami
   types:
   - Personality
   decks:
@@ -396,7 +399,8 @@ cards:
     hero of the Clan War, the slayer of Yogo Junzo, and now sits among the stars with Kamoko. It is an
     honor justly deserved.</i>
   collector_number: '68'
-- title: Hida Yakamo, Seven Thunder
+- title: Hida Yakamo
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
@@ -504,7 +508,8 @@ cards:
     black scrolls. Yet their good intentions could not spare them the dire consequences.</i>
   collector_number: '3'
   designer: Bryan
-- title: Isawa Tadaka, Seven Thunder
+- title: Isawa Tadaka
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
@@ -541,7 +546,8 @@ cards:
   artist: Diego Gisbert Llorens
   flavor_text: <i>"For a brighter future."</i>
   collector_number: '54'
-- title: Isawa Tanayama, the Necromancer
+- title: Isawa Tanayama
+  subtitle: the Necromancer
   types:
   - Personality
   decks:
@@ -566,7 +572,8 @@ cards:
   flavor_text: <i>"What secrets are more precious than those of life beyond death?"</i>
   collector_number: '23'
   designer: Bryan
-- title: Isawa Tsuke, Master of Fire
+- title: Isawa Tsuke
+  subtitle: Master of Fire
   types:
   - Personality
   decks:
@@ -615,7 +622,8 @@ cards:
   flavor_text: <i>"You took my lord from me," Junzo whispered. "I will take all you have in repayment."</i>
   collector_number: '43'
   designer: Bryan
-- title: Kuni Yori, the Corruptor
+- title: Kuni Yori
+  subtitle: the Corruptor
   types:
   - Personality
   decks:
@@ -719,7 +727,8 @@ cards:
   flavor_text: <i>"We could expend forces to break their lines, yes, but why bother?" - Hida Kisada</i>
   collector_number: '29'
   designer: Bryan
-- title: Mirumoto Hitomi, Seven Thunder
+- title: Mirumoto Hitomi
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
@@ -776,7 +785,8 @@ cards:
   flavor_text: <i>"You call us the Dark Moto. You are wrong. We are the true Moto."</i>
   collector_number: '26'
   designer: Bryan
-- title: Otaku Kamoko, Seven Thunder
+- title: Otaku Kamoko
+  subtitle: Seven Thunder
   creates:
   - hachiman
   types:
@@ -1156,7 +1166,8 @@ cards:
   flavor_text: <i>Some weapons were too terrible for either side.</i>
   collector_number: '31'
   designer: Bryan
-- title: The Hooded Ronin, Descendant of Shinsei
+- title: The Hooded Ronin
+  subtitle: Descendant of Shinsei
   types:
   - Personality
   decks:
@@ -1461,7 +1472,8 @@ cards:
     Every man is but a bolt of lightning. Mortals can kill gods.</i>
   collector_number: '6'
   designer: Bryan
-- title: Togashi Yokuni, Kami
+- title: Togashi Yokuni
+  subtitle: Kami
   types:
   - Personality
   decks:
@@ -1496,7 +1508,8 @@ cards:
   artist: Adam Schumpert
   flavor_text: <i>"For my plans."</i>
   collector_number: '51'
-- title: Toturi, Seven Thunder
+- title: Toturi
+  subtitle: Seven Thunder
   types:
   - Personality
   decks:
@@ -1606,7 +1619,8 @@ cards:
     your back on! It is not a mistake you will live to regret, fools!"</i>
   collector_number: '42'
   designer: Bryan
-- title: Yogo Junzo, The Betrayer
+- title: Yogo Junzo
+  subtitle: The Betrayer
   types:
   - Personality
   decks:
@@ -1634,7 +1648,8 @@ cards:
   flavor_text: <i>"I sought to serve, loyally. I have found one worthy of that loyalty."</i>
   collector_number: '28'
   designer: Bryan
-- title: Yoritomo, Son of Storms
+- title: Yoritomo
+  subtitle: Son of Storms
   types:
   - Personality
   decks:

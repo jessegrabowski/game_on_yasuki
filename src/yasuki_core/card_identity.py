@@ -30,6 +30,13 @@ def experience_label(keywords: Iterable[str]) -> str | None:
     return None
 
 
+def subtitled_title(entry: Mapping) -> str:
+    """The title a printing shows, then ", " and its subtitle where it has one."""
+    if subtitle := entry.get("subtitle"):
+        return f"{entry['title']}{SUBTITLE_SEPARATOR}{subtitle}"
+    return entry["title"]
+
+
 def extended_title(entry: Mapping) -> str:
     """The title a printing shows, qualified by its subtitle and its experience.
 
@@ -44,9 +51,7 @@ def extended_title(entry: Mapping) -> str:
         The title, then ", " and the subtitle, then " • " and the experience qualifier, each only
         where the printing has one.
     """
-    title = entry["title"]
-    if subtitle := entry.get("subtitle"):
-        title = f"{title}{SUBTITLE_SEPARATOR}{subtitle}"
+    title = subtitled_title(entry)
     if label := experience_label(entry.get("keywords") or ()):
         title = f"{title}{EXPERIENCE_SEPARATOR}{label}"
     return title

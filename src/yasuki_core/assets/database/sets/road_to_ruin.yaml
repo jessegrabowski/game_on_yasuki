@@ -111,7 +111,8 @@ cards:
   collector_number: '103'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Eirasu, the Irredeemable
+- title: Akodo Eirasu
+  subtitle: the Irredeemable
   types:
   - Personality
   decks:
@@ -219,7 +220,8 @@ cards:
   collector_number: '50'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Asako Miyabi, Master of Water
+- title: Asako Miyabi
+  subtitle: Master of Water
   grants:
   - minus1f
   - plus1f
@@ -791,7 +793,8 @@ cards:
   collector_number: '64'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daigotsu Shikenuro, the Silk Fever
+- title: Daigotsu Shikenuro
+  subtitle: the Silk Fever
   types:
   - Personality
   decks:
@@ -1166,7 +1169,8 @@ cards:
   collector_number: '136'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Kurabi, Vanguard of the Damned
+- title: Hida Kurabi
+  subtitle: Vanguard of the Damned
   types:
   - Personality
   decks:
@@ -1552,7 +1556,8 @@ cards:
   collector_number: '97'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Iweko Ayameko, the Iron Empress
+- title: Iweko Ayameko
+  subtitle: the Iron Empress
   types:
   - Personality
   decks:
@@ -1615,7 +1620,8 @@ cards:
   collector_number: '22'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kaiu Gorobei, Master of the Engines
+- title: Kaiu Gorobei
+  subtitle: Master of the Engines
   types:
   - Personality
   decks:
@@ -1667,7 +1673,8 @@ cards:
   collector_number: '98'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kakita Harudei, Drunkard
+- title: Kakita Harudei
+  subtitle: Drunkard
   types:
   - Personality
   decks:
@@ -2194,7 +2201,8 @@ cards:
   collector_number: '70'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Zi Feng, Villain
+- title: Moto Zi Feng
+  subtitle: Villain
   types:
   - Personality
   decks:
@@ -2317,7 +2325,8 @@ cards:
   collector_number: '88'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Otomo Suikihime, Second City Governor
+- title: Otomo Suikihime
+  subtitle: Second City Governor
   types:
   - Personality
   decks:
@@ -2664,7 +2673,8 @@ cards:
   collector_number: '145'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shiba Tetsunori, Revered Sensei
+- title: Shiba Tetsunori
+  subtitle: Revered Sensei
   types:
   - Personality
   decks:
@@ -2726,7 +2736,8 @@ cards:
   collector_number: '72'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shosuro Hotaka, Governor's Advisor
+- title: Shosuro Hotaka
+  subtitle: Governor's Advisor
   types:
   - Personality
   decks:

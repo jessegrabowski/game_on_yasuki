@@ -5313,7 +5313,8 @@ cards:
   artist: Jason Juta
   flavor_text: <i>"Peace in the Colonies, my friend. The Dragon will brook no more of this pointless conflict."</i>
   collector_number: '76'
-- title: Mirumoto Tsuda, Emerald Champion
+- title: Mirumoto Tsuda
+  subtitle: Emerald Champion
   types:
   - Personality
   decks:
@@ -5543,7 +5544,8 @@ cards:
     lack of a horse will not save him."'
   collector_number: '175'
   designer: Duncan
-- title: Moto Taigo, Shogun
+- title: Moto Taigo
+  subtitle: Shogun
   types:
   - Personality
   decks:
@@ -5841,7 +5843,8 @@ cards:
   flavor_text: There are those whose souls have been lost to the Nothing, but who serve neither Goju nor
     Ninube.
   collector_number: '164'
-- title: Okuma, Beiko's Bear
+- title: Okuma
+  subtitle: Beiko's Bear
   types:
   - Proxy
   - Personality

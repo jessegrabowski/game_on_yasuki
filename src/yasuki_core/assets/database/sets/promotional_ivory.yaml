@@ -21,7 +21,8 @@ cards:
   artist: Gong Studios
   flavor_text: <i>The uneasy resumption of peace between the Crane and the Mantis was not liked by all,
     but all obeyed. They simply found more acceptable outlets for their rivalries.</i>
-- title: Akodo Dairuko, the Steel Lion
+- title: Akodo Dairuko
+  subtitle: the Steel Lion
   types:
   - Personality
   decks:
@@ -323,7 +324,8 @@ cards:
   artist: Gong Studios
   flavor_text: <i>"We are fortunate bamboo grows so quickly and in so many places. It is as if it was
     blessed by the Heavens!"</i>
-- title: Bayushi Nitoshi, the Poison Mask
+- title: Bayushi Nitoshi
+  subtitle: the Poison Mask
   types:
   - Personality
   decks:
@@ -561,7 +563,8 @@ cards:
   artist: Gong Studios
   flavor_text: <i>"With this blade, you take up the station as magistrate. Honor it, as your father did,
     and much glory shall be yours."</i>
-- title: Daigotsu Kanpeki, the Shadow Emperor
+- title: Daigotsu Kanpeki
+  subtitle: the Shadow Emperor
   types:
   - Personality
   decks:
@@ -619,7 +622,8 @@ cards:
   artist: Albert Tavira
   flavor_text: <i>"Nothing incapacitates an enemy quite as effectively as a greivous wound." - Hida Tadama</i>
   designer: Thomas
-- title: Doji Makoto, the Smiling Blade
+- title: Doji Makoto
+  subtitle: the Smiling Blade
   types:
   - Personality
   decks:
@@ -753,7 +757,8 @@ cards:
   flavor_text: '"Magnificent creatures, truly. They do not care about the Shogun, the Governor, or the
     Imperial heirs. They simply do as commanded, whether hauling logs or trampling enemies. Would that
     I had an entire army of them." - Commander of the Crab Colonial Forces'
-- title: Hida Kisada, the Little Bear
+- title: Hida Kisada
+  subtitle: the Little Bear
   types:
   - Personality
   decks:
@@ -836,7 +841,8 @@ cards:
   flavor_text: For some samurai, the notion of being removed from a battle without being defeated is far
     worse a fate than death itself. Others find such an idea foolish in the extreme, but they are in the
     minority.
-- title: Isawa Shunryu, the Infinite Eye
+- title: Isawa Shunryu
+  subtitle: the Infinite Eye
   types:
   - Personality
   decks:
@@ -934,7 +940,8 @@ cards:
   rarity: Promo
   artist: Charles Urbach
   designer: Bryan
-- title: Mirumoto Shikei, the Laughing Dragon
+- title: Mirumoto Shikei
+  subtitle: the Laughing Dragon
   types:
   - Personality
   decks:
@@ -970,7 +977,8 @@ cards:
   rarity: Promo
   artist: Calderon Studio
   flavor_text: "<i>“Answer? No, I have the question you seek.”</i>"
-- title: Moto Naleesh, the Living Goddess
+- title: Moto Naleesh
+  subtitle: the Living Goddess
   types:
   - Personality
   decks:
@@ -1485,7 +1493,8 @@ cards:
   artist: Lake Hurwitz
   flavor_text: <i>"A wound is not the end of a true samurai. It is merely a momentary inconvenience that
     can be cleansed by once more entering battle." - Akodo's Leadership</i>
-- title: Yoritomo Hiromi, the Growing Storm
+- title: Yoritomo Hiromi
+  subtitle: the Growing Storm
   types:
   - Personality
   decks:

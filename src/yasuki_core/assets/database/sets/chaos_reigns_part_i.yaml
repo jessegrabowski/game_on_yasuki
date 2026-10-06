@@ -20,7 +20,8 @@ cards:
   collector_number: '48'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Akodo Atsutane, Ivory Champion
+- title: Akodo Atsutane
+  subtitle: Ivory Champion
   types:
   - Personality
   decks:
@@ -158,7 +159,8 @@ cards:
   collector_number: '42'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Bayushi Akinari, "The Devil of Nihai Tower"
+- title: Bayushi Akinari
+  subtitle: '"The Devil of Nihai Tower"'
   types:
   - Personality
   decks:
@@ -427,7 +429,8 @@ cards:
   collector_number: '4'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hida Gojiro, Tetsubo Master
+- title: Hida Gojiro
+  subtitle: Tetsubo Master
   types:
   - Personality
   decks:
@@ -592,7 +595,8 @@ cards:
   collector_number: '25'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Isawa Kosea, Master of Earth
+- title: Isawa Kosea
+  subtitle: Master of Earth
   types:
   - Personality
   decks:
@@ -625,7 +629,8 @@ cards:
   collector_number: '26'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kakita Tatewaki, Bishonen
+- title: Kakita Tatewaki
+  subtitle: Bishonen
   types:
   - Personality
   decks:
@@ -734,7 +739,8 @@ cards:
   collector_number: '21'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kitsuki Miro, Dogged Investigator
+- title: Kitsuki Miro
+  subtitle: Dogged Investigator
   types:
   - Personality
   decks:
@@ -925,7 +931,8 @@ cards:
   collector_number: '17'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Miya Tamiyo, Herald of the Hantei
+- title: Miya Tamiyo
+  subtitle: Herald of the Hantei
   types:
   - Personality
   decks:
@@ -950,7 +957,8 @@ cards:
   collector_number: '32'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Khedai, Head Priest of the Second City
+- title: Moto Khedai
+  subtitle: Head Priest of the Second City
   grants:
   - minus1f
   types:
@@ -1430,7 +1438,8 @@ cards:
   collector_number: '41'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yasuki Angosu, Master Coin
+- title: Yasuki Angosu
+  subtitle: Master Coin
   types:
   - Personality
   decks:
@@ -1488,7 +1497,8 @@ cards:
   collector_number: '12'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yoritomo Saigo, Master Silk
+- title: Yoritomo Saigo
+  subtitle: Master Silk
   types:
   - Personality
   decks:

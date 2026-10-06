@@ -70,11 +70,12 @@ _RANGE_OPS = {">": ">", ">=": ">=", "<": "<", "<=": "<="}
 # so interpolating the column into `c.<col> IS NOT NULL` is injection-safe.
 _PRESENCE_COLUMNS = {"is_flip": "back_card_id", "has_errata": "errata_text"}
 
-# The broad bare-word match: a card whose name, id, current text (either face), or any printing's
-# own text contains the needle. Four %s placeholders take the same pattern. Used positively for a
-# bare word and, negated as a whole (De Morgan), to exclude one.
+# The broad bare-word match: a card whose extended title, id, current text (either face), or any
+# printing's own text contains the needle. The extended title carries the subtitle the name omits.
+# Four %s placeholders take the same pattern. Used positively for a bare word and, negated as a
+# whole (De Morgan), to exclude one.
 _BARE_TEXT_UNION = (
-    "c.name ILIKE %s ESCAPE '\\'"
+    "c.extended_title ILIKE %s ESCAPE '\\'"
     " OR c.card_id ILIKE %s ESCAPE '\\'"
     " OR (c.rules_text || ' ' || COALESCE(back.rules_text, '')) ILIKE %s ESCAPE '\\'"
     " OR EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
@@ -170,13 +171,14 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
             conditions.append(f"c.name_normalized {op} %s ESCAPE '\\'")
             params.append(f"%{escape_like(normalize_name(needle))}%")
     elif property_name in ("name_exact", "name_exact_excludes"):
-        # `!"phrase"` for exact match: the whole name equals the phrase (case-insensitive).
-        # All of a card's experience versions share a name, so this isolates that card, not one
-        # printing.
-        op = "!=" if property_name.endswith("excludes") else "="
+        # `!"phrase"` for exact match: the title, or the title with its subtitle, equals the phrase
+        # (case-insensitive). All of a card's experience versions share a name, so this isolates
+        # that card, not one printing.
+        excludes = property_name.endswith("excludes")
+        op, join = ("!=", "AND") if excludes else ("=", "OR")
         for needle in value:
-            conditions.append(f"lower(c.name) {op} lower(%s)")
-            params.append(needle)
+            conditions.append(f"(lower(c.name) {op} lower(%s) {join} c.name_normalized {op} %s)")
+            params.extend([needle, normalize_name(needle)])
     elif property_name == "bare_excludes":
         # A negated bare word (-doji) hides any card the positive bare word would match.
         for needle in value:

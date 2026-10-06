@@ -1102,7 +1102,8 @@ cards:
   flavor_text: <i>Every city has a red-light district. Those worth visiting have a "flower street."</i>
   collector_number: '7'
   designer: Loki
-- title: Harukaze, the Confidant
+- title: Harukaze
+  subtitle: the Confidant
   types:
   - Personality
   decks:
@@ -1157,7 +1158,8 @@ cards:
     And you dare call us gaijin, Phoenix?" - Utaku Izimi</i>
   collector_number: '95'
   designer: Randy
-- title: Hida Kozan, Voice of the Empress
+- title: Hida Kozan
+  subtitle: Voice of the Empress
   types:
   - Personality
   decks:
@@ -2502,7 +2504,8 @@ cards:
   flavor_text: <i>Samurai tell things to geisha that they wouldn't even whisper when alone.</i>
   collector_number: '13'
   designer: Randy
-- title: Momiji, the Madam
+- title: Momiji
+  subtitle: the Madam
   types:
   - Personality
   decks:
@@ -2659,7 +2662,8 @@ cards:
   rarity: Premium
   artist: Veronica V. Jones
   collector_number: '14'
-- title: Natsumi, the Socialite
+- title: Natsumi
+  subtitle: the Socialite
   types:
   - Personality
   decks:
@@ -2708,7 +2712,8 @@ cards:
   flavor_text: <i>"How are you Dragon surprised by this?" Yasunari growled. "Two hands, two swords, yes?"</i>
   collector_number: '134'
   designer: Julien
-- title: Oboro, the Liar
+- title: Oboro
+  subtitle: the Liar
   grants:
   - conspiracy
   types:
@@ -3816,7 +3821,8 @@ cards:
   flavor_text: <i>"It is truly a shame," he tutted.</i>
   collector_number: '65'
   designer: Jeremy
-- title: Suzune, the Coy
+- title: Suzune
+  subtitle: the Coy
   creates:
   - kikuchiyo
   types:

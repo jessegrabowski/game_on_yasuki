@@ -43,7 +43,8 @@ cards:
   collector_number: '1'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Agasha Uzeko, Master of Water
+- title: Agasha Uzeko
+  subtitle: Master of Water
   types:
   - Personality
   decks:
@@ -360,7 +361,8 @@ cards:
   collector_number: '69'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Doji Koshiro, Bastion of the Morning Sun
+- title: Doji Koshiro
+  subtitle: Bastion of the Morning Sun
   types:
   - Personality
   decks:
@@ -532,7 +534,8 @@ cards:
   collector_number: '15'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hoji Misato, Wicked Eyes
+- title: Hoji Misato
+  subtitle: Wicked Eyes
   types:
   - Personality
   decks:
@@ -584,7 +587,8 @@ cards:
   collector_number: '54'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hotaru Okane, the Last Light
+- title: Hotaru Okane
+  subtitle: the Last Light
   grants:
   - plus1f
   types:
@@ -635,7 +639,8 @@ cards:
   collector_number: '70'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Ikoma Satoru, Shogun
+- title: Ikoma Satoru
+  subtitle: Shogun
   types:
   - Personality
   decks:
@@ -666,7 +671,8 @@ cards:
   collector_number: '27'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Isawa Eijiri, Warmonger
+- title: Isawa Eijiri
+  subtitle: Warmonger
   types:
   - Personality
   decks:
@@ -798,7 +804,8 @@ cards:
   collector_number: '59'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kitsune Toshitaka, Fox Clan Champion
+- title: Kitsune Toshitaka
+  subtitle: Fox Clan Champion
   types:
   - Personality
   decks:
@@ -829,7 +836,8 @@ cards:
   collector_number: '11'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Kuni Tanken, Master of the White Tower
+- title: Kuni Tanken
+  subtitle: Master of the White Tower
   types:
   - Personality
   decks:
@@ -930,7 +938,8 @@ cards:
   collector_number: '6'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Buyan, Death's Messenger
+- title: Moto Buyan
+  subtitle: Death's Messenger
   grants:
   - minus1ps
   types:
@@ -992,7 +1001,8 @@ cards:
   collector_number: '47'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Moto Qatun, Savior of the Khol Wall
+- title: Moto Qatun
+  subtitle: Savior of the Khol Wall
   types:
   - Personality
   decks:
@@ -1138,7 +1148,8 @@ cards:
   collector_number: '8'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shahadet, Warlord
+- title: Shahadet
+  subtitle: Warlord
   types:
   - Personality
   decks:
@@ -1168,7 +1179,8 @@ cards:
   collector_number: '12'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shiba Tetsunori, Revered Sensei
+- title: Shiba Tetsunori
+  subtitle: Revered Sensei
   types:
   - Personality
   decks:
@@ -1225,7 +1237,8 @@ cards:
   collector_number: '49'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Shosuro Aoki, "Yoritomo Kayoko"
+- title: Shosuro Aoki
+  subtitle: '"Yoritomo Kayoko"'
   types:
   - Personality
   decks:
@@ -1448,7 +1461,8 @@ cards:
   collector_number: '51'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Suzume Ryosuke, Clan Champion
+- title: Suzume Ryosuke
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
@@ -1565,7 +1579,8 @@ cards:
   collector_number: '44'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Tetsuo, Clan Champion
+- title: Tetsuo
+  subtitle: Clan Champion
   types:
   - Personality
   decks:
@@ -1769,7 +1784,8 @@ cards:
   collector_number: '23'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Togashi Noboru, the Shattered Star
+- title: Togashi Noboru
+  subtitle: the Shattered Star
   types:
   - Personality
   decks:
@@ -1966,7 +1982,8 @@ cards:
   collector_number: '79'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yabe no Oni, Blessed Abomination
+- title: Yabe no Oni
+  subtitle: Blessed Abomination
   creates:
   - oni_personality_2_1
   types:

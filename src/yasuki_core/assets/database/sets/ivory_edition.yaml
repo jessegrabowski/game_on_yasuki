@@ -217,7 +217,8 @@ cards:
     brilliant minds. We are fortunate that he continues to teach." - Moto Naleesh</i>
   collector_number: '254'
   designer: Bryan
-- title: Akodo Dairuko, the Steel Lion
+- title: Akodo Dairuko
+  subtitle: the Steel Lion
   types:
   - Personality
   decks:
@@ -1065,7 +1066,8 @@ cards:
   artist: Edwin David
   flavor_text: <i>"And now, you will tell no one."</i>
   collector_number: '139'
-- title: Bayushi Nitoshi, the Poison Mask
+- title: Bayushi Nitoshi
+  subtitle: the Poison Mask
   types:
   - Personality
   decks:
@@ -1763,7 +1765,8 @@ cards:
   flavor_text: <i>"I have no quarrel with you, Crab. If you choose to force the issue, it will be by your
     own action that your life reaches its end."</i>
   collector_number: '149'
-- title: Daigotsu Kanpeki, the Shadow Emperor
+- title: Daigotsu Kanpeki
+  subtitle: the Shadow Emperor
   types:
   - Personality
   decks:
@@ -2252,7 +2255,8 @@ cards:
   flavor_text: <i>"I think an important point has been overlooked."</i>
   collector_number: '78'
   designer: Bryan
-- title: Doji Makoto, the Smiling Blade
+- title: Doji Makoto
+  subtitle: the Smiling Blade
   types:
   - Personality
   decks:
@@ -3298,7 +3302,8 @@ cards:
   artist: Immar Palomera
   flavor_text: <i>"I make sure to have the final say in every argument and the final blow in any fight."</i>
   collector_number: '58'
-- title: Hida Kisada, the Little Bear
+- title: Hida Kisada
+  subtitle: the Little Bear
   types:
   - Personality
   decks:
@@ -4261,7 +4266,8 @@ cards:
   flavor_text: <i>"How glorious the mountains are! What wisdom can be found here! Small wonder the Togashi
     build their monasteries on great heights."</i>
   collector_number: '129'
-- title: Isawa Shunryu, the Infinite Eye
+- title: Isawa Shunryu
+  subtitle: the Infinite Eye
   types:
   - Personality
   decks:
@@ -5667,7 +5673,8 @@ cards:
   artist: Michael Phillippi
   flavor_text: <i>"My family may have forgotten, but I? I will never forget."</i>
   collector_number: '87'
-- title: Mirumoto Shikei, the Laughing Dragon
+- title: Mirumoto Shikei
+  subtitle: the Laughing Dragon
   types:
   - Personality
   decks:
@@ -5874,7 +5881,8 @@ cards:
   artist: Jason Behnke
   flavor_text: <i>"Are you so sure of your strength, friend? Come test it against my blade."</i>
   collector_number: '179'
-- title: Moto Naleesh, the Living Goddess
+- title: Moto Naleesh
+  subtitle: the Living Goddess
   types:
   - Personality
   decks:
@@ -7271,7 +7279,8 @@ cards:
   artist: Jason Engle
   flavor_text: <i>"I am not a shugenja, but the Void gives me all things."</i>
   collector_number: '134'
-- title: Shiba Tsukimi, the Blind Phoenix
+- title: Shiba Tsukimi
+  subtitle: the Blind Phoenix
   types:
   - Personality
   decks:
@@ -9867,7 +9876,8 @@ cards:
   artist: Jaime Jones
   flavor_text: '"Your father intends to visit me soon," the spirit said. Nitoshi narrowed his eyes.'
   collector_number: '148'
-- title: Yoritomo Hiromi, the Growing Storm
+- title: Yoritomo Hiromi
+  subtitle: the Growing Storm
   types:
   - Personality
   decks:

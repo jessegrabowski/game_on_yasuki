@@ -1484,7 +1484,8 @@ cards:
     in her mind are signs of insanity, or the messages of the kami.</i>
   collector_number: '50'
   designer: Loki
-- title: Isawa Kaname, Advisor to the Ruby Champion
+- title: Isawa Kaname
+  subtitle: Advisor to the Ruby Champion
   types:
   - Personality
   decks:
@@ -1957,7 +1958,8 @@ cards:
   flavor_text: <i>"I find your response disappointing. My friend, even more so!"</i>
   collector_number: '44'
   designer: Trevor
-- title: Kuni Shinoda, Advisor to the Jade Champion
+- title: Kuni Shinoda
+  subtitle: Advisor to the Jade Champion
   types:
   - Personality
   decks:
@@ -2922,7 +2924,8 @@ cards:
   flavor_text: <i>"Toturi Shigekawa was a great and honorable man. Here we honor his memory and ideals."</i>
   collector_number: '14'
   designer: Julien
-- title: Shinjo Ajasu, Topaz Champion
+- title: Shinjo Ajasu
+  subtitle: Topaz Champion
   types:
   - Personality
   decks:
@@ -3794,7 +3797,8 @@ cards:
     allow you to benefit in our stead?"</i>
   collector_number: '46'
   designer: Trevor
-- title: Tsuruchi Yashiro, Defender of the Obsidian Blades
+- title: Tsuruchi Yashiro
+  subtitle: Defender of the Obsidian Blades
   types:
   - Personality
   decks:

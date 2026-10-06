@@ -55,7 +55,8 @@ cards:
   flavor_text: <i>"You will make a fine Emperor, my brother." <br>"You would have as well."</i>
   collector_number: '113'
   designer: Bryan
-- title: Akodo Kano, Master Tactician
+- title: Akodo Kano
+  subtitle: Master Tactician
   types:
   - Personality
   decks:
@@ -722,7 +723,8 @@ cards:
     rarely willing to dwell upon how that is possible."</i>
   collector_number: '26'
   designer: Jeremy
-- title: Daigotsu Kanpeki, Unleashed
+- title: Daigotsu Kanpeki
+  subtitle: Unleashed
   types:
   - Personality
   decks:

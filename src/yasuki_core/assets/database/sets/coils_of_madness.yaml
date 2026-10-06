@@ -323,7 +323,8 @@ cards:
     incursion."</i>
   collector_number: '70'
   designer: Loki
-- title: Asukai, the Tireless
+- title: Asukai
+  subtitle: the Tireless
   types:
   - Personality
   decks:
@@ -1110,7 +1111,8 @@ cards:
   flavor_text: <i>Even heretics have their uses.</i>
   collector_number: '16'
   designer: Thomas
-- title: Hamuro, the Wise
+- title: Hamuro
+  subtitle: the Wise
   types:
   - Personality
   decks:
@@ -1276,7 +1278,8 @@ cards:
     Kingdom's history." - Asako Chukage</i>
   collector_number: '115'
   designer: Loki
-- title: Hiruma Nikaru, the Flesh Eater
+- title: Hiruma Nikaru
+  subtitle: the Flesh Eater
   types:
   - Personality
   decks:
@@ -1332,7 +1335,8 @@ cards:
   artist: Franz Vohwinkel
   flavor_text: <i>"You want to see it?! You want to see the darkness we have held at bay?!"</i>
   collector_number: '139'
-- title: Ichiro Otani, the Stone Breaker
+- title: Ichiro Otani
+  subtitle: the Stone Breaker
   types:
   - Personality
   decks:
@@ -1624,7 +1628,8 @@ cards:
   flavor_text: <i>"The Lords of Death, the Kami - all delusions! Now I see what is real!"</i>
   collector_number: '73'
   designer: Duncan
-- title: Jikoji, Fist of Stone
+- title: Jikoji
+  subtitle: Fist of Stone
   types:
   - Personality
   decks:
@@ -1679,7 +1684,8 @@ cards:
     - Kakita Ichigiku</i>
   collector_number: '100'
   designer: Loki
-- title: Kakita Hideo, the Fallen Keeper
+- title: Kakita Hideo
+  subtitle: the Fallen Keeper
   grants:
   - plus1f
   types:
@@ -1746,7 +1752,8 @@ cards:
     Perhaps that is why I find her so fascinating." - Kitsuki Kinaro</i>
   collector_number: '32'
   designer: Loki
-- title: Kasuga Aizawa, the Razor's Edge
+- title: Kasuga Aizawa
+  subtitle: the Razor's Edge
   types:
   - Personality
   decks:
@@ -1776,7 +1783,8 @@ cards:
   flavor_text: <i>"The world is vaster by far than most samurai ever realize. There are wonders and threats
     that most can never imagine. P'an Ku? Fudo? Mere annoyances compared to some."</i>
   collector_number: '24'
-- title: Kimura, Forgiver of Sins
+- title: Kimura
+  subtitle: Forgiver of Sins
   types:
   - Personality
   decks:
@@ -2031,7 +2039,8 @@ cards:
   flavor_text: <i>"Is madness a thing that can be perfected?" - Daigotsu Kanpeki</i>
   collector_number: '74'
   designer: Duncan
-- title: Komori Miyano, the Shadow Wing
+- title: Komori Miyano
+  subtitle: the Shadow Wing
   creates:
   - bat
   types:
@@ -2255,7 +2264,8 @@ cards:
     are steeled against the insidious touch of madness.</i>
   collector_number: '127'
   designer: Loki
-- title: Morito Inoue, Scourge of the Plains
+- title: Morito Inoue
+  subtitle: Scourge of the Plains
   types:
   - Personality
   decks:
@@ -2353,7 +2363,8 @@ cards:
     great interest…"</i>
   collector_number: '85'
   designer: Bryan
-- title: Moto Taigo, the Skull Taker
+- title: Moto Taigo
+  subtitle: the Skull Taker
   types:
   - Personality
   decks:
@@ -2466,7 +2477,8 @@ cards:
   artist: Sam Flegal
   flavor_text: <i>"None of you are worthy of your lives."</i>
   collector_number: '146'
-- title: Nishoji, the Steel-Eyed
+- title: Nishoji
+  subtitle: the Steel-Eyed
   types:
   - Personality
   decks:
@@ -2518,7 +2530,8 @@ cards:
     forward, heads held high.</i>
   collector_number: '128'
   designer: Duncan
-- title: Okazaki, Breaker of Wills
+- title: Okazaki
+  subtitle: Breaker of Wills
   types:
   - Personality
   decks:
@@ -2550,7 +2563,8 @@ cards:
   flavor_text: <i>"Your dissembling is entertaining but ultimately futile. Speak the truth. It is inevitable."</i>
   collector_number: '47'
   designer: Bryan
-- title: Otomo Suikihime, Queen of Fools
+- title: Otomo Suikihime
+  subtitle: Queen of Fools
   types:
   - Personality
   decks:
@@ -2803,7 +2817,8 @@ cards:
     and suffering on an undreamt of scale.</i>
   collector_number: '8'
   designer: Loki
-- title: Rokkaku, Master of Scrolls
+- title: Rokkaku
+  subtitle: Master of Scrolls
   types:
   - Personality
   decks:
@@ -2834,7 +2849,8 @@ cards:
   flavor_text: <i>"Secrets. More precious than any treasure."</i>
   collector_number: '61'
   designer: Duncan
-- title: Sengmai, the Unbreakable
+- title: Sengmai
+  subtitle: the Unbreakable
   types:
   - Personality
   decks:
@@ -3099,7 +3115,8 @@ cards:
     plans.</i>
   collector_number: '65'
   designer: Duncan
-- title: Suzume Shindo, the Final Blade
+- title: Suzume Shindo
+  subtitle: the Final Blade
   types:
   - Personality
   decks:
@@ -3509,7 +3526,8 @@ cards:
   flavor_text: <i>"Ours is a proud history, and we shall prove worthy of the name this day."</i>
   collector_number: '96'
   designer: Duncan
-- title: Tochiko, the Jagged Tusk of Death
+- title: Tochiko
+  subtitle: the Jagged Tusk of Death
   types:
   - Personality
   decks:
@@ -3577,7 +3595,8 @@ cards:
     him shall there be." - Mirumoto Shikei</i>
   collector_number: '37'
   designer: Thomas
-- title: Togashi Noboru, the Shattered Star
+- title: Togashi Noboru
+  subtitle: the Shattered Star
   types:
   - Personality
   decks:
@@ -3609,7 +3628,8 @@ cards:
   flavor_text: <i>"Father was a fool to cast this aside. I alone know what is best."</i>
   collector_number: '38'
   designer: Thomas
-- title: Toku Saiga, the Metal Storm
+- title: Toku Saiga
+  subtitle: the Metal Storm
   types:
   - Personality
   decks:
@@ -3640,7 +3660,8 @@ cards:
   flavor_text: <i>"There are few who approve of me. No matter. I will laugh and laugh at the looks on
     their faces when they fall to the ground, helpless before my blades."</i>
   collector_number: '66'
-- title: Tonbo Inuyama, the Eye of Tomorrow
+- title: Tonbo Inuyama
+  subtitle: the Eye of Tomorrow
   types:
   - Personality
   decks:
@@ -3671,7 +3692,8 @@ cards:
   artist: Héctor Herrera
   flavor_text: <i>"You see coins," he said, eyes dancing. "I see windows into tomorrow."</i>
   collector_number: '57'
-- title: Tsi Hayamizu, the Hand of Steel
+- title: Tsi Hayamizu
+  subtitle: the Hand of Steel
   types:
   - Personality
   decks:
@@ -3700,7 +3722,8 @@ cards:
   flavor_text: <i>"The wise man knows worthy weapons are made with purity. Not just of the steel, but
     of the spirit and body as well. No pile of filthy Shosuro money will make me forget that."</i>
   collector_number: '81'
-- title: Tsiang, the Benevolent
+- title: Tsiang
+  subtitle: the Benevolent
   types:
   - Personality
   decks:
@@ -3814,7 +3837,8 @@ cards:
   flavor_text: <i>No one mind could ever hope to contain the burden of P'an Ku's madness.</i>
   collector_number: '136'
   designer: Duncan
-- title: Usagi Seki, the Untouchable
+- title: Usagi Seki
+  subtitle: the Untouchable
   types:
   - Personality
   decks:
@@ -4002,7 +4026,8 @@ cards:
   artist: Chris Pritchard
   flavor_text: <i>"They are mine. Understand? All of this is mine!"</i>
   collector_number: '143'
-- title: Yunmen, the Whisper
+- title: Yunmen
+  subtitle: the Whisper
   types:
   - Personality
   decks:

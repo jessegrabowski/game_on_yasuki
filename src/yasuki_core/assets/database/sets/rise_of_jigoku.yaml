@@ -258,7 +258,8 @@ cards:
   collector_number: '56'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Bayushi Norimasa, Blade of the Black Cabal
+- title: Bayushi Norimasa
+  subtitle: Blade of the Black Cabal
   types:
   - Personality
   decks:
@@ -513,7 +514,8 @@ cards:
   collector_number: '128'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daidoji Akeha, Iron Crane
+- title: Daidoji Akeha
+  subtitle: Iron Crane
   types:
   - Personality
   decks:
@@ -571,7 +573,8 @@ cards:
   collector_number: '79'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Daidoji Nerishma, Topaz Champion
+- title: Daidoji Nerishma
+  subtitle: Topaz Champion
   types:
   - Personality
   decks:
@@ -1230,7 +1233,8 @@ cards:
   collector_number: '9'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Hiruma Tetsuya, Secret Heart
+- title: Hiruma Tetsuya
+  subtitle: Secret Heart
   types:
   - Personality
   decks:
@@ -3786,7 +3790,8 @@ cards:
   collector_number: '165'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- title: Yasuki Umi-Ushi, First Magistrate
+- title: Yasuki Umi-Ushi
+  subtitle: First Magistrate
   types:
   - Personality
   decks:
