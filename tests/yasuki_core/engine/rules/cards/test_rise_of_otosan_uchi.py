@@ -18,6 +18,8 @@ from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
     COURTIER,
     EXPENDABLE_SERVANT,
     LION_ANCESTOR,
+    SATO_RESHUFFLE,
+    SATO_TAKE,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
@@ -2335,3 +2337,123 @@ def test_higaru_with_no_ring_straightens_his_target_without_asking():
 
     assert session.game.pending is None
     assert not session.game.table.cards_by_id["ally"].bowed
+
+
+# --- Kokujin Sato (Experienced) ---
+
+
+def _sato_ring(card_id: str, *, shadowlands: bool, owner: PlayerId = P1) -> L5RCard:
+    ring_keywords = ("Air", "Shadowlands") if shadowlands else ("Air",)
+    return L5RCard.of(
+        RingPrint,
+        id=card_id,
+        name=card_id,
+        printed_id=card_id,
+        side=Side.FATE,
+        owner=owner,
+        element=Element.AIR,
+        keywords=ring_keywords,
+    )
+
+
+def _sato_game(*, discarded: tuple[L5RCard, ...] = (), in_play: tuple[L5RCard, ...] = ()):
+    """Sato in play, with ``discarded`` in P1's Fate discard and ``in_play`` on the battlefield."""
+    state = TableState.empty_two_seat()
+    put_in_play(
+        state,
+        register(
+            state,
+            personality("sato", printed_id="kokujin_sato_experienced", name="Sato", force=3, chi=4),
+        ),
+    )
+    for card in in_play:
+        put_in_play(state, register(state, card))
+    pile = state.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    for card in discarded:
+        pile.add(register(state, card))
+    return EngineSession.start(state, P1)
+
+
+def _sato_dynasty_phase(session) -> None:
+    while session.game.phase is not Phase.DYNASTY:
+        end_phase(session)
+
+
+def test_kokujin_sato_costs_two_honor_to_enter_play():
+    session = _sato_game()
+    before = _honor(session, P1)
+
+    fire(session.game, EnteredPlay("sato"))
+
+    assert _honor(session, P1) == before - 2
+
+
+@pytest.mark.parametrize("rings, bonus", [(0, 0), (1, 1), (2, 2)], ids=["none", "one", "two"])
+def test_kokujin_sato_grows_with_each_shadowlands_ring_you_control(rings, bonus):
+    held = tuple(_sato_ring(f"dark{index}", shadowlands=True) for index in range(rings))
+    session = _sato_game(
+        in_play=(
+            *held,
+            _sato_ring("clean", shadowlands=False),
+            _sato_ring("theirs", shadowlands=True, owner=P2),
+        )
+    )
+    sato = session.game.table.cards_by_id["sato"]
+
+    assert effective_force(session.game, sato) == 3 + bonus
+    assert effective_chi(session.game, sato) == 4 + bonus
+
+
+def test_kokujin_sato_reshuffles_an_ordinary_fate_card_without_asking():
+    session = _sato_game(discarded=(fate_card("spent", P1),))
+    _sato_dynasty_phase(session)
+
+    session.act(P1, ActivateAbility("sato"))
+    session.submit(P1, DecisionResponse(("spent",)))
+
+    assert session.game.pending is None
+    assert [card.id for card in session.game.table.decks[DeckKey(P1, Side.FATE)].cards] == ["spent"]
+
+
+def test_kokujin_sato_buys_a_shadowlands_ring_into_your_hand_for_two_chi():
+    session = _sato_game(discarded=(_sato_ring("dark", shadowlands=True),))
+    _sato_dynasty_phase(session)
+
+    session.act(P1, ActivateAbility("sato"))
+    session.submit(P1, DecisionResponse(("dark",)))
+    session.submit(P1, DecisionResponse((SATO_TAKE,)))
+
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)]
+    assert "dark" in {card.id for card in hand.cards}
+    assert effective_chi(session.game, session.game.table.cards_by_id["sato"]) == 2
+
+
+def test_kokujin_satos_chi_price_outlasts_the_turn_he_paid_it_on():
+    session = _sato_game(discarded=(_sato_ring("dark", shadowlands=True),))
+    _sato_dynasty_phase(session)
+    session.act(P1, ActivateAbility("sato"))
+    session.submit(P1, DecisionResponse(("dark",)))
+    session.submit(P1, DecisionResponse((SATO_TAKE,)))
+
+    end_turn(session)
+
+    assert effective_chi(session.game, session.game.table.cards_by_id["sato"]) == 2
+
+
+def test_kokujin_sato_may_still_just_reshuffle_the_shadowlands_ring():
+    session = _sato_game(discarded=(_sato_ring("dark", shadowlands=True),))
+    _sato_dynasty_phase(session)
+
+    session.act(P1, ActivateAbility("sato"))
+    session.submit(P1, DecisionResponse(("dark",)))
+    session.submit(P1, DecisionResponse((SATO_RESHUFFLE,)))
+
+    assert effective_chi(session.game, session.game.table.cards_by_id["sato"]) == 4
+    assert [card.id for card in session.game.table.decks[DeckKey(P1, Side.FATE)].cards] == ["dark"]
+
+
+def test_kokujin_sato_acts_only_in_the_dynasty_phase():
+    session = _sato_game(discarded=(fate_card("spent", P1),))
+
+    assert session.game.phase is not Phase.DYNASTY
+    assert ActivateAbility("sato") not in session.legal_actions(P1)

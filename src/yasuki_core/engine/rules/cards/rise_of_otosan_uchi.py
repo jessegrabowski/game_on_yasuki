@@ -30,6 +30,7 @@ from yasuki_core.engine.rules.board.counts_as import (
     AskedBy,
     Asking,
     CountsAs,
+    counts_as,
     register_counts_as,
     while_in_play,
 )
@@ -96,6 +97,7 @@ from yasuki_core.engine.rules.effects import (
     Unpayable,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
@@ -971,6 +973,103 @@ register_ability(
         targets=_kitsu_watanabe_experienced_targets,
         targeting_message="your Holding",
         effects=_kitsu_watanabe_experienced_effects,
+    ),
+)
+
+
+# --- Kokujin Sato (Experienced) ---
+
+
+SATO_HONOR_LOSS = 2
+SATO_CHI_PRICE = 2
+SATO_RESHUFFLE = "Reshuffle it into your deck"
+SATO_TAKE = f"Take it into your hand for {SATO_CHI_PRICE} Chi"
+
+
+@on(EnteredPlay, "kokujin_sato_experienced")
+def _kokujin_sato_experienced_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After Sato enters play, lose 2 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -SATO_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+@stat_grant("kokujin_sato_experienced")
+def _kokujin_sato_experienced_stat_grant(
+    game: GameState, source: L5RCard, card: L5RCard, stat: Stat
+) -> int:
+    """Sato has +1F/+1C for each Shadowlands Ring his controller holds in play."""
+    if card is not source or stat not in (Stat.FORCE, Stat.CHI):
+        return 0
+    return sum(
+        1
+        for ring in rings_in_play(game, source.owner, Asking.trait(source))
+        if keywords.SHADOWLANDS in effective_keywords(game, ring)
+    )
+
+
+def _kokujin_sato_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Every Fate card in your discard pile. Being a Shadowlands Ring opens a second branch rather
+    than deciding which cards the action reaches."""
+    discard = game.table.zones[ZoneKey(source.owner, ZoneRole.FATE_DISCARD)]
+    return [card.id for card in discard.cards]
+
+
+def _kokujin_sato_experienced_reshuffle(seat: PlayerId, card_id: str) -> list[Effect]:
+    """The card back into its owner's Fate deck, which the shuffle then hides it in."""
+    fate = DeckKey(seat, Side.FATE)
+    return [MoveToDeck(card_id, fate, from_top=0), ShuffleDeck(fate)]
+
+
+def _kokujin_sato_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Reshuffle the target, unless it is a Shadowlands Ring, which Sato may instead buy into your
+    hand with 2 Chi he never gets back."""
+    asking = Asking.action(source)
+    shadowlands_ring = counts_as(game, target, RingPrint, asking) and (
+        keywords.SHADOWLANDS in effective_keywords(game, target)
+    )
+    if not shadowlands_ring:
+        return _kokujin_sato_experienced_reshuffle(source.owner, target.id)
+    return [
+        AskOption(
+            seat=source.owner,
+            options=(SATO_RESHUFFLE, SATO_TAKE),
+            question=f"What does {source.name} do with {target.name}?",
+            resolver="kokujin_sato_experienced_ring",
+            source_id=source.id,
+            resolver_context=(target.id,),
+        )
+    ]
+
+
+@choice_resolver("kokujin_sato_experienced_ring")
+def _resolve_kokujin_sato_experienced_ring(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """The Chi is permanent, so it is spent whether or not the Ring is ever cast."""
+    (ring,) = resolver_context
+    if chosen[0] == SATO_RESHUFFLE:
+        return _kokujin_sato_experienced_reshuffle(seat, ring)
+    return [
+        GrantModifier(source_id, source_id, Stat.CHI, -SATO_CHI_PRICE, Duration.PERMANENT),
+        MoveToHand(ring, seat),
+    ]
+
+
+register_ability(
+    "kokujin_sato_experienced",
+    Ability(
+        timings=(ActionTiming.DYNASTY,),
+        cost=no_cost,
+        targets=_kokujin_sato_experienced_targets,
+        targeting_message="a Fate card in your discard pile",
+        effects=_kokujin_sato_experienced_effects,
     ),
 )
 
