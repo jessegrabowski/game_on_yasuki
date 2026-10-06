@@ -1949,6 +1949,71 @@ def test_the_prompt_box_offers_only_the_strike_while_a_duel_asks_to_focus(board)
     assert not window.field.selecting
 
 
+YOJIMBO_OPTION = "Create and Recruit a Samurai Yojimbo"
+RING_PICK = "Put this Ring into play"
+
+
+@choice_resolver("presenter_named_answer", prompt="Pick a Ring to put into play", pick=RING_PICK)
+def _named_answer(game, source_id, chosen, seat):
+    return []
+
+
+@pytest.fixture
+def a_ring_or_the_yojimbo(board):
+    """Tamori Tsushima's shape in front of the presenter: one Ring in hand to name, and one option
+    beside it that is not a card."""
+    presenter, window, session = board
+    ring = L5RCard.of(
+        ActionPrint, id="ring", name="Ring", printed_id="ring", side=Side.FATE, owner=P1
+    )
+    session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(session.game.table, ring))
+    session.game.pending = ChooseCards(
+        seat=P1,
+        candidates=("ring",),
+        minimum=1,
+        maximum=1,
+        resolver="presenter_named_answer",
+        options=(YOJIMBO_OPTION,),
+    )
+    presenter.present()
+    return presenter, window, session
+
+
+def test_the_prompt_box_offers_only_the_options_of_a_question_named_one_at_a_time(
+    a_ring_or_the_yojimbo,
+):
+    _, window, _ = a_ring_or_the_yojimbo
+
+    # Cancel because nothing has changed on the board yet. No confirm, because naming one thing is
+    # the whole answer.
+    assert _buttons(window) == [YOJIMBO_OPTION, "Cancel"]
+    assert not window.field.selecting
+
+
+def test_a_card_of_a_question_named_one_at_a_time_offers_its_own_entry(a_ring_or_the_yojimbo):
+    presenter, window, _ = a_ring_or_the_yojimbo
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("ring")
+
+    assert [label for label, _ in offered] == [RING_PICK]
+
+
+def test_a_card_the_question_does_not_offer_carries_no_entry(a_ring_or_the_yojimbo):
+    presenter, window, session = a_ring_or_the_yojimbo
+    other = L5RCard.of(
+        ActionPrint, id="other", name="Other", printed_id="other", side=Side.FATE, owner=P1
+    )
+    session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(session.game.table, other))
+    offered = []
+    window.popup_at_pointer = lambda entries: offered.extend(entries)
+
+    presenter.on_card_activated("other")
+
+    assert offered == []
+
+
 def test_a_hand_card_offers_focusing_it_while_the_duel_asks(board):
     presenter, window, session = board
     card = register(session.game.table, focus_card("fv", P1, 2, name="Ancestral Sword"))

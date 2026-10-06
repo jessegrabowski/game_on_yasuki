@@ -66,6 +66,23 @@ def _button_actions(actions: list[Action]) -> list[Action]:
     return [action for action in actions if type(action) in _ACTION_LABELS]
 
 
+def _answered_off_the_board(pending: DecisionRequest) -> bool:
+    """Whether a question is answered somewhere other than a board selection: on the prompt's
+    buttons or spinner, or from a card's own menu."""
+    if isinstance(pending, ChooseCards):
+        return pending.names_one_answer
+    return isinstance(
+        pending,
+        ChooseAmount
+        | ChooseOption
+        | Confirm
+        | ChooseBattlefield
+        | ChooseDebugSeat
+        | FocusOrStrike
+        | ChooseNextTrigger,
+    )
+
+
 class Presenter:
     """Turns what the engine wants next into what the player sees, and the player's answers back
     into engine calls.
@@ -121,16 +138,7 @@ class Presenter:
             # Units already sent stay pickable: the lane is where they are, and picking them there
             # is how they are brought home or sent somewhere else.
             field.begin_selection({assignment(token)[0] for token in pending.candidates})
-        elif pending is not None and not isinstance(
-            pending,
-            ChooseAmount
-            | ChooseOption
-            | Confirm
-            | ChooseBattlefield
-            | ChooseDebugSeat
-            | FocusOrStrike
-            | ChooseNextTrigger,
-        ):
+        elif pending is not None and not _answered_off_the_board(pending):
             # A payment's candidate producers become selectable and preview as bowed when picked. An
             # amount is named on the prompt's spinner, a yes/no question on its buttons and a
             # trigger from its card's menu, so none of them puts the board into selection mode.
@@ -319,13 +327,11 @@ class Presenter:
         if isinstance(pending, ChooseOption):
             # An outcome the card spells out rather than anything on the board: "gain or lose" or
             # "which player". It is read as a list of wordings and answered by picking one.
-            options: list[ButtonSpec] = [
-                (option, lambda chosen=option: self.submit_answer((chosen,)), True)
-                for option in pending.candidates
-            ]
-            if runner.can_cancel():
-                options.append(("Cancel", self.cancel, True))
-            return pending.prompt(), options
+            return pending.prompt(), self._named_buttons(pending.candidates)
+        if isinstance(pending, ChooseCards) and pending.names_one_answer:
+            # Only the options. Every card answer is offered on the card it names, because an
+            # answer that is a card belongs with the card.
+            return pending.prompt(), self._named_buttons(pending.options)
         if isinstance(pending, FocusOrStrike):
             # Only the strike. Every focus source is offered on the card or the deck it comes from,
             # because an option belongs with the thing that produces it, and the prompt box is for
@@ -538,6 +544,29 @@ class Presenter:
         self._duel_read = None if duel is None else duel.ordinal
         self.present()
 
+    def _named_buttons(self, labels: tuple[str, ...]) -> list[ButtonSpec]:
+        """A button per answer worded in the prompt box, and Cancel while backing out is allowed."""
+        buttons: list[ButtonSpec] = [
+            (label, lambda chosen=label: self.submit_answer((chosen,)), True) for label in labels
+        ]
+        if self.host.runner.can_cancel():
+            buttons.append(("Cancel", self.cancel, True))
+        return buttons
+
+    def _pick_items(self, card_id: str) -> list[tuple[str, Callable[[], None]]]:
+        """The entry one candidate card offers to a question answered by naming one thing, or
+        nothing when no such question is open.
+
+        An answer that is a card is offered on the card, so the player gives it by pointing at the
+        card, and the prompt box carries the answers that are not cards.
+        """
+        pending = self.host.runner.pending
+        if not isinstance(pending, ChooseCards) or not pending.names_one_answer:
+            return []
+        if card_id not in pending.candidates:
+            return []
+        return [(pending.pick_label, lambda: self.submit_answer((card_id,)))]
+
     def _focus_items(self, token: str) -> list[tuple[str, Callable[[], None]]]:
         """The focus offered for one source, or nothing when the duel is not asking for one.
 
@@ -626,7 +655,7 @@ class Presenter:
             self.window.popup_at_pointer(self._assignment_menu())
             return
         self._offer_with(
-            self._focus_items(focus_token(card_id)),
+            self._pick_items(card_id) + self._focus_items(focus_token(card_id)),
             runner.province_menu(card_id)
             + runner.hand_menu(card_id)
             + runner.ability_menu(card_id)
