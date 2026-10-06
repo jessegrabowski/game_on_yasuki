@@ -426,7 +426,6 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     # row is built from the newest once every file is read. Rules text folds separately, from the
     # newest printing that carries any.
     printings: dict[str, list[tuple[datetime.date | None, dict]]] = {}
-    latest_text: dict[str, list[tuple[datetime.date | None, str]]] = {}
 
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute("SELECT set_name, set_id, set_slug, release_date FROM l5r_sets")
@@ -447,10 +446,6 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             for entry in data.get("cards", []):
                 card_id = card_identity.card_id(entry)
                 printings.setdefault(card_id, []).append((set_date, entry))
-
-                entry_text = entry.get("text")
-                if entry_text:
-                    latest_text.setdefault(card_id, []).append((set_date, entry_text))
 
                 for fmt in entry.get("legality", []):
                     formats.add(fmt)
@@ -495,9 +490,11 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
         # Set each card's standing rules text to its most-recent printing (MRP standard). This runs
         # before errata folding so an erratum, being the newest revision, still wins over the
         # printing.
-        for card_id, dated_texts in latest_text.items():
-            text = most_recent_printing(dated_texts)
-            if text is not None and card_id in cards:
+        for card_id, dated_entries in printings.items():
+            dated_texts = [
+                (date, entry["text"]) for date, entry in dated_entries if entry.get("text")
+            ]
+            if (text := most_recent_printing(dated_texts)) is not None:
                 cards[card_id][_RULES_TEXT_COL] = text
 
         # Fold each errata'd card's newest revision onto its cards row so every existing read path
