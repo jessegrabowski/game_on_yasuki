@@ -14,8 +14,7 @@ def _okura_is_released_interrupt(game: GameState, source: L5RCard, effect: Fear)
     """ "Interrupt: After any Fear effect from the action bows a card, destroy it."
 
     The bow still happens, so a trait reading "after this bows a card" still fires, and the
-    destruction follows it. Played against one Fear effect: an action producing several needs it
-    played against each.
+    destruction follows it. One play answers every Fear effect the action holds.
     """
     return Interruption(
         replace(effect, outcome=(*effect.outcome, Destroy(effect.target_id, effect.cause)))
@@ -27,5 +26,6 @@ register_interrupt(
     Interrupt(
         answers=Fear,
         interrupt=_okura_is_released_interrupt,
+        answers_every=True,
     ),
 )
