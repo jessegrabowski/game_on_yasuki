@@ -3,6 +3,12 @@ yasuki_core.card_identity
 
 .. currentmodule:: yasuki_core.card_identity
 
+.. rubric:: Classes
+
+.. autosummary::
+
+    NameIndex
+
 .. rubric:: Functions
 
 .. autosummary::
@@ -13,6 +19,7 @@ yasuki_core.card_identity
     experience_label
     extended_title
     name_index
+    printed_sets
     resolve_name
     retired_ids
 

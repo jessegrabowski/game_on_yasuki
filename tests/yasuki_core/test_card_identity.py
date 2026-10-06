@@ -130,3 +130,29 @@ def test_a_retired_id_is_not_answered_by_another_cards_extended_title():
     index = name_index([personality, follower], retired)
 
     assert resolve_name(index, "Aulus", retired) is follower
+
+
+FOLLOWER = {
+    "card_id": "aulus_goc",
+    "name": "Aulus",
+    "extended_title": "Aulus",
+    "prints": [{"set_name": "Gates of Chaos"}],
+}
+PERSONALITY = {
+    "card_id": "aulus_cr3",
+    "name": "Aulus",
+    "extended_title": "Aulus",
+    "prints": [{"set_name": "Chaos Reigns Part III"}],
+}
+
+
+@pytest.mark.parametrize(
+    "set_name, expected",
+    [("Chaos Reigns Part III", PERSONALITY), ("Gates of Chaos", FOLLOWER), (None, FOLLOWER)],
+    ids=["personality-set", "follower-set", "no-set"],
+)
+def test_the_line_set_tells_apart_cards_sharing_a_title(set_name, expected):
+    retired = {"aulus": "aulus_goc"}
+    index = name_index([PERSONALITY, FOLLOWER], retired)
+
+    assert resolve_name(index, "Aulus", set_name, retired) is expected

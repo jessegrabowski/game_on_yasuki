@@ -1,4 +1,4 @@
-import { $, debounce, scrollToSelected, deckSide, stripUnique } from './helpers.js';
+import { $, debounce, scrollToSelected, deckSide, lookupKey, stripUnique } from './helpers.js';
 import { fetchJSON } from './api.js';
 import {
   addCard,
@@ -470,16 +470,21 @@ async function doImportDeck(text, { silent = false } = {}) {
   const parsed = parseDeckYaml(text);
 
   const allEntries = [...parsed.pre_game, ...parsed.dynasty, ...parsed.fate];
-  const names = new Set();
+  // Each name travels with its line's set, which tells apart two cards that share a title.
+  const lines = new Map();
   allEntries.forEach((e) => {
-    names.add(stripUnique(e.name)); // a hand-edited deck may carry the ◆ unique marker
-    if (e.art?.donorName) names.add(stripUnique(e.art.donorName));
+    lines.set(lookupKey(e.name, e.setName), [stripUnique(e.name), e.setName || '']);
+    if (e.art?.donorName) {
+      lines.set(lookupKey(e.art.donorName, e.art.donorSet), [stripUnique(e.art.donorName), e.art.donorSet || '']);
+    }
   });
-  const uniqueNames = [...names];
-  if (uniqueNames.length === 0) return;
+  if (lines.size === 0) return;
 
   const params = new URLSearchParams();
-  uniqueNames.forEach((n) => params.append('name', n));
+  lines.forEach(([name, setName]) => {
+    params.append('name', name);
+    params.append('set', setName);
+  });
 
   let cardsByName = {};
   try {
@@ -504,7 +509,7 @@ async function doImportDeck(text, { silent = false } = {}) {
   })) {
     const side = SIDE_MAP[section];
     for (const entry of entries) {
-      const card = cardsByName[stripUnique(entry.name).toLowerCase()];
+      const card = cardsByName[lookupKey(entry.name, entry.setName)];
       if (!card) {
         unresolved.push(entry.name);
         continue;
@@ -540,7 +545,7 @@ async function doImportDeck(text, { silent = false } = {}) {
 // prints' era/layout, recompose the art client-side. Returns true on success, false to fall back to
 // a plain print.
 async function addImportedCustom(side, recipientCard, recipientPrint, entry, cardsByName, unresolved) {
-  const donorCard = cardsByName[stripUnique(entry.art.donorName || '').toLowerCase()];
+  const donorCard = cardsByName[lookupKey(entry.art.donorName || '', entry.art.donorSet)];
   if (!recipientPrint || !donorCard) {
     unresolved.push(entry.art.donorName || '(art donor)');
     return false;

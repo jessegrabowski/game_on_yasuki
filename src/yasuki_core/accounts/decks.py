@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import psycopg
 
 from yasuki_core.decklist import parse_deck_yaml
-from yasuki_core.card_identity import current_id, resolve_name
+from yasuki_core.card_identity import NameIndex, current_id, resolve_name
 
 # The three deck sections, in display order. A section name is also the persisted ``side`` value, so
 # the parser keys, the YAML headers, and the deck_cards.side check constraint stay in lockstep.
@@ -56,7 +56,7 @@ def _display_name(record: dict) -> str:
     return record.get("extended_title") or record["name"]
 
 
-def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCard]:
+def resolve_deck_cards(parsed: dict, name_index: NameIndex[dict]) -> list[DeckCard]:
     """Resolve a parsed name-based decklist into validated, id-based deck cards.
 
     This is both the save-time serializer and its validation: every named card (and every art-swap
@@ -69,8 +69,8 @@ def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCa
     parsed : dict
         The output of ``parse_deck_yaml``: ``pre_game`` / ``dynasty`` / ``fate`` lists of entries,
         each ``{name, count, set_name, art}`` where ``art`` is ``{name, set_name}`` or None.
-    name_index : dict mapping str to dict
-        Slug to card record, as built by :func:`~yasuki_core.card_identity.name_index`.
+    name_index : :class:`~yasuki_core.card_identity.NameIndex`
+        The candidate cards, as built by :func:`~yasuki_core.card_identity.name_index`.
 
     Returns
     -------
@@ -89,14 +89,14 @@ def resolve_deck_cards(parsed: dict, name_index: dict[str, dict]) -> list[DeckCa
 
     for side in SIDES:
         for entry in parsed.get(side, []):
-            record = resolve_name(name_index, entry["name"])
+            record = resolve_name(name_index, entry["name"], entry.get("set_name"))
             if record is None:
                 unknown.append(entry["name"])
                 continue
             donor_id = donor_set = None
             art = entry.get("art")
             if art:
-                donor = resolve_name(name_index, art["name"])
+                donor = resolve_name(name_index, art["name"], art.get("set_name"))
                 if donor is None:
                     unknown.append(art["name"])
                     continue
@@ -288,7 +288,7 @@ def to_yaml(
     return "\n".join(lines) + "\n"
 
 
-def deck_from_yaml(text: str, name_index: dict[str, dict]) -> list[DeckCard]:
+def deck_from_yaml(text: str, name_index: NameIndex[dict]) -> list[DeckCard]:
     """Parse and resolve a YAML decklist in one step. The import-and-validate entry point."""
     return resolve_deck_cards(parse_deck_yaml(text), name_index)
 

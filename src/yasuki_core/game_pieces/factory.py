@@ -24,7 +24,7 @@ from yasuki_core.game_pieces.prints import (
     WindPrint,
 )
 from yasuki_core.game_pieces.constants import RULEBOOK_PROXY_IDS, AttachmentType, Element, Side
-from yasuki_core.card_identity import name_index, resolve_name
+from yasuki_core.card_identity import NameIndex, name_index, resolve_name
 
 # The print each database card type resolves to, per deck section. A section the record's type is
 # unknown in falls back to that section's base print.
@@ -106,7 +106,7 @@ def resolve_decklist(
     next_id = 0
     for section, target in sections.items():
         for entry in parsed.get(section, []):
-            record = resolve_name(index, entry["name"])
+            record = resolve_name(index, entry["name"], entry.get("set_name"))
             if record is None:
                 resolved.unresolved.append(entry["name"])
                 continue
@@ -201,7 +201,7 @@ def _select_print(record: dict, set_name: str | None) -> dict | None:
 
 
 def _art_swap(
-    record: dict, front_print: dict, art: dict, name_index: dict[str, dict]
+    record: dict, front_print: dict, art: dict, name_index: NameIndex[dict]
 ) -> dict | None:
     """The client-side art-swap payload for a card whose deck entry borrows another printing's art.
 
@@ -209,7 +209,7 @@ def _art_swap(
     Everything the browser canvas needs to recomposite the borrowed art onto the recipient frame.
     Returns None when the donor card or a usable donor print is absent, leaving the recipient's own
     art to stand."""
-    donor_record = resolve_name(name_index, art["name"])
+    donor_record = resolve_name(name_index, art["name"], art.get("set_name"))
     if donor_record is None:
         return None
     donor_print = _select_print(donor_record, art.get("set_name"))
@@ -234,7 +234,7 @@ def _entry_prints(
     by_id: dict[str, dict],
     *,
     art: dict | None = None,
-    name_index: dict[str, dict] | None = None,
+    name_index: NameIndex[dict] | None = None,
     creates: tuple[str, ...] = (),
 ) -> tuple[CardPrint, CardPrint | None]:
     """The print a deck entry's cards present, and the print of their back face if they have one.
@@ -254,8 +254,8 @@ def _entry_prints(
         Every resolved record by card id, for looking up a double-faced card's back.
     art : dict, optional
         The entry's borrowed-art request, as ``{name, set_name}``. Default none.
-    name_index : dict mapping str to dict, optional
-        The case-insensitive name index, for resolving the art donor. Default none.
+    name_index : :class:`~yasuki_core.card_identity.NameIndex`, optional
+        The index decklist names resolve through, for the art donor. Default none.
     creates : tuple of str, optional
         Token ids this card can create in play. Default empty.
 

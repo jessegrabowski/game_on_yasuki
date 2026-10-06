@@ -1,5 +1,6 @@
 import re
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping
+from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
 
@@ -92,9 +93,35 @@ def current_id(card_id: str, retired: Mapping[str, str | None] | None = None) ->
     return card_id
 
 
+def printed_sets(record: Mapping) -> list[str]:
+    """The sets a card record's ``prints`` list says it was printed in."""
+    return [printing["set_name"] for printing in record.get("prints") or ()]
+
+
+@dataclass(frozen=True, slots=True)
+class NameIndex[R: Mapping]:
+    """Card records keyed by the slugs a decklist name resolves through.
+
+    Attributes
+    ----------
+    by_slug : mapping of str to mapping
+        Each card's id, then the slug of its current extended title, to the card.
+    sharing : mapping of str to tuple of mapping
+        The slug of an extended title two or more cards share, to those cards.
+    sets_of : callable
+        The names of the sets a card was printed in.
+    """
+
+    by_slug: Mapping[str, R]
+    sharing: Mapping[str, tuple[R, ...]]
+    sets_of: Callable[[R], Iterable[str]]
+
+
 def name_index[R: Mapping](
-    records: Iterable[R], retired: Mapping[str, str | None] | None = None
-) -> dict[str, R]:
+    records: Iterable[R],
+    retired: Mapping[str, str | None] | None = None,
+    sets_of: Callable[[R], Iterable[str]] = printed_sets,
+) -> NameIndex[R]:
     """Index card records by the slugs a decklist name resolves through.
 
     A deck file names a card by the extended title it showed when the deck was written, and that
@@ -108,29 +135,61 @@ def name_index[R: Mapping](
         Card records, each carrying ``card_id``, ``name`` and optionally ``extended_title``.
     retired : mapping of str to str or None, optional
         Retired id to successor. Default is the committed list, :func:`retired_ids`.
+    sets_of : callable, optional
+        The names of the sets a record was printed in, which tell apart cards sharing a title.
+        Default reads the record's ``prints`` list.
 
     Returns
     -------
-    dict mapping str to mapping
-        Slug to card record, for :func:`resolve_name`.
+    NameIndex
+        The index :func:`resolve_name` reads.
     """
     records = list(records)
     retired = retired_ids() if retired is None else retired
-    index = {record["card_id"]: record for record in records}
+    by_slug = {record["card_id"]: record for record in records}
+    titled: dict[str, list[R]] = {}
     for record in records:
         slug = card_slug(record.get("extended_title") or record["name"])
+        titled.setdefault(slug, []).append(record)
         if slug not in retired:
-            index.setdefault(slug, record)
-    return index
+            by_slug.setdefault(slug, record)
+    sharing = {slug: tuple(cards) for slug, cards in titled.items() if len(cards) > 1}
+    return NameIndex(by_slug, sharing, sets_of)
 
 
-def resolve_name[R](
-    index: Mapping[str, R], name: str, retired: Mapping[str, str | None] | None = None
+def resolve_name[R: Mapping](
+    index: NameIndex[R],
+    name: str,
+    set_name: str | None = None,
+    retired: Mapping[str, str | None] | None = None,
 ) -> R | None:
-    """The record a decklist ``name`` names in ``index``, following a retired id to its successor,
-    or None for a name no card answers to. ``retired`` defaults to the committed list."""
+    """The record a decklist line names.
+
+    Cards that share an extended title are told apart by the set the line names. Otherwise the
+    name's slug is looked up, a retired id followed to its successor.
+
+    Parameters
+    ----------
+    index : NameIndex
+        As built by :func:`name_index`.
+    name : str
+        The card name the line gives.
+    set_name : str, optional
+        The set the line gives, if any.
+    retired : mapping of str to str or None, optional
+        Retired id to successor. Default is the committed list, :func:`retired_ids`.
+
+    Returns
+    -------
+    mapping or None
+        The card, or None for a name no card answers to.
+    """
     slug = card_slug(name)
-    if slug in index:
-        return index[slug]
+    if set_name is not None:
+        for record in index.sharing.get(slug, ()):
+            if set_name in index.sets_of(record):
+                return record
+    if slug in index.by_slug:
+        return index.by_slug[slug]
     successor = current_id(slug, retired)
-    return index.get(successor) if successor is not None else None
+    return index.by_slug.get(successor) if successor is not None else None

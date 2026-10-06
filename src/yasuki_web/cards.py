@@ -115,24 +115,35 @@ async def list_cards(
 async def lookup_cards_by_name(
     request: Request,
     name: Annotated[list[str], Query(description="Card names to look up (repeatable)")] = [],
+    set_name: Annotated[
+        list[str],
+        Query(
+            alias="set",
+            description="The set each name's decklist line gives, aligned with name; empty for none",
+        ),
+    ] = [],
 ):
     """
     Look up cards by name for deck import.
 
-    Resolves each name as :func:`~yasuki_core.card_identity.resolve_name` does and returns the
-    card it names, keyed by the name lowercased, with its full list of prints for set-specific
-    resolution. A name no card answers to is absent.
+    Resolves each name as :func:`~yasuki_core.card_identity.resolve_name` does, the set its line
+    gives telling apart cards that share a title, and returns the card it names with its full list
+    of prints. A card is keyed by its name lowercased, followed by `` [Set]`` when a set was given.
+    A name no card answers to is absent.
     """
     if len(name) > 200:
         raise HTTPException(status_code=400, detail="Too many names (max 200)")
+    if set_name and len(set_name) != len(name):
+        raise HTTPException(status_code=400, detail="Give one set per name, or none")
     try:
         cards = await to_thread(get_cards_by_names, name)
         index = name_index(cards)
-        by_name = {
-            requested.lower(): card
-            for requested in name
-            if (card := resolve_name(index, requested)) is not None
-        }
+        by_name = {}
+        for requested, requested_set in zip(name, set_name or [""] * len(name)):
+            card = resolve_name(index, requested, requested_set or None)
+            if card is not None:
+                key = requested.lower() + (f" [{requested_set}]" if requested_set else "")
+                by_name[key] = card
         return {"cards": by_name, "found": len(cards)}
     except Exception as e:
         logger.error(f"Error looking up cards by name: {e}")

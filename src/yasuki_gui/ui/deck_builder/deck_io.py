@@ -159,7 +159,10 @@ def import_deck_yaml(
     from yasuki_gui.ui.deck_builder.deck_data import DeckState
 
     parsed = parse_deck_yaml(text)
-    cards_by_slug = name_index(repository.cards_by_id.values())
+    cards_by_slug = name_index(
+        repository.cards_by_id.values(),
+        sets_of=lambda card: [p["set_name"] for p in repository.get_prints(card["card_id"])],
+    )
 
     state = DeckState()
     unresolved = []
@@ -170,7 +173,7 @@ def import_deck_yaml(
         ("fate", parsed["fate"]),
     ]:
         for entry in entries:
-            card, card_id = _resolve_card(entry["name"], cards_by_slug)
+            card, card_id = _resolve_card(entry["name"], entry["set_name"], cards_by_slug)
             if not card:
                 unresolved.append(entry["name"])
                 continue
@@ -206,7 +209,7 @@ def import_deck_yaml(
 def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_slug, repository):
     """Register the art-swap recipe for an ``{art: ...}`` entry. Return its id or None if
     unresolved."""
-    donor = resolve_name(cards_by_slug, art["name"])
+    donor = resolve_name(cards_by_slug, art["name"], art["set_name"])
     if not donor:
         return None
     donor_card_id = donor["card_id"]
@@ -226,8 +229,8 @@ def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_s
     return repository.register_custom_print(recipe)
 
 
-def _resolve_card(name, cards_by_slug):
-    card = resolve_name(cards_by_slug, name)
+def _resolve_card(name, set_name, cards_by_slug):
+    card = resolve_name(cards_by_slug, name, set_name)
     if card is None:
         return None, None
     return card, card["card_id"]
