@@ -17,7 +17,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     assignment_token,
 )
-from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, TurnBoundary
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.session import EngineSession
@@ -52,7 +52,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     Pass,
     PlayInterrupt,
 )
-from yasuki_core.engine.rules.turn.structure import END_OF_TURN, RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Boundary, RoundKind
 from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey
@@ -1166,3 +1166,80 @@ def test_struggle_on_keeps_a_named_follower_with_its_personality_when_none_can_t
     spear = game.table.cards_by_id["spear"]
     assert game.pending is None
     assert spear.bowed and attachments_of(game, game.table.cards_by_id["leader"]) == (spear,)
+
+
+# --- Ruby of Iuchiban (Experienced 2) ---
+
+RUBY = "ruby_of_iuchiban_experienced_2"
+
+
+def _ruby_game(*, mine=(3, 5), theirs=(2, 4)):
+    """The Ruby on P1's highest-Chi Personality, with ``mine`` and ``theirs`` giving each side's
+    Chi values. Starting the game announces the beginning of P1's turn, so the Ruby has already
+    taken P1's lowest by the time a test looks."""
+    game = two_seat_game()
+    for seat, values in ((P1, mine), (P2, theirs)):
+        for index, chi in enumerate(values):
+            put_in_play(game, personality(f"{seat.name}-{index}", owner=seat, chi=chi))
+    attached(game, attachment("ruby", printed_id=RUBY), f"P1-{len(mine) - 1}")
+    return EngineSession.start(game.table, P1)
+
+
+def test_the_ruby_costs_three_honor_to_enter_play():
+    session = _ruby_game()
+    before = session.game.table.seats[P1].honor
+
+    fire(session.game, EnteredPlay("ruby"))
+
+    assert session.game.table.seats[P1].honor == before - 3
+
+
+def test_the_ruby_takes_its_own_controllers_personality_too():
+    session = _ruby_game()
+
+    assert "P1-0" not in _on_board(session)
+    assert {"P1-1", "ruby"} <= _on_board(session)
+
+
+def test_the_ruby_takes_the_active_players_lowest_chi_personality_each_turn():
+    session = _ruby_game()
+
+    fire(session.game, TurnBoundary(P2, Boundary.BEGINNING))
+
+    assert "P2-0" not in _on_board(session)
+    assert {"P1-1", "P2-1"} <= _on_board(session)
+
+
+def test_the_ruby_reads_chi_as_modified_rather_than_as_printed():
+    session = _ruby_game(theirs=(4, 6))
+    attached(
+        session.game,
+        attachment("millstone", owner=P2, attachment_type=AttachmentType.FOLLOWER, chi_modifier=-4),
+        "P2-1",
+    )
+
+    fire(session.game, TurnBoundary(P2, Boundary.BEGINNING))
+
+    assert "P2-1" not in _on_board(session)
+    assert "P2-0" in _on_board(session)
+
+
+def test_the_ruby_lets_the_active_player_break_a_tie():
+    session = _ruby_game(theirs=(2, 2))
+
+    fire(session.game, TurnBoundary(P2, Boundary.BEGINNING))
+    asked = session.game.pending
+    assert asked.seat is P2 and set(asked.candidates) == {"P2-0", "P2-1"}
+
+    submit(session.game, DecisionResponse(("P2-1",)))
+
+    assert "P2-1" not in _on_board(session)
+    assert "P2-0" in _on_board(session)
+
+
+def test_the_ruby_asks_nothing_when_the_active_player_has_no_personalities():
+    session = _ruby_game(theirs=())
+
+    fire(session.game, TurnBoundary(P2, Boundary.BEGINNING))
+
+    assert session.game.pending is None

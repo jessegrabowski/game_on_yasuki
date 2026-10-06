@@ -73,6 +73,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     EnteredPlay,
     NextTime,
     ProvinceDestroyed,
+    TurnBoundary,
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.decisions import OneGroup, PickLimit, TotalAtMost
@@ -80,7 +81,7 @@ from yasuki_core.engine.rules.rulebook.recruit import proclaim_gain
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower, unit_force
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
-from yasuki_core.engine.rules.turn.structure import END_OF_TURN
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Boundary
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import rightmost_province, sincerity_seed_targets
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -371,6 +372,55 @@ register_interrupt(
         cost=_ninube_aitso_doji_yeiko_experienced_cost,
     ),
 )
+
+
+# --- Ruby of Iuchiban (Experienced 2) ---
+
+
+RUBY_HONOR_LOSS = 3
+
+
+@on(EnteredPlay, "ruby_of_iuchiban_experienced_2")
+def _ruby_of_iuchiban_experienced_2_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After the Ruby enters play, lose 3 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -RUBY_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+def _ruby_of_iuchiban_experienced_2_lowest(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """``seat``'s Personalities tied for the lowest Chi, which is every one of them when they all
+    stand level."""
+    held = owned_personalities(game, seat)
+    if not held:
+        return ()
+    lowest = min(effective_chi(game, card) for card in held)
+    return tuple(card.id for card in held if effective_chi(game, card) == lowest)
+
+
+@on(TurnBoundary, "ruby_of_iuchiban_experienced_2", boundary=Boundary.BEGINNING)
+def _ruby_of_iuchiban_experienced_2_turn_boundary(ctx: TriggerContext) -> list[Effect]:
+    """Every turn costs the active player their lowest-Chi Personality, whoever controls the Ruby.
+    A tie is theirs to break."""
+    event = ctx.event
+    if not isinstance(event, TurnBoundary):
+        return []
+    lowest = _ruby_of_iuchiban_experienced_2_lowest(ctx.game, event.seat)
+    if not lowest:
+        return []
+    if len(lowest) == 1:
+        return [Destroy(lowest[0], Trait(ctx.card.id))]
+    return [Choose(event.seat, lowest, 1, 1, "ruby_of_iuchiban_experienced_2_tie", ctx.card.id)]
+
+
+@choice_resolver(
+    "ruby_of_iuchiban_experienced_2_tie",
+    prompt="Choose which of your Personalities the Ruby takes",
+)
+def _resolve_ruby_of_iuchiban_experienced_2_tie(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Destroy(chosen[0], Trait(source_id))]
 
 
 # --- Sasada, Pearl Champion (Experienced) ---
