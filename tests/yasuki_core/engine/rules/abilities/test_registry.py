@@ -237,6 +237,29 @@ def test_an_unlabeled_ability_shows_the_printed_line_its_index_names():
     assert ability_label(card, _labelless(printed_index=1)) == "Open: Draw a card."
 
 
+def test_a_flipped_stronghold_shows_the_printed_line_of_its_back():
+    castle = L5RCard.of(
+        StrongholdPrint,
+        id="castle",
+        printed_id="castle",
+        name="Castle",
+        side=Side.STRONGHOLD,
+        owner=PlayerId.P1,
+        text="<b>Battle:</b> Bow a target Follower.",
+        back_card_id="castle__back",
+        back_printed=StrongholdPrint(
+            name="Castle",
+            side=Side.STRONGHOLD,
+            printed_id="castle__back",
+            text="<b>Open:</b> Draw a card.",
+        ),
+    )
+
+    castle.flip_face()
+
+    assert ability_label(castle, _labelless()) == "Open: Draw a card."
+
+
 def test_a_labeled_ability_shows_its_label_whatever_the_card_prints():
     card = _printed("<b>Open:</b> Draw a card.")
 

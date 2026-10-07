@@ -79,6 +79,7 @@ from yasuki_core.engine.rules.triggers import (
     fire_all,
     lapse_ongoing,
     on,
+    printed_trait,
     reach_moment,
     resolve_delayed,
     resolve_action_effects,
@@ -90,7 +91,12 @@ from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH, counter_from_key
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.prints import FatePrint, HoldingPrint, PersonalityPrint
+from yasuki_core.game_pieces.prints import (
+    FatePrint,
+    HoldingPrint,
+    PersonalityPrint,
+    StrongholdPrint,
+)
 
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -2024,3 +2030,26 @@ def test_an_effect_delayed_to_a_cards_destruction_waits_for_that_card_and_resolv
     resolve_effects(game, [Destroy("waited", PlayerId.P2)])
     assert game.table.seats[PlayerId.P1].honor == 1
     assert game.delayed == []
+
+
+def test_a_waiting_trigger_on_a_flipped_card_is_named_by_its_backs_trait():
+    castle = L5RCard.of(
+        StrongholdPrint,
+        id="castle",
+        printed_id="castle",
+        name="Castle",
+        side=Side.STRONGHOLD,
+        owner=PlayerId.P1,
+        text="After your turn begins, gain 1 Honor.",
+        back_card_id="castle__back",
+        back_printed=StrongholdPrint(
+            name="Castle",
+            side=Side.STRONGHOLD,
+            printed_id="castle__back",
+            text="After you Recruit a Holding, draw a card.",
+        ),
+    )
+
+    castle.flip_face()
+
+    assert printed_trait(two_seat_game(), castle) == "After you Recruit a Holding, draw a card."
