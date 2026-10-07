@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     DuelDeclared,
     EnteredPlay,
     HonorChanged,
+    LastKnownState,
     NextTime,
     ProducingGold,
     TurnBoundary,
@@ -989,9 +990,8 @@ def test_destroy_effect_discards_the_card_and_emits_destroyed():
 
     events = apply_effect(game, Destroy(farm.id, PlayerId.P1))
 
-    assert events == [
-        Destroyed(farm.id, PlayerId.P1, Location.home(PlayerId.P1), controller=PlayerId.P1)
-    ]
+    left_as = LastKnownState(Location.home(PlayerId.P1), PlayerId.P1, force=0)
+    assert events == [Destroyed(farm.id, PlayerId.P1, left_as)]
     assert farm not in game.table.battlefield.cards
     assert farm in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
 
@@ -1011,7 +1011,7 @@ def test_destroying_your_farm_gives_rural_market_a_wealth_token():
     rural = _rural_market(game)
     farm = _keyworded_farm(game)
 
-    fire(game, Destroyed(farm.id, PlayerId.P1))
+    resolve_effects(game, [Destroy(farm.id, PlayerId.P1)])
 
     assert rural.counters == {"wealth": 1}
 
@@ -1021,7 +1021,7 @@ def test_rural_market_ignores_a_non_farm_destruction():
     rural = _rural_market(game)
     holding = _caravansary(game)  # a Holding, but not a Farm
 
-    fire(game, Destroyed(holding.id, PlayerId.P1))
+    resolve_effects(game, [Destroy(holding.id, PlayerId.P1)])
 
     assert rural.counters == {}
 
@@ -1031,7 +1031,7 @@ def test_rural_market_ignores_an_opponents_farm():
     rural = _rural_market(game, seat=PlayerId.P1)
     farm = _keyworded_farm(game, seat=PlayerId.P2, card_id="P2-a-farm")
 
-    fire(game, Destroyed(farm.id, PlayerId.P1))
+    resolve_effects(game, [Destroy(farm.id, PlayerId.P1)])
 
     assert rural.counters == {}
 
@@ -1796,9 +1796,8 @@ def test_a_destruction_nothing_acts_before_is_not_announced():
 
     resolve_effects(game, [Destroy(dying.id, PlayerId.P2)])
 
-    assert game.turn_events[before:] == (
-        Destroyed(dying.id, PlayerId.P2, Location.home(PlayerId.P1), PlayerId.P1),
-    )
+    left_as = LastKnownState(Location.home(PlayerId.P1), PlayerId.P1, force=2)
+    assert game.turn_events[before:] == (Destroyed(dying.id, PlayerId.P2, left_as),)
 
 
 def test_a_followers_trait_acts_before_its_personality_is_destroyed(reacting):

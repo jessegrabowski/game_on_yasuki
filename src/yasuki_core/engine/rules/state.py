@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.battle.records import AttackPhase
 from yasuki_core.engine.rules.duel.records import DuelRecord
 from yasuki_core.engine.rules.vocabulary.segments import DuelStep
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest
-from yasuki_core.engine.rules.vocabulary.game_events import GameEvent, NextTime
+from yasuki_core.engine.rules.vocabulary.game_events import GameEvent, LastKnownState, NextTime
 from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.modifiers import Ongoing
 from yasuki_core.engine.rules.turn.structure import (
@@ -149,6 +149,10 @@ class GameState:
     created_by : dict mapping str to str
         Each created card to the card that created it, kept for the life of the game so a card can
         still name what it made after the fact. Ephemeral and rebuilt by replay. Default empty.
+    last_known : dict mapping str to :class:`~.LastKnownState`
+        Each card an effect has moved out of play, as it last stood in play, which is what a
+        reference to it reads once it has left (CR, References to Other Points in Time). Ephemeral
+        and rebuilt by replay. Default empty.
     delayed : list of (Moment or NextTime, Effect)
         Effects held until a moment of play arrives or an event next names a card: the CR's delayed
         effects. Each is resolved and dropped when its moment or event comes, whether or not it
@@ -269,6 +273,7 @@ class GameState:
     ongoing: list[Ongoing] = field(default_factory=list)
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
+    last_known: dict[str, LastKnownState] = field(default_factory=dict)
     delayed: list[tuple[Moment | NextTime, object]] = field(default_factory=list)
     round_stack: list[ActionRound] = field(default_factory=list)
     responded: set[str] = field(default_factory=set)

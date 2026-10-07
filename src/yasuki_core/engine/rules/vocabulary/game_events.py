@@ -112,6 +112,28 @@ class CounterChanged:
 
 
 @dataclass(frozen=True, slots=True)
+class LastKnownState:
+    """A card as it stood before it moved, which is what a reference to it reads once it has gone
+    (CR, Created Cards; CR, References to Other Points in Time). Not an event: ``GameState.last_known``
+    keeps each card's from when it last left play, and :class:`Destroyed` carries the destroyed
+    card's, wherever it stood.
+
+    Attributes
+    ----------
+    location : Location
+        Where the card stood.
+    controller : PlayerId
+        The seat that controlled it. Control is ownership until the engine models the two apart.
+    force : int
+        Its Force, every modifier, token and attachment counted.
+    """
+
+    location: Location
+    controller: PlayerId
+    force: int
+
+
+@dataclass(frozen=True, slots=True)
 class Destroyed:
     """A card was destroyed, sent to a discard by destruction, distinct from being discarded from
     hand. ``cause`` names who or what destroyed it, which cards ask about: several react only to a
@@ -124,20 +146,15 @@ class Destroyed:
         The card destroyed.
     cause : PlayerId, Rulebook or Trait
         Who or what destroyed it.
-    location : Location, optional
-        Where the card stood when it was destroyed. It is in its discard by the time this is
-        announced, so a card reacting to a destruction "at this location" reads it here. Default
-        None, for a destruction announced without one.
-    controller : PlayerId, optional
-        The seat that controlled it. A created card leaves the table as it is destroyed, so a card
-        reacting to "a card you do not control" reads it here. Control is ownership until the
-        engine models the two apart. Default None, for a destruction announced without one.
+    left_as : LastKnownState
+        The card as it stood when it was destroyed, in play or wherever else it was. It is in its
+        discard, or off the table if created, by the time this is announced, so a card reacting to a
+        destruction "at this location" or of "a card you do not control" reads it here.
     """
 
     card_id: str
     cause: Cause
-    location: Location | None = None
-    controller: PlayerId | None = None
+    left_as: LastKnownState
 
 
 @dataclass(frozen=True, slots=True)

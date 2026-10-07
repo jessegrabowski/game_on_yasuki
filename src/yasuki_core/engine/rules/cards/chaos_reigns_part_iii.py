@@ -180,7 +180,7 @@ def _bayushi_gihei_reacts(ctx: TriggerContext, where: Location | None) -> list[E
 
 @on(Destroyed, "bayushi_gihei")
 def _bayushi_gihei_destroyed(ctx: TriggerContext) -> list[Effect]:
-    return _bayushi_gihei_reacts(ctx, ctx.event.location)
+    return _bayushi_gihei_reacts(ctx, ctx.event.left_as.location)
 
 
 @on(Dishonored, "bayushi_gihei")
@@ -667,7 +667,7 @@ def _matsu_hanshiro_deathseeker_fell_this_battle(game: GameState, seat: PlayerId
     ended = [index for index, event in enumerate(history) if isinstance(event, BattleEnded)]
     this_battle = history[ended[-1] + 1 :] if ended else history
     for event in this_battle:
-        if not isinstance(event, Destroyed) or event.controller is not seat:
+        if not isinstance(event, Destroyed) or event.left_as.controller is not seat:
             continue
         destroyed = game.table.cards_by_id.get(event.card_id)
         if destroyed is not None and has_keyword(game, destroyed, keywords.DEATHSEEKER):

@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroying,
     Dishonored,
     EnteredPlay,
+    LastKnownState,
     FavorDiscarded,
     ProvinceDestroyed,
     GameEvent,
@@ -414,23 +415,51 @@ class MoveToHand(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
         if card is not None:
-            ops.move_card(game.table, card, ZoneKey(self.seat, ZoneRole.HAND))
+            _move_card(game, card, ZoneKey(self.seat, ZoneRole.HAND))
         return []
 
 
-def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> tuple[L5RCard, ...]:
+def _as_it_stands(game: GameState, card: L5RCard) -> LastKnownState:
+    return LastKnownState(
+        location_of(game.table, card), card.owner, effective_stat(game, card, Stat.FORCE)
+    )
+
+
+def _in_play(game: GameState, card: L5RCard) -> bool:
+    return any(held is card for held in game.table.battlefield.cards)
+
+
+def _move_card(
+    game: GameState, card: L5RCard, dest: ZoneKey | DeckKey, **placement: object
+) -> None:
+    """Move ``card`` as an effect does, remembering it as it stood if it is leaving play, which is
+    what a later reference to it reads (CR, References to Other Points in Time). Every effect that
+    can take a card out of play moves it through here or through :func:`_remove_unit`, so a card
+    moving between places out of play keeps the record of when it last stood in play."""
+    if _in_play(game, card):
+        game.last_known[card.id] = _as_it_stands(game, card)
+    ops.move_card(game.table, card, dest, **placement)
+
+
+def _remove_unit(
+    game: GameState, card: L5RCard, *, banished: bool = False
+) -> tuple[tuple[L5RCard, LastKnownState], ...]:
     """Send ``card`` and everything attached to him out of play, to their discards or to their
-    banishes when ``banished``. Return the unit that left so the caller can announce each
-    departure in its own words (CR, Unit).
+    banishes when ``banished``. Return each member of the unit that left with how it stood, read
+    for the whole unit before any of it moved so each member's Force still counts the others, so
+    the caller can announce each departure in its own words (CR, Unit).
 
     A created card among them has no pile of either kind and is taken off the table instead, which
     the move itself sees to (CR, Create). It still announces its departure, because a card reacting
     to a Follower being destroyed does not care where the Follower came from.
     """
-    unit = unit_of(game, card)
-    for member in unit:
+    in_play = _in_play(game, card)
+    stood = tuple((member, _as_it_stands(game, member)) for member in unit_of(game, card))
+    for member, state in stood:
+        if in_play:
+            game.last_known[member.id] = state
         ops.move_card(game.table, member, pile_for(member, banished=banished))
-    return unit
+    return stood
 
 
 def _leaves_for_pile(game: GameState, card_id: str, *, banished: bool) -> bool:
@@ -513,8 +542,7 @@ class Destroy(Effect):
         ):
             record_terrain_destroyed(game, destroyer, card, battlefield=location.battlefield)
         return [
-            Destroyed(member.id, self.cause, location, controller=member.owner)
-            for member in _remove_unit(game, card)
+            Destroyed(member.id, self.cause, stood) for member, stood in _remove_unit(game, card)
         ]
 
 
@@ -548,8 +576,8 @@ class Discard(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         if not self.would_happen(game):
             return []
-        unit = _remove_unit(game, game.table.cards_by_id[self.card_id])
-        return [CardDiscarded(member.id, member.side, self.cause) for member in unit]
+        removed = _remove_unit(game, game.table.cards_by_id[self.card_id])
+        return [CardDiscarded(member.id, member.side, self.cause) for member, _ in removed]
 
 
 @dataclass(frozen=True, slots=True)
@@ -773,7 +801,7 @@ class PlaceInProvince(Effect):
         province = game.table.zones.get(self.zone)
         if card is None or province is None or not province.has_capacity():
             return []
-        ops.move_card(game.table, card, self.zone)
+        _move_card(game, card, self.zone)
         card.turn_face_up()
         return []
 
@@ -2202,7 +2230,7 @@ class PlaceOnDeck(Effect):
         for card_id in self.card_ids:
             card = game.table.cards_by_id.get(card_id)
             if card is not None:
-                ops.move_card(game.table, card, self.deck, to_bottom=self.to_bottom)
+                _move_card(game, card, self.deck, to_bottom=self.to_bottom)
         return []
 
 
@@ -2260,7 +2288,7 @@ class MoveToDeck(Effect):
         cards = game.table.decks[self.deck].cards
         landing_size = len(cards) - (1 if any(held is card for held in cards) else 0)
         index = self.from_bottom if self.from_bottom is not None else landing_size - self.from_top
-        ops.move_card(game.table, card, self.deck, deck_index=index)
+        _move_card(game, card, self.deck, deck_index=index)
         return []
 
 

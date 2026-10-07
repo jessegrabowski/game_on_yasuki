@@ -314,12 +314,12 @@ def _fields_of_slaughter_destroyed(ctx: TriggerContext) -> list[Effect]:
     """ "Gain 2 Honor after each time a card at this battlefield that you do not control is
     destroyed." """
     event = ctx.event
-    if not isinstance(event, Destroyed) or event.location is None:
+    if not isinstance(event, Destroyed):
         return []
     here = location_of(ctx.game.table, ctx.card).battlefield
-    if here is None or event.location.battlefield != here:
+    if here is None or event.left_as.location.battlefield != here:
         return []
-    if event.controller is None or event.controller is ctx.card.owner:
+    if event.left_as.controller is ctx.card.owner:
         return []
     return [GainHonor(ctx.card.owner, FIELDS_OF_SLAUGHTER_HONOR, source_id=ctx.card.id)]
 

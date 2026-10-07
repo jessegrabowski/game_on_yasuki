@@ -24,7 +24,7 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, PhaseStarted
+from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, LastKnownState, PhaseStarted
 from yasuki_core.engine.table import Location
 from yasuki_core.game_pieces.constants import AttachmentType, Element
 from yasuki_core.game_pieces.prints import RingPrint
@@ -150,7 +150,8 @@ def test_an_army_is_outnumbered_only_by_an_opposing_army_with_more_units():
 
 def test_the_phase_history_holds_what_happened_since_the_latest_phase_began():
     game = two_seat_game()
-    earlier, later = Destroyed("a", PlayerId.P1), Destroyed("b", PlayerId.P1)
+    stood = LastKnownState(Location.home(PlayerId.P1), PlayerId.P1, force=2)
+    earlier, later = Destroyed("a", PlayerId.P1, stood), Destroyed("b", PlayerId.P1, stood)
     game.turn_events = (
         earlier,
         PhaseStarted(Phase.ACTION),
