@@ -175,7 +175,7 @@ def test_a_phrase_whose_limits_seat_no_pair_is_not_offered():
         ability = ability_for(game, source)
 
         assert legality.legal_targets(game, source, ability) == ["P2-one", "P2-two", "P2-three"]
-        assert legality.first_phrase_reachable(game, source, ability) is False
+        assert legality.phrases_reachable(game, source, ability) is False
         assert ActivateAbility("P1-src") not in legality.legal_actions(game, P1)
 
 
@@ -188,5 +188,5 @@ def test_a_phrase_whose_limits_seat_a_pair_is_offered():
     with probe_ability(HEAVY_PAIR_PROBE, _heavy_pair_ability()):
         ability = ability_for(game, source)
 
-        assert legality.first_phrase_reachable(game, source, ability) is True
+        assert legality.phrases_reachable(game, source, ability) is True
         assert ActivateAbility("P1-src") in legality.legal_actions(game, P1)

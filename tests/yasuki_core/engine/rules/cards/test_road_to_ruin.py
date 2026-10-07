@@ -1237,7 +1237,9 @@ def test_desperate_melee_records_both_phrases_as_the_actions_targets():
     assert set(session.game.action_targets) == {"mine", "cheap"}
 
 
-def test_desperate_melee_destroys_your_own_followers_when_the_melee_reaches_none():
+def test_desperate_melee_is_not_played_with_no_enemy_follower_to_target():
+    # Its second phrase takes one to two enemy Followers, and an action is announced only when all
+    # of its targeting can be met (CR, Good Faith Rule).
     mine = personality("mine", gold_cost=6)
     melee = L5RCard.of(
         ActionPrint,
@@ -1251,20 +1253,8 @@ def test_desperate_melee_destroys_your_own_followers_when_the_melee_reaches_none
     session = combat_segment(
         [mine, personality("theirs", owner=P2)], {"mine": 0}, {"theirs": 0}, in_hand=[melee]
     )
-    attached(
-        session.game.table,
-        attachment("mine_own", attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
-        "mine",
-    )
 
-    session.act(P1, PlayStrategy("melee"))
-    session.submit(P1, DecisionResponse(("mine",)))
-
-    # The second phrase has nothing to point at, so it targets nothing and the sentence that
-    # destroys your Personality's own Followers still resolves.
-    assert session.game.pending is None
-    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
-    assert "mine_own" in {card.id for card in discard.cards}
+    assert PlayStrategy("melee") not in session.legal_actions(P1)
 
 
 # --- "Is That All?" ---

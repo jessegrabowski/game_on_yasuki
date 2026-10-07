@@ -14,7 +14,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     answerable,
     within_reach,
 )
-from yasuki_core.engine.rules.legality import group_targets, legal_targets
+from yasuki_core.engine.rules.legality import choosable_targets
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.game_pieces.cards import L5RCard
@@ -86,7 +86,7 @@ class SelectAbilityTarget:
         limits = group.conditions(game, source, self.picked)
         candidates = self.candidates
         if candidates is None:
-            candidates = tuple(group_targets(game, source, ability, group, self.picked))
+            candidates = tuple(choosable_targets(game, source, ability, self.picked))
         else:
             # The candidates were fixed before the cost was paid and the limits are read against
             # the board the cost left, so a cost that moved a ceiling can shut one of them out.
@@ -100,8 +100,8 @@ class SelectAbilityTarget:
             if not self.picked:
                 # An ability that targets after its cost and found nothing does nothing more.
                 return
-            # A later phrase the earlier picks left short targets nothing, and what the card makes
-            # of that is the card's business.
+            # A later phrase taking no card after the earlier picks targets nothing, and what the
+            # card makes of that is its business. Good Faith keeps a pick from leaving one short.
             _advance(game, self.card_id, self.ability_key, (*self.picked, ()))
             return
         game.pending = ChooseAbilityTarget(
@@ -154,7 +154,7 @@ def defer_ability(game: GameState, card: L5RCard, ability: Ability, *, plays_car
     if ability.targets_after_cost:
         game.stack.append(SelectAbilityTarget(card.id, None, ability.key))
     else:
-        targets = tuple(legal_targets(game, card, ability))
+        targets = tuple(choosable_targets(game, card, ability))
         game.stack.append(
             ApplyAbilityEffects(card.id, targets, ability.key)
             if ability.hits_every_target

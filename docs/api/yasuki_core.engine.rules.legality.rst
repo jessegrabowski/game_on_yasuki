@@ -10,7 +10,7 @@ yasuki_core.engine.rules.legality
     action_gold
     activatable
     can_proclaim
-    first_phrase_reachable
+    choosable_targets
     group_targets
     has_absent_ability
     has_presence
@@ -25,6 +25,7 @@ yasuki_core.engine.rules.legality
     permits
     permitted_timings
     permitted_timings_in
+    phrases_reachable
     playable
     recruit_cost
     seat_cards
