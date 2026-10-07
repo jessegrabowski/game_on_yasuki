@@ -118,8 +118,8 @@ def perform(game: GameState, action: Action) -> None:
     match action:
         case Pass():
             yield_priority(game, passed=True)
-        case Equip(card_id=card_id, invest=invest):
-            equip(game, card_id, invest=invest)
+        case Equip(card_id=card_id, invest=invest, discount=discount):
+            equip(game, card_id, invest=invest, discount=discount)
         case ActivateAbility(card_id=card_id, ability_key=ability_key):
             activate(game, card_id, ability_key)
             # Resolve the target, unless the cost's cascade paused for a decision first.

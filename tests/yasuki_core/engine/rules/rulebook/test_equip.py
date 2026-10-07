@@ -7,8 +7,10 @@ from yasuki_core.engine.rules.effects import AttachCard
 from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.rulebook.equip import (
     ATTACH_RESTRICTIONS,
+    EQUIP_DISCOUNTS,
     EQUIPS_FROM_DISCARD,
     attach_restriction,
+    equip_discount,
     creation_targets,
     equips_from_discard,
     has_caster,
@@ -456,3 +458,54 @@ def test_equipping_from_the_discard_pile_pays_and_attaches_but_is_not_from_hand(
     assert attached_to(game, game.table.cards_by_id["monks"]).id == "hero"
     assert game.table.cards_by_id["mine"].bowed
     assert EnteredPlay("monks", from_hand=False) in game.turn_events
+
+
+def test_a_discounted_equip_charges_less_and_may_join_only_the_personality_granting_it():
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("hero"))
+    put_in_play(state, personality("patron", printed_id="discount_probe"))
+    put_in_play(state, holding("mine", gold_production=3))
+    sword = register(state, attachment("sword", gold_cost=3))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(sword)
+
+    @equip_discount("discount_probe")
+    def _one_less(game, personality_, card):
+        return 1
+
+    try:
+        session = EngineSession.start(state, P1)
+        legal = session.legal_actions(P1)
+        assert Equip("sword") in legal and Equip("sword", discount=1) in legal
+
+        session.act(P1, Equip("sword", discount=1))
+        assert session.game.pending.amount == 2
+        pay(session, P1)
+        assert session.game.pending.candidates == ("patron",)
+        session.submit(P1, DecisionResponse(("patron",)))
+
+        assert attached_to(session.game, session.game.table.cards_by_id["sword"]).id == "patron"
+        assert session.log.replay() == session.game
+    finally:
+        EQUIP_DISCOUNTS.pop("discount_probe", None)
+
+
+def test_only_the_discounted_equip_is_offered_when_the_full_price_is_out_of_reach():
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("patron", printed_id="discount_probe"))
+    put_in_play(state, holding("mine", gold_production=2))
+    sword = register(state, attachment("sword", gold_cost=3))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(sword)
+
+    @equip_discount("discount_probe")
+    def _one_less(game, personality_, card):
+        return 1
+
+    try:
+        equips = [
+            action
+            for action in EngineSession.start(state, P1).legal_actions(P1)
+            if isinstance(action, Equip)
+        ]
+        assert equips == [Equip("sword", discount=1)]
+    finally:
+        EQUIP_DISCOUNTS.pop("discount_probe", None)

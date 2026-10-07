@@ -224,7 +224,7 @@ id:
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, `uses_per_turn`, an entry point of a
 registry (`gold`, `invest`, `keywords`, `recruit_discount`, `invest_discount`, `stat_grant`,
-`considered_stat`, `attach_restriction`, `equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`,
+`considered_stat`, `attach_restriction`, `equip_discount`, `equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`,
 `lobby_bar`, `favor_payer`, `entry_state`, `before_entering_play`), or the event a trigger answers
 (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`, `turn_boundary`,
 `counter_changed`, `province_destroyed`, `card_discarded`, `producing_gold`, `produced_gold`,

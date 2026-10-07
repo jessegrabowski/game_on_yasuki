@@ -91,10 +91,16 @@ class Equip:
         Whether to pay the card's Invest cost on top of its Gold Cost. Invest belongs to a card
         entering play rather than to the action that brought it, so Equip offers it exactly as
         a Recruit does. Default False.
+    discount : int
+        The Gold this Equip charges less, for the Personalities whose texts grant that much on this
+        card, which are then the only ones it may join: paying the lower price obliges the target
+        (CR, Targeting Paradoxes). Default 0, the full price, which may join any Personality that
+        would accept the card.
     """
 
     card_id: str
     invest: bool = False
+    discount: int = 0
 
 
 @dataclass(frozen=True, slots=True)

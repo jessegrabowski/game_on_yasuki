@@ -16,6 +16,7 @@ yasuki_core.engine.rules.rulebook.equip
     apply_equip_target
     creation_targets
     equip
+    equip_discount_onto
     equip_gold
     equip_targets
     equippable
