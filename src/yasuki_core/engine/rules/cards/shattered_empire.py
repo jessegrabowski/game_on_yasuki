@@ -262,6 +262,48 @@ register_ability(
 )
 
 
+# --- Collapsing Bridge ---
+
+COLLAPSING_BRIDGE_STRENGTH = 3
+
+
+def _collapsing_bridge_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Give a Province +3PS." The Province is no target, so it is chosen as the ability resolves,
+    from every player's Provinces."""
+    provinces = tuple(
+        key.token for seat in game.table.seats for key, _ in province_zones(game, seat)
+    )
+    return [Choose(source.owner, provinces, 1, 1, "collapsing_bridge", source.id)]
+
+
+@choice_resolver("collapsing_bridge", prompt="Collapsing Bridge: choose a Province for +3PS")
+def _resolve_collapsing_bridge(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The bonus runs to the end of the turn, as one with no printed duration does (CR, Duration
+    of Effects), and the Holding is destroyed after it."""
+    province = ZoneKey.from_token(chosen[0])
+    return [
+        GrantProvinceStrength(
+            source_id, province, COLLAPSING_BRIDGE_STRENGTH, Duration.UNTIL_END_OF_TURN
+        ),
+        Destroy(source_id, seat),
+    ]
+
+
+register_ability(
+    "collapsing_bridge",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        effects=_collapsing_bridge_effects,
+        hits_every_target=True,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
 # --- Daidoji Tashiko ---
 
 TASHIKO_HONOR = 2

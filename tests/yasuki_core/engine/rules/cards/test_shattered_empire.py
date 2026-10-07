@@ -2189,6 +2189,29 @@ def test_binasa_offers_no_pearl_card_his_ranged_destroyed():
     assert game.pending is None
 
 
+# --- Collapsing Bridge ---
+
+
+def test_collapsing_bridge_gives_any_players_province_3_strength_and_destroys_itself():
+    state = TableState.empty_two_seat()
+    province_card(state, "own-prov", seat=P1)
+    province_card(state, "enemy-prov", seat=P2)
+    put_in_play(state, holding("bridge", printed_id="collapsing_bridge"))
+    session = EngineSession.start(state, P1)
+    enemy_province = ZoneKey(P2, ZoneRole.PROVINCE, 0)
+
+    session.act(P1, ActivateAbility("bridge"))
+    assert set(session.game.pending.candidates) == {
+        ZoneKey(P1, ZoneRole.PROVINCE, 0).token,
+        enemy_province.token,
+    }
+    session.submit(P1, DecisionResponse((enemy_province.token,)))
+
+    game = session.game
+    assert effective_province_strength(game, enemy_province) == 3
+    assert game.table.cards_by_id["bridge"] not in game.table.battlefield.cards
+
+
 # --- Daigotsu Konishi ---
 
 
