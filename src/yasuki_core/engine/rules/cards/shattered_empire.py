@@ -263,6 +263,66 @@ register_ability(
 )
 
 
+# --- Brute Force ---
+
+BRUTE_FORCE_PRINTED_FORCE = 5
+
+
+def _brute_force_personalities(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """ "Your unbowed Personality with 5 or higher printed Force"."""
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if not card.bowed and (card.force or 0) >= BRUTE_FORCE_PRINTED_FORCE
+    ]
+
+
+def _brute_force_enemies(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "A target enemy Personality with lower current Force than your target's current Force"."""
+    yours = effective_force(game, game.table.cards_by_id[picked[0][0]])
+    return [
+        card_id
+        for card_id in opposing_units_in_battle(game, source.owner)
+        if effective_force(game, game.table.cards_by_id[card_id]) < yours
+    ]
+
+
+def _brute_force_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """Bow the enemy, and destroy them as well if your Personality has more than twice their
+    current Force."""
+    (yours,), (enemy,) = groups
+    effects: list[Effect] = [Bow(enemy.id)]
+    if effective_force(game, yours) > 2 * effective_force(game, enemy):
+        effects.append(Destroy(enemy.id, source.owner))
+    return effects
+
+
+register_ability(
+    "brute_force",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_brute_force_personalities,
+                targeting_message="your unbowed Personality with 5 or higher printed Force",
+            ),
+            TargetGroup(
+                candidates=_brute_force_enemies,
+                targeting_message="an enemy Personality with lower current Force",
+            ),
+        ),
+        effects_for_groups=_brute_force_effects,
+        located_at=(CardLocation.HAND,),
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
 # --- Collapsing Bridge ---
 
 COLLAPSING_BRIDGE_STRENGTH = 3
