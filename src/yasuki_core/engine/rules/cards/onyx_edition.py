@@ -85,7 +85,8 @@ from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_BATTLE
-from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
+from yasuki_core.engine.rules.units.composition import followers_of, unit_force
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.triggers import TriggerContext, action_recruited, choice_resolver, on
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.duel.procedure import duel_decided_by
@@ -291,6 +292,70 @@ register_ability(
         targets=_hida_war_college_experienced_targets,
         targeting_message="your Personality",
         effects=_hida_war_college_experienced_effects,
+    ),
+)
+
+
+# --- Hida Yurike, Soul of Hida Rikyu ---
+
+
+def _hida_yurike_soul_of_hida_rikyu_bow_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Enemy Personalities at the battle whose unit totals no more Force than Yurike's."""
+    reach = unit_force(game, source)
+    return [
+        card_id
+        for card_id in opposing_units_in_battle(game, source.owner)
+        if unit_force(game, game.table.cards_by_id[card_id]) <= reach
+    ]
+
+
+def _hida_yurike_soul_of_hida_rikyu_bow_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Bow every card in the target's unit (CR, Unit)."""
+    return [Simultaneously(tuple(Bow(card.id) for card in unit_of(game, target)))]
+
+
+register_ability(
+    "hida_yurike_soul_of_hida_rikyu",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=_hida_yurike_soul_of_hida_rikyu_bow_targets,
+        targeting_message="an enemy Personality whose unit has no more Force than Yurike's",
+        effects=_hida_yurike_soul_of_hida_rikyu_bow_effects,
+        key="bow",
+    ),
+)
+
+
+def _hida_yurike_soul_of_hida_rikyu_straighten_targets(
+    game: GameState, source: L5RCard
+) -> list[str]:
+    return [card.id for card in followers_of(game, source) if not card.bowed]
+
+
+def _hida_yurike_soul_of_hida_rikyu_straighten_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Bow Yurike's target Follower to straighten Yurike": a Follower bowed by the time this
+    resolves bows nothing, so Yurike stays as she is (CR, To)."""
+    if target.bowed:
+        return []
+    return [Bow(target.id), Straighten(source.id)]
+
+
+register_ability(
+    "hida_yurike_soul_of_hida_rikyu",
+    Ability(
+        printed_index=1,
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_hida_yurike_soul_of_hida_rikyu_straighten_targets,
+        targeting_message="Yurike's unbowed Follower",
+        effects=_hida_yurike_soul_of_hida_rikyu_straighten_effects,
+        tireless=True,
+        key="straighten",
     ),
 )
 

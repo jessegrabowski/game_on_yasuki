@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import (
+    Bow,
     Destroy,
     Effect,
     Move,
@@ -92,6 +93,7 @@ from yasuki_core.game_pieces.constants import AttachmentType, Element, Side
 
 from tests.yasuki_core.engine.builders import (
     datasheet_favor_ability,
+    attached,
     attachment,
     contentious_terrain,
     combat_segment,
@@ -1901,6 +1903,52 @@ def test_hida_war_college_gives_more_force_to_a_defending_or_outnumbered_persona
     assert effective_force(game, game.table.cards_by_id["hero"]) == force
     assert game.table.cards_by_id["college"].bowed
     assert game.round.priority is P1 and game.round.passes == 0
+
+
+# --- Hida Yurike, Soul of Hida Rikyu ---
+
+YURIKE = "hida_yurike_soul_of_hida_rikyu"
+
+
+def _yurike_battle() -> EngineSession:
+    """Yurike (5F) with a Follower, against a 4F guard with a 1F Follower, whose unit totals as
+    much as hers, and a 6F brute."""
+    cards = [
+        personality("yurike", printed_id=YURIKE, force=5),
+        personality("guard", owner=P2, force=4),
+        personality("brute", owner=P2, force=6),
+    ]
+    session = combat_segment(cards, {"yurike": 0}, {"guard": 0, "brute": 0})
+    follower = AttachmentType.FOLLOWER
+    attached(session.game, attachment("ashigaru", attachment_type=follower), "yurike")
+    attached(
+        session.game, attachment("spear", owner=P2, attachment_type=follower, force=1), "guard"
+    )
+    return session
+
+
+def test_yurike_bows_a_unit_with_no_more_force_than_hers():
+    session = _yurike_battle()
+
+    session.act(P1, ActivateAbility("yurike", "bow"))
+    assert session.game.pending.candidates == ("guard",)
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    cards = session.game.table.cards_by_id
+    assert cards["guard"].bowed and cards["spear"].bowed
+    assert cards["yurike"].bowed
+
+
+def test_yurike_bows_her_follower_to_straighten_herself():
+    session = _yurike_battle()
+    resolve_effects(session.game, [Bow("yurike")])
+
+    session.act(P1, ActivateAbility("yurike", "straighten"))
+    session.submit(P1, DecisionResponse(("ashigaru",)))
+
+    cards = session.game.table.cards_by_id
+    assert cards["ashigaru"].bowed
+    assert not cards["yurike"].bowed
 
 
 # --- Togashi Hiyoku ---
