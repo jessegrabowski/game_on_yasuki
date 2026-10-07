@@ -2291,6 +2291,50 @@ def test_brute_force_only_bows_an_enemy_with_half_its_force_or_more():
     assert mid.bowed
 
 
+# --- Heedless Assault ---
+
+
+def _heedless_assault_on(*, penalty: int, berserker_armored: bool = False) -> EngineSession:
+    """P1's 3F Berserker plays Heedless Assault against P2's 3F guard with the given penalty."""
+    heedless_assault = L5RCard.of(
+        ActionPrint,
+        id="heedless",
+        printed_id="heedless_assault",
+        name="Heedless Assault",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    cards = [
+        personality("berserker", force=3, keywords=(keywords.BERSERKER,)),
+        personality("guard", owner=P2, force=3),
+    ]
+    session = combat_segment(cards, {"berserker": 0}, {"guard": 0}, in_hand=[heedless_assault])
+    if berserker_armored:
+        attached(session.game, attachment("armor"), "berserker")
+
+    session.act(P1, PlayStrategy("heedless"))
+    session.submit(P1, DecisionResponse(("berserker",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    assert session.game.pending.candidates == ("0", "1", "2", "3")
+    session.submit(P1, DecisionResponse((str(penalty),)))
+    return session
+
+
+@pytest.mark.parametrize(
+    ("penalty", "berserker_armored", "destroyed"),
+    [(2, False, set()), (3, False, {"berserker", "guard"}), (3, True, {"guard"})],
+    ids=["short_of_zero", "both_at_zero", "armored_berserker_survives"],
+)
+def test_heedless_assault_destroys_each_target_left_at_0_force_without_attachments(
+    penalty, berserker_armored, destroyed
+):
+    session = _heedless_assault_on(penalty=penalty, berserker_armored=berserker_armored)
+
+    on_table = {card.id for card in session.game.table.battlefield.cards}
+    assert {"berserker", "guard"} - on_table == destroyed
+
+
 # --- Purity's Fist ---
 
 

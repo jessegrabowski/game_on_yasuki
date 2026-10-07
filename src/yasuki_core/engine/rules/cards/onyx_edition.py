@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.abilities.model import (
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
+    printed_ability_line,
     printed_line_without_cost,
     granted_ability,
     invest_amounts,
@@ -65,6 +66,8 @@ from yasuki_core.engine.rules.effects import (
     StartDuel,
     Straighten,
     TakeFavor,
+    To,
+    Unpayable,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.rulebook.kharmic import (
@@ -99,6 +102,7 @@ from yasuki_core.engine.rules.board.queries import (
     opposed_units_in_battle,
     opposing_units_in_battle,
     outnumbered_at,
+    owned_holdings,
     owned_personalities,
     personalities_in_play,
     rings_in_play,
@@ -114,6 +118,7 @@ from yasuki_core.engine.rules.stats.card_values import (
     effective_force,
     effective_personal_honor,
 )
+from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     Duration,
@@ -341,11 +346,9 @@ def _hida_yurike_soul_of_hida_rikyu_straighten_targets(
 def _hida_yurike_soul_of_hida_rikyu_straighten_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """ "Bow Yurike's target Follower to straighten Yurike": a Follower bowed by the time this
-    resolves bows nothing, so Yurike stays as she is (CR, To)."""
-    if target.bowed:
-        return []
-    return [Bow(target.id), Straighten(source.id)]
+    """ "Bow Yurike's target Follower to straighten Yurike": Yurike straightens only if the Follower
+    actually bows (CR, Independence of Effects)."""
+    return [To(Bow(target.id), (Straighten(source.id),))]
 
 
 register_ability(
@@ -1077,6 +1080,133 @@ register_ability(
         cost=no_cost,
         targets=_the_dark_capital_of_the_spider_targets,
         effects=_the_dark_capital_of_the_spider__back_effects,
+        tireless=True,
+    ),
+)
+
+
+# --- The Indomitable Fortress of the Crab ---
+
+
+def _the_indomitable_fortress_of_the_crab_targets(game: GameState, source: L5RCard) -> list[str]:
+    return list(opposed_units_in_battle(game, source.owner))
+
+
+def _the_indomitable_fortress_of_the_crab_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Straighten your target opposed Personality. Straighten their attachments if your current
+    army is outnumbered." """
+    effects: list[Effect] = [Straighten(target.id)]
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return effects
+    if outnumbered_at(game, attack.current, source.owner):
+        attachments = attachments_of(game, target)
+        effects.append(Simultaneously(tuple(Straighten(attached.id) for attached in attachments)))
+    return effects
+
+
+def _the_indomitable_fortress_of_the_crab_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """ "If you bow your Fortification when announcing it": one of your unbowed Fortifications,
+    chosen and bowed as the ability is announced."""
+    fortifications = tuple(
+        card.id
+        for card in owned_holdings(game, source.owner, keywords.FORTIFICATION)
+        if not card.bowed
+    )
+    if not fortifications:
+        return [Unpayable(f"{source.owner.name} has no unbowed Fortification")]
+    return [
+        Choose(
+            source.owner, fortifications, 1, 1, "the_indomitable_fortress_of_the_crab", source.id
+        )
+    ]
+
+
+@choice_resolver(
+    "the_indomitable_fortress_of_the_crab", prompt="Bow your Fortification for Tireless"
+)
+def _resolve_the_indomitable_fortress_of_the_crab(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [Bow(chosen[0])]
+
+
+def _the_indomitable_fortress_of_the_crab_battle_bowing_a_fortification_label(
+    card: L5RCard, index: int
+) -> str:
+    return f"{printed_ability_line(card, index)} (bow your Fortification: Tireless)"
+
+
+register_ability(
+    "the_indomitable_fortress_of_the_crab",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_the_indomitable_fortress_of_the_crab_targets,
+        targeting_message="your opposed Personality",
+        effects=_the_indomitable_fortress_of_the_crab_effects,
+        key="battle",
+    ),
+)
+
+# One printed ability, offered twice: as printed, and with the Fortification bowed at announcement,
+# which gives it Tireless. Both count as its one use this turn.
+register_ability(
+    "the_indomitable_fortress_of_the_crab",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        label=_the_indomitable_fortress_of_the_crab_battle_bowing_a_fortification_label,
+        cost=_the_indomitable_fortress_of_the_crab_cost,
+        targets=_the_indomitable_fortress_of_the_crab_targets,
+        targeting_message="your opposed Personality",
+        effects=_the_indomitable_fortress_of_the_crab_effects,
+        tireless=True,
+        key="battle_bowing_a_fortification",
+        limit_key="battle",
+    ),
+)
+
+
+# --- The Indomitable Fortress of the Crab (back) ---
+
+
+@keyword_grant("the_indomitable_fortress_of_the_crab__back")
+def _the_indomitable_fortress_of_the_crab__back_keywords(
+    game: GameState, fortress: L5RCard, card: L5RCard
+) -> tuple[str, ...]:
+    """ "The first time each turn you Recruit a Fortification, refill its Province face-up", read
+    as your Fortifications having Renew until another of them has been Recruited this turn. A
+    Recruit's refill reads Renew before its own arrival is recorded."""
+    if not _the_indomitable_fortress_of_the_crab__back_yours(fortress, card):
+        return ()
+    recruited_earlier = any(
+        isinstance(event, EnteredPlay)
+        and event.recruited
+        and event.card_id != card.id
+        and _the_indomitable_fortress_of_the_crab__back_yours(
+            fortress, game.table.cards_by_id[event.card_id]
+        )
+        for event in game.turn_events
+    )
+    return () if recruited_earlier else (keywords.RENEW,)
+
+
+def _the_indomitable_fortress_of_the_crab__back_yours(fortress: L5RCard, card: L5RCard) -> bool:
+    """Whether ``card`` is a Fortification of the Fortress's controller. Its printed keywords are
+    read, since this grant is itself part of its effective keywords."""
+    return card.owner is fortress.owner and keywords.FORTIFICATION in card.keywords
+
+
+register_ability(
+    "the_indomitable_fortress_of_the_crab__back",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_the_indomitable_fortress_of_the_crab_targets,
+        targeting_message="your opposed Personality",
+        effects=_the_indomitable_fortress_of_the_crab_effects,
         tireless=True,
     ),
 )

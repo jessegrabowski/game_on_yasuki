@@ -18,6 +18,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     emperor_edition,
     empire_at_war,
     evil_portents,
+    fire_and_shadow,
     gates_of_chaos,
     gates_of_tengoku,
     gathering_storms,

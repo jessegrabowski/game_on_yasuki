@@ -23,13 +23,15 @@ from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import (
     Bow,
     Destroy,
+    GrantNegation,
     Effect,
     Move,
     Negated,
     RevokeGrants,
     TakeFavor,
 )
-from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, RoundKind
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
@@ -1953,6 +1955,17 @@ def test_yurike_bows_her_follower_to_straighten_herself():
     assert not cards["yurike"].bowed
 
 
+def test_yurike_stays_bowed_when_her_followers_bowing_is_negated():
+    session = _yurike_battle()
+    negation = Negation("guard", END_OF_TURN, effect_kind=Bow, subject_id="ashigaru")
+    resolve_effects(session.game, [Bow("yurike"), GrantNegation(negation)])
+
+    session.act(P1, ActivateAbility("yurike", "straighten"))
+    session.submit(P1, DecisionResponse(("ashigaru",)))
+
+    assert session.game.table.cards_by_id["yurike"].bowed
+
+
 # --- Kaiu Denkaru ---
 
 
@@ -2001,6 +2014,114 @@ def test_a_defending_denkaru_may_do_both():
     game = session.game
     assert effective_force(game, game.table.cards_by_id["guard"]) == 2
     assert effective_force(game, game.table.cards_by_id["denkaru"]) == 6
+
+
+# --- The Indomitable Fortress of the Crab ---
+
+INDOMITABLE = "the_indomitable_fortress_of_the_crab"
+
+
+def _indomitable_battle(
+    *, flipped: bool = False, outnumbered: bool = False, wall: bool = True
+) -> EngineSession:
+    """P1's bowed hero, carrying a bowed Follower, opposed by one or two of P2's Personalities, with
+    the Indomitable Fortress as P1's Stronghold and, by default, an unbowed Fortification."""
+    cards = [
+        flip_stronghold(INDOMITABLE, flipped=flipped),
+        personality("hero"),
+        personality("guard", owner=P2),
+        personality("reserve", owner=P2),
+    ]
+    if wall:
+        cards.append(holding("wall", keywords=(keywords.FORTIFICATION,)))
+    enemies = {"guard": 0, "reserve": 0} if outnumbered else {"guard": 0}
+    session = combat_segment(cards, {"hero": 0}, enemies)
+    follower = attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER)
+    attached(session.game, follower, "hero")
+    resolve_effects(session.game, [Bow("hero"), Bow("ashigaru")])
+    return session
+
+
+@pytest.mark.parametrize("outnumbered", [False, True], ids=["even", "outnumbered"])
+def test_the_indomitable_fortress_straightens_attachments_only_while_outnumbered(outnumbered):
+    session = _indomitable_battle(outnumbered=outnumbered)
+
+    session.act(P1, ActivateAbility("sh", "battle"))
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    cards = session.game.table.cards_by_id
+    assert not cards["hero"].bowed
+    assert cards["ashigaru"].bowed is not outnumbered
+
+
+def test_a_bowed_indomitable_fortress_acts_by_bowing_your_fortification():
+    session = _indomitable_battle()
+    resolve_effects(session.game, [Bow("sh")])
+    assert ActivateAbility("sh", "battle") not in session.legal_actions(P1)
+
+    session.act(P1, ActivateAbility("sh", "battle_bowing_a_fortification"))
+    session.submit(P1, DecisionResponse(("wall",)))
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    cards = session.game.table.cards_by_id
+    assert cards["wall"].bowed
+    assert not cards["hero"].bowed
+
+
+def test_the_indomitable_fortress_cannot_bow_for_tireless_without_an_unbowed_fortification():
+    session = _indomitable_battle(wall=False)
+
+    assert ActivateAbility("sh", "battle_bowing_a_fortification") not in session.legal_actions(P1)
+
+
+def test_either_way_of_taking_the_indomitable_fortress_spends_its_one_use():
+    session = _indomitable_battle()
+
+    session.act(P1, ActivateAbility("sh", "battle"))
+    session.submit(P1, DecisionResponse(("hero",)))
+    session.act(P2, Pass())
+
+    legal = session.legal_actions(P1)
+    assert ActivateAbility("sh", "battle") not in legal
+    assert ActivateAbility("sh", "battle_bowing_a_fortification") not in legal
+
+
+def test_the_indomitable_fortress_back_is_tireless():
+    session = _indomitable_battle(flipped=True)
+    resolve_effects(session.game, [Bow("sh")])
+
+    session.act(P1, ActivateAbility("sh"))
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    assert not session.game.table.cards_by_id["hero"].bowed
+
+
+@pytest.mark.parametrize(
+    ("flipped", "face_up"), [(True, [True, False]), (False, [False, False])], ids=["back", "front"]
+)
+def test_the_indomitable_fortress_back_refills_face_up_after_the_first_fortification_only(
+    flipped, face_up
+):
+    state = TableState.empty_two_seat()
+    put_in_play(state, flip_stronghold(INDOMITABLE, flipped=flipped))
+    put_in_play(state, holding("mine", gold_production=6))
+    for index, wall in enumerate(("first-wall", "second-wall")):
+        province_card(state, wall, keywords=(keywords.FORTIFICATION,), gold_cost=2, index=index)
+    refills = [register(state, holding(f"refill-{n}")) for n in range(2)]
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = refills
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+
+    for wall in ("first-wall", "second-wall"):
+        session.act(P1, ActivateAbility(wall, RECRUIT))
+        pay(session, P1)
+
+    refilled = [
+        session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, index)].cards[0].face_up
+        for index in (0, 1)
+    ]
+    assert refilled == face_up
 
 
 # --- Togashi Hiyoku ---
