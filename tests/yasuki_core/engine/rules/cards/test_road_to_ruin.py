@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, Straightened
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
@@ -1303,10 +1304,71 @@ def test_is_that_all_fears_at_the_bowed_personalitys_force(feared, bowed, straig
     session.act(P1, PlayStrategy("is_that_all", "fear"))
     session.submit(P1, DecisionResponse(("brave",)))
     session.submit(P1, DecisionResponse((feared,)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
 
     assert game.pending is None
     assert game.table.cards_by_id[feared].bowed is bowed
     assert game.table.cards_by_id["brave"].bowed is not straightened
+
+
+def test_is_that_alls_fear_is_answerable_at_the_interrupt_step():
+    okura = L5RCard.of(
+        ActionPrint,
+        id="okura",
+        name="Okura is Released",
+        printed_id="okura_is_released",
+        side=Side.FATE,
+        owner=P1,
+    )
+    cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
+    held = [_is_that_all(P1), okura]
+    session = combat_segment(cards, {"brave": 0}, {"guard": 0}, in_hand=held)
+    resolve_effects(session.game, [Bow("brave")])
+
+    session.act(P1, PlayStrategy("is_that_all", "fear"))
+    session.submit(P1, DecisionResponse(("brave",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert PlayInterrupt("okura") in session.legal_actions(P1)
+
+
+def test_okura_destroys_what_is_that_alls_fear_bowed_after_its_personality_straightens():
+    okura = L5RCard.of(
+        ActionPrint,
+        id="okura",
+        name="Okura is Released",
+        printed_id="okura_is_released",
+        side=Side.FATE,
+        owner=P1,
+    )
+    cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
+    session = combat_segment(cards, {"brave": 0}, {"guard": 0}, in_hand=[_is_that_all(P1), okura])
+    game = session.game
+    resolve_effects(game, [Bow("brave")])
+
+    session.act(P1, PlayStrategy("is_that_all", "fear"))
+    session.submit(P1, DecisionResponse(("brave",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    session.act(P1, PlayInterrupt("okura"))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    order = [
+        type(event).__name__
+        for event in game.turn_events
+        if isinstance(event, Straightened | Destroyed)
+    ]
+    assert order == ["Straightened", "Destroyed"]
+    assert not game.table.cards_by_id["brave"].bowed
+
+
+def test_is_that_all_is_not_played_with_nothing_to_fear():
+    cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
+    session = combat_segment(cards, {"brave": 0}, {"guard": 1}, in_hand=[_is_that_all(P1)])
+    resolve_effects(session.game, [Bow("brave")])
+
+    assert PlayStrategy("is_that_all", "fear") not in session.legal_actions(P1)
 
 
 def test_is_that_all_destroys_the_zero_cost_attachment_an_action_was_from():

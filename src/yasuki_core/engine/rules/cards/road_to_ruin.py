@@ -37,7 +37,6 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
     Effect,
-    Evaluate,
     Fear,
     GainHonor,
     GrantModifier,
@@ -62,6 +61,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ProducingGold,
 )
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     attack_targets,
     has_keyword,
     opposed_units_in_battle,
@@ -72,7 +72,7 @@ from yasuki_core.engine.rules.board.queries import (
     province_key_holding,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -220,45 +220,28 @@ register_ability(
 # --- "Is That All?" ---
 
 
-def _is_that_all_fear_targets(game: GameState, source: L5RCard) -> list[str]:
+def _is_that_all_yours(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """Your bowed Personalities, while the Fear has a card to target, since its targeting is the
+    action's own (CR, Good Faith Rule)."""
+    if not attack_targets(game, source):
+        return []
     return [card.id for card in owned_personalities(game, source.owner) if card.bowed]
 
 
-def _is_that_all_fear_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    return [Evaluate("is_that_all_fear_target", source.id, source.owner, (target.id,))]
+def _is_that_all_feared(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    return attack_targets(game, source)
 
 
-@choice_resolver("is_that_all_fear_target")
-def _resolve_is_that_all_fear_target(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """The Fear targets the way any Fear does, among what stands at the battle as it resolves, and
-    is not raised when nothing there can be targeted. ``chosen`` is your bowed Personality."""
-    feared = attack_targets(game, game.table.cards_by_id[source_id])
-    if not feared:
-        return []
-    return [Choose(seat, tuple(feared), 1, 1, "is_that_all_fear", source_id, chosen)]
-
-
-@choice_resolver(
-    "is_that_all_fear", prompt="Fear equal to your Personality's Force: choose its target"
-)
-def _resolve_is_that_all_fear(
-    game: GameState,
-    source_id: str,
-    chosen: tuple[str, ...],
-    seat: PlayerId,
-    resolver_context: tuple[str, ...] = (),
+def _is_that_all_fear_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
     """ "If this bowed an enemy Personality, straighten your Personality": the straightening
     follows the Fear's bow only if that bow happened."""
-    (yours_id,) = resolver_context
-    feared = game.table.cards_by_id[chosen[0]]
-    strength = effective_force(game, game.table.cards_by_id[yours_id])
+    (yours,), (feared,) = groups
     if not isinstance(feared.printed, PersonalityPrint):
-        return [Fear(strength, feared.id, seat)]
-    outcome = (To(Bow(feared.id), (Straighten(yours_id),)),)
-    return [Fear(strength, feared.id, seat, outcome=outcome)]
+        return [Fear(0, feared.id, source.owner, force_of=yours.id)]
+    outcome = (To(Bow(feared.id), (Straighten(yours.id),)),)
+    return [Fear(0, feared.id, source.owner, outcome=outcome, force_of=yours.id)]
 
 
 def _is_that_all_destroy_targets(game: GameState, source: L5RCard) -> list[str]:
@@ -268,7 +251,7 @@ def _is_that_all_destroy_targets(game: GameState, source: L5RCard) -> list[str]:
             card = game.table.cards_by_id.get(card_id)
         case _:
             return []
-    if card is None or card not in game.table.battlefield.cards:
+    if card is None or not any(held is card for held in game.table.battlefield.cards):
         return []
     if not isinstance(card.printed, AttachmentPrint) or effective_gold_cost(game, card) != 0:
         return []
@@ -284,9 +267,11 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=_is_that_all_fear_targets,
-        targeting_message="your bowed Personality",
-        effects=_is_that_all_fear_effects,
+        target_groups=(
+            TargetGroup(candidates=_is_that_all_yours, targeting_message="your bowed Personality"),
+            TargetGroup(candidates=_is_that_all_feared, targeting_message=ATTACK_TARGET),
+        ),
+        effects_for_groups=_is_that_all_fear_effects,
         located_at=(CardLocation.HAND,),
         key="fear",
     ),
