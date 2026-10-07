@@ -96,6 +96,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     EndLook,
     Evaluate,
+    Fear,
     GrantAbility,
     GrantDuelStat,
     GrantProvinceStrength,
@@ -164,7 +165,7 @@ from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AttachmentPrint,
@@ -528,6 +529,7 @@ register_ability(
 # --- Hida Sanjiro ---
 
 SANJIROS_ARMOR = "armor_item_plus2f"
+SANJIRO_FEAR = 4
 
 
 def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
@@ -536,6 +538,28 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 
 
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
+
+
+def _hida_sanjiro_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "If Sanjiro has any Items, Fear 4", the Items read as the ability resolves."""
+    has_items = any(
+        isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type is AttachmentType.ITEM
+        for card in attachments_of(game, source)
+    )
+    return [Fear(SANJIRO_FEAR, target.id, source.owner)] if has_items else []
+
+
+register_ability(
+    "hida_sanjiro",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_hida_sanjiro_effects,
+    ),
+)
 
 
 # --- Lane of Immorality ---

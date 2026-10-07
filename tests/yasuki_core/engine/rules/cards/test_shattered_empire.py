@@ -502,6 +502,25 @@ def test_the_rulebook_favor_ability_opens_way_of_the_cranes_window():
     assert CRANE_DRAW in session.legal_actions(P1)
 
 
+@pytest.mark.parametrize(
+    ("carried", "bows"),
+    [(AttachmentType.ITEM, True), (AttachmentType.FOLLOWER, False)],
+    ids=["item", "follower"],
+)
+def test_hida_sanjiro_fears_only_while_he_has_an_item(carried, bows):
+    cards = [
+        personality("sanjiro", printed_id="hida_sanjiro", force=4),
+        personality("guard", owner=P2, force=4),
+    ]
+    session = combat_segment(cards, {"sanjiro": 0}, {"guard": 0})
+    attached(session.game, attachment("gear", attachment_type=carried), "sanjiro")
+
+    session.act(P1, ActivateAbility("sanjiro"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed is bows
+
+
 # --- Way of the Crab (Experienced) ---
 
 
