@@ -2272,6 +2272,41 @@ def test_brute_force_only_bows_an_enemy_with_half_its_force_or_more():
     assert mid.bowed
 
 
+# --- Purity's Fist ---
+
+
+@pytest.mark.parametrize(
+    ("enemy_force", "enemy_keywords", "two_handed", "destroyed"),
+    [
+        (3, (), False, True),
+        (3, (), True, False),
+        (4, (), False, False),
+        (4, (keywords.SHADOWLANDS,), False, True),
+    ],
+    ids=["melee_3", "two_handed", "too_strong", "shadowlands"],
+)
+def test_puritys_fist_adjusts_its_melee_to_the_target(
+    enemy_force, enemy_keywords, two_handed, destroyed
+):
+    cards = [
+        personality("hero", force=3),
+        personality("guard", owner=P2, force=enemy_force, keywords=enemy_keywords),
+    ]
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0})
+    game = session.game
+    attached(game, attachment("fist", printed_id="puritys_fist", force_modifier=3), "hero")
+    if two_handed:
+        weapon = attachment("club", owner=P2, keywords=(keywords.WEAPON, keywords.TWO_HANDED))
+        attached(game, weapon, "guard")
+
+    session.act(P1, ActivateAbility("fist"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    discard = {card.id for card in game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)].cards}
+    assert ("guard" in discard) is destroyed
+    assert game.table.cards_by_id["fist"].bowed
+
+
 # --- Collapsing Bridge ---
 
 

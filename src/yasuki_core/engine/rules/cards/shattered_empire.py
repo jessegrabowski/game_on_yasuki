@@ -161,7 +161,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     HonorChanged,
     TurnBoundary,
 )
-from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets, weapons_on
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -703,6 +703,36 @@ register_ability(
         targets=_matsu_gonshiro_soul_of_matsu_shimei_targets,
         targeting_message="an enemy Personality whose unit's total Gold Cost is 9 or less",
         effects=_matsu_gonshiro_soul_of_matsu_shimei_effects,
+    ),
+)
+
+
+# --- Purity's Fist ---
+
+PURITYS_FIST_MELEE = 3
+
+
+def _puritys_fist_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Melee 3, with -1 strength if the target has a Two-Handed Weapon and +1 strength if the
+    target is Shadowlands", both read off the target as the ability resolves."""
+    two_handed = any(
+        keywords.TWO_HANDED in effective_keywords(game, weapon)
+        for weapon in weapons_on(game, target)
+    )
+    shadowlands = has_keyword(game, target, keywords.SHADOWLANDS)
+    strength = PURITYS_FIST_MELEE - int(two_handed) + int(shadowlands)
+    return [MeleeAttack(strength, target.id, source.owner)]
+
+
+register_ability(
+    "puritys_fist",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_puritys_fist_effects,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )
 
