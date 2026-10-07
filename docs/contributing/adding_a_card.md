@@ -39,7 +39,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | May Proclaim for an amount other than Personal Honor | `@proclaim_gain(id)` | {card}`Ninube Aitso, "Doji Yeiko" (Experienced)` |
 | "Political Open, :gstar:: If this Holding is in your Province, Recruit it." | `Ability(cost=recruit_gold, targets=recruitable, effects=recruit_from_its_province, located_at=(CardLocation.PROVINCE,))` | {card}`The Ivory Courtroom` |
 | Gives another card's abilities Tireless | `@tireless_grant(id)` | {card}`Shrine to Inari` |
-| Carries a keyword only sometimes | `@keyword_grant(id)` | {card}`Fortified Farmlands` |
+| Gives a card a keyword by its text, itself or another | `@keyword_grant(id)` | {card}`Fortified Farmlands`, {card}`Way of the Crab` |
 | Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |
 | Is considered to have a stat when a certain action checks it | `@considered_stat(id)` | {card}`Dragon Elite Inkyo` |
 | Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |

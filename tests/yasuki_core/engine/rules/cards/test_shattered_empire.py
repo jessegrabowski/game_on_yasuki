@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, PutIntoPlay
 from yasuki_core.engine.rules.abilities.costs import no_cost
@@ -575,6 +576,24 @@ def test_a_fortification_whose_bowing_way_of_the_crab_negates_still_bows_to_pay_
     pay_costs(game, [Bow("wall")])
 
     assert _bowed(game, "wall")
+
+
+def test_way_of_the_crab_gives_siege_only_to_your_opposed_personalities():
+    cards = [
+        _edict("crab", "way_of_the_crab_experienced"),
+        personality("hero"),
+        personality("idle"),
+        personality("guard", owner=P2),
+    ]
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0})
+    game = session.game
+
+    sieging = {
+        card_id
+        for card_id in ("hero", "idle", "guard")
+        if keywords.SIEGE in effective_keywords(game, game.table.cards_by_id[card_id])
+    }
+    assert sieging == {"hero"}
 
 
 # --- Way of the Dragon (Experienced) ---

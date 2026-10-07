@@ -124,7 +124,7 @@ from yasuki_core.engine.rules.stats.card_values import (
     effective_force,
     effective_personal_honor,
 )
-from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.stats.calculation import unbounded_stat
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
@@ -1330,8 +1330,18 @@ register_entry(
     "way_of_the_crab_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.CRAB)
 )
 
-# "Your Personalities have Siege while opposed" has no handler: Siege has no rules behind it yet.
 WAY_OF_THE_CRAB_TAG = "way_of_the_crab_straighten"
+
+
+@keyword_grant("way_of_the_crab_experienced")
+def _way_of_the_crab_experienced_keywords(
+    game: GameState, edict: L5RCard, card: L5RCard
+) -> tuple[str, ...]:
+    """ "Your Personalities have Siege while opposed." Siege carries no rule of its own, and other
+    cards read it."""
+    if card.owner is not edict.owner or not isinstance(card.printed, PersonalityPrint):
+        return ()
+    return (keywords.SIEGE,) if card.id in opposed_units_in_battle(game, edict.owner) else ()
 
 
 @focus_effect("way_of_the_crab_experienced")
