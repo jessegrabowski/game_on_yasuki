@@ -96,6 +96,7 @@ from yasuki_core.engine.rules.effects import (
     Effect,
     EndLook,
     Evaluate,
+    Fear,
     GrantAbility,
     GrantDuelStat,
     GrantProvinceStrength,
@@ -123,7 +124,7 @@ from yasuki_core.engine.rules.stats.card_values import (
     effective_force,
     effective_personal_honor,
 )
-from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
 from yasuki_core.engine.rules.stats.calculation import unbounded_stat
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
@@ -160,11 +161,11 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     HonorChanged,
     TurnBoundary,
 )
-from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import creation_targets, weapons_on
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AttachmentPrint,
@@ -258,6 +259,108 @@ register_ability(
         targeting_message=ATTACK_TARGET,
         effects=_binasa_experienced_effects,
         tireless=True,
+    ),
+)
+
+
+# --- Brute Force ---
+
+BRUTE_FORCE_PRINTED_FORCE = 5
+
+
+def _brute_force_personalities(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """ "Your unbowed Personality with 5 or higher printed Force"."""
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if not card.bowed and (card.force or 0) >= BRUTE_FORCE_PRINTED_FORCE
+    ]
+
+
+def _brute_force_enemies(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "A target enemy Personality with lower current Force than your target's current Force"."""
+    yours = effective_force(game, game.table.cards_by_id[picked[0][0]])
+    return [
+        card_id
+        for card_id in opposing_units_in_battle(game, source.owner)
+        if effective_force(game, game.table.cards_by_id[card_id]) < yours
+    ]
+
+
+def _brute_force_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """Bow the enemy, and destroy them as well if your Personality has more than twice their
+    current Force."""
+    (yours,), (enemy,) = groups
+    effects: list[Effect] = [Bow(enemy.id)]
+    if effective_force(game, yours) > 2 * effective_force(game, enemy):
+        effects.append(Destroy(enemy.id, source.owner))
+    return effects
+
+
+register_ability(
+    "brute_force",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_brute_force_personalities,
+                targeting_message="your unbowed Personality with 5 or higher printed Force",
+            ),
+            TargetGroup(
+                candidates=_brute_force_enemies,
+                targeting_message="an enemy Personality with lower current Force",
+            ),
+        ),
+        effects_for_groups=_brute_force_effects,
+        located_at=(CardLocation.HAND,),
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
+# --- Collapsing Bridge ---
+
+COLLAPSING_BRIDGE_STRENGTH = 3
+
+
+def _collapsing_bridge_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Give a Province +3PS." The Province is no target, so it is chosen as the ability resolves,
+    from every player's Provinces."""
+    provinces = tuple(
+        key.token for seat in game.table.seats for key, _ in province_zones(game, seat)
+    )
+    return [Choose(source.owner, provinces, 1, 1, "collapsing_bridge", source.id)]
+
+
+@choice_resolver("collapsing_bridge", prompt="Collapsing Bridge: choose a Province for +3PS")
+def _resolve_collapsing_bridge(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The bonus runs to the end of the turn, as one with no printed duration does (CR, Duration
+    of Effects), and the Holding is destroyed after it."""
+    province = ZoneKey.from_token(chosen[0])
+    return [
+        GrantProvinceStrength(
+            source_id, province, COLLAPSING_BRIDGE_STRENGTH, Duration.UNTIL_END_OF_TURN
+        ),
+        Destroy(source_id, seat),
+    ]
+
+
+register_ability(
+    "collapsing_bridge",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=itself,
+        effects=_collapsing_bridge_effects,
+        hits_every_target=True,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )
 
@@ -486,6 +589,7 @@ register_ability(
 # --- Hida Sanjiro ---
 
 SANJIROS_ARMOR = "armor_item_plus2f"
+SANJIRO_FEAR = 4
 
 
 def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
@@ -494,6 +598,28 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 
 
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
+
+
+def _hida_sanjiro_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "If Sanjiro has any Items, Fear 4", the Items read as the ability resolves."""
+    has_items = any(
+        isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type is AttachmentType.ITEM
+        for card in attachments_of(game, source)
+    )
+    return [Fear(SANJIRO_FEAR, target.id, source.owner)] if has_items else []
+
+
+register_ability(
+    "hida_sanjiro",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_hida_sanjiro_effects,
+    ),
+)
 
 
 # --- Lane of Immorality ---
@@ -577,6 +703,36 @@ register_ability(
         targets=_matsu_gonshiro_soul_of_matsu_shimei_targets,
         targeting_message="an enemy Personality whose unit's total Gold Cost is 9 or less",
         effects=_matsu_gonshiro_soul_of_matsu_shimei_effects,
+    ),
+)
+
+
+# --- Purity's Fist ---
+
+PURITYS_FIST_MELEE = 3
+
+
+def _puritys_fist_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Melee 3, with -1 strength if the target has a Two-Handed Weapon and +1 strength if the
+    target is Shadowlands", both read off the target as the ability resolves."""
+    two_handed = any(
+        keywords.TWO_HANDED in effective_keywords(game, weapon)
+        for weapon in weapons_on(game, target)
+    )
+    shadowlands = has_keyword(game, target, keywords.SHADOWLANDS)
+    strength = PURITYS_FIST_MELEE - int(two_handed) + int(shadowlands)
+    return [MeleeAttack(strength, target.id, source.owner)]
+
+
+register_ability(
+    "puritys_fist",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_puritys_fist_effects,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )
 
@@ -1174,8 +1330,18 @@ register_entry(
     "way_of_the_crab_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.CRAB)
 )
 
-# "Your Personalities have Siege while opposed" has no handler: Siege has no rules behind it yet.
 WAY_OF_THE_CRAB_TAG = "way_of_the_crab_straighten"
+
+
+@keyword_grant("way_of_the_crab_experienced")
+def _way_of_the_crab_experienced_keywords(
+    game: GameState, edict: L5RCard, card: L5RCard
+) -> tuple[str, ...]:
+    """ "Your Personalities have Siege while opposed." Siege carries no rule of its own, and other
+    cards read it."""
+    if card.owner is not edict.owner or not isinstance(card.printed, PersonalityPrint):
+        return ()
+    return (keywords.SIEGE,) if card.id in opposed_units_in_battle(game, edict.owner) else ()
 
 
 @focus_effect("way_of_the_crab_experienced")

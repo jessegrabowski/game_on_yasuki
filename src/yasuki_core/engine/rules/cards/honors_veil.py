@@ -18,9 +18,11 @@ register_event_entry("a_prophet_revealed")
 
 
 @keyword_grant("famous_bazaar")
-def _famous_bazaar_keywords(card: L5RCard, game: GameState, seat: PlayerId) -> tuple[str, ...]:
+def _famous_bazaar_keywords(game: GameState, bazaar: L5RCard, card: L5RCard) -> tuple[str, ...]:
     """Renew, which the card carries under either templating: Shattered Empire prints it on the
     keyword line, and every earlier printing spells the same rule out in the text box."""
+    if card is not bazaar:
+        return ()
     return (keywords.RENEW,)
 
 

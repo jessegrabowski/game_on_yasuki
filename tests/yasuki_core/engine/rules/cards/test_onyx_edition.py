@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import (
+    Bow,
     Destroy,
     Effect,
     Move,
@@ -54,6 +55,8 @@ from yasuki_core.game_pieces.prints import (
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
+    DENKARU_BONUS,
+    DENKARU_PENALTY,
     DRAGON_YOJIMBO,
     LION_ANCESTOR,
     NAGA_FOLLOWER,
@@ -92,6 +95,7 @@ from yasuki_core.game_pieces.constants import AttachmentType, Element, Side
 
 from tests.yasuki_core.engine.builders import (
     datasheet_favor_ability,
+    attached,
     attachment,
     contentious_terrain,
     combat_segment,
@@ -1854,6 +1858,149 @@ def test_haikeru_replays_to_the_same_board():
     session = _duel_the_rival(_haikeru_in_combat(rival_force=1, rival_chi=9))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Hida War College (Experienced) ---
+
+
+@pytest.mark.parametrize(("clan", "offered"), [(ruleset.CRAB, True), (ruleset.CRANE, False)])
+def test_hida_war_college_may_only_be_recruited_by_a_crab_clan_player(clan, offered):
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, clan=clan, gold_production=5))
+    province_card(state, "college", printed_id="hida_war_college_experienced", gold_cost=2)
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+
+    assert (ActivateAbility("college", RECRUIT) in session.legal_actions(P1)) is offered
+
+
+@pytest.mark.parametrize(
+    ("p1_army", "p2_army", "p1_attacks", "force"),
+    [
+        ({"hero": 0}, {"guard": 0}, True, 5),
+        ({"hero": 0}, {"guard": 0, "reserve": 0}, True, 7),
+        ({"hero": 0}, {"guard": 0}, False, 7),
+    ],
+    ids=["attacking", "outnumbered", "defending"],
+)
+def test_hida_war_college_gives_more_force_to_a_defending_or_outnumbered_personality(
+    p1_army, p2_army, p1_attacks, force
+):
+    cards = [
+        holding("college", printed_id="hida_war_college_experienced"),
+        personality("hero", force=3),
+        personality("guard", owner=P2),
+        personality("reserve", owner=P2),
+    ]
+    if p1_attacks:
+        session = combat_segment(cards, p1_army, p2_army)
+    else:
+        session = combat_segment(cards, p2_army, p1_army, attacker=P2, defender_passes=False)
+
+    session.act(P1, ActivateAbility("college"))
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    game = session.game
+    assert effective_force(game, game.table.cards_by_id["hero"]) == force
+    assert game.table.cards_by_id["college"].bowed
+    assert game.round.priority is P1 and game.round.passes == 0
+
+
+# --- Hida Yurike, Soul of Hida Rikyu ---
+
+YURIKE = "hida_yurike_soul_of_hida_rikyu"
+
+
+def _yurike_battle() -> EngineSession:
+    """Yurike (5F) with a Follower, against a 4F guard with a 1F Follower, whose unit totals as
+    much as hers, and a 6F brute."""
+    cards = [
+        personality("yurike", printed_id=YURIKE, force=5),
+        personality("guard", owner=P2, force=4),
+        personality("brute", owner=P2, force=6),
+    ]
+    session = combat_segment(cards, {"yurike": 0}, {"guard": 0, "brute": 0})
+    follower = AttachmentType.FOLLOWER
+    attached(session.game, attachment("ashigaru", attachment_type=follower), "yurike")
+    attached(
+        session.game, attachment("spear", owner=P2, attachment_type=follower, force=1), "guard"
+    )
+    return session
+
+
+def test_yurike_bows_a_unit_with_no_more_force_than_hers():
+    session = _yurike_battle()
+
+    session.act(P1, ActivateAbility("yurike", "bow"))
+    assert session.game.pending.candidates == ("guard",)
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    cards = session.game.table.cards_by_id
+    assert cards["guard"].bowed and cards["spear"].bowed
+    assert cards["yurike"].bowed
+
+
+def test_yurike_bows_her_follower_to_straighten_herself():
+    session = _yurike_battle()
+    resolve_effects(session.game, [Bow("yurike")])
+
+    session.act(P1, ActivateAbility("yurike", "straighten"))
+    session.submit(P1, DecisionResponse(("ashigaru",)))
+
+    cards = session.game.table.cards_by_id
+    assert cards["ashigaru"].bowed
+    assert not cards["yurike"].bowed
+
+
+# --- Kaiu Denkaru ---
+
+
+def _denkaru_battle(*, defending: bool) -> EngineSession:
+    cards = [
+        personality("denkaru", printed_id="kaiu_denkaru", force=4),
+        personality("guard", owner=P2, force=4),
+    ]
+    if defending:
+        return combat_segment(
+            cards, {"guard": 0}, {"denkaru": 0}, attacker=P2, defender_passes=False
+        )
+    return combat_segment(cards, {"denkaru": 0}, {"guard": 0})
+
+
+def test_an_attacking_denkaru_gives_an_enemy_minus_2_force():
+    session = _denkaru_battle(defending=False)
+
+    session.act(P1, ActivateAbility("denkaru"))
+    assert session.game.pending.maximum == 1
+    session.submit(P1, DecisionResponse((DENKARU_PENALTY,)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert effective_force(game, game.table.cards_by_id["guard"]) == 2
+    assert effective_force(game, game.table.cards_by_id["denkaru"]) == 4
+
+
+def test_an_unopposed_denkaru_offers_nothing():
+    cards = [
+        personality("denkaru", printed_id="kaiu_denkaru", force=4),
+        personality("guard", owner=P2, force=4),
+    ]
+    session = combat_segment(cards, {"denkaru": 0}, {"guard": 1})
+
+    assert ActivateAbility("denkaru") not in session.legal_actions(P1)
+
+
+def test_a_defending_denkaru_may_do_both():
+    session = _denkaru_battle(defending=True)
+
+    session.act(P1, ActivateAbility("denkaru"))
+    session.submit(P1, DecisionResponse((DENKARU_BONUS, DENKARU_PENALTY)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    game = session.game
+    assert effective_force(game, game.table.cards_by_id["guard"]) == 2
+    assert effective_force(game, game.table.cards_by_id["denkaru"]) == 6
 
 
 # --- Togashi Hiyoku ---

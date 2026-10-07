@@ -191,8 +191,10 @@ ends when its *target* leaves the table, because a card that leaves play ceases 
 
 A card in play whose text gives a stat to a card, itself or another, uses `@stat_grant`, and its
 handler names the scope: {card}`Haramaki-do` reaches the Personality it hangs on, and
-{card}`Daidoji Tashiko` reaches herself while opposed. A card that grants a keyword sometimes uses
-`@keyword_grant`. A card that changes a Province's strength uses
+{card}`Daidoji Tashiko` reaches herself while opposed. A card whose text gives a keyword to a card,
+itself or another, uses `@keyword_grant`, with a handler of the same shape:
+{card}`Fortified Farmlands` reaches itself, wherever it is, and {card}`Way of the Crab` reaches your
+opposed Personalities while it is in play. A card that changes a Province's strength uses
 `@province_strength_grant`.
 
 A card "considered to have" a stat when a certain asker checks it, as {card}`Dragon Elite Inkyo`

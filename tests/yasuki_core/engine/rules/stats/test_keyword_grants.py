@@ -1,10 +1,20 @@
 from yasuki_core.engine.players import PlayerId
+import pytest
+
 from yasuki_core.engine.rules.stats.keyword_grants import (
+    KEYWORD_GRANTS,
     effective_keywords,
+    keyword_grant,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
 
-from tests.yasuki_core.engine.builders import doro_no_oni, holding, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    doro_no_oni,
+    holding,
+    put_in_play,
+    register,
+    two_seat_game,
+)
 
 
 def _shrine_of_courtesy(seat):
@@ -69,3 +79,22 @@ def test_an_ownerless_card_falls_back_to_its_printed_keywords():
     game = two_seat_game()
     orphan = holding("loose", printed_id="shrine_of_courtesy", keywords=("Temple",))
     assert effective_keywords(game, orphan) == frozenset({"Temple"})
+
+
+@pytest.mark.parametrize("in_play", [True, False], ids=["in_play", "out_of_play"])
+def test_a_text_grant_reaches_another_card_only_while_its_card_is_in_play(in_play):
+    @keyword_grant("grant_probe")
+    def _cavalry_to_every_card(game, granting, card):
+        return ("Cavalry",)
+
+    try:
+        game = two_seat_game()
+        other = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
+        banner = holding("P1-banner", owner=PlayerId.P1, printed_id="grant_probe")
+        granting = put_in_play(game, banner) if in_play else register(game.table, banner)
+
+        assert effective_keywords(game, granting) == frozenset({"Cavalry"})
+        expected = {"Farm", "Cavalry"} if in_play else {"Farm"}
+        assert effective_keywords(game, other) == frozenset(expected)
+    finally:
+        KEYWORD_GRANTS.pop("grant_probe", None)

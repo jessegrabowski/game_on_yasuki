@@ -105,6 +105,7 @@ PEARL = "Pearl"
 PORT = "Port"
 SAMURAI = "Samurai"
 SHADOWLANDS = "Shadowlands"
+SIEGE = "Siege"
 TACTICIAN = "Tactician"
 YOJIMBO = "Yojimbo"
 # The clan, not the creature: the "<X> Clan" column, per the note at the top of this module.

@@ -1,7 +1,11 @@
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, InvestAbility
 from yasuki_core.engine.rules.abilities.registry import register_ability, register_invest
-from yasuki_core.engine.rules.board.queries import has_keyword, opposed_units_in_battle, units_at
+from yasuki_core.engine.rules.board.queries import (
+    has_keyword,
+    opposed_units_in_battle,
+    outnumbered_at,
+)
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     Effect,
@@ -101,17 +105,12 @@ def _the_unassailable_fortress_of_the_crab_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     """ "Straighten your target opposed Personality. Straighten his attachments if your army has
-    fewer units than the opposing army." A unit is a Personality with his attachments (CR, Unit),
-    so the armies are compared by Personalities."""
+    fewer units than the opposing army." """
+    effects: list[Effect] = [Straighten(target.id)]
     attack = game.attack
     if attack is None or attack.current is None:
-        return [Straighten(target.id)]
-    enemy = attack.enemy_of(source.owner)
-    own_army = units_at(game, attack.current, source.owner)
-    enemy_army = units_at(game, attack.current, enemy)
-    outnumbered = len(own_army) < len(enemy_army)
-    effects: list[Effect] = [Straighten(target.id)]
-    if outnumbered:
+        return effects
+    if outnumbered_at(game, attack.current, source.owner):
         attachments = attachments_of(game, target)
         effects.append(Simultaneously(tuple(Straighten(attached.id) for attached in attachments)))
     return effects

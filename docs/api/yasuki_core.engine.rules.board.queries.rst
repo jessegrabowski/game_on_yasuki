@@ -18,6 +18,7 @@ yasuki_core.engine.rules.board.queries
     in_army_with
     opposed_units_in_battle
     opposing_units_in_battle
+    outnumbered_at
     owned_carrying
     owned_holdings
     owned_personalities

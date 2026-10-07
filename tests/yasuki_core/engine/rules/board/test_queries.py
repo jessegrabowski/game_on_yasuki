@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.board.queries import (
     controls_terrain_at,
     has_keyword,
     owned_carrying,
+    outnumbered_at,
     owned_holdings,
     phase_history,
     province_key_of,
@@ -31,6 +32,7 @@ from yasuki_core.game_pieces.prints import RingPrint
 from tests.yasuki_core.engine.builders import (
     attached,
     attachment,
+    combat_segment,
     doro_no_oni,
     holding,
     personality,
@@ -79,8 +81,8 @@ def test_a_keyword_lookup_sees_a_keyword_the_card_grants_itself():
     assert owned_holdings(game, PlayerId.P1, "Port") == [printed]
 
     @keyword_grant("keyword_probe")
-    def _grants_port(card, game, seat):
-        return ("Port",)
+    def _grants_port(game, granting, card):
+        return ("Port",) if card is granting else ()
 
     try:
         assert owned_holdings(game, PlayerId.P1, "Port") == [granted, printed]
@@ -132,6 +134,18 @@ def test_a_terrain_named_only_by_its_ability_keyword_is_a_terrain():
 
     assert terrains_at(game, battlefield=0) == [doro]
     assert controls_terrain_at(game, PlayerId.P2, battlefield=0)
+
+
+def test_an_army_is_outnumbered_only_by_an_opposing_army_with_more_units():
+    cards = [personality(card_id, owner=PlayerId.P2) for card_id in ("d1", "d2", "d3")]
+    cards.append(personality("a", owner=PlayerId.P1))
+    session = combat_segment(cards, {"a": 0}, {"d1": 0, "d2": 0, "d3": 1})
+    game = session.game
+
+    assert outnumbered_at(game, 0, PlayerId.P1)
+    assert not outnumbered_at(game, 0, PlayerId.P2)
+    assert not outnumbered_at(game, 1, PlayerId.P1)
+    assert not outnumbered_at(game, 1, PlayerId.P2)
 
 
 def test_the_phase_history_holds_what_happened_since_the_latest_phase_began():

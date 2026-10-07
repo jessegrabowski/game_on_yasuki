@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
 from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, PutIntoPlay
 from yasuki_core.engine.rules.abilities.costs import no_cost
@@ -502,6 +503,25 @@ def test_the_rulebook_favor_ability_opens_way_of_the_cranes_window():
     assert CRANE_DRAW in session.legal_actions(P1)
 
 
+@pytest.mark.parametrize(
+    ("carried", "bows"),
+    [(AttachmentType.ITEM, True), (AttachmentType.FOLLOWER, False)],
+    ids=["item", "follower"],
+)
+def test_hida_sanjiro_fears_only_while_he_has_an_item(carried, bows):
+    cards = [
+        personality("sanjiro", printed_id="hida_sanjiro", force=4),
+        personality("guard", owner=P2, force=4),
+    ]
+    session = combat_segment(cards, {"sanjiro": 0}, {"guard": 0})
+    attached(session.game, attachment("gear", attachment_type=carried), "sanjiro")
+
+    session.act(P1, ActivateAbility("sanjiro"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert session.game.table.cards_by_id["guard"].bowed is bows
+
+
 # --- Way of the Crab (Experienced) ---
 
 
@@ -556,6 +576,24 @@ def test_a_fortification_whose_bowing_way_of_the_crab_negates_still_bows_to_pay_
     pay_costs(game, [Bow("wall")])
 
     assert _bowed(game, "wall")
+
+
+def test_way_of_the_crab_gives_siege_only_to_your_opposed_personalities():
+    cards = [
+        _edict("crab", "way_of_the_crab_experienced"),
+        personality("hero"),
+        personality("idle"),
+        personality("guard", owner=P2),
+    ]
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0})
+    game = session.game
+
+    sieging = {
+        card_id
+        for card_id in ("hero", "idle", "guard")
+        if keywords.SIEGE in effective_keywords(game, game.table.cards_by_id[card_id])
+    }
+    assert sieging == {"hero"}
 
 
 # --- Way of the Dragon (Experienced) ---
@@ -2187,6 +2225,128 @@ def test_binasa_offers_no_pearl_card_his_ranged_destroyed():
 
     assert "pearl" not in {card.id for card in game.table.battlefield.cards}
     assert game.pending is None
+
+
+# --- Brute Force ---
+
+
+def _brute_force_battle() -> EngineSession:
+    """P1's 6F brute and a 4F scout carrying +2F, against P2's 2F, 4F and 6F Personalities, with
+    Brute Force in hand."""
+    brute_force = L5RCard.of(
+        ActionPrint,
+        id="brute-force",
+        printed_id="brute_force",
+        name="Brute Force",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    cards = [
+        personality("brute", force=6),
+        personality("scout", force=4),
+        personality("weak", owner=P2, force=2),
+        personality("mid", owner=P2, force=4),
+        personality("big", owner=P2, force=6),
+    ]
+    p1_army = {"brute": 0, "scout": 0}
+    p2_army = {"weak": 0, "mid": 0, "big": 0}
+    session = combat_segment(cards, p1_army, p2_army, in_hand=[brute_force])
+    attached(session.game, attachment("spear", force_modifier=2), "scout")
+    return session
+
+
+def _brute_force_on(session: EngineSession, enemy: str) -> None:
+    session.act(P1, PlayStrategy("brute-force"))
+    session.submit(P1, DecisionResponse(("brute",)))
+    session.submit(P1, DecisionResponse((enemy,)))
+
+
+def test_brute_force_targets_by_printed_force_then_by_lower_current_force():
+    session = _brute_force_battle()
+
+    session.act(P1, PlayStrategy("brute-force"))
+    assert session.game.pending.candidates == ("brute",)  # the scout reaches 6F only with his +2F
+    session.submit(P1, DecisionResponse(("brute",)))
+
+    assert set(session.game.pending.candidates) == {"weak", "mid"}
+
+
+def test_brute_force_destroys_an_enemy_with_under_half_its_force():
+    session = _brute_force_battle()
+
+    _brute_force_on(session, "weak")
+
+    discard = session.game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)]
+    assert "weak" in {card.id for card in discard.cards}
+
+
+def test_brute_force_only_bows_an_enemy_with_half_its_force_or_more():
+    session = _brute_force_battle()
+
+    _brute_force_on(session, "mid")
+
+    mid = session.game.table.cards_by_id["mid"]
+    assert mid in session.game.table.battlefield.cards
+    assert mid.bowed
+
+
+# --- Purity's Fist ---
+
+
+@pytest.mark.parametrize(
+    ("enemy_force", "enemy_keywords", "two_handed", "destroyed"),
+    [
+        (3, (), False, True),
+        (3, (), True, False),
+        (4, (), False, False),
+        (4, (keywords.SHADOWLANDS,), False, True),
+    ],
+    ids=["melee_3", "two_handed", "too_strong", "shadowlands"],
+)
+def test_puritys_fist_adjusts_its_melee_to_the_target(
+    enemy_force, enemy_keywords, two_handed, destroyed
+):
+    cards = [
+        personality("hero", force=3),
+        personality("guard", owner=P2, force=enemy_force, keywords=enemy_keywords),
+    ]
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0})
+    game = session.game
+    attached(game, attachment("fist", printed_id="puritys_fist", force_modifier=3), "hero")
+    if two_handed:
+        weapon = attachment("club", owner=P2, keywords=(keywords.WEAPON, keywords.TWO_HANDED))
+        attached(game, weapon, "guard")
+
+    session.act(P1, ActivateAbility("fist"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    discard = {card.id for card in game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)].cards}
+    assert ("guard" in discard) is destroyed
+    assert game.table.cards_by_id["fist"].bowed
+
+
+# --- Collapsing Bridge ---
+
+
+def test_collapsing_bridge_gives_any_players_province_3_strength_and_destroys_itself():
+    state = TableState.empty_two_seat()
+    province_card(state, "own-prov", seat=P1)
+    province_card(state, "enemy-prov", seat=P2)
+    put_in_play(state, holding("bridge", printed_id="collapsing_bridge"))
+    session = EngineSession.start(state, P1)
+    enemy_province = ZoneKey(P2, ZoneRole.PROVINCE, 0)
+
+    session.act(P1, ActivateAbility("bridge"))
+    assert set(session.game.pending.candidates) == {
+        ZoneKey(P1, ZoneRole.PROVINCE, 0).token,
+        enemy_province.token,
+    }
+    session.submit(P1, DecisionResponse((enemy_province.token,)))
+
+    game = session.game
+    assert effective_province_strength(game, enemy_province) == 3
+    assert game.table.cards_by_id["bridge"] not in game.table.battlefield.cards
 
 
 # --- Daigotsu Konishi ---

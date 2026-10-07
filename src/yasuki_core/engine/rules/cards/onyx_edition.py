@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesi
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
+    AskOption,
     Banish,
     Bow,
     Choose,
@@ -50,6 +51,7 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantDuelStat,
     GrantKeyword,
+    GrantModifier,
     GrantSeatAbility,
     Move,
     MoveToDeck,
@@ -84,15 +86,19 @@ from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_BATTLE
-from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
+from yasuki_core.engine.rules.units.composition import followers_of, is_follower, unit_force
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.triggers import TriggerContext, action_recruited, choice_resolver, on
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.duel.procedure import duel_decided_by
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import (
+    army_at,
     attack_targets,
     has_keyword,
+    opposed_units_in_battle,
     opposing_units_in_battle,
+    outnumbered_at,
     owned_personalities,
     personalities_in_play,
     rings_in_play,
@@ -246,6 +252,117 @@ register_ability(
 )
 
 
+# --- Hida War College (Experienced) ---
+
+WAR_COLLEGE_FORCE = 2
+WAR_COLLEGE_PRESSED_FORCE = 4
+
+register_recruit_restriction("hida_war_college_experienced", clan_player(ruleset.CRAB))
+
+
+def _hida_war_college_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in owned_personalities(game, source.owner)]
+
+
+def _hida_war_college_experienced_pressed(game: GameState, personality: L5RCard) -> bool:
+    """ "If they are defending or outnumbered", read at the battle being fought, where a Battle
+    action's target stands."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return False
+    seat = personality.owner
+    return attack.defender is seat or outnumbered_at(game, attack.current, seat)
+
+
+def _hida_war_college_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """The bonus runs to the end of the turn, as one with no printed duration does (CR, Duration
+    of Effects)."""
+    pressed = _hida_war_college_experienced_pressed(game, target)
+    amount = WAR_COLLEGE_PRESSED_FORCE if pressed else WAR_COLLEGE_FORCE
+    return [
+        GrantModifier(source.id, target.id, Stat.FORCE, amount, Duration.UNTIL_END_OF_TURN),
+        AdditionalAction(source.owner, source.id),
+    ]
+
+
+register_ability(
+    "hida_war_college_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=_hida_war_college_experienced_targets,
+        targeting_message="your Personality",
+        effects=_hida_war_college_experienced_effects,
+    ),
+)
+
+
+# --- Hida Yurike, Soul of Hida Rikyu ---
+
+
+def _hida_yurike_soul_of_hida_rikyu_bow_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Enemy Personalities at the battle whose unit totals no more Force than Yurike's."""
+    reach = unit_force(game, source)
+    return [
+        card_id
+        for card_id in opposing_units_in_battle(game, source.owner)
+        if unit_force(game, game.table.cards_by_id[card_id]) <= reach
+    ]
+
+
+def _hida_yurike_soul_of_hida_rikyu_bow_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Bow every card in the target's unit (CR, Unit)."""
+    return [Simultaneously(tuple(Bow(card.id) for card in unit_of(game, target)))]
+
+
+register_ability(
+    "hida_yurike_soul_of_hida_rikyu",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=_hida_yurike_soul_of_hida_rikyu_bow_targets,
+        targeting_message="an enemy Personality whose unit has no more Force than Yurike's",
+        effects=_hida_yurike_soul_of_hida_rikyu_bow_effects,
+        key="bow",
+    ),
+)
+
+
+def _hida_yurike_soul_of_hida_rikyu_straighten_targets(
+    game: GameState, source: L5RCard
+) -> list[str]:
+    return [card.id for card in followers_of(game, source) if not card.bowed]
+
+
+def _hida_yurike_soul_of_hida_rikyu_straighten_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Bow Yurike's target Follower to straighten Yurike": a Follower bowed by the time this
+    resolves bows nothing, so Yurike stays as she is (CR, To)."""
+    if target.bowed:
+        return []
+    return [Bow(target.id), Straighten(source.id)]
+
+
+register_ability(
+    "hida_yurike_soul_of_hida_rikyu",
+    Ability(
+        printed_index=1,
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_hida_yurike_soul_of_hida_rikyu_straighten_targets,
+        targeting_message="Yurike's unbowed Follower",
+        effects=_hida_yurike_soul_of_hida_rikyu_straighten_effects,
+        tireless=True,
+        key="straighten",
+    ),
+)
+
+
 # --- Imperial Treasurer's Outpost ---
 
 
@@ -264,6 +381,94 @@ register_ability(
         cost=no_cost,
         targets=itself,
         effects=_imperial_treasurers_outpost_effects,
+        hits_every_target=True,
+    ),
+)
+
+
+# --- Kaiu Denkaru ---
+
+DENKARU_FORCE = 2
+DENKARU_BONUS = "Give Denkaru +2F"
+DENKARU_PENALTY = "Give a target enemy Follower or Personality -2F"
+
+
+def _kaiu_denkaru_enemies(game: GameState, source: L5RCard) -> tuple[str, ...]:
+    """The enemy Followers and Personalities at the battle being fought."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return ()
+    return tuple(
+        card.id
+        for card in army_at(game, attack.current, attack.enemy_of(source.owner))
+        if isinstance(card.printed, PersonalityPrint) or is_follower(card)
+    )
+
+
+def _kaiu_denkaru_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Denkaru himself, while he is opposed: unopposed, the ability does nothing."""
+    return [source.id] if source.id in opposed_units_in_battle(game, source.owner) else []
+
+
+def _kaiu_denkaru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "If Denkaru is opposed, either give him +2F or give a target enemy Follower or Personality
+    -2F. If Denkaru is defending, you may do both." The penalty is offered only while an enemy can
+    take it."""
+    attack = game.attack
+    if attack is None or source.id not in opposed_units_in_battle(game, source.owner):
+        return []
+    if _kaiu_denkaru_enemies(game, source):
+        modes = (DENKARU_BONUS, DENKARU_PENALTY)
+    else:
+        modes = (DENKARU_BONUS,)
+    defending = attack.defender is source.owner
+    return [
+        AskOption(
+            source.owner,
+            modes,
+            "Kaiu Denkaru: give him +2F, or an enemy -2F?",
+            "kaiu_denkaru",
+            source.id,
+            maximum=len(modes) if defending else 1,
+        )
+    ]
+
+
+@choice_resolver("kaiu_denkaru")
+def _resolve_kaiu_denkaru(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Both changes run to the end of the turn, as ones with no printed duration do (CR, Duration
+    of Effects)."""
+    effects: list[Effect] = []
+    if DENKARU_BONUS in chosen:
+        effects.append(
+            GrantModifier(
+                source_id, source_id, Stat.FORCE, DENKARU_FORCE, Duration.UNTIL_END_OF_TURN
+            )
+        )
+    if DENKARU_PENALTY in chosen:
+        enemies = _kaiu_denkaru_enemies(game, game.table.cards_by_id[source_id])
+        effects.append(Choose(seat, enemies, 1, 1, "kaiu_denkaru_penalty", source_id))
+    return effects
+
+
+@choice_resolver("kaiu_denkaru_penalty", prompt="Give a target enemy Follower or Personality -2F")
+def _resolve_kaiu_denkaru_penalty(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [
+        GrantModifier(source_id, chosen[0], Stat.FORCE, -DENKARU_FORCE, Duration.UNTIL_END_OF_TURN)
+    ]
+
+
+register_ability(
+    "kaiu_denkaru",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_kaiu_denkaru_targets,
+        effects=_kaiu_denkaru_effects,
         hits_every_target=True,
     ),
 )

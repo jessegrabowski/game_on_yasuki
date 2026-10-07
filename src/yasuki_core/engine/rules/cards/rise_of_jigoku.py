@@ -806,13 +806,15 @@ def _sapphire_mine_gold(
 
 
 @keyword_grant("sapphire_mine")
-def _sapphire_mine_keywords(card: L5RCard, game: GameState, seat: PlayerId) -> tuple[str, ...]:
+def _sapphire_mine_keywords(game: GameState, mine: L5RCard, card: L5RCard) -> tuple[str, ...]:
     """Renew while it holds any Sincerity token.
 
     Recruiting reads Renew as the card enters play and spends its Sincerity afterwards, so a Mine
     that accrued even one token refills the Province it vacated face-up.
     """
-    return (keywords.RENEW,) if card.counters.get(SINCERITY.key, 0) else ()
+    if card is not mine:
+        return ()
+    return (keywords.RENEW,) if mine.counters.get(SINCERITY.key, 0) else ()
 
 
 @on(EnteredPlay, "sapphire_mine")
