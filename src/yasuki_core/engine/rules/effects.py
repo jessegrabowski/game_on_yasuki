@@ -2796,10 +2796,20 @@ class Recruit(Effect):
         return f"recruit {self.card_id}"
 
     def would_happen(self, game: GameState) -> bool:
-        """Whether the card may enter play: Unique and Singular can keep it out, and so can its own
-        "May only be Recruited by" text."""
+        """Whether the card may enter play: Unique and Singular can keep it out, its own "May only
+        be Recruited by" text can, and so can a Personality's Honor Requirement.
+
+        The Honor Requirement is checked here rather than only where the rulebook offers a Recruit,
+        so a card that Recruits by returning this effect meets it too.
+        """
+        # The Recruit procedure imports this module for the effects it resolves, so importing it
+        # at the top would close that cycle.
+        from yasuki_core.engine.rules.rulebook.recruit import meets_honor_requirement
+
         card = game.table.cards_by_id[self.card_id]
-        return may_join(game, card.owner, card) and may_recruit(game, card.owner, card)
+        if not may_join(game, card.owner, card) or not may_recruit(game, card.owner, card):
+            return False
+        return meets_honor_requirement(game, card)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         # The Recruit procedure imports this module for the effects it resolves, so importing it

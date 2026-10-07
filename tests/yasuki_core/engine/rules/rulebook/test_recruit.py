@@ -242,3 +242,47 @@ def test_a_cards_recruit_is_open_to_its_actions_interrupt_step():
     foreseen = forecast(game, tuple(recruit.recruit_card(game, target)))
 
     assert [effect.card_id for effect in foreseen if isinstance(effect, Recruit)] == [target.id]
+
+
+@pytest.mark.parametrize(
+    ("honor", "arrives"), [(5, True), (6, True), (4, False)], ids=["meets", "exceeds", "short"]
+)
+def test_the_recruit_effect_itself_holds_a_personality_to_his_honor_requirement(honor, arrives):
+    """The rulebook offers a Recruit only to a seat whose Honor reaches it, but a card that
+    Recruits by returning the effect reaches it another way, so the effect carries the gate too."""
+    game = two_seat_game()
+    game.table.seats[PlayerId.P1].honor = honor
+    proud = register(game.table, personality("proud", honor_requirement=5))
+
+    resolve_action_effects(game, [Recruit("proud", from_province=None)])
+
+    assert (proud in game.table.battlefield.cards) is arrives
+
+
+def test_the_recruit_effect_lets_a_holding_in_whatever_the_seats_honor():
+    """Only a Personality prints an Honor Requirement, so the gate has to let everything else
+    past rather than reading a stat that is not there."""
+    game = two_seat_game()
+    game.table.seats[PlayerId.P1].honor = -10
+    mine = register(game.table, holding("mine", gold_production=2))
+
+    resolve_action_effects(game, [Recruit("mine", from_province=None)])
+
+    assert mine in game.table.battlefield.cards
+
+
+def test_a_waiver_in_play_carries_a_personality_past_the_recruit_effects_gate():
+    """The waiver is read off the board as the Recruit resolves, so it reaches the effect's gate
+    and not only the rulebook's offer."""
+    game = two_seat_game()
+    game.table.seats[PlayerId.P1].honor = 0
+    put_in_play(game.table, holding("P1-sensei", printed_id="waiver_probe"))
+    proud = register(game.table, personality("proud", honor_requirement=5))
+    recruit.register_honor_requirement_waiver("waiver_probe")
+
+    try:
+        resolve_action_effects(game, [Recruit("proud", from_province=None)])
+    finally:
+        recruit.HONOR_REQUIREMENT_WAIVERS.discard("waiver_probe")
+
+    assert proud in game.table.battlefield.cards
