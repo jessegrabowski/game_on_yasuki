@@ -153,11 +153,12 @@ def attack_targeting(kind: type) -> Callable[[GameState, L5RCard], list[str]]:
 
 
 def attack_targets_at(
-    game: GameState, battlefield: int, seat: PlayerId, *, past_followers: bool = False
+    game: GameState, battlefield: int | None, seat: PlayerId, *, past_followers: bool = False
 ) -> list[str]:
     """The ids an attack effect may be pointed at among ``seat``'s units at ``battlefield``: each
     unit's Followers, and its Personality when he carries none or ``past_followers`` lets the
-    attack reach him anyway (CR, Ranged Attack)."""
+    attack reach him anyway (CR, Ranged Attack). ``None`` asks it of ``seat``'s home, for an
+    attack that reaches a card standing out of the battle."""
     targets: list[str] = []
     for personality in units_at(game, battlefield, seat):
         followers = followers_of(game, personality)
@@ -290,9 +291,10 @@ def province_holdings(game: GameState, seat: PlayerId) -> list[str]:
     ]
 
 
-def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]:
+def units_at(game: GameState, battlefield: int | None, seat: PlayerId) -> list[L5RCard]:
     """The Personalities ``seat`` has standing at ``battlefield``, in play order. One side of the
-    army there, since a seat's units at a battlefield are all on the same side of it."""
+    army there, since a seat's units at a battlefield are all on the same side of it. ``None``
+    names the seat's home, where a Personality in no battle stands."""
     return [
         card
         for card in game.table.battlefield.cards
