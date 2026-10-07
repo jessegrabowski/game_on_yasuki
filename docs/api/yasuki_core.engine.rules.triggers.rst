@@ -45,6 +45,7 @@ yasuki_core.engine.rules.triggers
     resolve_delayed
     resolve_effects
     resume_cascade
+    resume_in_place
     resume_paused_cascade
     resume_trigger_order
     rulebook_trigger

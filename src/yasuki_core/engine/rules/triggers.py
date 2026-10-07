@@ -730,6 +730,9 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 effect = negate_committed(game, effect, provenance)
             effect = _held_from(effect, provenance)
             if isinstance(effect, InterruptingEffect) and effect.pauses(game):
+                if effect.answers_in_place:
+                    # Kept where it stood, with what depends on it, for the answer to replace.
+                    top.pending.insert(0, popped)
                 # Stash before asking for the request: the work stack is LIFO, and an effect whose
                 # request queues its own work (a recruit queues its resolution) must have that work
                 # run before the remainder of this cascade resumes.
@@ -1407,6 +1410,24 @@ def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
     nothing pushes between the pause and the answer. Raise ``RuntimeError`` if it is not there.
     """
     resume_cascade(game, _popped_stash(game), produced)
+
+
+def resume_in_place(game: GameState, choices: tuple[str, ...]) -> None:
+    """Pop the cascade a question answered in place paused, and continue it with what ``choices``
+    make of that question where it stood, still the first of the :class:`~.To` it stood in.
+
+    Raise ``RuntimeError`` if the stash does not hold such a question at the head of its top frame,
+    where its pause leaves it.
+    """
+    frames = _resumed_frames(game, _popped_stash(game))
+    top = frames[-1]
+    held = top.pending.pop(0) if isinstance(top, _Effects) and top.pending else None
+    asked = held.first if isinstance(held, To) else held
+    if not isinstance(asked, InterruptingEffect) or not asked.answers_in_place:
+        raise RuntimeError("an answer came back with no question paused to take it")
+    answer = asked.answered(choices)
+    top.pending.insert(0, To(answer, held.contingent) if isinstance(held, To) else answer)
+    _advance(game, frames)
 
 
 def resume_trigger_order(game: GameState, chosen: str) -> None:

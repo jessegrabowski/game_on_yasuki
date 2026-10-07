@@ -179,6 +179,9 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             apply_interrupt_target(game, request, response)
         case ChooseInterruptEffect():
             apply_interrupt_effect(game, request, response)
+        case ChooseOption(resolver=None):
+            triggers.resume_in_place(game, response.choices)
+            run_stack(game)
         case ChooseCards():
             _apply_card_choice(game, request, response)
         case ChooseAmount():

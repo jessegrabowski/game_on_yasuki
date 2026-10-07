@@ -57,6 +57,7 @@ the order they are written" (CR, Order of Effects).
 .. autosummary::
 
    AdjustCounter
+   AlternateEffects
    Arrange
    Ask
    AskAmount

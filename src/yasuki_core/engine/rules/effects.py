@@ -210,6 +210,24 @@ class InterruptingEffect(Effect, ABC):
         case the walker performs the effect instead of asking."""
         return True
 
+    def possible_answers(self) -> tuple[Effect, ...]:
+        """Each effect the answer may make of this one, which the Interrupt step reads as the
+        action's text (CR, Blind Cards Rule). An Interrupt bound to one applies only if the answer
+        makes it, since its effect waits for that effect to occur (CR, Interrupt Actions). None
+        unless a subclass answers in place."""
+        return ()
+
+    @property
+    def answers_in_place(self) -> bool:
+        """Whether the answer makes this effect into one of :meth:`possible_answers`, which takes
+        its place where it stood, the first of a :class:`To` included."""
+        return bool(self.possible_answers())
+
+    def answered(self, choices: tuple[str, ...]) -> Effect:
+        """The effect the seat's ``choices`` make of this one, for one that answers in place. Raise
+        ``RuntimeError`` for one that does not."""
+        raise RuntimeError(f"{type(self).__name__} is not answered in place")
+
     def is_negatable(self, game: GameState) -> bool:
         """False: a question is no effect, and what its answer produces is checked as it commits.
         An effect that asks before it happens, as a chosen discard does, says True."""
@@ -1833,6 +1851,62 @@ class AskAmount(InterruptingEffect):
 
 
 @dataclass(frozen=True, slots=True)
+class AlternateEffects(InterruptingEffect):
+    """Ask ``seat`` which of ``options`` happens, as an alternate effect ("bow or destroy it") has
+    it, when it comes up to resolve, and commit the one chosen (CR, Choices).
+
+    The first of a :class:`To` may be one, so what depends on it follows only if the chosen effect
+    actually happened (CR, Independence of Effects). It would happen while any of its options
+    would, which is what the Interrupt step reads of what depends on it.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat choosing: the player taking the action, the CR's default where the card names none.
+    options : tuple of Effect
+        The alternatives, in print order.
+    wordings : tuple of str
+        Each alternative as the seat reads it, in the same order.
+    question : str
+        What is being chosen.
+    source_id : str
+        The card whose text offers the choice.
+    """
+
+    seat: PlayerId
+    options: tuple[Effect, ...]
+    wordings: tuple[str, ...]
+    question: str
+    source_id: str
+
+    def __post_init__(self) -> None:
+        """Raise ValueError unless each alternative has one wording."""
+        if len(self.options) != len(self.wordings):
+            raise ValueError("each alternative needs one wording")
+
+    def describe(self) -> str:
+        return f"{self.seat.name} chooses: {' or '.join(self.wordings)}"
+
+    def would_happen(self, game: GameState) -> bool:
+        return any(option.would_happen(game) for option in self.options)
+
+    def answered(self, choices: tuple[str, ...]) -> Effect:
+        return self.options[self.wordings.index(choices[0])]
+
+    def possible_answers(self) -> tuple[Effect, ...]:
+        return self.options
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return ChooseOption(
+            seat=self.seat,
+            candidates=self.wordings,
+            question=self.question,
+            resolver=None,
+            source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class AskOption(InterruptingEffect):
     """Pause for the seat to pick one of the outcomes a card spells out, then hand the choice to a
     resolver.
@@ -2834,7 +2908,8 @@ class To(Effect):
     adjusted did. What reacts to ``first`` resolves before ``contingent`` applies.
 
     Raise ``TypeError`` if ``first`` asks a question or holds other effects, which the walk could
-    not tell happened.
+    not tell happened, unless the question is answered in place, as :class:`AlternateEffects` is:
+    what the answer makes of it is what happened.
 
     Attributes
     ----------
@@ -2848,6 +2923,8 @@ class To(Effect):
     contingent: tuple[Effect, ...]
 
     def __post_init__(self) -> None:
+        if isinstance(self.first, InterruptingEffect) and self.first.answers_in_place:
+            return
         if isinstance(self.first, InterruptingEffect | Simultaneously | To | Attributed):
             raise TypeError(f"{type(self.first).__name__} cannot be what another effect depends on")
 
