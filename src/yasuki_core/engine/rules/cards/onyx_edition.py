@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.abilities.model import (
     Interrupt,
     Interruption,
     InvestAbility,
+    TargetGroup,
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
@@ -34,6 +35,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
@@ -99,6 +101,7 @@ from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.duel.procedure import duel_decided_by
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     army_at,
     attack_targets,
     has_keyword,
@@ -1120,50 +1123,50 @@ register_ability(
 # "You lose 1 Honor less from your cards" (2 on the back) is not modeled: nothing reads how much
 # Honor a card's effect costs its own controller. The Battle ability is.
 
-DARK_CAPITAL_FEAR = "the_dark_capital_of_the_spider"
+
+def _the_dark_capital_of_the_spider_targets(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """Any Personality, your own only while the Fear targeting it commits you to has a card to
+    target (CR, Good Faith Rule; CR, Choice Paradoxes)."""
+    return _the_dark_capital_of_the_spider_personalities(
+        game, source, fear_follows=bool(attack_targets(game, source))
+    )
 
 
-def _the_dark_capital_of_the_spider_targets(game: GameState, source: L5RCard) -> list[str]:
-    return [card.id for card in personalities_in_play(game)]
+def _the_dark_capital_of_the_spider_personalities(
+    game: GameState, source: L5RCard, *, fear_follows: bool
+) -> list[str]:
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if card.owner is not source.owner or fear_follows
+    ]
+
+
+def _the_dark_capital_of_the_spider_feared(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """The Fear's target, chosen with the action's other targets (CR, Good Faith Rule), when the
+    Personality targeted first is yours. There is no Fear otherwise, and so nothing to target."""
+    if game.table.cards_by_id[picked[0][0]].owner is not source.owner:
+        return []
+    return attack_targets(game, source)
 
 
 def _the_dark_capital_of_the_spider_effects(
-    game: GameState, source: L5RCard, target: L5RCard
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
     """ "Give a target Personality Shadowlands. If they are yours, Fear equal to their Force.
     Otherwise, take an additional action." """
+    (target,), feared = groups
     shadowlands = GrantKeyword(
         source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN
     )
     if target.owner is not source.owner:
         return [shadowlands, AdditionalAction(source.owner, source.id)]
-    fear = Evaluate(
-        "the_dark_capital_of_the_spider_fear_target", source.id, source.owner, (target.id,)
-    )
-    return [shadowlands, fear]
-
-
-@choice_resolver("the_dark_capital_of_the_spider_fear_target")
-def _resolve_the_dark_capital_of_the_spider_fear_target(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """The Fear targets the way any Fear does, among what stands at the battle as it resolves, and
-    is not raised when nothing there can be targeted. ``chosen`` is the Personality whose Force it
-    reads."""
-    feared = attack_targets(game, game.table.cards_by_id[source_id])
-    if not feared:
-        return []
-    return [Choose(seat, tuple(feared), 1, 1, DARK_CAPITAL_FEAR, chosen[0])]
-
-
-@choice_resolver(DARK_CAPITAL_FEAR, prompt="Fear equal to their Force: choose its target")
-def _the_dark_capital_of_the_spider_fear(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """``source_id`` is the Personality given Shadowlands, whose Force the Fear reads as it
-    resolves."""
-    strength = effective_force(game, game.table.cards_by_id[source_id])
-    return [Fear(strength, chosen[0], seat)]
+    fears = (Fear(0, card.id, source.owner, force_of=target.id) for card in feared)
+    return [shadowlands, *fears]
 
 
 register_ability(
@@ -1171,8 +1174,14 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=_the_dark_capital_of_the_spider_targets,
-        effects=_the_dark_capital_of_the_spider_effects,
+        target_groups=(
+            TargetGroup(candidates=_the_dark_capital_of_the_spider_targets),
+            TargetGroup(
+                candidates=_the_dark_capital_of_the_spider_feared,
+                targeting_message=ATTACK_TARGET,
+            ),
+        ),
+        effects_for_groups=_the_dark_capital_of_the_spider_effects,
         tireless=True,
     ),
 )
@@ -1181,15 +1190,38 @@ register_ability(
 # --- The Dark Capital of the Spider (back) ---
 
 
+def _the_dark_capital_of_the_spider__back_in_battle(game: GameState, source: L5RCard) -> bool:
+    return ActionTiming.BATTLE in permitted_timings_in(game, action_round(game), source.owner)
+
+
+def _the_dark_capital_of_the_spider__back_targets(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """As the front's in a Battle. Taken as an Open, a Personality of yours makes no Fear, so
+    nothing holds it back."""
+    in_battle = _the_dark_capital_of_the_spider__back_in_battle(game, source)
+    fear_follows = not in_battle or bool(attack_targets(game, source))
+    return _the_dark_capital_of_the_spider_personalities(game, source, fear_follows=fear_follows)
+
+
+def _the_dark_capital_of_the_spider__back_feared(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """As the front's, and only when "this is a Battle"."""
+    if not _the_dark_capital_of_the_spider__back_in_battle(game, source):
+        return []
+    return _the_dark_capital_of_the_spider_feared(game, source, picked)
+
+
 def _the_dark_capital_of_the_spider__back_effects(
-    game: GameState, source: L5RCard, target: L5RCard
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
     """ "If they are yours and this is a Battle, Fear equal to their Force. Otherwise, take an
     additional action." Taken as an Open, even on the controller's own Personality, it is the
     additional action."""
-    in_battle = ActionTiming.BATTLE in permitted_timings_in(game, action_round(game), source.owner)
-    if in_battle:
-        return _the_dark_capital_of_the_spider_effects(game, source, target)
+    if _the_dark_capital_of_the_spider__back_in_battle(game, source):
+        return _the_dark_capital_of_the_spider_effects(game, source, groups)
+    (target,), _ = groups
     return [
         GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN),
         AdditionalAction(source.owner, source.id),
@@ -1201,8 +1233,14 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
         cost=no_cost,
-        targets=_the_dark_capital_of_the_spider_targets,
-        effects=_the_dark_capital_of_the_spider__back_effects,
+        target_groups=(
+            TargetGroup(candidates=_the_dark_capital_of_the_spider__back_targets),
+            TargetGroup(
+                candidates=_the_dark_capital_of_the_spider__back_feared,
+                targeting_message=ATTACK_TARGET,
+            ),
+        ),
+        effects_for_groups=_the_dark_capital_of_the_spider__back_effects,
         tireless=True,
     ),
 )

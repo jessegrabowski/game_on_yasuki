@@ -67,6 +67,7 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseAbilityTarget,
     ChooseCards,
     ChooseDiscard,
     ChooseNextTrigger,
@@ -800,7 +801,7 @@ def test_the_capital_gives_its_own_personality_shadowlands_and_fear_equal_to_his
     session.act(P1, ActivateAbility("capital"))
     session.submit(P1, DecisionResponse(("raider",)))
     choice = session.game.pending
-    assert isinstance(choice, ChooseCards) and choice.candidates == ("guard",)
+    assert isinstance(choice, ChooseAbilityTarget) and choice.candidates == ("guard",)
     session.submit(P1, DecisionResponse(("guard",)))
 
     game = session.game
@@ -880,16 +881,36 @@ def test_the_capital_replays_to_the_same_board():
     assert replay(session.log) == session.game
 
 
-def test_the_capitals_fear_reads_the_battle_as_it_resolves():
+@pytest.mark.parametrize(("guard_at", "offered"), [(0, True), (1, False)], ids=["fear", "no_fear"])
+def test_the_capital_targets_your_own_personality_only_with_something_to_fear(guard_at, offered):
+    cards = [
+        flip_stronghold(DARK_CAPITAL, card_id="capital", gold_production=4, clan="Spider"),
+        personality("raider", owner=P1, force=3),
+        personality("guard", owner=P2, force=2),
+    ]
+    session = combat_segment(cards, {"raider": 0}, {"guard": guard_at})
+
+    assert (ActivateAbility("capital") in session.legal_actions(P1)) is offered
+
+
+def test_the_capitals_fear_is_answerable_at_the_interrupt_step():
     session = _dark_capital_in_combat()
     game = session.game
-    capital, raider = game.table.cards_by_id["capital"], game.table.cards_by_id["raider"]
-    effects = ability_for(game, capital).effects(game, capital, raider)
+    okura = L5RCard.of(
+        ActionPrint,
+        id="okura",
+        name="Okura is Released",
+        printed_id="okura_is_released",
+        side=Side.FATE,
+        owner=P1,
+    )
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(game.table, okura))
 
-    resolve_effects(game, [Move("guard", Location.home(P2)), *effects])
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
 
-    assert game.pending is None
-    assert not game.table.cards_by_id["guard"].bowed
+    assert PlayInterrupt("okura") in session.legal_actions(P1)
 
 
 # --- The Sacred Ground of the Phoenix ---
