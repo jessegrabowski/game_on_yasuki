@@ -152,6 +152,8 @@ class GameRunner:
                 continue
             if isinstance(action, Equip):
                 verb = "Equip & Invest" if action.invest else "Equip"
+                if action.discount:
+                    verb = f"{verb} for {action.discount} less"
                 items.append((f"{verb}: {_pay(legality.action_gold(game, action))}", action))
             elif isinstance(action, PlayStrategy):
                 card = game.table.cards_by_id[card_id]

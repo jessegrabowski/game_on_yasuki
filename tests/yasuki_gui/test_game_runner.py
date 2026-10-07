@@ -727,6 +727,20 @@ def test_an_equip_is_priced_at_what_the_seats_discount_leaves():
     assert runner.hand_menu("spell") == [("Equip: Pay 1 gold", Equip("spell"))]
 
 
+def test_a_discounted_equip_is_labelled_apart_from_the_full_price_one():
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(PlayerId.P1, gold_production=5))
+    put_in_play(state, personality("o-win", printed_id="hida_o_win_experienced"))
+    blade = register(state, attachment("blade", gold_cost=3, keywords=("Jade",)))
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(blade)
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
+
+    assert runner.hand_menu("blade") == [
+        ("Equip: Pay 3 gold", Equip("blade")),
+        ("Equip for 1 less: Pay 2 gold", Equip("blade", discount=1)),
+    ]
+
+
 def _ruins_runner() -> GameRunner:
     """A runner with Repairing the Ruins face-up in a Province, and in each pile it searches one
     Holding it can find plus a Unique one it cannot."""
