@@ -6,7 +6,9 @@ from yasuki_core.engine.rules.stats.card_values import effective_weapon_limit
 from yasuki_core.engine.rules.effects import AttachCard
 from yasuki_core.engine.rules.units.membership import attached_to
 from yasuki_core.engine.rules.rulebook.equip import (
+    ATTACH_RESTRICTIONS,
     EQUIPS_FROM_DISCARD,
+    attach_restriction,
     creation_targets,
     equips_from_discard,
     has_caster,
@@ -183,6 +185,24 @@ def test_a_created_follower_is_not_held_back_by_a_weapon():
     )
 
     assert creation_targets(game, P1, ashigaru) == (hero,)
+
+
+def test_a_personalitys_own_text_refuses_what_will_not_attach_to_him():
+    game = two_seat_game()
+    picky = put_in_play(game, personality("picky", printed_id="refusing_probe"))
+    plain = put_in_play(game, personality("plain"))
+    sword = _weapon("sword")
+
+    @attach_restriction("refusing_probe")
+    def _refuses_weapons(game_, personality_, card):
+        return keywords.WEAPON not in card.keywords
+
+    try:
+        assert may_attach(game, picky, sword) is False
+        assert may_attach(game, plain, sword) is True
+        assert creation_targets(game, P1, _weapon_print()) == (plain,)
+    finally:
+        ATTACH_RESTRICTIONS.pop("refusing_probe", None)
 
 
 def test_a_creation_can_be_narrowed_to_the_keyword_the_card_names():

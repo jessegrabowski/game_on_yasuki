@@ -65,26 +65,22 @@ Cavalry rather than a keyword, so a unit is Infantry exactly when Cavalry is mis
 
 ## What a card may hang on
 
-{func}`~.may_attach` asks the card's own text first, then the rulebook:
+{func}`~.may_attach` asks the text of both cards first, the attachment's and the Personality's, then
+the rulebook:
 
-```python
-restriction = ATTACH_RESTRICTIONS.get(card.printed_id)
-if restriction is not None and not restriction(game, personality, card):
-    return False
-if is_spell(card) and not may_cast_spells(game, personality):
-    return False
-if keywords.WEAPON not in effective_keywords(game, card):
-    return True
-return may_attach_weapon(game, personality, card)
+```{literalinclude} ../../../src/yasuki_core/engine/rules/rulebook/equip.py
+:pyobject: may_attach
+:language: python
 ```
 
 The Weapon count and Two-Handed exclusivity are rulebook limits and live in `rulebook/equip.py` as
 code. A restriction only one card states is registered with that card, which is what
-`@attach_restriction` is for.
+`@attach_restriction` is for. One registry serves both sides: {card}`Brothers in Arms` limits what
+it will hang on, and {card}`Hida Zaiberu (Experienced)` limits what will attach to him.
 
 A created attachment is judged by {func}`~.may_attach_created` instead. The card does not exist yet,
-so its keywords come off the print, and a per-card restriction cannot apply to something with no
-text of its own.
+so its keywords come off the print. It has no text of its own, so only the Personality's
+restriction applies to it.
 
 ## Two things that need no handler
 

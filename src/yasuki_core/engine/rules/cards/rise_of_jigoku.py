@@ -40,6 +40,7 @@ from yasuki_core.engine.rules.rulebook.recruit import (
 )
 from yasuki_core.engine.rules.legality import location_permits, permitted_timings_in, recruit_cost
 from yasuki_core.engine.rules.rulebook.equip import attach_restriction, is_spell
+from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.effects import (
@@ -423,8 +424,13 @@ register_ability(
 
 ZAIBERU_EXPERIENCED_MOST_BOWED = 2
 
-# "Will not attach Followers" has no handler: nothing yet models a Personality refusing a kind of
-# attachment, and the Equip restriction is the place it will go.
+
+@attach_restriction("hida_zaiberu_experienced")
+def _hida_zaiberu_experienced_attach_restriction(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> bool:
+    """ "Will not attach Followers." """
+    return not is_follower(card)
 
 
 def _hida_zaiberu_experienced_bound(game: GameState, source: L5RCard) -> int:

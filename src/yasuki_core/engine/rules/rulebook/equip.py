@@ -61,9 +61,10 @@ def may_attach_weapon(game: GameState, personality: L5RCard, weapon: L5RCard) ->
     return may_hold_weapon(game, personality, effective_keywords(game, weapon))
 
 
-# What a card's own text says it will hang on. "Can only attach to a Samurai" and its kin. Keyed by
-# printed id like the other per-card registries. The rulebook's restrictions live in this module as
-# code. A restriction only one card states lives with that card.
+# What a card's own text says may attach: an attachment's "Can only attach to a Samurai", or a
+# Personality's "Will not attach Followers". Read for both the attachment and the Personality it
+# would join, and keyed by printed id like the other per-card registries. The rulebook's
+# restrictions live in this module as code. A restriction only one card states lives with that card.
 AttachRestriction = Callable[[GameState, L5RCard, L5RCard], bool]
 ATTACH_RESTRICTIONS: HandlerRegistry[AttachRestriction] = HandlerRegistry(
     "attach restrictions", "already has an attach restriction"
@@ -96,14 +97,13 @@ def _may_equip_from_discard(game: GameState, card: L5RCard) -> bool:
 
 
 def may_attach(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
-    """Whether ``card`` may attach to ``personality``, by its own text and by the rulebook's limits
-    on Spells and Weapons.
+    """Whether ``card`` may attach to ``personality``, by the text of each and by the rulebook's
+    limits on Spells and Weapons.
 
     Only Weapons answer to the Weapon rules. A Follower or a plain Item is limited by neither the
     count nor Two-Handed exclusivity.
     """
-    restriction = ATTACH_RESTRICTIONS.get(card.printed_id)
-    if restriction is not None and not restriction(game, personality, card):
+    if not _texts_admit(game, personality, card, holders=(card, personality)):
         return False
     if is_spell(card) and not may_cast_spells(game, personality):
         return False
@@ -116,13 +116,28 @@ def may_attach_created(game: GameState, personality: L5RCard, printed: CardPrint
     """Whether a card created from ``printed`` may attach to ``personality``.
 
     The card does not exist yet, so its keywords come off the print rather than through the grants a
-    card in play reads. Only the rulebook's rules apply: an attach restriction is a card's own text,
-    and a created card carries the plain proxy print of what it is.
+    card in play reads. A created card carries the plain proxy print of what it is and no text of its
+    own, so only the Personality's text and the rulebook's rules apply.
     """
+    created = L5RCard(id=printed.printed_id, printed=printed, owner=personality.owner)
+    if not _texts_admit(game, personality, created, holders=(personality,)):
+        return False
     printed_keywords = frozenset(printed.keywords)
     if keywords.WEAPON not in printed_keywords:
         return True
     return may_hold_weapon(game, personality, printed_keywords)
+
+
+def _texts_admit(
+    game: GameState, personality: L5RCard, card: L5RCard, *, holders: tuple[L5RCard, ...]
+) -> bool:
+    """Whether the attach restriction each of ``holders`` prints, if any, lets ``card`` join
+    ``personality``."""
+    for holder in holders:
+        restriction = ATTACH_RESTRICTIONS.get(holder.printed_id)
+        if restriction is not None and not restriction(game, personality, card):
+            return False
+    return True
 
 
 def creation_targets(

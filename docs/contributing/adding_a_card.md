@@ -42,7 +42,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Gives a card a keyword by its text, itself or another | `@keyword_grant(id)` | {card}`Fortified Farmlands`, {card}`Way of the Crab` |
 | Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |
 | Is considered to have a stat when a certain action checks it | `@considered_stat(id)` | {card}`Dragon Elite Inkyo` |
-| Limits what it will attach to | `@attach_restriction(id)` | {card}`Brothers in Arms` |
+| Limits what it will attach to, or what will attach to it | `@attach_restriction(id)` | {card}`Brothers in Arms`, {card}`Hida Zaiberu (Experienced)` |
 | "The rulebook Equip ability may target this Follower in the discard pile" | `@equips_from_discard(id)` | {card}`Tao Defenders` |
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
 | Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
