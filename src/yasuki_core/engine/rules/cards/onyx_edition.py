@@ -228,7 +228,8 @@ def _daigotsu_rin_targets(game: GameState, source: L5RCard) -> list[str]:
 
 
 def _daigotsu_rin_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """A deck holding no Undead Follower is still searched, and shuffled after (CR, Search)."""
+    """The seat may let the search fail even with an Undead Follower to find, and a deck holding
+    none is still searched and shuffled (CR, Search)."""
     seat = source.owner
     undead = tuple(
         card.id
@@ -237,14 +238,16 @@ def _daigotsu_rin_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
     )
     if not undead:
         return [ShuffleDeck(DeckKey(seat, Side.FATE))]
-    return [Choose(seat, undead, 1, 1, "daigotsu_rin", source.id)]
+    return [Choose(seat, undead, 0, 1, "daigotsu_rin", source.id)]
 
 
-@choice_resolver("daigotsu_rin", prompt="Put an Undead Follower into your discard pile")
+@choice_resolver("daigotsu_rin", prompt="You may put an Undead Follower into your discard pile")
 def _resolve_daigotsu_rin(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    return [Discard(chosen[0], seat), ShuffleDeck(DeckKey(seat, Side.FATE))]
+    """The searched deck is shuffled whatever the search found (CR, Search)."""
+    found = [Discard(card_id, seat) for card_id in chosen]
+    return [*found, ShuffleDeck(DeckKey(seat, Side.FATE))]
 
 
 register_ability(

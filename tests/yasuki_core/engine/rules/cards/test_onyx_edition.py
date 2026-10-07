@@ -2332,18 +2332,11 @@ def test_tsushima_offers_his_rings_and_his_yojimbo_as_one_question():
 # --- Daigotsu Rin ---
 
 
-def test_rin_puts_an_undead_follower_from_the_fate_deck_into_the_discard_pile():
+def _rin_recruited(*deck: L5RCard) -> EngineSession:
     state = TableState.empty_two_seat()
     put_in_play(state, register(state, stronghold(P1, gold_production=4)))
     state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
-    state.decks[DeckKey(P1, Side.FATE)].cards = [
-        register(state, attachment(card_id, attachment_type=attachment_type, keywords=carried))
-        for card_id, attachment_type, carried in (
-            ("zombie", AttachmentType.FOLLOWER, ("Undead",)),
-            ("ashigaru", AttachmentType.FOLLOWER, ()),
-            ("bone_blade", AttachmentType.ITEM, ("Undead",)),
-        )
-    ]
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, card) for card in deck]
     rin = register(state, personality("rin", printed_id="daigotsu_rin", force=3, gold_cost=4))
     rin.turn_face_up()
     province = ProvinceZone(owner=P1)
@@ -2354,17 +2347,46 @@ def test_rin_puts_an_undead_follower_from_the_fate_deck_into_the_discard_pile():
     end_phase(session)
     session.act(P1, ActivateAbility("rin", RECRUIT))
     pay(session, P1)
+    return session
+
+
+def _undead_follower(card_id: str) -> L5RCard:
+    return attachment(card_id, attachment_type=AttachmentType.FOLLOWER, keywords=("Undead",))
+
+
+def _fate_deck_ids(session: EngineSession) -> set[str]:
+    return {card.id for card in session.game.table.decks[DeckKey(P1, Side.FATE)].cards}
+
+
+def _fate_discard_ids(session: EngineSession) -> set[str]:
+    return {card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards}
+
+
+@pytest.mark.parametrize(
+    ("answer", "discarded"), [(("zombie",), {"zombie"}), ((), set())], ids=["found", "declined"]
+)
+def test_rin_may_put_an_undead_follower_from_the_fate_deck_into_the_discard_pile(answer, discarded):
+    session = _rin_recruited(
+        _undead_follower("zombie"),
+        attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER),
+        attachment("bone_blade", attachment_type=AttachmentType.ITEM, keywords=("Undead",)),
+    )
 
     session.act(P1, ActivateAbility("rin"))
     assert session.game.pending.candidates == ("zombie",)
-    session.submit(P1, DecisionResponse(("zombie",)))
+    session.submit(P1, DecisionResponse(answer))
 
-    table = session.game.table
-    assert [card.id for card in table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards] == ["zombie"]
-    assert {card.id for card in table.decks[DeckKey(P1, Side.FATE)].cards} == {
-        "ashigaru",
-        "bone_blade",
-    }
+    assert _fate_discard_ids(session) == discarded
+    assert _fate_deck_ids(session) == {"zombie", "ashigaru", "bone_blade"} - discarded
+
+
+def test_rin_finding_no_undead_follower_still_resolves():
+    session = _rin_recruited(attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER))
+
+    session.act(P1, ActivateAbility("rin"))
+
+    assert session.game.pending is None
+    assert _fate_deck_ids(session) == {"ashigaru"}
 
 
 # --- Daigotsu Hiromu ---
