@@ -353,6 +353,7 @@ EFFECTS = [
         AskOption(PlayerId.P1, ("P1 gains 1 Honor",), "Whose Honor moves?", "courts", "courts_1"),
         "P1 is asked: Whose Honor moves?",
     ),
+    (Fear(0, "guard", PlayerId.P1, force_of="hero"), "fear equal to hero's Force on guard"),
     (
         AskDistribution(PlayerId.P1, ("hero", "rival"), 3, "suiteiru_no_oni", "oni_1"),
         "P1 divides 3 among 2 for suiteiru_no_oni",

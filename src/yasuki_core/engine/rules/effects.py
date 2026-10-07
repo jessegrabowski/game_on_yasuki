@@ -425,6 +425,12 @@ def _as_it_stands(game: GameState, card: L5RCard) -> LastKnownState:
     )
 
 
+def _named(game: GameState, card_id: str) -> str:
+    """``card_id``'s card by name, or its id once a created card has left the table (CR, Create)."""
+    card = game.table.cards_by_id.get(card_id)
+    return card_id if card is None else card.name
+
+
 def _in_play(game: GameState, card: L5RCard) -> bool:
     return any(held is card for held in game.table.battlefield.cards)
 
@@ -1237,6 +1243,11 @@ class AttackEffect(Effect, ABC):
         filled in when none is given. An Interrupt replaces the effect with one whose outcome does
         more. The outcome follows the comparison through the cascade as effects of its own, so an
         Interrupt against a Bow or a Destroy is offered against what an attack does as well.
+    force_of : str, optional
+        The card whose Force the strength is, as "Fear equal to his Force" has it, added to
+        ``strength``. Read as the attack resolves, since the effect is made then (CR, Action
+        Sequence step E), and as the card last stood in play if it has left. Default None, for a
+        strength the card prints as a number.
     """
 
     # What the card prints this effect as, which is the only thing its description needs from the
@@ -1255,6 +1266,7 @@ class AttackEffect(Effect, ABC):
     cause: Cause
     compared: Stat = Stat.FORCE
     outcome: tuple[Effect, ...] = ()
+    force_of: str | None = None
 
     def __post_init__(self) -> None:
         if not self.outcome:
@@ -1265,7 +1277,16 @@ class AttackEffect(Effect, ABC):
         """What this kind does to a target its strength reaches, as the CR prints it."""
 
     def describe(self) -> str:
-        return f"{self.name} {self.strength} on {self.target_id}{self._compared_stat()}"
+        strength = self._strength_text(self.force_of)
+        return f"{self.name} {strength} on {self.target_id}{self._compared_stat()}"
+
+    def _strength_text(self, named: str | None) -> str:
+        """The strength as printed, or as "equal to" the Force of the card ``named`` for one taken
+        from a card's Force."""
+        if self.force_of is None:
+            return str(self.strength)
+        adjusted = f" {self.strength:+d}" if self.strength else ""
+        return f"equal to {named}'s Force{adjusted}"
 
     def _compared_stat(self) -> str:
         return "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
@@ -1322,8 +1343,12 @@ class Fear(AttackEffect):
     name: ClassVar[str] = "fear"
 
     def narrate(self, game: GameState) -> str:
-        target = game.table.cards_by_id[self.target_id].name
-        return f"{self.name.capitalize()} {self.strength} on {target}{self._compared_stat()}"
+        by_id = game.table.cards_by_id
+        target = by_id[self.target_id].name
+        strength = self._strength_text(
+            None if self.force_of is None else _named(game, self.force_of)
+        )
+        return f"{self.name.capitalize()} {strength} on {target}{self._compared_stat()}"
 
     def _printed_outcome(self) -> tuple[Effect, ...]:
         return (Bow(self.target_id),)

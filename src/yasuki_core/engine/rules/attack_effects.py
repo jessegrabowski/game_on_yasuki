@@ -3,6 +3,8 @@ from collections.abc import Callable
 from yasuki_core.engine.rules.effects import AttackEffect
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -28,12 +30,23 @@ def effective_strength(game: GameState, attack: AttackEffect) -> int:
     nothing, which is what "have -2 strength" buys. The zero floor the CR puts on a stat
     (Calculating Stats) is about stats, and an attack's strength is not one.
     """
+    total = attack.strength
+    if attack.force_of is not None:
+        total += _force_of(game, attack.force_of)
     target = game.table.cards_by_id.get(attack.target_id)
     if target is None:
-        return attack.strength
-    total = attack.strength
+        return total
     for holder in game.table.battlefield.cards:
         handler = ATTACK_STRENGTH_AGAINST.get(holder.printed_id)
         if handler is not None:
             total += handler(game, holder, target, attack)
     return total
+
+
+def _force_of(game: GameState, card_id: str) -> int:
+    """The Force of the card an attack takes its strength from: as it stands in play, or as it last
+    stood there once it has left (CR, References to Other Points in Time)."""
+    card = game.table.cards_by_id.get(card_id)
+    if card is not None and any(held is card for held in game.table.battlefield.cards):
+        return effective_stat(game, card, Stat.FORCE)
+    return game.last_known[card_id].force
