@@ -2096,6 +2096,34 @@ def test_the_indomitable_fortress_back_is_tireless():
     assert not session.game.table.cards_by_id["hero"].bowed
 
 
+@pytest.mark.parametrize(
+    ("flipped", "face_up"), [(True, [True, False]), (False, [False, False])], ids=["back", "front"]
+)
+def test_the_indomitable_fortress_back_refills_face_up_after_the_first_fortification_only(
+    flipped, face_up
+):
+    state = TableState.empty_two_seat()
+    put_in_play(state, flip_stronghold(INDOMITABLE, flipped=flipped))
+    put_in_play(state, holding("mine", gold_production=6))
+    for index, wall in enumerate(("first-wall", "second-wall")):
+        province_card(state, wall, keywords=(keywords.FORTIFICATION,), gold_cost=2, index=index)
+    refills = [register(state, holding(f"refill-{n}")) for n in range(2)]
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = refills
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+
+    for wall in ("first-wall", "second-wall"):
+        session.act(P1, ActivateAbility(wall, RECRUIT))
+        pay(session, P1)
+
+    refilled = [
+        session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, index)].cards[0].face_up
+        for index in (0, 1)
+    ]
+    assert refilled == face_up
+
+
 # --- Togashi Hiyoku ---
 
 

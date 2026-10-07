@@ -118,6 +118,7 @@ from yasuki_core.engine.rules.stats.card_values import (
     effective_force,
     effective_personal_honor,
 )
+from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     Duration,
@@ -1169,6 +1170,33 @@ register_ability(
 
 
 # --- The Indomitable Fortress of the Crab (back) ---
+
+
+@keyword_grant("the_indomitable_fortress_of_the_crab__back")
+def _the_indomitable_fortress_of_the_crab__back_keywords(
+    game: GameState, fortress: L5RCard, card: L5RCard
+) -> tuple[str, ...]:
+    """ "The first time each turn you Recruit a Fortification, refill its Province face-up", read
+    as your Fortifications having Renew until another of them has been Recruited this turn. A
+    Recruit's refill reads Renew before its own arrival is recorded."""
+    if not _the_indomitable_fortress_of_the_crab__back_yours(fortress, card):
+        return ()
+    recruited_earlier = any(
+        isinstance(event, EnteredPlay)
+        and event.recruited
+        and event.card_id != card.id
+        and _the_indomitable_fortress_of_the_crab__back_yours(
+            fortress, game.table.cards_by_id[event.card_id]
+        )
+        for event in game.turn_events
+    )
+    return () if recruited_earlier else (keywords.RENEW,)
+
+
+def _the_indomitable_fortress_of_the_crab__back_yours(fortress: L5RCard, card: L5RCard) -> bool:
+    """Whether ``card`` is a Fortification of the Fortress's controller. Its printed keywords are
+    read, since this grant is itself part of its effective keywords."""
+    return card.owner is fortress.owner and keywords.FORTIFICATION in card.keywords
 
 
 register_ability(
