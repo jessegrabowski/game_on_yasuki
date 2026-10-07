@@ -1,3 +1,4 @@
+from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.costs import declare_amount
@@ -85,6 +86,8 @@ from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Boundary
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import rightmost_province, sincerity_seed_targets
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.board.clans import card_alignments
+from yasuki_core.engine.rules.rulebook.equip import equip_discount
 from yasuki_core.engine.rules.vocabulary.modifiers import CompassionGrant, Duration, Negation
 from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -144,6 +147,42 @@ def _resolve_decree_of_the_hantei_favor(
     if not chosen:
         return []
     return [DiscardFavor(seat), GainProvince(seat)]
+
+
+# --- Hida O-Win (Experienced) ---
+
+O_WIN_EQUIP_DISCOUNT = 1
+O_WIN_MELEE = 3
+
+
+@equip_discount("hida_o_win_experienced")
+def _hida_o_win_experienced_equip_discount(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> int:
+    """ "O-Win Equips Jade cards for 1 less." """
+    return O_WIN_EQUIP_DISCOUNT if has_keyword(game, card, keywords.JADE) else 0
+
+
+def _hida_o_win_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Melee 3, with +1 strength if the target is a non-Spider Clan Shadowlands card", read off
+    the target as the ability resolves."""
+    tainted = has_keyword(game, target, keywords.SHADOWLANDS)
+    strength = O_WIN_MELEE + int(tainted and ruleset.SPIDER not in card_alignments(target))
+    return [MeleeAttack(strength, target.id, source.owner)]
+
+
+register_ability(
+    "hida_o_win_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_hida_o_win_experienced_effects,
+    ),
+)
 
 
 # --- Hida Yamadera, Dark Human (Experienced 2) ---

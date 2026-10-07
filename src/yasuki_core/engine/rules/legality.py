@@ -41,7 +41,12 @@ from yasuki_core.engine.rules.board.queries import (
     province_cards,
     units_at,
 )
-from yasuki_core.engine.rules.rulebook.equip import equip_gold, equip_targets, equippable
+from yasuki_core.engine.rules.rulebook.equip import (
+    equip_discount_onto,
+    equip_gold,
+    equip_targets,
+    equippable,
+)
 from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import (
@@ -246,13 +251,18 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
             continue
         if not copy_may_enter(game, seat, card):
             continue
-        affordable = reach.for_card(game, card)
-        if equip_gold(game, card) > affordable or not equip_targets(game, card):
+        targets = equip_targets(game, card)
+        if not targets:
             continue
-        equips.append(Equip(card.id))
-        has_invest = fixed_invest_amount(game, card) is not None
-        if has_invest and equip_gold(game, card, invest=True) <= affordable:
-            equips.append(Equip(card.id, invest=True))
+        affordable = reach.for_card(game, card)
+        discounts = {0, *(equip_discount_onto(game, target, card) for target in targets)}
+        investing = (False, True) if fixed_invest_amount(game, card) is not None else (False,)
+        equips.extend(
+            Equip(card.id, invest=invest, discount=discount)
+            for discount in sorted(discounts)
+            for invest in investing
+            if equip_gold(game, card, invest=invest, discount=discount) <= affordable
+        )
     return equips
 
 
@@ -281,8 +291,8 @@ def action_gold(game: GameState, action: ActivateAbility | Equip | PlayStrategy)
     """
     card = game.table.cards_by_id[action.card_id]
     match action:
-        case Equip(invest=invest):
-            return (equip_gold(game, card, invest=invest),)
+        case Equip(invest=invest, discount=discount):
+            return (equip_gold(game, card, invest=invest, discount=discount),)
         case ActivateAbility(ability_key=key):
             return _ability_gold(game, card, _ability_named(game, card, key))
         case PlayStrategy(ability_key=key):

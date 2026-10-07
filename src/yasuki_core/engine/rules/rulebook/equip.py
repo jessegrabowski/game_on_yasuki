@@ -61,14 +61,35 @@ def may_attach_weapon(game: GameState, personality: L5RCard, weapon: L5RCard) ->
     return may_hold_weapon(game, personality, effective_keywords(game, weapon))
 
 
-# What a card's own text says it will hang on. "Can only attach to a Samurai" and its kin. Keyed by
-# printed id like the other per-card registries. The rulebook's restrictions live in this module as
-# code. A restriction only one card states lives with that card.
+# What a card's own text says may attach: an attachment's "Can only attach to a Samurai", or a
+# Personality's "Will not attach Followers". Read for both the attachment and the Personality it
+# would join, and keyed by printed id like the other per-card registries. The rulebook's
+# restrictions live in this module as code. A restriction only one card states lives with that card.
 AttachRestriction = Callable[[GameState, L5RCard, L5RCard], bool]
 ATTACH_RESTRICTIONS: HandlerRegistry[AttachRestriction] = HandlerRegistry(
     "attach restrictions", "already has an attach restriction"
 )
 attach_restriction = ATTACH_RESTRICTIONS.make_decorator()
+
+
+# What a card's own text takes off the Gold of Equipping one card onto one Personality: a
+# Personality's "O-Win Equips Jade cards for 1 less", or an attachment's "Equips to a Crab Clan
+# Personality for 1 less". Read for both cards, like the attach restrictions above.
+EquipDiscount = Callable[[GameState, L5RCard, L5RCard], int]
+EQUIP_DISCOUNTS: HandlerRegistry[EquipDiscount] = HandlerRegistry(
+    "equip discounts", "already has an Equip discount"
+)
+equip_discount = EQUIP_DISCOUNTS.make_decorator()
+
+
+def equip_discount_onto(game: GameState, personality: L5RCard, card: L5RCard) -> int:
+    """The Gold the texts of ``card`` and ``personality`` take off Equipping the one onto the
+    other."""
+    return sum(
+        handler(game, personality, card)
+        for holder in (card, personality)
+        if (handler := EQUIP_DISCOUNTS.get(holder.printed_id)) is not None
+    )
 
 
 # Cards whose own text lets the rulebook Equip ability target them in their owner's Fate discard
@@ -96,14 +117,13 @@ def _may_equip_from_discard(game: GameState, card: L5RCard) -> bool:
 
 
 def may_attach(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
-    """Whether ``card`` may attach to ``personality``, by its own text and by the rulebook's limits
-    on Spells and Weapons.
+    """Whether ``card`` may attach to ``personality``, by the text of each and by the rulebook's
+    limits on Spells and Weapons.
 
     Only Weapons answer to the Weapon rules. A Follower or a plain Item is limited by neither the
     count nor Two-Handed exclusivity.
     """
-    restriction = ATTACH_RESTRICTIONS.get(card.printed_id)
-    if restriction is not None and not restriction(game, personality, card):
+    if not _texts_admit(game, personality, card, holders=(card, personality)):
         return False
     if is_spell(card) and not may_cast_spells(game, personality):
         return False
@@ -116,13 +136,28 @@ def may_attach_created(game: GameState, personality: L5RCard, printed: CardPrint
     """Whether a card created from ``printed`` may attach to ``personality``.
 
     The card does not exist yet, so its keywords come off the print rather than through the grants a
-    card in play reads. Only the rulebook's rules apply: an attach restriction is a card's own text,
-    and a created card carries the plain proxy print of what it is.
+    card in play reads. A created card carries the plain proxy print of what it is and no text of its
+    own, so only the Personality's text and the rulebook's rules apply.
     """
+    created = L5RCard(id=printed.printed_id, printed=printed, owner=personality.owner)
+    if not _texts_admit(game, personality, created, holders=(personality,)):
+        return False
     printed_keywords = frozenset(printed.keywords)
     if keywords.WEAPON not in printed_keywords:
         return True
     return may_hold_weapon(game, personality, printed_keywords)
+
+
+def _texts_admit(
+    game: GameState, personality: L5RCard, card: L5RCard, *, holders: tuple[L5RCard, ...]
+) -> bool:
+    """Whether the attach restriction each of ``holders`` prints, if any, lets ``card`` join
+    ``personality``."""
+    for holder in holders:
+        restriction = ATTACH_RESTRICTIONS.get(holder.printed_id)
+        if restriction is not None and not restriction(game, personality, card):
+            return False
+    return True
 
 
 def creation_targets(
@@ -151,17 +186,25 @@ def creation_targets(
     )
 
 
-def equip_targets(game: GameState, card: L5RCard) -> tuple[L5RCard, ...]:
+def equip_targets(game: GameState, card: L5RCard, *, discount: int = 0) -> tuple[L5RCard, ...]:
     """The Personalities ``card`` may be Equipped to: the ones its own owner has in play, that the
-    attachment rules still admit. A player may only attach to their own (CR, Attachments)."""
+    attachment rules still admit. A player may only attach to their own (CR, Attachments).
+
+    Parameters
+    ----------
+    discount : int, optional
+        The discount the Equip is paid at, which narrows the Personalities to those granting it
+        (CR, Targeting Paradoxes). Default 0, the full price, which narrows nothing.
+    """
     return tuple(
         personality
         for personality in owned_personalities(game, card.owner)
         if may_attach(game, personality, card)
+        and (not discount or equip_discount_onto(game, personality, card) == discount)
     )
 
 
-def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
+def equip(game: GameState, card_id: str, *, invest: bool = False, discount: int = 0) -> None:
     """Announce an Equip: take the card out of the hand into its entering-play area, settle the
     board that leaves, then ask for its cost with the choice of which Personality it joins queued
     behind. Answering that choice attaches the card (CR, Action Sequence steps B and C; CR,
@@ -175,28 +218,33 @@ def equip(game: GameState, card_id: str, *, invest: bool = False) -> None:
     player chooses. Every
     attachment printing one prints a fixed cost, so the amount is settled here rather than through a
     decision, and a variable one would need a step this path does not have.
+
+    With ``discount``, the Equip is paid that much less and may join only the Personalities granting
+    it (CR, Targeting Paradoxes).
     """
     card = game.table.cards_by_id[card_id]
-    candidates = tuple(target.id for target in equip_targets(game, card))
+    candidates = tuple(target.id for target in equip_targets(game, card, discount=discount))
     hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards
     if any(held is card for held in hand):
         game.announced_from_hand |= {card_id}
     if invest:
         triggers.pay_costs(game, [Invest(card.id, equip_invest_amount(game, card))])
     game.stack.append(SelectEquipTarget(card_id, candidates))
-    game.stack.append(RequestPayment(card.owner, equip_gold(game, card), card.name, card_id))
+    price = equip_gold(game, card, discount=discount)
+    game.stack.append(RequestPayment(card.owner, price, card.name, card_id))
     triggers.enforce_state_based_actions(game)
 
 
-def equip_gold(game: GameState, card: L5RCard, *, invest: bool = False) -> int:
-    """The Gold Equipping ``card`` charges: its Gold Cost less the seat's discount on the Equip. With
-    ``invest``, its Gold Cost as the Invest about to be laid will raise it, so a card already
-    Invested in is priced without the flag. Raise ``ValueError`` for ``invest`` on a card printing
-    no fixed Invest."""
+def equip_gold(game: GameState, card: L5RCard, *, invest: bool = False, discount: int = 0) -> int:
+    """The Gold Equipping ``card`` charges: its Gold Cost less the seat's discount on the Equip and
+    less ``discount``, the one its target's text grants, floored at zero. With ``invest``, its Gold
+    Cost as the Invest about to be laid will raise it, so a card already Invested in is priced
+    without the flag. Raise ``ValueError`` for ``invest`` on a card printing no fixed Invest."""
     invest_amount = equip_invest_amount(game, card) if invest else 0
-    return discounted_gold(
+    paid = discounted_gold(
         game, equip_purchase(card), effective_gold_cost(game, card) + invest_amount
     )
+    return max(0, paid - discount)
 
 
 @dataclass(frozen=True, slots=True)

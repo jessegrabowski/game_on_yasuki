@@ -601,6 +601,19 @@ def test_backing_out_of_the_first_step_unwinds_it_too():
     assert "target" not in {c.id for c in session.game.table.battlefield.cards}
 
 
+@pytest.mark.parametrize(
+    ("attachment_type", "offered"),
+    [(AttachmentType.FOLLOWER, False), (AttachmentType.ITEM, True)],
+    ids=["follower", "item"],
+)
+def test_zaiberu_will_not_attach_followers(attachment_type, offered):
+    game = two_seat_game()
+    zaiberu = put_in_play(game, personality("zaiberu", printed_id="hida_zaiberu_experienced"))
+    card = attachment("recruit", attachment_type=attachment_type)
+
+    assert may_attach(game, zaiberu, card) is offered
+
+
 # --- Mishime Sensei ---
 
 

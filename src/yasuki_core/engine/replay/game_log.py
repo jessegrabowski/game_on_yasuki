@@ -301,8 +301,8 @@ def _encode_action(action: Action) -> dict:
     match action:
         case Pass():
             return {"kind": "pass"}
-        case Equip(card_id=card_id, invest=invest):
-            return {"kind": "equip", "card_id": card_id, "invest": invest}
+        case Equip(card_id=card_id, invest=invest, discount=discount):
+            return {"kind": "equip", "card_id": card_id, "invest": invest, "discount": discount}
         case ActivateAbility(card_id=card_id, ability_key=key):
             return {"kind": "activate_ability", "card_id": card_id, "key": key}
         case PlayStrategy(card_id=card_id):
@@ -319,7 +319,11 @@ def _decode_action(payload: dict) -> Action:
     if kind == "pass":
         return Pass()
     if kind == "equip":
-        return Equip(payload["card_id"], invest=payload.get("invest", False))
+        return Equip(
+            payload["card_id"],
+            invest=payload.get("invest", False),
+            discount=payload.get("discount", 0),
+        )
     if kind == "activate_ability":
         return ActivateAbility(payload["card_id"], payload.get("key"))
     if kind == "play_strategy":

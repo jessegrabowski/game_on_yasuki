@@ -49,6 +49,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
     DeclareAttack,
+    Equip,
     Pass,
     PlayInterrupt,
 )
@@ -83,6 +84,47 @@ from tests.yasuki_core.engine.builders import (
 
 P1 = PlayerId.P1
 P2 = PlayerId.P2
+
+
+# --- Hida O-Win (Experienced) ---
+
+O_WIN = "hida_o_win_experienced"
+
+
+@pytest.mark.parametrize(
+    ("card_keywords", "discounted"), [(("Jade",), True), ((), False)], ids=["jade", "plain"]
+)
+def test_o_win_takes_jade_cards_for_one_gold_less(card_keywords, discounted):
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("o-win", printed_id=O_WIN))
+    put_in_play(state, personality("hero"))
+    put_in_play(state, holding("mine", gold_production=3))
+    blade = register(state, attachment("blade", gold_cost=3, keywords=card_keywords))
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(blade)
+    session = EngineSession.start(state, P1)
+
+    assert (Equip("blade", discount=1) in session.legal_actions(P1)) is discounted
+
+
+@pytest.mark.parametrize(
+    ("guard_keywords", "guard_clans", "destroyed"),
+    [((), (), False), (("Shadowlands",), (), True), (("Shadowlands",), ("Spider",), False)],
+    ids=["plain", "shadowlands", "spider_shadowlands"],
+)
+def test_o_win_melees_harder_against_a_non_spider_shadowlands_card(
+    guard_keywords, guard_clans, destroyed
+):
+    cards = [
+        personality("o-win", printed_id=O_WIN),
+        personality("guard", owner=P2, force=4, keywords=guard_keywords, clans=guard_clans),
+    ]
+    session = combat_segment(cards, {"o-win": 0}, {"guard": 0})
+
+    session.act(P1, ActivateAbility("o-win"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    discard = session.game.table.zones[ZoneKey(P2, ZoneRole.DYNASTY_DISCARD)]
+    assert ("guard" in {card.id for card in discard.cards}) is destroyed
 
 
 # --- Decree of the Hantei ---
