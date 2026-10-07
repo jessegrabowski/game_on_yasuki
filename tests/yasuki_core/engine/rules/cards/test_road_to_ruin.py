@@ -1363,6 +1363,18 @@ def test_okura_destroys_what_is_that_alls_fear_bowed_after_its_personality_strai
     assert not game.table.cards_by_id["brave"].bowed
 
 
+def test_is_that_all_cannot_be_discarded_to_its_own_courage_while_it_is_played():
+    cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
+    session = combat_segment(cards, {"brave": 0}, {"guard": 0}, in_hand=[_is_that_all(P1)])
+    resolve_effects(session.game, [Bow("brave")])
+
+    session.act(P1, PlayStrategy("is_that_all", "fear"))
+    session.submit(P1, DecisionResponse(("brave",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert PlayInterrupt("is_that_all", "courage") not in session.legal_actions(P1)
+
+
 def test_is_that_all_is_not_played_with_nothing_to_fear():
     cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
     session = combat_segment(cards, {"brave": 0}, {"guard": 1}, in_hand=[_is_that_all(P1)])

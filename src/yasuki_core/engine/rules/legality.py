@@ -386,7 +386,8 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
 
     A card in hand is yielded like any other. Only an ability whose ``located_at`` names the hand is
     offered from there, and every ability defaults to the battlefield, so a card waiting to be
-    played stays silent until one says otherwise.
+    played stays silent until one says otherwise. A card announced out of the hand is in a
+    resolution area until it lands (CR, Resolution Area), so it offers nothing from the hand.
     """
     for card in game.table.battlefield.cards:
         if card.owner is seat:
@@ -399,7 +400,11 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
                 if card.face_up:  # face-down, what the card is has not been revealed
                     yield CardLocation.PROVINCE, card
         elif key.role is ZoneRole.HAND:
-            yield from ((CardLocation.HAND, card) for card in zone.cards)
+            yield from (
+                (CardLocation.HAND, card)
+                for card in zone.cards
+                if card.id not in game.announced_from_hand
+            )
         elif key.role is ZoneRole.RULEBOOK:
             yield from ((CardLocation.RULEBOOK, card) for card in zone.cards)
         elif key.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):
