@@ -99,6 +99,7 @@ from yasuki_core.game_pieces.constants import AttachmentType, Element, Side
 
 from tests.yasuki_core.engine.builders import (
     datasheet_favor_ability,
+    attached,
     attachment,
     contentious_terrain,
     combat_segment,

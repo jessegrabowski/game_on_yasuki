@@ -40,6 +40,7 @@ from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
     AlternateEffects,
+    AskOption,
     Banish,
     Bow,
     Choose,
