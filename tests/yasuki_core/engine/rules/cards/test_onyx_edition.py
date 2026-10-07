@@ -2454,6 +2454,22 @@ def test_hiromu_bowing_a_bowed_follower_makes_no_melee():
     assert "guard" in _in_play(session)
 
 
+@pytest.mark.parametrize(
+    ("guard_at", "offered"), [(0, True), (1, False)], ids=["melee", "no_melee"]
+)
+def test_hiromu_is_offered_only_with_something_to_melee(guard_at, offered):
+    cards = [
+        personality("hiromu", printed_id="daigotsu_hiromu", force=1),
+        personality("guard", owner=P2, force=3),
+    ]
+    follower = attachment("ogre", attachment_type=AttachmentType.FOLLOWER, force=3)
+    session = combat_segment(
+        cards, {"hiromu": 0}, {"guard": guard_at}, attachments=((follower, "hiromu"),)
+    )
+
+    assert (ActivateAbility("hiromu") in session.legal_actions(P1)) is offered
+
+
 def test_hiromus_melee_is_answerable_at_the_interrupt_step():
     negate_a_melee = Interrupt(
         answers=MeleeAttack,

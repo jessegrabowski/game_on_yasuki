@@ -149,6 +149,12 @@ targeted":
 :language: python
 ```
 
+A seat announces such an ability only when every phrase can be met, and is offered a first pick
+only when the phrases after it can still be met (CR, Good Faith Rule), which
+{func}`~.phrases_reachable` and {func}`~.choosable_targets` read. A phrase whose count can be zero is
+met by taking nothing: {card}`The Dark Capital of the Spider` takes a Fear target only when the
+Personality it targets first is yours.
+
 Such an ability builds its effects over the whole set with `effects_for_groups`, which is handed one
 tuple of cards per phrase: effects built per target could not tell the phrases apart. Backing out of
 a later phrase returns to the one before it, since targeting has changed nothing on the board.

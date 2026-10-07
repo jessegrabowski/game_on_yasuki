@@ -151,10 +151,6 @@ from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY
 def _daigotsu_hiromu_followers(
     game: GameState, source: L5RCard, picked: PickedTargets
 ) -> list[str]:
-    """Your Followers, while the Melee has a card to target, since its targeting is the action's
-    own (CR, Good Faith Rule)."""
-    if not attack_targets(game, source):
-        return []
     return [card.id for card in followers_in_play(game) if card.owner is source.owner]
 
 
@@ -1099,31 +1095,23 @@ register_ability(
 def _the_dark_capital_of_the_spider_targets(
     game: GameState, source: L5RCard, picked: PickedTargets
 ) -> list[str]:
-    """Any Personality, your own only while the Fear targeting it commits you to has a card to
-    target (CR, Good Faith Rule; CR, Choice Paradoxes)."""
-    return _the_dark_capital_of_the_spider_personalities(
-        game, source, fear_follows=bool(attack_targets(game, source))
-    )
-
-
-def _the_dark_capital_of_the_spider_personalities(
-    game: GameState, source: L5RCard, *, fear_follows: bool
-) -> list[str]:
-    return [
-        card.id
-        for card in personalities_in_play(game)
-        if card.owner is not source.owner or fear_follows
-    ]
+    return [card.id for card in personalities_in_play(game)]
 
 
 def _the_dark_capital_of_the_spider_feared(
     game: GameState, source: L5RCard, picked: PickedTargets
 ) -> list[str]:
-    """The Fear's target, chosen with the action's other targets (CR, Good Faith Rule), when the
-    Personality targeted first is yours. There is no Fear otherwise, and so nothing to target."""
-    if game.table.cards_by_id[picked[0][0]].owner is not source.owner:
-        return []
+    """The Fear's target, chosen with the action's other targets (CR, Good Faith Rule)."""
     return attack_targets(game, source)
+
+
+def _the_dark_capital_of_the_spider_fear_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    """One Fear target when the Personality targeted first is yours, and none otherwise, since
+    there is then no Fear."""
+    yours = game.table.cards_by_id[picked[0][0]].owner is source.owner
+    return (1, 1) if yours else (0, 0)
 
 
 def _the_dark_capital_of_the_spider_effects(
@@ -1150,6 +1138,7 @@ register_ability(
             TargetGroup(candidates=_the_dark_capital_of_the_spider_targets),
             TargetGroup(
                 candidates=_the_dark_capital_of_the_spider_feared,
+                count=_the_dark_capital_of_the_spider_fear_count,
                 targeting_message=ATTACK_TARGET,
             ),
         ),
@@ -1166,23 +1155,13 @@ def _the_dark_capital_of_the_spider__back_in_battle(game: GameState, source: L5R
     return ActionTiming.BATTLE in permitted_timings_in(game, action_round(game), source.owner)
 
 
-def _the_dark_capital_of_the_spider__back_targets(
-    game: GameState, source: L5RCard, picked: PickedTargets
-) -> list[str]:
-    """As the front's in a Battle. Taken as an Open, a Personality of yours makes no Fear, so
-    nothing holds it back."""
-    in_battle = _the_dark_capital_of_the_spider__back_in_battle(game, source)
-    fear_follows = not in_battle or bool(attack_targets(game, source))
-    return _the_dark_capital_of_the_spider_personalities(game, source, fear_follows=fear_follows)
-
-
-def _the_dark_capital_of_the_spider__back_feared(
-    game: GameState, source: L5RCard, picked: PickedTargets
-) -> list[str]:
+def _the_dark_capital_of_the_spider__back_fear_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
     """As the front's, and only when "this is a Battle"."""
     if not _the_dark_capital_of_the_spider__back_in_battle(game, source):
-        return []
-    return _the_dark_capital_of_the_spider_feared(game, source, picked)
+        return (0, 0)
+    return _the_dark_capital_of_the_spider_fear_count(game, source, picked, offered)
 
 
 def _the_dark_capital_of_the_spider__back_effects(
@@ -1206,9 +1185,10 @@ register_ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
         cost=no_cost,
         target_groups=(
-            TargetGroup(candidates=_the_dark_capital_of_the_spider__back_targets),
+            TargetGroup(candidates=_the_dark_capital_of_the_spider_targets),
             TargetGroup(
-                candidates=_the_dark_capital_of_the_spider__back_feared,
+                candidates=_the_dark_capital_of_the_spider_feared,
+                count=_the_dark_capital_of_the_spider__back_fear_count,
                 targeting_message=ATTACK_TARGET,
             ),
         ),

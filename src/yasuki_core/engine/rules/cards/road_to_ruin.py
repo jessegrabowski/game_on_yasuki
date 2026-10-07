@@ -221,10 +221,6 @@ register_ability(
 
 
 def _is_that_all_yours(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
-    """Your bowed Personalities, while the Fear has a card to target, since its targeting is the
-    action's own (CR, Good Faith Rule)."""
-    if not attack_targets(game, source):
-        return []
     return [card.id for card in owned_personalities(game, source.owner) if card.bowed]
 
 
