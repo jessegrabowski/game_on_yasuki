@@ -36,6 +36,7 @@ from yasuki_core.engine.rules.board.counts_as import (
 )
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
+    army_at,
     attack_targets,
     different_elements,
     followers_in_play,
@@ -73,6 +74,7 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     DiscardFromHand,
     DrawCard,
+    Evaluate,
     Effect,
     EndLook,
     Fear,
@@ -96,7 +98,7 @@ from yasuki_core.engine.rules.effects import (
     Straighten,
     Unpayable,
 )
-from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_loss
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -937,6 +939,63 @@ def _iweko_miaka_princess_of_rokugan_experienced_favor_payer(
     if used_this_turn(game, card, MIAKA_PAYMENT):
         return None
     return [SpendOncePerTurn(card.id, MIAKA_PAYMENT)]
+
+
+# --- Jade No-Dachi ---
+
+
+@keyword_loss("jade_no_dachi")
+def _jade_no_dachi_keyword_loss(
+    game: GameState, no_dachi: L5RCard, card: L5RCard
+) -> tuple[str, ...]:
+    """ "This Weapon is One-Handed while attached to a Berserker": not Two-Handed then, since
+    One-Handed is the absence of Two-Handed (ShE datasheet, Kensai)."""
+    if card is not no_dachi:
+        return ()
+    bearer = attached_to(game, no_dachi)
+    if bearer is None or not has_keyword(game, bearer, keywords.BERSERKER):
+        return ()
+    return (keywords.TWO_HANDED,)
+
+
+def _jade_no_dachi_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Draw a card, then discard a card unless this Personality is opposing any Shadowlands
+    cards." """
+    return [DrawCard(source.owner), Evaluate("jade_no_dachi_discard", source.id, source.owner)]
+
+
+@choice_resolver("jade_no_dachi_discard")
+def _resolve_jade_no_dachi_discard(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The discard, unless the bearer faces a Shadowlands card as it would resolve."""
+    bearer = attached_to(game, game.table.cards_by_id[source_id])
+    if bearer is not None and _jade_no_dachi_opposes_shadowlands(game, bearer):
+        return []
+    return [DiscardFromHand(seat, 1, seat, seat)]
+
+
+def _jade_no_dachi_opposes_shadowlands(game: GameState, bearer: L5RCard) -> bool:
+    """Whether the enemy army at the bearer's battlefield holds a Shadowlands card: "opposing"
+    reads cards at the same battlefield on different sides (CR, Opposing)."""
+    attack = game.attack
+    battlefield = location_of(game.table, bearer).battlefield
+    if attack is None or battlefield is None:
+        return False
+    enemy = army_at(game, battlefield, attack.enemy_of(bearer.owner))
+    return any(has_keyword(game, card, keywords.SHADOWLANDS) for card in enemy)
+
+
+register_ability(
+    "jade_no_dachi",
+    Ability(
+        timings=(ActionTiming.ENGAGE,),
+        cost=bow_cost,
+        targets=itself,
+        effects=_jade_no_dachi_effects,
+        hits_every_target=True,
+    ),
+)
 
 
 # --- Kisada's Funeral (Experienced) ---

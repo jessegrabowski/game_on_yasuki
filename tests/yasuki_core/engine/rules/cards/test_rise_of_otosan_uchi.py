@@ -31,6 +31,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_options
@@ -1042,6 +1043,60 @@ def test_culling_grounds_replays_to_the_same_board():
     session.act(P1, ActivateAbility("grounds"))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Jade No-Dachi ---
+
+
+@pytest.mark.parametrize(
+    ("bearer_keywords", "two_handed"),
+    [(("Berserker",), False), ((), True)],
+    ids=["berserker", "other"],
+)
+def test_jade_no_dachi_is_one_handed_only_on_a_berserker(bearer_keywords, two_handed):
+    game = two_seat_game()
+    put_in_play(game, personality("bearer", keywords=bearer_keywords))
+    no_dachi = attachment(
+        "no-dachi", printed_id="jade_no_dachi", keywords=("Two-Handed", "Weapon", "Jade")
+    )
+    attached(game, no_dachi, "bearer")
+
+    assert (keywords.TWO_HANDED in effective_keywords(game, no_dachi)) is two_handed
+
+
+def _no_dachi_engaged(*, guard_keywords: tuple[str, ...]) -> EngineSession:
+    """P1's attack in its Engage Segment, the hero carrying Jade No-Dachi against P2's guard, with
+    an empty hand over a one-card Fate deck."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov", seat=P1, index=0)
+    province_card(state, "def-prov", seat=P2, index=0)
+    put_in_play(state, personality("hero"))
+    put_in_play(state, personality("guard", owner=P2, keywords=guard_keywords))
+    attached(state, attachment("no-dachi", printed_id="jade_no_dachi"), "hero")
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, fate_card("top", P1))]
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    session.act(P1, DeclareAttack())
+    session.submit(P1, DecisionResponse(("hero@0",)))
+    session.submit(P2, DecisionResponse(("guard@0",)))
+    session.submit(P1, DecisionResponse(("0",)))
+    session.act(P2, Pass())
+    return session
+
+
+@pytest.mark.parametrize(
+    ("guard_keywords", "hand"),
+    [((), []), (("Shadowlands",), ["top"])],
+    ids=["plain", "shadowlands"],
+)
+def test_jade_no_dachi_draws_then_discards_unless_opposing_shadowlands(guard_keywords, hand):
+    session = _no_dachi_engaged(guard_keywords=guard_keywords)
+
+    session.act(P1, ActivateAbility("no-dachi"))
+
+    game = session.game
+    assert [card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards] == hand
+    assert game.table.cards_by_id["no-dachi"].bowed
 
 
 # --- Kitsu Watanabe ---
