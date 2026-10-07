@@ -16,6 +16,7 @@ yasuki_core.engine.rules.board.queries
     favor_actions_this_turn
     followers_in_play
     has_keyword
+    honorably_dead
     in_army_with
     opposed_units_in_battle
     opposing_units_in_battle

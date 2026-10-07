@@ -214,6 +214,21 @@ def phase_history(game: GameState) -> tuple[GameEvent, ...]:
     return events[starts[-1] + 1 :] if starts else events
 
 
+def honorably_dead(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` lies dead in a pile without disgrace, which is what "if X is honorably
+    dead" asks.
+
+    Three cards in a discard pile look alike and are not: one destroyed while honorable is
+    honorably dead, one destroyed while dishonorable is dishonorably dead, and one discarded out
+    of a Province never died at all. Only the first answers True, and a card back in play is not
+    dead whatever it last left play by.
+    """
+    departure = game.last_known.get(card.id)
+    if departure is None or not departure.destroyed or card.dishonorable:
+        return False
+    return not any(held is card for held in game.table.battlefield.cards)
+
+
 def rings_in_play(game: GameState, seat: PlayerId, asking: Asking) -> tuple[L5RCard, ...]:
     """The Rings ``seat`` has in play, as ``asking`` counts them."""
     return tuple(
