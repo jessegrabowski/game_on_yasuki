@@ -2,8 +2,8 @@ from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import attack_targets
-from yasuki_core.engine.rules.effects import Fear, GainHonor
-from yasuki_core.engine.rules.triggers import resolve_action_effects
+from yasuki_core.engine.rules.effects import Bow, Fear, GainHonor
+from yasuki_core.engine.rules.triggers import resolve_action_effects, resolve_effects
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -132,3 +132,12 @@ def test_okura_destroys_what_every_fear_of_the_action_bows():
     assert session.game.pending is None
     assert not _in_play(session, "guard")
     assert not _in_play(session, "second")
+
+
+def test_okura_destroys_nothing_a_fear_did_not_bow():
+    session = _fear_announced({}, strategies=(OKURA,))
+    resolve_effects(session.game, [Bow("guard")])
+
+    session.act(DEFENDER, PlayInterrupt("okura"))
+
+    assert _in_play(session, "guard")
