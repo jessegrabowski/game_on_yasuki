@@ -215,8 +215,8 @@ def test_a_narrowed_creation_reads_a_keyword_the_card_grants_itself():
     assert creation_targets(game, P1, _weapon_print(), keyword="Samurai") == ()
 
     @keyword_grant("samurai_probe")
-    def _grants_samurai(card, me, opponents):
-        return ("Samurai",)
+    def _grants_samurai(game, granting, card):
+        return ("Samurai",) if card is granting else ()
 
     try:
         assert creation_targets(game, P1, _weapon_print(), keyword="Samurai") == (granted,)

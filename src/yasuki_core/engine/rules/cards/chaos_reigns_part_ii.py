@@ -361,7 +361,7 @@ register_terrain("desperate_ground", ability_keywords=frozenset({keywords.TERRAI
 
 @keyword_grant("fortified_farmlands")
 def _fortified_farmlands_keywords(
-    card: L5RCard, game: GameState, seat: PlayerId
+    game: GameState, farmlands: L5RCard, card: L5RCard
 ) -> tuple[str, ...]:
     """Grant Renew while its controller has another Farm Holding in play.
 
@@ -369,7 +369,10 @@ def _fortified_farmlands_keywords(
     being granted once. The card's Response half is not modeled: no Action Round opens a Response
     step for it to be taken in.
     """
-    return ("Renew",) if seat_controls_printed(game, seat, "Farm", other_than=card) else ()
+    if card is not farmlands:
+        return ()
+    others = seat_controls_printed(game, farmlands.owner, "Farm", other_than=farmlands)
+    return (keywords.RENEW,) if others else ()
 
 
 # --- Isawa Eijiri, Warmonger ---

@@ -512,9 +512,13 @@ def _shrine_of_courtesy_recruit_discount(card: L5RCard, game: GameState, seat: P
 
 
 @keyword_grant("shrine_of_courtesy")
-def _shrine_of_courtesy_keywords(card: L5RCard, game: GameState, seat: PlayerId) -> tuple[str, ...]:
+def _shrine_of_courtesy_keywords(
+    game: GameState, shrine: L5RCard, card: L5RCard
+) -> tuple[str, ...]:
     """The same Courtesy clause grants Legacy, so a second player can search this Holding out."""
-    return (keywords.LEGACY,) if went_second(game, seat) else ()
+    if card is not shrine:
+        return ()
+    return (keywords.LEGACY,) if went_second(game, shrine.owner) else ()
 
 
 # --- Shrine of Sincerity ---

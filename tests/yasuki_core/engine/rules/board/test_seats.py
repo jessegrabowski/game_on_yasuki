@@ -159,8 +159,8 @@ def test_seat_controls_reads_printed_keywords_and_not_granted_ones():
     granted = put_in_play(game, holding("P1-docks", owner=PlayerId.P1, printed_id="seat_probe"))
 
     @keyword_grant("seat_probe")
-    def _grants_port(card, game_, seat):
-        return ("Port",)
+    def _grants_port(game_, granting, card):
+        return ("Port",) if card is granting else ()
 
     try:
         assert has_keyword(game, granted, "Port") is True
