@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     GrantNegation,
     Effect,
+    MeleeAttack,
     Move,
     Negated,
     RevokeGrants,
@@ -98,7 +99,6 @@ from yasuki_core.game_pieces.constants import AttachmentType, Element, Side
 
 from tests.yasuki_core.engine.builders import (
     datasheet_favor_ability,
-    attached,
     attachment,
     contentious_terrain,
     combat_segment,
@@ -119,7 +119,7 @@ from tests.yasuki_core.engine.builders import (
     token_template,
     two_seat_game,
 )
-from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_interrupt
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 ANCIENT_CASTLE = "the_ancient_castle_of_the_lion"
@@ -2413,24 +2413,110 @@ def test_rin_finding_no_undead_follower_still_resolves():
 # --- Daigotsu Hiromu ---
 
 
-@pytest.mark.parametrize(
-    ("answer", "kept"), [("Bow it", True), ("Destroy it", False)], ids=["bow", "destroy"]
-)
-def test_hiromu_spends_his_follower_on_a_melee_equal_to_its_force(answer, kept):
+def _hiromu_battle(*, follower_bowed: bool = False) -> EngineSession:
     cards = [
         personality("hiromu", printed_id="daigotsu_hiromu", force=1),
         personality("guard", owner=P2, force=3),
     ]
-    session = combat_segment(cards, {"hiromu": 0}, {"guard": 0})
-    game = session.game
     follower = attachment("ogre", attachment_type=AttachmentType.FOLLOWER, force=3)
-    attached(game, follower, "hiromu")
+    session = combat_segment(
+        cards, {"hiromu": 0}, {"guard": 0}, attachments=((follower, "hiromu"),)
+    )
+    if follower_bowed:
+        resolve_effects(session.game, [Bow("ogre")])
+    return session
+
+
+@pytest.mark.parametrize(
+    ("answer", "kept"), [("Bow it", True), ("Destroy it", False)], ids=["bow", "destroy"]
+)
+def test_hiromu_spends_his_follower_on_a_melee_equal_to_its_force(answer, kept):
+    session = _hiromu_battle()
 
     session.act(P1, ActivateAbility("hiromu"))
     session.submit(P1, DecisionResponse(("ogre",)))
-    session.submit(P1, DecisionResponse((answer,)))
     session.submit(P1, DecisionResponse(("guard",)))
+    session.submit(P1, DecisionResponse((answer,)))
 
-    assert game.pending is None
+    assert session.game.pending is None
     assert ("ogre" in _in_play(session)) is kept
     assert "guard" not in _in_play(session)
+
+
+def test_hiromu_bowing_a_bowed_follower_makes_no_melee():
+    session = _hiromu_battle(follower_bowed=True)
+
+    session.act(P1, ActivateAbility("hiromu"))
+    session.submit(P1, DecisionResponse(("ogre",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    session.submit(P1, DecisionResponse(("Bow it",)))
+
+    assert "guard" in _in_play(session)
+
+
+def test_hiromus_melee_is_answerable_at_the_interrupt_step():
+    negate_a_melee = Interrupt(
+        answers=MeleeAttack,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+    )
+    session = _hiromu_battle()
+    negator = L5RCard.of(
+        ActionPrint,
+        id="negator",
+        name="negator",
+        printed_id="melee_negator_probe",
+        side=Side.FATE,
+        owner=P2,
+    )
+    session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(register(session.game.table, negator))
+
+    with probe_interrupt("melee_negator_probe", negate_a_melee):
+        session.act(P1, ActivateAbility("hiromu"))
+        session.submit(P1, DecisionResponse(("ogre",)))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        assert PlayInterrupt("negator") in session.legal_actions(P2)
+
+
+def test_a_hiromu_game_replays_to_the_same_board():
+    session = _hiromu_battle()
+    session.act(P1, ActivateAbility("hiromu"))
+    session.submit(P1, DecisionResponse(("ogre",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    session.submit(P1, DecisionResponse(("Destroy it",)))
+
+    assert replay(session.log) == session.game
+
+
+@pytest.mark.parametrize(
+    ("answer", "guard_kept"), [("Destroy it", True), ("Bow it", False)], ids=["destroy", "bow"]
+)
+def test_an_interrupt_on_hiromus_destroy_applies_only_if_destroy_is_chosen(answer, guard_kept):
+    spare_the_follower = Interrupt(
+        answers=Destroy,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+        applies=lambda game, source, effect: effect.card_id == "ogre",
+    )
+    session = _hiromu_battle()
+    game = session.game
+    spare = L5RCard.of(
+        ActionPrint,
+        id="spare",
+        name="spare",
+        printed_id="spare_the_follower_probe",
+        side=Side.FATE,
+        owner=P2,
+    )
+    game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(register(game.table, spare))
+
+    with probe_interrupt("spare_the_follower_probe", spare_the_follower):
+        session.act(P1, ActivateAbility("hiromu"))
+        session.submit(P1, DecisionResponse(("ogre",)))
+        session.submit(P1, DecisionResponse(("guard",)))
+        session.act(P2, PlayInterrupt("spare"))
+        while game.round.kind is RoundKind.INTERRUPT:
+            session.act(game.round.priority, Pass())
+        session.submit(P1, DecisionResponse((answer,)))
+
+    assert "ogre" in _in_play(session)
+    assert ("guard" in _in_play(session)) is guard_kept

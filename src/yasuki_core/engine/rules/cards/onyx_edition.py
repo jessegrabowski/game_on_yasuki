@@ -39,7 +39,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
-    AskOption,
+    AlternateEffects,
     Banish,
     Bow,
     Choose,
@@ -104,6 +104,7 @@ from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     army_at,
     attack_targets,
+    followers_in_play,
     has_keyword,
     opposed_units_in_battle,
     opposing_units_in_battle,
@@ -121,7 +122,6 @@ from yasuki_core.engine.rules.rulebook.recruit_restrictions import register_recr
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
-    effective_force,
     effective_personal_honor,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
@@ -147,67 +147,37 @@ from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY
 
 # --- Daigotsu Hiromu ---
 
-HIROMU_BOW = "Bow it"
-HIROMU_DESTROY = "Destroy it"
+
+def _daigotsu_hiromu_followers(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """Your Followers, while the Melee has a card to target, since its targeting is the action's
+    own (CR, Good Faith Rule)."""
+    if not attack_targets(game, source):
+        return []
+    return [card.id for card in followers_in_play(game) if card.owner is source.owner]
 
 
-def _daigotsu_hiromu_targets(game: GameState, source: L5RCard) -> list[str]:
-    return [
-        card.id
-        for card in game.table.battlefield.cards
-        if card.owner is source.owner and is_follower(card)
-    ]
+def _daigotsu_hiromu_attacked(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    return attack_targets(game, source)
 
 
-def _daigotsu_hiromu_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """A bowed Follower cannot be bowed again, so only its destruction is offered."""
-    options = (HIROMU_DESTROY,) if target.bowed else (HIROMU_BOW, HIROMU_DESTROY)
-    return [
-        AskOption(
-            source.owner,
-            options,
-            f"Bow or destroy {target.name}?",
-            "daigotsu_hiromu",
-            source.id,
-            resolver_context=(target.id,),
-        )
-    ]
-
-
-@choice_resolver("daigotsu_hiromu")
-def _resolve_daigotsu_hiromu(
-    game: GameState,
-    source_id: str,
-    chosen: tuple[str, ...],
-    seat: PlayerId,
-    resolver_context: tuple[str, ...] = (),
+def _daigotsu_hiromu_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
-    """The Melee is made only if the Follower bowed or was destroyed (CR, Independence of Effects),
-    at the Force it had before it went. The Melee targets as any Melee does, and is not raised when
-    nothing at the battle can be targeted."""
-    (follower_id,) = resolver_context
-    follower = game.table.cards_by_id[follower_id]
-    paid = Bow(follower_id) if chosen[0] == HIROMU_BOW else Destroy(follower_id, seat)
-    attacked = tuple(attack_targets(game, game.table.cards_by_id[source_id]))
-    if not attacked:
-        return [paid]
-    strength = str(effective_force(game, follower))
-    melee = Choose(seat, attacked, 1, 1, "daigotsu_hiromu_melee", source_id, (strength,))
-    return [To(paid, (melee,))]
-
-
-@choice_resolver(
-    "daigotsu_hiromu_melee", prompt="Melee equal to the Follower's Force: choose its target"
-)
-def _resolve_daigotsu_hiromu_melee(
-    game: GameState,
-    source_id: str,
-    chosen: tuple[str, ...],
-    seat: PlayerId,
-    resolver_context: tuple[str, ...] = (),
-) -> list[Effect]:
-    (strength,) = resolver_context
-    return [MeleeAttack(int(strength), chosen[0], seat)]
+    """ "Bow or destroy your target Follower to make a Melee equal to its Force": the Melee is
+    made only if the alternative chosen happened, and reads the Follower's Force as it last stood
+    in play when that was its destruction."""
+    (follower,), (attacked,) = groups
+    seat = source.owner
+    paid = AlternateEffects(
+        seat,
+        (Bow(follower.id), Destroy(follower.id, seat)),
+        ("Bow it", "Destroy it"),
+        f"Bow or destroy {follower.name}?",
+        source.id,
+    )
+    return [To(paid, (MeleeAttack(0, attacked.id, seat, force_of=follower.id),))]
 
 
 register_ability(
@@ -215,9 +185,11 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=_daigotsu_hiromu_targets,
-        targeting_message="your Follower",
-        effects=_daigotsu_hiromu_effects,
+        target_groups=(
+            TargetGroup(candidates=_daigotsu_hiromu_followers, targeting_message="your Follower"),
+            TargetGroup(candidates=_daigotsu_hiromu_attacked, targeting_message=ATTACK_TARGET),
+        ),
+        effects_for_groups=_daigotsu_hiromu_effects,
     ),
 )
 

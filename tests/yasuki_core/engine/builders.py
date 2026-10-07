@@ -250,6 +250,7 @@ def combat_segment(
     *,
     attacker: PlayerId = PlayerId.P1,
     in_hand: list[L5RCard] | None = None,
+    attachments: tuple[tuple[L5RCard, str], ...] = (),
     defender_passes: bool = True,
 ) -> EngineSession:
     """The Combat Segment at battlefield 0 of ``attacker``'s attack, with ``cards`` in play and each
@@ -258,7 +259,8 @@ def combat_segment(
 
     ``in_hand`` cards go to their own owner's hand before the game starts, which is where a battle
     Strategy has to be for the tape to replay: a card put on the table afterwards is not in the
-    state the log was opened on.
+    state the log was opened on. ``attachments`` pairs a card with the id of the Personality it is
+    attached to before the game starts, for the same reason.
 
     The defender holds priority as the Combat Segment opens and passes it to the attacker, which is
     what almost every test wants. Set ``defender_passes`` false to leave it with the defender, for a
@@ -271,6 +273,8 @@ def combat_segment(
         province_card(state, f"def-prov{index}", seat=defender, index=index)
     for card in cards:
         put_in_play(state, card)
+    for card, parent in attachments:
+        attached(state, card, parent)
     for card in in_hand or []:
         register(state, card)
         state.zones[ZoneKey(card.owner, ZoneRole.HAND)].add(card)

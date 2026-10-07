@@ -4,9 +4,14 @@ import pytest
 
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.triggers import CHOICE_RESOLVERS
-from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.model import Ability, Interrupt
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
-from yasuki_core.engine.rules.abilities.registry import _ABILITIES, register_ability
+from yasuki_core.engine.rules.abilities.registry import (
+    _ABILITIES,
+    _INTERRUPTS,
+    register_ability,
+    register_interrupt,
+)
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 
 
@@ -93,3 +98,14 @@ def probe_ability(printed_id: str, ability: Ability):
         yield
     finally:
         _ABILITIES.pop(printed_id)
+
+
+@contextmanager
+def probe_interrupt(printed_id: str, interrupt: Interrupt):
+    """Register ``interrupt`` under ``printed_id`` for the body of a ``with`` and remove it after,
+    as :func:`probe_ability` does for an ability."""
+    register_interrupt(printed_id, interrupt)
+    try:
+        yield
+    finally:
+        _INTERRUPTS.pop(printed_id)
