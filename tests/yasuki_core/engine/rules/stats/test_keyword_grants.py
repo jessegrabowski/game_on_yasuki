@@ -3,8 +3,10 @@ import pytest
 
 from yasuki_core.engine.rules.stats.keyword_grants import (
     KEYWORD_GRANTS,
+    KEYWORD_LOSSES,
     effective_keywords,
     keyword_grant,
+    keyword_loss,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, KeywordGrant
 
@@ -98,3 +100,27 @@ def test_a_text_grant_reaches_another_card_only_while_its_card_is_in_play(in_pla
         assert effective_keywords(game, other) == frozenset(expected)
     finally:
         KEYWORD_GRANTS.pop("grant_probe", None)
+
+
+@pytest.mark.parametrize("in_play", [True, False], ids=["in_play", "out_of_play"])
+def test_a_text_loss_outweighs_any_grant_and_reaches_others_only_from_play(in_play):
+    @keyword_loss("loss_probe")
+    def _no_cavalry_anywhere(game, losing, card):
+        return ("Cavalry",)
+
+    try:
+        game = two_seat_game()
+        other = put_in_play(game, holding("P1-mine", owner=PlayerId.P1, keywords=("Farm",)))
+        game.ongoing.append(
+            KeywordGrant("P1-source", other.id, "Cavalry", Duration.UNTIL_END_OF_TURN)
+        )
+        banner = holding(
+            "P1-banner", owner=PlayerId.P1, printed_id="loss_probe", keywords=("Cavalry",)
+        )
+        losing = put_in_play(game, banner) if in_play else register(game.table, banner)
+
+        assert effective_keywords(game, losing) == frozenset()
+        expected = {"Farm"} if in_play else {"Farm", "Cavalry"}
+        assert effective_keywords(game, other) == frozenset(expected)
+    finally:
+        KEYWORD_LOSSES.pop("loss_probe", None)
