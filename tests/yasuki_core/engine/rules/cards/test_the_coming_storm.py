@@ -9,7 +9,6 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
-    ChooseCards,
     ChooseOption,
     DecisionResponse,
     focus_token,
@@ -30,13 +29,15 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, Side
+from yasuki_core.game_pieces.constants import IMPERIAL_FAVOR_ID, AttachmentType, Side
 from yasuki_core.game_pieces.prints import RulebookPrint, StrongholdPrint
 
 from contextlib import contextmanager
 from dataclasses import replace
 
 from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
     combat_segment,
     end_phase,
     focus_card,
@@ -265,14 +266,17 @@ def test_relentless_does_nothing_to_a_duel_fought_during_a_battle():
 
 
 def _relentless_battle() -> EngineSession:
-    """A battle with P1's bowed Personality opposed by P2's, a Follower on P2's, and Relentless in
-    P1's hand."""
+    """A battle with P1's bowed Personality opposed by P2's, P1's Follower on hers, a Personality
+    of P2's at home, and Relentless in P1's hand."""
     cards = [
         personality("mine", owner=P1, force=3),
         personality("theirs", owner=P2, force=3),
+        personality("reserve", owner=P2, force=3),
     ]
     held = [focus_card("relentless_card", P1, 2, printed_id="relentless")]
     session = combat_segment(cards, {"mine": 0}, {"theirs": 0}, in_hand=held)
+    follower = attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER)
+    attached(session.game, follower, "mine")
     session.game.table.cards_by_id["mine"].bow()
     return session
 
@@ -281,8 +285,9 @@ def test_relentless_straightens_your_card_and_moves_a_force_the_way_you_choose()
     session = _relentless_battle()
 
     session.act(P1, PlayStrategy("relentless_card"))
+    assert set(session.game.pending.candidates) == {"mine", "ashigaru"}
     session.submit(P1, DecisionResponse(("mine",)))
-    assert isinstance(session.game.pending, ChooseCards)
+    assert set(session.game.pending.candidates) == {"mine", "theirs", "ashigaru"}
     session.submit(P1, DecisionResponse(("theirs",)))
     pending = session.game.pending
     assert isinstance(pending, ChooseOption)
