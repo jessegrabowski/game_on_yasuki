@@ -267,6 +267,7 @@ ROLES = frozenset(
         "targets",
         "target_count",
         "uses_per_turn",
+        "label",
         "effects",
         "interrupt",
         "applies",
