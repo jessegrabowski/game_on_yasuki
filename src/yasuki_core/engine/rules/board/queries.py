@@ -283,6 +283,18 @@ def army_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]:
     ]
 
 
+def outnumbered_at(game: GameState, battlefield: int, seat: PlayerId) -> bool:
+    """Whether ``seat``'s army at ``battlefield`` is outnumbered: the opposing side there has more
+    units than it (ShE datasheet, Outnumbered). A side with no units is not an army, so a seat with
+    none there is never outnumbered, and outside an attack no armies oppose each other at all."""
+    attack = game.attack
+    if attack is None:
+        return False
+    own = units_at(game, battlefield, seat)
+    enemy = units_at(game, battlefield, attack.enemy_of(seat))
+    return bool(own) and len(own) < len(enemy)
+
+
 def in_army_with(game: GameState, source: L5RCard, card: L5RCard) -> bool:
     """Whether ``card`` is in the army of ``source``'s controller at ``source``'s battlefield, as
     "your cards at this battlefield" reads. False while ``source`` is at home."""
