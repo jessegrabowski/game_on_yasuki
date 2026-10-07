@@ -85,6 +85,7 @@ from yasuki_core.engine.rules.board.queries import (
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     Ask,
+    AskAmount,
     Bow,
     Choose,
     CreateToken,
@@ -112,6 +113,7 @@ from yasuki_core.engine.rules.effects import (
     RangedAttack,
     Rehonor,
     ShuffleDeck,
+    Simultaneously,
     SpendOncePerTurn,
     Straighten,
     seppuku,
@@ -582,6 +584,103 @@ register_ability(
         targets=_doji_yasuko_soul_of_doji_takeji_targets,
         effects=_doji_yasuko_soul_of_doji_takeji_effects,
         hits_every_target=True,
+    ),
+)
+
+
+# --- Heedless Assault ---
+
+
+def _heedless_assault_berserkers(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """ "Your target unbowed Berserker Personality"."""
+    return [
+        card.id
+        for card in owned_personalities(game, source.owner)
+        if not card.bowed and has_keyword(game, card, keywords.BERSERKER)
+    ]
+
+
+def _heedless_assault_enemies(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "A target enemy Follower or Personality". The Rules of Location keep it to the battle."""
+    return [
+        card.id
+        for card in (*personalities_in_play(game), *followers_in_play(game))
+        if card.owner is not source.owner
+    ]
+
+
+def _heedless_assault_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """ "A Force penalty up to their current Force", from none to all of it."""
+    (berserker,), (enemy,) = groups
+    amounts = tuple(range(effective_force(game, berserker) + 1))
+    return [
+        AskAmount(
+            source.owner,
+            amounts,
+            "Heedless Assault: how large a Force penalty?",
+            "heedless_assault",
+            source.id,
+            resolver_context=(berserker.id, enemy.id),
+        )
+    ]
+
+
+@choice_resolver("heedless_assault")
+def _resolve_heedless_assault(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """The same penalty on both targets until the end of the turn, as one with no printed duration
+    lasts (CR, Duration of Effects), then the destroy check on each."""
+    penalty = -int(chosen[0])
+    penalties = [
+        GrantModifier(source_id, target_id, Stat.FORCE, penalty, Duration.UNTIL_END_OF_TURN)
+        for target_id in resolver_context
+    ]
+    check = Evaluate("heedless_assault_destroy", source_id, seat, resolver_context)
+    return [*penalties, check]
+
+
+@choice_resolver("heedless_assault_destroy")
+def _resolve_heedless_assault_destroy(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "Destroy either target if it now has 0 Force and no attachments." """
+    spent = (
+        target_id
+        for target_id in chosen
+        if effective_force(game, game.table.cards_by_id[target_id]) == 0
+        and not attachments_of(game, game.table.cards_by_id[target_id])
+    )
+    destroyed = tuple(Destroy(target_id, seat) for target_id in spent)
+    return [Simultaneously(destroyed)] if destroyed else []
+
+
+register_ability(
+    "heedless_assault",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_heedless_assault_berserkers,
+                targeting_message="your unbowed Berserker Personality",
+            ),
+            TargetGroup(
+                candidates=_heedless_assault_enemies,
+                targeting_message="an enemy Follower or Personality",
+            ),
+        ),
+        effects_for_groups=_heedless_assault_effects,
+        located_at=(CardLocation.HAND,),
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )
 
