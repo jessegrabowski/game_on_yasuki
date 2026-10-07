@@ -1856,6 +1856,53 @@ def test_haikeru_replays_to_the_same_board():
     assert replay(session.log).table == session.game.table
 
 
+# --- Hida War College (Experienced) ---
+
+
+@pytest.mark.parametrize(("clan", "offered"), [(ruleset.CRAB, True), (ruleset.CRANE, False)])
+def test_hida_war_college_may_only_be_recruited_by_a_crab_clan_player(clan, offered):
+    state = TableState.empty_two_seat()
+    put_in_play(state, stronghold(P1, clan=clan, gold_production=5))
+    province_card(state, "college", printed_id="hida_war_college_experienced", gold_cost=2)
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+
+    assert (ActivateAbility("college", RECRUIT) in session.legal_actions(P1)) is offered
+
+
+@pytest.mark.parametrize(
+    ("p1_army", "p2_army", "p1_attacks", "force"),
+    [
+        ({"hero": 0}, {"guard": 0}, True, 5),
+        ({"hero": 0}, {"guard": 0, "reserve": 0}, True, 7),
+        ({"hero": 0}, {"guard": 0}, False, 7),
+    ],
+    ids=["attacking", "outnumbered", "defending"],
+)
+def test_hida_war_college_gives_more_force_to_a_defending_or_outnumbered_personality(
+    p1_army, p2_army, p1_attacks, force
+):
+    cards = [
+        holding("college", printed_id="hida_war_college_experienced"),
+        personality("hero", force=3),
+        personality("guard", owner=P2),
+        personality("reserve", owner=P2),
+    ]
+    if p1_attacks:
+        session = combat_segment(cards, p1_army, p2_army)
+    else:
+        session = combat_segment(cards, p2_army, p1_army, attacker=P2, defender_passes=False)
+
+    session.act(P1, ActivateAbility("college"))
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    game = session.game
+    assert effective_force(game, game.table.cards_by_id["hero"]) == force
+    assert game.table.cards_by_id["college"].bowed
+    assert game.round.priority is P1 and game.round.passes == 0
+
+
 # --- Togashi Hiyoku ---
 
 

@@ -50,6 +50,7 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     GrantDuelStat,
     GrantKeyword,
+    GrantModifier,
     GrantSeatAbility,
     Move,
     MoveToDeck,
@@ -93,6 +94,7 @@ from yasuki_core.engine.rules.board.queries import (
     attack_targets,
     has_keyword,
     opposing_units_in_battle,
+    outnumbered_at,
     owned_personalities,
     personalities_in_play,
     rings_in_play,
@@ -242,6 +244,53 @@ register_ability(
         targets=_hida_haikeru_targets,
         targeting_message="an enemy Personality",
         effects=_hida_haikeru_effects,
+    ),
+)
+
+
+# --- Hida War College (Experienced) ---
+
+WAR_COLLEGE_FORCE = 2
+WAR_COLLEGE_PRESSED_FORCE = 4
+
+register_recruit_restriction("hida_war_college_experienced", clan_player(ruleset.CRAB))
+
+
+def _hida_war_college_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in owned_personalities(game, source.owner)]
+
+
+def _hida_war_college_experienced_pressed(game: GameState, personality: L5RCard) -> bool:
+    """ "If they are defending or outnumbered", read at the battle being fought, where a Battle
+    action's target stands."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return False
+    seat = personality.owner
+    return attack.defender is seat or outnumbered_at(game, attack.current, seat)
+
+
+def _hida_war_college_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """The bonus runs to the end of the turn, as one with no printed duration does (CR, Duration
+    of Effects)."""
+    pressed = _hida_war_college_experienced_pressed(game, target)
+    amount = WAR_COLLEGE_PRESSED_FORCE if pressed else WAR_COLLEGE_FORCE
+    return [
+        GrantModifier(source.id, target.id, Stat.FORCE, amount, Duration.UNTIL_END_OF_TURN),
+        AdditionalAction(source.owner, source.id),
+    ]
+
+
+register_ability(
+    "hida_war_college_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=_hida_war_college_experienced_targets,
+        targeting_message="your Personality",
+        effects=_hida_war_college_experienced_effects,
     ),
 )
 
