@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.cards.road_to_ruin import (
 )
 from yasuki_core.engine.rules.effects import (
     AttachCard,
+    Bow,
     DelayStraighten,
     Destroy,
     Dishonor,
@@ -557,6 +558,89 @@ def test_verdant_wilds_cannot_straighten_a_card_forbidden_to_straighten():
 
     assert session.game.table.cards_by_id["mine"].bowed
     assert "mine" in session.game.straighten_delayed
+
+
+# --- "Is That All?" ---
+
+TRINKET_PROBE = "probe_trinket"
+
+
+def _is_that_all_battle(*, guard_force: int = 3, guard_follower: bool = False) -> EngineSession:
+    """P1's bowed 4F hero facing P2's guard, with "Is That All?" in P1's hand."""
+    is_that_all = L5RCard.of(
+        ActionPrint,
+        id="is-that-all",
+        printed_id="is_that_all",
+        name='"Is That All?"',
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    cards = [personality("hero", force=4), personality("guard", owner=P2, force=guard_force)]
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0}, in_hand=[is_that_all])
+    if guard_follower:
+        follower = attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER)
+        attached(session.game, follower, "guard")
+    resolve_effects(session.game, [Bow("hero")])
+    return session
+
+
+@pytest.mark.parametrize(
+    ("guard_force", "guard_follower", "feared", "bowed", "straightened"),
+    [
+        (3, False, "guard", True, True),
+        (5, False, "guard", False, False),
+        (3, True, "ashigaru", True, False),
+    ],
+    ids=["bows_a_personality", "too_strong", "bows_a_follower"],
+)
+def test_is_that_all_straightens_your_personality_only_after_bowing_an_enemy_personality(
+    guard_force, guard_follower, feared, bowed, straightened
+):
+    session = _is_that_all_battle(guard_force=guard_force, guard_follower=guard_follower)
+
+    session.act(P1, PlayStrategy("is-that-all", "fear"))
+    session.submit(P1, DecisionResponse(("hero",)))
+    session.submit(P1, DecisionResponse((feared,)))
+
+    cards = session.game.table.cards_by_id
+    assert cards[feared].bowed is bowed
+    assert cards["hero"].bowed is not straightened
+
+
+def _trinket_used(gold_cost: int) -> EngineSession:
+    """The "Is That All?" battle once P1 has used the ability of a trinket costing ``gold_cost``
+    attached to the hero, so its Response Step is open."""
+    session = _is_that_all_battle()
+    trinket = attachment("trinket", printed_id=TRINKET_PROBE, gold_cost=gold_cost)
+    attached(session.game, trinket, "hero")
+    session.act(P1, ActivateAbility("trinket"))
+    return session
+
+
+TRINKET_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    cost=no_cost,
+    targets=itself,
+    effects=lambda game, source, target: [],
+    hits_every_target=True,
+)
+
+
+def test_is_that_all_destroys_the_zero_cost_attachment_whose_action_it_answers():
+    with probe_ability(TRINKET_PROBE, TRINKET_ABILITY):
+        session = _trinket_used(gold_cost=0)
+
+        session.act(P1, PlayStrategy("is-that-all", "destroy"))
+
+    assert "trinket" not in {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_is_that_all_does_not_answer_an_attachment_costing_gold():
+    with probe_ability(TRINKET_PROBE, TRINKET_ABILITY):
+        session = _trinket_used(gold_cost=1)
+
+        assert PlayStrategy("is-that-all", "destroy") not in session.legal_actions(P1)
 
 
 # --- Kakita Harudei, Drunkard ---
