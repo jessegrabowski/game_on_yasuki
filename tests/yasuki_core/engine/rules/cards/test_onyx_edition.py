@@ -23,13 +23,15 @@ from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import (
     Bow,
     Destroy,
+    GrantNegation,
     Effect,
     Move,
     Negated,
     RevokeGrants,
     TakeFavor,
 )
-from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN, RoundKind
+from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
@@ -1951,6 +1953,17 @@ def test_yurike_bows_her_follower_to_straighten_herself():
     cards = session.game.table.cards_by_id
     assert cards["ashigaru"].bowed
     assert not cards["yurike"].bowed
+
+
+def test_yurike_stays_bowed_when_her_followers_bowing_is_negated():
+    session = _yurike_battle()
+    negation = Negation("guard", END_OF_TURN, effect_kind=Bow, subject_id="ashigaru")
+    resolve_effects(session.game, [Bow("yurike"), GrantNegation(negation)])
+
+    session.act(P1, ActivateAbility("yurike", "straighten"))
+    session.submit(P1, DecisionResponse(("ashigaru",)))
+
+    assert session.game.table.cards_by_id["yurike"].bowed
 
 
 # --- Kaiu Denkaru ---

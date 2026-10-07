@@ -65,6 +65,7 @@ from yasuki_core.engine.rules.effects import (
     StartDuel,
     Straighten,
     TakeFavor,
+    To,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.rulebook.kharmic import (
@@ -341,11 +342,9 @@ def _hida_yurike_soul_of_hida_rikyu_straighten_targets(
 def _hida_yurike_soul_of_hida_rikyu_straighten_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    """ "Bow Yurike's target Follower to straighten Yurike": a Follower bowed by the time this
-    resolves bows nothing, so Yurike stays as she is (CR, To)."""
-    if target.bowed:
-        return []
-    return [Bow(target.id), Straighten(source.id)]
+    """ "Bow Yurike's target Follower to straighten Yurike": Yurike straightens only if the Follower
+    actually bows (CR, Independence of Effects)."""
+    return [To(Bow(target.id), (Straighten(source.id),))]
 
 
 register_ability(
