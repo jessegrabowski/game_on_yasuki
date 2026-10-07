@@ -484,7 +484,9 @@ def _granted_yu_label(printed_id: str) -> TriggerLabel:
             (held for held in game.table.cards_by_id.values() if held.printed_id == printed_id),
             None,
         )
-        quoted = None if source is None else _QUOTED_YU.search(strip_markup(source.printed.text))
+        quoted = (
+            None if source is None else _QUOTED_YU.search(strip_markup(source.active_face.text))
+        )
         return quoted.group(1) if quoted is not None else f"{card.name}'s Yu"
 
     return label

@@ -110,7 +110,7 @@ TriggerLabel = Callable[[GameState, L5RCard], str]
 def printed_trait(game: GameState, card: L5RCard) -> str:
     """``card``'s printed trait when it prints exactly one, and otherwise "<name>'s triggered
     ability"."""
-    traits = split_text_box(card.printed.text).traits
+    traits = split_text_box(card.active_face.text).traits
     return traits[0] if len(traits) == 1 else f"{card.name}'s triggered ability"
 
 
@@ -118,7 +118,7 @@ def trait_opening(prefix: str) -> TriggerLabel:
     """A label reading the printed trait that opens with ``prefix``, as "Yu:" or "Invest"."""
 
     def label(game: GameState, card: L5RCard) -> str:
-        traits = split_text_box(card.printed.text).traits
+        traits = split_text_box(card.active_face.text).traits
         return next(
             (trait for trait in traits if trait.startswith(prefix)), printed_trait(game, card)
         )

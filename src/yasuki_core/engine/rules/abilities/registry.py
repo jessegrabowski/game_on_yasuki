@@ -545,7 +545,7 @@ def printed_line_without_cost(card: L5RCard, index: int) -> str:
 
 
 def _printed_ability(card: L5RCard, index: int) -> PrintedAbility | None:
-    abilities = split_text_box(card.printed.text).abilities
+    abilities = split_text_box(card.active_face.text).abilities
     return abilities[index] if index < len(abilities) else None
 
 
