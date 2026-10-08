@@ -18,4 +18,6 @@ def lose_honor_for_a_dishonorable_death(ctx: TriggerContext) -> list[Effect]:
     card = ctx.card
     if not isinstance(card.printed, PersonalityPrint) or not card.dishonorable:
         return []
-    return [GainHonor(card.owner, -card.personal_honor)]
+    # The card has already left play, so its controller is read off the record of how it stood as
+    # it went rather than from the board, which no longer holds it.
+    return [GainHonor(ctx.event.left_as.controller, -card.personal_honor)]

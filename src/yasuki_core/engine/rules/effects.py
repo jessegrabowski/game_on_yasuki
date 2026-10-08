@@ -94,6 +94,7 @@ from yasuki_core.engine.rules.turn.structure import (
     flow_resolves,
 )
 from yasuki_core.engine.table import (
+    controller_of,
     BATTLEFIELD,
     UNPLACED_BOARD_POS,
     DeckKey,
@@ -488,7 +489,7 @@ class MoveToHand(Effect):
 def _as_it_stands(game: GameState, card: L5RCard, *, destroyed: bool = False) -> LastKnownState:
     return LastKnownState(
         location_of(game.table, card),
-        card.owner,
+        controller_of(game.table, card),
         effective_stat(game, card, Stat.FORCE),
         effective_stat(game, card, Stat.CHI),
         destroyed=destroyed,
@@ -575,7 +576,7 @@ def _destroying_seat(game: GameState, cause: Cause) -> PlayerId | None:
         return cause
     if isinstance(cause, Trait):
         source = game.table.cards_by_id.get(cause.card_id)
-        return None if source is None else source.owner
+        return None if source is None else controller_of(game.table, source)
     return None
 
 

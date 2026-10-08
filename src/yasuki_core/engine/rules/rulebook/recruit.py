@@ -41,7 +41,7 @@ from yasuki_core.engine.rules.vocabulary.actions import Action, ActionTiming, Ac
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.stats.card_values import effective_personal_honor
-from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey
+from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey, controller_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import SINCERITY
@@ -251,7 +251,10 @@ def meets_honor_requirement(game: GameState, card: L5RCard) -> bool:
     if not isinstance(card.printed, PersonalityPrint):
         return True
     required = card.honor_requirement
-    if required is None or game.table.seats[card.owner].honor >= required:
+    if required is None:
+        return True
+    seat = controller_of(game.table, card)
+    if game.table.seats[seat].honor >= required:
         return True
     return _waives_honor_requirement(game, card)
 
@@ -261,8 +264,10 @@ def _waives_honor_requirement(game: GameState, personality: L5RCard) -> bool:
     Requirement): Honor the seat has lost to anything but its own cards, which waives the
     requirement of its own Clan Alignment's Personalities only, or a card in play that waives every
     requirement whatever clan it names.
+
+    "Its own cards" are the ones the seat controls, which the CR leaves open.
     """
-    seat = personality.owner
+    seat = controller_of(game.table, personality)
     if game.table.seats[seat].lost_honor_from_elsewhere and shares_seat_alignment(
         game, personality
     ):

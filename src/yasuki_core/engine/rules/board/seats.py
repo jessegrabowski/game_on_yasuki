@@ -1,14 +1,16 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.modifiers import CompassionGrant
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import ZoneKey, ZoneRole, controller_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import FatePrint, StrongholdPrint, WindPrint
 
 
 def cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
     """The cards ``seat`` controls on the battlefield."""
-    return tuple(card for card in game.table.battlefield.cards if card.owner is seat)
+    return tuple(
+        card for card in game.table.battlefield.cards if controller_of(game.table, card) is seat
+    )
 
 
 def fate_cards_in_play(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
@@ -29,11 +31,7 @@ def cards_in_hand(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
 def seat_wind(game: GameState, seat: PlayerId) -> L5RCard | None:
     """``seat``'s Wind, or None when it has none in play: what a card means by "your Wind"."""
     return next(
-        (
-            card
-            for card in game.table.battlefield.cards
-            if card.owner is seat and isinstance(card.printed, WindPrint)
-        ),
+        (card for card in cards_in_play(game, seat) if isinstance(card.printed, WindPrint)),
         None,
     )
 
@@ -41,7 +39,7 @@ def seat_wind(game: GameState, seat: PlayerId) -> L5RCard | None:
 def seat_stronghold(game: GameState, seat: PlayerId | None) -> L5RCard | None:
     """``seat``'s Stronghold, or None when it has none in play."""
     for card in game.table.battlefield.cards:
-        if card.owner is seat and isinstance(card.printed, StrongholdPrint):
+        if controller_of(game.table, card) is seat and isinstance(card.printed, StrongholdPrint):
             return card
     return None
 
@@ -106,9 +104,7 @@ def seat_controls_printed(
     asking. Default None.
     """
     return any(
-        keyword in card.keywords and card is not other_than
-        for card in game.table.battlefield.cards
-        if card.owner is seat
+        keyword in card.keywords and card is not other_than for card in cards_in_play(game, seat)
     )
 
 

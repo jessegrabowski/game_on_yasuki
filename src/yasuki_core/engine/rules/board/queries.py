@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.table import (
+    controller_of,
     DeckKey,
     Zone,
     ZoneKey,
@@ -137,9 +138,10 @@ def attack_targets(game: GameState, source: L5RCard, kind: type) -> list[str]:
     attack = game.attack
     if attack is None or attack.current is None:
         return []
-    seat = source.owner
+    seat = controller_of(game.table, source)
     past_followers = any(
-        card.owner is seat and kind in ATTACKS_PAST_FOLLOWERS.get(card.printed_id, frozenset())
+        kind in ATTACKS_PAST_FOLLOWERS.get(card.printed_id, frozenset())
+        and controller_of(game.table, card) is seat
         for card in game.table.battlefield.cards
     )
     return attack_targets_at(
@@ -179,7 +181,7 @@ def owned_personalities(game: GameState, owner: PlayerId) -> tuple[L5RCard, ...]
     return tuple(
         card
         for card in game.table.battlefield.cards
-        if isinstance(card.printed, PersonalityPrint) and card.owner is owner
+        if isinstance(card.printed, PersonalityPrint) and controller_of(game.table, card) is owner
     )
 
 
@@ -197,7 +199,8 @@ def owned_carrying(game: GameState, owner: PlayerId, *carried: str) -> tuple[L5R
     return tuple(
         card
         for card in game.table.battlefield.cards
-        if card.owner is owner and any(has_keyword(game, card, keyword) for keyword in carried)
+        if controller_of(game.table, card) is owner
+        and any(has_keyword(game, card, keyword) for keyword in carried)
     )
 
 
@@ -254,7 +257,7 @@ def rings_in_play(game: GameState, seat: PlayerId, asking: Asking) -> tuple[L5RC
     return tuple(
         card
         for card in game.table.battlefield.cards
-        if card.owner is seat and counts_as(game, card, RingPrint, asking)
+        if controller_of(game.table, card) is seat and counts_as(game, card, RingPrint, asking)
     )
 
 
@@ -298,8 +301,8 @@ def owned_holdings(game: GameState, owner: PlayerId, keyword: str | None = None)
     return [
         held
         for held in game.table.battlefield.cards
-        if held.owner is owner
-        and isinstance(held.printed, HoldingPrint)
+        if isinstance(held.printed, HoldingPrint)
+        and controller_of(game.table, held) is owner
         and (keyword is None or keyword in effective_keywords(game, held))
     ]
 
@@ -333,8 +336,8 @@ def units_at(game: GameState, battlefield: int | None, seat: PlayerId) -> list[L
     return [
         card
         for card in game.table.battlefield.cards
-        if card.owner is seat
-        and isinstance(card.printed, PersonalityPrint)
+        if isinstance(card.printed, PersonalityPrint)
+        and controller_of(game.table, card) is seat
         and location_of(game.table, card).battlefield == battlefield
     ]
 
@@ -366,9 +369,10 @@ def in_army_with(game: GameState, source: L5RCard, card: L5RCard) -> bool:
     """Whether ``card`` is in the army of ``source``'s controller at ``source``'s battlefield, as
     "your cards at this battlefield" reads. False while ``source`` is at home."""
     here = location_of(game.table, source).battlefield
-    if here is None or card.owner is not source.owner:
+    seat = controller_of(game.table, source)
+    if here is None or controller_of(game.table, card) is not seat:
         return False
-    return any(member is card for member in army_at(game, here, source.owner))
+    return any(member is card for member in army_at(game, here, seat))
 
 
 def terrains_at(game: GameState, battlefield: int) -> list[L5RCard]:
@@ -383,9 +387,8 @@ def terrains_at(game: GameState, battlefield: int) -> list[L5RCard]:
 
 
 def controls_terrain_at(game: GameState, seat: PlayerId, battlefield: int) -> bool:
-    """Whether ``seat`` controls a Terrain at ``battlefield``. Control is ownership until the engine
-    models the two apart."""
-    return any(card.owner is seat for card in terrains_at(game, battlefield))
+    """Whether ``seat`` controls a Terrain at ``battlefield``."""
+    return any(controller_of(game.table, card) is seat for card in terrains_at(game, battlefield))
 
 
 def opposing_units_in_battle(game: GameState, seat: PlayerId) -> tuple[str, ...]:

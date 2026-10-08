@@ -2,6 +2,7 @@ from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_in_play, seat_stronghold
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import controller_of
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -60,7 +61,8 @@ def shares_seat_alignment(game: GameState, card: L5RCard) -> bool:
     """Whether ``card`` carries one of its controller's Clan Alignments: what a rule means by a
     Personality "with his or her Clan Alignment". False for an unaligned card and for a seat with
     no alignment of its own, neither of which shares one with anybody."""
-    return not seat_alignments(game, card.owner).isdisjoint(card_alignments(card))
+    seat = controller_of(game.table, card)
+    return not seat_alignments(game, seat).isdisjoint(card_alignments(card))
 
 
 def is_clan(game: GameState, seat: PlayerId | None, clan: str) -> bool:
