@@ -31,6 +31,7 @@ from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
 from yasuki_core.engine.rules.effects import (
     Ask,
     CreateBattle,
+    ExemptFromResolutionBow,
     DelayedEffect,
     Destroy,
     DestroyProvince,
@@ -1669,3 +1670,29 @@ def test_the_response_step_to_the_creating_action_opens_before_the_battle():
             session.act(session.game.round.priority, Pass())
 
         assert session.game.attack.battle_segment is BattleSegment.ENGAGE
+
+
+def test_the_resolution_bow_exemption_can_be_scoped_to_a_keyword():
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, stronghold(PlayerId.P2))
+    put_in_play(state, personality("sailor", force=5, keywords=(keywords.NAVAL,)))
+    put_in_play(state, personality("soldier", force=5))
+    put_in_play(state, personality("d", owner=PlayerId.P2, force=1))
+    session = _to_battle(EngineSession.start(state, PlayerId.P1))
+    session.act(PlayerId.P1, DeclareAttack())
+    session.submit(
+        PlayerId.P1,
+        DecisionResponse((assignment_token("sailor", 0), assignment_token("soldier", 0))),
+    )
+    session.submit(PlayerId.P2, DecisionResponse((assignment_token("d", 0),)))
+    pending = session.game.pending
+    assert isinstance(pending, ChooseBattlefield)
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    resolve_effects(session.game, [ExemptFromResolutionBow(PlayerId.P1, 0, keyword=keywords.NAVAL)])
+
+    _pass_out_the_segments(session)
+
+    assert not session.game.table.cards_by_id["sailor"].bowed
+    assert session.game.table.cards_by_id["soldier"].bowed

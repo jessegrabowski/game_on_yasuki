@@ -86,6 +86,7 @@ WEAPON = "Weapon"
 
 ARMOR = "Armor"
 HEAVY_WEAPON = "Heavy Weapon"
+NAVAL = "Naval"
 TETSUBO = "Tetsubo"
 BERSERKER = "Berserker"
 CAVALRY = "Cavalry"

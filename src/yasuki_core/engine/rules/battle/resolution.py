@@ -405,8 +405,12 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     exempt = attack.battlefields[battlefield].bow_exempt
     bows: list[Effect] = []
     for personality in units_at(game, battlefield, attack.attacker):
-        conqueror = keywords.CONQUEROR in effective_keywords(game, personality)
-        if personality.owner not in exempt and not conqueror:
+        carried = effective_keywords(game, personality)
+        spared = keywords.CONQUEROR in carried or any(
+            seat is personality.owner and (keyword is None or keyword in carried)
+            for seat, keyword in exempt
+        )
+        if not spared:
             bows.append(Bow(personality.id))
             bows.extend(Bow(attached.id) for attached in attachments_of(game, personality))
         ops.return_home(game.table, personality)

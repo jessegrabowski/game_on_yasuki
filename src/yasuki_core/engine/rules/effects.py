@@ -2225,19 +2225,24 @@ class ExemptFromResolutionBow(Effect):
         The seat whose units keep standing.
     battlefield : int
         The battlefield whose battle it is.
+    keyword : str, optional
+        The keyword the exemption is scoped to, for "does not bow your Naval Personalities".
+        Default None, which spares all the seat's units.
     """
 
     seat: PlayerId
     battlefield: int
+    keyword: str | None = None
 
     def describe(self) -> str:
-        return f"the resolution at battlefield {self.battlefield} does not bow {self.seat.name}"
+        whose = self.seat.name if self.keyword is None else f"{self.seat.name}'s {self.keyword}"
+        return f"the resolution at battlefield {self.battlefield} does not bow {whose}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         attack = game.attack
         if attack is not None:
             exempt = attack.battlefields[self.battlefield].bow_exempt
-            attack.amend(self.battlefield, bow_exempt=exempt | {self.seat})
+            attack.amend(self.battlefield, bow_exempt=exempt | {(self.seat, self.keyword)})
         return []
 
 

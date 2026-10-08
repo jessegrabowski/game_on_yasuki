@@ -70,9 +70,10 @@ class BattlefieldInfo(NamedTuple):
         whether or not the Personality was still there when the battle was fought. An entry stays
         once written, because "any enemy units were ever at its battlefield" asks about the whole
         attack. Default empty.
-    bow_exempt : frozenset of PlayerId
-        The seats whose units the battle's resolution does not bow (CR, After Resolution 0.1), as
-        Rallying Cry grants. Default empty.
+    bow_exempt : frozenset of (PlayerId, str or None)
+        Each seat whose units the battle's resolution does not bow (CR, After Resolution 0.1), as
+        Rallying Cry grants, with the keyword the exemption is scoped to, or None for all the
+        seat's units. Default empty.
     terrains_played : frozenset of (PlayerId, str)
         Each seat and the Terrain it played here from its hand. Default empty.
     terrains_destroyed : frozenset of (PlayerId, str)
@@ -89,7 +90,7 @@ class BattlefieldInfo(NamedTuple):
     province: ZoneKey | None
     outcome: BattleOutcome | None = None
     ever_present: frozenset[tuple[PlayerId, str]] = frozenset()
-    bow_exempt: frozenset[PlayerId] = frozenset()
+    bow_exempt: frozenset[tuple[PlayerId, str | None]] = frozenset()
     terrains_played: frozenset[tuple[PlayerId, str]] = frozenset()
     terrains_destroyed: frozenset[tuple[PlayerId, str]] = frozenset()
     printed_actions: frozenset[PlayerId] = frozenset()
