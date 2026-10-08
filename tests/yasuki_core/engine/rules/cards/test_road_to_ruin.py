@@ -563,6 +563,81 @@ def test_verdant_wilds_cannot_straighten_a_card_forbidden_to_straighten():
     assert "mine" in session.game.straighten_delayed
 
 
+# --- Grim Reality ---
+
+
+def _grim_reality() -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id="grim",
+        name="Grim Reality",
+        printed_id="grim_reality",
+        side=Side.FATE,
+        owner=P1,
+    )
+
+
+def _grim_reality_battle(*, guard_force: int = 2, in_discard: bool = False) -> EngineSession:
+    """P1's raider faces P2's guard, with Grim Reality in P1's hand or Fate discard pile and a
+    Holding producing 2 Gold."""
+    cards = [
+        personality("raider", force=3),
+        personality("guard", owner=P2, force=guard_force),
+        holding("mine", gold_production=2),
+    ]
+    grim = _grim_reality()
+    session = combat_segment(
+        cards, {"raider": 0}, {"guard": 0}, in_hand=[] if in_discard else [grim]
+    )
+    if in_discard:
+        pile = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+        pile.add(register(session.game.table, grim))
+    return session
+
+
+@pytest.mark.parametrize(
+    ("guard_force", "bowed", "force_after"), [(0, True, 0), (4, False, 1)], ids=["0F", "4F"]
+)
+def test_grim_reality_bows_a_0_force_card_and_gives_any_other_minus_3_force(
+    guard_force, bowed, force_after
+):
+    session = _grim_reality_battle(guard_force=guard_force)
+    game = session.game
+
+    session.act(P1, PlayStrategy("grim"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    guard = game.table.cards_by_id["guard"]
+    assert guard.bowed is bowed
+    assert effective_force(game, guard) == force_after
+
+
+def test_grim_reality_is_played_from_the_discard_pile_for_2_gold_and_banished():
+    session = _grim_reality_battle(in_discard=True)
+    game = session.game
+
+    session.act(P1, PlayStrategy("grim", disciplined=True))
+    assert game.pending.amount == 2
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    assert game.table.cards_by_id["mine"].bowed
+    assert effective_force(game, game.table.cards_by_id["guard"]) == 0
+    banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)].cards
+    assert [card.id for card in banished] == ["grim"]
+
+
+def test_grim_reality_is_not_played_from_the_discard_pile_without_the_gold():
+    session = _grim_reality_battle(in_discard=True)
+    resolve_effects(session.game, [Bow("mine")])
+
+    assert PlayStrategy("grim", disciplined=True) not in session.legal_actions(P1)
+
+
 # --- "Is That All?" ---
 
 

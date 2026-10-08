@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
     Effect,
+    Evaluate,
     Fear,
     GainHonor,
     GrantModifier,
@@ -52,6 +53,7 @@ from yasuki_core.engine.rules.effects import (
     To,
     seppuku,
 )
+from yasuki_core.engine.rules.rulebook.discipline import disciplined, register_discipline
 from yasuki_core.engine.rules.rulebook.equip import creation_targets, equips_from_discard
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
@@ -67,12 +69,13 @@ from yasuki_core.engine.rules.board.queries import (
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_holdings,
+    followers_in_play,
     owned_personalities,
     personalities_in_play,
     province_key_holding,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -213,6 +216,50 @@ register_ability(
         targets=_dull_tanto_targets,
         targeting_message="a Personality",
         effects=_dull_tanto_effects,
+    ),
+)
+
+
+# --- Grim Reality ---
+
+GRIM_REALITY_FORCE_PENALTY = 3
+
+register_discipline("grim_reality", disciplined(2))
+
+
+def _grim_reality_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [
+        card.id
+        for card in (*personalities_in_play(game), *followers_in_play(game))
+        if card.owner is not source.owner
+    ]
+
+
+def _grim_reality_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Evaluate("grim_reality", source.id, source.owner, (target.id,))]
+
+
+@choice_resolver("grim_reality")
+def _resolve_grim_reality(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "If its Force is 0, bow it; otherwise, give it -3F", read as the effect resolves."""
+    (target_id,) = chosen
+    if effective_force(game, game.table.cards_by_id[target_id]) == 0:
+        return [Bow(target_id)]
+    penalty = -GRIM_REALITY_FORCE_PENALTY
+    return [GrantModifier(source_id, target_id, Stat.FORCE, penalty, Duration.UNTIL_END_OF_TURN)]
+
+
+register_ability(
+    "grim_reality",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_grim_reality_targets,
+        targeting_message="an enemy Follower or Personality",
+        effects=_grim_reality_effects,
+        located_at=(CardLocation.HAND,),
     ),
 )
 

@@ -70,6 +70,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "May not Lobby" | `register_may_not_lobby(id)` | {card}`Moto Chen` |
 | "You do not lose Honor from your cards' effects", "You lose 1 Honor less from your cards" | `register_honor_loss_reduction(id, no_honor_lost)`, `register_honor_loss_reduction(id, honor_loss_reduced_by(1))` | {card}`Mishime Sensei`, {card}`The Dark Capital of the Spider` |
 | "You may ignore Honor Requirements" | `register_honor_requirement_waiver(id)` | {card}`Mishime Sensei` |
+| "Discipline :g2:", or "If you are a Crab Clan player, this Strategy has Discipline :g1:" | `register_discipline(id, disciplined(2))`, or a handler returning the cost or None | {card}`Grim Reality` |
 | Moves the Family Honor an Honor Victory or a Dishonor loss needs | `register_threshold_shift(id, ThresholdShift(...))` | {card}`Daigotsu Shinobu` |
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
