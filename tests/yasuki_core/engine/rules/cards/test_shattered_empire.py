@@ -2945,3 +2945,15 @@ def test_developed_quarry_without_a_masterwork_token_has_nothing_to_transfer():
     attached(session.game, attachment("sword", keywords=(keywords.WEAPON,)), "hero")
 
     assert ActivateAbility("quarry", "transfer_masterwork") not in session.legal_actions(P1)
+
+
+def test_tashiko_pays_nothing_after_a_battle_at_no_province():
+    session = _tashiko_defending(raider_force=1)
+    session.game.attack.amend(0, province=None)
+    session.act(P2, ActivateAbility("tashiko"))
+    before = session.game.table.seats[P2].honor
+
+    _resolve_the_battle(session)
+
+    outcome = session.game.attack.battlefields[0].outcome
+    assert session.game.table.seats[P2].honor == before + outcome.honor[P2]
