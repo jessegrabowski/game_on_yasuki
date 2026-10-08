@@ -36,8 +36,8 @@ P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 def _give_control(game, card_id: str, seat: PlayerId) -> None:
-    """Hand ``card_id`` to ``seat``, as a Take control effect will once one exists."""
-    game.table.controllers[card_id] = seat
+    """Hand ``card_id`` to ``seat``, the way a card's text does."""
+    resolve_effects(game, [TakeControl(card_id, seat)])
 
 
 def test_a_card_is_controlled_by_its_owner_until_control_passes():
