@@ -53,6 +53,11 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MINUS_1F
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, HoldingPrint, RingPrint
 
+from tests.yasuki_core.engine.rules.cards.test_shattered_empire import (
+    DUEL_ABILITY,
+    DUEL_PROBE,
+    _edict_duel,
+)
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -858,6 +863,95 @@ def test_harudei_acts_no_third_time_with_compassion():
         session.act(PlayerId.P2, Pass())
 
     assert ActivateAbility("harudei") not in session.legal_actions(P1)
+
+
+# --- Like a Twig ---
+
+
+def _twig(owner: PlayerId = P1) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id="twig",
+        name="Like a Twig",
+        printed_id="like_a_twig",
+        side=Side.FATE,
+        owner=owner,
+    )
+
+
+def _twig_battle(
+    *, guard_cost: int = 3, guard_gear_cost: int | None = None, own_follower_bowed: bool = False
+) -> EngineSession:
+    """P1's 6-Gold raider with a 1-Gold Follower faces P2's guard, with Like a Twig in P1's hand.
+    The guard carries an Item costing ``guard_gear_cost`` when one is given."""
+    cards = [
+        personality("raider", gold_cost=6),
+        personality("guard", owner=P2, gold_cost=guard_cost),
+    ]
+    follower = attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, gold_cost=1)
+    attachments = [(follower, "raider")]
+    if guard_gear_cost is not None:
+        attachments.append((attachment("gear", owner=P2, gold_cost=guard_gear_cost), "guard"))
+    session = combat_segment(
+        cards, {"raider": 0}, {"guard": 0}, in_hand=[_twig()], attachments=tuple(attachments)
+    )
+    if own_follower_bowed:
+        resolve_effects(session.game, [Bow("ashigaru")])
+    return session
+
+
+def _play_the_twig(session: EngineSession) -> None:
+    game = session.game
+    session.act(P1, PlayStrategy("twig"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+
+@pytest.mark.parametrize(
+    ("guard_gear_cost", "straightened"),
+    [(None, True), (0, True), (1, False)],
+    ids=["no_attachments", "free_attachment", "costly_attachment"],
+)
+def test_like_a_twig_bows_your_unit_to_destroy_a_cheaper_enemy_unit(guard_gear_cost, straightened):
+    session = _twig_battle(guard_cost=3, guard_gear_cost=guard_gear_cost)
+    honor = session.game.table.seats[P1].honor
+
+    _play_the_twig(session)
+
+    game = session.game
+    in_play = {card.id for card in game.table.battlefield.cards}
+    assert "guard" not in in_play and "gear" not in in_play
+    assert game.table.cards_by_id["raider"].bowed is not straightened
+    assert game.table.cards_by_id["ashigaru"].bowed is not straightened
+    assert game.table.seats[P1].honor == honor - 3
+
+
+def test_like_a_twig_destroys_nothing_when_a_card_of_your_unit_was_already_bowed():
+    session = _twig_battle(own_follower_bowed=True)
+    honor = session.game.table.seats[P1].honor
+
+    _play_the_twig(session)
+
+    game = session.game
+    assert "guard" in {card.id for card in game.table.battlefield.cards}
+    assert game.table.seats[P1].honor == honor - 3
+
+
+def test_like_a_twig_is_not_played_without_a_cheaper_enemy_unit():
+    session = _twig_battle(guard_cost=7)
+
+    assert PlayStrategy("twig") not in session.legal_actions(P1)
+
+
+def test_like_a_twig_focused_destroys_the_loser_of_a_duel_of_force():
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _edict_duel("like_a_twig", p1_focus=None, guard_force=9)
+
+    game = session.game
+    assert game.duel.outcome.winners == (P2,)
+    assert "raider" not in {card.id for card in game.table.battlefield.cards}
 
 
 # --- Unity of Spirit ---

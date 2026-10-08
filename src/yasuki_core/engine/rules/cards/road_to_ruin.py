@@ -34,12 +34,14 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     CreateToken,
     DeclareOptions,
+    DelayedEffect,
     Destroy,
     Discard,
     Effect,
     Evaluate,
     Fear,
     GainHonor,
+    GrantDuelStat,
     GrantModifier,
     MeleeAttack,
     Move,
@@ -56,6 +58,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.rulebook.discipline import disciplined, register_discipline
 from yasuki_core.engine.rules.rulebook.equip import creation_targets, equips_from_discard
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    Bowed,
     Destroyed,
     Dishonored,
     EnteredPlay,
@@ -74,7 +77,7 @@ from yasuki_core.engine.rules.board.queries import (
     personalities_in_play,
     province_key_holding,
 )
-from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost, unit_gold_cost
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.units.composition import followers_of
@@ -86,7 +89,10 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
-from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.duel.focus_effects import focus_effect
+from yasuki_core.engine.rules.duel.procedure import decided_duel
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
@@ -411,6 +417,119 @@ register_ability(
         targets=itself,
         effects=_kitsune_rumiko_effects,
         hits_every_target=True,
+    ),
+)
+
+
+# --- Like a Twig ---
+
+LIKE_A_TWIG_HONOR_LOSS = 3
+
+
+@focus_effect("like_a_twig")
+def _like_a_twig_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
+    """ "As a Focus Effect, both Personalities use their Force as their duel stat, and the loser
+    is destroyed." The CR names the duel stat per Personality, so each duelist is told to compare
+    it (CR, Duel Stat)."""
+    duel = game.duel
+    if duel is None:
+        return []
+    return [
+        *(
+            GrantDuelStat(card.id, duel.duelist_of(seat), Stat.FORCE, DUEL_CONSEQUENCES)
+            for seat in (duel.challenger, duel.challenged)
+        ),
+        DelayedEffect(Evaluate("like_a_twig_loser", card.id, card.owner), DUEL_CONSEQUENCES),
+    ]
+
+
+@choice_resolver("like_a_twig_loser")
+def _resolve_like_a_twig_loser(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """A tie is lost by both duelists, so both are destroyed then."""
+    duel = decided_duel(game)
+    if duel is None:
+        return []
+    return [Destroy(duel.duelist_of(loser), seat) for loser in duel.outcome.losers]
+
+
+def _like_a_twig_yours(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    return [card.id for card in owned_personalities(game, source.owner)]
+
+
+def _like_a_twig_theirs(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """Enemy Personalities whose unit costs less in all than your targeted Personality's."""
+    yours = unit_gold_cost(game, game.table.cards_by_id[picked[0][0]])
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if card.owner is not source.owner and unit_gold_cost(game, card) < yours
+    ]
+
+
+def _like_a_twig_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """ "Bow your target Personality's unit to destroy ...": the destruction depends on every card
+    of the unit actually bowing (CR, Independence of Effects), read once the bows have resolved.
+    The Honor is lost whatever else happens."""
+    (yours,), (theirs,) = groups
+    seat = source.owner
+    unit = tuple(card.id for card in unit_of(game, yours))
+    return [
+        *(Bow(card_id) for card_id in unit),
+        Evaluate("like_a_twig_bowed", source.id, seat, (theirs.id, *unit)),
+        GainHonor(seat, -LIKE_A_TWIG_HONOR_LOSS, source_id=source.id),
+    ]
+
+
+@choice_resolver("like_a_twig_bowed")
+def _resolve_like_a_twig_bowed(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Destroy the enemy unit once every card of yours has bowed. Whether it carries an attachment
+    of 1 or higher Gold Cost is read before it is destroyed, and your unit straightens only if the
+    destruction happened."""
+    theirs, *yours = chosen
+    bowed = {event.card_id for event in action_did(game, Bowed)}
+    if not bowed.issuperset(yours):
+        return []
+    personality, *attachments = unit_of(game, game.table.cards_by_id[theirs])
+    unit = (personality, *attachments)
+    destroyed = Simultaneously(tuple(Destroy(card.id, seat) for card in unit))
+    if any(effective_gold_cost(game, card) >= 1 for card in attachments):
+        return [destroyed]
+    straighten = Evaluate("like_a_twig_destroyed", source_id, seat, (theirs, *yours))
+    return [destroyed, straighten]
+
+
+@choice_resolver("like_a_twig_destroyed")
+def _resolve_like_a_twig_destroyed(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "If the destroyed unit had no attachments in it with 1 or higher Gold Cost, straighten
+    your unit." """
+    theirs, *yours = chosen
+    if not any(event.card_id == theirs for event in action_did(game, Destroyed)):
+        return []
+    return [Straighten(card_id) for card_id in yours]
+
+
+register_ability(
+    "like_a_twig",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(candidates=_like_a_twig_yours, targeting_message="your Personality"),
+            TargetGroup(
+                candidates=_like_a_twig_theirs,
+                targeting_message="an enemy Personality whose unit costs less",
+            ),
+        ),
+        effects_for_groups=_like_a_twig_effects,
+        located_at=(CardLocation.HAND,),
     ),
 )
 
