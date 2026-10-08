@@ -464,14 +464,6 @@ def once_tag(ability: Ability) -> str:
     return f"ability:{key or ''}"
 
 
-def use_tags(game: GameState, card: L5RCard, ability: Ability) -> tuple[str, ...]:
-    """The tags ``ability``'s uses this turn are claimed under, one per use allowed: its
-    once-per-turn tag, then one more for each further use ``uses_per_turn`` allows."""
-    tag = once_tag(ability)
-    uses = 1 if ability.uses_per_turn is None else ability.uses_per_turn(game, card)
-    return (tag, *(f"{tag}:{use}" for use in range(2, uses + 1)))
-
-
 @dataclass(frozen=True, slots=True)
 class InvestAbility:
     """A card's Invest ability, an optional gold cost paid while recruiting for a one-time

@@ -11,13 +11,19 @@ from yasuki_core.engine.rules.abilities.model import (
     Interrupt,
     InvestAbility,
     Label,
+    once_tag,
 )
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
-from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Ongoing, SeatAbilityGrant
+from yasuki_core.engine.rules.vocabulary.modifiers import (
+    AbilityGrant,
+    AdditionalUse,
+    Ongoing,
+    SeatAbilityGrant,
+)
 from yasuki_core.engine.rules.vocabulary.locations import location_holding
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.text_split import Ability as PrintedAbility
@@ -469,6 +475,27 @@ def _by_location(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     if location is None:
         return ()
     return tuple(held for held in LOCATION_ABILITIES.get(location, ()) if in_force(held))
+
+
+def use_tags(game: GameState, card: L5RCard, ability: Ability) -> tuple[str, ...]:
+    """The tags ``ability``'s uses this turn are claimed under, one per use allowed: its
+    once-per-turn tag, then one more for each further use ``uses_per_turn`` allows, and one more
+    for each grant in force letting the card's printed abilities be used an additional time."""
+    tag = once_tag(ability)
+    uses = 1 if ability.uses_per_turn is None else ability.uses_per_turn(game, card)
+    uses += _additional_uses(game, card, ability)
+    return (tag, *(f"{tag}:{use}" for use in range(2, uses + 1)))
+
+
+def _additional_uses(game: GameState, card: L5RCard, ability: Ability) -> int:
+    granted = sum(
+        1
+        for held in game.ongoing
+        if isinstance(held, AdditionalUse)
+        and held.target_id == card.id
+        and grant_applies(game, held)
+    )
+    return granted if granted and is_printed_ability(card, ability) else 0
 
 
 def is_printed_ability(card: L5RCard, ability: Ability) -> bool:

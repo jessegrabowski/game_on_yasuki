@@ -66,6 +66,7 @@ from yasuki_core.engine.rules.effects import (
     GrantMinimum,
     GrantStatChangeNegation,
     GrantAbility,
+    GrantAdditionalUse,
     GrantSeatAbility,
     GrantConditionalModifier,
     GrantLobbyBonus,
@@ -182,6 +183,10 @@ EFFECTS = [
     (
         GrantMinimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
         "uncertainty gives shiba a minimum CHI of 1 (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantAdditionalUse("gojiro", "tetsubo", Duration.UNTIL_END_OF_TURN),
+        "gojiro grants tetsubo's abilities an additional use (UNTIL_END_OF_TURN)",
     ),
     (
         GrantStatChangeNegation(

@@ -55,6 +55,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Straightened,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import (
+    AdditionalUse,
     AbilityGrant,
     Duration,
     CompassionGrant,
@@ -1155,6 +1156,29 @@ class GrantAbility(Effect):
         game.ongoing.append(
             AbilityGrant(self.source_id, self.target_id, self.context, self.duration)
         )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantAdditionalUse(Effect):
+    """Let each printed ability of ``target`` be used one additional time for ``duration``."""
+
+    source_id: str
+    target_id: str
+    duration: Lifetime
+
+    @property
+    def subject_id(self) -> str:
+        return self.target_id
+
+    def describe(self) -> str:
+        lifetime = describe_lifetime(self.duration)
+        return (
+            f"{self.source_id} grants {self.target_id}'s abilities an additional use ({lifetime})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        game.ongoing.append(AdditionalUse(self.source_id, self.target_id, self.duration))
         return []
 
 

@@ -148,6 +148,9 @@ the central rule answers where the card may reach.
 Write the predicate for the card's text and let the rule do the rest. A handler that tries to
 reimplement the Rules of Location will drift from them.
 
+A granted additional use, as {class}`~.GrantAdditionalUse` records it, adds a use to each printed
+ability of its card for as long as it lasts, which `use_tags` counts beside `uses_per_turn`.
+
 ## An Interrupt
 
 A Strategy printing an Interrupt is not an `Ability`. It has no target and no effects of its own,

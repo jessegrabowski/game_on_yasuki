@@ -8,6 +8,7 @@ yasuki_core.engine.rules.vocabulary.modifiers
 .. autosummary::
 
     AbilityGrant
+    AdditionalUse
     AttachedChange
     CompassionGrant
     Condition

@@ -32,7 +32,7 @@ from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     RoundKind,
 )
-from yasuki_core.engine.rules.vocabulary.modifiers import SeatAbilityGrant
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, SeatAbilityGrant
 from yasuki_core.engine.session import EngineSession
 
 from tests.yasuki_core.engine.builders import (
@@ -64,7 +64,8 @@ from yasuki_core.engine.rules.abilities.registry import (
 from yasuki_core.engine.rules.vocabulary.actions import (
     BattleDesignator,
 )
-from yasuki_core.engine.rules.effects import AdjustCounter
+from yasuki_core.engine.rules.effects import AdjustCounter, GrantAdditionalUse
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.legality import activatable, has_absent_ability, playable
 from yasuki_core.game_pieces.constants import AttachmentType
@@ -943,6 +944,21 @@ def test_an_ability_in_play_is_once_per_turn_unless_repeatable():
     offered = session.legal_actions(PlayerId.P1)
     assert ActivateAbility("once") not in offered
     assert ActivateAbility("again") in offered
+
+
+def test_a_granted_additional_use_offers_a_used_ability_once_more():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("once", printed_id="test_acts_from_play"))
+    session = EngineSession.start(state, PlayerId.P1)
+    _use(session, "once")
+
+    resolve_effects(
+        session.game, [GrantAdditionalUse("granter", "once", Duration.UNTIL_END_OF_TURN)]
+    )
+    assert ActivateAbility("once") in session.legal_actions(PlayerId.P1)
+
+    _use(session, "once")
+    assert ActivateAbility("once") not in session.legal_actions(PlayerId.P1)
 
 
 def test_a_used_ability_is_offered_again_next_turn():

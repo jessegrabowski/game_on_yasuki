@@ -41,6 +41,7 @@ yasuki_core.engine.rules.abilities.registry
     register_keyword_ability
     register_keyword_interrupt
     register_location_ability
+    use_tags
 
 .. automodule:: yasuki_core.engine.rules.abilities.registry
     :members:
