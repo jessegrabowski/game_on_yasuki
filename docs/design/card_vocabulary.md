@@ -230,6 +230,7 @@ the action rather than by deserializing it.
    abilities.strategy.DiscardPlayed
    abilities.strategy.ResolveStrategy
    battle.resolution.FightNextBattle
+   battle.resolution.ResolveBattle
    effects.ApplyEffects
    gold.payment.ContinuePayment
    gold.production.CompleteProduction

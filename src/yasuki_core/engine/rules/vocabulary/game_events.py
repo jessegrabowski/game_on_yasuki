@@ -449,6 +449,21 @@ class ActionResolved:
 
 
 @dataclass(frozen=True, slots=True)
+class BattleResolving:
+    """A battle is about to resolve: announced as the Resolution Segment begins, before either
+    army's Force is read (CR, Battle Sequence), so a trait reading "before battle resolution" acts
+    on the Forces resolution then reads.
+
+    Attributes
+    ----------
+    battlefield : int
+        The index of the battlefield the battle is fought at.
+    """
+
+    battlefield: int
+
+
+@dataclass(frozen=True, slots=True)
 class BattleResolved:
     """A battle has resolved (CR, Resolution), before After Resolution bows and sends home its
     survivors.
@@ -680,6 +695,7 @@ WINDOWS: frozenset[type] = frozenset({ProducingGold})
 GameEvent = (
     ActionResolved
     | Assigned
+    | BattleResolving
     | BattleResolved
     | BattleEnded
     | BattleSegmentStarted

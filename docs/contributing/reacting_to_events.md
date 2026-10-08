@@ -99,6 +99,7 @@ The events a trigger can answer:
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducingGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ProducedGold`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.ActionResolved`
+- {class}`~yasuki_core.engine.rules.vocabulary.game_events.BattleResolving`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.BattleResolved`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.BattleEnded`
 - {class}`~yasuki_core.engine.rules.vocabulary.game_events.BattleSegmentStarted`
