@@ -45,6 +45,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |
 | Is considered to have a stat when a certain action checks it | `@considered_stat(id)` | {card}`Dragon Elite Inkyo` |
 | Limits what it will attach to, or what will attach to it | `@attach_restriction(id)` | {card}`Brothers in Arms`, {card}`Hida Zaiberu (Experienced)` |
+| "Will not join a player with ..." | `register_join_restriction(id, handler)` | {card}`Moto Tsuneo, Soul of Moto Tsume` |
 | Equips for less onto some Personalities, from either card's text | `@equip_discount(id)` | {card}`Hida O-Win (Experienced)` |
 | "The rulebook Equip ability may target this Follower in the discard pile" | `@equips_from_discard(id)` | {card}`Tao Defenders` |
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |

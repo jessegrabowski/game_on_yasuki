@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for,
 from yasuki_core.engine.rules.effects import GainHonor, GrantNegation, TakeFavor
 from yasuki_core.engine.rules.vocabulary.game_events import ConditionFulfilled
 from yasuki_core.engine.rules.legality import recruit_cost
+from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.triggers import pay_costs, resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
 from yasuki_core.engine.replay.game_log import replay
@@ -1008,6 +1009,52 @@ def test_gonshiro_is_withheld_while_honorable():
     session = _gonshiro_attacking(dishonored=False)
 
     assert ActivateAbility("gonshiro") not in session.legal_actions(P1)
+
+
+# --- Moto Tsuneo, Soul of Moto Tsume ---
+
+
+def _tsuneo(owner: PlayerId = P1) -> L5RCard:
+    return personality("tsuneo", printed_id="moto_tsuneo_soul_of_moto_tsume", owner=owner)
+
+
+@pytest.mark.parametrize(("tsuneo_at", "bowed"), [(0, True), (1, False)], ids=["here", "elsewhere"])
+def test_tsuneo_bows_the_honorable_personalities_in_his_army_as_the_combat_segment_begins(
+    tsuneo_at, bowed
+):
+    cards = [
+        _tsuneo(),
+        personality("honorable", personal_honor=1),
+        personality("honorless", personal_honor=0),
+        personality("enemy", owner=P2, personal_honor=2),
+    ]
+    attackers = {"tsuneo": tsuneo_at, "honorable": 0, "honorless": 0}
+
+    session = combat_segment(cards, attackers, {"enemy": 0})
+
+    cards_by_id = session.game.table.cards_by_id
+    assert cards_by_id["honorable"].bowed is bowed
+    assert not cards_by_id["honorless"].bowed
+    assert not cards_by_id["enemy"].bowed
+    assert not cards_by_id["tsuneo"].bowed
+
+
+@pytest.mark.parametrize(("honor", "joins"), [(0, True), (1, False)])
+def test_tsuneo_will_not_join_a_player_with_1_or_higher_family_honor(honor, joins):
+    game = two_seat_game()
+    game.table.seats[P1].honor = honor
+    tsuneo = register(game.table, _tsuneo())
+
+    assert may_join(game, P1, tsuneo) is joins
+
+
+def test_tsuneo_loses_4_honor_as_he_enters_play():
+    game = two_seat_game()
+    tsuneo = register(game.table, _tsuneo())
+
+    resolve_effects(game, [PutIntoPlay(tsuneo.id)])
+
+    assert game.table.seats[P1].honor == -4
 
 
 # --- Shinjo Mayuko, Soul of Shinjo Wei ---

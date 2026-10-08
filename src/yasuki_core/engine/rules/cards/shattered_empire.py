@@ -152,10 +152,11 @@ from yasuki_core.engine.rules.turn.structure import (
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
-from yasuki_core.engine.rules.vocabulary.segments import Boundary
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Boundary
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
     BattleResolved,
+    BattleSegmentStarted,
     Bowed,
     DuelDeclared,
     DuelResolved,
@@ -165,6 +166,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     TurnBoundary,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets, weapons_on
+from yasuki_core.engine.rules.rulebook.joining import register_join_restriction
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -805,6 +807,44 @@ register_ability(
         effects=_matsu_gonshiro_soul_of_matsu_shimei_effects,
     ),
 )
+
+
+# --- Moto Tsuneo, Soul of Moto Tsume ---
+
+MOTO_TSUNEO_HONOR_LOSS = 4
+
+
+@on(EnteredPlay, "moto_tsuneo_soul_of_moto_tsume")
+def _moto_tsuneo_soul_of_moto_tsume_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """ "After Tsuneo enters play, lose 4 Honor." """
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -MOTO_TSUNEO_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+def _moto_tsuneo_soul_of_moto_tsume_join_restriction(game: GameState, seat: PlayerId) -> bool:
+    """ "Will not join a player with 1 or higher Family Honor." """
+    return game.table.seats[seat].honor < 1
+
+
+register_join_restriction(
+    "moto_tsuneo_soul_of_moto_tsume", _moto_tsuneo_soul_of_moto_tsume_join_restriction
+)
+
+
+@on(BattleSegmentStarted, "moto_tsuneo_soul_of_moto_tsume")
+def _moto_tsuneo_soul_of_moto_tsume_battle_segment_started(ctx: TriggerContext) -> list[Effect]:
+    """ "After a Combat Segment begins, if Tsuneo is in your current army, bow all other
+    Personalities in this army with 1 or higher Personal Honor." """
+    event = ctx.event
+    army = units_at(ctx.game, event.battlefield, ctx.card.owner)
+    if event.segment is not BattleSegment.COMBAT or not any(unit is ctx.card for unit in army):
+        return []
+    return [
+        Bow(personality.id)
+        for personality in army
+        if personality is not ctx.card and effective_personal_honor(ctx.game, personality) >= 1
+    ]
 
 
 # --- Purity's Fist ---
