@@ -21,6 +21,7 @@ from yasuki_core.engine.rules.abilities.model import (
 from yasuki_core.engine.rules.abilities.registry import (
     EntryState,
     entry_state,
+    granted_ability,
     register_interrupt,
     register_may_remain_bowed,
     register_ability,
@@ -81,6 +82,7 @@ from yasuki_core.engine.rules.effects import (
     BothLoseTheDuel,
     DelayedEffect,
     GainHonor,
+    GrantAbility,
     MoveToHand,
     GrantKeyword,
     GrantModifier,
@@ -91,11 +93,13 @@ from yasuki_core.engine.rules.effects import (
     Move,
     MoveToDeck,
     Negated,
+    PayGold,
     ReshuffleFromHand,
     ShuffleDeck,
     Simultaneously,
     SpendOncePerTurn,
     Straighten,
+    To,
     Unpayable,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_loss
@@ -1332,6 +1336,110 @@ def _rebuilt_harbor_invest(game: GameState, source: L5RCard, amount: int) -> lis
 
 
 register_invest("rebuilt_harbor", InvestAbility(amounts=(1, 2, 3), effect=_rebuilt_harbor_invest))
+
+
+# --- Shidare no Oni ---
+
+SHIDARE_NO_ONI_FORCE_PENALTY = 2
+SHIDARE_NO_ONI_GOLD = 4
+SHIDARE_NO_ONI_HONOR_LOSS = 2
+SHIDARE_NO_ONI_ONI = "oni_personality_3_1_0"
+
+
+def _shidare_no_oni_targets(game: GameState, source: L5RCard) -> list[str]:
+    """ "A target Follower or Personality", on either side."""
+    return [card.id for card in (*personalities_in_play(game), *followers_in_play(game))]
+
+
+def _shidare_no_oni_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The text gives the penalty no duration, so it runs to the end of the turn (CR, Ongoing).
+    Whether the target's Force is now 0 is read once the penalty is given."""
+    penalty = GrantModifier(
+        source.id,
+        target.id,
+        Stat.FORCE,
+        -SHIDARE_NO_ONI_FORCE_PENALTY,
+        Duration.UNTIL_END_OF_TURN,
+    )
+    return [penalty, Evaluate("shidare_no_oni_penalized", source.id, source.owner, (target.id,))]
+
+
+@choice_resolver("shidare_no_oni_penalized")
+def _resolve_shidare_no_oni_penalized(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "Bow them if their Force is now 0." """
+    (target_id,) = chosen
+    target = game.table.cards_by_id[target_id]
+    return [Bow(target_id)] if effective_force(game, target) == 0 else []
+
+
+SHIDARE_NO_ONI_BATTLE = Ability(
+    timings=(ActionTiming.BATTLE,),
+    cost=no_cost,
+    targets=_shidare_no_oni_targets,
+    targeting_message="a Follower or Personality",
+    effects=_shidare_no_oni_effects,
+    key="battle",
+)
+
+
+def _shidare_no_oni_open_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    return [PayGold(source.owner, SHIDARE_NO_ONI_GOLD, source.name)]
+
+
+def _shidare_no_oni_open_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Destroy this Holding and lose 2 Honor to create": the creation depends on the Holding's
+    destruction actually happening (CR, Independence of Effects), read off what the action did. A
+    card reducing the Honor its controller loses from their own cards does not stop it."""
+    seat = source.owner
+    return [
+        Destroy(source.id, seat),
+        GainHonor(seat, -SHIDARE_NO_ONI_HONOR_LOSS, source_id=source.id),
+        Evaluate("shidare_no_oni_create", source.id, seat),
+    ]
+
+
+@choice_resolver("shidare_no_oni_create")
+def _resolve_shidare_no_oni_create(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    if not any(event.card_id == source_id for event in action_did(game, Destroyed)):
+        return []
+    created = CreateToken(SHIDARE_NO_ONI_ONI, seat, source_id)
+    return [To(created, (Evaluate("shidare_no_oni_created", source_id, seat),))]
+
+
+@choice_resolver("shidare_no_oni_created")
+def _resolve_shidare_no_oni_created(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "With this Holding's Battle ability": the Oni it just created keeps it for as long as it
+    is in play."""
+    oni = [card_id for card_id, creator in game.created_by.items() if creator == source_id][-1]
+    return [GrantAbility(source_id, oni, (), Duration.PERMANENT)]
+
+
+@granted_ability("shidare_no_oni")
+def _shidare_no_oni_granted_ability(
+    game: GameState, card: L5RCard, context: tuple[str, ...]
+) -> Ability:
+    return SHIDARE_NO_ONI_BATTLE
+
+
+register_ability("shidare_no_oni", SHIDARE_NO_ONI_BATTLE)
+register_ability(
+    "shidare_no_oni",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=_shidare_no_oni_open_cost,
+        targets=itself,
+        effects=_shidare_no_oni_open_effects,
+        hits_every_target=True,
+        key="open",
+        printed_index=1,
+    ),
+)
 
 
 # --- Shinjo Saeki, Clan Champion (Experienced 2) ---
