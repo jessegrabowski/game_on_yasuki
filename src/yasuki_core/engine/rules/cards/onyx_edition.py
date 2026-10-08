@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.effects import (
+    NegateAction,
     honor_loss_reduced_by,
     register_honor_loss_reduction,
     AdditionalAction,
@@ -101,6 +102,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
+from yasuki_core.engine.rules.interrupts import held_action_targets
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.state_based_actions import ThresholdShift, register_threshold_shift
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_BATTLE
@@ -155,6 +157,42 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY, counter_from_key
+
+
+# --- Daigotsu Churo (Experienced) ---
+
+
+def _daigotsu_churo_experienced_applies(game: GameState, source: L5RCard, effect: Effect) -> bool:
+    """ "If the action is targeting Churo"."""
+    return source.id in held_action_targets(game)
+
+
+def _daigotsu_churo_experienced_targets(
+    game: GameState, source: L5RCard, effect: Effect
+) -> list[str]:
+    return [card.id for card in followers_in_play(game) if card.owner is source.owner]
+
+
+def _daigotsu_churo_experienced_interrupt(
+    game: GameState, source: L5RCard, effect: Effect, target: L5RCard
+) -> Interruption:
+    """ "Destroy your target Follower to negate the action": the negation depends on the
+    destruction actually happening, and reaches every effect of the action at once."""
+    negation = To(Destroy(target.id, source.owner), (NegateAction(source.id),))
+    return Interruption(effect, effects=(negation,))
+
+
+register_interrupt(
+    "daigotsu_churo_experienced",
+    Interrupt(
+        answers=Effect,
+        interrupt=_daigotsu_churo_experienced_interrupt,
+        targets=_daigotsu_churo_experienced_targets,
+        applies=_daigotsu_churo_experienced_applies,
+        located_at=(CardLocation.BATTLEFIELD,),
+        answers_every=True,
+    ),
+)
 
 
 # --- Daigotsu Hiromu ---

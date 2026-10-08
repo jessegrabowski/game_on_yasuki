@@ -68,6 +68,7 @@ yasuki_core.engine.rules.effects
     Move
     MoveToDeck
     MoveToHand
+    NegateAction
     Negated
     PayFavorCost
     PayGold

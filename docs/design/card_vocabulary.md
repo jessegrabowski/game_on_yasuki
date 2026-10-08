@@ -94,6 +94,7 @@ the order they are written" (CR, Order of Effects).
    MeleeAttack
    GrantCompassion
    GrantNegation
+   NegateAction
    Negated
    AdditionalAction
    GrantPriority

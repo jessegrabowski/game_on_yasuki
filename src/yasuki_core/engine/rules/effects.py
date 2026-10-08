@@ -296,6 +296,38 @@ class GrantNegation(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class NegateAction(Effect):
+    """Negate the action held at the Interrupt step: every effect it has yet to hand over is
+    negated, whatever produces it, and its targeting is not (CR, Negate an Action).
+
+    Attributes
+    ----------
+    source_id : str
+        The card negating the action.
+    """
+
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.source_id} negates the action"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Raise ``RuntimeError`` if no action is held at the Interrupt step."""
+        # Imported where it is used: the cascade imports this module for the effects it applies.
+        from yasuki_core.engine.rules.triggers import HeldAction
+
+        negation = Negation(self.source_id, Duration.UNTIL_END_OF_TURN, effect_kind=Effect)
+        for index in reversed(range(len(game.stack))):
+            held = game.stack[index]
+            if isinstance(held, HeldAction):
+                negations = (*held.provenance.negations, negation)
+                provenance = replace(held.provenance, negations=negations)
+                game.stack[index] = replace(held, provenance=provenance)
+                return []
+        raise RuntimeError("no action is held at the Interrupt step to negate")
+
+
+@dataclass(frozen=True, slots=True)
 class GrantCompassion(Effect):
     """Record ``grant``, treating its seat as having Compassion while it lasts."""
 
