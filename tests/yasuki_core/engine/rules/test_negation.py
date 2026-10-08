@@ -417,6 +417,17 @@ def test_seppuku_spends_no_once_negation():
     assert game.ongoing == [negation]
 
 
+@pytest.mark.parametrize("negatable", [True, False])
+def test_a_lasting_negation_stops_a_bow_only_when_it_may_be_negated(negatable):
+    game = two_seat_game()
+    farm = put_in_play(game, holding("farm"))
+    game.ongoing.append(Negation("any", END_OF_TURN, effect_kind=Bow))
+
+    resolve_effects(game, [Bow(farm.id, negatable=negatable)])
+
+    assert farm.bowed is not negatable
+
+
 def test_an_interrupt_cannot_negate_an_effect_that_cannot_be_negated():
     game = two_seat_game()
     hero = put_in_play(game, personality("hero"))

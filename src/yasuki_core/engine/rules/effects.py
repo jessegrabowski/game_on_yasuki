@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from collections.abc import Callable
 from typing import ClassVar, Self
 
@@ -122,14 +122,21 @@ def pile_for(card: L5RCard, *, banished: bool = False) -> ZoneKey:
     return ZoneKey(card.owner, role)
 
 
+@dataclass(frozen=True, slots=True)
 class Effect(ABC):
     """One change to game state, described as data.
 
     Triggers and activated abilities return lists of effects rather than mutating the board, and the
     cascade commits each through :meth:`~.perform`.
+
+    Attributes
+    ----------
+    negatable : bool, optional
+        Whether a negation can stop this effect. False for one a card or the rules say cannot be
+        negated, as seppuku's two effects and Berserker Rage's bow. Default True.
     """
 
-    __slots__ = ()
+    negatable: bool = field(default=True, kw_only=True)
 
     @abstractmethod
     def perform(self, game: GameState) -> list[GameEvent]:
@@ -160,9 +167,9 @@ class Effect(ABC):
         return None
 
     def is_negatable(self, game: GameState) -> bool:
-        """Whether a negation in force can reach this effect as it commits. True unless the effect
-        is no effect at all, such as an action's targeting."""
-        return True
+        """Whether a negation in force can reach this effect as it commits: ``negatable``, unless
+        the effect is no effect at all, such as an action's targeting."""
+        return self.negatable
 
     @abstractmethod
     def describe(self) -> str:
@@ -583,14 +590,10 @@ class Destroy(Effect):
         The card to destroy.
     cause : PlayerId, Rulebook or Trait
         Who or what destroyed it: the seat whose card did, or the rule that demanded it.
-    negatable : bool, optional
-        Whether a negation can stop it. False for a destruction the rules say cannot be negated,
-        as seppuku's. Default True.
     """
 
     card_id: str
     cause: Cause
-    negatable: bool = True
 
     @property
     def subject_id(self) -> str:
@@ -598,9 +601,6 @@ class Destroy(Effect):
 
     def describe(self) -> str:
         return f"destroy {self.card_id}"
-
-    def is_negatable(self, game: GameState) -> bool:
-        return self.negatable
 
     def impending(self, game: GameState) -> tuple[Destroying, ...]:
         """One :class:`~.Destroying` for each card of the unit about to leave play, or none for a
@@ -2330,13 +2330,9 @@ class Rehonor(Effect):
     ----------
     card_id : str
         The Personality to rehonor.
-    negatable : bool, optional
-        Whether a negation can stop it. False for a rehonoring the rules say cannot be negated, as
-        seppuku's. Default True.
     """
 
     card_id: str
-    negatable: bool = True
 
     @property
     def subject_id(self) -> str:
@@ -2344,9 +2340,6 @@ class Rehonor(Effect):
 
     def describe(self) -> str:
         return f"rehonor {self.card_id}"
-
-    def is_negatable(self, game: GameState) -> bool:
-        return self.negatable
 
     def is_payable(self, game: GameState, *, bowed_by_cost: frozenset[str] = frozenset()) -> bool:
         """An honorable Personality cannot be rehonored."""
@@ -3338,7 +3331,7 @@ class DiscardFromHand(InterruptingEffect):
         return self.picker is not None and len(self._eligible(game)) > self.count
 
     def is_negatable(self, game: GameState) -> bool:
-        return True
+        return self.negatable
 
     def would_happen(self, game: GameState) -> bool:
         """Whether any card would leave the hand."""
