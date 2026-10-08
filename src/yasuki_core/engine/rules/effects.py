@@ -86,6 +86,7 @@ from yasuki_core.engine.rules.state import (
 from yasuki_core.engine.rules.turn.structure import (
     AdditionalGrant,
     BEGINNING_OF_ACTION_PHASE,
+    BEGINNING_OF_TURN,
     END_OF_ACTION_PHASE,
     END_OF_TURN,
     Moment,
@@ -2827,9 +2828,20 @@ class AdjustPending(Effect):
         return []
 
 
+def _ordinal(count: int) -> str:
+    match count:
+        case 2:
+            return "second"
+        case 3:
+            return "third"
+        case _:
+            return f"{count}th"
+
+
 @dataclass(frozen=True, slots=True)
 class DelayStraighten(Effect):
-    """Forbid ``card_id`` from straightening until ``until`` in its controller's next Action Phase.
+    """Forbid ``card_id`` from straightening until ``until`` in the ``turns``-th of its
+    controller's turns from now.
 
     Blocks any attempt to straighten the card while it holds, not just the turn-start straighten.
     Imposed, unlike the printed "May remain bowed" its controller chooses each turn.
@@ -2839,28 +2851,38 @@ class DelayStraighten(Effect):
     card_id : str
         The card forbidden to straighten.
     until : Moment, optional
-        The edge of that Action Phase that lifts the prohibition, its beginning or its end. Default
-        its end, as "until after their next Action Phase" reads.
+        The moment of that turn that lifts the prohibition: its beginning, before its straighten,
+        or an edge of its Action Phase. Default the Action Phase's end, as "until after their next
+        Action Phase" reads.
+    turns : int, optional
+        Which of its controller's turns from now the prohibition lifts in, as "before your second
+        turn from now begins" names the second. Default 1, the next.
     """
 
     card_id: str
     until: Moment = END_OF_ACTION_PHASE
+    turns: int = 1
 
     @property
     def subject_id(self) -> str:
         return self.card_id
 
     def describe(self) -> str:
+        which = "next" if self.turns == 1 else _ordinal(self.turns)
+        later = "" if self.turns == 1 else " from now"
+        if self.until == BEGINNING_OF_TURN:
+            return f"{self.card_id} may not straighten until its {which} turn{later} begins"
         if self.until == BEGINNING_OF_ACTION_PHASE:
-            return f"{self.card_id} may not straighten until its next Action Phase begins"
-        return f"{self.card_id} may not straighten until after its next Action Phase"
+            return f"{self.card_id} may not straighten until its {which} Action Phase{later} begins"
+        return f"{self.card_id} may not straighten until after its {which} Action Phase{later}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        """Raise ValueError for a moment other than the Action Phase's two edges, which is all the
-        turn lifts delays at."""
-        if self.until not in (BEGINNING_OF_ACTION_PHASE, END_OF_ACTION_PHASE):
+        """Raise ValueError for a moment other than a turn's beginning and the Action Phase's two
+        edges, which is all the turn lifts delays at."""
+        if self.until not in (BEGINNING_OF_TURN, BEGINNING_OF_ACTION_PHASE, END_OF_ACTION_PHASE):
             raise ValueError(f"a straighten delay cannot lift at {self.until}")
-        game.straighten_delayed[self.card_id] = StraightenDelay(game.turn, self.until)
+        delay = StraightenDelay(game.turn, self.until, self.turns)
+        game.straighten_delayed[self.card_id] = delay
         return []
 
 

@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.turn.structure import (
     ActionRound,
     BATTLE_SEGMENT_TIMINGS,
     BEGINNING_OF_ACTION_PHASE,
+    BEGINNING_OF_TURN,
     END_OF_TURN,
     FIRED_MOMENTS,
     Moment,
@@ -868,7 +869,22 @@ def test_a_delay_until_the_action_phase_begins_outlives_the_straighten_and_lifts
     assert "mine" not in session.game.straighten_delayed
 
 
-def test_a_straighten_delay_lifts_only_at_the_action_phase_edges():
+def test_a_delay_into_the_second_turn_holds_through_the_first_and_lifts_as_the_second_begins():
+    session = EngineSession.start(dealt_table(hand=0), PlayerId.P2)
+    mine = put_in_play(session.game, holding("mine", owner=PlayerId.P2))
+    mine.bow()
+    delay = DelayStraighten("mine", until=BEGINNING_OF_TURN, turns=2)
+    triggers.resolve_effects(session.game, [delay])
+
+    _advance_turns(session, 2)  # P2's first turn from now: its straighten is still forbidden
+    assert session.game.table.cards_by_id["mine"].bowed
+
+    _advance_turns(session, 2)  # P2's second turn from now: lifted before its straighten
+    assert not session.game.table.cards_by_id["mine"].bowed
+    assert "mine" not in session.game.straighten_delayed
+
+
+def test_a_straighten_delay_lifts_only_at_the_moments_a_turn_lifts_delays_at():
     session = EngineSession.start(dealt_table(hand=0), PlayerId.P1)
     put_in_play(session.game, holding("mine", owner=PlayerId.P1))
 

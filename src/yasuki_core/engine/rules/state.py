@@ -39,19 +39,24 @@ def rules_at_start(table: TableState, seat: PlayerId) -> frozenset[VictoryRule]:
 
 @dataclass(frozen=True, slots=True)
 class StraightenDelay:
-    """When a card's prohibition on straightening lifts: at ``until`` in its controller's first
-    Action Phase on a turn later than ``imposed``.
+    """When a card's prohibition on straightening lifts: at ``until`` in the ``turns``-th of its
+    controller's turns after ``imposed``.
 
     Attributes
     ----------
     imposed : int
-        The turn the prohibition began on.
+        The turn the prohibition began on, or the last of its controller's turns it has been
+        counted through.
     until : Moment
-        The edge of the Action Phase that lifts it, its beginning or its end.
+        The moment of that turn that lifts it: the turn's beginning, before its straighten, or an
+        edge of its Action Phase.
+    turns : int, optional
+        How many of its controller's turns after ``imposed`` it holds into. Default 1, the next.
     """
 
     imposed: int
     until: Moment
+    turns: int = 1
 
 
 @dataclass(slots=True)

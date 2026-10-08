@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.turn.structure import (
     BEGINNING_OF_ACTION_PHASE,
     BEGINNING_OF_COMBAT,
+    BEGINNING_OF_TURN,
     DUEL_CONSEQUENCES,
     END_OF_TURN,
 )
@@ -341,6 +342,10 @@ EFFECTS = [
     ),
     (ShuffleDeck(DeckKey(PlayerId.P1, Side.DYNASTY)), "shuffle P1's dynasty deck"),
     (DelayStraighten("jade_1"), "jade_1 may not straighten until after its next Action Phase"),
+    (
+        DelayStraighten("guard", until=BEGINNING_OF_TURN, turns=2),
+        "guard may not straighten until its second turn from now begins",
+    ),
     (
         DelayStraighten("air_1", until=BEGINNING_OF_ACTION_PHASE),
         "air_1 may not straighten until its next Action Phase begins",

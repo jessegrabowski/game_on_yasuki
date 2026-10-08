@@ -223,8 +223,10 @@ class Moment:
 
 
 END_OF_TURN = Moment(Turn.CURRENT, Boundary.END)
-# The two edges of an Action Phase a card can name as the end of a prohibition on straightening,
-# as in "until after their controller's next Action Phase begins".
+# The moments a card can name as the end of a prohibition on straightening: a turn's beginning,
+# before its straighten, as in "cannot straighten before your second turn from now begins", and the
+# two edges of an Action Phase, as in "until after their controller's next Action Phase begins".
+BEGINNING_OF_TURN = Moment(Turn.CURRENT, Boundary.BEGINNING)
 BEGINNING_OF_ACTION_PHASE = Moment(Phase.ACTION, Boundary.BEGINNING)
 END_OF_ACTION_PHASE = Moment(Phase.ACTION, Boundary.END)
 BEGINNING_OF_COMBAT = Moment(BattleSegment.COMBAT, Boundary.BEGINNING)

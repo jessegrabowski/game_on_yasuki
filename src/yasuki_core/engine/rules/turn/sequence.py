@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.turn.structure import (
     ADDITIONAL_ACTION_SPENT,
     ActionRound,
     BEGINNING_OF_ACTION_PHASE,
+    BEGINNING_OF_TURN,
     Boundary,
     END_OF_ACTION_PHASE,
     END_OF_TURN,
@@ -139,13 +140,26 @@ def _announce_phase(game: GameState) -> None:
     game.stack.append(triggers.AnnounceEvent(PhaseStarted(game.phase)))
 
 
-def _lift_straighten_delays(game: GameState, moment: Moment) -> None:
-    """Free the active seat's cards whose prohibition on straightening lifts at ``moment``, an edge
-    of its Action Phase.
+def _count_turn_against_straighten_delays(game: GameState) -> None:
+    """Count the turn beginning against each of the active seat's straighten delays that holds into
+    a later one of its turns, so the delay lifts in the turn it names."""
+    by_id = game.table.cards_by_id
+    for card_id, delay in game.straighten_delayed.items():
+        card = by_id.get(card_id)
+        counted = card is not None and card.owner is game.active and game.turn > delay.imposed
+        if counted and delay.turns > 1:
+            game.straighten_delayed[card_id] = replace(
+                delay, imposed=game.turn, turns=delay.turns - 1
+            )
 
-    Only a *later* Action Phase than the one the delay began on counts: a card bowed to pay for an
-    Action is forbidden until the seat's next Action Phase, not the rest of this one. A card that
-    has left the table takes its delay with it. Nothing it could be forbidden from is left.
+
+def _lift_straighten_delays(game: GameState, moment: Moment) -> None:
+    """Free the active seat's cards whose prohibition on straightening lifts at ``moment``: its
+    turn's beginning or an edge of its Action Phase.
+
+    Only a *later* turn than the one the delay began on counts: a card bowed to pay for an Action is
+    forbidden until the seat's next Action Phase, not the rest of this one. A card that has left the
+    table takes its delay with it. Nothing it could be forbidden from is left.
     """
     by_id = game.table.cards_by_id
     game.straighten_delayed = {
@@ -402,12 +416,14 @@ def open_turn(game: GameState, staying_bowed: frozenset[str]) -> None:
     the turn's start, then the Action Phase's start. The round opens last, so a question asked while
     opening is answered in the previous round and hands no opportunity on. The straighten
     prohibition outlives this step: it lifts as the Action Phase this straighten precedes begins, or
-    once it has ended, whichever the delay names.
+    once it has ended, whichever the delay names, or before it, as the turn begins.
     """
     _announce_phase(game)
     game.stack.append(LiftStraightenDelays(BEGINNING_OF_ACTION_PHASE))
     game.stack.append(triggers.AnnounceEvent(TurnBoundary(game.active, Boundary.BEGINNING)))
     game.stack.append(ApplyEffects((RevealProvinces(game.active),)))
+    _count_turn_against_straighten_delays(game)
+    _lift_straighten_delays(game, BEGINNING_OF_TURN)
     straightened = ops.straighten(
         game.table, game.active, staying_bowed | game.straighten_delayed.keys()
     )
