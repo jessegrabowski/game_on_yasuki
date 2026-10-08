@@ -3,7 +3,11 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.duel.procedure import challenge_is_legal, duel_decided_by
+from yasuki_core.engine.rules.duel.procedure import (
+    challenge_can_be_made,
+    challenge_costs,
+    duel_decided_by,
+)
 from yasuki_core.engine.rules.effects import (
     AskOption,
     Choose,
@@ -53,7 +57,7 @@ def _sanctioned_duel_targets(game: GameState, source: L5RCard) -> list[str]:
         for card in personalities
         if card.owner is source.owner
         and not card.bowed
-        and any(challenge_is_legal(game, card.id, other.id) for other in personalities)
+        and any(challenge_can_be_made(game, card.id, other.id) for other in personalities)
     ]
 
 
@@ -67,7 +71,7 @@ def _sanctioned_duel_effects(game: GameState, source: L5RCard, target: L5RCard) 
     challenged = tuple(
         card.id
         for card in personalities_in_play(game)
-        if challenge_is_legal(game, target.id, card.id)
+        if challenge_can_be_made(game, target.id, card.id)
     )
     if not challenged:
         return []
@@ -92,12 +96,13 @@ def _resolve_sanctioned_duel_challenge(
     seat: PlayerId,
     resolver_context: tuple[str, ...] = (),
 ) -> list[Effect]:
-    """Put the challenge to the challenged Personality's controller, who may refuse it (CR,
-    Challenge). ``source_id`` is the challenger, picked as the card's target, and
-    ``resolver_context`` carries the Strategy that is asking."""
+    """Pay what cards in play add to the cost of the challenge, then put it to the challenged
+    Personality's controller, who may refuse it (CR, Challenge). ``source_id`` is the challenger,
+    picked as the card's target, and ``resolver_context`` carries the Strategy that is asking."""
     challenged = game.table.cards_by_id[chosen[0]]
     (strategy,) = resolver_context
     return [
+        *challenge_costs(game, source_id, challenged.id),
         AskOption(
             seat=challenged.owner,
             options=(SANCTIONED_DUEL_REFUSE, SANCTIONED_DUEL_ACCEPT),
@@ -105,7 +110,7 @@ def _resolve_sanctioned_duel_challenge(
             resolver=SANCTIONED_DUEL_RESOLVER,
             source_id=strategy,
             resolver_context=(source_id, challenged.id),
-        )
+        ),
     ]
 
 

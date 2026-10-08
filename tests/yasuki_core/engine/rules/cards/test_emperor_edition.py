@@ -25,9 +25,13 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import FatePrint
 
 from yasuki_core.engine.rules.duel.procedure import declare_duel
+from yasuki_core.engine.rules.effects import DiscardFromHand
 from yasuki_core.engine.rules.turn.sequence import run_stack
 
-from tests.yasuki_core.engine.rules.conftest import probe_challenge_restriction
+from tests.yasuki_core.engine.rules.conftest import (
+    probe_challenge_cost,
+    probe_challenge_restriction,
+)
 from tests.yasuki_core.engine.builders import (
     end_phase,
     fate_card,
@@ -194,6 +198,21 @@ def test_sanctioned_duel_is_not_offered_when_the_rival_may_not_be_challenged():
         session = _sanctioned_duel_game()
 
         assert PlayStrategy("duel") not in session.legal_actions(P1)
+
+
+def test_sanctioned_duel_pays_the_rivals_challenge_cost_when_it_picks_him():
+    def _discard_to_challenge(game, holder, challenger, challenged):
+        seat = challenger.owner
+        return [DiscardFromHand(seat, 1, seat, seat)] if challenged is holder else []
+
+    with probe_challenge_cost("theirs", _discard_to_challenge):
+        session = _sanctioned_duel_game()
+
+        _challenge(session)
+
+        discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
+        assert "P1-fv" in {card.id for card in discard}
+        assert isinstance(session.game.pending, ChooseOption)
 
 
 def test_sanctioned_duel_does_not_target_a_bowed_challenger():

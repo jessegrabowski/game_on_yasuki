@@ -16,7 +16,11 @@ from yasuki_core.engine.rules.effects import (
     GrantDuelStat,
     StartDuel,
 )
-from yasuki_core.engine.rules.duel.procedure import challenge_is_legal, duel_decided_by
+from yasuki_core.engine.rules.duel.procedure import (
+    challenge_can_be_made,
+    challenge_costs,
+    duel_decided_by,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
@@ -41,7 +45,7 @@ def _test_of_might_targets(game: GameState, source: L5RCard) -> list[str]:
         card_id
         for card_id in opposed_units_in_battle(game, source.owner)
         if not game.table.cards_by_id[card_id].bowed
-        and any(challenge_is_legal(game, card_id, enemy) for enemy in enemies)
+        and any(challenge_can_be_made(game, card_id, enemy) for enemy in enemies)
     ]
 
 
@@ -51,7 +55,7 @@ def _test_of_might_effects(game: GameState, source: L5RCard, target: L5RCard) ->
     enemies = tuple(
         enemy
         for enemy in opposing_units_in_battle(game, source.owner)
-        if challenge_is_legal(game, target.id, enemy)
+        if challenge_can_be_made(game, target.id, enemy)
     )
     if not enemies:
         return []
@@ -76,8 +80,9 @@ def _resolve_test_of_might_duel(
     seat: PlayerId,
     resolver_context: tuple[str, ...] = (),
 ) -> list[Effect]:
-    """Both Personalities duel on Force, which the CR names per Personality rather than per duel, so
-    each is told to compare it (CR, Duel Stat).
+    """Pay what cards in play add to the cost of the challenge, then have both Personalities duel
+    on Force, which the CR names per Personality rather than per duel, so each is told to compare
+    it (CR, Duel Stat).
 
     ``source_id`` is the seat's own duelist, picked as the card's target, and ``resolver_context``
     carries the Strategy, which the duel records as its source.
@@ -85,6 +90,7 @@ def _resolve_test_of_might_duel(
     (strategy,) = resolver_context
     challenger, challenged = source_id, chosen[0]
     return [
+        *challenge_costs(game, challenger, challenged),
         *(
             GrantDuelStat(strategy, duelist, Stat.FORCE, DUEL_CONSEQUENCES)
             for duelist in (challenger, challenged)

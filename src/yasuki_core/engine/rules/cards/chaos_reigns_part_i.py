@@ -5,7 +5,10 @@ from yasuki_core.engine.rules.abilities.idioms import register_entry
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability, tireless_grant
 from yasuki_core.engine.rules.action_record import action_keywords
-from yasuki_core.engine.rules.board.queries import owned_personalities
+from yasuki_core.engine.rules.board.queries import has_keyword, owned_personalities
+from yasuki_core.engine.rules.duel.procedure import challenge_cost
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
@@ -13,10 +16,13 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     Choose,
     DiscardFavor,
+    DiscardFromHand,
     DrawCard,
     Effect,
     GainHonor,
+    GrantAdditionalUse,
     Move,
+    Straighten,
 )
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.legality import has_wind
@@ -77,6 +83,72 @@ register_ability(
         targets=_caravansary_targets,
         effects=_caravansary_effects,
         hits_every_target=True,
+    ),
+)
+
+
+# --- Hida Gojiro, Tetsubo Master (Experienced) ---
+
+GOJIRO_TETSUBO_FORCE = 1
+
+
+def _hida_gojiro_tetsubo_master_experienced_has_a_tetsubo(game: GameState, gojiro: L5RCard) -> bool:
+    return any(has_keyword(game, card, keywords.TETSUBO) for card in attachments_of(game, gojiro))
+
+
+@stat_grant("hida_gojiro_tetsubo_master_experienced")
+def _hida_gojiro_tetsubo_master_experienced_stat_grant(
+    game: GameState, gojiro: L5RCard, card: L5RCard, stat: Stat
+) -> tuple[int, ...]:
+    """ "While Gojiro has a Tetsubo, he has +1F." """
+    if stat is not Stat.FORCE or card is not gojiro:
+        return ()
+    has_one = _hida_gojiro_tetsubo_master_experienced_has_a_tetsubo(game, gojiro)
+    return (GOJIRO_TETSUBO_FORCE if has_one else 0,)
+
+
+@challenge_cost("hida_gojiro_tetsubo_master_experienced")
+def _hida_gojiro_tetsubo_master_experienced_challenge_cost(
+    game: GameState, gojiro: L5RCard, challenger: L5RCard, challenged: L5RCard
+) -> list[Effect]:
+    """ "While Gojiro has a Tetsubo, players must discard a card to have their Personality
+    challenge him." The challenger's player picks the card."""
+    if challenged is not gojiro:
+        return []
+    if not _hida_gojiro_tetsubo_master_experienced_has_a_tetsubo(game, gojiro):
+        return []
+    seat = challenger.owner
+    return [DiscardFromHand(seat, 1, seat, seat)]
+
+
+def _hida_gojiro_tetsubo_master_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Gojiro's Heavy Weapons."""
+    return [
+        card.id
+        for card in attachments_of(game, source)
+        if has_keyword(game, card, keywords.HEAVY_WEAPON)
+    ]
+
+
+def _hida_gojiro_tetsubo_master_experienced_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "You may use its printed abilities one additional time. If the target is a Tetsubo,
+    straighten it." """
+    again = GrantAdditionalUse(source.id, target.id, Duration.UNTIL_END_OF_TURN)
+    if not has_keyword(game, target, keywords.TETSUBO):
+        return [again]
+    return [again, Straighten(target.id)]
+
+
+register_ability(
+    "hida_gojiro_tetsubo_master_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_hida_gojiro_tetsubo_master_experienced_targets,
+        targeting_message="one of Gojiro's Heavy Weapons",
+        effects=_hida_gojiro_tetsubo_master_experienced_effects,
     ),
 )
 

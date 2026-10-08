@@ -20,7 +20,6 @@ yasuki_core.engine.rules.abilities.model
 
     itself
     once_tag
-    use_tags
 
 .. automodule:: yasuki_core.engine.rules.abilities.model
     :members:

@@ -3,7 +3,7 @@ from collections.abc import Iterator
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import gold_charged, payable
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, TargetGroup, use_tags
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, TargetGroup
 from yasuki_core.engine.rules.vocabulary.decisions import (
     PickedTargets,
     answerable,
@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     holds_seat_grant,
     fixed_invest_amount,
     granted_tireless,
+    use_tags,
 )
 from yasuki_core.engine.rules.vocabulary.actions import (
     Action,

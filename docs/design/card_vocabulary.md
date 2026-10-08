@@ -100,6 +100,7 @@ the order they are written" (CR, Order of Effects).
    AdditionalAction
    GrantPriority
    GrantAbility
+   GrantAdditionalUse
    GrantConditionalModifier
    GrantKeyword
    GrantMinimum
@@ -259,6 +260,7 @@ set a card can return.
    Stat
    Duration
    AbilityGrant
+   AdditionalUse
    AttachedChange
    Condition
    ConditionalModifier

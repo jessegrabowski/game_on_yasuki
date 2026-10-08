@@ -327,6 +327,13 @@ class Ability:
         ability whose effects read the whole set, or read one phrase against another. Required with
         more than one group, since effects built per target could not tell the phrases apart. Set
         it or ``effects``, never both. Default None.
+    challenges_target : bool, optional
+        Whether the ability's card challenges the Personality it targets. A cost a card in play
+        adds to challenging one of its targets splits it into a version that pays the cost and
+        must target him, and one that may not target him (CR, Targeting Paradoxes). Default False.
+    derived_from : Ability, optional
+        The registered ability this one is a version of, built for such a cost, which it stands
+        for wherever the card's printed abilities are asked about. Default None.
     """
 
     timings: tuple[ActionTiming, ...]
@@ -357,6 +364,8 @@ class Ability:
     effects_for_groups: (
         Callable[[GameState, L5RCard, tuple[tuple[L5RCard, ...], ...]], list[Effect]] | None
     ) = None
+    challenges_target: bool = False
+    derived_from: "Ability | None" = field(default=None, compare=False, repr=False)
 
     def __post_init__(self) -> None:
         """Raise ValueError for a keyword's ability not marked ``from_rulebook``, one that declares
@@ -462,14 +471,6 @@ def once_tag(ability: Ability) -> str:
     counts its uses under another's key."""
     key = ability.key if ability.limit_key is None else ability.limit_key
     return f"ability:{key or ''}"
-
-
-def use_tags(game: GameState, card: L5RCard, ability: Ability) -> tuple[str, ...]:
-    """The tags ``ability``'s uses this turn are claimed under, one per use allowed: its
-    once-per-turn tag, then one more for each further use ``uses_per_turn`` allows."""
-    tag = once_tag(ability)
-    uses = 1 if ability.uses_per_turn is None else ability.uses_per_turn(game, card)
-    return (tag, *(f"{tag}:{use}" for use in range(2, uses + 1)))
 
 
 @dataclass(frozen=True, slots=True)

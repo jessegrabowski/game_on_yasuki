@@ -8,6 +8,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.registry import (
     abilities_for,
+    use_tags,
     ability_for,
     ability_label,
     register_ability,
@@ -25,6 +26,7 @@ from yasuki_core.engine.rules.effects import (
     GainHonor,
     Destroy,
     Discard,
+    DiscardFromHand,
     GrantNegation,
     Effect,
     Fear,
@@ -129,6 +131,7 @@ from tests.yasuki_core.engine.builders import (
 from tests.yasuki_core.engine.rules.battle.test_resolution import _pass_out_the_segments
 from tests.yasuki_core.engine.rules.conftest import (
     probe_ability,
+    probe_challenge_cost,
     probe_challenge_restriction,
     probe_interrupt,
 )
@@ -1902,6 +1905,61 @@ def test_haikeru_is_not_offered_against_a_rival_who_may_not_be_challenged():
         session = _haikeru_in_combat(rival_force=1, rival_chi=1)
 
         assert ActivateAbility("haikeru") not in session.legal_actions(P1)
+
+
+def _discard_to_challenge(game, holder, challenger, challenged):
+    seat = challenger.owner
+    return [DiscardFromHand(seat, 1, seat, seat)] if challenged is holder else []
+
+
+def test_haikeru_pays_a_rivals_challenge_cost_in_a_use_of_its_own():
+    with probe_challenge_cost("rival", _discard_to_challenge):
+        session = _haikeru_in_combat(rival_force=1, rival_chi=1)
+        table = session.game.table
+        table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(table, fate_card("spare", P1)))
+        offered = [
+            action
+            for action in session.legal_actions(P1)
+            if isinstance(action, ActivateAbility) and action.card_id == "haikeru"
+        ]
+
+        assert offered == [ActivateAbility("haikeru", ":challenging:rival")]
+        session.act(P1, offered[0])
+
+        discard = table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards
+        assert [card.id for card in discard] == ["spare"]
+        assert session.game.pending.candidates == ("rival",)
+
+
+def test_haikerus_two_versions_split_the_rivals_and_share_one_use():
+    with probe_challenge_cost("rival", _discard_to_challenge):
+        session = combat_segment(
+            [
+                personality("haikeru", printed_id="hida_haikeru", force=5, chi=2),
+                personality("rival", owner=P2),
+                personality("other", owner=P2),
+            ],
+            {"haikeru": 0},
+            {"rival": 0, "other": 0},
+        )
+        game = session.game
+        haikeru = game.table.cards_by_id["haikeru"]
+
+        free, paying = abilities_for(game, haikeru)
+
+        assert free.targets(game, haikeru) == ["other"]
+        assert paying.targets(game, haikeru) == ["rival"]
+        assert use_tags(game, haikeru, paying) == use_tags(game, haikeru, free)
+
+
+def test_haikeru_is_not_offered_with_no_card_to_pay_a_rivals_challenge_cost():
+    with probe_challenge_cost("rival", _discard_to_challenge):
+        session = _haikeru_in_combat(rival_force=1, rival_chi=1)
+
+        assert not any(
+            isinstance(action, ActivateAbility) and action.card_id == "haikeru"
+            for action in session.legal_actions(P1)
+        )
 
 
 def _duel_the_rival(session: EngineSession) -> EngineSession:

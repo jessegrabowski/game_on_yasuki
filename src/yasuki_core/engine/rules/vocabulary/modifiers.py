@@ -170,6 +170,26 @@ class AbilityGrant:
 
 
 @dataclass(frozen=True, slots=True)
+class AdditionalUse:
+    """A continuous effect that lets each printed ability of one card be used one additional time
+    while active: "You may use its printed abilities one additional time".
+
+    Attributes
+    ----------
+    source_id : str
+        The card the grant comes from.
+    target_id : str
+        The card whose printed abilities may be used again.
+    duration : Duration or Moment
+        When the grant stops applying.
+    """
+
+    source_id: str
+    target_id: str
+    duration: Lifetime
+
+
+@dataclass(frozen=True, slots=True)
 class SeatAbilityGrant:
     """A continuous effect that gives every card one player owns an activated ability while
     active: "the next time you use the rulebook Kharmic ability, you may use it on a non-Kharmic
@@ -600,6 +620,7 @@ Ongoing = (
     Modifier
     | ConditionalModifier
     | AbilityGrant
+    | AdditionalUse
     | SeatAbilityGrant
     | DuelStatOverride
     | KeywordGrant

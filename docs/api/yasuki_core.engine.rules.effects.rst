@@ -48,6 +48,7 @@ yasuki_core.engine.rules.effects
     GainHonor
     GainProvince
     GrantAbility
+    GrantAdditionalUse
     GrantCompassion
     GrantConditionalModifier
     GrantDuelStat

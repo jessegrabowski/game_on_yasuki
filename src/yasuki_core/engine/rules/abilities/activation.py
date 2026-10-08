@@ -1,8 +1,8 @@
 from dataclasses import dataclass, replace
 
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.abilities.model import Ability, use_tags
-from yasuki_core.engine.rules.abilities.registry import ability_for
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.abilities.registry import ability_for, use_tags
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.negation import action_provenance
 from yasuki_core.engine.rules.vocabulary.game_events import GameEvent
