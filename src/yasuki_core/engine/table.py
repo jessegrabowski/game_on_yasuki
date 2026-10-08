@@ -436,13 +436,17 @@ def province_holding(state: TableState, seat: PlayerId, card_id: str) -> ZoneKey
     return None
 
 
-def owns_card(state: TableState, seat: PlayerId, card_id: str) -> bool:
-    """Return whether ``seat`` may act on the card: True for its owner, False if the card is unknown
-    or belongs to the other seat."""
+def controls_card(state: TableState, seat: PlayerId, card_id: str) -> bool:
+    """Return whether ``seat`` may act on the card. Only a card's controller may use its abilities
+    or use it to pay costs (CR, Card control). False if the card is unknown.
+
+    Control and ownership part only for a card in play, so this answers the same as ownership for
+    one in a hand, a deck or a Province.
+    """
     card = state.cards_by_id.get(card_id)
     if card is None:
         return False
-    return card.owner == seat
+    return controller_of(state, card) == seat
 
 
 def owns_zone(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> bool:

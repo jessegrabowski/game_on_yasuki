@@ -13,6 +13,7 @@ from yasuki_core.engine.table import (
     TableState,
     ZoneKey,
     ZoneRole,
+    controller_of,
 )
 from yasuki_core.engine.intents import (
     MoveCard,
@@ -332,7 +333,24 @@ def test_give_control_hands_a_battlefield_card_to_the_opponent():
 
     events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
 
-    assert card.owner == PlayerId.P2 and len(events) == 1
+    assert controller_of(table, card) is PlayerId.P2 and len(events) == 1
+    assert card.owner is PlayerId.P1  # ownership never changes (CR, Card ownership)
+
+
+def test_giving_a_card_back_leaves_no_control_entry_behind():
+    """Control returning to the owner is the absence of an entry, not an entry naming them, so the
+    map stays canonical and two boards that agree compare equal."""
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P1)
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, GiveControl("f1"))
+    assert table.controllers == {"f1": PlayerId.P2}
+
+    apply_intent(table, PlayerId.P2, GiveControl("f1"))
+
+    assert table.controllers == {}
+    assert controller_of(table, card) is PlayerId.P1
 
 
 def test_give_control_is_rejected_on_the_opponents_card():
@@ -342,7 +360,7 @@ def test_give_control_is_rejected_on_the_opponents_card():
 
     events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
 
-    assert events == [] and card.owner == PlayerId.P2
+    assert events == [] and controller_of(table, card) is PlayerId.P2
 
 
 def test_give_control_is_rejected_on_a_face_down_card():
@@ -353,19 +371,19 @@ def test_give_control_is_rejected_on_a_face_down_card():
 
     events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
 
-    assert events == [] and card.owner == PlayerId.P1
+    assert events == [] and controller_of(table, card) is PlayerId.P1
 
 
 def test_give_control_is_rejected_off_the_battlefield():
-    # Reassigning a card held in an owned zone would break the zone/owner invariant, so it's
-    # refused.
+    # Control is an in-play relation, which the table validates, so a card in a hand, a deck or a
+    # Province cannot change hands.
     table = TableState.empty_two_seat()
     hand = _stock_hand(table, "a")
     card = table.zones[hand].cards[0]
 
     events = apply_intent(table, PlayerId.P1, GiveControl(card.id))
 
-    assert events == [] and card.owner == PlayerId.P1
+    assert events == [] and controller_of(table, card) is PlayerId.P1
 
 
 def test_move_card_into_the_hand_lands_at_the_given_slot():
@@ -994,14 +1012,14 @@ def test_peek_is_owner_gated_to_your_own_hidden_card():
 
 
 def test_unpeek_drops_a_peek_even_after_control_passes_to_the_opponent():
-    # Unpeek is not owner-gated: whoever holds a peek may always drop it, even once the card has
+    # Unpeek is not control-gated: whoever holds a peek may always drop it, even once the card has
     # changed hands, so a stale peek never lingers after a Give control.
     table = TableState.empty_two_seat()
     card = _fate("f1", owner=PlayerId.P1)
     _on_battlefield(table, card)
     apply_intent(table, PlayerId.P1, Peek("f1"))
 
-    card.set_owner(PlayerId.P2)
+    apply_intent(table, PlayerId.P1, GiveControl("f1"))
     assert apply_intent(table, PlayerId.P1, Unpeek("f1")) != []
     assert card.peekers == frozenset()
 
