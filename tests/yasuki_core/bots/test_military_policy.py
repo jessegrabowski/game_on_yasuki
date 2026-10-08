@@ -694,3 +694,39 @@ def test_the_policy_focuses_blind_off_its_deck_and_strikes_when_it_cannot():
 
     assert policy.decide(offered, None).choices == (DECK_TOP,)
     assert policy.decide(spent, None).choices == (STRIKE,)
+
+
+class TestABattlefieldAtNoProvince:
+    """A battlefield not associated with any Province offers nothing to take or save, so neither
+    seat's assignment sends units there."""
+
+    def test_the_attacker_sends_nothing_there(self):
+        session = _attacked(defenders={}, attackers={"raider": 5}, provinces=1)
+        game = session.game
+        resolution.declare_attack(game, ATTACKER)
+        game.attack.amend(0, province=None)
+        request = AssignUnits(
+            seat=ATTACKER,
+            candidates=resolution.assignment_candidates(game, ATTACKER),
+            battlefields=len(game.attack.battlefields),
+        )
+
+        answer = MilitaryPolicy().decide(request, project(game, ATTACKER))
+
+        assert answer.choices == ()
+
+    def test_the_defender_sends_nothing_there(self):
+        session = _attacked(defenders={"guard": 4}, attackers={"raider": 3}, provinces=1)
+        game = session.game
+        resolution.declare_attack(game, ATTACKER)
+        game.attack.amend(0, province=None)
+        ops.assign(game.table, game.table.cards_by_id["raider"], 0)
+        request = AssignUnits(
+            seat=DEFENDER,
+            candidates=resolution.assignment_candidates(game, DEFENDER),
+            battlefields=len(game.attack.battlefields),
+        )
+
+        answer = MilitaryPolicy().decide(request, project(game, DEFENDER))
+
+        assert answer.choices == ()

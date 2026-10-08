@@ -12,6 +12,7 @@ yasuki_core.engine.rules.projection
     DuelView
     DuelistView
     GameView
+    ProvinceAtBattlefield
     UnitView
 
 .. rubric:: Functions

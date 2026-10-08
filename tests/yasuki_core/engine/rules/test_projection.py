@@ -601,7 +601,7 @@ def test_a_provinces_fortifications_reach_the_view_with_it():
 
     view = project(game, PlayerId.P1)
 
-    assert [card.id for card in view.attack.battlefields[0].fortifications] == ["p2-wall"]
+    assert [card.id for card in view.attack.battlefields[0].province.fortifications] == ["p2-wall"]
 
 
 def test_a_fortification_belongs_only_to_the_province_it_defends():
@@ -616,7 +616,7 @@ def test_a_fortification_belongs_only_to_the_province_it_defends():
 
     lanes = project(game, PlayerId.P1).attack.battlefields
 
-    assert [[card.id for card in lane.fortifications] for lane in lanes] == [
+    assert [[card.id for card in lane.province.fortifications] for lane in lanes] == [
         ["p2-wall"],
         ["p2-gate"],
     ]
@@ -636,7 +636,9 @@ def test_a_fortification_the_viewer_cannot_identify_reaches_it_as_a_back():
 
     view = project(game, PlayerId.P1)
 
-    assert [card.card_id for card in view.attack.battlefields[0].fortifications] == ["p2-wall"]
+    assert [card.card_id for card in view.attack.battlefields[0].province.fortifications] == [
+        "p2-wall"
+    ]
 
 
 def test_a_terrain_reaches_the_view_of_its_own_battlefield():
@@ -651,12 +653,22 @@ def test_a_terrain_reaches_the_view_of_its_own_battlefield():
     assert [[card.id for card in lane.terrains] for lane in lanes] == [[], ["ground"]]
 
 
+def test_a_battlefield_at_no_province_projects_an_empty_lane():
+    game = _attack_between(face_up=True)
+    attack = game.attack
+    attack.amend(0, province=None)
+
+    lane = project(game, PlayerId.P1).attack.battlefields[0]
+
+    assert lane.province is None
+
+
 def test_a_province_with_nothing_attached_carries_no_fortifications():
     game = _attack_between(face_up=True)
 
     view = project(game, PlayerId.P1)
 
-    assert view.attack.battlefields[0].fortifications == ()
+    assert view.attack.battlefields[0].province.fortifications == ()
 
 
 def test_a_face_up_province_card_reaches_the_attacker_by_name():
@@ -664,7 +676,7 @@ def test_a_face_up_province_card_reaches_the_attacker_by_name():
 
     view = project(game, PlayerId.P1)
 
-    assert view.attack.battlefields[0].occupant.id == "p2-holding"
+    assert view.attack.battlefields[0].province.occupant.id == "p2-holding"
 
 
 def test_a_face_down_province_card_reaches_the_attacker_as_a_back():
@@ -675,7 +687,7 @@ def test_a_face_down_province_card_reaches_the_attacker_as_a_back():
 
     view = project(game, PlayerId.P1)
 
-    assert isinstance(view.attack.battlefields[0].occupant, HiddenCard)
+    assert isinstance(view.attack.battlefields[0].province.occupant, HiddenCard)
 
 
 def test_the_defender_sees_its_own_face_down_province_card_as_a_back_too():
@@ -685,7 +697,7 @@ def test_the_defender_sees_its_own_face_down_province_card_as_a_back_too():
 
     view = project(game, PlayerId.P2)
 
-    assert isinstance(view.attack.battlefields[0].occupant, HiddenCard)
+    assert isinstance(view.attack.battlefields[0].province.occupant, HiddenCard)
 
 
 def test_the_attack_view_names_the_cards_a_battle_destroyed():

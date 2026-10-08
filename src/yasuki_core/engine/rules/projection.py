@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.stats.province_strength import effective_province_
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.battle.records import BattleOutcome
+from yasuki_core.engine.rules.battle.records import AttackPhase, BattleOutcome, BattlefieldInfo
 from yasuki_core.engine.rules.turn.structure import Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, DuelStep, Segment
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionRequest, FocusOrStrike
@@ -43,21 +43,39 @@ class UnitView:
 
 
 @dataclass(frozen=True, slots=True)
+class ProvinceAtBattlefield:
+    """The Defender Province a battlefield is associated with, as a seat sees it.
+
+    Attributes
+    ----------
+    key : ZoneKey
+        The Province zone the battlefield sits at.
+    occupant : L5RCard or HiddenCard or None
+        The card standing in the Province, redacted like any other. A face-down Dynasty card is a
+        back to the seat attacking it. None when the Province is empty.
+    fortifications : tuple of L5RCard or HiddenCard
+        The cards attached to the Province, in attach order, redacted like the occupant. They stand
+        at the battlefield with it and are already counted in ``strength``.
+    strength : int
+        The Province's effective Strength, which the attacking Force must clear to destroy it.
+    """
+
+    key: ZoneKey
+    occupant: L5RCard | HiddenCard | None
+    fortifications: tuple[L5RCard | HiddenCard, ...]
+    strength: int
+
+
+@dataclass(frozen=True, slots=True)
 class BattlefieldView:
     """One battlefield of a declared attack, and the two armies standing at it.
 
     Attributes
     ----------
-    province : ZoneKey
-        The Defender Province the battlefield sits at.
-    occupant : L5RCard or HiddenCard or None
-        The card standing in that Province, redacted like any other. A face-down Dynasty card is a
-        back to the seat attacking it. None when the Province is empty.
-    fortifications : tuple of L5RCard or HiddenCard
-        The cards attached to that Province, in attach order, redacted like the occupant. They stand
-        at the battlefield with it and are already counted in ``strength``.
-    strength : int
-        The Province's effective Strength, which the attacking Force must clear to destroy it.
+    province : ProvinceAtBattlefield or None
+        The Province the battlefield sits at, with what stands in it and its Strength, or None for
+        a battlefield not associated with any Province (CR, Battlefields), which has no occupant,
+        no Fortifications and no Strength to clear.
     terrains : tuple of L5RCard or HiddenCard
         The Terrains in play here, in play order. They stand at the battlefield in neither army.
     attacking : tuple of UnitView
@@ -78,10 +96,7 @@ class BattlefieldView:
         card is sitting in a discard both seats may read.
     """
 
-    province: ZoneKey
-    occupant: L5RCard | HiddenCard | None
-    fortifications: tuple[L5RCard | HiddenCard, ...]
-    strength: int
+    province: ProvinceAtBattlefield | None
     terrains: tuple[L5RCard | HiddenCard, ...]
     attacking: tuple[UnitView, ...]
     defending: tuple[UnitView, ...]
@@ -580,20 +595,36 @@ def _project_attack(game: GameState, table: ViewSnapshot) -> AttackView | None:
         battle_segment=attack.battle_segment,
         current=attack.current,
         battlefields=tuple(
-            BattlefieldView(
-                province=info.province,
-                occupant=_occupant(table, info.province),
-                fortifications=_fortifications(table, info.province),
-                strength=effective_province_strength(game, info.province),
-                terrains=_as_seen(table, [card.id for card in terrains_at(game, index)]),
-                attacking=_units(game, index, attack.attacker),
-                defending=_units(game, index, attack.defender),
-                attacking_force=resolution.army_force(game, index, attack.attacker),
-                defending_force=resolution.army_force(game, index, attack.defender),
-                fought=index in attack.fought,
-                outcome=info.outcome,
-                destroyed_names=_destroyed_names(game, info.outcome),
-            )
+            _project_battlefield(game, table, attack, index, info)
             for index, info in enumerate(attack.battlefields)
         ),
+    )
+
+
+def _project_battlefield(
+    game: GameState, table: ViewSnapshot, attack: AttackPhase, index: int, info: BattlefieldInfo
+) -> BattlefieldView:
+    """One lane of the attack view: the battlefield at ``index`` as the snapshot's viewer sees
+    it, its Province grouped into one optional field so a lane either has a whole Province or
+    none of one."""
+    province = (
+        None
+        if info.province is None
+        else ProvinceAtBattlefield(
+            key=info.province,
+            occupant=_occupant(table, info.province),
+            fortifications=_fortifications(table, info.province),
+            strength=effective_province_strength(game, info.province),
+        )
+    )
+    return BattlefieldView(
+        province=province,
+        terrains=_as_seen(table, [card.id for card in terrains_at(game, index)]),
+        attacking=_units(game, index, attack.attacker),
+        defending=_units(game, index, attack.defender),
+        attacking_force=resolution.army_force(game, index, attack.attacker),
+        defending_force=resolution.army_force(game, index, attack.defender),
+        fought=index in attack.fought,
+        outcome=info.outcome,
+        destroyed_names=_destroyed_names(game, info.outcome),
     )
