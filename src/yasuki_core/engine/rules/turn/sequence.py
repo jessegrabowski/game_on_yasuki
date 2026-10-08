@@ -83,7 +83,7 @@ def _waits_beneath_its_round(game: GameState) -> bool:
     top = game.stack[-1]
     held = game.round.kind is RoundKind.INTERRUPT and isinstance(top, triggers.HeldAction)
     resolving = game.round.kind is RoundKind.RESPONSE and isinstance(
-        top, resolution.AfterResolution
+        top, resolution.AfterResolution | resolution.FightCreatedBattle
     )
     dueling = game.round.kind is RoundKind.DUEL_WINDOW and isinstance(top, DuelWork)
     return held or resolving or dueling
@@ -450,7 +450,7 @@ def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
         game.modifications.clear()
     if game.round is not acted_in:
         return
-    _announce_resolution(game)
+    announce_action_resolution(game)
     if game.awaiting_decision or game.game_over:
         return
     if open_response_window(game):
@@ -458,11 +458,12 @@ def yield_after_action(game: GameState, acted_in: ActionRound) -> None:
     yield_priority(game, passed=False)
 
 
-def _announce_resolution(game: GameState) -> None:
+def announce_action_resolution(game: GameState) -> None:
     """Announce :class:`~.ActionResolved` once for the action just resolved, before the Response
     Step, so a card in hand reading "Play after you resolve X" enters where the CR's "immediately"
     puts it. An action taken inside an Interrupt or Response step is not announced, because the
-    action record names the action it answers."""
+    action record names the action it answers. A created battle announces here too, since the
+    action that created it has resolved before the battle is fought (CR, Timing)."""
     if game.action_resolved or game.action is None or game.action_seat is None:
         return
     if game.round.kind in STEP_ROUNDS:

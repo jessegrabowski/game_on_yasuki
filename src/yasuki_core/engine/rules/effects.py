@@ -859,6 +859,42 @@ class DestroyProvince(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class CreateBattle(Effect):
+    """Create a battle at a new battlefield not associated with any Province, fought once the
+    action creating it has resolved (CR, Battles: "some effects create battles separately").
+
+    Attributes
+    ----------
+    attacker : PlayerId
+        The seat whose attack this is.
+    attacking : tuple of str
+        The Personalities assigned to the attacking side as the battlefield is created.
+    defending : tuple of str
+        The Personalities assigned to the defending side.
+    sealed : bool, optional
+        Whether no other unit may move to the battlefield, as "Other Personalities cannot move
+        there" reads. Default False.
+    """
+
+    attacker: PlayerId
+    attacking: tuple[str, ...]
+    defending: tuple[str, ...]
+    sealed: bool = False
+
+    def describe(self) -> str:
+        return "create a battlefield and fight a battle there"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        # Imported where it is used: the fight loop imports this module for the effects a battle
+        # resolves with.
+        from yasuki_core.engine.rules.battle.resolution import create_battle
+
+        return list(
+            create_battle(game, self.attacker, self.attacking, self.defending, sealed=self.sealed)
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class GainProvince(Effect):
     """``seat`` gains a Province, created to the left of its leftmost and then refilled (ShE
     datasheet). It takes a fresh id, so no record naming another Province changes meaning.

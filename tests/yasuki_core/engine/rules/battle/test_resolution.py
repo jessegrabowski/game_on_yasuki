@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     DeclareAttack,
     Pass,
+    PlayStrategy,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
@@ -29,6 +30,7 @@ from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
 from yasuki_core.engine.rules.effects import (
     Ask,
+    CreateBattle,
     DelayedEffect,
     Destroy,
     DestroyProvince,
@@ -56,9 +58,9 @@ from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, lo
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.prints import FatePrint
+from yasuki_core.game_pieces.prints import ActionPrint, FatePrint
 
-from tests.yasuki_core.engine.rules.conftest import probe_resolver
+from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_resolver
 from tests.yasuki_core.engine.rules.test_interrupts import _honor_card
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -1541,3 +1543,129 @@ def test_a_province_destroyed_before_resolution_is_not_credited_to_it():
     [resolved] = _battles_resolved(session)
     assert not resolved.province_destroyed
     assert resolved.destroyed == ("d",)
+
+
+def test_a_battle_cannot_be_created_during_an_attack():
+    session = _one_battlefield({"a": 3}, {"d": 2})
+
+    with pytest.raises(ValueError, match="already in progress"):
+        resolution.create_battle(session.game, PlayerId.P1, ("a",), ("d",))
+
+
+def test_a_named_card_that_left_the_table_is_not_assigned_and_the_battle_still_opens():
+    # The creating action resolves as far as it can: a target an Interrupt removed between
+    # targeting and resolution is skipped, the way Move skips one, instead of crashing the action.
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, personality("d", owner=PlayerId.P2, force=1))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assigned = resolution.create_battle(session.game, PlayerId.P1, ("ghost",), ("d",))
+
+    assert [event.card_id for event in assigned] == ["d"]
+    attack = session.game.attack
+    assert attack is not None
+    assert attack.battlefields[0].ever_present == frozenset({(PlayerId.P2, "d")})
+
+
+def test_a_created_battle_suspends_the_action_phase_round_and_hands_it_back():
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, personality("a", owner=PlayerId.P1, force=3))
+    put_in_play(state, personality("d", owner=PlayerId.P2, force=1))
+    probe = register(
+        state,
+        L5RCard.of(
+            ActionPrint,
+            id="probe",
+            name="probe",
+            printed_id="probe_created_battle",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            gold_cost=0,
+        ),
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(probe)
+    ability = Ability(
+        timings=(ActionTiming.LIMITED,),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [
+            CreateBattle(attacker=source.owner, attacking=("a",), defending=("d",))
+        ],
+        hits_every_target=True,
+        located_at=(CardLocation.HAND,),
+    )
+    with probe_ability("probe_created_battle", ability):
+        session = EngineSession.start(state, PlayerId.P1)
+        phase_round = session.game.round
+
+        session.act(PlayerId.P1, PlayStrategy("probe"))
+
+        attack = session.game.attack
+        assert attack is not None and attack.current == 0
+        assert session.game.action_resolved
+        assert session.game.round.kind is RoundKind.BATTLE_SEGMENT
+        assert session.game.round_stack == [phase_round]
+
+        for _ in range(20):
+            if session.game.attack is None:
+                break
+            session.act(session.game.round.priority, Pass())
+
+        assert session.game.attack is None
+        assert session.game.round.kind is RoundKind.PHASE
+        assert session.game.round_stack == []
+        assert session.game.round.priority is PlayerId.P2
+        assert session.game.phase is Phase.ACTION
+
+
+def test_the_response_step_to_the_creating_action_opens_before_the_battle():
+    # Caravansary responds to the creating action's own Fate discard, so the window the CR puts
+    # "immediately after" the action must open before the battle the action delayed.
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, personality("a", owner=PlayerId.P1, force=3))
+    put_in_play(state, personality("d", owner=PlayerId.P2, force=1))
+    put_in_play(state, holding("inn", printed_id="caravansary", owner=PlayerId.P1))
+    probe = register(
+        state,
+        L5RCard.of(
+            ActionPrint,
+            id="probe",
+            name="probe",
+            printed_id="probe_created_battle",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            gold_cost=0,
+        ),
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(probe)
+    ability = Ability(
+        timings=(ActionTiming.LIMITED,),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [
+            CreateBattle(attacker=source.owner, attacking=("a",), defending=("d",))
+        ],
+        hits_every_target=True,
+        located_at=(CardLocation.HAND,),
+    )
+    with probe_ability("probe_created_battle", ability):
+        session = EngineSession.start(state, PlayerId.P1)
+
+        session.act(PlayerId.P1, PlayStrategy("probe"))
+
+        assert session.game.round.kind is RoundKind.RESPONSE
+        attack = session.game.attack
+        assert attack is not None and attack.battle_segment is None
+
+        for _ in range(4):
+            if session.game.attack.battle_segment is not None:
+                break
+            session.act(session.game.round.priority, Pass())
+
+        assert session.game.attack.battle_segment is BattleSegment.ENGAGE

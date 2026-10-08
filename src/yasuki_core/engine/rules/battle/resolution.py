@@ -37,6 +37,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.battle.records import (
     ArmyForces,
+    AttackKind,
     AttackPhase,
     BattleOutcome,
     BattlefieldInfo,
@@ -101,6 +102,105 @@ def declare_attack(game: GameState, attacker: PlayerId | None = None) -> None:
         defender=defender,
         battlefields=tuple(BattlefieldInfo(province=province) for province in provinces),
     )
+
+
+def create_battle(
+    game: GameState,
+    attacker: PlayerId,
+    attacking: tuple[str, ...],
+    defending: tuple[str, ...],
+    *,
+    sealed: bool = False,
+) -> list[Assigned]:
+    """Create a battle at a new battlefield not associated with any Province, fought once the
+    action creating it has resolved (CR, Battles; CR, Timing, Exception 3). Return the
+    assignments made as the battlefield was created.
+
+    The named units assign to their controllers' sides. Nothing here bars a bowed unit: what may
+    be named is the creating card's targeting, and an effect that assigns is not the Maneuvers
+    Segment. A named card no longer on the table is not assigned, and the battle is still
+    created, as an action resolves as far as it can. Raise ``ValueError`` while an attack is in
+    progress, since the table holds one attack at a time and no card creates a battle during
+    another.
+
+    Parameters
+    ----------
+    game : GameState
+        The game to create the battle in.
+    attacker : PlayerId
+        The seat whose attack this is.
+    attacking : tuple of str
+        The Personalities assigned to the attacking side.
+    defending : tuple of str
+        The Personalities assigned to the defending side.
+    sealed : bool, optional
+        Whether no other unit may move to the battlefield, as "Other Personalities cannot move
+        there" reads. Default False.
+
+    Returns
+    -------
+    list of Assigned
+        One event per unit the creation assigned, for the creating effect to announce.
+    """
+    if game.attack is not None:
+        raise ValueError("an attack is already in progress")
+    defender = defender_of(game, attacker)
+    game.attack = AttackPhase(
+        attacker=attacker,
+        defender=defender,
+        battlefields=(BattlefieldInfo(province=None),),
+        segment=Segment.FIGHT,
+        kind=AttackKind.CREATED,
+    )
+    assigned = []
+    for card_id in (*attacking, *defending):
+        card = game.table.cards_by_id.get(card_id)
+        if card is not None and place_unit(game, card, Location.at_battlefield(0)):
+            assigned.append(Assigned(card_id, 0, attacker))
+    if sealed:
+        game.attack.amend(0, sealed=True)
+    # At the bottom of the stack, beneath everything the creating action still has to do: a battle
+    # an effect creates is fought only once that action has resolved (CR, Timing, Exception 3).
+    game.stack.insert(0, FightCreatedBattle())
+    return assigned
+
+
+@dataclass(frozen=True, slots=True)
+class FightCreatedBattle:
+    """Fight the one battle of a created attack, once the action that created it has ended.
+
+    The action resolved before this ran, so its resolution is announced and its Response Step
+    offered first, which is where the CR's "immediately after" puts them, and the battle the
+    action delayed opens once both are done (CR, Timing).
+
+    Attributes
+    ----------
+    announced : bool, optional
+        Whether the creating action's resolution has been announced. Default False.
+    responded : bool, optional
+        Whether its Response Step has been offered. Default False.
+    """
+
+    announced: bool = False
+    responded: bool = False
+
+    def resume(self, game: GameState) -> None:
+        # The announcement and the Response Step are the turn machine's, which imports this module.
+        from yasuki_core.engine.rules.turn.sequence import (
+            announce_action_resolution,
+            open_response_window,
+        )
+
+        if not self.announced:
+            # Queued first, so a Reaction that pauses on the announcement stashes its cascade
+            # above the battle and is answered before it opens.
+            game.stack.append(replace(self, announced=True))
+            announce_action_resolution(game)
+            return
+        if not self.responded and open_response_window(game):
+            game.stack.append(replace(self, responded=True))
+            return
+        fight_battle(game, 0)
 
 
 def assignable_units(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -347,11 +447,19 @@ def begin_fight(game: GameState) -> None:
 
 
 def fight_next_battle(game: GameState) -> None:
-    """Ask the Attacker where the next battle is fought, or do nothing once every battlefield has
-    been fought at and the segment is over."""
+    """Ask the Attacker where the next battle is fought, or end the fighting once every
+    battlefield has been fought at: a declared attack waits for the end of the Battle Phase, and
+    a created attack ceases to exist with its one battle (CR, Battlefields)."""
     attack = _declared_attack(game)
     remaining = [index for index in range(len(attack.battlefields)) if index not in attack.fought]
     if not remaining:
+        if attack.kind is not AttackKind.DECLARED:
+            # The turn machine's, which imports this module. The creating action never handed its
+            # opportunity on, since the battle opened over its round; the battle ending does it.
+            from yasuki_core.engine.rules.turn.sequence import yield_priority
+
+            game.attack = None
+            yield_priority(game, passed=False)
         return
     game.pending = ChooseBattlefield(
         seat=attack.attacker, candidates=tuple(str(index) for index in remaining)

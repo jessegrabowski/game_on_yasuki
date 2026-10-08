@@ -11,6 +11,7 @@ yasuki_core.engine.rules.battle.resolution
     AfterResolution
     AnnounceResolution
     EndBattle
+    FightCreatedBattle
     FightNextBattle
     LeaveBattle
     ResolveBattle
@@ -26,6 +27,7 @@ yasuki_core.engine.rules.battle.resolution
     assignment_candidates
     begin_fight
     close_battle_segment
+    create_battle
     declare_attack
     defender_of
     end_attack_phase
