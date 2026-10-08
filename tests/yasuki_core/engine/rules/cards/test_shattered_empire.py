@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
+    EventPrint,
     PersonalityPrint,
     RingPrint,
     RulebookPrint,
@@ -30,7 +31,14 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, PutIntoPlay
+from yasuki_core.engine.rules.effects import (
+    AttachCard,
+    Bow,
+    Destroy,
+    Discard,
+    DrawCard,
+    PutIntoPlay,
+)
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
 from yasuki_core.engine.rules.abilities.model import (
@@ -2818,3 +2826,64 @@ def test_daigotsu_arakans_engage_gives_his_army_a_yu_creating_an_undead_follower
 
     undead = attachments_of(game, game.table.cards_by_id["arakan"])
     assert [card.name for card in undead] == ["Undead"]
+
+
+# --- Inheriting an Heirloom ---
+
+
+def _heirloom_game(*, kind_keywords: tuple[str, ...] = ("Armor",)) -> EngineSession:
+    """Inheriting an Heirloom in play for P1, P1's hero beside it and an Item carrying
+    ``kind_keywords`` in P1's hand, with cards in both Fate decks to draw."""
+    state = TableState.empty_two_seat()
+    heirloom = L5RCard.of(
+        EventPrint,
+        id="heirloom",
+        name="Inheriting an Heirloom",
+        printed_id="inheriting_an_heirloom",
+        side=Side.DYNASTY,
+        owner=P1,
+    )
+    put_in_play(state, heirloom)
+    put_in_play(state, personality("hero"))
+    item = attachment("item", keywords=kind_keywords)
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, item))
+    for seat in (P1, P2):
+        state.decks[DeckKey(seat, Side.FATE)].cards = [
+            register(state, fate_card(f"{seat.name}-{index}", seat)) for index in range(6)
+        ]
+    return EngineSession.start(state, P1)
+
+
+@pytest.mark.parametrize("kind_keywords", [("Armor",), ("Weapon",)])
+def test_heirloom_offers_a_card_after_equipping_an_armor_or_weapon(kind_keywords):
+    session = _heirloom_game(kind_keywords=kind_keywords)
+    session.act(P1, Equip("item"))
+    session.submit(P1, DecisionResponse(("hero",)))
+
+    end_turn(session)
+    asked = session.game.pending
+    assert isinstance(asked, Confirm)
+    deck = session.game.table.decks[DeckKey(P1, Side.FATE)].cards
+    before = len(deck)
+    session.submit(P1, DecisionResponse(asked.candidates))
+
+    assert before - len(deck) == 2
+
+
+@pytest.mark.parametrize(
+    ("kind_keywords", "equip"),
+    [(("Weapon",), False), (("Jade",), True)],
+    ids=["put_into_play", "not_armor_or_weapon"],
+)
+def test_heirloom_offers_nothing_without_an_equipped_armor_or_weapon(kind_keywords, equip):
+    session = _heirloom_game(kind_keywords=kind_keywords)
+    if equip:
+        session.act(P1, Equip("item"))
+        session.submit(P1, DecisionResponse(("hero",)))
+    else:
+        resolve_effects(session.game, [AttachCard("item", "hero")])
+
+    end_turn(session)
+
+    assert session.game.active is P2
+    assert session.game.pending is None

@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.board.counts_as import (
     while_in_play,
 )
 from yasuki_core.engine.rules.board.queries import (
+    equipped_from_hand_since_last_turn,
     different_elements,
     controls_terrain_at,
     has_keyword,
@@ -25,7 +26,12 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, LastKnownState, PhaseStarted
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    Destroyed,
+    EnteredPlay,
+    LastKnownState,
+    PhaseStarted,
+)
 from yasuki_core.engine.rules.effects import Destroy, Discard, Dishonor
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.table import BATTLEFIELD, Location
@@ -245,3 +251,17 @@ def test_a_card_brought_back_into_play_is_no_longer_dead():
     ops.move_card(game.table, game.table.cards_by_id["risen"], BATTLEFIELD)
 
     assert not honorably_dead(game, game.table.cards_by_id["risen"])
+
+
+def test_equipped_from_hand_since_last_turn_spans_the_previous_turn_and_skips_other_entries():
+    game = two_seat_game()
+    mine = [put_in_play(game, attachment(card_id)) for card_id in ("before", "now", "put")]
+    theirs = put_in_play(game, attachment("theirs", owner=PlayerId.P2))
+    game.previous_turn_events = (EnteredPlay("before", from_hand=True, equipped=True),)
+    game.turn_events = (
+        EnteredPlay("now", from_hand=True, equipped=True),
+        EnteredPlay("put", from_hand=True),
+        EnteredPlay(theirs.id, from_hand=True, equipped=True),
+    )
+
+    assert equipped_from_hand_since_last_turn(game, PlayerId.P1) == (mine[0], mine[1])

@@ -332,6 +332,7 @@ def register_event_entry(
     *,
     timing: ActionTiming = ActionTiming.OPEN,
     ability_keywords: frozenset[str] = frozenset(),
+    ruleset: str | None = None,
 ) -> None:
     """Register ``printed_id``'s "put this Event into play" action, taken from the Province it
     sits face-up in.
@@ -347,6 +348,9 @@ def register_event_entry(
         The designator the entry is taken under. Default ``OPEN``, which most Events print.
     ability_keywords : frozenset of str, optional
         The ability keywords the entry prints, as in "Political Open". Default empty.
+    ruleset : str, optional
+        The ruleset the entry is in force under, for an Event whose text one arc rewrote. Default
+        None, every arc.
     """
 
     def targets(game: GameState, source: L5RCard) -> list[str]:
@@ -366,6 +370,7 @@ def register_event_entry(
             hits_every_target=True,
             located_at=(CardLocation.PROVINCE,),
             keywords=ability_keywords,
+            ruleset=ruleset,
         ),
     )
 

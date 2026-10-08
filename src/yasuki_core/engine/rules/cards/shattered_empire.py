@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
     YuWidening,
     register_granted_yu,
     register_entry,
+    register_event_entry,
     register_ring,
     enemy_units_ever_present,
     register_trait_entry,
@@ -70,6 +71,7 @@ from yasuki_core.engine.rules.board.queries import (
     army_at,
     attack_targeting,
     attack_targets,
+    equipped_from_hand_since_last_turn,
     controls_terrain_at,
     followers_in_play,
     has_keyword,
@@ -774,6 +776,39 @@ register_ability(
         effects=_hida_sanjiro_effects,
     ),
 )
+
+
+# --- Inheriting an Heirloom ---
+
+register_event_entry("inheriting_an_heirloom", ruleset=ruleset.SHATTERED_EMPIRE.name)
+
+
+@on(
+    TurnBoundary,
+    "inheriting_an_heirloom",
+    boundary=Boundary.END,
+    ruleset=ruleset.SHATTERED_EMPIRE.name,
+)
+def _inheriting_an_heirloom_turn_boundary(ctx: TriggerContext) -> list[Effect]:
+    """ "Each player may draw an additional card before their turn ends if they Equipped any Armors
+    or Weapons from their hand since their last turn ended." """
+    seat = ctx.event.seat
+    armed = any(
+        has_keyword(ctx.game, card, keywords.ARMOR) or has_keyword(ctx.game, card, keywords.WEAPON)
+        for card in equipped_from_hand_since_last_turn(ctx.game, seat)
+    )
+    if not armed:
+        return []
+    question = "Draw an additional card for Inheriting an Heirloom?"
+    heirloom = ctx.card.id
+    return [Ask(seat, question, "inheriting_an_heirloom", subjects=(heirloom,), source_id=heirloom)]
+
+
+@choice_resolver("inheriting_an_heirloom")
+def _resolve_inheriting_an_heirloom(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [DrawCard(seat)] if chosen else []
 
 
 # --- Lane of Immorality ---
