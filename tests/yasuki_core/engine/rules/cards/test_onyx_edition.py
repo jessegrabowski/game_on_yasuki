@@ -55,7 +55,7 @@ from yasuki_core.game_pieces.prints import (
     RulebookPrint,
     StrongholdPrint,
 )
-from yasuki_core.engine.rules.rulebook.equip import may_attach
+from yasuki_core.engine.rules.rulebook.equip import equip_discount_onto, may_attach
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
@@ -2578,3 +2578,73 @@ def test_an_interrupt_on_hiromus_destroy_applies_only_if_destroy_is_chosen(answe
 
     assert "ogre" in _in_play(session)
     assert ("guard" in _in_play(session)) is guard_kept
+
+
+# --- Yamigatai (Experienced) ---
+
+YAMIGATAI = "yamigatai_experienced"
+
+
+def _yamigatai() -> L5RCard:
+    return attachment("yamigatai", printed_id=YAMIGATAI, keywords=("Armor",), force_modifier=2)
+
+
+@pytest.mark.parametrize(
+    ("bearer_keywords", "attaches"),
+    [(("Shadowlands",), False), ((), True)],
+    ids=["tainted", "pure"],
+)
+def test_yamigatai_will_not_attach_to_a_shadowlands_personality(bearer_keywords, attaches):
+    game = two_seat_game()
+    bearer = put_in_play(game, personality("bearer", keywords=bearer_keywords))
+
+    assert may_attach(game, bearer, _yamigatai()) is attaches
+
+
+@pytest.mark.parametrize(
+    ("clans", "discount"), [(("Crab",), 1), (("Crane",), 0)], ids=["crab", "crane"]
+)
+def test_yamigatai_equips_to_a_crab_clan_personality_for_one_less(clans, discount):
+    game = two_seat_game()
+    bearer = put_in_play(game, personality("bearer", clans=clans))
+
+    assert equip_discount_onto(game, bearer, _yamigatai()) == discount
+
+
+def test_yamigatai_gives_its_personality_two_force_during_the_combat_segment_only():
+    cards = [personality("hero", force=3), personality("guard", owner=P2)]
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0})
+    attached(session.game, _yamigatai(), "hero")
+    hero = session.game.table.cards_by_id["hero"]
+
+    assert effective_force(session.game, hero) == 7
+    session.game.attack.battle_segment = BattleSegment.RESOLUTION
+    assert effective_force(session.game, hero) == 5
+
+
+@pytest.mark.parametrize("held", [True, False], ids=["ring_in_hand", "no_ring"])
+def test_yamigatai_puts_the_ring_of_earth_into_play_before_her_army_destroys_a_province(held):
+    in_hand = [_ring("earth", "ring_of_earth")] if held else []
+    cards = [personality("hero", force=3), personality("guard", owner=P2)]
+    session = combat_segment(cards, {"hero": 0}, {}, in_hand=in_hand)
+    attached(session.game, _yamigatai(), "hero")
+
+    _pass_out_the_segments(session)
+
+    game = session.game
+    assert ZoneKey(P2, ZoneRole.PROVINCE, 0) not in game.table.zones
+    in_play = {card.id for card in game.table.battlefield.cards}
+    assert ("earth" in in_play) is held
+
+
+def test_yamigatai_leaves_the_ring_in_hand_when_the_enemy_destroys_her_province():
+    cards = [personality("hero", force=1), personality("raider", owner=P2, force=6)]
+    held = [_ring("earth", "ring_of_earth")]
+    session = combat_segment(cards, {"raider": 0}, {"hero": 0}, attacker=P2, in_hand=held)
+    attached(session.game, _yamigatai(), "hero")
+
+    _pass_out_the_segments(session)
+
+    game = session.game
+    assert ZoneKey(P1, ZoneRole.PROVINCE, 0) not in game.table.zones
+    assert "earth" in {card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards}
