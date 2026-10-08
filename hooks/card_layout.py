@@ -305,7 +305,6 @@ ROLES = frozenset(
         # triggers, named for the event they answer
         "action_resolved",
         "assigned",
-        "battle_resolving",
         "battle_resolved",
         "battle_ended",
         "battle_segment_started",

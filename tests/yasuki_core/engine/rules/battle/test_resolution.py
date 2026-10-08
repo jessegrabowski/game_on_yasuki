@@ -47,7 +47,7 @@ from yasuki_core.engine.rules.triggers import apply_effect, resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import (
     BattleEnded,
     BattleResolved,
-    BattleResolving,
+    BattleSegmentStarted,
     Bowed,
     CardDiscarded,
     Destroying,
@@ -990,12 +990,21 @@ def test_a_won_battle_records_the_winner_and_what_it_destroyed():
     assert outcome.honor == {PlayerId.P1: 2}  # twice the one card it destroyed
 
 
+def _before_resolution(effects):
+    def _react(ctx):
+        return effects(ctx) if ctx.event.segment is BattleSegment.RESOLUTION else []
+
+    return _react
+
+
 def test_a_trait_before_battle_resolution_changes_the_forces_resolution_reads(reacting):
     session = _one_battlefield({"a": 4}, {"d": 2})
     reacting(
-        BattleResolving,
+        BattleSegmentStarted,
         "d",
-        lambda ctx: [GrantModifier("d", "d", Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)],
+        _before_resolution(
+            lambda ctx: [GrantModifier("d", "d", Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)]
+        ),
     )
 
     _fight_one_battle(session)
@@ -1006,9 +1015,11 @@ def test_a_trait_before_battle_resolution_changes_the_forces_resolution_reads(re
 def test_a_question_before_battle_resolution_is_answered_before_the_forces_are_read(reacting):
     session = _one_battlefield({"a": 4}, {"d": 2})
     reacting(
-        BattleResolving,
+        BattleSegmentStarted,
         "d",
-        lambda ctx: [Ask(ctx.card.owner, "Rally?", "rally_probe", ("d",), source_id="d")],
+        _before_resolution(
+            lambda ctx: [Ask(ctx.card.owner, "Rally?", "rally_probe", ("d",), source_id="d")]
+        ),
     )
 
     def _rally(game, source_id, chosen, seat):

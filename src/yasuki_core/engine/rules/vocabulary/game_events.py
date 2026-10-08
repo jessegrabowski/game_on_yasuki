@@ -44,8 +44,10 @@ class PhaseStarted:
 
 @dataclass(frozen=True, slots=True)
 class BattleSegmentStarted:
-    """A segment of the battle being fought has begun, once its Action Round has opened, as "After
-    a Combat Segment begins" reads.
+    """A segment of the battle being fought has begun, as "After a Combat Segment begins" reads.
+    The Engage and Combat Segments begin once their Action Round has opened. The Resolution Segment,
+    which the CR also calls battle resolution, begins before either army's Force is read, so a
+    trait reading "before battle resolution" acts on the Forces resolution then reads.
 
     Attributes
     ----------
@@ -457,21 +459,6 @@ class ActionResolved:
 
 
 @dataclass(frozen=True, slots=True)
-class BattleResolving:
-    """A battle is about to resolve: announced as the Resolution Segment begins, before either
-    army's Force is read (CR, Battle Sequence), so a trait reading "before battle resolution" acts
-    on the Forces resolution then reads.
-
-    Attributes
-    ----------
-    battlefield : int
-        The index of the battlefield the battle is fought at.
-    """
-
-    battlefield: int
-
-
-@dataclass(frozen=True, slots=True)
 class BattleResolved:
     """A battle has resolved (CR, Resolution), before After Resolution bows and sends home its
     survivors.
@@ -703,7 +690,6 @@ WINDOWS: frozenset[type] = frozenset({ProducingGold})
 GameEvent = (
     ActionResolved
     | Assigned
-    | BattleResolving
     | BattleResolved
     | BattleEnded
     | BattleSegmentStarted

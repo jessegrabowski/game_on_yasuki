@@ -129,7 +129,7 @@ from yasuki_core.engine.rules.stats.province_strength import effective_province_
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.vocabulary.game_events import (
     BattleEnded,
-    BattleResolving,
+    BattleSegmentStarted,
     Bowed,
     CardDiscarded,
     Destroyed,
@@ -144,6 +144,7 @@ from yasuki_core.engine.rules.triggers import (
     choice_resolver,
     on,
 )
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -935,18 +936,20 @@ TORANOSUKE_PENALTY = -2
 TORANOSUKE_MELEE = 4
 
 
-@on(BattleResolving, "hida_toranosuke_clan_champion_experienced_3")
-def _hida_toranosuke_clan_champion_experienced_3_battle_resolving(
+@on(BattleSegmentStarted, "hida_toranosuke_clan_champion_experienced_3")
+def _hida_toranosuke_clan_champion_experienced_3_battle_segment_started(
     ctx: TriggerContext,
 ) -> list[Effect]:
     """Before battle resolution, if Toranosuke is in your current army, negate all Force penalties
-    on your cards in it. Only the penalties standing as resolution begins are negated (CR,
-    Prevention)."""
+    on your cards in it. Battle resolution is the Resolution Segment, and only the penalties
+    standing as it begins are negated (CR, Prevention)."""
     toranosuke = ctx.card
-    battlefield = ctx.event.battlefield
-    if location_of(ctx.game.table, toranosuke).battlefield != battlefield:
+    event = ctx.event
+    if event.segment is not BattleSegment.RESOLUTION:
         return []
-    army = frozenset(card.id for card in army_at(ctx.game, battlefield, toranosuke.owner))
+    if location_of(ctx.game.table, toranosuke).battlefield != event.battlefield:
+        return []
+    army = frozenset(card.id for card in army_at(ctx.game, event.battlefield, toranosuke.owner))
     return [
         GrantStatChangeNegation(
             toranosuke.id, army, Stat.FORCE, StatChanges.PENALTIES, Duration.UNTIL_END_OF_TURN
