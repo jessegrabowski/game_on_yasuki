@@ -233,7 +233,7 @@ def cancel(game: GameState) -> None:
         raise RuntimeError("no decision is pending")
     match request:
         case ChoosePayment(target_id=target_id):
-            game.announced_from_hand -= {target_id}
+            game.announced_cards -= {target_id}
             _cancel_payment(game)
         case _:
             raise ValueError(f"{type(request).__name__} cannot be canceled")

@@ -1111,7 +1111,7 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     # A card announced from hand stands in the area a card entering play waits in while its costs
     # are checked and paid (CR, Entering-Play Areas), so what was laid on it then, an Invest among
     # them, reaches play with it.
-    on_table = {card.id for card in game.table.battlefield.cards} | game.announced_from_hand
+    on_table = {card.id for card in game.table.battlefield.cards} | game.announced_cards
     for key, zone in game.table.zones.items():
         if key.role in (ZoneRole.PROVINCE, ZoneRole.FOCUS):
             on_table.update(card.id for card in zone.cards)
@@ -1194,7 +1194,7 @@ def _newly_fulfilled(game: GameState) -> list[ConditionFulfilled]:
     or returning. The next settle after that compares against the board from before the
     announcement, so a condition still fulfilled once the card has landed is announced then.
     """
-    if game.announced_from_hand:
+    if game.announced_cards:
         return []
     if not _WATCHES and not game.conditions_holding:
         return []

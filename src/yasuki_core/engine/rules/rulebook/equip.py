@@ -226,7 +226,7 @@ def equip(game: GameState, card_id: str, *, invest: bool = False, discount: int 
     candidates = tuple(target.id for target in equip_targets(game, card, discount=discount))
     hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards
     if any(held is card for held in hand):
-        game.announced_from_hand |= {card_id}
+        game.announced_cards |= {card_id}
     if invest:
         triggers.pay_costs(game, [Invest(card.id, equip_invest_amount(game, card))])
     game.stack.append(SelectEquipTarget(card_id, candidates))
@@ -282,8 +282,8 @@ def apply_equip_target(
 def resolve_equip(game: GameState, card_id: str, target_id: str) -> None:
     """Bring the paid-for attachment out of its hand or discard pile and onto its Personality."""
     card = game.table.cards_by_id[card_id]
-    from_hand = card_id in game.announced_from_hand
-    game.announced_from_hand -= {card_id}
+    from_hand = card_id in game.announced_cards
+    game.announced_cards -= {card_id}
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
     # Queued beneath the settling, which may stop to ask a question: the board is legal before

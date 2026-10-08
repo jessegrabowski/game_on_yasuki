@@ -22,7 +22,7 @@ def cards_in_hand(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
     return tuple(
         card
         for card in game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards
-        if card.id not in game.announced_from_hand and isinstance(card.printed, FatePrint)
+        if card.id not in game.announced_cards and isinstance(card.printed, FatePrint)
     )
 
 

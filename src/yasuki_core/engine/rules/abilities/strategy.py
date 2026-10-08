@@ -47,7 +47,7 @@ def play_strategy(game: GameState, card_id: str, ability_key: str | None = None)
     never moved needs nothing put back.
     """
     card = game.table.cards_by_id[card_id]
-    game.announced_from_hand |= {card_id}
+    game.announced_cards |= {card_id}
     game.stack.append(ResolveStrategy(card_id, ability_key))
     game.stack.append(
         RequestPayment(card.owner, strategy_cost(game, card, ability_key), card.name, card_id)
@@ -72,7 +72,7 @@ def play_strategy_with(
     Interrupt plays a Strategy, since what it does is decided against the effect it interrupts
     rather than against a target. ``provenance`` says whose action the effects are.
     """
-    game.announced_from_hand |= {card.id}
+    game.announced_cards |= {card.id}
     game.stack.append(DiscardPlayed(card.id))
     game.stack.append(ApplyEffects(effects, provenance))
     cost = discounted_gold_cost(game, card_purchase(game, card, plays_card=True))
@@ -132,7 +132,7 @@ def discard_played(game: GameState, card_id: str) -> None:
     has left by another road, and discarding it would drag it back out of the pile it chose, so the
     test is whether it is still in hand rather than whether it reached the board.
     """
-    game.announced_from_hand -= {card_id}
+    game.announced_cards -= {card_id}
     card = game.table.cards_by_id[card_id]
     if card not in game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)].cards:
         return

@@ -443,7 +443,7 @@ def _without_the_resolution_area(game: GameState, table: ViewSnapshot) -> ViewSn
     of the player resolving it. The projection is where the two are reconciled, once, rather than in
     each client.
     """
-    announced = game.announced_from_hand
+    announced = game.announced_cards
     if not announced:
         return table
     zones = {

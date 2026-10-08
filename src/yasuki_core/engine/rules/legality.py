@@ -403,7 +403,7 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
             yield from (
                 (CardLocation.HAND, card)
                 for card in zone.cards
-                if card.id not in game.announced_from_hand
+                if card.id not in game.announced_cards
             )
         elif key.role is ZoneRole.RULEBOOK:
             yield from ((CardLocation.RULEBOOK, card) for card in zone.cards)
