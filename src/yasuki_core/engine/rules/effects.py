@@ -1732,17 +1732,23 @@ class AttachCard(Effect):
         The card to attach.
     target_id : str
         The Personality it attaches to.
+    equip : bool, optional
+        Whether this is an Equip used as an effect: the Equip action's effects, announced as an
+        Equip, which a card reading "if he Equipped" counts. The card using it checks the Gold Cost
+        against what its action paid (CR, Equip). Default False, a plain attach.
     """
 
     card_id: str
     target_id: str
+    equip: bool = False
 
     @property
     def subject_id(self) -> str:
         return self.card_id
 
     def describe(self) -> str:
-        return f"attach {self.card_id} to {self.target_id}"
+        verb = "equip" if self.equip else "attach"
+        return f"{verb} {self.card_id} to {self.target_id}"
 
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
@@ -1757,7 +1763,9 @@ class AttachCard(Effect):
         if entering:
             ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
         ops.attach_to_personality(game.table, card, personality)
-        return [EnteredPlay(self.card_id, from_hand=from_hand)] if entering else []
+        if not entering:
+            return []
+        return [EnteredPlay(self.card_id, from_hand=from_hand, equipped=self.equip)]
 
 
 @dataclass(frozen=True, slots=True)
