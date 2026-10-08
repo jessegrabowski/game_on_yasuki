@@ -642,6 +642,8 @@ def _resolve_matsu_hanshiro(
     Ongoing)."""
     battlefield = location_of(game.table, game.table.cards_by_id[source_id]).battlefield
     province = game.attack.battlefields[battlefield].province
+    if province is None:
+        return []
     amount = (
         -HANSHIRO_PROVINCE_STRENGTH if chosen[0] == HANSHIRO_LOWER else HANSHIRO_PROVINCE_STRENGTH
     )

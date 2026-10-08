@@ -1513,6 +1513,19 @@ def test_the_target_is_bowed():
     assert session.game.table.cards_by_id["rear"].bowed
 
 
+def test_man_the_walls_bows_the_target_and_grants_nothing_at_a_battlefield_at_no_province():
+    """The bow is the action's own effect and resolves; the strength grant names the current
+    Province, and a battlefield not associated with any Province has none to give it to."""
+    session = _man_the_walls_battle()
+    session.game.attack.amend(0, province=None)
+    before = effective_province_strength(session.game, WALLED_PROVINCE)
+
+    _play_walls(session, "rear")
+
+    assert session.game.table.cards_by_id["rear"].bowed
+    assert effective_province_strength(session.game, WALLED_PROVINCE) == before
+
+
 def test_a_bowed_card_is_no_target():
     """The action bows what it names, and a bowed card cannot be bowed again (CR, Costs)."""
     session = _man_the_walls_battle()
@@ -2121,6 +2134,15 @@ def test_the_dark_earth_is_withheld_from_the_attacker():
 
 def test_the_dark_earth_is_withheld_against_an_army_of_more_than_nine_chi():
     session = _dark_earth_battle(attacker_chi=10)
+
+    assert ActivateAbility("earth", "earth") not in session.legal_actions(P2)
+
+
+def test_the_dark_earth_is_withheld_at_a_battlefield_at_no_province():
+    """Its cost lowers the current Province's strength, and a cost that names nothing cannot be
+    paid, so the action stays off the menu."""
+    session = _dark_earth_battle()
+    session.game.attack.amend(0, province=None)
 
     assert ActivateAbility("earth", "earth") not in session.legal_actions(P2)
 
