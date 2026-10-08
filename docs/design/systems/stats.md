@@ -154,8 +154,8 @@ whether the record reaches the card being read: a `Modifier` compares its `targe
 `ConditionalModifier` asks {func}`~.condition_holds`:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/stats/calculation.py
-:start-at: for recorded in game.ongoing:
-:end-at: yield Modifier(recorded.source_id, card.id, stat, recorded.amount, recorded.duration)
+:start-at: for held in recorded:
+:end-at: yield RecordedChange(card.id, held.serial), conditional
 :dedent: 4
 :language: python
 ```
@@ -190,7 +190,8 @@ ends when its *target* leaves the table, because a card that leaves play ceases 
 ## Where a card plugs in
 
 A card in play whose text gives a stat to a card, itself or another, uses `@stat_grant`, and its
-handler names the scope: {card}`Haramaki-do` reaches the Personality it hangs on, and
+handler returns one amount per clause of the text that gives the stat, so {card}`Lonely Battlefield`
+returns its -2F and its +1F apart. The handler names the scope: {card}`Haramaki-do` reaches the Personality it hangs on, and
 {card}`Daidoji Tashiko` reaches herself while opposed. A card whose text gives a keyword to a card,
 itself or another, uses `@keyword_grant`, with a handler of the same shape:
 {card}`Fortified Farmlands` reaches itself, wherever it is, and {card}`Way of the Crab` reaches your
@@ -198,6 +199,18 @@ opposed Personalities while it is in play. A card whose text takes a keyword awa
 `@keyword_loss` the same way, applied after every grant, as {card}`Jade No-Dachi` stops being
 Two-Handed on a Berserker. A card that changes a Province's strength uses
 `@province_strength_grant`.
+
+A card that negates bonuses or penalties returns {class}`~.GrantStatChangeNegation`. Only the
+changes standing on its subjects when it commits are negated, since negating an ongoing kind of
+effect "only suppresses existing effects", unless the card reads "current and new" (CR,
+Prevention). Each change is told apart for this, and each names the card it changes: a recorded
+modifier by the serial it was recorded under, so a second record of the same change is a new one,
+a card's text by the card and the clause giving it, a non-Item attachment's printed modifier by the
+attachment, and the tokens of one kind by how many there are. Tokens of a kind are alike, so a
+negation holds a count of them, cut down as tokens are removed, and a token added later is new. An
+Item's or a Sensei's printed modifier is no bonus or penalty, so nothing negates it (CR, Bonuses and
+Penalties). A text clause that stops applying and starts again is still the change the negation
+holds, since nothing records that it stopped.
 
 A card "considered to have" a stat when a certain asker checks it, as {card}`Dragon Elite Inkyo`
 has 3 Chi when a Kiho checks a card's Chi, uses `@considered_stat`. Only an action that reads the

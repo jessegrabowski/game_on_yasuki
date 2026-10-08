@@ -9,6 +9,12 @@ yasuki_core.engine.rules.vocabulary.locations
 
     CardLocation
 
+.. rubric:: Functions
+
+.. autosummary::
+
+    location_holding
+
 .. automodule:: yasuki_core.engine.rules.vocabulary.locations
     :members:
     :undoc-members:

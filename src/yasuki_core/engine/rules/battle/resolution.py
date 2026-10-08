@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
     BattleEnded,
     BattleResolved,
+    BattleResolving,
     BattleSegmentStarted,
     Destroyed,
 )
@@ -413,11 +414,12 @@ def close_battle_segment(game: GameState) -> None:
     if following is not None:
         _open_battle_segment(game, following)
         return
-    _resolve_battle(game)
+    _begin_resolution(game)
 
 
-def _resolve_battle(game: GameState) -> None:
-    """Resolve the battle at the current battlefield, clear up after it, and queue the next.
+def _begin_resolution(game: GameState) -> None:
+    """Open the Resolution Segment at the current battlefield and announce it, with the battle's
+    resolution queued behind the announcement.
 
     Raise ``ValueError`` when no battle is being fought, since resolution has nothing to resolve.
     """
@@ -425,6 +427,32 @@ def _resolve_battle(game: GameState) -> None:
     battlefield = attack.current
     if battlefield is None:
         raise ValueError("no battle is being fought")
+    attack.battle_segment = BattleSegment.RESOLUTION
+    # Queued first, so the traits answering the announcement resolve before any Force is read.
+    game.stack.append(ResolveBattle(battlefield))
+    triggers.fire(game, BattleResolving(battlefield))
+
+
+@dataclass(frozen=True, slots=True)
+class ResolveBattle:
+    """Resolve the battle at ``battlefield``, once the traits answering
+    :class:`~.BattleResolving` have resolved.
+
+    Attributes
+    ----------
+    battlefield : int
+        The battlefield whose battle resolves.
+    """
+
+    battlefield: int
+
+    def resume(self, game: GameState) -> None:
+        _resolve_battle(game, self.battlefield)
+
+
+def _resolve_battle(game: GameState, battlefield: int) -> None:
+    """Resolve the battle at ``battlefield``, clear up after it, and queue the next."""
+    attack = _declared_attack(game)
     last_battle = len(attack.fought) == len(attack.battlefields)
     # All three read before anything is applied: resolution destroys the armies the effects and the
     # winner are read off, and moves the honor the outcome reports the movement of.
@@ -444,7 +472,6 @@ def _resolve_battle(game: GameState) -> None:
     events_before = len(game.action_events)
     province_stood = attack.battlefields[battlefield].province in game.table.zones
 
-    attack.battle_segment = BattleSegment.RESOLUTION
     # Queued first, so a trigger that pauses the resolution's cascade to ask a question stashes it
     # above the announcement, which then sees everything the resolution did.
     game.stack.append(

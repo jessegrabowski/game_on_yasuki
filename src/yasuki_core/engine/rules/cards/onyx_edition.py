@@ -1013,7 +1013,9 @@ def _spearmen_of_the_akasha_card_discarded(ctx: TriggerContext) -> list[Effect]:
     Nothing is offered with nobody to carry it. The Follower is the whole of what banishing buys, so
     a board with no Naga Personality leaves the card nothing it could do.
     """
-    if ctx.event.card_id != ctx.card.id or not ctx.event.from_hand_or_deck:
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    if ctx.event.from_location not in (CardLocation.HAND, CardLocation.DECK):
         return []
     seat = ctx.card.owner
     naga = ctx.game.table.creatable_tokens[NAGA_FOLLOWER]
@@ -1179,15 +1181,15 @@ register_ability(
 @stat_grant("the_ancient_castle_of_the_lion__back")
 def _the_ancient_castle_of_the_lion__back_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     """Your attacking Lion Clan Personalities have +1F: the controller's Lion Personalities in an
     attacking army, at any battlefield of the controller's own attack (CR, Attack)."""
     attack = game.attack
     if stat is not Stat.FORCE or card.owner is not source.owner or attack is None:
-        return 0
+        return ()
     if attack.attacker is not source.owner or ruleset.LION not in card_alignments(card):
-        return 0
-    return 1 if location_of(game.table, card).battlefield is not None else 0
+        return ()
+    return (1 if location_of(game.table, card).battlefield is not None else 0,)
 
 
 def _the_ancient_castle_of_the_lion__back_effects(
@@ -1791,10 +1793,10 @@ def _yamigatai_experienced_province_destroying(ctx: TriggerContext) -> list[Effe
 @stat_grant("yamigatai_experienced")
 def _yamigatai_experienced_stat_grant(
     game: GameState, yamigatai: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     """ "This Personality has +2F during the Combat Segment (not battle resolution)." """
     if stat is not Stat.FORCE or card is not attached_to(game, yamigatai):
-        return 0
+        return ()
     attack = game.attack
     in_combat = attack is not None and attack.battle_segment is BattleSegment.COMBAT
-    return YAMIGATAI_COMBAT_FORCE if in_combat else 0
+    return (YAMIGATAI_COMBAT_FORCE if in_combat else 0,)

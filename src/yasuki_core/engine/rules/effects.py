@@ -12,7 +12,8 @@ from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
 from yasuki_core.engine.players import Cause, PlayerId, Trait
 from yasuki_core.engine.rules.units.membership import unit_of
-from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.stats.calculation import effective_stat, stat_changes
+from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import Action
@@ -29,6 +30,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     answerable,
 )
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation, location_holding
 from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -69,6 +71,8 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     ProvinceModifier,
     SeatAbilityGrant,
     Stat,
+    StatChangeNegation,
+    StatChanges,
     describe_lifetime,
 )
 from yasuki_core.engine.rules.state import (
@@ -544,9 +548,14 @@ def _remove_unit(
 
 
 def _leaves_for_pile(game: GameState, card_id: str, *, banished: bool) -> bool:
+    """Whether the card goes to its pile: it is on the table, not in that pile already, and not
+    banished, since a banished card is out of the game."""
     card = game.table.cards_by_id.get(card_id)
-    return (
-        card is not None and card not in game.table.zones[pile_for(card, banished=banished)].cards
+    if card is None:
+        return False
+    piles = game.table.zones
+    return card not in piles[pile_for(card, banished=banished)].cards and (
+        banished or card not in piles[pile_for(card, banished=True)].cards
     )
 
 
@@ -652,14 +661,17 @@ class Discard(Effect):
         return f"{self.cause.name} discards {self.card_id}"
 
     def would_happen(self, game: GameState) -> bool:
-        """False for a card already gone or already in its discard pile, which nothing moves."""
+        """False for a card already gone, already in its discard pile or banished, which nothing
+        moves."""
         return _leaves_for_pile(game, self.card_id, banished=False)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         if not self.would_happen(game):
             return []
-        removed = _remove_unit(game, game.table.cards_by_id[self.card_id])
-        return [CardDiscarded(member.id, member.side, self.cause) for member, _ in removed]
+        card = game.table.cards_by_id[self.card_id]
+        left = location_holding(game.table, card)
+        removed = _remove_unit(game, card)
+        return [CardDiscarded(member.id, member.side, self.cause, left) for member, _ in removed]
 
 
 @dataclass(frozen=True, slots=True)
@@ -949,6 +961,12 @@ class DiscardFavor(Effect):
         return [FavorDiscarded(self.seat)]
 
 
+def _next_record(game: GameState) -> int:
+    """Number the stat modifier about to be recorded."""
+    game.records_made += 1
+    return game.records_made
+
+
 @dataclass(frozen=True, slots=True)
 class GrantModifier(Effect):
     """Record a continuous stat modifier: the ``source`` card grants ``target`` a change of
@@ -973,8 +991,74 @@ class GrantModifier(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
-            Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
+            Modifier(
+                self.source_id,
+                self.target_id,
+                self.stat,
+                self.amount,
+                self.duration,
+                serial=_next_record(game),
+            )
         )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantStatChangeNegation(Effect):
+    """Negate the bonuses, penalties or both to ``stat`` on ``subjects`` for ``duration`` (CR,
+    Prevention), recording which changes stand on them as it commits so only those are negated,
+    unless ``reaches_new`` negates new ones too.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the negation comes from.
+    subjects : frozenset of str
+        The cards whose changes it negates.
+    stat : Stat
+        The stat whose changes it negates.
+    changes : ~yasuki_core.engine.rules.vocabulary.modifiers.StatChanges
+        Which changes it negates.
+    duration : ~yasuki_core.engine.rules.vocabulary.modifiers.Duration or Moment
+        When it stops applying.
+    reaches_new : bool, optional
+        Whether changes arriving after it are negated too, as "current and new" reads. Default
+        False.
+    """
+
+    source_id: str
+    subjects: frozenset[str]
+    stat: Stat
+    changes: StatChanges
+    duration: Lifetime
+    reaches_new: bool = False
+
+    def describe(self) -> str:
+        reached = ", ".join(sorted(self.subjects))
+        return (
+            f"{self.source_id} negates {self.changes.value} to {self.stat.name} on {reached} "
+            f"({describe_lifetime(self.duration)})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        by_id = game.table.cards_by_id
+        granters = stat_granters(game)
+        current = frozenset(
+            identity
+            for subject in self.subjects
+            if subject in by_id
+            for identity in stat_changes(game, by_id[subject], self.stat, granters=granters)
+        )
+        negation = StatChangeNegation(
+            self.source_id,
+            self.subjects,
+            self.stat,
+            self.changes,
+            self.duration,
+            current=current,
+            reaches_new=self.reaches_new,
+        )
+        game.ongoing.append(negation)
         return []
 
 
@@ -1004,7 +1088,14 @@ class Invest(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
-            Modifier(self.card_id, self.card_id, Stat.GOLD_COST, self.amount, Duration.PERMANENT)
+            Modifier(
+                self.card_id,
+                self.card_id,
+                Stat.GOLD_COST,
+                self.amount,
+                Duration.PERMANENT,
+                serial=_next_record(game),
+            )
         )
         return [Invested(self.card_id, self.amount)]
 
@@ -1030,7 +1121,12 @@ class GrantConditionalModifier(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
             ConditionalModifier(
-                self.source_id, self.condition, self.stat, self.amount, self.duration
+                self.source_id,
+                self.condition,
+                self.stat,
+                self.amount,
+                self.duration,
+                serial=_next_record(game),
             )
         )
         return []
@@ -3243,8 +3339,7 @@ class DiscardFromHand(InterruptingEffect):
         for card in discarded:
             ops.move_card(game.table, card, pile_for(card))
         return [
-            CardDiscarded(card.id, card.side, self.cause, from_hand_or_deck=True)
-            for card in discarded
+            CardDiscarded(card.id, card.side, self.cause, CardLocation.HAND) for card in discarded
         ]
 
     def _eligible(self, game: GameState) -> tuple[str, ...]:

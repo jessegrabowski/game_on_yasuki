@@ -39,6 +39,8 @@ from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     army_at,
     attack_targeting,
+    attack_targets,
+    attack_targets_at,
     different_elements,
     followers_in_play,
     phase_history,
@@ -87,6 +89,7 @@ from yasuki_core.engine.rules.effects import (
     GrantKeyword,
     GrantModifier,
     GrantNegation,
+    GrantStatChangeNegation,
     GrantProvinceStrength,
     LookAtTop,
     MeleeAttack,
@@ -108,7 +111,7 @@ from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.board.clans import seat_alignment_name
-from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat, StatChanges
 from yasuki_core.engine.rules.turn.structure import (
     BEGINNING_OF_ACTION_PHASE,
     DUEL_CONSEQUENCES,
@@ -123,9 +126,10 @@ from yasuki_core.engine.rules.units.membership import attached_to, attachments_o
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.state_based_actions import register_no_enlightenment
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
-from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.vocabulary.game_events import (
     BattleEnded,
+    BattleResolving,
     Bowed,
     CardDiscarded,
     Destroyed,
@@ -925,6 +929,139 @@ register_interrupt(
 )
 
 
+# --- Hida Toranosuke, Clan Champion (Experienced 3) ---
+
+TORANOSUKE_PENALTY = -2
+TORANOSUKE_MELEE = 4
+
+
+@on(BattleResolving, "hida_toranosuke_clan_champion_experienced_3")
+def _hida_toranosuke_clan_champion_experienced_3_battle_resolving(
+    ctx: TriggerContext,
+) -> list[Effect]:
+    """Before battle resolution, if Toranosuke is in your current army, negate all Force penalties
+    on your cards in it. Only the penalties standing as resolution begins are negated (CR,
+    Prevention)."""
+    toranosuke = ctx.card
+    battlefield = ctx.event.battlefield
+    if location_of(ctx.game.table, toranosuke).battlefield != battlefield:
+        return []
+    army = frozenset(card.id for card in army_at(ctx.game, battlefield, toranosuke.owner))
+    return [
+        GrantStatChangeNegation(
+            toranosuke.id, army, Stat.FORCE, StatChanges.PENALTIES, Duration.UNTIL_END_OF_TURN
+        )
+    ]
+
+
+@on(CardDiscarded, "hida_toranosuke_clan_champion_experienced_3")
+def _hida_toranosuke_clan_champion_experienced_3_card_discarded(
+    ctx: TriggerContext,
+) -> list[Effect]:
+    """After you discard a Courage card from your hand, give a target card -2F. The discard is
+    yours when you caused it, as the event's cause says."""
+    event = ctx.event
+    if event.cause is not ctx.card.owner or event.from_location is not CardLocation.HAND:
+        return []
+    discarded = ctx.game.table.cards_by_id.get(event.card_id)
+    if discarded is None or discarded.owner is not ctx.card.owner:
+        return []
+    if not has_keyword(ctx.game, discarded, keywords.COURAGE):
+        return []
+    targets = tuple(card.id for card in ctx.game.table.battlefield.cards)
+    return [
+        Choose(
+            ctx.card.owner,
+            targets,
+            1,
+            1,
+            "hida_toranosuke_clan_champion_experienced_3_penalty",
+            ctx.card.id,
+        )
+    ]
+
+
+@choice_resolver(
+    "hida_toranosuke_clan_champion_experienced_3_penalty", prompt="Give a target card -2F"
+)
+def _resolve_hida_toranosuke_clan_champion_experienced_3_penalty(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [
+        GrantModifier(
+            source_id, chosen[0], Stat.FORCE, TORANOSUKE_PENALTY, Duration.UNTIL_END_OF_TURN
+        )
+    ]
+
+
+def _hida_toranosuke_clan_champion_experienced_3_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """Banish a Courage card in your discard pile to make a Melee 4. The Melee is aimed as it is
+    made, once the card is banished, since what it may target depends on that card."""
+    courage = tuple(
+        card.id
+        for role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD)
+        for card in game.table.zones[ZoneKey(source.owner, role)].cards
+        if has_keyword(game, card, keywords.COURAGE)
+    )
+    if not courage:
+        return []
+    return [
+        Choose(
+            source.owner,
+            courage,
+            1,
+            1,
+            "hida_toranosuke_clan_champion_experienced_3_banish",
+            source.id,
+        )
+    ]
+
+
+@choice_resolver(
+    "hida_toranosuke_clan_champion_experienced_3_banish", prompt="Banish a Courage card"
+)
+def _resolve_hida_toranosuke_clan_champion_experienced_3_banish(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The Melee may target a Personality with Followers if the banished card was a Follower."""
+    banished = game.table.cards_by_id[chosen[0]]
+    attack = game.attack
+    if is_follower(banished) and attack is not None and attack.current is not None:
+        enemy = attack.enemy_of(seat)
+        aimable = attack_targets_at(game, attack.current, enemy, past_followers=True)
+    else:
+        aimable = attack_targets(game, game.table.cards_by_id[source_id], MeleeAttack)
+    if not aimable:
+        return [Banish(banished.id)]
+    melee = Choose(
+        seat, tuple(aimable), 1, 1, "hida_toranosuke_clan_champion_experienced_3_melee", source_id
+    )
+    return [To(Banish(banished.id), (melee,))]
+
+
+@choice_resolver(
+    "hida_toranosuke_clan_champion_experienced_3_melee", prompt="Target the Melee Attack"
+)
+def _resolve_hida_toranosuke_clan_champion_experienced_3_melee(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    return [MeleeAttack(TORANOSUKE_MELEE, chosen[0], seat)]
+
+
+register_ability(
+    "hida_toranosuke_clan_champion_experienced_3",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=itself,
+        effects=_hida_toranosuke_clan_champion_experienced_3_effects,
+        hits_every_target=True,
+    ),
+)
+
+
 # --- Iweko Miaka, Princess of Rokugan (Experienced) ---
 
 MIAKA_PAYMENT = "iweko_miaka_favor_payment"
@@ -1060,14 +1197,16 @@ def _kokujin_sato_experienced_entered_play(ctx: TriggerContext) -> list[Effect]:
 @stat_grant("kokujin_sato_experienced")
 def _kokujin_sato_experienced_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     """Sato has +1F/+1C for each Shadowlands Ring his controller holds in play."""
     if card is not source or stat not in (Stat.FORCE, Stat.CHI):
-        return 0
-    return sum(
-        1
-        for ring in rings_in_play(game, source.owner, Asking.trait(source))
-        if keywords.SHADOWLANDS in effective_keywords(game, ring)
+        return ()
+    return (
+        sum(
+            1
+            for ring in rings_in_play(game, source.owner, Asking.trait(source))
+            if keywords.SHADOWLANDS in effective_keywords(game, ring)
+        ),
     )
 
 

@@ -35,16 +35,19 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     Dishonor,
     GainHonor,
+    GrantModifier,
     Move,
     Rehonor,
     Simultaneously,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import Confirm
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.triggers import apply_effect, resolve_effects
 from yasuki_core.engine.rules.vocabulary.game_events import (
     BattleEnded,
     BattleResolved,
+    BattleResolving,
     Bowed,
     CardDiscarded,
     Destroying,
@@ -55,6 +58,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import FatePrint
 
+from tests.yasuki_core.engine.rules.conftest import probe_resolver
 from tests.yasuki_core.engine.rules.test_interrupts import _honor_card
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -984,6 +988,42 @@ def test_a_won_battle_records_the_winner_and_what_it_destroyed():
     assert outcome.winner is PlayerId.P1
     assert outcome.destroyed == ("d",)
     assert outcome.honor == {PlayerId.P1: 2}  # twice the one card it destroyed
+
+
+def test_a_trait_before_battle_resolution_changes_the_forces_resolution_reads(reacting):
+    session = _one_battlefield({"a": 4}, {"d": 2})
+    reacting(
+        BattleResolving,
+        "d",
+        lambda ctx: [GrantModifier("d", "d", Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)],
+    )
+
+    _fight_one_battle(session)
+
+    assert _outcome(session).winner is PlayerId.P2
+
+
+def test_a_question_before_battle_resolution_is_answered_before_the_forces_are_read(reacting):
+    session = _one_battlefield({"a": 4}, {"d": 2})
+    reacting(
+        BattleResolving,
+        "d",
+        lambda ctx: [Ask(ctx.card.owner, "Rally?", "rally_probe", ("d",), source_id="d")],
+    )
+
+    def _rally(game, source_id, chosen, seat):
+        return [GrantModifier("d", "d", Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)]
+
+    with probe_resolver("rally_probe", _rally):
+        session.submit(PlayerId.P1, DecisionResponse(("0",)))
+        while session.game.round.kind is RoundKind.BATTLE_SEGMENT:
+            session.act(session.game.round.priority, Pass())
+        assert isinstance(session.game.pending, Confirm)
+        assert _outcome(session) is None
+
+        session.submit(PlayerId.P2, DecisionResponse(("d",)))
+
+    assert _outcome(session).winner is PlayerId.P2
 
 
 def test_a_tied_battle_records_no_winner_and_both_armies_destroyed():

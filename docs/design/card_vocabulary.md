@@ -94,6 +94,7 @@ the order they are written" (CR, Order of Effects).
    MeleeAttack
    GrantCompassion
    GrantNegation
+   GrantStatChangeNegation
    NegateAction
    Negated
    AdditionalAction
@@ -229,6 +230,7 @@ the action rather than by deserializing it.
    abilities.strategy.DiscardPlayed
    abilities.strategy.ResolveStrategy
    battle.resolution.FightNextBattle
+   battle.resolution.ResolveBattle
    effects.ApplyEffects
    gold.payment.ContinuePayment
    gold.production.CompleteProduction
@@ -245,7 +247,7 @@ A modifier adjusts one `Stat` for one `Duration`. A counter is named scalar stat
 each counter declares the per-count stat it grants, so a card's wealth tokens raise its Gold
 Production without a modifier being recorded.
 
-The seven ongoing types differ by what they rest on, and `Duration` decides how long one lasts.
+The ongoing types differ by what they rest on, and `Duration` decides how long one lasts.
 [Stats: printed against effective](systems/stats.md) explains both. This page lists the closed
 set a card can return.
 
@@ -257,6 +259,7 @@ set a card can return.
    Stat
    Duration
    AbilityGrant
+   AttachedChange
    Condition
    ConditionalModifier
    KeywordGrant
@@ -264,7 +267,12 @@ set a card can return.
    Minimum
    Modifier
    ProvinceModifier
+   RecordedChange
    SeatAbilityGrant
+   StatChangeNegation
+   StatChanges
+   TextChange
+   TokenChange
 ```
 
 ```{eval-rst}

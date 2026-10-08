@@ -82,16 +82,16 @@ register_ability(
 @stat_grant("the_impregnable_fortress_of_the_crab")
 def _the_impregnable_fortress_of_the_crab_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     """Your Crab Clan Personalities have +1F while opposed."""
     attack = game.attack
     if stat is not Stat.FORCE or card.owner is not source.owner or attack is None:
-        return 0
+        return ()
     if ruleset.CRAB not in card_alignments(card):
-        return 0
+        return ()
     if location_of(game.table, card).battlefield != attack.current:
-        return 0
-    return 1 if opposing_units_in_battle(game, source.owner) else 0
+        return ()
+    return (1 if opposing_units_in_battle(game, source.owner) else 0,)
 
 
 # --- The Impregnable Fortress of the Crab (back) ---
@@ -100,5 +100,5 @@ def _the_impregnable_fortress_of_the_crab_stat_grant(
 @stat_grant("the_impregnable_fortress_of_the_crab__back")
 def _the_impregnable_fortress_of_the_crab__back_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     return _the_impregnable_fortress_of_the_crab_stat_grant(game, source, card, stat)

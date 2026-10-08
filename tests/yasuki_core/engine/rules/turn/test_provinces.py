@@ -1,3 +1,4 @@
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.effects import DestroyProvince, Discard, RefillProvince
@@ -51,7 +52,7 @@ def test_a_dynasty_discard_announces_the_discard_once(reacting):
 
     _dynasty_discard(game, "P1-victim")
 
-    assert heard == [CardDiscarded("P1-victim", Side.DYNASTY, P1)]
+    assert heard == [CardDiscarded("P1-victim", Side.DYNASTY, P1, CardLocation.PROVINCE)]
 
 
 def test_a_reaction_to_a_discard_sees_the_province_still_empty(reacting):

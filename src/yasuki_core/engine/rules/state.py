@@ -142,6 +142,9 @@ class GameState:
         in creation order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but
         unlike it may be non-empty at rest within a turn, so its order is load-bearing. Default
         empty.
+    records_made : int
+        How many stat modifiers the game has recorded, which numbers the next one so two records
+        of the same change stay apart. Ephemeral and rebuilt by replay. Default 0.
     tokens_created : int
         How many tokens the game has created, which names the next one. Ephemeral and rebuilt by
         replay like ``stack``. It counts creations rather than tokens on the board, so an id is
@@ -279,6 +282,7 @@ class GameState:
     stack: list[WorkItem] = field(default_factory=list)
     look: Look | None = None
     ongoing: list[Ongoing] = field(default_factory=list)
+    records_made: int = 0
     tokens_created: int = 0
     created_by: dict[str, str] = field(default_factory=dict)
     last_known: dict[str, LastKnownState] = field(default_factory=dict)

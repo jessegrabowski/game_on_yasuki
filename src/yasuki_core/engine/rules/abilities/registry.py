@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import AbilityGrant, Ongoing, SeatAbilityGrant
-from yasuki_core.engine.table import ZoneRole
+from yasuki_core.engine.rules.vocabulary.locations import location_holding
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.text_split import Ability as PrintedAbility
 from yasuki_core.game_pieces.text_split import split_text_box
@@ -465,31 +465,10 @@ def _by_keyword[T: Ability | Interrupt](
 
 
 def _by_location(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
-    return tuple(
-        held
-        for location, conferred in LOCATION_ABILITIES.items()
-        if _sits_at(game, card, location)
-        for held in conferred
-        if in_force(held)
-    )
-
-
-_LOCATION_ZONE_ROLES = {
-    CardLocation.PROVINCE: (ZoneRole.PROVINCE,),
-    CardLocation.HAND: (ZoneRole.HAND,),
-    CardLocation.RULEBOOK: (ZoneRole.RULEBOOK,),
-    CardLocation.DISCARD: (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD),
-}
-
-
-def _sits_at(game: GameState, card: L5RCard, location: CardLocation) -> bool:
-    if location is CardLocation.BATTLEFIELD:
-        return any(held is card for held in game.table.battlefield.cards)
-    roles = _LOCATION_ZONE_ROLES[location]
-    return any(
-        key.role in roles and any(held is card for held in zone.cards)
-        for key, zone in game.table.zones.items()
-    )
+    location = location_holding(game.table, card)
+    if location is None:
+        return ()
+    return tuple(held for held in LOCATION_ABILITIES.get(location, ()) if in_force(held))
 
 
 def is_printed_ability(card: L5RCard, ability: Ability) -> bool:

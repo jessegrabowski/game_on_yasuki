@@ -64,6 +64,7 @@ from yasuki_core.engine.rules.effects import (
     GrantKeyword,
     GrantDuelStat,
     GrantMinimum,
+    GrantStatChangeNegation,
     GrantAbility,
     GrantSeatAbility,
     GrantConditionalModifier,
@@ -101,6 +102,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Duration,
     Negation,
     Stat,
+    StatChanges,
 )
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.game_pieces.prints import ActionPrint
@@ -180,6 +182,16 @@ EFFECTS = [
     (
         GrantMinimum("uncertainty", "shiba", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN),
         "uncertainty gives shiba a minimum CHI of 1 (UNTIL_END_OF_TURN)",
+    ),
+    (
+        GrantStatChangeNegation(
+            "toranosuke",
+            frozenset({"kisada", "tsuru"}),
+            Stat.FORCE,
+            StatChanges.PENALTIES,
+            Duration.UNTIL_END_OF_TURN,
+        ),
+        "toranosuke negates penalties to FORCE on kisada, tsuru (UNTIL_END_OF_TURN)",
     ),
     (
         GrantDuelStat("ryusei", "berserker", Stat.FORCE, DUEL_CONSEQUENCES),

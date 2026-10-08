@@ -64,11 +64,11 @@ register_ability(
 @stat_grant("shadowlands_ambassador")
 def _shadowlands_ambassador_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     """This Personality has -1PH. The Force 2 and the -1 Chi are printed on the card."""
     if stat is not Stat.PERSONAL_HONOR or attached_to(game, source) is not card:
-        return 0
-    return -1
+        return ()
+    return (-1,)
 
 
 # Once a turn, his Personality may ignore the cost of bowing to pay for one of their own abilities.

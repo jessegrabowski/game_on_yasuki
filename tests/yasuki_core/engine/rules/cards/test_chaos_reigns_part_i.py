@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import legality, triggers
 from yasuki_core.engine import ops
@@ -217,7 +218,7 @@ def test_a_discard_no_player_made_offers_nothing():
     )
 
     assert game.action_events[-1] == CardDiscarded(
-        "spare-fate-0", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE, from_hand_or_deck=True
+        "spare-fate-0", Side.FATE, Rulebook.MAXIMUM_HAND_SIZE, CardLocation.HAND
     )
     assert not _step_is_open(session)
 

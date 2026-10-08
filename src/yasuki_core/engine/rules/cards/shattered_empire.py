@@ -380,19 +380,21 @@ register_cannot_attack("daidoji_tashiko")
 
 
 @stat_grant("daidoji_tashiko")
-def _daidoji_tashiko_stat_grant(game: GameState, source: L5RCard, card: L5RCard, stat: Stat) -> int:
+def _daidoji_tashiko_stat_grant(
+    game: GameState, source: L5RCard, card: L5RCard, stat: Stat
+) -> tuple[int, ...]:
     """While opposed, a Force bonus equal to the highest Personal Honor among Courtiers in her
     army."""
     if card is not source or stat is not Stat.FORCE:
-        return 0
+        return ()
     if source.id not in opposed_units_in_battle(game, source.owner):
-        return 0
+        return ()
     honors = [
         effective_personal_honor(game, personality)
         for personality in units_at(game, game.attack.current, source.owner)
         if has_keyword(game, personality, keywords.COURTIER)
     ]
-    return max(honors, default=0)
+    return (max(honors, default=0),)
 
 
 def _daidoji_tashiko_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

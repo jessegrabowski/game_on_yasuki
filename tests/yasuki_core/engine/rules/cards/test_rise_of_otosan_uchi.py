@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.cards.rise_of_otosan_uchi import (
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
     ChooseAmount,
+    ChooseCards,
     ChooseNextTrigger,
     ChooseOption,
     Confirm,
@@ -33,7 +34,7 @@ from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.vocabulary.game_events import Dishonored, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.game_events import BattleResolved, Dishonored, EnteredPlay
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_options
 from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.effects import (
@@ -46,8 +47,10 @@ from yasuki_core.engine.rules.effects import (
     Move,
     Straighten,
     TakeFavor,
+    Discard,
     DrawCard,
     GainHonor,
+    GrantModifier,
     Simultaneously,
 )
 from yasuki_core.engine.rules.state import GameState
@@ -78,6 +81,12 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.turn.structure import END_OF_TURN, Boundary, Moment, Phase, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.test_interrupts import (
+    COURAGE_DOWN,
+    DEFENDER,
+    _discard_to_interrupt,
+    _fear_announced,
+)
 from tests.yasuki_core.engine.rules.duel.conftest import (
     CHALLENGE_ABILITY,
     CHALLENGE_PROBE,
@@ -1045,6 +1054,119 @@ def test_culling_grounds_replays_to_the_same_board():
     session.act(P1, ActivateAbility("grounds"))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Hida Toranosuke, Clan Champion (Experienced 3) ---
+
+TORANOSUKE = "hida_toranosuke_clan_champion_experienced_3"
+
+
+def _courage_card(card_id: str, *, follower: bool = True) -> L5RCard:
+    kind = AttachmentType.FOLLOWER if follower else AttachmentType.ITEM
+    return attachment(card_id, attachment_type=kind, force=1, keywords=("Courage",))
+
+
+def _toranosuke_in_combat(*, printed_id: str = TORANOSUKE, attacking: bool = True) -> EngineSession:
+    """Toranosuke (7F) and an ally (3F) attacking an 8F guard who carries a 1F Follower. Toranosuke
+    stays home unless ``attacking``."""
+    attackers = {"tora": 0, "ally": 0} if attacking else {"ally": 0}
+    return combat_segment(
+        [
+            personality("tora", printed_id=printed_id, force=7),
+            personality("ally", force=3),
+            personality("guard", owner=P2, force=8),
+        ],
+        attackers,
+        {"guard": 0},
+        attachments=(
+            (
+                attachment("spear", owner=P2, attachment_type=AttachmentType.FOLLOWER, force=1),
+                "guard",
+            ),
+        ),
+    )
+
+
+@pytest.mark.parametrize(
+    ("printed_id", "attacking", "winner"),
+    [(TORANOSUKE, True, P1), ("plain", True, P2), (TORANOSUKE, False, P2)],
+    ids=["toranosuke", "no_toranosuke", "toranosuke_at_home"],
+)
+def test_toranosuke_negates_the_penalties_his_army_carries_into_resolution(
+    printed_id, attacking, winner
+):
+    session = _toranosuke_in_combat(printed_id=printed_id, attacking=attacking)
+    resolve_effects(
+        session.game, [GrantModifier("hex", "ally", Stat.FORCE, -3, Duration.UNTIL_END_OF_TURN)]
+    )
+
+    while session.game.attack.battle_segment is BattleSegment.COMBAT:
+        session.act(session.game.round.priority, Pass())
+
+    [resolved] = [event for event in session.game.turn_events if isinstance(event, BattleResolved)]
+    assert resolved.winner is winner
+
+
+@pytest.mark.parametrize(
+    ("courage", "cause", "asked"),
+    [
+        (("Courage",), P1, True),
+        ((), P1, False),
+        (("Courage",), P2, False),
+        (("Courage",), Rulebook.MAXIMUM_HAND_SIZE, False),
+    ],
+    ids=["courage", "no_courage", "opponent_caused", "hand_size"],
+)
+def test_discarding_a_courage_card_from_hand_gives_a_target_card_minus_2f(courage, cause, asked):
+    state = TableState.empty_two_seat()
+    put_in_play(state, personality("tora", printed_id=TORANOSUKE, force=7))
+    put_in_play(state, personality("foe", owner=P2, force=4))
+    discarded = attachment("brave", attachment_type=AttachmentType.FOLLOWER, keywords=courage)
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, discarded))
+    session = EngineSession.start(state, P1)
+
+    resolve_effects(session.game, [Discard("brave", cause)])
+
+    assert isinstance(session.game.pending, ChooseCards) is asked
+    if asked:
+        session.submit(P1, DecisionResponse(("foe",)))
+        assert effective_force(session.game, session.game.table.cards_by_id["foe"]) == 2
+
+
+def test_a_courage_interrupt_discard_gives_a_target_card_minus_2f():
+    session = _fear_announced({DEFENDER: 1})
+    put_in_play(session.game.table, personality("tora", owner=DEFENDER, printed_id=TORANOSUKE))
+
+    _discard_to_interrupt(session, DEFENDER, "P2-courage0", COURAGE_DOWN)
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseCards) and pending.seat is DEFENDER
+
+
+@pytest.mark.parametrize(("follower", "aimable"), [(True, {"spear", "guard"}), (False, {"spear"})])
+def test_banishing_a_follower_lets_the_melee_reach_a_personality_with_followers(follower, aimable):
+    session = _toranosuke_in_combat()
+    table = session.game.table
+    table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(
+        register(table, _courage_card("brave", follower=follower))
+    )
+    session.act(P1, ActivateAbility("tora"))
+    session.submit(P1, DecisionResponse(("brave",)))
+
+    assert set(session.game.pending.candidates) == aimable
+    assert [card.id for card in table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)].cards] == ["brave"]
+
+
+def test_toranosukes_melee_4_destroys_the_target_it_reaches():
+    session = _toranosuke_in_combat()
+    table = session.game.table
+    table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(register(table, _courage_card("brave")))
+    session.act(P1, ActivateAbility("tora"))
+    session.submit(P1, DecisionResponse(("brave",)))
+
+    session.submit(P1, DecisionResponse(("spear",)))
+
+    assert "spear" not in {card.id for card in table.battlefield.cards}
 
 
 # --- Jade No-Dachi ---

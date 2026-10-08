@@ -1,5 +1,6 @@
 import pytest
 
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
@@ -189,7 +190,7 @@ def _responder_game() -> GameState:
         ),
     )
     game = GameState.start(state, PlayerId.P1)
-    game.action_events[:] = [CardDiscarded("some-fate", Side.FATE, PlayerId.P1)]
+    game.action_events[:] = [CardDiscarded("some-fate", Side.FATE, PlayerId.P1, CardLocation.HAND)]
     return game
 
 

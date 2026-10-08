@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
     register_interrupt,
 )
+from yasuki_core.engine.rules.stats.stat_grants import STAT_GRANTS, stat_grant
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 
 
@@ -40,6 +41,21 @@ def reacting():
     for event, printed_id in registered:
         for by_card in triggers._TRIGGERS.get(event, {}).values():
             by_card.pop(printed_id, None)
+
+
+@pytest.fixture
+def granting():
+    """Register stat grants for one test and clear them afterwards, for the reason ``reacting``
+    gives."""
+    registered: list[str] = []
+
+    def _register(printed_id: str, grant) -> None:
+        stat_grant(printed_id)(grant)
+        registered.append(printed_id)
+
+    yield _register
+    for printed_id in registered:
+        STAT_GRANTS.pop(printed_id, None)
 
 
 @pytest.fixture

@@ -3,6 +3,7 @@ import re
 
 import pytest
 
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
@@ -560,7 +561,8 @@ def _responder_game(*holders: PlayerId) -> GameState:
         )
     game = GameState.start(state, PlayerId.P1)
     game.action_events[:] = [
-        CardDiscarded(f"some-fate-{seat.name}", Side.FATE, seat) for seat in holders
+        CardDiscarded(f"some-fate-{seat.name}", Side.FATE, seat, CardLocation.HAND)
+        for seat in holders
     ]
     return game
 
