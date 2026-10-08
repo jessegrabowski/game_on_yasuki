@@ -1560,7 +1560,8 @@ class AttachCard(Effect):
 
     The other half of the Equip distinction: a card that says "attach" reaches the same board as the
     Equip action without its cost, its timing or its legality (CR, Equip). A card already in play
-    moves units. One elsewhere arrives on the battlefield first.
+    moves units. One elsewhere arrives on the battlefield first, and only if it may join its owner
+    (CR, Join).
 
     Attributes
     ----------
@@ -1586,6 +1587,8 @@ class AttachCard(Effect):
         if card is None or personality is None:
             return []
         entering = not any(held is card for held in game.table.battlefield.cards)
+        if entering and not may_join(game, card.owner, card):
+            return []
         hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
         from_hand = any(held is card for held in hand.cards)
         if entering:
