@@ -345,7 +345,7 @@ def strategy_gold(
     return discounted_gold_cost(game, purchase) + gold_charged(added)
 
 
-def recruit_cost(game: GameState, card: L5RCard, *, raised_by: int = 0) -> int:
+def recruit_cost(game: GameState, card: L5RCard, *, raised_by: int = 0, lowered_by: int = 0) -> int:
     """The gold a seat pays to recruit ``card``: its gold cost with modifiers, plus the off-clan
     surcharge when the card has a Clan Alignment the seat does not share, less the card's own
     conditional recruit discount. Floored at zero.
@@ -355,8 +355,11 @@ def recruit_cost(game: GameState, card: L5RCard, *, raised_by: int = 0) -> int:
     raised_by : int, optional
         Gold the card's Gold Cost is about to be raised by, an Invest not yet laid, so the cost is
         read as it will stand when it is paid. Default 0.
+    lowered_by : int, optional
+        Gold the Recruit costs less, for text that Recruits a card for less than its Gold Cost.
+        Default 0.
     """
-    cost = effective_gold_cost(game, card) + raised_by
+    cost = effective_gold_cost(game, card) + raised_by - lowered_by
     seat_aligns = seat_alignments(game, card.owner)
     card_aligns = card_alignments(card)
     if seat_aligns and card_aligns and seat_aligns.isdisjoint(card_aligns):

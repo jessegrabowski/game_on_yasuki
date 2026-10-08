@@ -21,6 +21,7 @@ yasuki_core.engine.rules.triggers
 
 .. autosummary::
 
+    action_destroyed_personality
     action_did
     action_recruited
     apply_effect

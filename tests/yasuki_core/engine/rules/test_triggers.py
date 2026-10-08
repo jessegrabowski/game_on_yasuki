@@ -76,6 +76,7 @@ from yasuki_core.engine.rules.triggers import (
     EffectsFrame,
     EventsFrame,
     ResumeCascade,
+    action_destroyed_personality,
     apply_effect,
     choice_resolver,
     enforce_state_based_actions,
@@ -2041,6 +2042,24 @@ def test_an_announced_destruction_is_not_among_what_the_action_did(reacting):
 
     assert any(isinstance(event, Destroying) for event in game.turn_events)
     assert not any(isinstance(event, Destroying) for event in game.action_events)
+
+
+@pytest.mark.parametrize(
+    ("victim", "answered"),
+    [("mine", True), ("theirs", False), ("my_holding", False)],
+    ids=["own Personality", "another seat's Personality", "own Holding"],
+)
+def test_the_action_destroyed_a_personality_only_for_the_seat_whose_personality_fell(
+    victim, answered
+):
+    game = two_seat_game()
+    put_in_play(game, personality("mine"))
+    put_in_play(game, personality("theirs", owner=PlayerId.P2))
+    put_in_play(game, holding("my_holding"))
+
+    resolve_action_effects(game, [Destroy(victim, PlayerId.P2)])
+
+    assert action_destroyed_personality(game, PlayerId.P1) is answered
 
 
 def test_an_effect_delayed_to_a_cards_destruction_waits_for_that_card_and_resolves_once():

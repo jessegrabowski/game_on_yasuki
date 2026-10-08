@@ -57,6 +57,7 @@ from yasuki_core.engine.rules.vocabulary.work import Provenance, Targeting
 from yasuki_core.ruleset import in_force
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.prints import PersonalityPrint
 from yasuki_core.game_pieces.counters import Counter
 from yasuki_core.game_pieces.text_split import split_text_box
 
@@ -1603,6 +1604,20 @@ def action_recruited(game: GameState, card_id: str) -> bool:
     reads, rather than putting it into play some other way."""
     return any(
         event.recruited and event.card_id == card_id for event in action_did(game, EnteredPlay)
+    )
+
+
+def action_destroyed_personality(game: GameState, seat: PlayerId) -> bool:
+    """Whether the action now resolving destroyed a Personality ``seat`` controlled, as "if the
+    action destroyed your Personality" reads.
+
+    Whose it was comes from the record of how it stood as it left play, since a card lying in a
+    pile is on nobody's side of the table.
+    """
+    return any(
+        event.left_as.controller is seat
+        and isinstance(game.table.cards_by_id[event.card_id].printed, PersonalityPrint)
+        for event in action_did(game, Destroyed)
     )
 
 
