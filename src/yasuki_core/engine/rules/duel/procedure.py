@@ -6,6 +6,8 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.abilities.costs import payable
+from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.duel.focusing import focused_cards
 from yasuki_core.engine.rules.duel.records import DuelOutcome, DuelRecord, DuelWork
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
@@ -96,6 +98,43 @@ def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duel
         for holder in in_play.values()
         if holder.printed_id in CHALLENGE_RESTRICTIONS
     )
+
+
+# What a card's own text adds to the cost of a challenge: Hida Gojiro's "players must discard a
+# card to have their Personality challenge him". Asked of every card in play holding one, about the
+# challenger and the challenged Personality, for the effects the challenger's player pays to make
+# the challenge, none where the text adds nothing.
+ChallengeCost = Callable[[GameState, L5RCard, L5RCard, L5RCard], list[Effect]]
+CHALLENGE_COSTS: HandlerRegistry[ChallengeCost] = HandlerRegistry(
+    "challenge costs", "already has a challenge cost"
+)
+challenge_cost = CHALLENGE_COSTS.make_decorator()
+
+
+def challenge_costs(
+    game: GameState, challenger_duelist: str, challenged_duelist: str
+) -> list[Effect]:
+    """What the text of the cards in play adds to the cost of this challenge. A card that targets
+    the Personality it challenges is taken with these paid, and must then target him, or without
+    them, and may not (CR, Targeting Paradoxes)."""
+    by_id = game.table.cards_by_id
+    challenger, challenged = by_id[challenger_duelist], by_id[challenged_duelist]
+    return [
+        cost
+        for holder in game.table.battlefield.cards
+        if holder.printed_id in CHALLENGE_COSTS
+        for cost in CHALLENGE_COSTS[holder.printed_id](game, holder, challenger, challenged)
+    ]
+
+
+def challenge_can_be_made(
+    game: GameState, challenger_duelist: str, challenged_duelist: str
+) -> bool:
+    """Whether a challenge between these two cards is legal and its player can pay what the cards
+    in play add to its cost: what a card that picks whom to challenge as it resolves offers."""
+    if not challenge_is_legal(game, challenger_duelist, challenged_duelist):
+        return False
+    return payable(game, challenge_costs(game, challenger_duelist, challenged_duelist))
 
 
 def declare_duel(

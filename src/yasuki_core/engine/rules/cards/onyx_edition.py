@@ -448,6 +448,7 @@ register_ability(
         targets=_hida_haikeru_targets,
         targeting_message="an enemy Personality",
         effects=_hida_haikeru_effects,
+        challenges_target=True,
     ),
 )
 
@@ -1648,6 +1649,7 @@ register_ability(
         targets=_togashi_hiyoku_targets,
         targeting_message="an enemy Personality",
         effects=_togashi_hiyoku_effects,
+        challenges_target=True,
     ),
 )
 

@@ -292,6 +292,7 @@ ROLES = frozenset(
         "considered_stat",
         "attach_restriction",
         "challenge_restriction",
+        "challenge_cost",
         "discipline_grant",
         "equips_from_discard",
         "equip_discount",

@@ -148,6 +148,13 @@ the central rule answers where the card may reach.
 Write the predicate for the card's text and let the rule do the rest. A handler that tries to
 reimplement the Rules of Location will drift from them.
 
+An ability whose card challenges the Personality it targets sets `challenges_target`. A card in play
+whose text adds a cost to challenging one of its targets, as `@challenge_cost` registers it, then
+splits the ability: {func}`~.abilities_for` returns a version that may not target that Personality
+and, for each such Personality, a version that pays the cost and must target him, keyed apart and
+counting its uses under the ability's own (CR, Targeting Paradoxes). A card that picks whom to
+challenge as it resolves asks {func}`~.challenge_can_be_made` and pays the cost when it picks.
+
 A granted additional use, as {class}`~.GrantAdditionalUse` records it, adds a use to each printed
 ability of its card for as long as it lasts, which `use_tags` counts beside `uses_per_turn`.
 

@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import TypeGuard
 
 from yasuki_core.ruleset import in_force
@@ -13,6 +13,8 @@ from yasuki_core.engine.rules.abilities.model import (
     Label,
     once_tag,
 )
+from yasuki_core.engine.rules.abilities.costs import Cost
+from yasuki_core.engine.rules.duel.procedure import challenge_costs
 from yasuki_core.engine.rules.effects import Effect
 from yasuki_core.engine.rules.gold.discounts import effective_invest_discount
 from yasuki_core.engine.rules.state import GameState
@@ -416,7 +418,67 @@ def abilities_for(game: GameState, card: L5RCard) -> tuple[Ability, ...]:
     granted = _granted(game, card, GRANTED_ABILITIES)
     shadowed = {held.key for held in granted}
     conferred = tuple(held for held in _conferred(game, card) if held.key not in shadowed)
-    return (*printed, *granted, *conferred)
+    held = (*printed, *granted, *conferred)
+    if not any(ability.challenges_target for ability in held):
+        return held
+    return tuple(
+        version for ability in held for version in _challenge_versions(game, card, ability)
+    )
+
+
+def _challenge_versions(game: GameState, card: L5RCard, ability: Ability) -> tuple[Ability, ...]:
+    """``ability`` as its card may take it, given the costs cards in play add to challenging its
+    targets: unchanged where none does, otherwise a version that may not target the Personalities
+    whose challenge costs more and, for each of them, a version that pays it and must target him.
+    Each version counts its uses under the ability's own (CR, Targeting Paradoxes)."""
+    targets = ability.targets
+    if not ability.challenges_target or targets is None:
+        return (ability,)
+    costed = frozenset(t for t in targets(game, card) if challenge_costs(game, card.id, t))
+    if not costed:
+        return (ability,)
+    uses_under = (ability.key if ability.limit_key is None else ability.limit_key) or ""
+    label = ability_label(card, ability)
+    free = replace(ability, targets=_excluding(targets, costed), derived_from=ability)
+    return (
+        free,
+        *(
+            replace(
+                ability,
+                key=f"{ability.key or ''}:challenging:{challenged}",
+                limit_key=uses_under,
+                label=f"{label} Pay to challenge {game.table.cards_by_id[challenged].name}.",
+                cost=_paying_to_challenge(ability, challenged),
+                targets=_only(challenged),
+                challenges_target=False,
+                derived_from=ability,
+            )
+            for challenged in sorted(costed)
+        ),
+    )
+
+
+def _paying_to_challenge(ability: Ability, challenged: str) -> Cost:
+    def cost(game: GameState, source: L5RCard) -> list[Effect]:
+        return [*ability.cost(game, source), *challenge_costs(game, source.id, challenged)]
+
+    return cost
+
+
+def _excluding(
+    targets: Callable[[GameState, L5RCard], list[str]], costed: frozenset[str]
+) -> Callable[[GameState, L5RCard], list[str]]:
+    def free(game: GameState, source: L5RCard) -> list[str]:
+        return [target for target in targets(game, source) if target not in costed]
+
+    return free
+
+
+def _only(challenged: str) -> Callable[[GameState, L5RCard], list[str]]:
+    def targets(game: GameState, source: L5RCard) -> list[str]:
+        return [challenged]
+
+    return targets
 
 
 def printed_abilities(card: L5RCard) -> tuple[Ability, ...]:
@@ -501,8 +563,9 @@ def _additional_uses(game: GameState, card: L5RCard, ability: Ability) -> int:
 def is_printed_ability(card: L5RCard, ability: Ability) -> bool:
     """Whether using ``ability`` is a printed action from ``card``: an action its own text carries,
     as against a trait, a rulebook ability, or one another card grants it (CR, Printed)."""
-    return ability.acts_from_its_card and any(
-        held is ability for held in _ABILITIES.get(card.printed_id, ())
+    origin = ability.derived_from or ability
+    return origin.acts_from_its_card and any(
+        held is origin for held in _ABILITIES.get(card.printed_id, ())
     )
 
 

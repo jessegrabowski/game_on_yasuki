@@ -15,6 +15,8 @@ yasuki_core.engine.rules.duel.procedure
 .. autosummary::
 
     apply_focus_or_strike
+    challenge_can_be_made
+    challenge_costs
     challenge_is_legal
     decided_duel
     decided_outcome
