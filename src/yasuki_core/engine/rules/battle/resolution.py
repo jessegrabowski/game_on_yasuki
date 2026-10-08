@@ -222,12 +222,13 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     """What resolving the battle at ``battlefield`` does (CR, Battle Resolution).
 
     The higher Force wins and destroys the enemy army. An Attacker whose Force also cleared the
-    Province Strength destroys the Province too. A tie with units on both sides destroys both. A tie
-    on zero Force where either side is empty has no outcome, which is not the same as a tie that
-    destroys nothing. The winner gains twice the cards it destroyed, and on a tie both do, except
-    that an army holding a dishonorable Personality rehonors him in place of its gain (CR,
-    Rehonoring 0.3), in a tie before it is destroyed. An army is destroyed at once, and in a tie
-    both are ("the Attacker and Defender each destroy all units in the enemy army"). An army's
+    Province Strength destroys the Province too, where the battlefield has one: a battlefield not
+    associated with any Province has none to destroy. A tie with units on both sides destroys
+    both. A tie on zero Force where either side is empty has no outcome, which is not the same as
+    a tie that destroys nothing. The winner gains twice the cards it destroyed, and on a tie both
+    do, except that an army holding a dishonorable Personality rehonors him in place of its gain
+    (CR, Rehonoring 0.3), in a tie before it is destroyed. An army is destroyed at once, and in a
+    tie both are ("the Attacker and Defender each destroy all units in the enemy army"). An army's
     dishonorable Personalities are rehonored at once ("all such dishonorable Personalities are
     rehonored").
     """
@@ -243,8 +244,10 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
             _winners_spoils(game, attack.attacker, attacking, defending),
         ]
         province = attack.battlefields[battlefield].province
-        if attacking_force > defending_force + effective_province_strength(game, province):
-            effects.append(DestroyProvince(attack.attacker, province))
+        if province is not None:
+            threshold = defending_force + effective_province_strength(game, province)
+            if attacking_force > threshold:
+                effects.append(DestroyProvince(attack.attacker, province))
         return effects
     if defending_force > attacking_force:
         return [
@@ -470,7 +473,8 @@ def _resolve_battle(game: GameState, battlefield: int) -> None:
     # Where this battle's events start. Every battle of an Attack Phase runs inside one action, so
     # an outcome reading the action's events rather than its own would collect its predecessors'.
     events_before = len(game.action_events)
-    province_stood = attack.battlefields[battlefield].province in game.table.zones
+    province = attack.battlefields[battlefield].province
+    province_stood = province is not None and province in game.table.zones
 
     # Queued first, so a trigger that pauses the resolution's cascade to ask a question stashes it
     # above the announcement, which then sees everything the resolution did.
