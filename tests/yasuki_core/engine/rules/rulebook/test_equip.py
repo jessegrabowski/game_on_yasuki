@@ -457,7 +457,7 @@ def test_equipping_from_the_discard_pile_pays_and_attaches_but_is_not_from_hand(
     game = session.game
     assert attached_to(game, game.table.cards_by_id["monks"]).id == "hero"
     assert game.table.cards_by_id["mine"].bowed
-    assert EnteredPlay("monks", from_hand=False) in game.turn_events
+    assert EnteredPlay("monks", from_hand=False, equipped=True) in game.turn_events
 
 
 def test_a_discounted_equip_charges_less_and_may_join_only_the_personality_granting_it():

@@ -207,6 +207,10 @@ class GameState:
         Response steps did. What a card folds over to count what happened this turn, as "after
         you resolve two or more Favor actions in one turn" does. Reset as the next turn begins.
         Ephemeral and rebuilt by replay. Default empty.
+    previous_turn_events : tuple of GameEvent
+        Every event of the turn before this one. With ``turn_events``, everything since the
+        active seat's last turn ended, as "since his last turn ended" reads. Ephemeral and rebuilt
+        by replay. Default empty.
     conditions_holding : frozenset of (str, str)
         Each card and watch whose condition held when the board last settled, so the condition is
         announced as fulfilled only when it turns true. Ephemeral and rebuilt by replay. Default
@@ -291,6 +295,7 @@ class GameState:
     action_events: list[GameEvent] = field(default_factory=list)
     action_resolved: bool = False
     turn_events: tuple[GameEvent, ...] = ()
+    previous_turn_events: tuple[GameEvent, ...] = ()
     conditions_holding: frozenset[tuple[str, str]] = frozenset()
     banished_on_leaving_play: frozenset[str] = frozenset()
     announced_cards: frozenset[str] = frozenset()

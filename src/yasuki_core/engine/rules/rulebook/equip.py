@@ -282,13 +282,15 @@ def apply_equip_target(
 def resolve_equip(game: GameState, card_id: str, target_id: str) -> None:
     """Bring the paid-for attachment out of its hand or discard pile and onto its Personality."""
     card = game.table.cards_by_id[card_id]
-    from_hand = card_id in game.announced_cards
+    hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
+    from_hand = any(held is card for held in hand.cards)
     game.announced_cards -= {card_id}
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     ops.attach_to_personality(game.table, card, game.table.cards_by_id[target_id])
     # Queued beneath the settling, which may stop to ask a question: the board is legal before
     # anything is told the card arrived, for the reason _put_into_play gives.
-    game.stack.append(triggers.AnnounceEvent(EnteredPlay(card_id, from_hand=from_hand)))
+    entered = EnteredPlay(card_id, from_hand=from_hand, equipped=True)
+    game.stack.append(triggers.AnnounceEvent(entered))
     triggers.enforce_state_based_actions(game)
 
 
