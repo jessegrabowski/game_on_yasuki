@@ -21,7 +21,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
     focus_token,
 )
-from yasuki_core.engine.rules.units.membership import attachments_of
+from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.cards.rise_of_jigoku import CAVALRY_FOLLOWER, MISHIMES_ONI
 from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as keywords_of
@@ -43,6 +43,7 @@ from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
+    AttachmentPrint,
     FatePrint,
     HoldingPrint,
     RingPrint,
@@ -1404,6 +1405,101 @@ def test_draw_strength_offers_only_unbowed_personalities_at_the_battle():
     session.act(P1, PlayStrategy("oaths"))
 
     assert session.game.pending.candidates == ("bushi",)
+
+
+# --- Forgotten Mine ---
+
+
+def _forgotten_mine_table(*, receiver_printed_id: str | None = None) -> TableState:
+    """P1's Forgotten Mine, with P1's "first" carrying a 1-Gold Follower and P1's "second" beside
+    him."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("mine", printed_id="forgotten_mine"))
+    put_in_play(state, personality("first"))
+    put_in_play(state, personality("second", printed_id=receiver_printed_id))
+    follower = attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, gold_cost=1)
+    attached(state, follower, "first")
+    return state
+
+
+def test_forgotten_mine_transfers_your_attachment_to_your_other_personality():
+    session = EngineSession.start(_forgotten_mine_table(), P1)
+
+    session.act(P1, ActivateAbility("mine", "transfer"))
+    session.submit(P1, DecisionResponse(("ashigaru",)))
+    session.submit(P1, DecisionResponse(("first",)))
+    session.submit(P1, DecisionResponse(("second",)))
+
+    game = session.game
+    assert attached_to(game, game.table.cards_by_id["ashigaru"]).id == "second"
+
+
+def test_forgotten_mine_does_not_transfer_to_a_personality_the_attachment_cannot_join():
+    table = _forgotten_mine_table(receiver_printed_id="hida_zaiberu_experienced")
+    session = EngineSession.start(table, P1)
+
+    assert ActivateAbility("mine", "transfer") not in session.legal_actions(P1)
+
+
+def _forgotten_mine_battle() -> EngineSession:
+    """P1's raider in the Combat Segment, with Forgotten Mine and a Holding producing 3 Gold, and
+    a 3-Gold Item and a 1-Gold Follower in P1's Fate discard pile."""
+    cards = [
+        personality("raider"),
+        personality("guard", owner=P2),
+        holding("mine", printed_id="forgotten_mine"),
+        holding("gold", gold_production=3),
+    ]
+    session = combat_segment(cards, {"raider": 0}, {"guard": 0})
+    pile = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    pile.add(register(session.game.table, attachment("sword", gold_cost=3)))
+    follower = attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, gold_cost=1)
+    pile.add(register(session.game.table, follower))
+    return session
+
+
+def test_forgotten_mine_equips_an_attachment_whose_cost_the_amount_paid_meets():
+    session = _forgotten_mine_battle()
+    game = session.game
+
+    session.act(P1, ActivateAbility("mine", "equip"))
+    session.submit(P1, DecisionResponse(("1",)))
+    pay(session, P1)
+    assert set(game.pending.candidates) == {"sword", "ashigaru"}
+    session.submit(P1, DecisionResponse(("sword",)))
+    session.submit(P1, DecisionResponse(("raider",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    assert attached_to(game, game.table.cards_by_id["sword"]).id == "raider"
+    assert "mine" not in {card.id for card in game.table.battlefield.cards}
+
+
+def test_forgotten_mine_does_not_equip_a_unique_attachment_whose_copy_you_control():
+    session = _forgotten_mine_battle()
+    game = session.game
+    for card_id, home in (("katana", None), ("katana-2", "raider")):
+        katana = L5RCard.of(
+            AttachmentPrint,
+            id=card_id,
+            name="Katana",
+            printed_id="probe_katana",
+            side=Side.FATE,
+            owner=P1,
+            is_unique=True,
+            attachment_type=AttachmentType.ITEM,
+            gold_cost=3,
+        )
+        if home is None:
+            game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(register(game.table, katana))
+        else:
+            attached(game, katana, home)
+
+    session.act(P1, ActivateAbility("mine", "equip"))
+    session.submit(P1, DecisionResponse(("1",)))
+    pay(session, P1)
+
+    assert set(game.pending.candidates) == {"sword", "ashigaru"}
 
 
 # --- I Do Not Forget ---

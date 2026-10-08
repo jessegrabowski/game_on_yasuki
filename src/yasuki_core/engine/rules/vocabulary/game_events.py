@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.vocabulary.segments import Boundary
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Boundary
 from yasuki_core.engine.table import Location, ZoneKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
@@ -39,6 +39,23 @@ class PhaseStarted:
     """
 
     phase: Phase
+
+
+@dataclass(frozen=True, slots=True)
+class BattleSegmentStarted:
+    """A segment of the battle being fought has begun, once its Action Round has opened, as "After
+    a Combat Segment begins" reads.
+
+    Attributes
+    ----------
+    segment : BattleSegment
+        The segment that began.
+    battlefield : int
+        The battlefield the battle is fought at.
+    """
+
+    segment: BattleSegment
+    battlefield: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -221,18 +238,20 @@ class EnteredPlay:
     card_id : str
         The card that arrived.
     from_hand : bool
-        Whether it came from its owner's hand. An attachment reaches the battlefield from hand by
-        Equip and from anywhere else by an effect that attaches it, and cards distinguish the two:
-        "after this Follower enters play from your hand". Default False, which is what everything
-        arriving from a Province reports.
+        Whether it came from its owner's hand: "after this Follower enters play from your hand".
+        Default False, which is what everything arriving from a Province reports.
     recruited : bool
         Whether a Recruit brought it into play, which "after the action Recruits X" reads, rather
         than an effect that puts it into play. Default False.
+    equipped : bool
+        Whether an Equip brought it into play, which "if he Equipped any Followers" reads, rather
+        than an effect that attaches it (CR, Equip). Default False.
     """
 
     card_id: str
     from_hand: bool = False
     recruited: bool = False
+    equipped: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -662,6 +681,7 @@ GameEvent = (
     | Assigned
     | BattleResolved
     | BattleEnded
+    | BattleSegmentStarted
     | Bowed
     | CardFocused
     | ConditionFulfilled

@@ -875,7 +875,7 @@ def test_a_card_announced_out_of_hand_is_not_projected_in_it():
     before = project(game, PlayerId.P1).table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     assert [held.id for held in before.cards] == ["played"]
 
-    game.announced_from_hand |= {"played"}
+    game.announced_cards |= {"played"}
 
     after = project(game, PlayerId.P1).table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
     assert after.cards == ()

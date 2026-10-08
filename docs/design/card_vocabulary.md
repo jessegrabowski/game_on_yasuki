@@ -94,6 +94,7 @@ the order they are written" (CR, Order of Effects).
    MeleeAttack
    GrantCompassion
    GrantNegation
+   NegateAction
    Negated
    AdditionalAction
    GrantPriority
@@ -156,6 +157,7 @@ left play reads it as it was (CR, References to Other Points in Time).
 
    ActionResolved
    Assigned
+   BattleSegmentStarted
    Bowed
    CardDiscarded
    CounterChanged

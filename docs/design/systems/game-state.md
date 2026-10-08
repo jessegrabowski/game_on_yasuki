@@ -47,8 +47,8 @@ the check that runs after every committed effect.
 ## What replay rebuilds
 
 Most of the rest is ephemeral. `stack`, `ongoing`, `delayed`, `round_stack`, `responded`,
-`created_by`, `tokens_created`, `attack`, `look`, `turn_events`, `conditions_holding`,
-`announced_from_hand`, `asked_outside_action`, `action` and its companions are all rebuilt by re-running the tape rather than serialized. [The replay log](the-replay-log.md) covers why.
+`created_by`, `tokens_created`, `attack`, `look`, `turn_events`, `previous_turn_events`, `conditions_holding`,
+`announced_cards`, `banished_on_leaving_play`, `asked_outside_action`, `action` and its companions are all rebuilt by re-running the tape rather than serialized. [The replay log](the-replay-log.md) covers why.
 
 `pending` is the question the engine has stopped on, or None, and `stack` is the work waiting
 behind it. Together they are the engine's whole notion of "part-way through". A client reads

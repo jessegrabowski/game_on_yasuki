@@ -1,13 +1,14 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, replace
+from collections.abc import Callable
 from typing import ClassVar, Self
 
 from yasuki_core.engine import ops
-from yasuki_core.engine.registrar import FlagRegistry
+from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.battle.presence import place_unit, record_terrain_destroyed
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.rulebook import favor_proxy
-from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
+from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
 from yasuki_core.engine.players import Cause, PlayerId, Trait
 from yasuki_core.engine.rules.units.membership import unit_of
@@ -295,6 +296,38 @@ class GrantNegation(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class NegateAction(Effect):
+    """Negate the action held at the Interrupt step: every effect it has yet to hand over is
+    negated, whatever produces it, and its targeting is not (CR, Negate an Action).
+
+    Attributes
+    ----------
+    source_id : str
+        The card negating the action.
+    """
+
+    source_id: str
+
+    def describe(self) -> str:
+        return f"{self.source_id} negates the action"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        """Raise ``RuntimeError`` if no action is held at the Interrupt step."""
+        # Imported where it is used: the cascade imports this module for the effects it applies.
+        from yasuki_core.engine.rules.triggers import HeldAction
+
+        negation = Negation(self.source_id, Duration.UNTIL_END_OF_TURN, effect_kind=Effect)
+        for index in reversed(range(len(game.stack))):
+            held = game.stack[index]
+            if isinstance(held, HeldAction):
+                negations = (*held.provenance.negations, negation)
+                provenance = replace(held.provenance, negations=negations)
+                game.stack[index] = replace(held, provenance=provenance)
+                return []
+        raise RuntimeError("no action is held at the Interrupt step to negate")
+
+
+@dataclass(frozen=True, slots=True)
 class GrantCompassion(Effect):
     """Record ``grant``, treating its seat as having Compassion while it lasts."""
 
@@ -461,10 +494,21 @@ def _move_card(
     """Move ``card`` as an effect does, remembering it as it stood if it is leaving play, which is
     what a later reference to it reads (CR, References to Other Points in Time). Every effect that
     can take a card out of play moves it through here or through :func:`_remove_unit`, so a card
-    moving between places out of play keeps the record of when it last stood in play."""
+    moving between places out of play keeps the record of when it last stood in play, and one
+    removed from the game on leaving play is removed whatever sent it."""
     if _in_play(game, card):
         game.last_known[card.id] = _as_it_stands(game, card)
+        dest = _leaving_play_to(game, card, dest)
     ops.move_card(game.table, card, dest, **placement)
+
+
+def _leaving_play_to(game: GameState, card: L5RCard, dest: ZoneKey | DeckKey) -> ZoneKey | DeckKey:
+    """Where ``card``, leaving play for ``dest``, goes: its banish pile when it is to be removed
+    from the game on leaving play, which spends that record, and ``dest`` otherwise."""
+    if card.id not in game.banished_on_leaving_play:
+        return dest
+    game.banished_on_leaving_play -= {card.id}
+    return pile_for(card, banished=True)
 
 
 def _remove_unit(
@@ -482,9 +526,11 @@ def _remove_unit(
     in_play = _in_play(game, card)
     stood = tuple((member, _as_it_stands(game, member)) for member in unit_of(game, card))
     for member, state in stood:
+        dest = pile_for(member, banished=banished)
         if in_play:
             game.last_known[member.id] = state
-        ops.move_card(game.table, member, pile_for(member, banished=banished))
+            dest = _leaving_play_to(game, member, dest)
+        ops.move_card(game.table, member, dest)
     return stood
 
 
@@ -1546,7 +1592,8 @@ class AttachCard(Effect):
 
     The other half of the Equip distinction: a card that says "attach" reaches the same board as the
     Equip action without its cost, its timing or its legality (CR, Equip). A card already in play
-    moves units. One elsewhere arrives on the battlefield first.
+    moves units. One elsewhere arrives on the battlefield first, and only if it may join its owner
+    (CR, Join).
 
     Attributes
     ----------
@@ -1572,6 +1619,8 @@ class AttachCard(Effect):
         if card is None or personality is None:
             return []
         entering = not any(held is card for held in game.table.battlefield.cards)
+        if entering and not may_join(game, card.owner, card):
+            return []
         hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
         from_hand = any(held is card for held in hand.cards)
         if entering:
@@ -1618,7 +1667,7 @@ class PutIntoPlay(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None or any(held is card for held in game.table.battlefield.cards):
             return []
-        if not copy_may_enter(game, card.owner, card):
+        if not may_join(game, card.owner, card):
             return []
         hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
         from_hand = any(held is card for held in hand.cards)
@@ -2465,11 +2514,30 @@ class WinGame(Effect):
         return []
 
 
-# Cards whose controller does not lose Honor from their own cards' effects, keyed on printed id. A
-# rulebook loss, such as a dishonorable Personality's destruction, is no card's effect and still
-# lands (CR, Dishonorable).
-HONOR_LOSS_SHIELDS = FlagRegistry("honor loss shields", "already shields its controller's Honor")
-register_honor_loss_shield = HONOR_LOSS_SHIELDS.make_register()
+# Cards whose controller loses less Honor from their own cards' effects, keyed on printed id, each
+# mapping the size of such a loss to what is left of it: "You lose 1 Honor less from your cards",
+# or "You do not lose Honor from your cards' effects", which leaves nothing. A rulebook loss, such
+# as a dishonorable Personality's destruction, is no card's effect and is not reduced (CR,
+# Dishonorable).
+HonorLossReduction = Callable[[int], int]
+HONOR_LOSS_REDUCTIONS: HandlerRegistry[HonorLossReduction] = HandlerRegistry(
+    "honor loss reductions", "already reduces its controller's Honor losses"
+)
+register_honor_loss_reduction = HONOR_LOSS_REDUCTIONS.make_register()
+
+
+def honor_loss_reduced_by(amount: int) -> HonorLossReduction:
+    """The reduction of "You lose ``amount`` Honor less from your cards"."""
+
+    def reduce(loss: int) -> int:
+        return loss - amount
+
+    return reduce
+
+
+def no_honor_lost(loss: int) -> int:
+    """The reduction of "You do not lose Honor from your cards' effects"."""
+    return 0
 
 
 @dataclass(frozen=True, slots=True)
@@ -2494,7 +2562,7 @@ class GainHonor(Effect):
         its own effects leaves this empty, since the CR substitutes only where rehonoring "is not
         one of that action or trait's effects". Default empty.
     source_id : str, optional
-        The card whose effect this is, so a shield against a seat's own cards' losses can tell
+        The card whose effect this is, so a reduction of a seat's own cards' losses can tell
         them from anyone else's. Default None, a rulebook change.
     """
 
@@ -2526,13 +2594,11 @@ class GainHonor(Effect):
     def is_interruptible(self, game: GameState) -> bool:
         # A change of zero is not a gain or loss (CR, Honor Gains and Losses), and neither is a loss
         # a card says its seat does not take, so there is nothing to interrupt.
-        if self.amount < 0 and self._shielded(game):
-            return False
-        return self.amount != 0
+        return self._reduced(game, self.amount) != 0
 
     def perform(self, game: GameState) -> list[GameEvent]:
-        amount = self.adjusted
-        if amount < 0 and self._shielded(game):
+        amount = self._reduced(game, self.adjusted)
+        if amount == 0:
             return []
         rehonored = self._substituted_for(game) if amount > 0 else []
         if rehonored:
@@ -2551,15 +2617,17 @@ class GainHonor(Effect):
         source = game.table.cards_by_id.get(self.source_id) if self.source_id else None
         return source is not None and source.owner is self.seat
 
-    def _shielded(self, game: GameState) -> bool:
-        """Whether the loss comes from a card ``seat`` controls while ``seat`` controls a card
-        that says it does not lose Honor from its own cards' effects."""
-        if not self._from_own_cards(game):
-            return False
-        return any(
-            card.owner is self.seat and card.printed_id in HONOR_LOSS_SHIELDS
-            for card in game.table.battlefield.cards
-        )
+    def _reduced(self, game: GameState, amount: int) -> int:
+        """``amount``, a loss reduced by the cards ``seat`` controls that reduce the losses its own
+        cards' effects cost it. A loss is never reduced past zero (CR, Honor Gains and Losses)."""
+        if amount >= 0 or not self._from_own_cards(game):
+            return amount
+        loss = -amount
+        for card in game.table.battlefield.cards:
+            reduce = HONOR_LOSS_REDUCTIONS.get(card.printed_id)
+            if reduce is not None and card.owner is self.seat:
+                loss = reduce(loss)
+        return -max(0, loss)
 
     def _substituted_for(self, game: GameState) -> list[L5RCard]:
         """The seat's own dishonorable Personalities among ``personalities``, whose rehonoring
@@ -2716,7 +2784,7 @@ class Recruit(Effect):
         """Whether the card may enter play: Unique and Singular can keep it out, and so can its own
         "May only be Recruited by" text."""
         card = game.table.cards_by_id[self.card_id]
-        return copy_may_enter(game, card.owner, card) and may_recruit(game, card.owner, card)
+        return may_join(game, card.owner, card) and may_recruit(game, card.owner, card)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         # The Recruit procedure imports this module for the effects it resolves, so importing it

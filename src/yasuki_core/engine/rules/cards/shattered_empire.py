@@ -68,6 +68,7 @@ from yasuki_core.engine.rules.board.counts_as import (
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     army_at,
+    attack_targeting,
     attack_targets,
     controls_terrain_at,
     followers_in_play,
@@ -78,6 +79,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     province_zones,
+    register_attacks_past_followers,
     rings_in_play,
     top_of_deck,
     units_at,
@@ -151,10 +153,11 @@ from yasuki_core.engine.rules.turn.structure import (
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation, Stat
-from yasuki_core.engine.rules.vocabulary.segments import Boundary
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Boundary
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
     BattleResolved,
+    BattleSegmentStarted,
     Bowed,
     DuelDeclared,
     DuelResolved,
@@ -164,6 +167,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     TurnBoundary,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets, weapons_on
+from yasuki_core.engine.rules.rulebook.discipline import discipline_grant, in_discard_pile
+from yasuki_core.engine.rules.rulebook.joining import register_join_restriction
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
@@ -257,7 +262,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(RangedAttack),
         targeting_message=ATTACK_TARGET,
         effects=_binasa_experienced_effects,
         tireless=True,
@@ -714,7 +719,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(Fear),
         targeting_message=ATTACK_TARGET,
         effects=_hida_sanjiro_effects,
     ),
@@ -806,6 +811,44 @@ register_ability(
 )
 
 
+# --- Moto Tsuneo, Soul of Moto Tsume ---
+
+MOTO_TSUNEO_HONOR_LOSS = 4
+
+
+@on(EnteredPlay, "moto_tsuneo_soul_of_moto_tsume")
+def _moto_tsuneo_soul_of_moto_tsume_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """ "After Tsuneo enters play, lose 4 Honor." """
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -MOTO_TSUNEO_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+def _moto_tsuneo_soul_of_moto_tsume_join_restriction(game: GameState, seat: PlayerId) -> bool:
+    """ "Will not join a player with 1 or higher Family Honor." """
+    return game.table.seats[seat].honor < 1
+
+
+register_join_restriction(
+    "moto_tsuneo_soul_of_moto_tsume", _moto_tsuneo_soul_of_moto_tsume_join_restriction
+)
+
+
+@on(BattleSegmentStarted, "moto_tsuneo_soul_of_moto_tsume")
+def _moto_tsuneo_soul_of_moto_tsume_battle_segment_started(ctx: TriggerContext) -> list[Effect]:
+    """ "After a Combat Segment begins, if Tsuneo is in your current army, bow all other
+    Personalities in this army with 1 or higher Personal Honor." """
+    event = ctx.event
+    army = units_at(ctx.game, event.battlefield, ctx.card.owner)
+    if event.segment is not BattleSegment.COMBAT or not any(unit is ctx.card for unit in army):
+        return []
+    return [
+        Bow(personality.id)
+        for personality in army
+        if personality is not ctx.card and effective_personal_honor(ctx.game, personality) >= 1
+    ]
+
+
 # --- Purity's Fist ---
 
 PURITYS_FIST_MELEE = 3
@@ -828,7 +871,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=bow_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_puritys_fist_effects,
         ruleset=ruleset.SHATTERED_EMPIRE.name,
@@ -1159,7 +1202,9 @@ def _shinjo_mayuko_soul_of_shinjo_wei_effects(
 ) -> list[Effect]:
     """A Melee 4, then a Melee 3 with its own target. The second is chosen once the first has
     resolved, and the first target is left out of it: a survivor of Melee 4 is beyond Melee 3."""
-    others = tuple(card_id for card_id in attack_targets(game, source) if card_id != target.id)
+    others = tuple(
+        card_id for card_id in attack_targets(game, source, MeleeAttack) if card_id != target.id
+    )
     second = (
         [Choose(source.owner, others, 1, 1, "shinjo_mayuko_second_melee", source.id)]
         if others
@@ -1180,7 +1225,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=_shinjo_mayuko_soul_of_shinjo_wei_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_shinjo_mayuko_soul_of_shinjo_wei_effects,
     ),
@@ -1675,6 +1720,21 @@ def _resolve_way_of_the_scorpion_experienced_winner(
 
 
 # --- Way of the Spider (Experienced) ---
+
+WAY_OF_THE_SPIDER_DISCIPLINE = 2
+
+register_attacks_past_followers("way_of_the_spider_experienced", frozenset({Fear}))
+
+
+@discipline_grant("way_of_the_spider_experienced")
+def _way_of_the_spider_experienced_discipline_grant(
+    game: GameState, source: L5RCard, card: L5RCard
+) -> int | None:
+    """ "Dark Virtues in your discard pile have Discipline :g2:." """
+    if not in_discard_pile(game, card) or not has_keyword(game, card, keywords.DARK_VIRTUE):
+        return None
+    return WAY_OF_THE_SPIDER_DISCIPLINE
+
 
 register_entry(
     "way_of_the_spider_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.SPIDER)

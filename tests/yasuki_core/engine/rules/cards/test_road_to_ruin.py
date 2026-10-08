@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.board.queries import attack_targeting
 from yasuki_core.engine.rules.cards.road_to_ruin import UNITY_CHI, UNITY_FORCE
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -53,6 +53,11 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MINUS_1F
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, HoldingPrint, RingPrint
 
+from tests.yasuki_core.engine.rules.cards.test_shattered_empire import (
+    DUEL_ABILITY,
+    DUEL_PROBE,
+    _edict_duel,
+)
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -563,6 +568,81 @@ def test_verdant_wilds_cannot_straighten_a_card_forbidden_to_straighten():
     assert "mine" in session.game.straighten_delayed
 
 
+# --- Grim Reality ---
+
+
+def _grim_reality() -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id="grim",
+        name="Grim Reality",
+        printed_id="grim_reality",
+        side=Side.FATE,
+        owner=P1,
+    )
+
+
+def _grim_reality_battle(*, guard_force: int = 2, in_discard: bool = False) -> EngineSession:
+    """P1's raider faces P2's guard, with Grim Reality in P1's hand or Fate discard pile and a
+    Holding producing 2 Gold."""
+    cards = [
+        personality("raider", force=3),
+        personality("guard", owner=P2, force=guard_force),
+        holding("mine", gold_production=2),
+    ]
+    grim = _grim_reality()
+    session = combat_segment(
+        cards, {"raider": 0}, {"guard": 0}, in_hand=[] if in_discard else [grim]
+    )
+    if in_discard:
+        pile = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+        pile.add(register(session.game.table, grim))
+    return session
+
+
+@pytest.mark.parametrize(
+    ("guard_force", "bowed", "force_after"), [(0, True, 0), (4, False, 1)], ids=["0F", "4F"]
+)
+def test_grim_reality_bows_a_0_force_card_and_gives_any_other_minus_3_force(
+    guard_force, bowed, force_after
+):
+    session = _grim_reality_battle(guard_force=guard_force)
+    game = session.game
+
+    session.act(P1, PlayStrategy("grim"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    guard = game.table.cards_by_id["guard"]
+    assert guard.bowed is bowed
+    assert effective_force(game, guard) == force_after
+
+
+def test_grim_reality_is_played_from_the_discard_pile_for_2_gold_and_banished():
+    session = _grim_reality_battle(in_discard=True)
+    game = session.game
+
+    session.act(P1, PlayStrategy("grim", disciplined=True))
+    assert game.pending.amount == 2
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    assert game.table.cards_by_id["mine"].bowed
+    assert effective_force(game, game.table.cards_by_id["guard"]) == 0
+    banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)].cards
+    assert [card.id for card in banished] == ["grim"]
+
+
+def test_grim_reality_is_not_played_from_the_discard_pile_without_the_gold():
+    session = _grim_reality_battle(in_discard=True)
+    resolve_effects(session.game, [Bow("mine")])
+
+    assert PlayStrategy("grim", disciplined=True) not in session.legal_actions(P1)
+
+
 # --- "Is That All?" ---
 
 
@@ -785,6 +865,95 @@ def test_harudei_acts_no_third_time_with_compassion():
     assert ActivateAbility("harudei") not in session.legal_actions(P1)
 
 
+# --- Like a Twig ---
+
+
+def _twig(owner: PlayerId = P1) -> L5RCard:
+    return L5RCard.of(
+        ActionPrint,
+        id="twig",
+        name="Like a Twig",
+        printed_id="like_a_twig",
+        side=Side.FATE,
+        owner=owner,
+    )
+
+
+def _twig_battle(
+    *, guard_cost: int = 3, guard_gear_cost: int | None = None, own_follower_bowed: bool = False
+) -> EngineSession:
+    """P1's 6-Gold raider with a 1-Gold Follower faces P2's guard, with Like a Twig in P1's hand.
+    The guard carries an Item costing ``guard_gear_cost`` when one is given."""
+    cards = [
+        personality("raider", gold_cost=6),
+        personality("guard", owner=P2, gold_cost=guard_cost),
+    ]
+    follower = attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, gold_cost=1)
+    attachments = [(follower, "raider")]
+    if guard_gear_cost is not None:
+        attachments.append((attachment("gear", owner=P2, gold_cost=guard_gear_cost), "guard"))
+    session = combat_segment(
+        cards, {"raider": 0}, {"guard": 0}, in_hand=[_twig()], attachments=tuple(attachments)
+    )
+    if own_follower_bowed:
+        resolve_effects(session.game, [Bow("ashigaru")])
+    return session
+
+
+def _play_the_twig(session: EngineSession) -> None:
+    game = session.game
+    session.act(P1, PlayStrategy("twig"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+
+@pytest.mark.parametrize(
+    ("guard_gear_cost", "straightened"),
+    [(None, True), (0, True), (1, False)],
+    ids=["no_attachments", "free_attachment", "costly_attachment"],
+)
+def test_like_a_twig_bows_your_unit_to_destroy_a_cheaper_enemy_unit(guard_gear_cost, straightened):
+    session = _twig_battle(guard_cost=3, guard_gear_cost=guard_gear_cost)
+    honor = session.game.table.seats[P1].honor
+
+    _play_the_twig(session)
+
+    game = session.game
+    in_play = {card.id for card in game.table.battlefield.cards}
+    assert "guard" not in in_play and "gear" not in in_play
+    assert game.table.cards_by_id["raider"].bowed is not straightened
+    assert game.table.cards_by_id["ashigaru"].bowed is not straightened
+    assert game.table.seats[P1].honor == honor - 3
+
+
+def test_like_a_twig_destroys_nothing_when_a_card_of_your_unit_was_already_bowed():
+    session = _twig_battle(own_follower_bowed=True)
+    honor = session.game.table.seats[P1].honor
+
+    _play_the_twig(session)
+
+    game = session.game
+    assert "guard" in {card.id for card in game.table.battlefield.cards}
+    assert game.table.seats[P1].honor == honor - 3
+
+
+def test_like_a_twig_is_not_played_without_a_cheaper_enemy_unit():
+    session = _twig_battle(guard_cost=7)
+
+    assert PlayStrategy("twig") not in session.legal_actions(P1)
+
+
+def test_like_a_twig_focused_destroys_the_loser_of_a_duel_of_force():
+    with probe_ability(DUEL_PROBE, DUEL_ABILITY):
+        session = _edict_duel("like_a_twig", p1_focus=None, guard_force=9)
+
+    game = session.game
+    assert game.duel.outcome.winners == (P2,)
+    assert "raider" not in {card.id for card in game.table.battlefield.cards}
+
+
 # --- Unity of Spirit ---
 
 MELEE_PROBE = "probe_battle_melee_5"
@@ -792,7 +961,7 @@ MELEE_ABILITY = Ability(
     timings=(ActionTiming.BATTLE,),
     label="Battle: Melee 5 Attack",
     cost=no_cost,
-    targets=attack_targets,
+    targets=attack_targeting(MeleeAttack),
     effects=lambda game, source, target: [MeleeAttack(5, target.id, source.owner)],
 )
 

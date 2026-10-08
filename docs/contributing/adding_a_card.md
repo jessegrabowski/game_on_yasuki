@@ -34,7 +34,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "Interrupt: ..." against a pending effect | `register_interrupt(id, Interrupt(...))` | {card}`Okura is Released` |
 | "Interrupt: ..." on a card in play | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.BATTLEFIELD,)))` | {card}`Doji Yuten` |
 | "Interrupt: Target your X. The action targets him instead" | `Interrupt(answers=ResolveAbility, targets=...)` replacing its `target_id` | {card}`Final Sacrifice` |
-| "Interrupt: ... negate the action's effects" | `Interrupt(answers=Effect, answers_every=True)` returning `Negated` | none yet |
+| "Interrupt: ... negate the action", or "negate the action's effects" | `Interrupt(answers=Effect, answers_every=True)` whose `Interruption` carries `NegateAction(source.id)` in its effects | {card}`Daigotsu Churo (Experienced)` |
 | "Interrupt: ..." on an Event in a Province | `register_interrupt(id, Interrupt(..., located_at=(CardLocation.PROVINCE,)))` | none yet |
 | "Unstoppable Battle: ..." | `Ability(..., unstoppable=True)` | none yet |
 | May Proclaim for an amount other than Personal Honor | `@proclaim_gain(id)` | {card}`Ninube Aitso, "Doji Yeiko" (Experienced)` |
@@ -45,6 +45,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |
 | Is considered to have a stat when a certain action checks it | `@considered_stat(id)` | {card}`Dragon Elite Inkyo` |
 | Limits what it will attach to, or what will attach to it | `@attach_restriction(id)` | {card}`Brothers in Arms`, {card}`Hida Zaiberu (Experienced)` |
+| "Will not join a player with ..." | `register_join_restriction(id, handler)` | {card}`Moto Tsuneo, Soul of Moto Tsume` |
 | Equips for less onto some Personalities, from either card's text | `@equip_discount(id)` | {card}`Hida O-Win (Experienced)` |
 | "The rulebook Equip ability may target this Follower in the discard pile" | `@equips_from_discard(id)` | {card}`Tao Defenders` |
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
@@ -67,8 +68,12 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "You have a +N Lobby Bonus" | `@lobby_bonus_grant(id)` | {card}`Shigekawa's Court` |
 | Stops a player Lobbying at all | `@lobby_bar(id)` | {card}`Wasp Sensei` |
 | "May not Lobby" | `register_may_not_lobby(id)` | {card}`Moto Chen` |
-| "You do not lose Honor from your cards' effects" | `register_honor_loss_shield(id)` | {card}`Mishime Sensei` |
+| "You do not lose Honor from your cards' effects", "You lose 1 Honor less from your cards" | `register_honor_loss_reduction(id, no_honor_lost)`, `register_honor_loss_reduction(id, honor_loss_reduced_by(1))` | {card}`Mishime Sensei`, {card}`The Dark Capital of the Spider` |
 | "You may ignore Honor Requirements" | `register_honor_requirement_waiver(id)` | {card}`Mishime Sensei` |
+| "Discipline :g2:", or "If you are a Crab Clan player, this Strategy has Discipline :g1:" | `register_discipline(id, disciplined(2))`, or a handler returning the cost or None | {card}`Grim Reality` |
+| Gives cards in your discard pile Discipline | `@discipline_grant(id)` | {card}`Way of the Spider (Experienced)` |
+| "Your :fear: may target Personalities with Followers" | `register_attacks_past_followers(id, frozenset({Fear}))` | {card}`Way of the Spider (Experienced)` |
+| Moves the Family Honor an Honor Victory or a Dishonor loss needs | `register_threshold_shift(id, ThresholdShift(...))` | {card}`Daigotsu Shinobu` |
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
 id no card has and tells you the nearest real one.
@@ -77,8 +82,8 @@ exists.
 
 These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straightened`, `Dishonored`,
 `Rehonored`, `CardDiscarded`, `CounterChanged`, `ProvinceDestroying`, `ProvinceDestroyed`,
-`Revealed`, `TurnBoundary`, `ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose
-moment is not one of them needs a new event, which is a core change.
+`Revealed`, `TurnBoundary`, `ProducingGold`, `ProducedGold`, `BattleSegmentStarted` and
+`ActionResolved`. A card whose moment is not one of them needs a new event, which is a core change.
 
 A Stronghold, a Sensei and a Wind never answer `EnteredPlay`. Under the CR's Start of Game they are
 already in play and never enter it, so a standing trait of one belongs in a registry or grant row
@@ -227,16 +232,17 @@ id:
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, `uses_per_turn`, an entry point of a
 registry (`gold`, `invest`, `keywords`, `keyword_loss`, `recruit_discount`, `invest_discount`,
-`stat_grant`, `considered_stat`, `attach_restriction`, `equip_discount`, `equips_from_discard`,
-`attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`, `entry_state`,
-`before_entering_play`), or the event a trigger answers (`entered_play`, `destroyed`,
-`straightened`, `dishonored`, `rehonored`, `turn_boundary`, `counter_changed`,
-`province_destroying`, `province_destroyed`, `battle_ended`, `card_discarded`, `producing_gold`,
-`produced_gold`, `entered_play_or_destroyed`). A card printing several abilities qualifies the role
-with that ability's key, as in `_incendiary_archers_fear_effects`, since one name per role would
-collide between them, and the key has to be one the module really registers. A choice resolver is
-named for the choice instead, `_resolve_<the string it is registered under>`. Helpers the block
-calls but never registers only need the card's id in front.
+`stat_grant`, `considered_stat`, `attach_restriction`, `discipline_grant`, `equip_discount`,
+`equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`,
+`favor_payer`, `entry_state`, `before_entering_play`), or the event a trigger answers
+(`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`, `turn_boundary`,
+`counter_changed`, `province_destroying`, `province_destroyed`, `battle_ended`, `card_discarded`,
+`producing_gold`, `produced_gold`, `battle_segment_started`, `entered_play_or_destroyed`). A card
+printing several abilities qualifies the role with that ability's key, as in
+`_incendiary_archers_fear_effects`, since one name per role would collide between them, and the key
+has to be one the module really registers. A choice resolver is named for the choice instead,
+`_resolve_<the string it is registered under>`. Helpers the block calls but never registers only
+need the card's id in front.
 
 The point is grep. A card's whole implementation answers a search for its id, and every handler of a
 kind answers a search for its role. A test enforces it, and `ROLES` in `hooks/card_layout.py` is

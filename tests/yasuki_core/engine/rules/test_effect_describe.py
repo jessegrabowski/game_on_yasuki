@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.effects import (
     AlternateEffects,
     GrantCompassion,
     GrantNegation,
+    NegateAction,
     Negated,
     RefillProvince,
     AdjustCounter,
@@ -126,6 +127,7 @@ EFFECTS = [
     ),
     (Dishonor("hero_1", PlayerId.P2), "dishonor hero_1"),
     (Negated(Bow("hero_1")), "negated: bow hero_1"),
+    (NegateAction("churo"), "churo negates the action"),
     (
         GrantNegation(Negation("ring", END_OF_TURN, source_kind=ActionPrint)),
         "ring negates effects (at the end of the turn)",

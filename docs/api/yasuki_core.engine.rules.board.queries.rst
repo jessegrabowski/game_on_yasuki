@@ -8,6 +8,7 @@ yasuki_core.engine.rules.board.queries
 .. autosummary::
 
     army_at
+    attack_targeting
     attack_targets
     attack_targets_at
     controls_terrain_at

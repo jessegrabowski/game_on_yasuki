@@ -363,6 +363,7 @@ class OpenNextTurn:
         if game.game_over:
             return
         game.turn += 1
+        game.previous_turn_events = game.turn_events
         game.turn_events = ()
         game.active = _other(game.active)
         game.phase = Phase.ACTION

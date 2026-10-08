@@ -1,7 +1,11 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named
-from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn, register_event_entry
+from yasuki_core.engine.rules.abilities.costs import bow_cost, declare_amount, no_cost
+from yasuki_core.engine.rules.abilities.idioms import (
+    declarable_gold,
+    plus_one_gp_this_turn,
+    register_event_entry,
+)
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
     CardLocation,
@@ -13,6 +17,7 @@ from yasuki_core.engine.rules.abilities.registry import register_ability, regist
 from yasuki_core.engine.rules.board.queries import (
     owned_carrying,
     ATTACK_TARGET,
+    attack_targeting,
     attack_targets,
     has_keyword,
     owned_holdings,
@@ -29,6 +34,7 @@ from yasuki_core.engine.rules.stats.card_values import (
 )
 from yasuki_core.engine.rules.stats.checked import checked_stat
 from yasuki_core.engine.rules.stats.province_strength import province_strength_grant
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import Purchase, action_discount
 from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler
 from yasuki_core.engine.rules.gold.producers import reachable_gold
@@ -39,14 +45,21 @@ from yasuki_core.engine.rules.rulebook.recruit import (
     register_honor_requirement_waiver,
 )
 from yasuki_core.engine.rules.legality import location_permits, permitted_timings_in, recruit_cost
-from yasuki_core.engine.rules.rulebook.equip import attach_restriction, is_spell
+from yasuki_core.engine.rules.rulebook.equip import (
+    attach_restriction,
+    equip_discount_onto,
+    is_spell,
+    may_attach,
+)
+from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
-from yasuki_core.engine.table import ZoneKey
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     AdjustPending,
     Ask,
+    AttachCard,
     Bow,
     Choose,
     CreateToken,
@@ -61,7 +74,9 @@ from yasuki_core.engine.rules.effects import (
     MeleeAttack,
     PayGold,
     RangedAttack,
-    register_honor_loss_shield,
+    To,
+    no_honor_lost,
+    register_honor_loss_reduction,
     Simultaneously,
     Straighten,
 )
@@ -132,7 +147,7 @@ def _resolve_a_terrible_glory_shadowlands(
     targeted."""
     if not has_keyword(game, game.table.cards_by_id[chosen[0]], keywords.SHADOWLANDS):
         return []
-    feared = attack_targets(game, game.table.cards_by_id[source_id])
+    feared = attack_targets(game, game.table.cards_by_id[source_id], Fear)
     if not feared:
         return []
     return [Choose(seat, tuple(feared), 1, 1, "a_terrible_glory_fear", source_id)]
@@ -312,7 +327,7 @@ def _draw_strength_from_your_oaths_effects(
     """Bow the target, then aim the Melee Attack at a card in the enemy army, if there is one. The
     Choose carries the bowed Personality, whose Chi the resolver reads."""
     bowed: list[Effect] = [Bow(target.id)]
-    aimable = tuple(attack_targets(game, source))
+    aimable = tuple(attack_targets(game, source, MeleeAttack))
     if not aimable:
         return bowed
     return [*bowed, Choose(source.owner, aimable, 1, 1, "draw_strength_from_your_oaths", target.id)]
@@ -343,6 +358,150 @@ register_ability(
         targeting_message="your unbowed Personality",
         effects=_draw_strength_from_your_oaths_effects,
         located_at=(CardLocation.HAND,),
+    ),
+)
+
+
+# --- Forgotten Mine ---
+
+# "paying :g2: less if it is an Item"
+FORGOTTEN_MINE_ITEM_DISCOUNT = 2
+
+
+def _forgotten_mine_attachments(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """ "Your target attachment": one attached to one of your Personalities."""
+    return [
+        card.id
+        for personality in owned_personalities(game, source.owner)
+        for card in attachments_of(game, personality)
+        if card.owner is source.owner
+    ]
+
+
+def _forgotten_mine_holder(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "From your target Personality": the one the attachment is attached to."""
+    holder = attached_to(game, game.table.cards_by_id[picked[0][0]])
+    return [] if holder is None else [holder.id]
+
+
+def _forgotten_mine_receiver(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "To your other target Personality", which has to meet the restrictions on attaching it
+    (CR, Transfer)."""
+    attachment = game.table.cards_by_id[picked[0][0]]
+    (holder_id,) = picked[1]
+    return [
+        personality.id
+        for personality in owned_personalities(game, source.owner)
+        if personality.id != holder_id and may_attach(game, personality, attachment)
+    ]
+
+
+def _forgotten_mine_transfer_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """A transferred card is not paid for (CR, Transfer)."""
+    (attachment,), _, (receiver,) = groups
+    return [AttachCard(attachment.id, receiver.id)]
+
+
+register_ability(
+    "forgotten_mine",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_forgotten_mine_attachments, targeting_message="your attachment"
+            ),
+            TargetGroup(
+                candidates=_forgotten_mine_holder, targeting_message="the Personality it is on"
+            ),
+            TargetGroup(
+                candidates=_forgotten_mine_receiver, targeting_message="your other Personality"
+            ),
+        ),
+        effects_for_groups=_forgotten_mine_transfer_effects,
+        key="transfer",
+    ),
+)
+
+
+def _forgotten_mine_equip_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """The :X: is declared before the target, since the Equip checks the attachment's Gold Cost
+    against it (CR, Equip). A discard pile with no attachment in it offers no amount (CR, Good
+    Faith)."""
+    if not _forgotten_mine_discarded(game, source):
+        amounts: tuple[int, ...] = ()
+    else:
+        amounts = tuple(range(declarable_gold(game, source, "equip") + 1))
+    return [declare_amount(source, amounts, "How much Gold do you spend on Forgotten Mine?")]
+
+
+def _forgotten_mine_discarded(game: GameState, source: L5RCard) -> list[L5RCard]:
+    pile = game.table.zones[ZoneKey(source.owner, ZoneRole.FATE_DISCARD)]
+    return [card for card in pile.cards if isinstance(card.printed, AttachmentPrint)]
+
+
+def _forgotten_mine_equipped(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "A target attachment from your discard pile" one of your Personalities could be Equipped
+    with for the amount paid (CR, Equip)."""
+    return [
+        card.id
+        for card in _forgotten_mine_discarded(game, source)
+        if may_join(game, source.owner, card)
+        and any(
+            _forgotten_mine_bears(game, bearer, card)
+            for bearer in owned_personalities(game, source.owner)
+        )
+    ]
+
+
+def _forgotten_mine_bears(game: GameState, bearer: L5RCard, card: L5RCard) -> bool:
+    """Whether ``bearer`` may be Equipped with ``card`` for the amount paid: its Gold Cost, 2 less
+    for an Item and less the Equip discounts the two cards give, checked against the amount (CR,
+    Equip)."""
+    discount = FORGOTTEN_MINE_ITEM_DISCOUNT if card.attachment_type is AttachmentType.ITEM else 0
+    discount += equip_discount_onto(game, bearer, card)
+    price = max(0, effective_gold_cost(game, card) - discount)
+    return price == game.amount_declared and may_attach(game, bearer, card)
+
+
+def _forgotten_mine_bearers(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    attachment = game.table.cards_by_id[picked[0][0]]
+    return [
+        bearer.id
+        for bearer in owned_personalities(game, source.owner)
+        if _forgotten_mine_bears(game, bearer, attachment)
+    ]
+
+
+def _forgotten_mine_equip_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """ "Destroy this Holding to Equip": the attachment comes only if the Holding is destroyed."""
+    (attachment,), (bearer,) = groups
+    return [To(Destroy(source.id, source.owner), (AttachCard(attachment.id, bearer.id),))]
+
+
+register_ability(
+    "forgotten_mine",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=_forgotten_mine_equip_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_forgotten_mine_equipped,
+                targeting_message="an attachment in your discard pile",
+            ),
+            TargetGroup(candidates=_forgotten_mine_bearers, targeting_message="your Personality"),
+        ),
+        targets_after_cost=True,
+        effects_for_groups=_forgotten_mine_equip_effects,
+        tireless=True,
+        key="equip",
+        printed_index=1,
     ),
 )
 
@@ -555,7 +714,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=bow_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_jade_legion_effects,
     ),
@@ -585,7 +744,7 @@ MISHIME_SENSEI_DISCOUNT = 2
 # "You do not lose Honor from your cards' effects and may ignore Honor Requirements." Both halves
 # are read off the board: a Sensei starts the game in play and never enters it, so there is no
 # arrival to react to.
-register_honor_loss_shield("mishime_sensei")
+register_honor_loss_reduction("mishime_sensei", no_honor_lost)
 register_honor_requirement_waiver("mishime_sensei")
 
 
@@ -886,7 +1045,7 @@ def _seven_heavens_strike_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     """Bow the target, then the Ranged attack. Its strength counts the Rings once it resolves."""
-    reachable = tuple(attack_targets(game, source))
+    reachable = tuple(attack_targets(game, source, RangedAttack))
     if not reachable:
         return [Bow(target.id)]
     return [

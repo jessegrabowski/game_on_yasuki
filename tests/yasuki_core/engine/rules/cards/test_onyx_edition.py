@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import (
     Bow,
+    GainHonor,
     Destroy,
     GrantNegation,
     Effect,
@@ -92,6 +93,7 @@ from yasuki_core.engine.rules.rulebook.kharmic import (
 )
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.state_based_actions import dishonor_threshold, honor_victory_threshold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
 
@@ -797,6 +799,22 @@ def _dark_capital_in_combat(*, flipped: bool = False) -> EngineSession:
         personality("guard", owner=P2, force=2),
     ]
     return combat_segment(cards, {"raider": 0}, {"guard": 0})
+
+
+@pytest.mark.parametrize(
+    ("flipped", "loss", "change"),
+    [(False, 3, -2), (True, 3, -1), (False, 1, 0)],
+    ids=["front", "back", "reduced_to_nothing"],
+)
+def test_the_capital_reduces_the_honor_its_controllers_own_cards_cost(flipped, loss, change):
+    game = two_seat_game()
+    put_in_play(game, flip_stronghold(DARK_CAPITAL, card_id="capital", flipped=flipped))
+    source = put_in_play(game, personality("source"))
+    before = game.table.seats[P1].honor
+
+    resolve_effects(game, [GainHonor(P1, -loss, source_id=source.id)])
+
+    assert game.table.seats[P1].honor == before + change
 
 
 def test_the_capital_gives_its_own_personality_shadowlands_and_fear_equal_to_his_force():
@@ -2481,6 +2499,62 @@ def test_rin_finding_no_undead_follower_still_resolves():
     assert _fate_deck_ids(session) == {"ashigaru"}
 
 
+# --- Daigotsu Churo (Experienced) ---
+
+ENEMY_ACTION_PROBE = "churo_enemy_action_probe"
+ENEMY_ACTION = Ability(
+    timings=(ActionTiming.BATTLE,),
+    cost=no_cost,
+    targets=lambda game, source: ["churo", "ashigaru"],
+    effects=lambda game, source, target: [Bow(target.id), GainHonor(source.owner, 1)],
+)
+
+
+def _churo_battle() -> EngineSession:
+    """P1's Churo, carrying a Follower, faces P2's guard, whose ability bows its target and gains
+    P2 1 Honor. The Defender holds the opportunity."""
+    cards = [
+        personality("churo", printed_id="daigotsu_churo_experienced"),
+        personality("guard", owner=P2, printed_id=ENEMY_ACTION_PROBE),
+    ]
+    follower = attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER)
+    return combat_segment(
+        cards,
+        {"churo": 0},
+        {"guard": 0},
+        attachments=((follower, "churo"),),
+        defender_passes=False,
+    )
+
+
+def test_churo_destroys_his_follower_to_negate_an_action_targeting_him():
+    with probe_ability(ENEMY_ACTION_PROBE, ENEMY_ACTION):
+        session = _churo_battle()
+        game = session.game
+        honor = game.table.seats[P2].honor
+
+        session.act(P2, ActivateAbility("guard"))
+        session.submit(P2, DecisionResponse(("churo",)))
+        session.act(P1, PlayInterrupt("churo"))
+        session.submit(P1, DecisionResponse(("ashigaru",)))
+        while game.round.kind is RoundKind.INTERRUPT:
+            session.act(game.round.priority, Pass())
+
+    assert "ashigaru" not in _in_play(session)
+    assert not game.table.cards_by_id["churo"].bowed
+    assert game.table.seats[P2].honor == honor
+
+
+def test_churo_does_not_answer_an_action_targeting_another_card():
+    with probe_ability(ENEMY_ACTION_PROBE, ENEMY_ACTION):
+        session = _churo_battle()
+
+        session.act(P2, ActivateAbility("guard"))
+        session.submit(P2, DecisionResponse(("ashigaru",)))
+
+        assert PlayInterrupt("churo") not in session.legal_actions(P1)
+
+
 # --- Daigotsu Hiromu ---
 
 
@@ -2677,3 +2751,42 @@ def test_yamigatai_leaves_the_ring_in_hand_when_the_enemy_destroys_her_province(
     game = session.game
     assert ZoneKey(P1, ZoneRole.PROVINCE, 0) not in game.table.zones
     assert "earth" in {card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards}
+
+
+# --- Daigotsu Shinobu ---
+
+
+@pytest.mark.parametrize(
+    ("guard_force", "guard_after", "shinobu_force"),
+    [(2, "destroyed", 4), (3, "bowed", 3), (4, "standing", 3)],
+    ids=["destroys_a_weak_card", "bows_without_destroying", "too_strong_to_bow"],
+)
+def test_shinobu_fears_at_his_force_and_destroys_a_weak_card_it_bowed(
+    guard_force, guard_after, shinobu_force
+):
+    cards = [
+        personality("shinobu", printed_id="daigotsu_shinobu", force=3),
+        personality("guard", owner=P2, force=guard_force),
+    ]
+    session = combat_segment(cards, {"shinobu": 0}, {"guard": 0})
+    game = session.game
+
+    session.act(P1, ActivateAbility("shinobu"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    guard = game.table.cards_by_id["guard"]
+    observed = (
+        "destroyed" if "guard" not in _in_play(session) else "bowed" if guard.bowed else "standing"
+    )
+    assert observed == guard_after
+    assert effective_force(game, game.table.cards_by_id["shinobu"]) == shinobu_force
+
+
+def test_shinobu_moves_both_honor_thresholds_while_in_play():
+    game = two_seat_game()
+    put_in_play(game, personality("shinobu", printed_id="daigotsu_shinobu"))
+
+    assert honor_victory_threshold(game) == ruleset.ACTIVE.honor_victory_at + 2
+    assert dishonor_threshold(game) == ruleset.ACTIVE.dishonor_loss_at - 2

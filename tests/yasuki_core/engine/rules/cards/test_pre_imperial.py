@@ -1,10 +1,13 @@
 from collections.abc import Callable
 
+import pytest
+
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.battle.resolution import army_force
+from yasuki_core.engine.rules.rulebook.equip import may_attach
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
@@ -22,11 +25,12 @@ from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.table import location_of
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import ActionPrint, HoldingPrint
 
 from tests.yasuki_core.engine.builders import (
+    attachment,
     contentious_terrain,
     end_phase,
     pay,
@@ -35,6 +39,7 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
     terrain_at,
+    two_seat_game,
 )
 
 P1 = PlayerId.P1
@@ -267,6 +272,23 @@ def _battle_resolved_holding_the_cry(*, held_by: PlayerId) -> EngineSession:
     while session.game.round.kind is RoundKind.BATTLE_SEGMENT:
         session.act(session.game.round.priority, Pass())
     return session
+
+
+@pytest.mark.parametrize(
+    ("attachment_type", "carried", "offered"),
+    [
+        (AttachmentType.FOLLOWER, (), False),
+        (AttachmentType.ITEM, ("Armor",), False),
+        (AttachmentType.ITEM, ("Weapon",), True),
+    ],
+    ids=["follower", "armor", "weapon"],
+)
+def test_ogre_bushi_cannot_attach_armor_or_followers(attachment_type, carried, offered):
+    game = two_seat_game()
+    ogre = put_in_play(game, personality("ogre", printed_id="ogre_bushi"))
+    card = attachment("gear", attachment_type=attachment_type, keywords=carried)
+
+    assert may_attach(game, ogre, card) is offered
 
 
 def test_rallying_cry_is_offered_in_the_response_step_after_the_resolution():

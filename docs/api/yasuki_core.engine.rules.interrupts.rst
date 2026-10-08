@@ -7,6 +7,7 @@ yasuki_core.engine.rules.interrupts
 
 .. autosummary::
 
+    InterruptOffer
     Replacement
 
 .. rubric:: Functions

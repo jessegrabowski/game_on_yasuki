@@ -57,7 +57,7 @@ def battle():
 
 def _ids(session, seat):
     source = next(card for card in session.game.table.battlefield.cards if card.owner is seat)
-    return set(attack_targets(session.game, source))
+    return set(attack_targets(session.game, source, Fear))
 
 
 def test_it_reaches_the_enemy_army_and_not_the_enemys_other_cards(battle):
@@ -119,7 +119,7 @@ def test_nothing_is_attackable_outside_a_battle():
     source = personality("raider", owner=ATTACKER, force=3)
     put_in_play(session.game, source)
 
-    assert attack_targets(session.game, source) == []
+    assert attack_targets(session.game, source, Fear) == []
 
 
 def _resolve(session, attack):

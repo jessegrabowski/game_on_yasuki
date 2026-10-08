@@ -1,4 +1,4 @@
-from collections.abc import Callable, Iterator
+from collections.abc import Iterator
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
@@ -47,8 +47,15 @@ from yasuki_core.engine.rules.rulebook.equip import (
     equip_targets,
     equippable,
 )
-from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
+from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.rulebook.discipline import (
+    Reach,
+    discipline_granters,
+    may_have_discipline,
+    reach,
+    under_discipline,
+)
 from yasuki_core.engine.rules.gold.discounts import (
     discounted_gold_cost,
     effective_recruit_discount,
@@ -249,7 +256,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
             continue
         if not isinstance(card.printed, AttachmentPrint):
             continue
-        if not copy_may_enter(game, seat, card):
+        if not may_join(game, seat, card):
             continue
         targets = equip_targets(game, card)
         if not targets:
@@ -267,18 +274,27 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
 
 
 def _strategies(game: GameState, seat: PlayerId, *, only: str | None = None) -> list[Action]:
-    """The Strategies ``seat`` can play: each one in hand whose designator this round permits, whose
-    Gold Cost it can reach, and which has a legal target.
+    """The Strategies ``seat`` can play: each one in hand, or in its Fate discard pile under
+    Discipline, whose designator this round permits, whose Gold Cost it can reach, and which has a
+    legal target.
 
-    Asks :func:`~yasuki_core.engine.rules.playable` for the hand, since the card's own ability
+    Asks :func:`playable` and :func:`playable_under_discipline`, since the card's own ability
     decides when it may be played. ``only`` narrows to a single card.
     """
-    reach = gold_reach(game, seat)
+    gold = gold_reach(game, seat)
+    permitted = permitted_timings(game, seat)
+    offers = [
+        *((card, ability, False) for card, ability in playable(game, seat, permitted)),
+        *(
+            (card, ability, True)
+            for card, ability in playable_under_discipline(game, seat, permitted)
+        ),
+    ]
     return [
-        PlayStrategy(card.id, ability.key)
-        for card, ability in playable(game, seat, permitted_timings(game, seat))
+        PlayStrategy(card.id, ability.key, disciplined=disciplined)
+        for card, ability, disciplined in offers
         if (only is None or card.id == only)
-        and strategy_gold(game, card, ability) <= reach.for_card(game, card)
+        and strategy_gold(game, card, ability, disciplined=disciplined) <= gold.for_card(game, card)
     ]
 
 
@@ -295,8 +311,9 @@ def action_gold(game: GameState, action: ActivateAbility | Equip | PlayStrategy)
             return (equip_gold(game, card, invest=invest, discount=discount),)
         case ActivateAbility(ability_key=key):
             return _ability_gold(game, card, _ability_named(game, card, key))
-        case PlayStrategy(ability_key=key):
-            return (strategy_gold(game, card, _ability_named(game, card, key)),)
+        case PlayStrategy(ability_key=key, disciplined=disciplined):
+            ability = _ability_named(game, card, key)
+            return (strategy_gold(game, card, ability, disciplined=disciplined),)
 
 
 def _ability_named(game: GameState, card: L5RCard, key: str | None) -> Ability:
@@ -315,12 +332,17 @@ def _ability_gold(game: GameState, card: L5RCard, ability: Ability) -> tuple[int
     return tuple(fixed + gold_charged(asked.answered(game, amount)) for amount in asked.amounts)
 
 
-def strategy_gold(game: GameState, card: L5RCard, ability: Ability) -> int:
-    """The Gold playing ``card`` for ``ability`` charges in all: its Gold Cost and the Gold its
-    ability's cost adds, with the action's one discount spent across both."""
-    gold_cost = discounted_gold_cost(game, ability.purchase(game, card, plays_card=True))
+def strategy_gold(
+    game: GameState, card: L5RCard, ability: Ability, *, disciplined: bool = False
+) -> int:
+    """The Gold playing ``card`` for ``ability`` charges in all: its Gold Cost, with its Discipline
+    added when ``disciplined``, and the Gold its ability's cost adds, with the action's one
+    discount spent across both."""
+    purchase = ability.purchase(game, card, plays_card=True)
+    if disciplined:
+        purchase = under_discipline(game, purchase)
     added = ability.discounted_cost(game, card, plays_card=True)
-    return gold_cost + gold_charged(added)
+    return discounted_gold_cost(game, purchase) + gold_charged(added)
 
 
 def recruit_cost(game: GameState, card: L5RCard, *, raised_by: int = 0) -> int:
@@ -403,24 +425,32 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
             yield from (
                 (CardLocation.HAND, card)
                 for card in zone.cards
-                if card.id not in game.announced_from_hand
+                if card.id not in game.announced_cards
             )
         elif key.role is ZoneRole.RULEBOOK:
             yield from ((CardLocation.RULEBOOK, card) for card in zone.cards)
         elif key.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):
             # A pile runs long and almost nothing acts from it, so it is read only for a card that
-            # prints such an ability, or while a grant could give one.
+            # prints such an ability or could have Discipline, or while a grant could give one.
             granted = holds_seat_grant(game, seat)
+            disciplined = key.role is ZoneRole.FATE_DISCARD and bool(
+                discipline_granters(game, seat)
+            )
             yield from (
                 (CardLocation.DISCARD, card)
                 for card in zone.cards
-                if granted or acts_from_discard(card)
+                if card.id not in game.announced_cards
+                and (
+                    granted
+                    or acts_from_discard(card)
+                    or may_have_discipline(card, granted=disciplined)
+                )
             )
 
 
 # Every place ``seat_cards`` yields a card from. A card's own ability in hand is *played* rather
-# than activated, and pays a Gold Cost to do it, so ``_played`` and ``_activated`` tell the two
-# actions apart below rather than the location alone.
+# than activated, and pays a Gold Cost to do it, so :func:`~.reach` tells the two actions apart
+# below rather than the location alone.
 ACTIVATED_FROM: tuple[CardLocation, ...] = (
     CardLocation.BATTLEFIELD,
     CardLocation.PROVINCE,
@@ -441,7 +471,7 @@ def activatable(
     One a keyword confers acts from the hand as well. Playing a card's own ability out of hand is
     a different action with a cost of its own, which :func:`playable` lists.
     """
-    return _usable(game, seat, permitted, at=ACTIVATED_FROM, offered=_activated)
+    return _usable(game, seat, permitted, at=ACTIVATED_FROM, reached=Reach.ACTIVATED)
 
 
 def playable(
@@ -449,15 +479,16 @@ def playable(
 ) -> list[tuple[L5RCard, Ability]]:
     """Each card in hand ``seat`` may play right now, paired with the ability it plays as, under
     the tests :func:`activatable` applies."""
-    return _usable(game, seat, permitted, at=(CardLocation.HAND,), offered=_played)
+    return _usable(game, seat, permitted, at=(CardLocation.HAND,), reached=Reach.PLAYED)
 
 
-def _activated(location: CardLocation, ability: Ability) -> bool:
-    return location is not CardLocation.HAND or ability.from_rulebook
-
-
-def _played(location: CardLocation, ability: Ability) -> bool:
-    return not _activated(location, ability)
+def playable_under_discipline(
+    game: GameState, seat: PlayerId, permitted: frozenset[ActionTiming]
+) -> list[tuple[L5RCard, Ability]]:
+    """Each card in ``seat``'s Fate discard pile it may play right now under Discipline, paired
+    with the ability it plays as, under the tests :func:`activatable` applies (CR, Discipline)."""
+    at = (CardLocation.DISCARD,)
+    return _usable(game, seat, permitted, at=at, reached=Reach.PLAYED_UNDER_DISCIPLINE)
 
 
 def _usable(
@@ -466,7 +497,7 @@ def _usable(
     permitted: frozenset[ActionTiming],
     *,
     at: tuple[CardLocation, ...],
-    offered: Callable[[CardLocation, Ability], bool],
+    reached: Reach,
 ) -> list[tuple[L5RCard, Ability]]:
     ready: list[tuple[L5RCard, Ability]] = []
     # Presence is the seat's, not the card's, so it is settled once rather than per card offered.
@@ -480,7 +511,10 @@ def _usable(
         if location is CardLocation.BATTLEFIELD and is_spell(card) and not has_caster(game, card):
             continue
         for ability in abilities_for(game, card):
-            if location not in ability.located_at or not offered(location, ability):
+            how = reach(
+                game, location, card, ability.located_at, from_rulebook=ability.from_rulebook
+            )
+            if how is not reached:
                 continue
             if permitted.isdisjoint(ability.timings):
                 continue
@@ -497,7 +531,7 @@ def _usable(
             # rations it.
             if (
                 ruleset.ACTIVE.abilities_once_per_turn
-                and _activated(location, ability)
+                and reached is Reach.ACTIVATED
                 and not ability.repeatable
                 and all(used_this_turn(game, card, tag) for tag in use_tags(game, card, ability))
             ):
@@ -511,7 +545,8 @@ def _usable(
                 and not location_permits(game, card)
             ):
                 continue
-            costs = ability.discounted_cost(game, card, plays_card=_played(location, ability))
+            plays_card = reached is not Reach.ACTIVATED
+            costs = ability.discounted_cost(game, card, plays_card=plays_card)
             if not payable(game, costs):
                 continue
             if ability.targets_after_cost or phrases_reachable(game, card, ability):

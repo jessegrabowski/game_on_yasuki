@@ -38,6 +38,8 @@ from yasuki_core.engine.rules.rulebook.favor_payment import favor_payment_option
 from yasuki_core.engine.rules.abilities.idioms import PITCH
 from yasuki_core.engine.rules.effects import (
     Bow,
+    CreateToken,
+    GrantNegation,
     Destroy,
     DiscardFromHand,
     Fear,
@@ -1168,6 +1170,77 @@ def test_kitsu_watanabe_replays_to_the_same_board():
     session.submit(P1, DecisionResponse(("shrine",)))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Shidare no Oni ---
+
+SHIDARE_ONI = "oni_personality_3_1_0"
+
+
+@pytest.mark.parametrize(
+    ("guard_force", "bowed", "force_after"), [(2, True, 0), (3, False, 1)], ids=["2F", "3F"]
+)
+def test_shidare_no_oni_bows_a_card_its_penalty_leaves_at_0_force(guard_force, bowed, force_after):
+    cards = [
+        personality("raider"),
+        personality("guard", owner=P2, force=guard_force),
+        holding("shidare", printed_id="shidare_no_oni"),
+    ]
+    session = combat_segment(cards, {"raider": 0}, {"guard": 0})
+    game = session.game
+
+    session.act(P1, ActivateAbility("shidare", "battle"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    guard = game.table.cards_by_id["guard"]
+    assert guard.bowed is bowed
+    assert effective_force(game, guard) == force_after
+
+
+@pytest.mark.parametrize(("mishime", "honor"), [(False, -2), (True, 0)], ids=["plain", "mishime"])
+def test_shidare_no_oni_creates_an_oni_with_its_battle_ability(mishime, honor):
+    game = two_seat_game()
+    token_template(
+        game,
+        SHIDARE_ONI,
+        name="Oni",
+        card_type="Personality",
+        keywords=("Nonhuman", "Oni", "Shadowlands"),
+        force=3,
+        chi=1,
+    )
+    put_in_play(game, holding("shidare", printed_id="shidare_no_oni"))
+    put_in_play(game, holding("gold", gold_production=4))
+    if mishime:
+        put_in_play(game, sensei(P1, printed_id="mishime_sensei"))
+    session = EngineSession.start(game.table, P1)
+
+    session.act(P1, ActivateAbility("shidare", "open"))
+    pay(session, P1)
+
+    game = session.game
+    oni = next(card for card in game.table.battlefield.cards if card.is_token)
+    assert "shidare" not in {card.id for card in game.table.battlefield.cards}
+    assert game.table.seats[P1].honor == honor
+    assert ability_for(game, oni, "battle") is not None
+
+
+def test_shidare_no_oni_grants_nothing_when_its_creation_is_negated():
+    game = two_seat_game()
+    put_in_play(game, holding("shidare", printed_id="shidare_no_oni"))
+    put_in_play(game, holding("gold", gold_production=4))
+    negation = Negation("gold", END_OF_TURN, effect_kind=CreateToken)
+    session = EngineSession.start(game.table, P1)
+    resolve_effects(session.game, [GrantNegation(negation)])
+
+    session.act(P1, ActivateAbility("shidare", "open"))
+    pay(session, P1)
+
+    game = session.game
+    assert not any(card.is_token for card in game.table.battlefield.cards)
+    assert "shidare" not in {card.id for card in game.table.battlefield.cards}
 
 
 # --- Shinjo Saeki, Clan Champion ---

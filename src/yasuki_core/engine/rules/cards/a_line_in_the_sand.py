@@ -7,7 +7,7 @@ from yasuki_core.engine.rules.abilities.registry import (
 )
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
-    attack_targets,
+    attack_targeting,
     has_keyword,
     owned_personalities,
     remaining_look,
@@ -216,7 +216,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(RangedAttack),
         targeting_message=ATTACK_TARGET,
         effects=_legion_of_the_khan_effects,
     ),

@@ -26,6 +26,7 @@ from yasuki_core.engine.rules.board.queries import (
     army_at,
     owned_carrying,
     ATTACK_TARGET,
+    attack_targeting,
     attack_targets,
     has_keyword,
     opposed_units_in_battle,
@@ -297,7 +298,7 @@ def _daidoji_kaede_granted_ability(
     def targets(game: GameState, source: L5RCard) -> list[str]:
         opposed = source.id in opposed_units_in_battle(game, source.owner)
         opposes = opposing_id in opposing_units_in_battle(game, source.owner)
-        return attack_targets(game, source) if opposed and opposes else []
+        return attack_targets(game, source, RangedAttack) if opposed and opposes else []
 
     def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
         return [RangedAttack(KAEDE_RANGED, target.id, source.owner)]
@@ -647,7 +648,7 @@ def _the_first_kengun_targets(game: GameState, source: L5RCard) -> list[str]:
         if isinstance(card.printed, AttachmentPrint)
         and card.printed.attachment_type in KENGUN_ALSO_TARGETS
     )
-    return [*attack_targets(game, source), *attachments]
+    return [*attack_targets(game, source, Fear), *attachments]
 
 
 def _the_first_kengun_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -831,7 +832,11 @@ def _resolve_togashi_chiyo_destroyed(
     """ "If this destroyed any cards, you may bow Chiyo to make a Melee 2." Chiyo is asked only
     when he is unbowed and the second Melee has something to reach."""
     chiyo = game.table.cards_by_id[source_id]
-    if not action_did(game, Destroyed) or chiyo.bowed or not attack_targets(game, chiyo):
+    if (
+        not action_did(game, Destroyed)
+        or chiyo.bowed
+        or not attack_targets(game, chiyo, MeleeAttack)
+    ):
         return []
     question = f"Bow {chiyo.name} to make a Melee {CHIYO_MELEE}?"
     return [Ask(seat, question, "togashi_chiyo_bow", subjects=(source_id,), source_id=source_id)]
@@ -843,7 +848,7 @@ def _resolve_togashi_chiyo_bow(
 ) -> list[Effect]:
     if not chosen:
         return []
-    reachable = tuple(attack_targets(game, game.table.cards_by_id[source_id]))
+    reachable = tuple(attack_targets(game, game.table.cards_by_id[source_id], MeleeAttack))
     return [Bow(source_id), Choose(seat, reachable, 1, 1, "togashi_chiyo_second_melee", source_id)]
 
 
@@ -859,7 +864,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_togashi_chiyo_effects,
     ),
@@ -904,7 +909,7 @@ WRATH_MOST_OPPOSED = 2
 def _wrath_of_the_shattered_star_modes(game: GameState, source: L5RCard) -> tuple[str, ...]:
     """The halves of the text the board leaves something to do with."""
     offered = (
-        (WRATH_MELEE_MODE, attack_targets(game, source)),
+        (WRATH_MELEE_MODE, attack_targets(game, source, MeleeAttack)),
         (WRATH_FIRE_MODE, opposed_units_in_battle(game, source.owner)),
     )
     return tuple(mode for mode, reachable in offered if reachable)
@@ -942,7 +947,7 @@ def _resolve_wrath_of_the_shattered_star(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     if chosen[0] == WRATH_MELEE_MODE:
-        reachable = tuple(attack_targets(game, game.table.cards_by_id[source_id]))
+        reachable = tuple(attack_targets(game, game.table.cards_by_id[source_id], MeleeAttack))
         return [Choose(seat, reachable, 1, 1, "wrath_of_the_shattered_star_melee", source_id)]
     opposed = opposed_units_in_battle(game, seat)
     most = min(WRATH_MOST_OPPOSED, len(opposed))

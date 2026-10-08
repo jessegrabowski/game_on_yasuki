@@ -1,5 +1,6 @@
 from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass, replace
+from typing import NamedTuple
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
@@ -23,8 +24,9 @@ from yasuki_core.engine.rules.effects import (
     Simultaneously,
     To,
 )
-from yasuki_core.engine.rules.gold.discounts import discounted_gold_cost
+from yasuki_core.engine.rules.gold.discounts import Purchase, discounted_gold_cost
 from yasuki_core.engine.rules.gold.producers import reachable_gold
+from yasuki_core.engine.rules.rulebook.discipline import Reach, reach, under_discipline
 from yasuki_core.engine.rules.legality import (
     legal_targets,
     location_permits,
@@ -150,11 +152,21 @@ def _unique(effects: Iterable[Effect]) -> list[Effect]:
 INTERRUPT_TAG = "interrupt"
 
 
+class InterruptOffer(NamedTuple):
+    """An Interrupt a seat could take: the card offering it, the Interrupt, where the card sits,
+    and how it is taken from there."""
+
+    card: L5RCard
+    interrupt: Interrupt
+    location: CardLocation
+    reach: Reach
+
+
 def card_interrupts_for(
     game: GameState, seat: PlayerId, foreseen: tuple[Effect, ...]
-) -> list[tuple[L5RCard, Interrupt, CardLocation]]:
-    """The Interrupts ``seat`` could take against an action about to do ``foreseen``, each with
-    the card offering it and where it is taken from. The Rule of Presence is the round's to apply,
+) -> list[InterruptOffer]:
+    """The Interrupts ``seat`` could take against an action about to do ``foreseen``. The Rule of
+    Presence is the round's to apply,
     through :func:`~yasuki_core.engine.rules.legality.permitted_timings_in`, so a seat with no
     unit at the battle is never asked here.
 
@@ -164,13 +176,18 @@ def card_interrupts_for(
     the Rules of Location.
     """
     return [
-        (card, interrupt, location)
+        InterruptOffer(card, interrupt, location, how)
         for location, card in seat_cards(game, seat)
         for interrupt in interrupts_for(game, card)
-        if location in interrupt.located_at
+        if (
+            how := reach(
+                game, location, card, interrupt.located_at, from_rulebook=interrupt.from_rulebook
+            )
+        )
+        is not None
         and _within_limit(game, seat, card, interrupt)
         and answered_by(game, card, interrupt, foreseen)
-        and _affordable(game, seat, card, interrupt, location)
+        and _affordable(game, seat, InterruptOffer(card, interrupt, location, how))
     ]
 
 
@@ -191,11 +208,10 @@ def _action_tag(card: L5RCard, interrupt: Interrupt) -> str:
     return interrupt.key or card.id
 
 
-def _affordable(
-    game: GameState, seat: PlayerId, card: L5RCard, interrupt: Interrupt, location: CardLocation
-) -> bool:
-    if _plays_card(interrupt, location):
-        purchase = interrupt.purchase(game, card, plays_card=True)
+def _affordable(game: GameState, seat: PlayerId, offer: InterruptOffer) -> bool:
+    card, interrupt, location, how = offer
+    if how is not Reach.ACTIVATED:
+        purchase = _played_purchase(game, offer)
         return discounted_gold_cost(game, purchase) <= reachable_gold(game, seat, card)
     if location is not CardLocation.HAND:
         if not location_permits(game, card):
@@ -211,10 +227,13 @@ def _tireless(game: GameState, card: L5RCard, interrupt: Interrupt) -> bool:
     return interrupt.tireless or granted_tireless(game, card)
 
 
-def _plays_card(interrupt: Interrupt, location: CardLocation) -> bool:
-    """Whether taking ``interrupt`` from ``location`` plays the card: a card's own Interrupt in
-    hand does, and one the rulebook confers pays its own cost instead (CR, Kharmic)."""
-    return location is CardLocation.HAND and not interrupt.from_rulebook
+def _played_purchase(game: GameState, offer: InterruptOffer) -> Purchase:
+    """What playing the card for ``offer`` pays for: its Gold Cost, with its Discipline added when
+    it is played under Discipline (CR, Discipline)."""
+    purchase = offer.interrupt.purchase(game, offer.card, plays_card=True)
+    if offer.reach is Reach.PLAYED_UNDER_DISCIPLINE:
+        return under_discipline(game, purchase)
+    return purchase
 
 
 def answered_by(
@@ -278,8 +297,12 @@ def interrupt_actions(game: GameState, seat: PlayerId) -> list[Action]:
     """The Interrupts ``seat`` may take against the action held at the Interrupt step, as a
     :class:`~.PlayInterrupt` per card and Interrupt that answers the forecast."""
     return [
-        PlayInterrupt(card.id, interrupt.key)
-        for card, interrupt, _ in card_interrupts_for(game, seat, foreseen_now(game))
+        PlayInterrupt(
+            offer.card.id,
+            offer.interrupt.key,
+            disciplined=offer.reach is Reach.PLAYED_UNDER_DISCIPLINE,
+        )
+        for offer in card_interrupts_for(game, seat, foreseen_now(game))
     ]
 
 
@@ -324,10 +347,17 @@ def _window_timings(game: GameState) -> RoundTimings:
     )
 
 
-def play_interrupt(game: GameState, seat: PlayerId, card_id: str, key: str | None = None) -> None:
-    """Take the Interrupt keyed ``key`` on ``card_id`` against the held action. Where the forecast
-    holds several effects it could answer, ask which first."""
-    card, interrupt, _ = _offer(game, seat, card_id, key)
+def play_interrupt(game: GameState, seat: PlayerId, action: PlayInterrupt) -> None:
+    """Take ``action``'s Interrupt against the held action. Where the forecast holds several
+    effects it could answer, ask which first.
+
+    Raise ``RuntimeError`` if the seat can no longer take it the way ``action`` names, from hand,
+    in play or under Discipline."""
+    card_id, key = action.card_id, action.interrupt_key
+    offer = _offer(game, seat, card_id, key)
+    if (offer.reach is Reach.PLAYED_UNDER_DISCIPLINE) is not action.disciplined:
+        raise RuntimeError(f"{card_id} is no longer an Interrupt {seat.name} can take that way")
+    card, interrupt = offer.card, offer.interrupt
     answered = answered_by(game, card, interrupt, foreseen_now(game))
     if len(answered) == 1 or interrupt.answers_every:
         _play(game, seat, card_id, key, answered[0])
@@ -342,16 +372,14 @@ def play_interrupt(game: GameState, seat: PlayerId, card_id: str, key: str | Non
     )
 
 
-def _offer(
-    game: GameState, seat: PlayerId, card_id: str, key: str | None
-) -> tuple[L5RCard, Interrupt, CardLocation]:
+def _offer(game: GameState, seat: PlayerId, card_id: str, key: str | None) -> InterruptOffer:
     """The seat's offer of ``card_id``'s Interrupt keyed ``key``. Raise ``RuntimeError`` if it is
     no longer one the seat can take."""
     offer = next(
         (
             offer
             for offer in card_interrupts_for(game, seat, foreseen_now(game))
-            if offer[0].id == card_id and offer[1].key == key
+            if offer.card.id == card_id and offer.interrupt.key == key
         ),
         None,
     )
@@ -380,8 +408,8 @@ def apply_interrupt_effect(
 
 
 def _answerable(game: GameState, seat: PlayerId, card_id: str, key: str | None) -> list[Effect]:
-    card, interrupt, _ = _offer(game, seat, card_id, key)
-    return answered_by(game, card, interrupt, foreseen_now(game))
+    offer = _offer(game, seat, card_id, key)
+    return answered_by(game, offer.card, offer.interrupt, foreseen_now(game))
 
 
 def _named(effects: list[Effect], matches: Callable[[Effect], bool]) -> Effect:
@@ -413,7 +441,8 @@ def _play(
     target_id: str | None = None,
 ) -> None:
     foreseen = foreseen_now(game)
-    card, interrupt, location = _offer(game, seat, card_id, key)
+    offer = _offer(game, seat, card_id, key)
+    card, interrupt = offer.card, offer.interrupt
     if effect not in answered_by(game, card, interrupt, foreseen):
         raise RuntimeError(f"{card_id} no longer answers {effect.describe()}")
     if interrupt.targets is None:
@@ -455,8 +484,9 @@ def _play(
                     interrupt=interrupt,
                 )
             )
-    if _plays_card(interrupt, location):
-        play_strategy_with(game, card, interruption.effects, provenance)
+    if offer.reach is not Reach.ACTIVATED:
+        disciplined = offer.reach is Reach.PLAYED_UNDER_DISCIPLINE
+        play_strategy_with(game, card, interruption.effects, provenance, disciplined=disciplined)
         return
     purchase = interrupt.purchase(game, card, plays_card=False)
     paid = priced_cost(game, purchase, interrupt.cost(game, card))

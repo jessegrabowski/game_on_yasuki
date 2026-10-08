@@ -55,6 +55,7 @@ from yasuki_core.engine.rules.cards import (  # noqa: F401
     the_new_order,
     the_truest_test,
     thousand_years_of_darkness,
+    time_of_the_void,
     torn_asunder,
     twenty_festivals,
     web_of_lies,

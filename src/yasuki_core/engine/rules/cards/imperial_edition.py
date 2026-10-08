@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itse
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
-    attack_targets,
+    attack_targeting,
     personalities_in_play,
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -223,7 +223,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(Fear),
         targeting_message=ATTACK_TARGET,
         effects=_skeletal_troops_effects,
     ),

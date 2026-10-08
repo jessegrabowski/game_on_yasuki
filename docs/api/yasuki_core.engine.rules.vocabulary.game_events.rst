@@ -11,6 +11,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     Assigned
     BattleEnded
     BattleResolved
+    BattleSegmentStarted
     Bowed
     CardDiscarded
     CardFocused

@@ -124,13 +124,13 @@ def perform(game: GameState, action: Action) -> None:
             activate(game, card_id, ability_key)
             # Resolve the target, unless the cost's cascade paused for a decision first.
             run_stack(game)
-        case PlayStrategy(card_id=card_id, ability_key=ability_key):
-            play_strategy(game, card_id, ability_key)
+        case PlayStrategy(card_id=card_id, ability_key=ability_key, disciplined=disciplined):
+            play_strategy(game, card_id, ability_key, disciplined=disciplined)
         case DeclareAttack():
             resolution.declare_attack(game)
             resolution.open_maneuvers(game)
-        case PlayInterrupt(card_id=card_id, interrupt_key=key):
-            play_interrupt(game, acted_in.priority, card_id, key)
+        case PlayInterrupt():
+            play_interrupt(game, acted_in.priority, action)
         case _:
             raise ValueError(f"no handler for action {type(action).__name__}")
     # An action resolves fully before the next input; one that paused for a decision leaves its
@@ -233,7 +233,7 @@ def cancel(game: GameState) -> None:
         raise RuntimeError("no decision is pending")
     match request:
         case ChoosePayment(target_id=target_id):
-            game.announced_from_hand -= {target_id}
+            game.announced_cards -= {target_id}
             _cancel_payment(game)
         case _:
             raise ValueError(f"{type(request).__name__} cannot be canceled")

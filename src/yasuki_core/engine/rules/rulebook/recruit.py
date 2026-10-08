@@ -35,7 +35,7 @@ from yasuki_core.engine.rules.effects import (
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay, GameEvent
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.legality import PROCLAIM, can_proclaim, recruit_cost
-from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
+from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
 from yasuki_core.engine.rules.vocabulary.actions import Action, ActionTiming, ActivateAbility
 from yasuki_core.engine.rules.state import GameState
@@ -62,7 +62,7 @@ def recruit_card(game: GameState, card: L5RCard, *, renew: bool = False) -> list
         Default False.
     """
     seat = card.owner
-    if not copy_may_enter(game, seat, card) or not may_recruit(game, seat, card):
+    if not may_join(game, seat, card) or not may_recruit(game, seat, card):
         return []
     payment = recruit_gold(game, card)
     from_province = province_key_holding(game, seat, card.id)
@@ -221,7 +221,7 @@ def recruitable(game: GameState, source: L5RCard) -> list[str]:
     seat = source.owner
     if not isinstance(source.printed, HoldingPrint | PersonalityPrint):
         return []
-    if not copy_may_enter(game, seat, source) or not may_recruit(game, seat, source):
+    if not may_join(game, seat, source) or not may_recruit(game, seat, source):
         return []
     if isinstance(source.printed, PersonalityPrint) and not _meets_honor_requirement(game, source):
         return []
