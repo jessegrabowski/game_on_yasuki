@@ -245,11 +245,10 @@ def meets_honor_requirement(game: GameState, card: L5RCard) -> bool:
     prints one at all, so every other card meets it."""
     if not isinstance(card.printed, PersonalityPrint):
         return True
-    personality = card
-    required = personality.honor_requirement
-    if required is None or game.table.seats[personality.owner].honor >= required:
+    required = card.honor_requirement
+    if required is None or game.table.seats[card.owner].honor >= required:
         return True
-    return _waives_honor_requirement(game, personality)
+    return _waives_honor_requirement(game, card)
 
 
 def _waives_honor_requirement(game: GameState, personality: L5RCard) -> bool:

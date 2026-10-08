@@ -286,17 +286,15 @@ HOUHOU_HONOR = 2
 
 
 def _houhou_experienced_cost(game: GameState, source: L5RCard) -> list[Effect]:
-    """Her Recruit's Gold, paid up front as the cost block. The Recruit it funds charges nothing
-    more, since the Gold for it has already crossed."""
+    """Her Recruit's Gold, paid up front as the cost block. The Recruit it funds adds no charge of
+    its own."""
     return recruit_gold(game, source)
 
 
 def _houhou_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
     """Herself, and only while she lies honorably dead and her Honor Requirement would let her
     back. A Houhou discarded out of a Province never died, and one who fell in disgrace died the
-    wrong way. The Requirement is read here as well as at the Recruit, which keeps the action off
-    the menu in the ordinary case. Honor can still fall between the two reads, and then the Gold
-    is spent on a Recruit that refuses."""
+    wrong way."""
     if not honorably_dead(game, source) or not meets_honor_requirement(game, source):
         return []
     return [source.id]

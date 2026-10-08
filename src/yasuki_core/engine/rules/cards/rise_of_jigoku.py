@@ -361,8 +361,9 @@ def _chuda_kuri_battle_targets(game: GameState, source: L5RCard) -> list[str]:
 
 
 def _chuda_kuri_battle_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Kuri goes first, so the Response he opens by dying is offered for this very action. Burning
-    the target is on offer only while they are Shadowlands, read as the choice is put."""
+    """Destroy Kuri, then put the three things he can do to the target. Burning is on offer only
+    while the target is Shadowlands, read as the choice is put. He is destroyed first, so the
+    Response his death opens is offered for this same action."""
     offered = [KURI_BOW, KURI_HOME]
     if keywords.SHADOWLANDS in effective_keywords(game, target):
         offered.append(KURI_BURN)
@@ -387,6 +388,8 @@ def _resolve_chuda_kuri_battle(
     seat: PlayerId,
     resolver_context: tuple[str, ...] = (),
 ) -> list[Effect]:
+    """Whichever of the three the seat picked. Burning is offered only against a Shadowlands
+    target, so reaching it means the target was one."""
     (target_id,) = resolver_context
     if chosen[0] == KURI_BOW:
         return [Bow(target_id)]
