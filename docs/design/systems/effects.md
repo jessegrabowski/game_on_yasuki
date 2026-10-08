@@ -75,6 +75,8 @@ These raise one: {class}`AdjustCounter <yasuki_core.engine.rules.effects.AdjustC
 {class}`~.Destroy` is also announced before it commits. {meth}`~.Effect.impending` returns what is
 announced, and a destruction returns a {class}`~.Destroying` for each card of the unit about to
 leave play, so a trait reading "before this card is destroyed" acts while the card still stands.
+{class}`~yasuki_core.engine.rules.effects.DestroyProvince` returns a {class}`~.ProvinceDestroying`
+the same way, for a trait that acts before a Province is destroyed.
 [Triggers and the cascade](triggers-and-the-cascade.md) has the rules for when it is announced.
 
 This is worth knowing in both directions. A card that should provoke a reaction has to reach for

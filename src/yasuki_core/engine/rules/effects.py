@@ -36,11 +36,13 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     CounterChanged,
     Destroyed,
     Destroying,
+    Impending,
     Dishonored,
     EnteredPlay,
     LastKnownState,
     FavorDiscarded,
     ProvinceDestroyed,
+    ProvinceDestroying,
     GameEvent,
     HonorChanged,
     Invested,
@@ -178,7 +180,7 @@ class Effect(ABC):
         Empty for an effect that is complete in itself."""
         return ()
 
-    def impending(self, game: GameState) -> tuple[Destroying, ...]:
+    def impending(self, game: GameState) -> tuple[Impending, ...]:
         """What is announced before this effect commits, for the traits that act before it: read on
         the board as it stands, before :meth:`~.Effect.perform`. Empty for an effect nothing acts
         before."""
@@ -771,6 +773,13 @@ class DestroyProvince(Effect):
 
     def describe(self) -> str:
         return f"destroy {self.seat.name}'s province {self.zone.idx}"
+
+    def impending(self, game: GameState) -> tuple[ProvinceDestroying, ...]:
+        """A :class:`~.ProvinceDestroying` for a Province still on the board, or none for one already
+        gone."""
+        if self.zone not in game.table.zones:
+            return ()
+        return (ProvinceDestroying(self.zone, self.seat),)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         if self.zone not in game.table.zones:

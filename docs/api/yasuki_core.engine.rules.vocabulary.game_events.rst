@@ -34,6 +34,7 @@ yasuki_core.engine.rules.vocabulary.game_events
     ProducedGold
     ProducingGold
     ProvinceDestroyed
+    ProvinceDestroying
     Rehonored
     Revealed
     Straightened

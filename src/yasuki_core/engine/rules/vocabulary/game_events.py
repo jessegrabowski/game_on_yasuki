@@ -74,6 +74,24 @@ class ProvinceDestroyed:
 
 
 @dataclass(frozen=True, slots=True)
+class ProvinceDestroying:
+    """A Province is about to be destroyed: announced before the destruction commits, the way
+    :class:`~.Destroying` is for a card, so a trait reading "before ... destroys a Province" resolves
+    while the Province still stands. Announced only when some card answers it.
+
+    Attributes
+    ----------
+    province : ZoneKey
+        The Province about to be destroyed. Its owner is ``province.owner``.
+    seat : PlayerId
+        The seat destroying it.
+    """
+
+    province: ZoneKey
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
 class FavorDiscarded:
     """The Imperial Favor left ``seat``'s control for nobody's.
 
@@ -651,6 +669,7 @@ GameEvent = (
     | CardDiscarded
     | CounterChanged
     | ProvinceDestroyed
+    | ProvinceDestroying
     | Destroyed
     | Destroying
     | Dishonored
@@ -720,3 +739,7 @@ def names_both_edges(event_type: type) -> bool:
     name the edge it answers.
     """
     return "boundary" in getattr(event_type, "__annotations__", {})
+
+
+# What an effect announces before it commits, for the traits that act before it.
+Impending = Destroying | ProvinceDestroying
