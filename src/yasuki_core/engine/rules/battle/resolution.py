@@ -32,7 +32,6 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
     BattleEnded,
     BattleResolved,
-    BattleResolving,
     BattleSegmentStarted,
     Destroyed,
 )
@@ -394,7 +393,12 @@ def _open_battle_segment(game: GameState, segment: BattleSegment) -> None:
         kind=RoundKind.BATTLE_SEGMENT,
     )
     # After the round exists, so an effect held for this moment lands on the round it was held for.
-    started = BattleSegmentStarted(segment, attack.current)
+    _reach_beginning(game, segment, attack.current)
+
+
+def _reach_beginning(game: GameState, segment: BattleSegment, battlefield: int) -> None:
+    """Reach ``segment``'s beginning at ``battlefield``, announcing that it has begun."""
+    started = BattleSegmentStarted(segment, battlefield)
     triggers.reach_moment(game, Moment(segment, Boundary.BEGINNING), started)
 
 
@@ -418,8 +422,8 @@ def close_battle_segment(game: GameState) -> None:
 
 
 def _begin_resolution(game: GameState) -> None:
-    """Open the Resolution Segment at the current battlefield and announce it, with the battle's
-    resolution queued behind the announcement.
+    """Open the Resolution Segment at the current battlefield and reach its beginning, with the
+    battle's resolution queued behind it.
 
     Raise ``ValueError`` when no battle is being fought, since resolution has nothing to resolve.
     """
@@ -428,15 +432,15 @@ def _begin_resolution(game: GameState) -> None:
     if battlefield is None:
         raise ValueError("no battle is being fought")
     attack.battle_segment = BattleSegment.RESOLUTION
-    # Queued first, so the traits answering the announcement resolve before any Force is read.
+    # Queued first, so what the segment's beginning sets off resolves before any Force is read.
     game.stack.append(ResolveBattle(battlefield))
-    triggers.fire(game, BattleResolving(battlefield))
+    _reach_beginning(game, BattleSegment.RESOLUTION, battlefield)
 
 
 @dataclass(frozen=True, slots=True)
 class ResolveBattle:
-    """Resolve the battle at ``battlefield``, once the traits answering
-    :class:`~.BattleResolving` have resolved.
+    """Resolve the battle at ``battlefield``, once what the Resolution Segment's beginning set off
+    has resolved.
 
     Attributes
     ----------

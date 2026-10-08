@@ -14,9 +14,10 @@ own time points. `STEP_ROUNDS` names the three that are a step inside an action 
 action taken in one answers the action the step was opened over, never becoming the action the table
 is resolving, and none of them opens a step of its own.
 
-Closing the Combat Segment opens the Resolution Segment and announces `BattleResolving` before
-either army's Force is read. {class}`~.ResolveBattle` waits beneath the announcement, so a trait
-reading "before battle resolution" resolves first and resolution reads the board it leaves.
+Closing the Combat Segment opens the Resolution Segment and reaches its beginning, announcing
+`BattleSegmentStarted`, before either army's Force is read. {class}`~.ResolveBattle` waits
+beneath that moment, so a trait reading "before battle resolution" resolves first and resolution
+reads the board it leaves.
 
 A battle's resolution opens a Response Step of its own. {class}`~.AnnounceResolution` records the
 outcome and announces `BattleResolved` once the resolution's own cascade has settled, including any
