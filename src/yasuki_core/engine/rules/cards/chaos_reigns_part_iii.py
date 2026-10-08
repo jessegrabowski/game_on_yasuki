@@ -34,7 +34,11 @@ from yasuki_core.engine.rules.board.queries import (
     personalities_in_play,
 )
 from yasuki_core.game_pieces.counters import WEALTH
-from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, ActivateAbility
+from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
+    BattleDesignator,
+)
 from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import permitted_timings_in
@@ -82,11 +86,14 @@ from yasuki_core.engine.rules.effects import (
     Show,
     ShuffleDeck,
     Simultaneously,
+    Straighten,
     PayGold,
     TakeFavor,
 )
 from yasuki_core.engine.rules.rulebook.looks import PUT_ON_BOTTOM
 from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.favor_payment import favor_cost
+from yasuki_core.engine.rules.rulebook.recruit import recruit_card, recruitable
 from yasuki_core.engine.rules.vocabulary.game_events import (
     BattleEnded,
     Destroyed,
@@ -729,6 +736,105 @@ register_ability(
         targeting_message=ATTACK_TARGET,
         effects=_matsu_hanshiro_effects,
         uses_per_turn=_matsu_hanshiro_uses_per_turn,
+    ),
+)
+
+
+# --- Matters of Succession ---
+
+SUCCESSION_LOOK = 5
+SUCCESSION_DISCOUNT = 2
+
+
+def _matters_of_succession_response_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Itself, and only while the action being answered destroyed one of its controller's own
+    Personalities."""
+    return [source.id] if action_destroyed_personality(game, source.owner) else []
+
+
+def _matters_of_succession_recruitable(
+    game: GameState, card_ids: tuple[str, ...]
+) -> tuple[str, ...]:
+    """Those of ``card_ids`` that are Personalities their controller may Recruit. The search is for
+    a Personality, and one the seat may not Recruit would be a choice that resolved to nothing."""
+    cards = (game.table.cards_by_id[card_id] for card_id in card_ids)
+    return tuple(
+        card.id
+        for card in cards
+        if isinstance(card.printed, PersonalityPrint) and recruitable(game, card)
+    )
+
+
+def _matters_of_succession_response_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Search the top 5 cards of your Dynasty deck for a Personality." The rest of the five stay
+    on top in the order they were in, which is what a search leaves behind."""
+    seat = source.owner
+    dynasty = DeckKey(seat, Side.DYNASTY)
+    seen = top_of_deck(game, dynasty, SUCCESSION_LOOK)
+    look = LookAtTop(seat, dynasty, len(seen))
+    personalities = _matters_of_succession_recruitable(game, seen)
+    if not personalities:
+        return [look, EndLook()]
+    return [look, Choose(seat, personalities, 0, 1, "matters_of_succession_recruit", source.id)]
+
+
+@choice_resolver(
+    "matters_of_succession_recruit",
+    prompt="You may Recruit one into your home for 2 Gold less",
+    pick="Recruit",
+)
+def _resolve_matters_of_succession_recruit(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Recruit the Personality named, from nowhere, which is "into your home", and leaving Proclaim
+    unasked. The look closes before the Recruit moves a card it still names."""
+    if not chosen:
+        return [EndLook()]
+    recruited = game.table.cards_by_id[chosen[0]]
+    return [EndLook(), *recruit_card(game, recruited, lowered_by=SUCCESSION_DISCOUNT)]
+
+
+def _matters_of_succession_open_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _matters_of_succession_open_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """ "Bow or straighten a target Personality." Only one of the two can change the target, since
+    a bowed card cannot bow and a standing one cannot straighten."""
+    return [Straighten(target.id) if target.bowed else Bow(target.id)]
+
+
+register_ability(
+    "matters_of_succession",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        key="response",
+        keywords=frozenset({keywords.POLITICAL}),
+        battle_designators=frozenset({BattleDesignator.ABSENT}),
+        cost=no_cost,
+        targets=_matters_of_succession_response_targets,
+        hits_every_target=True,
+        effects=_matters_of_succession_response_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
+
+register_ability(
+    "matters_of_succession",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        printed_index=1,
+        key="open",
+        keywords=frozenset({keywords.POLITICAL}),
+        cost=favor_cost,
+        targets=_matters_of_succession_open_targets,
+        targeting_message="a Personality",
+        effects=_matters_of_succession_open_effects,
+        located_at=(CardLocation.HAND,),
     ),
 )
 

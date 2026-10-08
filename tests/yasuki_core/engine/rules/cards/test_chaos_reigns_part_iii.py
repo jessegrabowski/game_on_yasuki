@@ -34,6 +34,7 @@ from yasuki_core.engine.rules.cards.chaos_reigns_part_iii import (
     IKARICHIS_UNDEAD,
     KANPEKI_DYNASTY,
     NAGA_ZEALOT,
+    SUCCESSION_DISCOUNT,
     ZOMBIE_FOLLOWER,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -58,7 +59,14 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver, fire, resolve_effects
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import (
+    DeckKey,
+    Location,
+    TableState,
+    ZoneKey,
+    ZoneRole,
+    location_of,
+)
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -1545,3 +1553,167 @@ def test_kayo_no_onis_reach_follows_his_force_as_modified():
         session.act(P1, ActivateAbility("kayo"))
 
         assert "enemy0" in session.game.pending.candidates
+
+
+# --- Matters of Succession ---
+
+SUCCESSION_RECRUIT_COST = 6
+
+
+def _matters_of_succession_game(
+    *, above: int = 0, gold_production: int = 8, honor_requirement: int | None = None
+) -> EngineSession:
+    """P1 holding Matters of Succession beside the probe that kills, one Personality of their own
+    to lose, and the Personality ``sought`` in their Dynasty deck under ``above`` Holdings."""
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1)))
+    put_in_play(state, register(state, holding("vault", gold_production=gold_production)))
+    put_in_play(state, register(state, personality("blade", printed_id=DEATH_PROBE)))
+    put_in_play(state, register(state, personality("mine")))
+    put_in_play(state, register(state, personality("theirs", owner=P2)))
+
+    sought = register(
+        state,
+        personality(
+            "sought", gold_cost=SUCCESSION_RECRUIT_COST, honor_requirement=honor_requirement
+        ),
+    )
+    # A deck's last card is its top one, so the fillers above `sought` come after it.
+    deck = [*(register(state, holding(f"under{index}")) for index in range(4)), sought]
+    deck += [register(state, holding(f"over{index}")) for index in range(above)]
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = deck
+
+    succession = L5RCard.of(
+        ActionPrint,
+        id="succession",
+        printed_id="matters_of_succession",
+        name="Matters of Succession",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    state.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(state, succession))
+    return EngineSession.start(state, P1)
+
+
+def _succession_deck(session: EngineSession) -> list[str]:
+    return [card.id for card in session.game.table.decks[DeckKey(P1, Side.DYNASTY)].cards]
+
+
+def test_matters_of_succession_answers_an_action_that_destroyed_nothing_with_nothing():
+    session = _matters_of_succession_game()
+
+    with probe_ability(DEATH_PROBE, _probe_that_bows("mine")):
+        session.act(P1, ActivateAbility("blade"))
+
+        assert PlayStrategy("succession", "response") not in session.legal_actions(P1)
+
+
+def test_matters_of_succession_ignores_an_enemy_personality_dying():
+    """ "If the action destroyed your Personality": the loss has to be its controller's."""
+    session = _matters_of_succession_game()
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("theirs")):
+        session.act(P1, ActivateAbility("blade"))
+
+        assert PlayStrategy("succession", "response") not in session.legal_actions(P1)
+
+
+def test_matters_of_succession_recruits_the_personality_it_finds_for_two_gold_less():
+    session = _matters_of_succession_game()
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, PlayStrategy("succession", "response"))
+
+        # The four Holdings sharing the top five are not what the search is for.
+        assert session.game.pending.candidates == ("sought",)
+        session.submit(P1, DecisionResponse(("sought",)))
+
+        assert session.game.pending.amount == SUCCESSION_RECRUIT_COST - SUCCESSION_DISCOUNT
+        pay(session, P1)
+
+    sought = session.game.table.cards_by_id["sought"]
+    assert location_of(session.game.table, sought) == Location.home(P1)
+
+
+def test_matters_of_succession_may_be_declined_and_then_leaves_the_deck_alone():
+    session = _matters_of_succession_game()
+    before = _succession_deck(session)
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, PlayStrategy("succession", "response"))
+        session.submit(P1, DecisionResponse(()))
+
+    assert _succession_deck(session) == before
+    assert session.game.look is None
+
+
+def test_matters_of_succession_passes_over_a_personality_it_could_not_recruit():
+    """A Personality whose Honor Requirement the seat does not meet may not be Recruited, so the
+    search finds nothing to offer rather than a choice that would resolve to nothing."""
+    session = _matters_of_succession_game(honor_requirement=20)
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, PlayStrategy("succession", "response"))
+
+    assert session.game.pending is None
+    assert session.game.look is None
+    assert "sought" in _succession_deck(session)
+
+
+def test_matters_of_succession_searches_only_the_top_five():
+    session = _matters_of_succession_game(above=5)
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, PlayStrategy("succession", "response"))
+
+    assert session.game.pending is None
+    assert session.game.look is None
+    assert "sought" in _succession_deck(session)
+
+
+def test_matters_of_succession_finds_nothing_in_an_empty_dynasty_deck():
+    session = _matters_of_succession_game()
+    session.game.table.decks[DeckKey(P1, Side.DYNASTY)].cards = []
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, PlayStrategy("succession", "response"))
+
+    assert session.game.pending is None
+    assert session.game.look is None
+
+
+def test_matters_of_successions_open_bows_a_standing_personality():
+    session = _matters_of_succession_game()
+    session.game.favor_holder = P1
+
+    session.act(P1, PlayStrategy("succession", "open"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+
+    assert session.game.table.cards_by_id["theirs"].bowed
+    assert session.game.favor_holder is None  # the cost
+
+
+def test_matters_of_successions_open_is_not_offered_without_the_favor():
+    session = _matters_of_succession_game()
+
+    assert session.game.favor_holder is None
+    assert PlayStrategy("succession", "open") not in session.legal_actions(P1)
+
+
+def test_matters_of_successions_open_straightens_a_bowed_personality():
+    """ "Bow or straighten": only one of the two can change the target, so the bowed one
+    straightens."""
+    session = _matters_of_succession_game()
+    session.game.favor_holder = P1
+    session.game.table.cards_by_id["theirs"].bow()
+
+    session.act(P1, PlayStrategy("succession", "open"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+
+    assert not session.game.table.cards_by_id["theirs"].bowed
