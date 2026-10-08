@@ -154,6 +154,13 @@ class TableState:
         ``positions`` this is rules truth, not presentation. Partial: a card with no entry is at its
         owner's home, which :func:`~.location_of` supplies, so a board on which nothing has ever
         assigned carries an empty map.
+    controllers : dict mapping str to PlayerId
+        Which seat controls each card in play, keyed by card id, for a card controlled by a seat
+        that does not own it. Partial: a card with no entry is controlled by its owner, which
+        :func:`~.controller_of` supplies. Ownership never changes and control is instantaneous
+        rather than lasting a duration (CR, Card control and Card ownership), so this is stored
+        state like a bow rather than an ongoing record. An attachment and a card attached to a
+        Province take their controller from what they are attached to and never appear here.
     attachments : dict mapping str to (str or ZoneKey)
         Which card or province a card sits behind on the table, keyed by the card on top. This is
         presentation, not rules: the manual sandbox lets a player stack anything on anything, so a
@@ -199,6 +206,9 @@ class TableState:
     # Rules truth about where a card in play stands, and partial: absent means "at its owner's
     # home". See the class docstring, and read it through location_of rather than directly.
     locations: dict[str, Location] = field(default_factory=dict)
+    # Control, also rules truth and also partial: absent means "its owner". Read it through
+    # controller_of, which applies the CR's two exceptions, rather than directly.
+    controllers: dict[str, PlayerId] = field(default_factory=dict)
     # Presentation stacking, external to the frozen card. See the class docstring.
     attachments: dict[str, "AttachTarget"] = field(default_factory=dict)
     # The two rules relations. Kept apart because they are apart in the rules. One map with a
@@ -284,6 +294,15 @@ class TableState:
             if location.seat is not None and location.seat not in self.seats:
                 raise ValueError(f"location for {card_id!r} has unknown seat: {location.seat}")
 
+        stray_controllers = set(self.controllers) - battlefield_ids
+        if stray_controllers:
+            raise ValueError(
+                f"controllers reference cards not in play: {sorted(stray_controllers)}"
+            )
+        for card_id, controller in self.controllers.items():
+            if controller not in self.seats:
+                raise ValueError(f"controller for {card_id!r} is an unknown seat: {controller}")
+
         for child_id, target in self.attachments.items():
             if child_id not in battlefield_ids:
                 raise ValueError(f"attachment child not on battlefield: {child_id!r}")
@@ -359,13 +378,33 @@ AttachTarget = str | ZoneKey
 
 
 def location_of(state: TableState, card: L5RCard) -> Location:
-    """Where ``card`` stands, supplying its owner's home when the table records nothing.
+    """Where ``card`` stands, supplying its controller's home when the table records nothing.
 
-    Read locations through this rather than off ``state.locations``, which is partial. Home is the
-    owner's until the engine models control separately from ownership.
+    Read locations through this rather than off ``state.locations``, which is partial. A card whose
+    control passes enters the new controller's home (CR, Card control), which is the home this
+    supplies for a card the table has never placed.
     """
     recorded = state.locations.get(card.id)
-    return Location.home(card.owner) if recorded is None else recorded
+    return Location.home(controller_of(state, card)) if recorded is None else recorded
+
+
+def controller_of(state: TableState, card: L5RCard) -> PlayerId:
+    """Which seat controls ``card``, which is its owner unless control has passed (CR, Card
+    control).
+
+    An attachment is controlled by its Personality's controller, and a card attached to a Province
+    by the seat whose Province it is. Both are read off what the card is attached to rather than
+    from ``state.controllers``, so neither can disagree with its master.
+    """
+    master_id = state.units.get(card.id)
+    if master_id is not None:
+        master = state.cards_by_id.get(master_id)
+        if master is not None:
+            return state.controllers.get(master.id, master.owner)
+    province = state.province_attachments.get(card.id)
+    if province is not None:
+        return province.owner
+    return state.controllers.get(card.id, card.owner)
 
 
 def unit_members(state: TableState, card: L5RCard) -> list[L5RCard]:

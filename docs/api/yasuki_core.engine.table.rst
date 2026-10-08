@@ -19,6 +19,7 @@ yasuki_core.engine.table
 
 .. autosummary::
 
+    controller_of
     location_of
     owns_card
     owns_deck

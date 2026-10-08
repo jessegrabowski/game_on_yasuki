@@ -43,7 +43,7 @@ def test_a_location_naming_neither_or_both_is_malformed(location):
     assert not location.is_well_formed()
 
 
-def test_a_card_with_no_entry_is_at_its_owners_home():
+def test_a_card_with_no_entry_is_at_the_home_of_the_seat_controlling_it():
     state = TableState.empty_two_seat()
     theirs = put_in_play(state, personality("p2-hero", owner=PlayerId.P2))
 
@@ -82,7 +82,7 @@ def test_set_location_stores_a_battlefield_and_reports_the_move():
     assert not ops.set_location(state, hero, Location.at_battlefield(0))
 
 
-def test_set_location_stores_the_owners_home_as_no_entry():
+def test_set_location_stores_the_controllers_home_as_no_entry():
     state = TableState.empty_two_seat()
     hero = put_in_play(state, personality("hero", owner=PlayerId.P1))
     ops.set_location(state, hero, Location.at_battlefield(0))
@@ -90,6 +90,19 @@ def test_set_location_stores_the_owners_home_as_no_entry():
     assert ops.set_location(state, hero, Location.home(PlayerId.P1))
     assert state.locations == {}
     assert location_of(state, hero) == Location.home(PlayerId.P1)
+
+
+def test_set_location_treats_a_controlled_cards_new_home_as_the_default():
+    """The default a recorded location is measured against is the controller's home, so handing a
+    card over and then sending it home leaves no entry rather than one naming the new seat."""
+    state = TableState.empty_two_seat()
+    hero = put_in_play(state, personality("hero", owner=PlayerId.P1))
+    state.controllers[hero.id] = PlayerId.P2
+    ops.set_location(state, hero, Location.at_battlefield(0))
+
+    assert ops.set_location(state, hero, Location.home(PlayerId.P2))
+    assert state.locations == {}
+    assert location_of(state, hero) == Location.home(PlayerId.P2)
 
 
 def test_set_location_reports_no_move_for_a_card_already_at_its_own_home():

@@ -13,6 +13,7 @@ from yasuki_core.engine.table import (
     TableState,
     ZoneKey,
     ZoneRole,
+    controller_of,
     location_of,
     province_keys,
     unit_members,
@@ -39,6 +40,7 @@ def remove_from_location(state: TableState, card: L5RCard) -> None:
                 del cards[i]
                 state.positions.pop(card.id, None)
                 state.locations.pop(card.id, None)
+                state.controllers.pop(card.id, None)
                 return
 
 
@@ -106,14 +108,18 @@ def move_card(
 
     if dest == BATTLEFIELD:
         pos = position or state.positions.get(card.id) or DEFAULT_BOARD_POS
-        # Read before the removal drops it: repositioning on the table is presentation, and must
-        # not send an assigned unit home from its battlefield.
+        # Read before the removal drops them: repositioning on the table is presentation, and must
+        # neither send an assigned unit home from its battlefield nor hand a card back to its
+        # owner.
         location = state.locations.get(card.id)
+        controller = state.controllers.get(card.id)
         remove_from_location(state, card)
         state.battlefield.add(card)
         state.positions[card.id] = pos
         if location is not None:
             state.locations[card.id] = location
+        if controller is not None:
+            state.controllers[card.id] = controller
         return True
 
     if isinstance(dest, DeckKey):
@@ -176,7 +182,7 @@ def set_location(state: TableState, card: L5RCard, location: Location) -> bool:
     """
     if not location.is_well_formed():
         raise ValueError(f"location names neither a home nor a battlefield: {location}")
-    default = Location.home(card.owner)
+    default = Location.home(controller_of(state, card))
     recorded = state.locations.get(card.id)
     if location == default:
         state.locations.pop(card.id, None)
