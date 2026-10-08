@@ -6,7 +6,10 @@ from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import units_at
 from yasuki_core.engine.rules.effects import Effect, ExemptFromResolutionBow
 from yasuki_core.engine.rules.gold.production import gold_handler
+from yasuki_core.engine.rules.rulebook.equip import attach_restriction
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.units.composition import is_follower
+from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -50,6 +53,15 @@ def _jade_works_gold(
     """+2 GP when paying for a Jade card."""
     bonus = 2 if any(keywords.JADE in target.keywords for target in targets) else 0
     return card.gold_production + bonus
+
+
+# --- Ogre Bushi ---
+
+
+@attach_restriction("ogre_bushi")
+def _ogre_bushi_attach_restriction(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
+    """ "Cannot attach Armor or Followers." """
+    return not is_follower(card) and keywords.ARMOR not in effective_keywords(game, card)
 
 
 # --- Rallying Cry ---
