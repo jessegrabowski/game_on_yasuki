@@ -435,7 +435,7 @@ def _as_seen(table: ViewSnapshot, card_ids: list[str]) -> tuple[L5RCard | Hidden
 
 
 def _without_the_resolution_area(game: GameState, table: ViewSnapshot) -> ViewSnapshot:
-    """``table`` with every card announced out of a hand taken out of it.
+    """``table`` with every card announced out of a hand or a discard pile taken out of it.
 
     A card played from hand sits in a resolution area until it lands (CR, Resolution Area), which is
     what :func:`~yasuki_core.engine.rules.board.seats.cards_in_hand` already counts. The zone it is
@@ -448,7 +448,7 @@ def _without_the_resolution_area(game: GameState, table: ViewSnapshot) -> ViewSn
         return table
     zones = {
         key: ZoneView(tuple(card for card in zone.cards if _card_id(card) not in announced))
-        if key.role is ZoneRole.HAND
+        if key.role in (ZoneRole.HAND, ZoneRole.FATE_DISCARD)
         else zone
         for key, zone in table.zones.items()
     }

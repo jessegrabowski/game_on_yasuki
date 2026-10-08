@@ -25,7 +25,7 @@ The card stays in hand until the payment is answered, so backing out of the paym
 there. Resolution stacks the discard before deferring the ability:
 
 ```{literalinclude} ../../src/yasuki_core/engine/rules/abilities/strategy.py
-:start-at: game.stack.append(DiscardPlayed(card_id))
+:start-at: game.stack.append(DiscardPlayed(card_id, disciplined))
 :end-at: defer_ability(game, card, ability, plays_card=True)
 :dedent: 4
 :language: python

@@ -68,6 +68,18 @@ card that will not join, either. A card also joins a player by changing controll
 changes a card's controller yet. The CR's Experienced exception to Unique is overlaying, which is
 not modeled, so an Experienced version entering normally is refused like any other copy.
 
+A card with Discipline is played out of its owner's Fate discard pile for one of its actions, the
+action it would take from the hand, with the Discipline's Gold added to the card's Gold Cost (CR,
+Discipline). {func}`~.discipline_cost` reads it off the card's own text, registered with
+`register_discipline`, and off the cards granting it, as Way of the Spider gives it to Dark Virtues.
+{func}`~.reach` decides how each ability or Interrupt is taken from where its card sits: activated,
+played, or played under Discipline. The choice travels on the action, as the `disciplined` flag of
+`PlayStrategy` and `PlayInterrupt`, and on the `Purchase`, whose `discipline` is the Gold the card's
+cost carries, so nothing reads where the card is to recover it. Once the action ends the card is
+removed from the game rather than discarded. One that put itself into play is recorded in
+`GameState.banished_on_leaving_play` and removed from the game the next time it leaves play,
+wherever it was sent.
+
 A card's title is the one it prints, without its subtitle (CR, Card Subtitles), so Akodo Kano,
 Clan Champion and Akodo Kano, the Lion's Fang share one. {func}`~.titles` also counts the title an
 "Experienced [#] Name" keyword names, so The Sorrow, which prints "Experienced Bayushi Tenzan", is a

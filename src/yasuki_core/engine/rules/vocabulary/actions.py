@@ -57,7 +57,9 @@ class Pass:
 
 @dataclass(frozen=True, slots=True)
 class PlayStrategy:
-    """Play a Strategy from hand for its Gold Cost, resolve its ability, and discard it.
+    """Play a Strategy from hand for its Gold Cost, resolve its ability, and discard it. Under
+    Discipline it is played from its owner's discard pile instead, for its Gold Cost and its
+    Discipline, and removed from the game afterward (CR, Discipline).
 
     Offered in whichever Action Round the card's own ability names, not a fixed one. Carries no
     entry in ``ACTION_TIMINGS``. Its target is chosen through the decision the ability raises.
@@ -65,14 +67,17 @@ class PlayStrategy:
     Attributes
     ----------
     card_id : str
-        The Strategy in hand.
+        The Strategy being played.
     ability_key : str, optional
         Names the ability among the several the card prints, so the one announced is the one
         that resolves. Default None, the card's only ability.
+    disciplined : bool, optional
+        Whether it is played from the discard pile under Discipline. Default False, from hand.
     """
 
     card_id: str
     ability_key: str | None = None
+    disciplined: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -134,10 +139,14 @@ class PlayInterrupt:
         The card whose Interrupt is taken.
     interrupt_key : str, optional
         The Interrupt taken, for one a keyword confers. Default None, the one the card prints.
+    disciplined : bool, optional
+        Whether a Strategy's own Interrupt is played from its discard pile under Discipline (CR,
+        Discipline). Default False.
     """
 
     card_id: str
     interrupt_key: str | None = None
+    disciplined: bool = False
 
 
 @dataclass(frozen=True, slots=True)

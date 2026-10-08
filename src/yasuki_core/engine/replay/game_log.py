@@ -305,12 +305,22 @@ def _encode_action(action: Action) -> dict:
             return {"kind": "equip", "card_id": card_id, "invest": invest, "discount": discount}
         case ActivateAbility(card_id=card_id, ability_key=key):
             return {"kind": "activate_ability", "card_id": card_id, "key": key}
-        case PlayStrategy(card_id=card_id):
-            return {"kind": "play_strategy", "card_id": card_id}
+        case PlayStrategy(card_id=card_id, ability_key=key, disciplined=disciplined):
+            return {
+                "kind": "play_strategy",
+                "card_id": card_id,
+                "key": key,
+                "disciplined": disciplined,
+            }
         case DeclareAttack():
             return {"kind": "declare_attack"}
-        case PlayInterrupt(card_id=card_id, interrupt_key=key):
-            return {"kind": "play_interrupt", "card_id": card_id, "key": key}
+        case PlayInterrupt(card_id=card_id, interrupt_key=key, disciplined=disciplined):
+            return {
+                "kind": "play_interrupt",
+                "card_id": card_id,
+                "key": key,
+                "disciplined": disciplined,
+            }
     raise ValueError(f"no encoding for action {action!r}")
 
 
@@ -327,9 +337,13 @@ def _decode_action(payload: dict) -> Action:
     if kind == "activate_ability":
         return ActivateAbility(payload["card_id"], payload.get("key"))
     if kind == "play_strategy":
-        return PlayStrategy(payload["card_id"])
+        return PlayStrategy(
+            payload["card_id"], payload.get("key"), disciplined=payload.get("disciplined", False)
+        )
     if kind == "declare_attack":
         return DeclareAttack()
     if kind == "play_interrupt":
-        return PlayInterrupt(payload["card_id"], payload.get("key"))
+        return PlayInterrupt(
+            payload["card_id"], payload.get("key"), disciplined=payload.get("disciplined", False)
+        )
     raise ValueError(f"unknown action kind {kind!r}")

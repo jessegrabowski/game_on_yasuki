@@ -462,10 +462,21 @@ def _move_card(
     """Move ``card`` as an effect does, remembering it as it stood if it is leaving play, which is
     what a later reference to it reads (CR, References to Other Points in Time). Every effect that
     can take a card out of play moves it through here or through :func:`_remove_unit`, so a card
-    moving between places out of play keeps the record of when it last stood in play."""
+    moving between places out of play keeps the record of when it last stood in play, and one
+    removed from the game on leaving play is removed whatever sent it."""
     if _in_play(game, card):
         game.last_known[card.id] = _as_it_stands(game, card)
+        dest = _leaving_play_to(game, card, dest)
     ops.move_card(game.table, card, dest, **placement)
+
+
+def _leaving_play_to(game: GameState, card: L5RCard, dest: ZoneKey | DeckKey) -> ZoneKey | DeckKey:
+    """Where ``card``, leaving play for ``dest``, goes: its banish pile when it is to be removed
+    from the game on leaving play, which spends that record, and ``dest`` otherwise."""
+    if card.id not in game.banished_on_leaving_play:
+        return dest
+    game.banished_on_leaving_play -= {card.id}
+    return pile_for(card, banished=True)
 
 
 def _remove_unit(
@@ -483,9 +494,11 @@ def _remove_unit(
     in_play = _in_play(game, card)
     stood = tuple((member, _as_it_stands(game, member)) for member in unit_of(game, card))
     for member, state in stood:
+        dest = pile_for(member, banished=banished)
         if in_play:
             game.last_known[member.id] = state
-        ops.move_card(game.table, member, pile_for(member, banished=banished))
+            dest = _leaving_play_to(game, member, dest)
+        ops.move_card(game.table, member, dest)
     return stood
 
 

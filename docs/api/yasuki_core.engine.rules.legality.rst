@@ -27,6 +27,7 @@ yasuki_core.engine.rules.legality
     permitted_timings_in
     phrases_reachable
     playable
+    playable_under_discipline
     recruit_cost
     seat_cards
     strategy_gold

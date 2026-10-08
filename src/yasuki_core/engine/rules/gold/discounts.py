@@ -62,12 +62,16 @@ class Purchase:
     plays_card : bool
         Whether the action plays the card and so pays its Gold Cost, as a Strategy from hand or an
         Equip does.
+    discipline : int, optional
+        The Gold Discipline adds to the card's Gold Cost, for a card played out of its discard pile
+        under Discipline (CR, Discipline). Default 0.
     """
 
     seat: PlayerId
     card: L5RCard | None
     keywords: frozenset[str]
     plays_card: bool
+    discipline: int = 0
 
     def has_keyword(self, keyword: str) -> bool:
         """Whether the action carries ``keyword``, compared without regard to case as the rest of
@@ -120,13 +124,12 @@ def discounted_gold(game: GameState, purchase: Purchase, amount: int) -> int:
 
 
 def discounted_gold_cost(game: GameState, purchase: Purchase) -> int:
-    """What ``purchase``'s seat pays for its card's Gold Cost, less their discounts on it.
+    """What ``purchase``'s seat pays for its card's Gold Cost and any Discipline added to it, less
+    their discounts on it.
 
     Raise ValueError for a player ability's purchase, which has no card whose Gold Cost is paid.
     """
-    if purchase.card is None:
-        raise ValueError("a player ability pays no card's Gold Cost")
-    return discounted_gold(game, purchase, effective_gold_cost(game, purchase.card))
+    return discounted_gold(game, purchase, _paid_gold_cost(game, purchase))
 
 
 def unspent_action_discount(game: GameState, purchase: Purchase) -> int:
@@ -137,5 +140,13 @@ def unspent_action_discount(game: GameState, purchase: Purchase) -> int:
     """
     discount = effective_action_discount(game, purchase)
     if purchase.plays_card and purchase.card is not None:
-        discount -= min(discount, effective_gold_cost(game, purchase.card))
+        discount -= min(discount, _paid_gold_cost(game, purchase))
     return discount
+
+
+def _paid_gold_cost(game: GameState, purchase: Purchase) -> int:
+    """The Gold Cost ``purchase`` pays for its card before discounts, with the Discipline added to
+    it (CR, Discipline)."""
+    if purchase.card is None:
+        raise ValueError("a player ability pays no card's Gold Cost")
+    return effective_gold_cost(game, purchase.card) + purchase.discipline

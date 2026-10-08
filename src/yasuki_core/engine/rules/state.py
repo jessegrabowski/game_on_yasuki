@@ -211,12 +211,16 @@ class GameState:
         Each card and watch whose condition held when the board last settled, so the condition is
         announced as fulfilled only when it turns true. Ephemeral and rebuilt by replay. Default
         empty.
+    banished_on_leaving_play : frozenset of str
+        The cards in play that are removed from the game, rather than going where they were sent,
+        the next time they leave play, as a Strategy that put itself into play under Discipline is
+        (CR, Discipline). Default empty.
     announced_cards : frozenset of str
-        The cards announced out of a hand that have not yet landed: a Strategy in its resolution
-        area and an attachment in its entering-play area, both out of play and out of the hand (CR,
-        Resolution Area; CR, Entering-Play Areas). The engine keeps them in the hand zone until
-        they land, and a count of a hand leaves them out. Ephemeral and rebuilt by replay. Default
-        empty.
+        The cards announced out of a hand, or a discard pile under Discipline, that have not yet
+        landed: a Strategy in its resolution area and an attachment in its entering-play area, both
+        out of play and out of the zone they were announced from (CR, Resolution Area; CR,
+        Entering-Play Areas). The engine keeps them in that zone until they land, and a count of a
+        hand leaves them out. Ephemeral and rebuilt by replay. Default empty.
     asked_outside_action : bool
         Whether the question now pending arose outside any action, as a debug step's does, so
         answering it, and what follows from the answer, hands no opportunity on. Ephemeral and
@@ -288,6 +292,7 @@ class GameState:
     action_resolved: bool = False
     turn_events: tuple[GameEvent, ...] = ()
     conditions_holding: frozenset[tuple[str, str]] = frozenset()
+    banished_on_leaving_play: frozenset[str] = frozenset()
     announced_cards: frozenset[str] = frozenset()
     asked_outside_action: bool = False
     interrupts_taken: set[tuple[str, PlayerId]] = field(default_factory=set)
