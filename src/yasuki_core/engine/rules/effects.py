@@ -8,7 +8,7 @@ from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.battle.presence import place_unit, record_terrain_destroyed
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.rulebook import favor_proxy
-from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
+from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
 from yasuki_core.engine.players import Cause, PlayerId, Trait
 from yasuki_core.engine.rules.units.membership import unit_of
@@ -1619,7 +1619,7 @@ class PutIntoPlay(Effect):
         card = game.table.cards_by_id.get(self.card_id)
         if card is None or any(held is card for held in game.table.battlefield.cards):
             return []
-        if not copy_may_enter(game, card.owner, card):
+        if not may_join(game, card.owner, card):
             return []
         hand = game.table.zones[ZoneKey(card.owner, ZoneRole.HAND)]
         from_hand = any(held is card for held in hand.cards)
@@ -2736,7 +2736,7 @@ class Recruit(Effect):
         """Whether the card may enter play: Unique and Singular can keep it out, and so can its own
         "May only be Recruited by" text."""
         card = game.table.cards_by_id[self.card_id]
-        return copy_may_enter(game, card.owner, card) and may_recruit(game, card.owner, card)
+        return may_join(game, card.owner, card) and may_recruit(game, card.owner, card)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         # The Recruit procedure imports this module for the effects it resolves, so importing it

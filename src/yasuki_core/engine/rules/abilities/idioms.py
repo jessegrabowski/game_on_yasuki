@@ -13,7 +13,7 @@ from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.board.queries import favor_actions_this_turn, terrains_at
 from yasuki_core.engine.rules.board.seats import seat_named
-from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
+from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
@@ -127,7 +127,7 @@ def register_entry(
     timings = timing if isinstance(timing, tuple) else (timing,)
 
     def targets(game: GameState, source: L5RCard) -> list[str]:
-        if not copy_may_enter(game, source.owner, source):
+        if not may_join(game, source.owner, source):
             return []
         if condition is not None and not condition(game, source):
             return []
@@ -230,7 +230,7 @@ def _offer_entry(ctx: TriggerContext) -> list[Effect]:
     if ring_entry() is not RingEntry.IMMEDIATE:
         raise NotImplementedError(f"{ring_entry().name} Ring entry is not implemented")
     card = ctx.card
-    if not copy_may_enter(ctx.game, card.owner, card):
+    if not may_join(ctx.game, card.owner, card):
         return []
     question = f"Put {card.name} into play?"
     return [Ask(card.owner, question, TRAIT_ENTRY, subjects=(card.id,), source_id=card.id)]
@@ -350,7 +350,7 @@ def register_event_entry(
     """
 
     def targets(game: GameState, source: L5RCard) -> list[str]:
-        return [source.id] if copy_may_enter(game, source.owner, source) else []
+        return [source.id] if may_join(game, source.owner, source) else []
 
     def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
         return [PutIntoPlay(source.id)]
@@ -629,7 +629,7 @@ def register_terrain(
         attack = game.attack
         if attack is None or attack.current is None:
             return []
-        return [source.id] if copy_may_enter(game, source.owner, source) else []
+        return [source.id] if may_join(game, source.owner, source) else []
 
     def effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
         attack = game.attack

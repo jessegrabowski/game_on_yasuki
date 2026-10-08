@@ -56,14 +56,17 @@ cost included. {func}`~.playable` applies the same tests to a card played out of
 the one place the two part: a card's own hand ability is played, while one a keyword confers is
 activated where the card sits.
 
-Unique and Singular are rules on every route into play rather than actions of their own.
-{func}`~.copy_may_enter` refuses a Unique card while its seat controls a Unique card with the
-same title (CR, Unique), and a Singular card while a card with the same title is in play under
-any seat (ShE datasheet, Singular). It is asked by the Recruit and Equip offers, by the entry
-abilities {func}`~.register_entry` and {func}`~.register_event_entry` build, and by the
-`PutIntoPlay` effect and {func}`~.recruit_card`, so a card effect cannot bring a duplicate in either. The
-CR's Experienced exception to Unique is overlaying, which is not modeled, so an Experienced
-version entering normally is refused like any other copy.
+Unique, Singular and a card's own "Will not join" are rules on every route into play rather than
+actions of their own. {func}`~.may_join` asks all three: {func}`~.copy_may_enter` refuses a Unique
+card while its seat controls a Unique card with the same title (CR, Unique), and a Singular card
+while a card with the same title is in play under any seat (ShE datasheet, Singular), and a card
+registered with `register_join_restriction` says which players it will not come under the control of
+(CR, Join). It is asked by the Recruit and Equip offers, by the entry abilities
+{func}`~.register_entry` and {func}`~.register_event_entry` build, and by the `PutIntoPlay` and
+`AttachCard` effects and {func}`~.recruit_card`, so a card effect cannot bring in a duplicate, or a
+card that will not join, either. A card also joins a player by changing controller, and no effect
+changes a card's controller yet. The CR's Experienced exception to Unique is overlaying, which is
+not modeled, so an Experienced version entering normally is refused like any other copy.
 
 A card's title is the one it prints, without its subtitle (CR, Card Subtitles), so Akodo Kano,
 Clan Champion and Akodo Kano, the Lion's Fang share one. {func}`~.titles` also counts the title an

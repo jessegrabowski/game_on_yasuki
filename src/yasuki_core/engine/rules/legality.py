@@ -47,7 +47,7 @@ from yasuki_core.engine.rules.rulebook.equip import (
     equip_targets,
     equippable,
 )
-from yasuki_core.engine.rules.rulebook.copies import copy_may_enter
+from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.gold.discounts import (
     discounted_gold_cost,
@@ -249,7 +249,7 @@ def _equips(game: GameState, seat: PlayerId, *, only: str | None = None) -> list
             continue
         if not isinstance(card.printed, AttachmentPrint):
             continue
-        if not copy_may_enter(game, seat, card):
+        if not may_join(game, seat, card):
             continue
         targets = equip_targets(game, card)
         if not targets:
