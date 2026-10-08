@@ -239,7 +239,7 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     defending_force = army_force(game, battlefield, attack.defender)
 
     if attacking_force > defending_force:
-        effects = [
+        effects: list[Effect] = [
             Simultaneously(tuple(_destroy_army(defending))),
             _winners_spoils(game, attack.attacker, attacking, defending),
         ]

@@ -177,6 +177,7 @@ def test_a_lane_at_no_province_names_itself_and_shows_no_strength(view):
     texts = _texts(view)
     assert "Battlefield 1" in texts
     assert "PROVINCE STRENGTH" not in texts
+    assert "3" in texts  # the army and its Force total still draw below the shortened header
 
 
 def test_the_province_strength_is_the_largest_thing_in_the_lane(view):

@@ -73,9 +73,8 @@ class BattlefieldView:
     Attributes
     ----------
     province : ProvinceAtBattlefield or None
-        The Province the battlefield sits at, with what stands in it and its Strength, or None for
-        a battlefield not associated with any Province (CR, Battlefields), which has no occupant,
-        no Fortifications and no Strength to clear.
+        The Province the battlefield sits at, with what stands in it and its Strength, or None
+        for a battlefield not associated with any Province (CR, Battlefields).
     terrains : tuple of L5RCard or HiddenCard
         The Terrains in play here, in play order. They stand at the battlefield in neither army.
     attacking : tuple of UnitView
@@ -605,8 +604,7 @@ def _project_battlefield(
     game: GameState, table: ViewSnapshot, attack: AttackPhase, index: int, info: BattlefieldInfo
 ) -> BattlefieldView:
     """One lane of the attack view: the battlefield at ``index`` as the snapshot's viewer sees
-    it, its Province grouped into one optional field so a lane either has a whole Province or
-    none of one."""
+    it."""
     province = (
         None
         if info.province is None
