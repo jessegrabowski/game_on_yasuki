@@ -527,13 +527,8 @@ def _remove_unit(
     the move itself sees to (CR, Create). It still announces its departure, because a card reacting
     to a Follower being destroyed does not care where the Follower came from.
 
-    Parameters
-    ----------
-    banished : bool, optional
-        Whether the unit goes to the banish piles rather than the discards. Default False.
-    destroyed : bool, optional
-        Whether the unit is being destroyed, which each member's record carries so a card lying in
-        a pile can be told from one discarded there without dying. Default False.
+    Each record says the departure was a destruction when ``destroyed``, which is what tells a
+    card lying in a pile from one discarded there without dying.
     """
     in_play = _in_play(game, card)
     stood = tuple(

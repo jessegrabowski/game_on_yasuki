@@ -327,9 +327,8 @@ def _chuda_kuri_response_targets(game: GameState, source: L5RCard) -> list[str]:
 
 
 def _chuda_kuri_response_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Taint as many Personalities as Kuri had Chi when he left play, which the pile cannot tell
-    and the record of how he stood can. Fewer Personalities on the board than that taints all of
-    them."""
+    """Taint as many Personalities as Kuri had Chi when he left play. Fewer Personalities on the
+    board than that taints all of them."""
     departure = game.last_known.get(source.id)
     if departure is None:
         return []
