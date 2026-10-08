@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.interrupts import interrupt_actions
 from yasuki_core.engine.rules.legality import activatable, permitted_timings, playable
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import controller_of
 from yasuki_core.engine.rules.turn.provinces import refill_short_provinces
 from yasuki_core.engine.rules.turn.structure import (
     ADDITIONAL_ACTION_SPENT,
@@ -146,7 +147,11 @@ def _count_turn_against_straighten_delays(game: GameState) -> None:
     by_id = game.table.cards_by_id
     for card_id, delay in game.straighten_delayed.items():
         card = by_id.get(card_id)
-        counted = card is not None and card.owner is game.active and game.turn > delay.imposed
+        counted = (
+            card is not None
+            and controller_of(game.table, card) is game.active
+            and game.turn > delay.imposed
+        )
         if counted and delay.turns > 1:
             game.straighten_delayed[card_id] = replace(
                 delay, imposed=game.turn, turns=delay.turns - 1
@@ -166,7 +171,11 @@ def _lift_straighten_delays(game: GameState, moment: Moment) -> None:
         card_id: delay
         for card_id, delay in game.straighten_delayed.items()
         if (card := by_id.get(card_id)) is not None
-        and not (delay.until == moment and card.owner is game.active and game.turn > delay.imposed)
+        and not (
+            delay.until == moment
+            and controller_of(game.table, card) is game.active
+            and game.turn > delay.imposed
+        )
     }
 
 

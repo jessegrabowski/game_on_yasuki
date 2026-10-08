@@ -853,6 +853,24 @@ def test_a_straighten_delay_lifts_after_its_own_controller_s_action_phase():
     assert not session.game.table.cards_by_id["mine"].bowed
 
 
+def test_a_straighten_delay_follows_control_rather_than_ownership():
+    """A delay lifts in its controller's turn (CR, Card control), so a card handed over waits for
+    the new controller's Action Phase and not its owner's."""
+    # P2 owns the card and goes first; P1 controls it, so P1's phase is the one that lifts it.
+    session = EngineSession.start(dealt_table(hand=0), PlayerId.P2)
+    mine = put_in_play(session.game, holding("mine", owner=PlayerId.P2))
+    mine.bow()
+    session.game.table.controllers["mine"] = PlayerId.P1
+    triggers.resolve_effects(session.game, [DelayStraighten("mine")])
+
+    _advance_turns(session, 1)  # P1's turn, the controller's, opens
+    assert "mine" in session.game.straighten_delayed
+
+    end_phase(session)  # P1's Action Phase ends, which is when the prohibition lifts
+
+    assert "mine" not in session.game.straighten_delayed
+
+
 def test_a_delay_until_the_action_phase_begins_outlives_the_straighten_and_lifts_at_the_phase():
     session = EngineSession.start(dealt_table(hand=0), PlayerId.P2)
     mine = put_in_play(session.game, holding("mine", owner=PlayerId.P2))

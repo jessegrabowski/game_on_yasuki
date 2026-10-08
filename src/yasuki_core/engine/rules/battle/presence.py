@@ -2,7 +2,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.units.membership import attached_to
-from yasuki_core.engine.table import Location
+from yasuki_core.engine.table import Location, controller_of
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -21,7 +21,7 @@ def place_unit(game: GameState, card: L5RCard, location: Location) -> bool:
     if location.battlefield is None or attack is None:
         return ops.move_unit(game.table, personality, location)
     info = attack.battlefields[location.battlefield]
-    arriving = (personality.owner, personality.id)
+    arriving = (controller_of(game.table, personality), personality.id)
     if info.sealed and arriving not in info.ever_present:
         return False
     moved = ops.move_unit(game.table, personality, location)
