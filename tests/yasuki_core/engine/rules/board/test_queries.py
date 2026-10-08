@@ -216,14 +216,25 @@ def test_only_a_card_destroyed_without_disgrace_is_honorably_dead(disgraced, dea
 
 
 def test_a_card_discarded_out_of_a_province_is_not_honorably_dead():
-    """A Personality who never left a Province never died, and the pile looks the same either way,
-    which is the whole reason the card carries a death at all."""
+    """A Personality who never left a Province never stood in play, so nothing remembers him and
+    the pile cannot be asked."""
     game = two_seat_game()
     province_card(game, "unplayed", seat=PlayerId.P1)
 
     resolve_effects(game, [Discard("unplayed", PlayerId.P1)])
 
     assert not honorably_dead(game, game.table.cards_by_id["unplayed"])
+
+
+def test_a_card_discarded_out_of_play_is_not_honorably_dead():
+    """The pile holds it either way and it is remembered either way. Only the record of how it
+    left tells a death from a discard."""
+    game = two_seat_game()
+    put_in_play(game, personality("spent"))
+
+    resolve_effects(game, [Discard("spent", PlayerId.P1)])
+
+    assert not honorably_dead(game, game.table.cards_by_id["spent"])
 
 
 def test_a_card_brought_back_into_play_is_no_longer_dead():
