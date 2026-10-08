@@ -107,7 +107,7 @@ def _modifiers(
             if amount:
                 yield Modifier(attached.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
     for stat in stats:
-        for granting, amount in granted_stats(game, card, stat, granters=granters):
+        for granting, _, amount in granted_stats(game, card, stat, granters=granters):
             yield Modifier(granting.id, card.id, stat, amount, Duration.WHILE_SOURCE_IN_PLAY)
     # Kensai raises the limit rather than exempting him from it: Two-Handed still binds a
     # Kensai, and that rule is checked separately.

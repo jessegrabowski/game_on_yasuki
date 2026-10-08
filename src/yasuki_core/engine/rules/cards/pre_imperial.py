@@ -28,16 +28,16 @@ CONTENTIOUS_TERRAIN_FORCE = 1
 @stat_grant("contentious_terrain")
 def _contentious_terrain_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     """ "Your Personalities at this battlefield have +1F." """
     if stat is not Stat.FORCE or card.owner is not source.owner:
-        return 0
+        return ()
     if not isinstance(card.printed, PersonalityPrint):
-        return 0
+        return ()
     battlefield = location_of(game.table, source).battlefield
     if battlefield is None or location_of(game.table, card).battlefield != battlefield:
-        return 0
-    return CONTENTIOUS_TERRAIN_FORCE
+        return ()
+    return (CONTENTIOUS_TERRAIN_FORCE,)
 
 
 register_terrain("contentious_terrain")

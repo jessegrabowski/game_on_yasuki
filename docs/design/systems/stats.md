@@ -190,7 +190,8 @@ ends when its *target* leaves the table, because a card that leaves play ceases 
 ## Where a card plugs in
 
 A card in play whose text gives a stat to a card, itself or another, uses `@stat_grant`, and its
-handler names the scope: {card}`Haramaki-do` reaches the Personality it hangs on, and
+handler returns one amount per clause of the text that gives the stat, so {card}`Lonely Battlefield`
+returns its -2F and its +1F apart. The handler names the scope: {card}`Haramaki-do` reaches the Personality it hangs on, and
 {card}`Daidoji Tashiko` reaches herself while opposed. A card whose text gives a keyword to a card,
 itself or another, uses `@keyword_grant`, with a handler of the same shape:
 {card}`Fortified Farmlands` reaches itself, wherever it is, and {card}`Way of the Crab` reaches your

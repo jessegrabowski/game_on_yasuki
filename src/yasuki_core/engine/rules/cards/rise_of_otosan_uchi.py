@@ -1060,14 +1060,16 @@ def _kokujin_sato_experienced_entered_play(ctx: TriggerContext) -> list[Effect]:
 @stat_grant("kokujin_sato_experienced")
 def _kokujin_sato_experienced_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     """Sato has +1F/+1C for each Shadowlands Ring his controller holds in play."""
     if card is not source or stat not in (Stat.FORCE, Stat.CHI):
-        return 0
-    return sum(
-        1
-        for ring in rings_in_play(game, source.owner, Asking.trait(source))
-        if keywords.SHADOWLANDS in effective_keywords(game, ring)
+        return ()
+    return (
+        sum(
+            1
+            for ring in rings_in_play(game, source.owner, Asking.trait(source))
+            if keywords.SHADOWLANDS in effective_keywords(game, ring)
+        ),
     )
 
 

@@ -18,17 +18,17 @@ LONELY_BATTLEFIELD_COMMANDER_BONUS = 1
 @stat_grant("lonely_battlefield")
 def _lonely_battlefield_stat_grant(
     game: GameState, source: L5RCard, card: L5RCard, stat: Stat
-) -> int:
+) -> tuple[int, ...]:
     """ "Personalities without Followers have -2F. Commanders have +1F." The text names no
     battlefield, so it reaches every such card in play."""
     if stat is not Stat.FORCE or not any(held is card for held in game.table.battlefield.cards):
-        return 0
-    amount = 0
-    if isinstance(card.printed, PersonalityPrint) and not followers_of(game, card):
-        amount += LONELY_BATTLEFIELD_PENALTY
-    if keywords.COMMANDER in effective_keywords(game, card):
-        amount += LONELY_BATTLEFIELD_COMMANDER_BONUS
-    return amount
+        return ()
+    alone = isinstance(card.printed, PersonalityPrint) and not followers_of(game, card)
+    commander = keywords.COMMANDER in effective_keywords(game, card)
+    return (
+        LONELY_BATTLEFIELD_PENALTY if alone else 0,
+        LONELY_BATTLEFIELD_COMMANDER_BONUS if commander else 0,
+    )
 
 
 register_terrain("lonely_battlefield")

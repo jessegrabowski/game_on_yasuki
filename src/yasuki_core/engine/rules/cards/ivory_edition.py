@@ -62,11 +62,13 @@ HARAMAKI_DO_FEAR = 3
 
 
 @stat_grant("haramaki_do")
-def _haramaki_do_stat_grant(game: GameState, source: L5RCard, card: L5RCard, stat: Stat) -> int:
+def _haramaki_do_stat_grant(
+    game: GameState, source: L5RCard, card: L5RCard, stat: Stat
+) -> tuple[int, ...]:
     """This Personality has +1PH. The +2F is printed on the card and needs no handler."""
     if stat is not Stat.PERSONAL_HONOR or attached_to(game, source) is not card:
-        return 0
-    return 1
+        return ()
+    return (1,)
 
 
 def _haramaki_do_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

@@ -9,9 +9,12 @@ from yasuki_core.game_pieces.cards import L5RCard
 # What a card in play gives a card for a stat by its own text, read off the board on every stat
 # read and gone the moment the granting card leaves play. The handler decides whom it reaches:
 # itself ("While opposed, Tashiko has a Force bonus..."), the Personality it hangs on ("This
-# Personality has +1PH"), or any card the text names. Keyed by printed id like the other per-card
-# registries.
-StatGrantHandler = Callable[[GameState, L5RCard, L5RCard, Stat], int]
+# Personality has +1PH"), or any card the text names. It returns one amount per clause of the text
+# that gives the stat, in print order, zero for a clause that gives this card nothing, and nothing
+# at all for a card no clause reaches: a bonus and a penalty from one text stay two changes, which
+# a negation of one of them tells apart (CR, Bonuses and Penalties). Keyed by printed id like the
+# other per-card registries.
+StatGrantHandler = Callable[[GameState, L5RCard, L5RCard, Stat], tuple[int, ...]]
 STAT_GRANTS: HandlerRegistry[StatGrantHandler] = HandlerRegistry(
     "stat grants", "already has a stat grant"
 )
@@ -29,9 +32,9 @@ def granted_stats(
     stat: Stat,
     *,
     granters: Sequence[L5RCard] | None = None,
-) -> Iterator[tuple[L5RCard, int]]:
-    """Each card in play whose text gives ``card`` something for ``stat`` right now, with the
-    amount, in play order.
+) -> Iterator[tuple[L5RCard, int, int]]:
+    """Each clause of a card in play's text that gives ``card`` something for ``stat`` right now:
+    the card, the clause's place in its text, and the amount, in play order.
 
     Parameters
     ----------
@@ -40,6 +43,7 @@ def granted_stats(
         one board. Default None, read off the board here.
     """
     for granting in stat_granters(game) if granters is None else granters:
-        amount = STAT_GRANTS[granting.printed_id](game, granting, card, stat)
-        if amount:
-            yield granting, amount
+        amounts = STAT_GRANTS[granting.printed_id](game, granting, card, stat)
+        for clause, amount in enumerate(amounts):
+            if amount:
+                yield granting, clause, amount

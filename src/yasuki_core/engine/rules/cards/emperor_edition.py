@@ -164,13 +164,15 @@ TOGASHI_KORIMI_DEFENDING_FORCE = 2
 # The Shattered Empire printing, "Response, :bow:: After you Recruit Korimi, draw a card." Its
 # Emperor printing made the draw an optional trait on entry, and its Ivory printing an Interrupt.
 @stat_grant("togashi_korimi")
-def _togashi_korimi_stat_grant(game: GameState, source: L5RCard, card: L5RCard, stat: Stat) -> int:
+def _togashi_korimi_stat_grant(
+    game: GameState, source: L5RCard, card: L5RCard, stat: Stat
+) -> tuple[int, ...]:
     """Korimi has +2F while defending."""
     if stat is not Stat.FORCE or card is not source:
-        return 0
+        return ()
     if not condition_holds(game, card, Condition.DEFENDING):
-        return 0
-    return TOGASHI_KORIMI_DEFENDING_FORCE
+        return ()
+    return (TOGASHI_KORIMI_DEFENDING_FORCE,)
 
 
 def _togashi_korimi_targets(game: GameState, source: L5RCard) -> list[str]:
