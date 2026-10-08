@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
+from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.board.queries import attack_targeting
 from yasuki_core.engine.rules.cards.road_to_ruin import UNITY_CHI, UNITY_FORCE
 from yasuki_core.engine.rules.stats.card_values import effective_chi
@@ -39,7 +40,7 @@ from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, Straightened
+from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, EnteredPlay, Straightened
 from yasuki_core.engine.rules.vocabulary.decisions import (
     DecisionResponse,
 )
@@ -49,12 +50,18 @@ from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation
+from yasuki_core.engine.rules.units.membership import attachments_of
+from yasuki_core.engine.rules.gold.discounts import ACTION_DISCOUNTS, action_discount
+from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MINUS_1F
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, HoldingPrint, RingPrint
 
+from tests.yasuki_core.engine.rules.cards.test_lotus_edition import (
+    _answer_everything,
+)
 from tests.yasuki_core.engine.rules.cards.test_shattered_empire import (
     DUEL_ABILITY,
     DUEL_PROBE,
@@ -1657,3 +1664,99 @@ def test_houhou_who_does_not_arrive_fires_no_shot():
     assert "houhou" not in _houhou_on_board(session)
     assert session.game.pending is None
     assert "enemy0" in _houhou_on_board(session)
+
+
+# --- The Hida Ryokans ---
+
+
+def _ryokans_battle(
+    *, follower_keywords: tuple[str, ...] = (), carried_keywords: tuple[str, ...] | None = None
+) -> EngineSession:
+    """P1's hero opposed by P2's raider, The Hida Ryokans and a 10-Gold Holding in play for P1, and
+    a 3-Gold Follower carrying ``follower_keywords`` in P1's hand. With ``carried_keywords``, the
+    hero already carries a Follower with those keywords."""
+    follower = attachment(
+        "recruit",
+        attachment_type=AttachmentType.FOLLOWER,
+        gold_cost=3,
+        keywords=follower_keywords,
+    )
+    session = combat_segment(
+        [
+            personality("hero"),
+            personality("raider", owner=P2),
+            holding("ryokans", printed_id="the_hida_ryokans", keywords=("Fortification",)),
+            holding("mine", gold_production=10),
+        ],
+        {"hero": 0},
+        {"raider": 0},
+        in_hand=[follower],
+    )
+    if carried_keywords is not None:
+        carried = attachment(
+            "veteran", attachment_type=AttachmentType.FOLLOWER, keywords=carried_keywords
+        )
+        attached(session.game, carried, "hero")
+    return session
+
+
+@pytest.mark.parametrize(
+    ("follower_keywords", "carried_keywords", "price"),
+    [((), None, 3), (("Courage",), None, 1), ((), ("Courage",), 1), ((), (), 3)],
+    ids=["plain", "courage_follower", "courage_beside", "other_beside"],
+)
+def test_the_ryokans_charges_the_equip_less_2_with_courage(
+    follower_keywords, carried_keywords, price
+):
+    session = _ryokans_battle(
+        follower_keywords=follower_keywords, carried_keywords=carried_keywords
+    )
+    game = session.game
+    ryokans = game.table.cards_by_id["ryokans"]
+
+    (asked,) = ability_for(game, ryokans, None).cost(game, ryokans)
+
+    assert asked.amounts == (price,)
+
+
+@pytest.fixture
+def follower_discount():
+    """A card whose controller pays 1 less for any Follower, registered for one test."""
+
+    def _one_less_for_a_follower(game, holder, purchase):
+        return 1 if purchase.card is not None and is_follower(purchase.card) else 0
+
+    action_discount("follower_discount_probe")(_one_less_for_a_follower)
+    yield
+    ACTION_DISCOUNTS.pop("follower_discount_probe")
+
+
+def test_the_ryokans_checks_the_gold_cost_not_a_discounted_equip_price(follower_discount):
+    session = _ryokans_battle()
+    game = session.game
+    put_in_play(game, holding("quartermaster", printed_id="follower_discount_probe"))
+    ryokans = game.table.cards_by_id["ryokans"]
+
+    (asked,) = ability_for(game, ryokans, None).cost(game, ryokans)
+
+    assert asked.amounts == (3,)
+
+
+def test_the_ryokans_equips_the_follower_to_your_opposed_personality():
+    session = _ryokans_battle(follower_keywords=("Courage",))
+
+    session.act(P1, ActivateAbility("ryokans"))
+    _answer_everything(session, amount=1)
+
+    game = session.game
+    assert [card.id for card in attachments_of(game, game.table.cards_by_id["hero"])] == ["recruit"]
+    entered = [event for event in game.turn_events if isinstance(event, EnteredPlay)]
+    assert entered == [EnteredPlay("recruit", from_hand=True, equipped=True)]
+
+
+def test_the_ryokans_is_not_offered_with_no_follower_in_hand():
+    session = _ryokans_battle()
+    hand = session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)]
+    hand.remove(session.game.table.cards_by_id["recruit"])
+
+    assert ActivateAbility("ryokans") not in session.legal_actions(P1)

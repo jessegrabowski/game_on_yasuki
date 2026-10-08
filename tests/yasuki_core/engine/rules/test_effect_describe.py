@@ -307,6 +307,7 @@ EFFECTS = [
     (Discard("farm_1", PlayerId.P1), "P1 discards farm_1"),
     (Discard("farm_1", Trait("harvest")), "harvest's trait discards farm_1"),
     (AttachCard("katana", "hero"), "attach katana to hero"),
+    (AttachCard("ashigaru", "hero", equip=True), "equip ashigaru to hero"),
     (CreateToken("ashigaru_sote", PlayerId.P1, "farm_1"), "P1 creates ashigaru_sote"),
     (
         CreateToken("ashigaru_sote", PlayerId.P1, "farm_1", attach_to="hero"),

@@ -51,6 +51,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "Will not join a player with ..." | `register_join_restriction(id, handler)` | {card}`Moto Tsuneo, Soul of Moto Tsume` |
 | Equips for less onto some Personalities, from either card's text | `@equip_discount(id)` | {card}`Hida O-Win (Experienced)` |
 | "The rulebook Equip ability may target this Follower in the discard pile" | `@equips_from_discard(id)` | {card}`Tao Defenders` |
+| "Equip a target Follower" as an effect of the card's own ability | `AttachCard(..., equip=True)`, the Gold Cost checked against what the ability paid | {card}`The Hida Ryokans` |
 | Buys its Invest cheaper, conditionally | `@invest_discount(id)` | {card}`Moto Ikarichi, Bloodseeker` |
 | Changes the strength of an attack | `@attack_strength_against(id)` | {card}`Aseth's Legion` |
 | Changes a Province's strength | `@province_strength_grant(id)` | {card}`Defensive Memorial` |

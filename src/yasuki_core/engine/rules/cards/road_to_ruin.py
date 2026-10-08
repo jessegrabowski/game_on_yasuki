@@ -2,9 +2,14 @@ from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
-from yasuki_core.engine.rules.board.seats import cards_in_play, cards_named, has_compassion
-from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
-from yasuki_core.engine.rules.abilities.idioms import register_event_entry
+from yasuki_core.engine.rules.board.seats import (
+    cards_in_hand,
+    cards_in_play,
+    cards_named,
+    has_compassion,
+)
+from yasuki_core.engine.rules.abilities.costs import bow_cost, declare_amount, no_cost
+from yasuki_core.engine.rules.abilities.idioms import declarable_gold, register_event_entry
 from yasuki_core.engine.rules.abilities.model import (
     Ability,
     CardLocation,
@@ -26,6 +31,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 from yasuki_core.engine.rules.gold.producers import reachable_gold
 from yasuki_core.engine.rules.gold.self_grants import register_self_grant, SELF_GRANT
 from yasuki_core.engine.rules.effects import (
+    AttachCard,
     AdditionalAction,
     AdjustCounter,
     AskOption,
@@ -57,7 +63,12 @@ from yasuki_core.engine.rules.effects import (
     seppuku,
 )
 from yasuki_core.engine.rules.rulebook.discipline import disciplined, register_discipline
-from yasuki_core.engine.rules.rulebook.equip import creation_targets, equips_from_discard
+from yasuki_core.engine.rules.rulebook.equip import (
+    creation_targets,
+    equip_discount_onto,
+    equips_from_discard,
+    may_attach,
+)
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Bowed,
     Destroyed,
@@ -83,7 +94,7 @@ from yasuki_core.engine.rules.board.queries import (
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost, unit_gold_cost
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
-from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.vocabulary.decisions import (
     PickedTargets,
     PickLimit,
@@ -813,6 +824,113 @@ def _resolve_the_forgotten(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
     return [CreateToken(FORGOTTEN_DEAD, seat, source_id, attach_to=chosen[0])]
+
+
+# --- The Hida Ryokans ---
+
+RYOKANS_COURAGE_DISCOUNT = 2
+
+
+def _the_hida_ryokans_price(game: GameState, follower: L5RCard, personality: L5RCard) -> int:
+    """The amount the Ryokans has to pay for ``follower`` to be Equipped to ``personality``: the
+    Follower's Gold Cost less the Equip discount either card's text grants, "paying :g2: less if
+    the Follower has Courage or the Personality has another Courage Follower attached". An Equip
+    used as an effect checks the Gold Cost against what its action paid (CR, Equip), so a seat's
+    discount on Equip actions does not apply."""
+    others = (card for card in followers_of(game, personality) if card is not follower)
+    courage = has_keyword(game, follower, keywords.COURAGE) or any(
+        has_keyword(game, other, keywords.COURAGE) for other in others
+    )
+    discount = equip_discount_onto(game, personality, follower)
+    if courage:
+        discount += RYOKANS_COURAGE_DISCOUNT
+    return max(0, effective_gold_cost(game, follower) - discount)
+
+
+def _the_hida_ryokans_pairings(
+    game: GameState, source: L5RCard
+) -> list[tuple[L5RCard, L5RCard, int]]:
+    """Each Follower in your hand with each of your opposed Personalities who would take it, and
+    what that Equip costs."""
+    by_id = game.table.cards_by_id
+    opposed = [by_id[card_id] for card_id in opposed_units_in_battle(game, source.owner)]
+    return [
+        (follower, personality, _the_hida_ryokans_price(game, follower, personality))
+        for follower in cards_in_hand(game, source.owner)
+        if is_follower(follower)
+        for personality in opposed
+        if may_attach(game, personality, follower)
+    ]
+
+
+def _the_hida_ryokans_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """The :X: is declared first, and the Equip it pays for is targeted against it (CR, Action
+    Sequence steps B and C). Only an amount some Equip costs is offered (CR, Good Faith)."""
+    reach = declarable_gold(game, source)
+    amounts = sorted(
+        {price for _, _, price in _the_hida_ryokans_pairings(game, source) if price <= reach}
+    )
+    question = "How much Gold do you spend on The Hida Ryokans?"
+    return [declare_amount(source, tuple(amounts), question)]
+
+
+def _the_hida_ryokans_followers(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """ "A target Follower from your hand" that some opposed Personality takes for the amount."""
+    paid = game.amount_declared
+    return list(
+        dict.fromkeys(
+            follower.id
+            for follower, _, price in _the_hida_ryokans_pairings(game, source)
+            if price == paid
+        )
+    )
+
+
+def _the_hida_ryokans_personalities(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """ "Your target opposed Personality" who takes the chosen Follower for the amount."""
+    (follower_id,) = picked[0]
+    paid = game.amount_declared
+    return [
+        personality.id
+        for follower, personality, price in _the_hida_ryokans_pairings(game, source)
+        if follower.id == follower_id and price == paid
+    ]
+
+
+def _the_hida_ryokans_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """Equip the Follower to the Personality, its Gold Cost checked against the amount paid
+    (CR, Equip)."""
+    (follower,), (personality,) = groups
+    if _the_hida_ryokans_price(game, follower, personality) != game.amount_declared:
+        return []
+    return [AttachCard(follower.id, personality.id, equip=True)]
+
+
+register_ability(
+    "the_hida_ryokans",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=_the_hida_ryokans_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_the_hida_ryokans_followers,
+                targeting_message="a Follower from your hand",
+            ),
+            TargetGroup(
+                candidates=_the_hida_ryokans_personalities,
+                targeting_message="your opposed Personality",
+            ),
+        ),
+        effects_for_groups=_the_hida_ryokans_effects,
+        targets_after_cost=True,
+    ),
+)
 
 
 # --- The Unicorn Expedition ---
