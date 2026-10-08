@@ -11,12 +11,17 @@ from yasuki_core.engine.rules.duel.records import DuelOutcome
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary.decisions import (
     STRIKE,
+    ChooseAbilityTarget,
     ChooseCards,
     DecisionResponse,
 )
+from yasuki_core.engine.rules.battle.records import AttackKind
+from yasuki_core.engine.rules.effects import Move
+from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.rules.turn.structure import Phase, RoundKind
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, Location, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
@@ -533,3 +538,125 @@ def test_poisoned_weapon_is_no_longer_offered_once_the_duel_is_decided():
 
         assert session.game.duel.outcome is not None
         assert PlayStrategy("poison") not in session.legal_actions(P2)
+
+
+AMBUSHER = PlayerId.P1
+DEFENDER = PlayerId.P2
+
+
+def _ambush_session(*, attacker_force: int = 4, defender_force: int = 2) -> EngineSession:
+    """P1 in its Action Phase holding Ambush, one Personality per seat to name, and a bystander
+    the sealed battlefield must refuse."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=AMBUSHER, index=0)
+    province_card(state, "def-prov0", seat=DEFENDER, index=0)
+    put_in_play(state, personality("ronin", owner=AMBUSHER, force=attacker_force))
+    put_in_play(state, personality("victim", owner=DEFENDER, force=defender_force))
+    put_in_play(state, personality("bystander", owner=DEFENDER, force=1))
+    card = register(
+        state,
+        L5RCard.of(
+            ActionPrint,
+            id="ambush-1",
+            name="Ambush",
+            printed_id="ambush",
+            side=Side.FATE,
+            owner=AMBUSHER,
+            gold_cost=0,
+        ),
+    )
+    state.zones[ZoneKey(AMBUSHER, ZoneRole.HAND)].add(card)
+    return EngineSession.start(state, AMBUSHER)
+
+
+def _play_ambush(session: EngineSession, *, theirs: str = "victim") -> None:
+    session.act(AMBUSHER, PlayStrategy("ambush-1"))
+    for pick in ("ronin", theirs):
+        asked = session.game.pending
+        assert isinstance(asked, ChooseAbilityTarget), f"expected targeting, got {asked!r}"
+        session.submit(asked.seat, DecisionResponse((pick,)))
+
+
+def _pass_out_the_battle(session: EngineSession) -> None:
+    for _ in range(20):
+        attack = session.game.attack
+        if attack is None:
+            return
+        session.act(session.game.round.priority, Pass())
+    raise AssertionError("the created battle never ended")
+
+
+def test_ambush_is_offered_as_an_open_action_from_hand():
+    session = _ambush_session()
+
+    assert PlayStrategy("ambush-1") in session.legal_actions(AMBUSHER)
+
+
+def test_ambush_offers_only_your_unbowed_personalities_to_attack():
+    session = _ambush_session()
+    session.game.table.cards_by_id["ronin"].bow()
+
+    assert PlayStrategy("ambush-1") not in session.legal_actions(AMBUSHER)
+
+
+def test_ambush_assigns_the_defender_even_bowed():
+    session = _ambush_session()
+    session.game.table.cards_by_id["victim"].bow()
+
+    _play_ambush(session)
+
+    victim = session.game.table.cards_by_id["victim"]
+    assert victim.bowed
+    assert location_of(session.game.table, victim).battlefield == 0
+
+
+def test_ambush_fights_the_battle_after_the_action_resolves():
+    session = _ambush_session()
+
+    _play_ambush(session)
+
+    discard = session.game.table.zones[ZoneKey(AMBUSHER, ZoneRole.FATE_DISCARD)]
+    assert [card.id for card in discard.cards] == ["ambush-1"]
+    attack = session.game.attack
+    assert attack is not None and attack.kind is AttackKind.CREATED
+    assert attack.battlefields[0].province is None
+    assert attack.battle_segment is BattleSegment.ENGAGE
+    assert session.game.round.kind is RoundKind.BATTLE_SEGMENT
+    assert session.game.round.priority is DEFENDER
+    assert session.game.phase is Phase.ACTION
+
+
+def test_no_other_personality_can_move_to_the_battlefield():
+    session = _ambush_session()
+    _play_ambush(session)
+
+    resolve_effects(session.game, [Move("bystander", Location.at_battlefield(0))])
+
+    assert location_of(session.game.table, session.game.table.cards_by_id["bystander"]).is_home
+
+
+def test_the_battle_resolves_and_the_attack_ceases_to_exist():
+    session = _ambush_session()
+    _play_ambush(session)
+
+    _pass_out_the_battle(session)
+
+    cards = session.game.table.cards_by_id
+    assert all(card.id != "victim" for card in session.game.table.battlefield.cards)
+    ronin = cards["ronin"]
+    assert ronin.bowed
+    assert location_of(session.game.table, ronin).is_home
+    assert session.game.attack is None
+    assert session.game.phase is Phase.ACTION
+
+
+def test_the_honor_loss_lands_after_the_battle_ends_not_before():
+    session = _ambush_session()
+    before = session.game.table.seats[AMBUSHER].honor
+    _play_ambush(session)
+    assert session.game.table.seats[AMBUSHER].honor == before
+
+    _pass_out_the_battle(session)
+
+    # Winning destroyed one card (+2), then the printed loss (-5).
+    assert session.game.table.seats[AMBUSHER].honor == before + 2 - 5

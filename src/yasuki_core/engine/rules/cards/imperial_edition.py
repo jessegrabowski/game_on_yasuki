@@ -1,11 +1,12 @@
 from yasuki_core import ruleset
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.abilities.costs import bow_cost, bow_parent_cost, no_cost
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, TargetGroup, itself
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targeting,
+    owned_personalities,
     personalities_in_play,
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
@@ -15,6 +16,7 @@ from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.effects import (
     Choose,
+    CreateBattle,
     DelayedEffect,
     Destroy,
     Discard,
@@ -28,6 +30,7 @@ from yasuki_core.engine.rules.effects import (
     ShuffleDeck,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.vocabulary.game_events import (
     CardFocused,
     DuelDeclared,
@@ -38,13 +41,69 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     StrikeDeclared,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
-from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT
+from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT, END_OF_BATTLE
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint
+
+
+# --- Ambush ---
+
+AMBUSH_HONOR_LOSS = 5
+
+
+def _ambush_yours(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "Target your unbowed Personality"."""
+    return [card.id for card in owned_personalities(game, source.owner) if not card.bowed]
+
+
+def _ambush_theirs(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "and another player's Personality", bowed or not: he is assigned "even if he is bowed"."""
+    return [card.id for card in personalities_in_play(game) if card.owner is not source.owner]
+
+
+def _ambush_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """Create the battlefield, assign both Personalities, fight there after this action resolves,
+    and lose 5 Honor after the battle ends."""
+    (yours,), (theirs,) = groups
+    return [
+        CreateBattle(
+            attacker=source.owner,
+            attacking=(yours.id,),
+            defending=(theirs.id,),
+            sealed=True,
+        ),
+        DelayedEffect(
+            effect=GainHonor(source.owner, -AMBUSH_HONOR_LOSS, source_id=source.id),
+            until=END_OF_BATTLE,
+        ),
+    ]
+
+
+register_ability(
+    "ambush",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(
+                candidates=_ambush_yours,
+                targeting_message="your unbowed Personality",
+            ),
+            TargetGroup(
+                candidates=_ambush_theirs,
+                targeting_message="another player's Personality",
+            ),
+        ),
+        effects_for_groups=_ambush_effects,
+        located_at=(CardLocation.HAND,),
+    ),
+)
 
 
 # --- Fantastic Gardens ---
