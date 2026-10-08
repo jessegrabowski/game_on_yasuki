@@ -18,7 +18,7 @@ every derived source spends within.
 {func}`~.unbounded_stat` sums the printed value and every active modifier:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/stats/calculation.py
-:start-at: base = getattr(card, stat.value, None)
+:start-at: base = printed_stat(card, stat)
 :end-at: return base + sum(modifier.amount for modifier in modifiers)
 :dedent: 4
 :language: python
@@ -27,7 +27,7 @@ every derived source spends within.
 {func}`~.effective_stat` floors and caps that total:
 
 ```{literalinclude} ../../../src/yasuki_core/engine/rules/stats/calculation.py
-:start-at: if getattr(card, stat.value, None) is None:
+:start-at: if printed_stat(card, stat) is None:
 :end-at: return max(floor, min(cap, total))
 :dedent: 4
 :language: python

@@ -33,7 +33,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
-from yasuki_core.game_pieces.counters import MINUS_1F
+from yasuki_core.game_pieces.counters import MINUS_1F, PLUS_1F
 
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -256,9 +256,7 @@ def test_an_absent_stat_takes_no_modifiers_at_all():
     assert effective_force(game, farm) == 0
 
 
-def test_an_attachments_printed_force_is_readable():
-    """Followers and Items carry Force and Chi of their own: the stats a unit will total. Without
-    them on the print there is nothing for an attachment to contribute."""
+def test_an_items_force_is_the_bonus_it_prints():
     bow = L5RCard.of(
         AttachmentPrint,
         id="bow",
@@ -267,12 +265,35 @@ def test_an_attachments_printed_force_is_readable():
         side=Side.FATE,
         owner=PlayerId.P1,
         attachment_type=AttachmentType.ITEM,
-        force=2,
+        force_modifier=2,
     )
     game = _game(bow)
 
     assert effective_force(game, bow) == 2
     assert effective_chi(game, bow) == 0
+
+
+@pytest.mark.parametrize("attachment_type", [AttachmentType.ITEM, AttachmentType.SPELL])
+def test_a_token_on_an_item_or_spell_raises_its_force_and_its_bearers(attachment_type):
+    hero = _personality(force=2)
+    game = _game(hero)
+    club = attachment("club", attachment_type=attachment_type, force_modifier=1)
+    attached(game, club, hero.id)
+    resolve_effects(game, [AdjustCounter(club.id, PLUS_1F, 2)])
+
+    assert effective_force(game, club) == 3
+    assert effective_force(game, hero) == 5
+
+
+def test_a_token_on_a_follower_raises_the_follower_and_not_its_personality():
+    hero = _personality(force=2)
+    game = _game(hero)
+    ashigaru = attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, force=1)
+    attached(game, ashigaru, hero.id)
+    resolve_effects(game, [AdjustCounter(ashigaru.id, PLUS_1F, 2)])
+
+    assert effective_force(game, ashigaru) == 3
+    assert effective_force(game, hero) == 2
 
 
 def test_a_stat_printed_as_a_dash_reads_zero_and_takes_no_modifiers():

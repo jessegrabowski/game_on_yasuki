@@ -42,7 +42,8 @@ battlefield clears the relation, so a handler that moves first then asks finds a
 
 {func}`~.followers_of` is Followers alone, because the rules ask about them alone. A Follower stands
 in the unit with a Force of its own. An Item or a Spell hands the Personality a modifier instead,
-which is already inside his effective Force.
+which is already inside his effective Force. That modifier is also the Item's own Force, so a token
+on the Item raises both, since a token conveys its bonus to the card it is on (CR, Token).
 
 That distinction is the whole of the battle-resolution rule in {func}`~.unit_force`:
 

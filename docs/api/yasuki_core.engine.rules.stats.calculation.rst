@@ -10,6 +10,7 @@ yasuki_core.engine.rules.stats.calculation
     active_modifiers
     effective_stat
     is_modified
+    printed_stat
     stat_changes
     stat_maximum
     stat_minimum
