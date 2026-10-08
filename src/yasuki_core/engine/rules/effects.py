@@ -988,6 +988,38 @@ class ShuffleDeck(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class TakeControl(Effect):
+    """Give ``seat`` control of ``card_id``, which its previous controller loses in this same step.
+
+    A card at a battlefield joins the new controller's side of it and one at home enters the new
+    controller's home (CR, Card control). Both follow from the record alone, since a side and a
+    home are read off control rather than stored, and a card's attachments follow their
+    Personality.
+
+    Changing control is instantaneous and has no duration (CR, Card control), so a return is a
+    second :class:`~.TakeControl`.
+    """
+
+    card_id: str
+    seat: PlayerId
+
+    @property
+    def subject_id(self) -> str | None:
+        return self.card_id
+
+    def describe(self) -> str:
+        return f"{self.seat.name} takes control of {self.card_id}"
+
+    def would_happen(self, game: GameState) -> bool:
+        card = game.table.cards_by_id.get(self.card_id)
+        return card is not None and controller_of(game.table, card) is not self.seat
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        ops.set_controller(game.table, game.table.cards_by_id[self.card_id], self.seat)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class TakeFavor(Effect):
     """Give ``seat`` the Imperial Favor.
 

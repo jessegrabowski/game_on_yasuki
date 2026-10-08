@@ -191,6 +191,18 @@ def set_location(state: TableState, card: L5RCard, location: Location) -> bool:
     return location != (default if recorded is None else recorded)
 
 
+def set_controller(state: TableState, card: L5RCard, seat: PlayerId) -> None:
+    """Record ``seat`` as controlling ``card``, dropping the record when ``seat`` owns it.
+
+    Control held by the owner is the absence of a record rather than one naming them, so two
+    boards that agree on who controls what compare equal.
+    """
+    if seat is card.owner:
+        state.controllers.pop(card.id, None)
+    else:
+        state.controllers[card.id] = seat
+
+
 def move_unit(state: TableState, card: L5RCard, location: Location) -> bool:
     """Put ``card``'s whole unit at ``location``. Returns whether it moved.
 
