@@ -2,7 +2,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.board.queries import owned_holdings, units_at
 from yasuki_core.engine.rules.board.seats import cards_in_play
-from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.effects import Destroy, TakeControl
 from yasuki_core.engine.rules.gold.production import complete_production
 from yasuki_core.engine.rules.rulebook.recruit import meets_honor_requirement
 from yasuki_core.engine.rules.triggers import (
@@ -97,6 +97,19 @@ def test_repositioning_a_controlled_card_on_the_table_keeps_its_controller():
     ops.move_card(game.table, mine, BATTLEFIELD, position=BoardPos(0.5, 0.5))
 
     assert controller_of(game.table, mine) is P2
+
+
+def test_giving_control_of_a_card_that_has_left_the_table_does_nothing():
+    """A delayed return names a card that may have ceased to exist, as a token does. Control went
+    with it, so there is nothing to record and nothing to raise."""
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", owner=P2))
+    _give_control(game, "hero", P1)
+    ops.remove_card(game.table, hero)
+
+    resolve_effects(game, [TakeControl("hero", P2)])
+
+    assert game.table.controllers == {}
 
 
 def test_a_destroyed_card_reaches_its_owners_pile_however_it_was_controlled():

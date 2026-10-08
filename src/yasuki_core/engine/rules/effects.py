@@ -1015,6 +1015,8 @@ class TakeControl(Effect):
         return card is not None and controller_of(game.table, card) is not self.seat
 
     def perform(self, game: GameState) -> list[GameEvent]:
+        if not self.would_happen(game):
+            return []
         ops.set_controller(game.table, game.table.cards_by_id[self.card_id], self.seat)
         return []
 
