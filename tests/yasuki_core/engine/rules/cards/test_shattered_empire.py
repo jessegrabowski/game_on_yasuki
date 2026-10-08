@@ -99,6 +99,7 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayInterrupt
 from yasuki_core.engine.rules.effects import Move, StartDuel, Straighten
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.board.queries import personalities_in_play
+from tests.yasuki_core.engine.rules.battle.test_resolution import _pass_out_the_segments
 from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_interrupt
 from tests.yasuki_core.engine.rules.cards.test_anvil_of_despair import (
     _reach_the_combat_segment,
@@ -2390,6 +2391,77 @@ def test_binasa_offers_no_pearl_card_his_ranged_destroyed():
 
     assert "pearl" not in {card.id for card in game.table.battlefield.cards}
     assert game.pending is None
+
+
+# --- Berserker Rage ---
+
+
+def _berserker_rage_defending(*, keywords: tuple[str, ...] = ("Berserker",)) -> EngineSession:
+    """P2's 2F raider attacks P1's 3F guard, who carries ``keywords``, with Berserker Rage in P1's
+    hand and P1 holding priority in the Combat Segment."""
+    rage = L5RCard.of(
+        ActionPrint,
+        id="rage",
+        printed_id="berserker_rage",
+        name="Berserker Rage",
+        side=Side.FATE,
+        owner=P1,
+        gold_cost=0,
+    )
+    cards = [
+        personality("guard", force=3, keywords=keywords),
+        personality("raider", owner=P2, force=2),
+    ]
+    return combat_segment(
+        cards, {"raider": 0}, {"guard": 0}, attacker=P2, in_hand=[rage], defender_passes=False
+    )
+
+
+def _rage(session: EngineSession) -> None:
+    session.act(P1, PlayStrategy("rage"))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+
+def test_berserker_rage_targets_only_an_opposed_berserker():
+    session = _berserker_rage_defending(keywords=())
+
+    assert PlayStrategy("rage") not in session.legal_actions(P1)
+
+
+def test_berserker_rage_sets_force_to_twice_printed_until_the_battle_ends():
+    session = _berserker_rage_defending()
+    guard = session.game.table.cards_by_id["guard"]
+
+    _rage(session)
+    assert effective_force(session.game, guard) == 6
+
+    _pass_out_the_segments(session)
+    assert effective_force(session.game, guard) == 3
+
+
+def test_berserker_rage_bows_the_target_when_the_battle_ends_past_a_negation():
+    session = _berserker_rage_defending()
+    session.game.ongoing.append(Negation("ward", END_OF_TURN, effect_kind=Bow))
+
+    _rage(session)
+    _pass_out_the_segments(session)
+
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def test_berserker_rage_holds_the_target_bowed_until_your_second_turn_from_now():
+    session = _berserker_rage_defending()
+    _rage(session)
+    _pass_out_the_segments(session)
+
+    end_turn(session)  # your first turn from now opens: its straighten is still forbidden
+    assert session.game.active is P1
+    assert session.game.table.cards_by_id["guard"].bowed
+
+    end_turn(session)
+    end_turn(session)  # your second turn from now begins, and its straighten stands him up
+    assert session.game.active is P1
+    assert not session.game.table.cards_by_id["guard"].bowed
 
 
 # --- Brute Force ---

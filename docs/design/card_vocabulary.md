@@ -38,7 +38,9 @@ such as a once-per-turn record, names none.
 `seppuku` is the one builder in the module: the CR defines seppuku as two effects, a rehonoring and
 then a destruction, and a handler returns that pair so each passes the Interrupt step on its own.
 The CR adds that neither can be negated, so both are built with `negatable=False`, which a lasting
-negation and an Interrupt that negates both respect.
+negation and an Interrupt that negates both respect. Every effect takes `negatable`, so a card
+reading "an effect that cannot be negated" builds its effect the same way, as {card}`Berserker Rage`
+does its bow.
 
 Effects in a list happen in the order they are written, and what each one sets off resolves before
 the next applies (CR 20F, Timing), so a step that follows another card's reaction to what just
