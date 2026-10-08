@@ -19,6 +19,10 @@
 # exempts nobody, not even itself.
 CONQUEROR = "Conqueror"
 
+# An ability carrying Raid may only be used during a Raid battle (ShE datasheet), which legality
+# enforces off the registration's keywords.
+RAID = "Raid"
+
 # The designator marking an ability a Favor action however its cost is settled, for a card whose
 # alternate cost would otherwise decide it (ShE datasheet, The Favor Icon).
 FAVOR = "Favor"

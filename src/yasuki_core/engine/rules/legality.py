@@ -66,6 +66,7 @@ from yasuki_core.engine.rules.state import GameState, seat_once_key, used_this_t
 from yasuki_core.engine.rules.turn.structure import ActionRound
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
 from yasuki_core.engine.table import DeckKey, location_of, ZoneRole
+from yasuki_core.engine.rules.battle.records import AttackKind
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -528,6 +529,9 @@ def _usable(
             # from anywhere, a Strategy out of hand as much as a Personality on the board.
             if not present and BattleDesignator.ABSENT not in ability.battle_designators:
                 continue
+            # "A Raid ability may only be used during a Raid Battle" (ShE datasheet).
+            if keywords.RAID in ability.keywords and not _raid_battle(game):
+                continue
             if ActionTiming.RESPONSE in ability.timings and card.id in game.responded:
                 continue
             # An activated ability is once per turn unless it prints Repeatable (CR, Using
@@ -556,6 +560,13 @@ def _usable(
             if ability.targets_after_cost or phrases_reachable(game, card, ability):
                 ready.append((card, ability))
     return ready
+
+
+def _raid_battle(game: GameState) -> bool:
+    """Whether the battle being fought is a Raid battle, which is the only place a Raid ability
+    may be used (ShE datasheet)."""
+    attack = game.attack
+    return attack is not None and attack.kind is AttackKind.RAID and attack.current is not None
 
 
 def _bow_permits(game: GameState, card: L5RCard, ability: Ability) -> bool:

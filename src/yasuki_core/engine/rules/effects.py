@@ -898,6 +898,32 @@ class CreateBattle(Effect):
 
 
 @dataclass(frozen=True, slots=True)
+class CreateRaidAttack(Effect):
+    """Create a Raid Attack: an additional Attack Phase with one battlefield not associated with
+    any Province, run from assignment once the creating action has resolved (ShE datasheet, Raid
+    Attacks and Raid Battles).
+
+    Attributes
+    ----------
+    attacker : PlayerId
+        The seat whose Raid Attack this is.
+    """
+
+    attacker: PlayerId
+
+    def describe(self) -> str:
+        return f"{self.attacker.name} creates a Raid Attack"
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        # Imported where it is used: the fight loop imports this module for the effects a battle
+        # resolves with.
+        from yasuki_core.engine.rules.battle.resolution import create_raid_attack
+
+        create_raid_attack(game, self.attacker)
+        return []
+
+
+@dataclass(frozen=True, slots=True)
 class GainProvince(Effect):
     """``seat`` gains a Province, created to the left of its leftmost and then refilled (ShE
     datasheet). It takes a fresh id, so no record naming another Province changes meaning.
