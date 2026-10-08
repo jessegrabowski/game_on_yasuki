@@ -48,6 +48,20 @@ off what an ability may be pointed at, without lifting them off the card the abi
 What a card's own `targets` function returns is narrowed centrally before the ability is offered.
 [Actions and legality](actions-and-legality.md) has that.
 
+## Battles a card creates
+
+Most battles are the Attack Phase's, and some effects create battles separately (CR, Battles).
+{class}`~.CreateBattle` is the effect a handler returns. It builds a one-battlefield attack
+through {func}`~.create_battle`, at a battlefield not associated with any Province, marked
+{class}`~.AttackKind` ``CREATED``, and the named Personalities assign to their controllers' sides
+as the battlefield is made.
+
+The battle is fought once the creating action has ended (CR, Timing): its resolution is announced
+and its Response Step offered first, and then the battle's rounds open over the round the action
+was taken in. When its one battle ends, the attack ceases to exist and the opportunity the
+creating action held passes on. A battlefield the effect seals refuses every unit not assigned as
+it was made, which is "Other Personalities cannot move there" as {card}`Ambush` prints it.
+
 ## The three attacks
 
 {class}`~.RangedAttack`, {class}`~.MeleeAttack` and {class}`~.Fear` are effects taking a strength,
