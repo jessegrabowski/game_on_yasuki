@@ -66,7 +66,6 @@ from yasuki_core.engine.rules.rulebook.discipline import disciplined, register_d
 from yasuki_core.engine.rules.rulebook.equip import (
     creation_targets,
     equip_discount_onto,
-    equip_gold,
     equips_from_discard,
     may_attach,
 )
@@ -833,16 +832,19 @@ RYOKANS_COURAGE_DISCOUNT = 2
 
 
 def _the_hida_ryokans_price(game: GameState, follower: L5RCard, personality: L5RCard) -> int:
-    """What Equipping ``follower`` to ``personality`` costs through the Ryokans: the Equip's own
-    price, "paying :g2: less if the Follower has Courage or the Personality has another Courage
-    Follower attached"."""
+    """The amount the Ryokans has to pay for ``follower`` to be Equipped to ``personality``: the
+    Follower's Gold Cost less the Equip discount either card's text grants, "paying :g2: less if
+    the Follower has Courage or the Personality has another Courage Follower attached". An Equip
+    used as an effect checks the Gold Cost against what its action paid (CR, Equip), so a seat's
+    discount on Equip actions does not apply."""
     others = (card for card in followers_of(game, personality) if card is not follower)
     courage = has_keyword(game, follower, keywords.COURAGE) or any(
         has_keyword(game, other, keywords.COURAGE) for other in others
     )
     discount = equip_discount_onto(game, personality, follower)
-    price = equip_gold(game, follower, discount=discount)
-    return max(0, price - RYOKANS_COURAGE_DISCOUNT) if courage else price
+    if courage:
+        discount += RYOKANS_COURAGE_DISCOUNT
+    return max(0, effective_gold_cost(game, follower) - discount)
 
 
 def _the_hida_ryokans_pairings(

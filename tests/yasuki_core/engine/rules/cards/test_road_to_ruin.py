@@ -51,6 +51,8 @@ from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Negation
 from yasuki_core.engine.rules.units.membership import attachments_of
+from yasuki_core.engine.rules.gold.discounts import ACTION_DISCOUNTS, action_discount
+from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
@@ -1715,6 +1717,29 @@ def test_the_ryokans_charges_the_equip_less_2_with_courage(
     (asked,) = ability_for(game, ryokans, None).cost(game, ryokans)
 
     assert asked.amounts == (price,)
+
+
+@pytest.fixture
+def follower_discount():
+    """A card whose controller pays 1 less for any Follower, registered for one test."""
+
+    def _one_less_for_a_follower(game, holder, purchase):
+        return 1 if purchase.card is not None and is_follower(purchase.card) else 0
+
+    action_discount("follower_discount_probe")(_one_less_for_a_follower)
+    yield
+    ACTION_DISCOUNTS.pop("follower_discount_probe")
+
+
+def test_the_ryokans_checks_the_gold_cost_not_a_discounted_equip_price(follower_discount):
+    session = _ryokans_battle()
+    game = session.game
+    put_in_play(game, holding("quartermaster", printed_id="follower_discount_probe"))
+    ryokans = game.table.cards_by_id["ryokans"]
+
+    (asked,) = ability_for(game, ryokans, None).cost(game, ryokans)
+
+    assert asked.amounts == (3,)
 
 
 def test_the_ryokans_equips_the_follower_to_your_opposed_personality():
