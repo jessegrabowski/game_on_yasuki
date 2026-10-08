@@ -92,6 +92,7 @@ from yasuki_core.engine.rules.effects import (
     Choose,
     CreateToken,
     DelayedEffect,
+    DelayStraighten,
     Destroy,
     DiscardFromHand,
     Dishonor,
@@ -146,6 +147,7 @@ from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcome
 from yasuki_core.engine.rules.turn.structure import (
     ADDITIONAL_ACTION_SPENT,
+    BEGINNING_OF_TURN,
     DUEL_CONSEQUENCES,
     END_OF_BATTLE,
     END_OF_TURN,
@@ -179,6 +181,52 @@ from yasuki_core.game_pieces.prints import (
     FatePrint,
     PersonalityPrint,
     RingPrint,
+)
+
+
+# --- Berserker Rage ---
+
+BERSERKER_RAGE_MULTIPLE = 2
+BERSERKER_RAGE_TURNS = 2
+
+
+def _berserker_rage_targets(game: GameState, source: L5RCard) -> list[str]:
+    """ "Your target opposed Berserker Personality"."""
+    return [
+        card_id
+        for card_id in opposed_units_in_battle(game, source.owner)
+        if has_keyword(game, game.table.cards_by_id[card_id], keywords.BERSERKER)
+    ]
+
+
+def _berserker_rage_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Set your target opposed Berserker Personality's Force equal to twice their printed Force
+    until the battle ends. The target bows when the battle ends, an effect that cannot be negated,
+    and cannot straighten before your second turn from now begins."
+
+    The Force is set by the bonus or penalty that reaches it, measured from the target's Force
+    before its minimum and maximum (CR, Setting Stats to Values)."""
+    twice_printed = BERSERKER_RAGE_MULTIPLE * (target.force or 0)
+    change = twice_printed - unbounded_stat(game, target, Stat.FORCE)
+    force = [GrantModifier(source.id, target.id, Stat.FORCE, change, END_OF_BATTLE)]
+    return [
+        *(force if change else []),
+        DelayedEffect(Bow(target.id, negatable=False), END_OF_BATTLE),
+        DelayStraighten(target.id, until=BEGINNING_OF_TURN, turns=BERSERKER_RAGE_TURNS),
+    ]
+
+
+register_ability(
+    "berserker_rage",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_berserker_rage_targets,
+        targeting_message="your opposed Berserker Personality",
+        effects=_berserker_rage_effects,
+        located_at=(CardLocation.HAND,),
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
 )
 
 
