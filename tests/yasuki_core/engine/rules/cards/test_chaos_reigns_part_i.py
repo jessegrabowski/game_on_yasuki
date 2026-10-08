@@ -27,6 +27,9 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
 from yasuki_core.engine.rules.turn.structure import BATTLE_SEGMENT_TIMINGS, ActionRound, RoundKind
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
+from yasuki_core.engine.rules.vocabulary.modifiers import AdditionalUse, Duration
+from yasuki_core.engine.rules.duel.procedure import challenge_costs
+from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import Location, TableState, ZoneKey, ZoneRole, location_of
@@ -41,6 +44,7 @@ from tests.yasuki_core.engine.builders import (
     datasheet_favor_ability,
     attached,
     attachment,
+    combat_segment,
     end_phase,
     fate_card,
     holding,
@@ -602,3 +606,52 @@ def test_a_bowed_shrine_grants_nothing():
     session = _bowed_estate_with_shrine(shrine_bowed=True)
 
     assert ActivateAbility("estate") not in session.legal_actions(P1)
+
+
+# --- Hida Gojiro, Tetsubo Master (Experienced) ---
+
+GOJIRO = "hida_gojiro_tetsubo_master_experienced"
+
+
+def _gojiros_weapon(weapon_keywords: tuple[str, ...]) -> L5RCard:
+    return attachment("weapon", printed_id="weapon", keywords=("Weapon", *weapon_keywords))
+
+
+@pytest.mark.parametrize(("weapon_keywords", "force"), [(("Tetsubo",), 5), ((), 4)])
+def test_gojiro_has_plus_1f_while_he_has_a_tetsubo(weapon_keywords, force):
+    game = two_seat_game()
+    gojiro = put_in_play(game, personality("gojiro", printed_id=GOJIRO, force=4))
+    attached(game, _gojiros_weapon(weapon_keywords), "gojiro")
+
+    assert effective_force(game, gojiro) == force
+
+
+@pytest.mark.parametrize(("weapon_keywords", "costs"), [(("Tetsubo",), 1), ((), 0)])
+def test_challenging_gojiro_with_a_tetsubo_costs_a_discard(weapon_keywords, costs):
+    game = two_seat_game()
+    put_in_play(game, personality("gojiro", printed_id=GOJIRO))
+    put_in_play(game, personality("rival", owner=P2))
+    attached(game, _gojiros_weapon(weapon_keywords), "gojiro")
+
+    paid = challenge_costs(game, "rival", "gojiro")
+
+    assert paid == [DiscardFromHand(P2, 1, P2, P2)] * costs
+
+
+@pytest.mark.parametrize(("weapon_keywords", "straightened"), [(("Tetsubo",), True), ((), False)])
+def test_gojiro_grants_a_heavy_weapon_an_additional_use(weapon_keywords, straightened):
+    weapon = _gojiros_weapon(("Heavy Weapon", *weapon_keywords))
+    session = combat_segment(
+        [personality("gojiro", printed_id=GOJIRO), personality("rival", owner=P2)],
+        {"gojiro": 0},
+        {"rival": 0},
+        attachments=((weapon, "gojiro"),),
+    )
+    session.game.table.cards_by_id["weapon"].bow()
+
+    session.act(P1, ActivateAbility("gojiro"))
+    session.submit(P1, DecisionResponse(("weapon",)))
+
+    game = session.game
+    assert AdditionalUse("gojiro", "weapon", Duration.UNTIL_END_OF_TURN) in game.ongoing
+    assert game.table.cards_by_id["weapon"].bowed is not straightened

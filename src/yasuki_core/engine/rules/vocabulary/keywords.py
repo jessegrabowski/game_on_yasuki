@@ -85,6 +85,8 @@ WEAPON = "Weapon"
 # --- Keywords individual cards ask after ---
 
 ARMOR = "Armor"
+HEAVY_WEAPON = "Heavy Weapon"
+TETSUBO = "Tetsubo"
 BERSERKER = "Berserker"
 CAVALRY = "Cavalry"
 COMMANDER = "Commander"
