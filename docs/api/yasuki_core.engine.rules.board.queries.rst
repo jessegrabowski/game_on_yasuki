@@ -13,6 +13,7 @@ yasuki_core.engine.rules.board.queries
     attack_targets_at
     controls_terrain_at
     different_elements
+    equipped_from_hand_since_last_turn
     favor_actions_this_turn
     followers_in_play
     has_keyword

@@ -5,7 +5,12 @@ from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.vocabulary.game_events import ActionResolved, GameEvent, PhaseStarted
+from yasuki_core.engine.rules.vocabulary.game_events import (
+    ActionResolved,
+    EnteredPlay,
+    GameEvent,
+    PhaseStarted,
+)
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.table import (
@@ -202,6 +207,21 @@ def favor_actions_this_turn(game: GameState, seat: PlayerId) -> int:
         1
         for event in game.turn_events
         if isinstance(event, ActionResolved) and event.seat is seat and event.favor
+    )
+
+
+def equipped_from_hand_since_last_turn(game: GameState, seat: PlayerId) -> tuple[L5RCard, ...]:
+    """The cards ``seat`` has Equipped from its hand since its last turn ended, as "if he Equipped
+    any Followers from his hand since his last turn ended" reads at the end of its own turn. An
+    Equip counts and a card put into play from hand does not (CR, Equip)."""
+    by_id = game.table.cards_by_id
+    return tuple(
+        by_id[event.card_id]
+        for event in (*game.previous_turn_events, *game.turn_events)
+        if isinstance(event, EnteredPlay)
+        and event.equipped
+        and event.from_hand
+        and by_id[event.card_id].owner is seat
     )
 
 
