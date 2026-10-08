@@ -512,7 +512,8 @@ class BattleView(CardPanel):
         mirrored: bool,
     ) -> None:
         """The lane's name and, in the largest type in the lane, the Province Strength the attackers
-        have to beat. It names the Province, so it sits at the Province's own end of the lane."""
+        have to beat. It names the Province, so it sits at the Province's own end of the lane, and
+        a lane at no Province shows the name alone."""
         left, right = span
         center = (left + right) // 2
 
@@ -527,11 +528,17 @@ class BattleView(CardPanel):
         self.canvas.create_text(
             center, inset(14), text=heading, fill=theme.INK_DIM, font=theme.serif(10, "bold")
         )
+        if view.province is None:
+            return
         self.canvas.create_text(
             center, inset(32), text="PROVINCE STRENGTH", fill=theme.INK_DIM, font=theme.serif(8)
         )
         self.canvas.create_text(
-            center, inset(56), text=str(view.strength), fill=theme.INK, font=theme.serif(26, "bold")
+            center,
+            inset(56),
+            text=str(view.province.strength),
+            fill=theme.INK,
+            font=theme.serif(26, "bold"),
         )
 
     def _draw_outcome(self, lines: list[_OutcomeLine], span: tuple[int, int], divider: int) -> None:
@@ -659,15 +666,18 @@ class BattleView(CardPanel):
     def _draw_province(self, view: BattlefieldView, x: int, y: int, *, mirrored: bool) -> None:
         """The Province card and the Fortifications attached to it, fanned inboard and tucked
         behind it the way the board tucks them under the slot."""
+        province = view.province
+        if province is None:
+            return
         inboard = -1 if mirrored else 1
         fan = [
             (to_render_card(card), (x, y + inboard * step * ATTACH_STACK_OFFSET))
-            for step, card in enumerate(view.fortifications, start=1)
+            for step, card in enumerate(province.fortifications, start=1)
         ]
         for card, spot in tower_draw_order(fan):
             self._draw_card(card, spot, pickable=False)
-        if view.occupant is not None:
-            self._draw_card(to_render_card(view.occupant), (x, y), pickable=False)
+        if province.occupant is not None:
+            self._draw_card(to_render_card(province.occupant), (x, y), pickable=False)
 
     def _draw_terrains(self, view: BattlefieldView, span: tuple[int, int], y: int) -> None:
         """The Terrains at the battlefield, in a centered row on the line between the armies."""

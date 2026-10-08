@@ -697,6 +697,38 @@ def test_the_province_falls_when_force_clears_its_strength():
     assert ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0) not in session.game.table.zones
 
 
+def _at_no_province(session: EngineSession) -> None:
+    """Rewrite the attack's first battlefield as one not associated with any Province (CR,
+    Battlefields)."""
+    attack = session.game.attack
+    assert attack is not None
+    attack.amend(0, province=None)
+
+
+def test_a_battlefield_at_no_province_offers_no_province_to_destroy():
+    session = _one_battlefield({"a": 9}, {"d": 2})
+    _at_no_province(session)
+
+    effects = resolution.resolution_effects(session.game, 0)
+
+    assert effects == [
+        Simultaneously((Destroy("d", Rulebook.BATTLE_RESOLUTION),)),
+        GainHonor(PlayerId.P1, 2, personalities=("a",)),
+    ]
+
+
+def test_a_won_battle_at_no_province_still_destroys_the_army_and_pays_honor():
+    session = _one_battlefield({"a": 9}, {"d": 2})
+    _at_no_province(session)
+    before = session.game.table.seats[PlayerId.P1].honor
+
+    _fight_one_battle(session)
+
+    assert not _in_play(session, "d")
+    assert session.game.table.seats[PlayerId.P1].honor - before == 2
+    assert ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0) in session.game.table.zones
+
+
 def test_honor_is_twice_the_cards_destroyed_not_the_units():
     # One unit, three cards. Counting units would pay 2 and counting cards pays 6, so the multi-
     # Follower unit is what makes the two readings disagree.
@@ -1061,6 +1093,46 @@ def test_an_outcome_says_the_province_stood_when_the_force_fell_short():
     _fight_one_battle(session)
 
     assert not _outcome(session).province_destroyed
+
+
+def test_an_outcome_at_no_province_never_says_the_province_fell():
+    session = _one_battlefield({"a": 9}, {"d": 2})
+    _at_no_province(session)
+
+    _fight_one_battle(session)
+
+    assert not _outcome(session).province_destroyed
+
+
+def test_battle_resolved_at_no_province_names_none():
+    session = _one_battlefield({"a": 9}, {"d": 2})
+    _at_no_province(session)
+
+    _fight_one_battle(session)
+
+    (resolved,) = _battles_resolved(session)
+    assert resolved.province is None
+    assert resolved.winner is PlayerId.P1
+
+
+def test_the_current_province_is_none_at_a_battlefield_at_no_province():
+    session = _one_battlefield({"a": 9}, {"d": 2})
+    _at_no_province(session)
+    pending = session.game.pending
+    assert isinstance(pending, ChooseBattlefield)
+
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+
+    assert session.game.attack.current_province is None
+
+
+def test_the_current_province_raises_between_battles():
+    # None means a battlefield not associated with any Province, so no battle being fought has to
+    # be an error rather than the same None.
+    session = _one_battlefield({"a": 9}, {"d": 2})
+
+    with pytest.raises(ValueError, match="no battle is being fought"):
+        session.game.attack.current_province
 
 
 def test_a_battle_that_did_nothing_records_an_outcome_saying_so():

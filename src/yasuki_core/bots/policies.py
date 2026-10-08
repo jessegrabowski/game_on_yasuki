@@ -354,7 +354,7 @@ def _holds_the_initiative(view: GameView) -> bool:
     """Whether the viewer could take a Province from the seat it would attack.
 
     No attack exists yet, so no Province's Strength can be read.
-    :attr:`~yasuki_core.engine.rules.projection.BattlefieldView.strength` only exists once one is
+    :attr:`~yasuki_core.engine.rules.projection.ProvinceAtBattlefield.strength` only exists once one is
     declared. What is readable is the other seat's Stronghold, and every
     Province is at least that strong, so a seat that cannot beat the Stronghold's Strength plus the
     Force the Defender could bring cannot take anything and has nothing to declare for.
@@ -481,7 +481,8 @@ def _offense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[
 
     The Defender assigns *after* this answer, so what it will bring is unknown. A Province therefore
     costs its Strength plus everything the Defender could still send, which makes taking it certain
-    rather than likely, and one the seat cannot pay for is left alone.
+    rather than likely, and one the seat cannot pay for is left alone. A battlefield not associated
+    with any Province offers nothing to take, so no units go there.
     """
     defending = _force_at_home(view, attack.defender)
     # Strictly greater takes the Province; equalling the bound only ties the battle.
@@ -489,8 +490,9 @@ def _offense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[
         request,
         view,
         [
-            (field.strength + defending + 1, index)
+            (field.province.strength + defending + 1, index)
             for index, field in enumerate(attack.battlefields)
+            if field.province is not None
         ],
     )
 
@@ -544,14 +546,16 @@ def _defense(request: AssignUnits, view: GameView, attack: AttackView) -> tuple[
 
     A Province survives when the attacking Force does not exceed the defending Force plus its
     Strength, so what a Province costs to hold is the attack against it less what it withstands on
-    its own. One the seat cannot reach is left alone.
+    its own. One the seat cannot reach is left alone, and a battlefield not associated with any
+    Province has nothing to save, so no units go there.
     """
     return _spend(
         request,
         view,
         [
-            (field.attacking_force - field.strength, index)
+            (field.attacking_force - field.province.strength, index)
             for index, field in enumerate(attack.battlefields)
+            if field.province is not None
         ],
     )
 

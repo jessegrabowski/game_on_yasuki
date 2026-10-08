@@ -3,7 +3,12 @@ import tkinter as tk
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.projection import AttackView, BattlefieldView, UnitView
+from yasuki_core.engine.rules.projection import (
+    AttackView,
+    BattlefieldView,
+    ProvinceAtBattlefield,
+    UnitView,
+)
 from yasuki_core.engine.rules.battle.records import BattleOutcome
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
 from yasuki_core.engine.table import ZoneKey, ZoneRole
@@ -63,12 +68,17 @@ def _battlefield(
     terrains=(),
     outcome=None,
     destroyed_names=(),
+    at_no_province=False,
 ):
     return BattlefieldView(
-        province=ZoneKey(P2, ZoneRole.PROVINCE, index),
-        occupant=occupant,
-        fortifications=fortifications,
-        strength=strength,
+        province=None
+        if at_no_province
+        else ProvinceAtBattlefield(
+            key=ZoneKey(P2, ZoneRole.PROVINCE, index),
+            occupant=occupant,
+            fortifications=fortifications,
+            strength=strength,
+        ),
         terrains=terrains,
         attacking=attacking,
         defending=defending,
@@ -159,6 +169,15 @@ def test_a_lane_names_its_battlefield_and_province_strength(view):
     assert "Battlefield 1" in texts
     assert "PROVINCE STRENGTH" in texts
     assert "4" in texts
+
+
+def test_a_lane_at_no_province_names_itself_and_shows_no_strength(view):
+    view.refresh(_attack(_battlefield(0, at_no_province=True, attacking=(_unit("akodo", 3),))))
+
+    texts = _texts(view)
+    assert "Battlefield 1" in texts
+    assert "PROVINCE STRENGTH" not in texts
+    assert "3" in texts  # the army and its Force total still draw below the shortened header
 
 
 def test_the_province_strength_is_the_largest_thing_in_the_lane(view):

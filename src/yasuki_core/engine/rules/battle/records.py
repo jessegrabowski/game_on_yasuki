@@ -43,12 +43,13 @@ class ArmyForces(NamedTuple):
 
 
 class BattlefieldInfo(NamedTuple):
-    """A battlefield an attack created, and the Defender Province it is associated with.
+    """A battlefield an attack created, and the Defender Province it is associated with, if any.
 
     Attributes
     ----------
-    province : ZoneKey
-        The Province this battlefield sits at.
+    province : ZoneKey or None
+        The Province this battlefield sits at, or None for a battlefield not associated with any
+        Province (CR, Battlefields), which no battle's resolution can destroy.
     outcome : BattleOutcome or None
         What the battle fought here did, or None until one has been.
     ever_present : frozenset of (PlayerId, str)
@@ -68,7 +69,7 @@ class BattlefieldInfo(NamedTuple):
         being fought. Default empty.
     """
 
-    province: ZoneKey
+    province: ZoneKey | None
     outcome: BattleOutcome | None = None
     ever_present: frozenset[tuple[PlayerId, str]] = frozenset()
     bow_exempt: frozenset[PlayerId] = frozenset()
@@ -91,8 +92,9 @@ class AttackPhase:
     defender : PlayerId
         The seat being attacked, at whose Provinces the battlefields stand.
     battlefields : tuple of BattlefieldInfo
-        One per Defender Province, in Province order. A card at a battlefield indexes into this
-        tuple, so the order is load-bearing and fixed for the life of the attack.
+        The battlefields this attack created: one per Defender Province, in Province order, when
+        declared. A card at a battlefield indexes into this tuple, so the order is load-bearing
+        and entries are never removed or reordered for the life of the attack.
     segment : Segment
         Which segment of the phase is open. Default ``Segment.DECLARATION``.
     fought : frozenset of int
@@ -136,7 +138,11 @@ class AttackPhase:
         raise KeyError(f"{seat} is not in this attack")
 
     @property
-    def current_province(self) -> ZoneKey:
+    def current_province(self) -> ZoneKey | None:
         """The Province the battle now being fought sits at: what a card means by "the current
-        Province". Raise ``TypeError`` between battles, when there is no current battlefield."""
+        Province". None at a battlefield not associated with any Province, where nothing is the
+        current Province. Raise ``ValueError`` between battles, when there is no current
+        battlefield, so that None keeps exactly one meaning."""
+        if self.current is None:
+            raise ValueError("no battle is being fought")
         return self.battlefields[self.current].province

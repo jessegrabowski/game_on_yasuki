@@ -988,6 +988,24 @@ def test_matsu_hanshiro_changes_the_province_he_dies_at(option, change):
     assert effective_province_strength(game, province) == strength + change
 
 
+def test_matsu_hanshiro_changes_no_province_at_a_battlefield_at_no_province():
+    units = [
+        personality("attacker", force=5),
+        personality("hanshiro", owner=P2, printed_id="matsu_hanshiro"),
+    ]
+    game = combat_segment(units, {"attacker": 0}, {"hanshiro": 0}).game
+    put_in_play(game, stronghold(P2, province_strength=6))
+    province = ZoneKey(P2, ZoneRole.PROVINCE, 0)
+    strength = effective_province_strength(game, province)
+    game.attack.amend(0, province=None)
+
+    resolve_effects(game, [Destroy("hanshiro", P1)])
+    assert isinstance(game.pending, ChooseOption) and game.pending.seat is P2
+    submit(game, DecisionResponse((HANSHIRO_LOWER,)))
+
+    assert effective_province_strength(game, province) == strength
+
+
 @pytest.mark.parametrize("deathseeker_fell", [True, False])
 def test_matsu_hanshiro_melees_again_only_after_his_deathseeker_falls_this_battle(
     deathseeker_fell,

@@ -89,6 +89,8 @@ def _outer_walls_effects(game: GameState, source: L5RCard, target: L5RCard) -> l
     """Strengthen the Province the battle is being fought at. "Its province" is the current
     battlefield's, which the card names rather than the seat choosing."""
     province = game.attack.current_province
+    if province is None:
+        return []
     return [
         GrantProvinceStrength(source.id, province, OUTER_WALLS_STRENGTH, Duration.UNTIL_END_OF_TURN)
     ]

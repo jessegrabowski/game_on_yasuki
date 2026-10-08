@@ -194,6 +194,18 @@ def test_outer_walls_strengthens_the_province_the_battle_is_at():
     assert effective_province_strength(session.game, SPARED_PROVINCE) == spared
 
 
+def test_outer_walls_grants_nothing_at_a_battlefield_at_no_province():
+    """ "Its province" names the current battlefield's, and a battlefield not associated with any
+    Province has none to strengthen."""
+    session = _outer_walls_battle(present=True)
+    session.game.attack.amend(0, province=None)
+    before = effective_province_strength(session.game, BATTLED_PROVINCE)
+
+    _play_walls(session)
+
+    assert effective_province_strength(session.game, BATTLED_PROVINCE) == before
+
+
 def test_outer_walls_is_played_with_no_units_at_the_battlefield():
     """The card's own clause, "Even if you control no units at the current battlefield," is the
     Absent designator in longhand, and it is the whole of what gets the action taken."""

@@ -474,8 +474,9 @@ class BattleResolved:
     ----------
     battlefield : int
         The index of the battlefield the battle was fought at.
-    province : ZoneKey
-        The Province the battlefield sat at, whether or not it still stands.
+    province : ZoneKey or None
+        The Province the battlefield sat at, whether or not it still stands, or None for a
+        battlefield not associated with any Province.
     attacker : PlayerId
         The seat that declared the attack.
     defender : PlayerId
@@ -505,7 +506,7 @@ class BattleResolved:
     """
 
     battlefield: int
-    province: ZoneKey
+    province: ZoneKey | None
     attacker: PlayerId
     defender: PlayerId
     winner: PlayerId | None
