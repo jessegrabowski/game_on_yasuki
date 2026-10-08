@@ -4,7 +4,7 @@ import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, recruitable
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
@@ -22,7 +22,13 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     focus_token,
 )
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
-from yasuki_core.engine.rules.cards.rise_of_jigoku import CAVALRY_FOLLOWER, MISHIMES_ONI
+from yasuki_core.engine.rules.cards.rise_of_jigoku import (
+    CAVALRY_FOLLOWER,
+    KURI_BOW,
+    KURI_BURN,
+    KURI_HOME,
+    MISHIMES_ONI,
+)
 from yasuki_core.engine.rules.rulebook.kharmic import KHARMIC_DRAW
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords as keywords_of
 from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
@@ -33,6 +39,7 @@ from yasuki_core.engine.rules.effects import (
     Discard,
     GainHonor,
     GrantKeyword,
+    GrantModifier,
     PayGold,
     RangedAttack,
 )
@@ -1842,3 +1849,135 @@ def test_a_terrible_glory_reads_shadowlands_as_its_fear_would_resolve():
     resolve_effects(game, [shadowlands, *effects])
 
     assert game.pending.candidates == ("guard",)
+
+
+# --- Chuda Kuri ---
+
+
+KURI_KILLER = "chuda_kuri_test_killer"
+
+
+def _kuri_killer() -> Ability:
+    """A bare Open that destroys Kuri, so his death is something an action did rather than
+    something a test reached in and caused."""
+    return Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=lambda game, source: ["kuri"],
+        effects=lambda game, source, target: [Destroy(target.id, source.owner)],
+        hits_every_target=True,
+    )
+
+
+def _kuri_game(*, chi: int = 3, penalty: int = 0, victims: int = 4):
+    """Kuri in play beside the probe that kills him and ``victims`` enemy Personalities, with
+    ``penalty`` Chi hung on him so the recorded Chi differs from the printed one."""
+    game = two_seat_game()
+    put_in_play(game, personality("kuri", printed_id="chuda_kuri", force=0, chi=chi, gold_cost=3))
+    put_in_play(game, personality("blade", printed_id=KURI_KILLER))
+    put_in_play(game, personality("curse"))
+    for index in range(victims):
+        put_in_play(game, personality(f"victim{index}", owner=P2))
+    session = EngineSession.start(game.table, P1)
+    if penalty:
+        resolve_effects(
+            session.game,
+            [GrantModifier("curse", "kuri", Stat.CHI, -penalty, Duration.UNTIL_END_OF_TURN)],
+        )
+    return session
+
+
+def _tainted(session, card_id: str) -> bool:
+    return keywords.SHADOWLANDS in keywords_of(
+        session.game, session.game.table.cards_by_id[card_id]
+    )
+
+
+def test_chuda_kuri_taints_as_many_personalities_as_the_chi_he_died_with():
+    """Not his printed 3: the Chi he actually had, which the discard pile can no longer show."""
+    session = _kuri_game(chi=3, penalty=1)
+
+    with probe_ability(KURI_KILLER, _kuri_killer()):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, ActivateAbility("kuri", "response"))
+        asked = session.game.pending
+
+        assert (asked.minimum, asked.maximum) == (2, 2)
+        session.submit(P1, DecisionResponse(("victim0", "victim1")))
+
+    assert _tainted(session, "victim0") and _tainted(session, "victim1")
+    assert not _tainted(session, "victim2")
+
+
+def test_chuda_kuri_answers_only_the_action_that_destroyed_him():
+    session = _kuri_game()
+
+    with probe_ability(KURI_KILLER, _kuri_killer()):
+        assert ActivateAbility("kuri", "response") not in session.legal_actions(P1)
+
+
+def test_chuda_kuri_taints_every_personality_when_fewer_stand_than_his_chi():
+    """ "A number of Personalities equal to his Chi" reaches as many as there are."""
+    session = _kuri_game(chi=3, victims=1)
+
+    with probe_ability(KURI_KILLER, _kuri_killer()):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, ActivateAbility("kuri", "response"))
+
+        assert session.game.pending.minimum == 3  # kuri, curse and the one victim
+
+
+def _kuri_battle(*, tainted_enemy: bool = False):
+    """Kuri in the attacking army against one enemy, Shadowlands or not as the test asks."""
+    enemy_keywords = (keywords.SHADOWLANDS,) if tainted_enemy else ()
+    return combat_segment(
+        [
+            personality("kuri", printed_id="chuda_kuri", force=0, chi=3, gold_cost=3),
+            personality("enemy", owner=P2, force=2, keywords=enemy_keywords),
+        ],
+        {"kuri": 0},
+        {"enemy": 0},
+    )
+
+
+def test_chuda_kuri_spends_himself_to_bow_a_personality():
+    session = _kuri_battle()
+
+    session.act(P1, ActivateAbility("kuri", "battle"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+    session.submit(P1, DecisionResponse((KURI_BOW,)))
+
+    assert session.game.table.cards_by_id["enemy"].bowed
+    assert "kuri" not in {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_chuda_kuri_can_send_the_target_home_instead():
+    session = _kuri_battle()
+
+    session.act(P1, ActivateAbility("kuri", "battle"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+    session.submit(P1, DecisionResponse((KURI_HOME,)))
+
+    assert (
+        location_of(session.game.table, session.game.table.cards_by_id["enemy"]).battlefield is None
+    )
+
+
+@pytest.mark.parametrize("tainted_enemy", [True, False], ids=["shadowlands", "clean"])
+def test_chuda_kuri_offers_the_melee_only_against_a_shadowlands_target(tainted_enemy):
+    session = _kuri_battle(tainted_enemy=tainted_enemy)
+
+    session.act(P1, ActivateAbility("kuri", "battle"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+
+    assert (KURI_BURN in session.game.pending.candidates) is tainted_enemy
+
+
+def test_chuda_kuri_burns_a_shadowlands_target_for_three():
+    session = _kuri_battle(tainted_enemy=True)
+
+    session.act(P1, ActivateAbility("kuri", "battle"))
+    session.submit(P1, DecisionResponse(("enemy",)))
+    session.submit(P1, DecisionResponse((KURI_BURN,)))
+
+    assert "enemy" not in {card.id for card in session.game.table.battlefield.cards}

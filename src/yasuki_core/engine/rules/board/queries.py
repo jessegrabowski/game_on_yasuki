@@ -153,11 +153,12 @@ def attack_targeting(kind: type) -> Callable[[GameState, L5RCard], list[str]]:
 
 
 def attack_targets_at(
-    game: GameState, battlefield: int, seat: PlayerId, *, past_followers: bool = False
+    game: GameState, battlefield: int | None, seat: PlayerId, *, past_followers: bool = False
 ) -> list[str]:
     """The ids an attack effect may be pointed at among ``seat``'s units at ``battlefield``: each
     unit's Followers, and its Personality when he carries none or ``past_followers`` lets the
-    attack reach him anyway (CR, Ranged Attack)."""
+    attack reach him anyway (CR, Ranged Attack). ``None`` asks it of ``seat``'s home, for an
+    attack that reaches a card standing out of the battle."""
     targets: list[str] = []
     for personality in units_at(game, battlefield, seat):
         followers = followers_of(game, personality)
@@ -211,6 +212,21 @@ def phase_history(game: GameState) -> tuple[GameEvent, ...]:
     events = game.turn_events
     starts = [index for index, event in enumerate(events) if isinstance(event, PhaseStarted)]
     return events[starts[-1] + 1 :] if starts else events
+
+
+def honorably_dead(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card`` lies dead in a pile without disgrace, which is what "if X is honorably
+    dead" asks.
+
+    Three cards in a discard pile look alike and are not: one destroyed while honorable is
+    honorably dead, one destroyed while dishonorable is dishonorably dead, and one discarded out
+    of a Province never died at all. Only the first answers True, and a card back in play is not
+    dead whatever it last left play by.
+    """
+    departure = game.last_known.get(card.id)
+    if departure is None or not departure.destroyed or card.dishonorable:
+        return False
+    return not any(held is card for held in game.table.battlefield.cards)
 
 
 def rings_in_play(game: GameState, seat: PlayerId, asking: Asking) -> tuple[L5RCard, ...]:
@@ -290,9 +306,10 @@ def province_holdings(game: GameState, seat: PlayerId) -> list[str]:
     ]
 
 
-def units_at(game: GameState, battlefield: int, seat: PlayerId) -> list[L5RCard]:
+def units_at(game: GameState, battlefield: int | None, seat: PlayerId) -> list[L5RCard]:
     """The Personalities ``seat`` has standing at ``battlefield``, in play order. One side of the
-    army there, since a seat's units at a battlefield are all on the same side of it."""
+    army there, since a seat's units at a battlefield are all on the same side of it. ``None``
+    names the seat's home, where a Personality in no battle stands."""
     return [
         card
         for card in game.table.battlefield.cards

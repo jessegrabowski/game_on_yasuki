@@ -993,7 +993,9 @@ def test_destroy_effect_discards_the_card_and_emits_destroyed():
 
     events = apply_effect(game, Destroy(farm.id, PlayerId.P1))
 
-    left_as = LastKnownState(Location.home(PlayerId.P1), PlayerId.P1, force=0)
+    left_as = LastKnownState(
+        Location.home(PlayerId.P1), PlayerId.P1, force=0, chi=0, destroyed=True
+    )
     assert events == [Destroyed(farm.id, PlayerId.P1, left_as)]
     assert farm not in game.table.battlefield.cards
     assert farm in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
@@ -1818,7 +1820,9 @@ def test_a_destruction_nothing_acts_before_is_not_announced():
 
     resolve_effects(game, [Destroy(dying.id, PlayerId.P2)])
 
-    left_as = LastKnownState(Location.home(PlayerId.P1), PlayerId.P1, force=2)
+    left_as = LastKnownState(
+        Location.home(PlayerId.P1), PlayerId.P1, force=2, chi=3, destroyed=True
+    )
     assert game.turn_events[before:] == (Destroyed(dying.id, PlayerId.P2, left_as),)
 
 

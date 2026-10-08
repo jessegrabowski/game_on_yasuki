@@ -64,6 +64,8 @@ def recruit_card(game: GameState, card: L5RCard, *, renew: bool = False) -> list
     seat = card.owner
     if not may_join(game, seat, card) or not may_recruit(game, seat, card):
         return []
+    if not meets_honor_requirement(game, card):
+        return []
     payment = recruit_gold(game, card)
     from_province = province_key_holding(game, seat, card.id)
     if from_province is None and keywords.FORTIFICATION in effective_keywords(game, card):
@@ -223,7 +225,7 @@ def recruitable(game: GameState, source: L5RCard) -> list[str]:
         return []
     if not may_join(game, seat, source) or not may_recruit(game, seat, source):
         return []
-    if isinstance(source.printed, PersonalityPrint) and not _meets_honor_requirement(game, source):
+    if not meets_honor_requirement(game, source):
         return []
     return [source.id]
 
@@ -237,11 +239,16 @@ HONOR_REQUIREMENT_WAIVERS = FlagRegistry(
 register_honor_requirement_waiver = HONOR_REQUIREMENT_WAIVERS.make_register()
 
 
-def _meets_honor_requirement(game: GameState, personality: L5RCard) -> bool:
-    required = personality.honor_requirement
-    if required is None or game.table.seats[personality.owner].honor >= required:
+def meets_honor_requirement(game: GameState, card: L5RCard) -> bool:
+    """Whether ``card``'s Honor Requirement lets its controller Recruit it: a dash never withholds,
+    Family Honor that reaches it never withholds, and neither does a waiver. Only a Personality
+    prints one at all, so every other card meets it."""
+    if not isinstance(card.printed, PersonalityPrint):
         return True
-    return _waives_honor_requirement(game, personality)
+    required = card.honor_requirement
+    if required is None or game.table.seats[card.owner].honor >= required:
+        return True
+    return _waives_honor_requirement(game, card)
 
 
 def _waives_honor_requirement(game: GameState, personality: L5RCard) -> bool:

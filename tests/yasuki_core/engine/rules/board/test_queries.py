@@ -14,6 +14,7 @@ from yasuki_core.engine.rules.board.queries import (
     different_elements,
     controls_terrain_at,
     has_keyword,
+    honorably_dead,
     owned_carrying,
     outnumbered_at,
     owned_holdings,
@@ -25,7 +26,9 @@ from yasuki_core.engine.rules.board.queries import (
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.turn.structure import Phase
 from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, LastKnownState, PhaseStarted
-from yasuki_core.engine.table import Location
+from yasuki_core.engine.rules.effects import Destroy, Discard, Dishonor
+from yasuki_core.engine.rules.triggers import resolve_effects
+from yasuki_core.engine.table import BATTLEFIELD, Location
 from yasuki_core.game_pieces.constants import AttachmentType, Element
 from yasuki_core.game_pieces.prints import RingPrint
 
@@ -150,7 +153,7 @@ def test_an_army_is_outnumbered_only_by_an_opposing_army_with_more_units():
 
 def test_the_phase_history_holds_what_happened_since_the_latest_phase_began():
     game = two_seat_game()
-    stood = LastKnownState(Location.home(PlayerId.P1), PlayerId.P1, force=2)
+    stood = LastKnownState(Location.home(PlayerId.P1), PlayerId.P1, force=2, chi=0)
     earlier, later = Destroyed("a", PlayerId.P1, stood), Destroyed("b", PlayerId.P1, stood)
     game.turn_events = (
         earlier,
@@ -195,3 +198,50 @@ AIR, FIRE, VOID = Element.AIR, Element.FIRE, Element.VOID
 )
 def test_different_elements_counts_rings_each_standing_for_a_different_element(rings, count):
     assert different_elements([frozenset(elements) for elements in rings]) == count
+
+
+@pytest.mark.parametrize(
+    ("disgraced", "dead"),
+    [(False, True), (True, False)],
+    ids=["honorable", "dishonorable"],
+)
+def test_only_a_card_destroyed_without_disgrace_is_honorably_dead(disgraced, dead):
+    game = two_seat_game()
+    put_in_play(game, personality("fallen"))
+    if disgraced:
+        resolve_effects(game, [Dishonor("fallen", PlayerId.P1)])
+    resolve_effects(game, [Destroy("fallen", PlayerId.P1)])
+
+    assert honorably_dead(game, game.table.cards_by_id["fallen"]) is dead
+
+
+def test_a_card_discarded_out_of_a_province_is_not_honorably_dead():
+    """A Personality who never left a Province never stood in play, so nothing remembers him and
+    the pile cannot be asked."""
+    game = two_seat_game()
+    province_card(game, "unplayed", seat=PlayerId.P1)
+
+    resolve_effects(game, [Discard("unplayed", PlayerId.P1)])
+
+    assert not honorably_dead(game, game.table.cards_by_id["unplayed"])
+
+
+def test_a_card_discarded_out_of_play_is_not_honorably_dead():
+    """The pile holds it either way and it is remembered either way. Only the record of how it
+    left tells a death from a discard."""
+    game = two_seat_game()
+    put_in_play(game, personality("spent"))
+
+    resolve_effects(game, [Discard("spent", PlayerId.P1)])
+
+    assert not honorably_dead(game, game.table.cards_by_id["spent"])
+
+
+def test_a_card_brought_back_into_play_is_no_longer_dead():
+    game = two_seat_game()
+    put_in_play(game, personality("risen"))
+    resolve_effects(game, [Destroy("risen", PlayerId.P1)])
+
+    ops.move_card(game.table, game.table.cards_by_id["risen"], BATTLEFIELD)
+
+    assert not honorably_dead(game, game.table.cards_by_id["risen"])

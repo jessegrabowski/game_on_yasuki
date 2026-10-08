@@ -161,11 +161,19 @@ class LastKnownState:
         The seat that controlled it. Control is ownership until the engine models the two apart.
     force : int
         Its Force, every modifier, token and attachment counted.
+    chi : int
+        Its Chi, counted the same way, which "his Chi before he left play" reads.
+    destroyed : bool
+        Whether it left play by being destroyed. A card discarded out of play, or moved anywhere
+        else, left without dying, and the two are indistinguishable once it lies in the pile.
+        Default False.
     """
 
     location: Location
     controller: PlayerId
     force: int
+    chi: int
+    destroyed: bool = False
 
 
 @dataclass(frozen=True, slots=True)

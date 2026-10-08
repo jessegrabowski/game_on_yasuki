@@ -54,11 +54,12 @@ from yasuki_core.engine.rules.rulebook.equip import (
 from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import Location, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     AdjustPending,
     Ask,
+    AskOption,
     AttachCard,
     Bow,
     Choose,
@@ -72,6 +73,7 @@ from yasuki_core.engine.rules.effects import (
     GrantKeyword,
     GrantModifier,
     MeleeAttack,
+    Move,
     PayGold,
     RangedAttack,
     To,
@@ -103,7 +105,7 @@ from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcom
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.game_pieces.counters import FIRE
-from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
+from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import province_holdings
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -303,6 +305,122 @@ register_ability(
         targeting_message="your unbowed Monk or Shugenja",
         effects=_blood_of_fu_leng_effects,
         located_at=(CardLocation.HAND,),
+    ),
+)
+
+
+# --- Chuda Kuri ---
+
+
+KURI_MELEE = 3
+KURI_BOW = "Bow them"
+KURI_HOME = "Move them home"
+KURI_BURN = f"Melee {KURI_MELEE} targeting them"
+
+
+def _chuda_kuri_response_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Kuri himself, and only when the action being answered is the one that destroyed him. He
+    answers from the discard pile, which is where that action put him."""
+    if not any(event.card_id == source.id for event in action_did(game, Destroyed)):
+        return []
+    return [source.id]
+
+
+def _chuda_kuri_response_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Taint as many Personalities as Kuri had Chi when he left play. Fewer Personalities on the
+    board than that taints all of them."""
+    departure = game.last_known.get(source.id)
+    if departure is None:
+        return []
+    candidates = tuple(card.id for card in personalities_in_play(game))
+    count = min(departure.chi, len(candidates))
+    if count == 0:
+        return []
+    return [Choose(source.owner, candidates, count, count, "chuda_kuri_taint", source.id)]
+
+
+@choice_resolver("chuda_kuri_taint", prompt="Choose the Personalities Kuri taints")
+def _resolve_chuda_kuri_taint(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """One phrase gives them all Shadowlands, so they take it at once. The card prints no duration,
+    so the grant lasts until the end of the turn (CR, Duration of Effects)."""
+    return [
+        Simultaneously(
+            tuple(
+                GrantKeyword(source_id, card_id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN)
+                for card_id in chosen
+            )
+        )
+    ]
+
+
+def _chuda_kuri_battle_targets(game: GameState, source: L5RCard) -> list[str]:
+    return [card.id for card in personalities_in_play(game)]
+
+
+def _chuda_kuri_battle_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Destroy Kuri, then put the three things he can do to the target. Burning is on offer only
+    while the target is Shadowlands, read as the choice is put. He is destroyed first, so the
+    Response his death opens is offered for this same action."""
+    offered = [KURI_BOW, KURI_HOME]
+    if keywords.SHADOWLANDS in effective_keywords(game, target):
+        offered.append(KURI_BURN)
+    return [
+        Destroy(source.id, source.owner),
+        AskOption(
+            seat=source.owner,
+            options=tuple(offered),
+            question=f"What does Kuri do to {target.name}?",
+            resolver="chuda_kuri_battle",
+            source_id=source.id,
+            resolver_context=(target.id,),
+        ),
+    ]
+
+
+@choice_resolver("chuda_kuri_battle")
+def _resolve_chuda_kuri_battle(
+    game: GameState,
+    source_id: str,
+    chosen: tuple[str, ...],
+    seat: PlayerId,
+    resolver_context: tuple[str, ...] = (),
+) -> list[Effect]:
+    """Whichever of the three the seat picked. Burning is offered only against a Shadowlands
+    target, so reaching it means the target was one."""
+    (target_id,) = resolver_context
+    if chosen[0] == KURI_BOW:
+        return [Bow(target_id)]
+    if chosen[0] == KURI_HOME:
+        target = game.table.cards_by_id[target_id]
+        return [Move(target_id, Location.home(target.owner))]
+    return [MeleeAttack(KURI_MELEE, target_id, seat)]
+
+
+register_ability(
+    "chuda_kuri",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        key="response",
+        cost=no_cost,
+        targets=_chuda_kuri_response_targets,
+        effects=_chuda_kuri_response_effects,
+        hits_every_target=True,
+        located_at=(CardLocation.DISCARD,),
+    ),
+)
+
+register_ability(
+    "chuda_kuri",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        printed_index=1,
+        key="battle",
+        cost=bow_cost,
+        targets=_chuda_kuri_battle_targets,
+        targeting_message="a Personality",
+        effects=_chuda_kuri_battle_effects,
     ),
 )
 

@@ -10,6 +10,7 @@ yasuki_core.engine.rules.rulebook.recruit
     bring_into_play
     effects_after_entering_play
     is_recruit
+    meets_honor_requirement
     proclaim_gain_effects
     proclamation_effects
     recruit_card

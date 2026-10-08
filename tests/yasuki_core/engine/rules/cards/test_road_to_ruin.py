@@ -1,3 +1,5 @@
+from typing import NamedTuple
+
 import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT
@@ -71,6 +73,7 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    stronghold,
     sensei,
     token_template,
     two_seat_game,
@@ -1498,3 +1501,159 @@ def test_desperate_melee_is_not_played_with_no_enemy_follower_to_target():
     )
 
     assert PlayStrategy("melee") not in session.legal_actions(P1)
+
+
+# --- Houhou (Experienced) ---
+
+
+class _Enemy(NamedTuple):
+    """One of P2's Personalities at home, for Houhou to shoot at or pass over."""
+
+    force: int = 2
+    follower: bool = False
+
+
+def _houhou_game(
+    *,
+    honor: int = 10,
+    production: int = 12,
+    dishonored: bool = False,
+    enemies: tuple[_Enemy, ...] = (_Enemy(),),
+):
+    """Houhou destroyed and lying in the discard, over ``enemies`` at P2's home. The Stronghold
+    produces ``production``, enough to cover her 8 Gold unless a test says otherwise."""
+    game = two_seat_game()
+    put_in_play(game, stronghold(P1, gold_production=production))
+    put_in_play(
+        game,
+        personality(
+            "houhou",
+            printed_id="houhou_experienced",
+            name="Houhou",
+            force=3,
+            chi=3,
+            personal_honor=4,
+            honor_requirement=7,
+            gold_cost=8,
+        ),
+    )
+    for index, enemy in enumerate(enemies):
+        put_in_play(game, personality(f"enemy{index}", owner=PlayerId.P2, force=enemy.force))
+        if enemy.follower:
+            attached(
+                game,
+                attachment(
+                    f"guard{index}", owner=PlayerId.P2, attachment_type=AttachmentType.FOLLOWER
+                ),
+                f"enemy{index}",
+            )
+    session = EngineSession.start(game.table, P1)
+    session.game.table.seats[P1].honor = honor
+    if dishonored:
+        resolve_effects(session.game, [Dishonor("houhou", P1)])
+    resolve_effects(session.game, [Destroy("houhou", P1)])
+    return session
+
+
+def _houhou_on_board(session):
+    return {card.id for card in session.game.table.battlefield.cards}
+
+
+def test_houhou_comes_back_from_the_discard_once_she_is_honorably_dead():
+    session = _houhou_game()
+    assert ActivateAbility("houhou") in session.legal_actions(P1)
+
+
+def test_houhou_who_died_in_disgrace_stays_dead():
+    """Dishonorably dead is not honorably dead, and the discard pile looks identical either way."""
+    session = _houhou_game(dishonored=True)
+
+    assert ActivateAbility("houhou") not in session.legal_actions(P1)
+
+
+def test_houhou_is_not_offered_while_she_is_still_in_play():
+    game = two_seat_game()
+    put_in_play(game, stronghold(P1, gold_production=12))
+    put_in_play(game, personality("houhou", printed_id="houhou_experienced", gold_cost=8))
+    session = EngineSession.start(game.table, P1)
+
+    assert ActivateAbility("houhou") not in session.legal_actions(P1)
+
+
+def test_houhou_is_withheld_when_her_eight_gold_cannot_be_raised():
+    """Her X is the Recruit's cost, so a seat that cannot cover it is never offered the action."""
+    session = _houhou_game(production=2)
+
+    assert ActivateAbility("houhou") not in session.legal_actions(P1)
+
+
+def test_houhou_shoots_an_enemy_at_home_as_she_arrives_and_gains_two_honor_for_the_kill():
+    session = _houhou_game()
+    before = session.game.table.seats[P1].honor
+
+    session.act(P1, ActivateAbility("houhou"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("enemy0",)))
+
+    assert "houhou" in _houhou_on_board(session)
+    assert "enemy0" not in _houhou_on_board(session)
+    assert session.game.table.seats[P1].honor == before + 2
+
+
+def test_houhou_gains_no_honor_when_her_shot_does_not_reach():
+    session = _houhou_game(enemies=(_Enemy(force=9),))
+    before = session.game.table.seats[P1].honor
+
+    session.act(P1, ActivateAbility("houhou"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(("enemy0",)))
+
+    assert "enemy0" in _houhou_on_board(session)
+    assert session.game.table.seats[P1].honor == before
+
+
+def test_houhous_shot_passes_over_a_personality_carrying_a_follower():
+    session = _houhou_game(enemies=(_Enemy(follower=True), _Enemy()))
+
+    session.act(P1, ActivateAbility("houhou"))
+    pay(session, P1)
+
+    assert set(session.game.pending.candidates) == {"enemy1", "guard0"}
+
+
+def test_houhou_may_decline_the_shot():
+    session = _houhou_game()
+    before = session.game.table.seats[P1].honor
+
+    session.act(P1, ActivateAbility("houhou"))
+    pay(session, P1)
+    session.submit(P1, DecisionResponse(()))
+
+    assert "houhou" in _houhou_on_board(session)
+    assert "enemy0" in _houhou_on_board(session)
+    assert session.game.table.seats[P1].honor == before
+
+
+def test_houhou_is_withheld_below_her_honor_requirement():
+    """She prints a Requirement of 7 and no leave to ignore it, so a seat at 3 cannot raise her."""
+    session = _houhou_game(honor=3)
+
+    assert ActivateAbility("houhou") not in session.legal_actions(P1)
+
+
+def test_houhou_who_does_not_arrive_fires_no_shot():
+    """The Ranged 3 is what follows her entering play, so a Recruit the rules refuse leaves
+    nothing to follow and must not hand the seat a free attack.
+
+    Her Honor Requirement is read when the action is offered and again as the Recruit resolves,
+    and Honor can fall in between.
+    """
+    session = _houhou_game()
+    session.act(P1, ActivateAbility("houhou"))
+    session.game.table.seats[P1].honor = 3
+
+    pay(session, P1)
+
+    assert "houhou" not in _houhou_on_board(session)
+    assert session.game.pending is None
+    assert "enemy0" in _houhou_on_board(session)

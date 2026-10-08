@@ -50,6 +50,7 @@ from yasuki_core.engine.rules.effects import (
     PayGold,
     PlaceInProvince,
     RangedAttack,
+    Recruit,
     Simultaneously,
     Straighten,
     To,
@@ -68,7 +69,9 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     attack_targets,
+    attack_targets_at,
     has_keyword,
+    honorably_dead,
     opposed_units_in_battle,
     opposing_units_in_battle,
     owned_holdings,
@@ -99,6 +102,11 @@ from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, locat
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import MINUS_1F
+from yasuki_core.engine.rules.rulebook.recruit import (
+    meets_honor_requirement,
+    recruit_effects,
+    recruit_gold,
+)
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
     HoldingPrint,
@@ -266,6 +274,104 @@ register_ability(
         targeting_message="an enemy Follower or Personality",
         effects=_grim_reality_effects,
         located_at=(CardLocation.HAND,),
+    ),
+)
+
+
+# --- Houhou (Experienced) ---
+
+
+HOUHOU_RANGED = 3
+HOUHOU_HONOR = 2
+
+
+def _houhou_experienced_cost(game: GameState, source: L5RCard) -> list[Effect]:
+    """Her Recruit's Gold, paid up front as the cost block. The Recruit it funds adds no charge of
+    its own."""
+    return recruit_gold(game, source)
+
+
+def _houhou_experienced_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Herself, and only while she lies honorably dead and her Honor Requirement would let her
+    back. A Houhou discarded out of a Province never died, and one who fell in disgrace died the
+    wrong way."""
+    if not honorably_dead(game, source) or not meets_honor_requirement(game, source):
+        return []
+    return [source.id]
+
+
+def _houhou_experienced_shots(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """What her arrival may shoot: an attack's ordinary targets, asked of each other player's home
+    rather than of an army. "Another player's home" is plural, so every other seat answers."""
+    return tuple(
+        target_id
+        for other in game.table.seats
+        if other is not seat
+        for target_id in attack_targets_at(game, None, other)
+    )
+
+
+def _houhou_experienced_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Recruit her out of the discard, then shoot. The shot is evaluated rather than built here,
+    because it reads the homes as they stand once she has arrived."""
+    arrival = Recruit(source.id, from_province=None)
+    return [
+        *recruit_effects(game, arrival),
+        Evaluate("houhou_experienced_shot", source.id, source.owner),
+    ]
+
+
+@choice_resolver("houhou_experienced_shot")
+def _resolve_houhou_experienced_shot(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Offer the Ranged 3 she arrives with, which her controller may decline ("which may target").
+    Nothing to shoot is no question, and neither is a Houhou who never arrived: the shot is what
+    follows her entering play, so a Recruit that did not happen fires nothing."""
+    houhou = game.table.cards_by_id[source_id]
+    if not any(held is houhou for held in game.table.battlefield.cards):
+        return []
+    shots = _houhou_experienced_shots(game, seat)
+    if not shots:
+        return []
+    return [Choose(seat, shots, 1, 1, "houhou_experienced_target", source_id, declinable=True)]
+
+
+@choice_resolver("houhou_experienced_target", prompt="Choose what Houhou's Ranged 3 attacks")
+def _resolve_houhou_experienced_target(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The shot, and after it the Honor it may earn. The target rides along, so the Honor answers
+    for what this attack killed rather than for anything else the action destroyed."""
+    if not chosen:
+        return []
+    return [
+        RangedAttack(HOUHOU_RANGED, chosen[0], seat),
+        Evaluate("houhou_experienced_honor", source_id, seat, (chosen[0],)),
+    ]
+
+
+@choice_resolver("houhou_experienced_honor")
+def _resolve_houhou_experienced_honor(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Two Honor if the shot killed its target, read once it has resolved. A Personality takes his
+    unit with him, so the one target answers "any cards"."""
+    (target_id,) = chosen
+    if not any(event.card_id == target_id for event in action_did(game, Destroyed)):
+        return []
+    return [GainHonor(seat, HOUHOU_HONOR, source_id=source_id)]
+
+
+register_ability(
+    "houhou_experienced",
+    Ability(
+        timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
+        cost=_houhou_experienced_cost,
+        targets=_houhou_experienced_targets,
+        effects=_houhou_experienced_effects,
+        hits_every_target=True,
+        located_at=(CardLocation.DISCARD,),
     ),
 )
 

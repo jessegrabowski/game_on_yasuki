@@ -472,9 +472,13 @@ class MoveToHand(Effect):
         return []
 
 
-def _as_it_stands(game: GameState, card: L5RCard) -> LastKnownState:
+def _as_it_stands(game: GameState, card: L5RCard, *, destroyed: bool = False) -> LastKnownState:
     return LastKnownState(
-        location_of(game.table, card), card.owner, effective_stat(game, card, Stat.FORCE)
+        location_of(game.table, card),
+        card.owner,
+        effective_stat(game, card, Stat.FORCE),
+        effective_stat(game, card, Stat.CHI),
+        destroyed=destroyed,
     )
 
 
@@ -512,7 +516,7 @@ def _leaving_play_to(game: GameState, card: L5RCard, dest: ZoneKey | DeckKey) ->
 
 
 def _remove_unit(
-    game: GameState, card: L5RCard, *, banished: bool = False
+    game: GameState, card: L5RCard, *, banished: bool = False, destroyed: bool = False
 ) -> tuple[tuple[L5RCard, LastKnownState], ...]:
     """Send ``card`` and everything attached to him out of play, to their discards or to their
     banishes when ``banished``. Return each member of the unit that left with how it stood, read
@@ -522,9 +526,14 @@ def _remove_unit(
     A created card among them has no pile of either kind and is taken off the table instead, which
     the move itself sees to (CR, Create). It still announces its departure, because a card reacting
     to a Follower being destroyed does not care where the Follower came from.
+
+    Each record says the departure was a destruction when ``destroyed``, which is what tells a
+    card lying in a pile from one discarded there without dying.
     """
     in_play = _in_play(game, card)
-    stood = tuple((member, _as_it_stands(game, member)) for member in unit_of(game, card))
+    stood = tuple(
+        (member, _as_it_stands(game, member, destroyed=destroyed)) for member in unit_of(game, card)
+    )
     for member, state in stood:
         dest = pile_for(member, banished=banished)
         if in_play:
@@ -614,7 +623,8 @@ class Destroy(Effect):
         ):
             record_terrain_destroyed(game, destroyer, card, battlefield=location.battlefield)
         return [
-            Destroyed(member.id, self.cause, stood) for member, stood in _remove_unit(game, card)
+            Destroyed(member.id, self.cause, stood)
+            for member, stood in _remove_unit(game, card, destroyed=True)
         ]
 
 
@@ -2781,10 +2791,20 @@ class Recruit(Effect):
         return f"recruit {self.card_id}"
 
     def would_happen(self, game: GameState) -> bool:
-        """Whether the card may enter play: Unique and Singular can keep it out, and so can its own
-        "May only be Recruited by" text."""
+        """Whether the card may enter play: Unique and Singular can keep it out, its own "May only
+        be Recruited by" text can, and so can a Personality's Honor Requirement.
+
+        The Honor Requirement is checked here rather than only where the rulebook offers a Recruit,
+        so a card that Recruits by returning this effect meets it too.
+        """
+        # The Recruit procedure imports this module for the effects it resolves, so importing it
+        # at the top would close that cycle.
+        from yasuki_core.engine.rules.rulebook.recruit import meets_honor_requirement
+
         card = game.table.cards_by_id[self.card_id]
-        return may_join(game, card.owner, card) and may_recruit(game, card.owner, card)
+        if not may_join(game, card.owner, card) or not may_recruit(game, card.owner, card):
+            return False
+        return meets_honor_requirement(game, card)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         # The Recruit procedure imports this module for the effects it resolves, so importing it

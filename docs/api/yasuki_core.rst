@@ -88,6 +88,7 @@ yasuki_core
     yasuki_core.engine.rules.rulebook.dishonor <yasuki_core.engine.rules.rulebook.dishonor>
     yasuki_core.engine.rules.rulebook.dynasty_discard <yasuki_core.engine.rules.rulebook.dynasty_discard>
     yasuki_core.engine.rules.rulebook.equip <yasuki_core.engine.rules.rulebook.equip>
+    yasuki_core.engine.rules.rulebook.expendable <yasuki_core.engine.rules.rulebook.expendable>
     yasuki_core.engine.rules.rulebook.favor_abilities <yasuki_core.engine.rules.rulebook.favor_abilities>
     yasuki_core.engine.rules.rulebook.favor_payment <yasuki_core.engine.rules.rulebook.favor_payment>
     yasuki_core.engine.rules.rulebook.favor_proxy <yasuki_core.engine.rules.rulebook.favor_proxy>

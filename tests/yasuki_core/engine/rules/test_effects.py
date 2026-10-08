@@ -999,3 +999,58 @@ def test_a_card_moved_on_out_of_play_keeps_how_it_last_stood_in_play():
     )
 
     assert game.last_known["hero"].force == 5
+
+
+def test_a_destroyed_card_is_remembered_with_the_chi_it_had_as_it_left():
+    """ "His Chi before he left play" cannot be read off the pile, because leaving play revokes
+    the modifiers that set it."""
+    game = two_seat_game()
+    put_in_play(game, personality("hero", chi=3))
+    put_in_play(game, personality("curse"))
+    resolve_effects(
+        game,
+        [effects.GrantModifier("curse", "hero", Stat.CHI, -1, Duration.UNTIL_END_OF_TURN)],
+    )
+
+    resolve_effects(game, [Destroy("hero", PlayerId.P2)])
+
+    assert game.last_known["hero"].chi == 2
+
+
+def test_a_destroyed_card_is_remembered_as_destroyed():
+    game = two_seat_game()
+    put_in_play(game, personality("hero"))
+
+    resolve_effects(game, [Destroy("hero", PlayerId.P2)])
+
+    assert game.last_known["hero"].destroyed
+
+
+def test_a_card_discarded_out_of_play_is_remembered_without_dying():
+    """A pile holds both, and only the record tells them apart."""
+    game = two_seat_game()
+    put_in_play(game, personality("hero"))
+
+    resolve_effects(game, [Discard("hero", PlayerId.P1)])
+
+    assert not game.last_known["hero"].destroyed
+
+
+def test_a_banished_card_is_remembered_without_dying():
+    game = two_seat_game()
+    put_in_play(game, personality("gone"))
+
+    resolve_effects(game, [Banish("gone")])
+
+    assert not game.last_known["gone"].destroyed
+
+
+def test_a_card_that_never_reached_play_is_remembered_not_at_all():
+    """A Personality discarded out of a Province never stood in play, so there is nothing to
+    remember him by and nothing that could read as a death."""
+    game = two_seat_game()
+    province_card(game, "unplayed", seat=PlayerId.P1)
+
+    resolve_effects(game, [Discard("unplayed", PlayerId.P1)])
+
+    assert "unplayed" not in game.last_known
