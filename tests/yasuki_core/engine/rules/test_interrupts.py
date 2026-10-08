@@ -1642,21 +1642,21 @@ def test_the_which_effect_question_reads_each_effect_as_it_stands_and_takes_the_
     left = put_in_play(game, personality("P1-left", force=2))
     right = put_in_play(game, personality("P1-right", force=2))
     _courage_card(game.table, "P2-courage0", P2)
-    _strategy(game.table, "okura", "okura_is_released", P2)
+    _strategy(game.table, "negator", "negate_fear_probe", P2)
     resolve_action_effects(game, [Fear(FEAR, left.id, P2), Fear(FEAR, right.id, P2)])
     action_sequence.perform(game, PlayInterrupt("P2-courage0", "courage"))
     action_sequence.submit(game, DecisionResponse(("Fear 2 on P1-left",)))
     action_sequence.submit(game, DecisionResponse(("+2 strength",)))
 
-    action_sequence.perform(game, PlayInterrupt("okura"))
+    action_sequence.perform(game, PlayInterrupt("negator"))
 
     which = game.pending
     assert isinstance(which, ChooseInterruptEffect)
     assert which.candidates == ("Fear 4 on P1-left", "Fear 2 on P1-right")
     action_sequence.submit(game, DecisionResponse(("Fear 4 on P1-left",)))
 
-    assert left not in game.table.battlefield.cards
-    assert right in game.table.battlefield.cards and right.bowed
+    assert not left.bowed
+    assert right.bowed
 
 
 # --- Interrupts on a bowed card, and Interrupts a card grants ---

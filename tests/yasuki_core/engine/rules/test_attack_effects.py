@@ -23,6 +23,7 @@ from tests.yasuki_core.engine.builders import (
     personality,
     province_card,
     put_in_play,
+    two_seat_game,
 )
 
 ATTACKER, DEFENDER = PlayerId.P1, PlayerId.P2
@@ -795,3 +796,30 @@ def test_only_the_jade_legion_that_attacked_straightens():
 
     assert not session.game.table.cards_by_id["jade"].bowed  # A attacked, so A straightens
     assert session.game.table.cards_by_id["jade-b"].bowed  # B did not, so B stays down
+
+
+def test_a_strength_taken_from_a_card_reads_its_force_as_the_attack_resolves():
+    game = two_seat_game()
+    put_in_play(game, personality("hero", force=3))
+    guard = put_in_play(game, personality("guard", owner=PlayerId.P2, force=4))
+    fear = Fear(0, guard.id, PlayerId.P1, force_of="hero")
+    raised = Modifier("hero", "hero", Stat.FORCE, 1, Duration.UNTIL_END_OF_TURN)
+    game.ongoing.append(raised)
+
+    triggers.resolve_effects(game, [fear])
+
+    assert guard.bowed
+
+
+def test_a_strength_taken_from_a_card_that_left_play_reads_it_as_it_last_stood():
+    game = two_seat_game()
+    put_in_play(game, personality("hero", force=1))
+    attached(game, attachment("ogre", attachment_type=AttachmentType.FOLLOWER, force=3), "hero")
+    guard = put_in_play(game, personality("guard", owner=PlayerId.P2, force=3))
+
+    triggers.resolve_effects(
+        game,
+        [Destroy("ogre", PlayerId.P1), MeleeAttack(0, guard.id, PlayerId.P1, force_of="ogre")],
+    )
+
+    assert guard not in game.table.battlefield.cards

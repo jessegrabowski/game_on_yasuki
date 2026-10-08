@@ -921,3 +921,81 @@ def test_a_card_out_of_play_has_no_destruction_to_announce():
     resolve_effects(game, [Destroy("hero", PlayerId.P2)])
 
     assert Destroy("hero", PlayerId.P2).impending(game) == ()
+
+
+def test_a_destroyed_unit_is_remembered_as_it_stood_in_play():
+    game = two_seat_game()
+    put_in_play(game, personality("hero", force=2))
+    attached(game, attachment("blade", force_modifier=3), "hero")
+    attached(game, attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER, force=1), "hero")
+
+    resolve_effects(game, [Destroy("hero", PlayerId.P2)])
+
+    assert game.last_known["hero"].force == 5
+    assert game.last_known["ashigaru"].force == 1
+    assert game.last_known["hero"].controller is PlayerId.P1
+
+
+def test_a_card_returned_to_hand_is_remembered_as_it_stood_in_play():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", force=2))
+    resolve_effects(
+        game,
+        [effects.GrantModifier("hero", "hero", Stat.FORCE, 4, Duration.UNTIL_END_OF_TURN)],
+    )
+
+    resolve_effects(game, [effects.MoveToHand(hero.id, PlayerId.P1)])
+
+    assert game.last_known["hero"].force == 6
+
+
+def _bow_or_destroy_hero() -> effects.AlternateEffects:
+    return effects.AlternateEffects(
+        PlayerId.P1,
+        (Bow("hero"), Destroy("hero", PlayerId.P1)),
+        ("Bow it", "Destroy it"),
+        "Bow or destroy hero?",
+        "hero",
+    )
+
+
+@pytest.mark.parametrize(
+    ("before", "answer", "honor"),
+    [((), "Bow it", 1), ((Bow("hero"),), "Bow it", 0), ((Bow("hero"),), "Destroy it", 1)],
+    ids=["bowed", "already_bowed", "destroyed"],
+)
+def test_what_depends_on_an_alternate_effect_follows_only_if_the_chosen_one_happened(
+    before, answer, honor
+):
+    game = two_seat_game()
+    put_in_play(game, personality("hero"))
+    alternates = _bow_or_destroy_hero()
+
+    resolve_effects(game, [*before, effects.To(alternates, (GainHonor(PlayerId.P1, 1),))])
+    assert game.pending.candidates == ("Bow it", "Destroy it")
+    submit(game, DecisionResponse((answer,)))
+
+    assert game.table.seats[PlayerId.P1].honor == honor
+
+
+def test_an_alternate_effect_on_its_own_resolves_the_alternative_chosen():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero"))
+
+    resolve_effects(game, [_bow_or_destroy_hero(), GainHonor(PlayerId.P1, 1)])
+    submit(game, DecisionResponse(("Destroy it",)))
+
+    assert hero not in game.table.battlefield.cards
+    assert game.table.seats[PlayerId.P1].honor == 1
+
+
+def test_a_card_moved_on_out_of_play_keeps_how_it_last_stood_in_play():
+    game = two_seat_game()
+    put_in_play(game, personality("hero", force=2))
+    raised = effects.GrantModifier("hero", "hero", Stat.FORCE, 3, Duration.UNTIL_END_OF_TURN)
+
+    resolve_effects(
+        game, [raised, Destroy("hero", PlayerId.P2), effects.MoveToHand("hero", PlayerId.P1)]
+    )
+
+    assert game.last_known["hero"].force == 5

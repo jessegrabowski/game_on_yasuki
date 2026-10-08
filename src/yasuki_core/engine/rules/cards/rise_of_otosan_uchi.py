@@ -672,7 +672,7 @@ def _dark_ring_of_fire_experienced_condition(game: GameState, source: L5RCard) -
         for event in phase_history(game)
         if isinstance(event, Destroyed)
         and isinstance(event.cause, PlayerId)
-        and event.cause is event.controller
+        and event.cause is event.left_as.controller
         and (card := by_id.get(event.card_id)) is not None
         and isinstance(card.printed, PersonalityPrint)
     ]

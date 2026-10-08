@@ -639,9 +639,7 @@ def _battle_resolved(
         province_destroyed=outcome.province_destroyed,
         destroyed=outcome.destroyed,
         ever_present=info.ever_present,
-        destroyed_controllers=frozenset(
-            event.controller for event in destructions if event.controller is not None
-        ),
+        destroyed_controllers=frozenset(event.left_as.controller for event in destructions),
         terrains_played=info.terrains_played,
         terrains_destroyed=info.terrains_destroyed,
     )

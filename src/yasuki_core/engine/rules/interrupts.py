@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.effects import (
     ApplyEffects,
     AttackEffect,
     Effect,
+    InterruptingEffect,
     Recruit,
     SpendOncePerTurn,
     Simultaneously,
@@ -58,9 +59,10 @@ def forecast(
     group or a :class:`~.To` where it stands, with a ``To``'s dependent effects only when its first
     will happen, an ability's effects behind the :class:`~.ResolveAbility` that targets them, a
     Proclaim's Honor gain behind the :class:`~.effects.Recruit` it follows, and an attack's outcome
-    behind the attack when it reaches on the board as it stands. An effect that is nothing to
-    interrupt, an Honor change of zero, a question the action asks or one a negation will negate, is
-    left out, and what a choice resolver produces later is not foreseeable and is not offered. A
+    behind the attack when it reaches on the board as it stands, and each effect a question answered
+    in place may become. An effect that is nothing to interrupt, an Honor change of zero, a question
+    the action asks or one a negation will negate, is left out, and what a choice resolver produces
+    later is not foreseeable and is not offered. A
     ``once`` negation leaves out only the first effect it will spend itself on."""
     return tuple(_foreseen(game, effects, provenance, []))
 
@@ -80,6 +82,8 @@ def _foreseen(
             if happens and not negated:
                 yield from _foreseen(game, effect.contingent, provenance, spent)
             continue
+        if isinstance(effect, InterruptingEffect):
+            yield from _foreseen(game, effect.possible_answers(), provenance, spent)
         if effect.is_interruptible(game) and not would_negate(game, effect, provenance, spent):
             yield effect
         stands = triggers.as_modified(game, effect)

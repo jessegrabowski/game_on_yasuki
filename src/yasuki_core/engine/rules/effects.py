@@ -38,6 +38,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroying,
     Dishonored,
     EnteredPlay,
+    LastKnownState,
     FavorDiscarded,
     ProvinceDestroyed,
     GameEvent,
@@ -208,6 +209,24 @@ class InterruptingEffect(Effect, ABC):
         """Whether the cascade stops here. True unless a subclass finds nobody to answer, in which
         case the walker performs the effect instead of asking."""
         return True
+
+    def possible_answers(self) -> tuple[Effect, ...]:
+        """Each effect the answer may make of this one, which the Interrupt step reads as the
+        action's text (CR, Blind Cards Rule). An Interrupt bound to one applies only if the answer
+        makes it, since its effect waits for that effect to occur (CR, Interrupt Actions). None
+        unless a subclass answers in place."""
+        return ()
+
+    @property
+    def answers_in_place(self) -> bool:
+        """Whether the answer makes this effect into one of :meth:`possible_answers`, which takes
+        its place where it stood, the first of a :class:`To` included."""
+        return bool(self.possible_answers())
+
+    def answered(self, choices: tuple[str, ...]) -> Effect:
+        """The effect the seat's ``choices`` make of this one, for one that answers in place. Raise
+        ``RuntimeError`` for one that does not."""
+        raise RuntimeError(f"{type(self).__name__} is not answered in place")
 
     def is_negatable(self, game: GameState) -> bool:
         """False: a question is no effect, and what its answer produces is checked as it commits.
@@ -414,23 +433,57 @@ class MoveToHand(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         card = game.table.cards_by_id.get(self.card_id)
         if card is not None:
-            ops.move_card(game.table, card, ZoneKey(self.seat, ZoneRole.HAND))
+            _move_card(game, card, ZoneKey(self.seat, ZoneRole.HAND))
         return []
 
 
-def _remove_unit(game: GameState, card: L5RCard, *, banished: bool = False) -> tuple[L5RCard, ...]:
+def _as_it_stands(game: GameState, card: L5RCard) -> LastKnownState:
+    return LastKnownState(
+        location_of(game.table, card), card.owner, effective_stat(game, card, Stat.FORCE)
+    )
+
+
+def _named(game: GameState, card_id: str) -> str:
+    """``card_id``'s card by name, or its id once a created card has left the table (CR, Create)."""
+    card = game.table.cards_by_id.get(card_id)
+    return card_id if card is None else card.name
+
+
+def _in_play(game: GameState, card: L5RCard) -> bool:
+    return any(held is card for held in game.table.battlefield.cards)
+
+
+def _move_card(
+    game: GameState, card: L5RCard, dest: ZoneKey | DeckKey, **placement: object
+) -> None:
+    """Move ``card`` as an effect does, remembering it as it stood if it is leaving play, which is
+    what a later reference to it reads (CR, References to Other Points in Time). Every effect that
+    can take a card out of play moves it through here or through :func:`_remove_unit`, so a card
+    moving between places out of play keeps the record of when it last stood in play."""
+    if _in_play(game, card):
+        game.last_known[card.id] = _as_it_stands(game, card)
+    ops.move_card(game.table, card, dest, **placement)
+
+
+def _remove_unit(
+    game: GameState, card: L5RCard, *, banished: bool = False
+) -> tuple[tuple[L5RCard, LastKnownState], ...]:
     """Send ``card`` and everything attached to him out of play, to their discards or to their
-    banishes when ``banished``. Return the unit that left so the caller can announce each
-    departure in its own words (CR, Unit).
+    banishes when ``banished``. Return each member of the unit that left with how it stood, read
+    for the whole unit before any of it moved so each member's Force still counts the others, so
+    the caller can announce each departure in its own words (CR, Unit).
 
     A created card among them has no pile of either kind and is taken off the table instead, which
     the move itself sees to (CR, Create). It still announces its departure, because a card reacting
     to a Follower being destroyed does not care where the Follower came from.
     """
-    unit = unit_of(game, card)
-    for member in unit:
+    in_play = _in_play(game, card)
+    stood = tuple((member, _as_it_stands(game, member)) for member in unit_of(game, card))
+    for member, state in stood:
+        if in_play:
+            game.last_known[member.id] = state
         ops.move_card(game.table, member, pile_for(member, banished=banished))
-    return unit
+    return stood
 
 
 def _leaves_for_pile(game: GameState, card_id: str, *, banished: bool) -> bool:
@@ -513,8 +566,7 @@ class Destroy(Effect):
         ):
             record_terrain_destroyed(game, destroyer, card, battlefield=location.battlefield)
         return [
-            Destroyed(member.id, self.cause, location, controller=member.owner)
-            for member in _remove_unit(game, card)
+            Destroyed(member.id, self.cause, stood) for member, stood in _remove_unit(game, card)
         ]
 
 
@@ -548,8 +600,8 @@ class Discard(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         if not self.would_happen(game):
             return []
-        unit = _remove_unit(game, game.table.cards_by_id[self.card_id])
-        return [CardDiscarded(member.id, member.side, self.cause) for member in unit]
+        removed = _remove_unit(game, game.table.cards_by_id[self.card_id])
+        return [CardDiscarded(member.id, member.side, self.cause) for member, _ in removed]
 
 
 @dataclass(frozen=True, slots=True)
@@ -773,7 +825,7 @@ class PlaceInProvince(Effect):
         province = game.table.zones.get(self.zone)
         if card is None or province is None or not province.has_capacity():
             return []
-        ops.move_card(game.table, card, self.zone)
+        _move_card(game, card, self.zone)
         card.turn_face_up()
         return []
 
@@ -1209,6 +1261,11 @@ class AttackEffect(Effect, ABC):
         filled in when none is given. An Interrupt replaces the effect with one whose outcome does
         more. The outcome follows the comparison through the cascade as effects of its own, so an
         Interrupt against a Bow or a Destroy is offered against what an attack does as well.
+    force_of : str, optional
+        The card whose Force the strength is, as "Fear equal to his Force" has it, added to
+        ``strength``. Read as the attack resolves, since the effect is made then (CR, Action
+        Sequence step E), and as the card last stood in play if it has left. Default None, for a
+        strength the card prints as a number.
     """
 
     # What the card prints this effect as, which is the only thing its description needs from the
@@ -1227,6 +1284,7 @@ class AttackEffect(Effect, ABC):
     cause: Cause
     compared: Stat = Stat.FORCE
     outcome: tuple[Effect, ...] = ()
+    force_of: str | None = None
 
     def __post_init__(self) -> None:
         if not self.outcome:
@@ -1237,7 +1295,16 @@ class AttackEffect(Effect, ABC):
         """What this kind does to a target its strength reaches, as the CR prints it."""
 
     def describe(self) -> str:
-        return f"{self.name} {self.strength} on {self.target_id}{self._compared_stat()}"
+        strength = self._strength_text(self.force_of)
+        return f"{self.name} {strength} on {self.target_id}{self._compared_stat()}"
+
+    def _strength_text(self, named: str | None) -> str:
+        """The strength as printed, or as "equal to" the Force of the card ``named`` for one taken
+        from a card's Force."""
+        if self.force_of is None:
+            return str(self.strength)
+        adjusted = f" {self.strength:+d}" if self.strength else ""
+        return f"equal to {named}'s Force{adjusted}"
 
     def _compared_stat(self) -> str:
         return "" if self.compared is Stat.FORCE else f" vs {self.compared.name}"
@@ -1294,8 +1361,12 @@ class Fear(AttackEffect):
     name: ClassVar[str] = "fear"
 
     def narrate(self, game: GameState) -> str:
-        target = game.table.cards_by_id[self.target_id].name
-        return f"{self.name.capitalize()} {self.strength} on {target}{self._compared_stat()}"
+        by_id = game.table.cards_by_id
+        target = by_id[self.target_id].name
+        strength = self._strength_text(
+            None if self.force_of is None else _named(game, self.force_of)
+        )
+        return f"{self.name.capitalize()} {strength} on {target}{self._compared_stat()}"
 
     def _printed_outcome(self) -> tuple[Effect, ...]:
         return (Bow(self.target_id),)
@@ -1780,6 +1851,62 @@ class AskAmount(InterruptingEffect):
 
 
 @dataclass(frozen=True, slots=True)
+class AlternateEffects(InterruptingEffect):
+    """Ask ``seat`` which of ``options`` happens, as an alternate effect ("bow or destroy it") has
+    it, when it comes up to resolve, and commit the one chosen (CR, Choices).
+
+    The first of a :class:`To` may be one, so what depends on it follows only if the chosen effect
+    actually happened (CR, Independence of Effects). It would happen while any of its options
+    would, which is what the Interrupt step reads of what depends on it.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat choosing: the player taking the action, the CR's default where the card names none.
+    options : tuple of Effect
+        The alternatives, in print order.
+    wordings : tuple of str
+        Each alternative as the seat reads it, in the same order.
+    question : str
+        What is being chosen.
+    source_id : str
+        The card whose text offers the choice.
+    """
+
+    seat: PlayerId
+    options: tuple[Effect, ...]
+    wordings: tuple[str, ...]
+    question: str
+    source_id: str
+
+    def __post_init__(self) -> None:
+        """Raise ValueError unless each alternative has one wording."""
+        if len(self.options) != len(self.wordings):
+            raise ValueError("each alternative needs one wording")
+
+    def describe(self) -> str:
+        return f"{self.seat.name} chooses: {' or '.join(self.wordings)}"
+
+    def would_happen(self, game: GameState) -> bool:
+        return any(option.would_happen(game) for option in self.options)
+
+    def answered(self, choices: tuple[str, ...]) -> Effect:
+        return self.options[self.wordings.index(choices[0])]
+
+    def possible_answers(self) -> tuple[Effect, ...]:
+        return self.options
+
+    def request(self, game: GameState) -> DecisionRequest:
+        return ChooseOption(
+            seat=self.seat,
+            candidates=self.wordings,
+            question=self.question,
+            resolver=None,
+            source_id=self.source_id,
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class AskOption(InterruptingEffect):
     """Pause for the seat to pick one of the outcomes a card spells out, then hand the choice to a
     resolver.
@@ -2202,7 +2329,7 @@ class PlaceOnDeck(Effect):
         for card_id in self.card_ids:
             card = game.table.cards_by_id.get(card_id)
             if card is not None:
-                ops.move_card(game.table, card, self.deck, to_bottom=self.to_bottom)
+                _move_card(game, card, self.deck, to_bottom=self.to_bottom)
         return []
 
 
@@ -2260,7 +2387,7 @@ class MoveToDeck(Effect):
         cards = game.table.decks[self.deck].cards
         landing_size = len(cards) - (1 if any(held is card for held in cards) else 0)
         index = self.from_bottom if self.from_bottom is not None else landing_size - self.from_top
-        ops.move_card(game.table, card, self.deck, deck_index=index)
+        _move_card(game, card, self.deck, deck_index=index)
         return []
 
 
@@ -2781,7 +2908,8 @@ class To(Effect):
     adjusted did. What reacts to ``first`` resolves before ``contingent`` applies.
 
     Raise ``TypeError`` if ``first`` asks a question or holds other effects, which the walk could
-    not tell happened.
+    not tell happened, unless the question is answered in place, as :class:`AlternateEffects` is:
+    what the answer makes of it is what happened.
 
     Attributes
     ----------
@@ -2795,6 +2923,8 @@ class To(Effect):
     contingent: tuple[Effect, ...]
 
     def __post_init__(self) -> None:
+        if isinstance(self.first, InterruptingEffect) and self.first.answers_in_place:
+            return
         if isinstance(self.first, InterruptingEffect | Simultaneously | To | Attributed):
             raise TypeError(f"{type(self.first).__name__} cannot be what another effect depends on")
 

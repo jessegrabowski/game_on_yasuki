@@ -472,8 +472,9 @@ class ChooseOption(DecisionRequest):
     ----------
     question : str
         What is being chosen, as the seat reads it.
-    resolver : str
-        The registered choice resolver the chosen option is handed to.
+    resolver : str or None
+        The registered choice resolver the chosen option is handed to, or None where the effect that
+        asked takes the answer itself, as an alternate effect does.
     source_id : str
         The card offering the choice, handed to the resolver as its context.
     resolver_context : tuple of str, optional
@@ -486,7 +487,7 @@ class ChooseOption(DecisionRequest):
     """
 
     question: str
-    resolver: str
+    resolver: str | None
     source_id: str
     resolver_context: tuple[str, ...] = ()
     minimum: int = 1

@@ -37,7 +37,10 @@ from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.rules.turn.sequence import run_stack
 from yasuki_core.engine.rules.turn.structure import RoundKind
-from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
+from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, Straightened
+from yasuki_core.engine.rules.vocabulary.decisions import (
+    DecisionResponse,
+)
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
@@ -562,85 +565,159 @@ def test_verdant_wilds_cannot_straighten_a_card_forbidden_to_straighten():
 
 # --- "Is That All?" ---
 
-TRINKET_PROBE = "probe_trinket"
 
-
-def _is_that_all_battle(*, guard_force: int = 3, guard_follower: bool = False) -> EngineSession:
-    """P1's bowed 4F hero facing P2's guard, with "Is That All?" in P1's hand."""
-    is_that_all = L5RCard.of(
+def _is_that_all(owner: PlayerId) -> L5RCard:
+    return L5RCard.of(
         ActionPrint,
-        id="is-that-all",
-        printed_id="is_that_all",
+        id="is_that_all",
         name='"Is That All?"',
+        printed_id="is_that_all",
         side=Side.FATE,
-        owner=P1,
-        gold_cost=0,
+        owner=owner,
+        keywords=(keywords.COURAGE,),
     )
-    cards = [personality("hero", force=4), personality("guard", owner=P2, force=guard_force)]
-    session = combat_segment(cards, {"hero": 0}, {"guard": 0}, in_hand=[is_that_all])
-    if guard_follower:
-        follower = attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER)
-        attached(session.game, follower, "guard")
-    resolve_effects(session.game, [Bow("hero")])
-    return session
 
 
 @pytest.mark.parametrize(
-    ("guard_force", "guard_follower", "feared", "bowed", "straightened"),
-    [
-        (3, False, "guard", True, True),
-        (5, False, "guard", False, False),
-        (3, True, "ashigaru", True, False),
-    ],
-    ids=["bows_a_personality", "too_strong", "bows_a_follower"],
+    ("feared", "bowed", "straightened"),
+    [("guard", True, True), ("ashigaru", True, False), ("giant", False, False)],
+    ids=["personality", "follower", "out_of_reach"],
 )
-def test_is_that_all_straightens_your_personality_only_after_bowing_an_enemy_personality(
-    guard_force, guard_follower, feared, bowed, straightened
-):
-    session = _is_that_all_battle(guard_force=guard_force, guard_follower=guard_follower)
+def test_is_that_all_fears_at_the_bowed_personalitys_force(feared, bowed, straightened):
+    cards = [
+        personality("brave", force=3),
+        personality("guard", owner=P2, force=3),
+        personality("giant", owner=P2, force=4),
+        personality("escort", owner=P2, force=5),
+    ]
+    defenders = {"guard": 0, "giant": 0, "escort": 0}
+    session = combat_segment(cards, {"brave": 0}, defenders, in_hand=[_is_that_all(P1)])
+    game = session.game
+    follower = attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER, force=2)
+    attached(game, follower, "escort")
+    resolve_effects(game, [Bow("brave")])
 
-    session.act(P1, PlayStrategy("is-that-all", "fear"))
-    session.submit(P1, DecisionResponse(("hero",)))
+    session.act(P1, PlayStrategy("is_that_all", "fear"))
+    session.submit(P1, DecisionResponse(("brave",)))
     session.submit(P1, DecisionResponse((feared,)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
 
-    cards = session.game.table.cards_by_id
-    assert cards[feared].bowed is bowed
-    assert cards["hero"].bowed is not straightened
-
-
-def _trinket_used(gold_cost: int) -> EngineSession:
-    """The "Is That All?" battle once P1 has used the ability of a trinket costing ``gold_cost``
-    attached to the hero, so its Response Step is open."""
-    session = _is_that_all_battle()
-    trinket = attachment("trinket", printed_id=TRINKET_PROBE, gold_cost=gold_cost)
-    attached(session.game, trinket, "hero")
-    session.act(P1, ActivateAbility("trinket"))
-    return session
+    assert game.pending is None
+    assert game.table.cards_by_id[feared].bowed is bowed
+    assert game.table.cards_by_id["brave"].bowed is not straightened
 
 
-TRINKET_ABILITY = Ability(
-    timings=(ActionTiming.BATTLE,),
-    cost=no_cost,
-    targets=itself,
-    effects=lambda game, source, target: [],
-    hits_every_target=True,
-)
+def test_is_that_alls_fear_is_answerable_at_the_interrupt_step():
+    okura = L5RCard.of(
+        ActionPrint,
+        id="okura",
+        name="Okura is Released",
+        printed_id="okura_is_released",
+        side=Side.FATE,
+        owner=P1,
+    )
+    cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
+    held = [_is_that_all(P1), okura]
+    session = combat_segment(cards, {"brave": 0}, {"guard": 0}, in_hand=held)
+    resolve_effects(session.game, [Bow("brave")])
+
+    session.act(P1, PlayStrategy("is_that_all", "fear"))
+    session.submit(P1, DecisionResponse(("brave",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert PlayInterrupt("okura") in session.legal_actions(P1)
 
 
-def test_is_that_all_destroys_the_zero_cost_attachment_whose_action_it_answers():
-    with probe_ability(TRINKET_PROBE, TRINKET_ABILITY):
-        session = _trinket_used(gold_cost=0)
+def test_okura_destroys_what_is_that_alls_fear_bowed_after_its_personality_straightens():
+    okura = L5RCard.of(
+        ActionPrint,
+        id="okura",
+        name="Okura is Released",
+        printed_id="okura_is_released",
+        side=Side.FATE,
+        owner=P1,
+    )
+    cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
+    session = combat_segment(cards, {"brave": 0}, {"guard": 0}, in_hand=[_is_that_all(P1), okura])
+    game = session.game
+    resolve_effects(game, [Bow("brave")])
 
-        session.act(P1, PlayStrategy("is-that-all", "destroy"))
+    session.act(P1, PlayStrategy("is_that_all", "fear"))
+    session.submit(P1, DecisionResponse(("brave",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    session.act(P1, PlayInterrupt("okura"))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
 
-    assert "trinket" not in {card.id for card in session.game.table.battlefield.cards}
+    order = [
+        type(event).__name__
+        for event in game.turn_events
+        if isinstance(event, Straightened | Destroyed)
+    ]
+    assert order == ["Straightened", "Destroyed"]
+    assert not game.table.cards_by_id["brave"].bowed
+
+
+def test_is_that_all_cannot_be_discarded_to_its_own_courage_while_it_is_played():
+    cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
+    session = combat_segment(cards, {"brave": 0}, {"guard": 0}, in_hand=[_is_that_all(P1)])
+    resolve_effects(session.game, [Bow("brave")])
+
+    session.act(P1, PlayStrategy("is_that_all", "fear"))
+    session.submit(P1, DecisionResponse(("brave",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+
+    assert PlayInterrupt("is_that_all", "courage") not in session.legal_actions(P1)
+
+
+def test_is_that_all_is_not_played_with_nothing_to_fear():
+    cards = [personality("brave", force=3), personality("guard", owner=P2, force=3)]
+    session = combat_segment(cards, {"brave": 0}, {"guard": 1}, in_hand=[_is_that_all(P1)])
+    resolve_effects(session.game, [Bow("brave")])
+
+    assert PlayStrategy("is_that_all", "fear") not in session.legal_actions(P1)
+
+
+def test_is_that_all_destroys_the_zero_cost_attachment_an_action_was_from():
+    trinket_ability = Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+    )
+    cards = [personality("raider", force=3), personality("guard", owner=P2, force=3)]
+    with probe_ability("trinket_probe", trinket_ability):
+        session = combat_segment(cards, {"raider": 0}, {"guard": 0}, in_hand=[_is_that_all(P2)])
+        game = session.game
+        trinket = attachment("trinket", printed_id="trinket_probe", gold_cost=0)
+        attached(game, trinket, "raider")
+
+        session.act(P1, ActivateAbility("trinket"))
+        assert game.round.kind is RoundKind.RESPONSE
+        session.act(P2, PlayStrategy("is_that_all", "destroy"))
+
+    assert "trinket" not in {card.id for card in game.table.battlefield.cards}
 
 
 def test_is_that_all_does_not_answer_an_attachment_costing_gold():
-    with probe_ability(TRINKET_PROBE, TRINKET_ABILITY):
-        session = _trinket_used(gold_cost=1)
+    trinket_ability = Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+    )
+    cards = [personality("raider", force=3), personality("guard", owner=P2, force=3)]
+    with probe_ability("trinket_probe", trinket_ability):
+        session = combat_segment(cards, {"raider": 0}, {"guard": 0}, in_hand=[_is_that_all(P2)])
+        trinket = attachment("trinket", printed_id="trinket_probe", gold_cost=1)
+        attached(session.game, trinket, "raider")
 
-        assert PlayStrategy("is-that-all", "destroy") not in session.legal_actions(P1)
+        session.act(P1, ActivateAbility("trinket"))
+
+        assert PlayStrategy("is_that_all", "destroy") not in session.legal_actions(P2)
 
 
 # --- Kakita Harudei, Drunkard ---
@@ -1234,7 +1311,9 @@ def test_desperate_melee_records_both_phrases_as_the_actions_targets():
     assert set(session.game.action_targets) == {"mine", "cheap"}
 
 
-def test_desperate_melee_destroys_your_own_followers_when_the_melee_reaches_none():
+def test_desperate_melee_is_not_played_with_no_enemy_follower_to_target():
+    # Its second phrase takes one to two enemy Followers, and an action is announced only when all
+    # of its targeting can be met (CR, Good Faith Rule).
     mine = personality("mine", gold_cost=6)
     melee = L5RCard.of(
         ActionPrint,
@@ -1248,17 +1327,5 @@ def test_desperate_melee_destroys_your_own_followers_when_the_melee_reaches_none
     session = combat_segment(
         [mine, personality("theirs", owner=P2)], {"mine": 0}, {"theirs": 0}, in_hand=[melee]
     )
-    attached(
-        session.game.table,
-        attachment("mine_own", attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
-        "mine",
-    )
 
-    session.act(P1, PlayStrategy("melee"))
-    session.submit(P1, DecisionResponse(("mine",)))
-
-    # The second phrase has nothing to point at, so it targets nothing and the sentence that
-    # destroys your Personality's own Followers still resolves.
-    assert session.game.pending is None
-    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
-    assert "mine_own" in {card.id for card in discard.cards}
+    assert PlayStrategy("melee") not in session.legal_actions(P1)

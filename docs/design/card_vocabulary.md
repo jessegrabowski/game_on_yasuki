@@ -57,6 +57,7 @@ the order they are written" (CR, Order of Effects).
 .. autosummary::
 
    AdjustCounter
+   AlternateEffects
    Arrange
    Ask
    AskAmount
@@ -143,6 +144,9 @@ production it interrupts, and `ProducedGold` announces the result once the Gold 
 `Destroying` is announced before a destruction commits, so a trait reading "before this card is
 destroyed" acts while the card still stands. `NextTime` is no event: it names the next time an
 event names a card, which a `DelayedEffect` waits for as "after this card is destroyed" reads.
+`LastKnownState` is no event either: it is a card as it stood before an effect moved it, which
+`GameState.last_known` keeps per card and `Destroyed` carries, so a reference to a card that has
+left play reads it as it was (CR, References to Other Points in Time).
 
 ```{eval-rst}
 .. currentmodule:: yasuki_core.engine.rules.vocabulary.game_events
@@ -160,6 +164,7 @@ event names a card, which a `DelayedEffect` waits for as "after this card is des
    EnteredPlay
    FavorDiscarded
    HonorChanged
+   LastKnownState
    NextTime
    PhaseStarted
    ProducedGold

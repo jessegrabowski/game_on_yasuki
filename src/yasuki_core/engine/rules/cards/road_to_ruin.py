@@ -37,7 +37,6 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     Discard,
     Effect,
-    Evaluate,
     Fear,
     GainHonor,
     GrantModifier,
@@ -55,7 +54,6 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets, equips_from_discard
 from yasuki_core.engine.rules.vocabulary.game_events import (
-    Bowed,
     Destroyed,
     Dishonored,
     EnteredPlay,
@@ -74,7 +72,7 @@ from yasuki_core.engine.rules.board.queries import (
     province_key_holding,
 )
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
-from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
+from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.units.composition import followers_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
@@ -85,7 +83,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
-from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
+from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.units.membership import unit_of
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
@@ -222,10 +220,7 @@ register_ability(
 # --- "Is That All?" ---
 
 
-def _is_that_all_personalities(
-    game: GameState, source: L5RCard, picked: PickedTargets
-) -> list[str]:
-    """ "Your target bowed Personality", whose Force the Fear's strength reads."""
+def _is_that_all_yours(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
     return [card.id for card in owned_personalities(game, source.owner) if card.bowed]
 
 
@@ -236,56 +231,27 @@ def _is_that_all_feared(game: GameState, source: L5RCard, picked: PickedTargets)
 def _is_that_all_fear_effects(
     game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
-    """The Fear's strength is your Personality's Force as it resolves, and whether it bowed an
-    enemy Personality is read once it has."""
+    """ "If this bowed an enemy Personality, straighten your Personality": the straightening
+    follows the Fear's bow only if that bow happened."""
     (yours,), (feared,) = groups
-    seat = source.owner
-    return [
-        Fear(effective_force(game, yours), feared.id, seat),
-        Evaluate("is_that_all_straighten", source.id, seat, (yours.id, feared.id)),
-    ]
-
-
-@choice_resolver("is_that_all_straighten")
-def _resolve_is_that_all_straighten(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """ "If this bowed an enemy Personality, straighten your Personality." """
-    yours, feared = chosen
-    bowed_here = any(event.card_id == feared for event in action_did(game, Bowed))
-    if not bowed_here or not isinstance(game.table.cards_by_id[feared].printed, PersonalityPrint):
-        return []
-    return [Straighten(yours)]
-
-
-register_ability(
-    "is_that_all",
-    Ability(
-        timings=(ActionTiming.BATTLE,),
-        cost=no_cost,
-        target_groups=(
-            TargetGroup(
-                candidates=_is_that_all_personalities, targeting_message="your bowed Personality"
-            ),
-            TargetGroup(candidates=_is_that_all_feared, targeting_message=ATTACK_TARGET),
-        ),
-        effects_for_groups=_is_that_all_fear_effects,
-        located_at=(CardLocation.HAND,),
-        key="fear",
-    ),
-)
+    if not isinstance(feared.printed, PersonalityPrint):
+        return [Fear(0, feared.id, source.owner, force_of=yours.id)]
+    outcome = (To(Bow(feared.id), (Straighten(yours.id),)),)
+    return [Fear(0, feared.id, source.owner, outcome=outcome, force_of=yours.id)]
 
 
 def _is_that_all_destroy_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The card whose ability the action just resolved was, when it is an attachment with 0 Gold
-    Cost."""
-    action = game.action
-    if not isinstance(action, ActivateAbility):
+    """The attachment the action was from, while it is in play with 0 Gold Cost."""
+    match game.action:
+        case ActivateAbility(card_id=card_id):
+            card = game.table.cards_by_id.get(card_id)
+        case _:
+            return []
+    if card is None or not any(held is card for held in game.table.battlefield.cards):
         return []
-    card = game.table.cards_by_id.get(action.card_id)
-    if card is None or not isinstance(card.printed, AttachmentPrint):
+    if not isinstance(card.printed, AttachmentPrint) or effective_gold_cost(game, card) != 0:
         return []
-    return [card.id] if effective_gold_cost(game, card) == 0 else []
+    return [card.id]
 
 
 def _is_that_all_destroy_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -295,7 +261,20 @@ def _is_that_all_destroy_effects(game: GameState, source: L5RCard, target: L5RCa
 register_ability(
     "is_that_all",
     Ability(
-        printed_index=1,
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(candidates=_is_that_all_yours, targeting_message="your bowed Personality"),
+            TargetGroup(candidates=_is_that_all_feared, targeting_message=ATTACK_TARGET),
+        ),
+        effects_for_groups=_is_that_all_fear_effects,
+        located_at=(CardLocation.HAND,),
+        key="fear",
+    ),
+)
+register_ability(
+    "is_that_all",
+    Ability(
         timings=(ActionTiming.RESPONSE,),
         cost=no_cost,
         targets=_is_that_all_destroy_targets,
@@ -303,6 +282,7 @@ register_ability(
         hits_every_target=True,
         located_at=(CardLocation.HAND,),
         key="destroy",
+        printed_index=1,
     ),
 )
 

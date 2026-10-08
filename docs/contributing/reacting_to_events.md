@@ -135,7 +135,8 @@ this location* compares Gihei's location to the other card's, which the event su
 ```
 
 A destroyed card is in its discard by the time `Destroyed` fires, so asking the board where it is
-would answer wrongly. `Destroyed.location` is where it stood. A dishonored card is still in play,
+would answer wrongly. `Destroyed.left_as` is the card as it stood, where and under whose control.
+A dishonored card is still in play,
 so the `Dishonored` handler looks the card up and reads its location from the board.
 
 ## Returning effects, not changes

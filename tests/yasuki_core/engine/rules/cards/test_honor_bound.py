@@ -1,17 +1,31 @@
 from yasuki_core.engine.replay.game_log import replay
-from yasuki_core.engine.rules.effects import Fear, GainHonor
-from yasuki_core.engine.rules.triggers import resolve_action_effects
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability
+from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.effects import Bow, Fear, GainHonor
+from yasuki_core.engine.rules.triggers import resolve_action_effects, resolve_effects
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.turn.structure import RoundKind
 from yasuki_core.engine.rules.vocabulary.actions import (
+    ActionTiming,
+    ActivateAbility,
     DeclareAttack,
     Pass,
     PlayInterrupt,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import ActionPrint
 
-from tests.yasuki_core.engine.builders import personality, put_in_play, two_seat_game
+from tests.yasuki_core.engine.builders import (
+    combat_segment,
+    personality,
+    put_in_play,
+    two_seat_game,
+)
+from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.rules.test_interrupts import (
     ATTACKER,
     DEFENDER,
@@ -87,3 +101,43 @@ def test_the_okura_game_replays_to_the_same_board():
 
     assert rebuilt.table.cards_by_id["guard"] not in rebuilt.table.battlefield.cards
     assert rebuilt.pending is None and not rebuilt.stack
+
+
+def test_okura_destroys_what_every_fear_of_the_action_bows():
+    okura = L5RCard.of(
+        ActionPrint,
+        id="okura",
+        name="Okura is Released",
+        printed_id="okura_is_released",
+        side=Side.FATE,
+        owner=DEFENDER,
+    )
+    cards = [
+        personality("raider", owner=ATTACKER, printed_id="double_fear_probe", force=3),
+        personality("guard", owner=DEFENDER, force=2),
+        personality("second", owner=DEFENDER, force=2),
+    ]
+    fear_each = Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=attack_targets,
+        effects=lambda game, source, target: [Fear(2, target.id, source.owner)],
+        hits_every_target=True,
+    )
+    with probe_ability("double_fear_probe", fear_each):
+        session = combat_segment(cards, {"raider": 0}, {"guard": 0, "second": 0}, in_hand=[okura])
+        session.act(ATTACKER, ActivateAbility("raider"))
+        session.act(DEFENDER, PlayInterrupt("okura"))
+
+    assert session.game.pending is None
+    assert not _in_play(session, "guard")
+    assert not _in_play(session, "second")
+
+
+def test_okura_destroys_nothing_a_fear_did_not_bow():
+    session = _fear_announced({}, strategies=(OKURA,))
+    resolve_effects(session.game, [Bow("guard")])
+
+    session.act(DEFENDER, PlayInterrupt("okura"))
+
+    assert _in_play(session, "guard")

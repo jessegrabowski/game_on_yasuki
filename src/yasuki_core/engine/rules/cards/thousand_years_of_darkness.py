@@ -29,7 +29,7 @@ def _ashura_destroyed(ctx: TriggerContext) -> list[Effect]:
     """After Ashura is destroyed while at a battlefield, target and destroy a Follower, or
     Personality without Followers, at that battlefield. Either army's, since the text names the
     battlefield and not a side. He is in his discard by now, so where he stood is the event's."""
-    battlefield = None if ctx.event.location is None else ctx.event.location.battlefield
+    battlefield = ctx.event.left_as.location.battlefield
     if ctx.event.card_id != ctx.card.id or battlefield is None:
         return []
     targets = [

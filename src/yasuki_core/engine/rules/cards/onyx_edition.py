@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.abilities.model import (
     Interrupt,
     Interruption,
     InvestAbility,
+    TargetGroup,
     itself,
 )
 from yasuki_core.engine.rules.abilities.registry import (
@@ -34,9 +35,11 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
+from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
+    AlternateEffects,
     AskOption,
     Banish,
     Bow,
@@ -44,6 +47,7 @@ from yasuki_core.engine.rules.effects import (
     CreateToken,
     DelayedEffect,
     Destroy,
+    Discard,
     DiscardFromHand,
     DrawCard,
     Effect,
@@ -54,6 +58,7 @@ from yasuki_core.engine.rules.effects import (
     GrantKeyword,
     GrantModifier,
     GrantSeatAbility,
+    MeleeAttack,
     Move,
     MoveToDeck,
     Negated,
@@ -61,6 +66,7 @@ from yasuki_core.engine.rules.effects import (
     PutIntoPlay,
     RevokeGrants,
     Show,
+    ShuffleDeck,
     Simultaneously,
     SpendOncePerTurn,
     StartDuel,
@@ -96,8 +102,10 @@ from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.duel.procedure import duel_decided_by
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
     army_at,
     attack_targets,
+    followers_in_play,
     has_keyword,
     opposed_units_in_battle,
     opposing_units_in_battle,
@@ -115,7 +123,6 @@ from yasuki_core.engine.rules.rulebook.recruit_restrictions import register_recr
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
-    effective_force,
     effective_personal_honor,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
@@ -137,6 +144,94 @@ from yasuki_core.game_pieces.prints import (
 )
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY
+
+
+# --- Daigotsu Hiromu ---
+
+
+def _daigotsu_hiromu_followers(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    return [card.id for card in followers_in_play(game) if card.owner is source.owner]
+
+
+def _daigotsu_hiromu_attacked(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    return attack_targets(game, source)
+
+
+def _daigotsu_hiromu_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """ "Bow or destroy your target Follower to make a Melee equal to its Force": the Melee is
+    made only if the alternative chosen happened, and reads the Follower's Force as it last stood
+    in play when that was its destruction."""
+    (follower,), (attacked,) = groups
+    seat = source.owner
+    paid = AlternateEffects(
+        seat,
+        (Bow(follower.id), Destroy(follower.id, seat)),
+        ("Bow it", "Destroy it"),
+        f"Bow or destroy {follower.name}?",
+        source.id,
+    )
+    return [To(paid, (MeleeAttack(0, attacked.id, seat, force_of=follower.id),))]
+
+
+register_ability(
+    "daigotsu_hiromu",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        target_groups=(
+            TargetGroup(candidates=_daigotsu_hiromu_followers, targeting_message="your Follower"),
+            TargetGroup(candidates=_daigotsu_hiromu_attacked, targeting_message=ATTACK_TARGET),
+        ),
+        effects_for_groups=_daigotsu_hiromu_effects,
+    ),
+)
+
+
+# --- Daigotsu Rin ---
+
+
+def _daigotsu_rin_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Himself, once the action just resolved Recruited him."""
+    return [source.id] if action_recruited(game, source.id) else []
+
+
+def _daigotsu_rin_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """The seat may let the search fail even with an Undead Follower to find, and a deck holding
+    none is still searched and shuffled (CR, Search)."""
+    seat = source.owner
+    undead = tuple(
+        card.id
+        for card in game.table.decks[DeckKey(seat, Side.FATE)].cards
+        if is_follower(card) and has_keyword(game, card, keywords.UNDEAD)
+    )
+    if not undead:
+        return [ShuffleDeck(DeckKey(seat, Side.FATE))]
+    return [Choose(seat, undead, 0, 1, "daigotsu_rin", source.id)]
+
+
+@choice_resolver("daigotsu_rin", prompt="You may put an Undead Follower into your discard pile")
+def _resolve_daigotsu_rin(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """The searched deck is shuffled whatever the search found (CR, Search)."""
+    found = [Discard(card_id, seat) for card_id in chosen]
+    return [*found, ShuffleDeck(DeckKey(seat, Side.FATE))]
+
+
+register_ability(
+    "daigotsu_rin",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=no_cost,
+        targets=_daigotsu_rin_targets,
+        effects=_daigotsu_rin_effects,
+        hits_every_target=True,
+    ),
+)
 
 
 # --- Daytiba ---
@@ -191,12 +286,12 @@ def _fields_of_slaughter_destroyed(ctx: TriggerContext) -> list[Effect]:
     """ "Gain 2 Honor after each time a card at this battlefield that you do not control is
     destroyed." """
     event = ctx.event
-    if not isinstance(event, Destroyed) or event.location is None:
+    if not isinstance(event, Destroyed):
         return []
     here = location_of(ctx.game.table, ctx.card).battlefield
-    if here is None or event.location.battlefield != here:
+    if here is None or event.left_as.location.battlefield != here:
         return []
-    if event.controller is None or event.controller is ctx.card.owner:
+    if event.left_as.controller is ctx.card.owner:
         return []
     return [GainHonor(ctx.card.owner, FIELDS_OF_SLAUGHTER_HONOR, source_id=ctx.card.id)]
 
@@ -997,50 +1092,42 @@ register_ability(
 # "You lose 1 Honor less from your cards" (2 on the back) is not modeled: nothing reads how much
 # Honor a card's effect costs its own controller. The Battle ability is.
 
-DARK_CAPITAL_FEAR = "the_dark_capital_of_the_spider"
 
-
-def _the_dark_capital_of_the_spider_targets(game: GameState, source: L5RCard) -> list[str]:
+def _the_dark_capital_of_the_spider_targets(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
     return [card.id for card in personalities_in_play(game)]
 
 
+def _the_dark_capital_of_the_spider_feared(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """The Fear's target, chosen with the action's other targets (CR, Good Faith Rule)."""
+    return attack_targets(game, source)
+
+
+def _the_dark_capital_of_the_spider_fear_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    """One Fear target when the Personality targeted first is yours, and none otherwise, since
+    there is then no Fear."""
+    yours = game.table.cards_by_id[picked[0][0]].owner is source.owner
+    return (1, 1) if yours else (0, 0)
+
+
 def _the_dark_capital_of_the_spider_effects(
-    game: GameState, source: L5RCard, target: L5RCard
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
     """ "Give a target Personality Shadowlands. If they are yours, Fear equal to their Force.
     Otherwise, take an additional action." """
+    (target,), feared = groups
     shadowlands = GrantKeyword(
         source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN
     )
     if target.owner is not source.owner:
         return [shadowlands, AdditionalAction(source.owner, source.id)]
-    fear = Evaluate(
-        "the_dark_capital_of_the_spider_fear_target", source.id, source.owner, (target.id,)
-    )
-    return [shadowlands, fear]
-
-
-@choice_resolver("the_dark_capital_of_the_spider_fear_target")
-def _resolve_the_dark_capital_of_the_spider_fear_target(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """The Fear targets the way any Fear does, among what stands at the battle as it resolves, and
-    is not raised when nothing there can be targeted. ``chosen`` is the Personality whose Force it
-    reads."""
-    feared = attack_targets(game, game.table.cards_by_id[source_id])
-    if not feared:
-        return []
-    return [Choose(seat, tuple(feared), 1, 1, DARK_CAPITAL_FEAR, chosen[0])]
-
-
-@choice_resolver(DARK_CAPITAL_FEAR, prompt="Fear equal to their Force: choose its target")
-def _the_dark_capital_of_the_spider_fear(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """``source_id`` is the Personality given Shadowlands, whose Force the Fear reads as it
-    resolves."""
-    strength = effective_force(game, game.table.cards_by_id[source_id])
-    return [Fear(strength, chosen[0], seat)]
+    fears = (Fear(0, card.id, source.owner, force_of=target.id) for card in feared)
+    return [shadowlands, *fears]
 
 
 register_ability(
@@ -1048,8 +1135,15 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=_the_dark_capital_of_the_spider_targets,
-        effects=_the_dark_capital_of_the_spider_effects,
+        target_groups=(
+            TargetGroup(candidates=_the_dark_capital_of_the_spider_targets),
+            TargetGroup(
+                candidates=_the_dark_capital_of_the_spider_feared,
+                count=_the_dark_capital_of_the_spider_fear_count,
+                targeting_message=ATTACK_TARGET,
+            ),
+        ),
+        effects_for_groups=_the_dark_capital_of_the_spider_effects,
         tireless=True,
     ),
 )
@@ -1058,15 +1152,28 @@ register_ability(
 # --- The Dark Capital of the Spider (back) ---
 
 
+def _the_dark_capital_of_the_spider__back_in_battle(game: GameState, source: L5RCard) -> bool:
+    return ActionTiming.BATTLE in permitted_timings_in(game, action_round(game), source.owner)
+
+
+def _the_dark_capital_of_the_spider__back_fear_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    """As the front's, and only when "this is a Battle"."""
+    if not _the_dark_capital_of_the_spider__back_in_battle(game, source):
+        return (0, 0)
+    return _the_dark_capital_of_the_spider_fear_count(game, source, picked, offered)
+
+
 def _the_dark_capital_of_the_spider__back_effects(
-    game: GameState, source: L5RCard, target: L5RCard
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
     """ "If they are yours and this is a Battle, Fear equal to their Force. Otherwise, take an
     additional action." Taken as an Open, even on the controller's own Personality, it is the
     additional action."""
-    in_battle = ActionTiming.BATTLE in permitted_timings_in(game, action_round(game), source.owner)
-    if in_battle:
-        return _the_dark_capital_of_the_spider_effects(game, source, target)
+    if _the_dark_capital_of_the_spider__back_in_battle(game, source):
+        return _the_dark_capital_of_the_spider_effects(game, source, groups)
+    (target,), _ = groups
     return [
         GrantKeyword(source.id, target.id, keywords.SHADOWLANDS, Duration.UNTIL_END_OF_TURN),
         AdditionalAction(source.owner, source.id),
@@ -1078,8 +1185,15 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE, ActionTiming.OPEN),
         cost=no_cost,
-        targets=_the_dark_capital_of_the_spider_targets,
-        effects=_the_dark_capital_of_the_spider__back_effects,
+        target_groups=(
+            TargetGroup(candidates=_the_dark_capital_of_the_spider_targets),
+            TargetGroup(
+                candidates=_the_dark_capital_of_the_spider_feared,
+                count=_the_dark_capital_of_the_spider__back_fear_count,
+                targeting_message=ATTACK_TARGET,
+            ),
+        ),
+        effects_for_groups=_the_dark_capital_of_the_spider__back_effects,
         tireless=True,
     ),
 )

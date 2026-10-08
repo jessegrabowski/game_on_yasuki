@@ -11,6 +11,7 @@ yasuki_core.engine.rules.effects
     AdjustCounter
     AdjustPending
     Adjustment
+    AlternateEffects
     ApplyEffects
     Arrange
     Ask

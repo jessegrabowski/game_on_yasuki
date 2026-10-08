@@ -386,7 +386,8 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
 
     A card in hand is yielded like any other. Only an ability whose ``located_at`` names the hand is
     offered from there, and every ability defaults to the battlefield, so a card waiting to be
-    played stays silent until one says otherwise.
+    played stays silent until one says otherwise. A card announced out of the hand is in a
+    resolution area until it lands (CR, Resolution Area), so it offers nothing from the hand.
     """
     for card in game.table.battlefield.cards:
         if card.owner is seat:
@@ -399,7 +400,11 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
                 if card.face_up:  # face-down, what the card is has not been revealed
                     yield CardLocation.PROVINCE, card
         elif key.role is ZoneRole.HAND:
-            yield from ((CardLocation.HAND, card) for card in zone.cards)
+            yield from (
+                (CardLocation.HAND, card)
+                for card in zone.cards
+                if card.id not in game.announced_from_hand
+            )
         elif key.role is ZoneRole.RULEBOOK:
             yield from ((CardLocation.RULEBOOK, card) for card in zone.cards)
         elif key.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):
@@ -509,7 +514,7 @@ def _usable(
             costs = ability.discounted_cost(game, card, plays_card=_played(location, ability))
             if not payable(game, costs):
                 continue
-            if ability.targets_after_cost or first_phrase_reachable(game, card, ability):
+            if ability.targets_after_cost or phrases_reachable(game, card, ability):
                 ready.append((card, ability))
     return ready
 
@@ -577,24 +582,54 @@ def group_targets(
     ]
 
 
-def first_phrase_reachable(game: GameState, card: L5RCard, ability: Ability) -> bool:
-    """Whether ``ability``'s first "target" phrase has a legal answer: enough cards on offer to
-    meet the fewest it takes, and limits that can seat that many of them. "Target two or more of
-    your unbowed Merchant or Ninja Personalities" is no action for a seat with one, and neither is
-    a phrase taking two cards whose total Force must stay under what no two of them can.
+def phrases_reachable(
+    game: GameState, card: L5RCard, ability: Ability, picked: PickedTargets = ()
+) -> bool:
+    """Whether ``ability``'s "target" phrases after ``picked`` can all still be met, which a seat
+    must be able to do to announce the action or make a choice in it (CR, Good Faith Rule; CR,
+    Choice Paradoxes). "Target two or more of your unbowed Merchant or Ninja Personalities" is no
+    action for a seat with one, and a Fear's target is part of the action's targeting.
+
+    A phrase taking no card is met by taking none. One taking a single card is met when a card it
+    offers leaves the phrases after it reachable. One taking several, or limiting the set it takes,
+    is met when it can be answered at all, since the phrases after it depend on the whole set.
     """
-    group = ability.phrases[0]
-    offered = tuple(group_targets(game, card, ability, group))
-    minimum, _ = group.wanted(game, card, (), offered)
-    return answerable(offered, minimum, group.conditions(game, card, ()))
+    if len(picked) == len(ability.phrases):
+        return True
+    group = ability.phrases[len(picked)]
+    offered = tuple(group_targets(game, card, ability, group, picked))
+    minimum, _ = group.wanted(game, card, picked, offered)
+    if minimum == 0 and phrases_reachable(game, card, ability, (*picked, ())):
+        return True
+    limits = group.conditions(game, card, picked)
+    if not answerable(offered, max(minimum, 1), limits):
+        return False
+    if minimum > 1 or limits:
+        return True
+    return any(phrases_reachable(game, card, ability, (*picked, (target,))) for target in offered)
+
+
+def choosable_targets(
+    game: GameState, card: L5RCard, ability: Ability, picked: PickedTargets = ()
+) -> list[str]:
+    """The cards ``ability``'s next "target" phrase after ``picked`` offers that leave its later
+    phrases reachable (CR, Choice Paradoxes). A phrase taking several cards offers every legal one,
+    as :func:`phrases_reachable` reads it."""
+    group = ability.phrases[len(picked)]
+    offered = group_targets(game, card, ability, group, picked)
+    if len(picked) + 1 == len(ability.phrases):
+        return offered
+    minimum, _ = group.wanted(game, card, picked, tuple(offered))
+    if minimum > 1 or group.conditions(game, card, picked):
+        return offered
+    return [
+        target for target in offered if phrases_reachable(game, card, ability, (*picked, (target,)))
+    ]
 
 
 def legal_targets(game: GameState, card: L5RCard, ability: Ability) -> list[str]:
-    """The ids ``ability``'s first "target" phrase may be pointed at from ``card`` right now.
-
-    Whether the ability can be taken at all is read off that phrase, since nothing later can be
-    reached without it, and so is what an Interrupt may substitute for a chosen target.
-    """
+    """The ids ``ability``'s first "target" phrase may be pointed at from ``card`` right now, which
+    is what an Interrupt may substitute for a chosen target."""
     return group_targets(game, card, ability, ability.phrases[0])
 
 

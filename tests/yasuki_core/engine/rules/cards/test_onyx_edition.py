@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     GrantNegation,
     Effect,
+    MeleeAttack,
     Move,
     Negated,
     RevokeGrants,
@@ -67,6 +68,7 @@ from yasuki_core.engine.rules.cards.onyx_edition import (
 from yasuki_core.engine.rules.turn import sequence
 from yasuki_core.engine.rules.abilities.registry import invest_amounts
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseAbilityTarget,
     ChooseCards,
     ChooseDiscard,
     ChooseNextTrigger,
@@ -118,7 +120,7 @@ from tests.yasuki_core.engine.builders import (
     token_template,
     two_seat_game,
 )
-from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_interrupt
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 ANCIENT_CASTLE = "the_ancient_castle_of_the_lion"
@@ -800,7 +802,7 @@ def test_the_capital_gives_its_own_personality_shadowlands_and_fear_equal_to_his
     session.act(P1, ActivateAbility("capital"))
     session.submit(P1, DecisionResponse(("raider",)))
     choice = session.game.pending
-    assert isinstance(choice, ChooseCards) and choice.candidates == ("guard",)
+    assert isinstance(choice, ChooseAbilityTarget) and choice.candidates == ("guard",)
     session.submit(P1, DecisionResponse(("guard",)))
 
     game = session.game
@@ -880,16 +882,36 @@ def test_the_capital_replays_to_the_same_board():
     assert replay(session.log) == session.game
 
 
-def test_the_capitals_fear_reads_the_battle_as_it_resolves():
+@pytest.mark.parametrize(("guard_at", "offered"), [(0, True), (1, False)], ids=["fear", "no_fear"])
+def test_the_capital_targets_your_own_personality_only_with_something_to_fear(guard_at, offered):
+    cards = [
+        flip_stronghold(DARK_CAPITAL, card_id="capital", gold_production=4, clan="Spider"),
+        personality("raider", owner=P1, force=3),
+        personality("guard", owner=P2, force=2),
+    ]
+    session = combat_segment(cards, {"raider": 0}, {"guard": guard_at})
+
+    assert (ActivateAbility("capital") in session.legal_actions(P1)) is offered
+
+
+def test_the_capitals_fear_is_answerable_at_the_interrupt_step():
     session = _dark_capital_in_combat()
     game = session.game
-    capital, raider = game.table.cards_by_id["capital"], game.table.cards_by_id["raider"]
-    effects = ability_for(game, capital).effects(game, capital, raider)
+    okura = L5RCard.of(
+        ActionPrint,
+        id="okura",
+        name="Okura is Released",
+        printed_id="okura_is_released",
+        side=Side.FATE,
+        owner=P1,
+    )
+    game.table.zones[ZoneKey(P1, ZoneRole.HAND)].add(register(game.table, okura))
 
-    resolve_effects(game, [Move("guard", Location.home(P2)), *effects])
+    session.act(P1, ActivateAbility("capital"))
+    session.submit(P1, DecisionResponse(("raider",)))
+    session.submit(P1, DecisionResponse(("guard",)))
 
-    assert game.pending is None
-    assert not game.table.cards_by_id["guard"].bowed
+    assert PlayInterrupt("okura") in session.legal_actions(P1)
 
 
 # --- The Sacred Ground of the Phoenix ---
@@ -2327,3 +2349,191 @@ def test_tsushima_offers_his_rings_and_his_yojimbo_as_one_question():
     assert pending.pick_label == (
         "Put this Ring into play, it does not count towards an Enlightenment Victory"
     )
+
+
+# --- Daigotsu Rin ---
+
+
+def _rin_recruited(*deck: L5RCard) -> EngineSession:
+    state = TableState.empty_two_seat()
+    put_in_play(state, register(state, stronghold(P1, gold_production=4)))
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill", owner=P1))]
+    state.decks[DeckKey(P1, Side.FATE)].cards = [register(state, card) for card in deck]
+    rin = register(state, personality("rin", printed_id="daigotsu_rin", force=3, gold_cost=4))
+    rin.turn_face_up()
+    province = ProvinceZone(owner=P1)
+    province.add(rin)
+    state.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+    session.act(P1, ActivateAbility("rin", RECRUIT))
+    pay(session, P1)
+    return session
+
+
+def _undead_follower(card_id: str) -> L5RCard:
+    return attachment(card_id, attachment_type=AttachmentType.FOLLOWER, keywords=("Undead",))
+
+
+def _fate_deck_ids(session: EngineSession) -> set[str]:
+    return {card.id for card in session.game.table.decks[DeckKey(P1, Side.FATE)].cards}
+
+
+def _fate_discard_ids(session: EngineSession) -> set[str]:
+    return {card.id for card in session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards}
+
+
+@pytest.mark.parametrize(
+    ("answer", "discarded"), [(("zombie",), {"zombie"}), ((), set())], ids=["found", "declined"]
+)
+def test_rin_may_put_an_undead_follower_from_the_fate_deck_into_the_discard_pile(answer, discarded):
+    session = _rin_recruited(
+        _undead_follower("zombie"),
+        attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER),
+        attachment("bone_blade", attachment_type=AttachmentType.ITEM, keywords=("Undead",)),
+    )
+
+    session.act(P1, ActivateAbility("rin"))
+    assert session.game.pending.candidates == ("zombie",)
+    session.submit(P1, DecisionResponse(answer))
+
+    assert _fate_discard_ids(session) == discarded
+    assert _fate_deck_ids(session) == {"zombie", "ashigaru", "bone_blade"} - discarded
+
+
+def test_rin_finding_no_undead_follower_still_resolves():
+    session = _rin_recruited(attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER))
+
+    session.act(P1, ActivateAbility("rin"))
+
+    assert session.game.pending is None
+    assert _fate_deck_ids(session) == {"ashigaru"}
+
+
+# --- Daigotsu Hiromu ---
+
+
+def _hiromu_battle(*, follower_bowed: bool = False) -> EngineSession:
+    cards = [
+        personality("hiromu", printed_id="daigotsu_hiromu", force=1),
+        personality("guard", owner=P2, force=3),
+    ]
+    follower = attachment("ogre", attachment_type=AttachmentType.FOLLOWER, force=3)
+    session = combat_segment(
+        cards, {"hiromu": 0}, {"guard": 0}, attachments=((follower, "hiromu"),)
+    )
+    if follower_bowed:
+        resolve_effects(session.game, [Bow("ogre")])
+    return session
+
+
+@pytest.mark.parametrize(
+    ("answer", "kept"), [("Bow it", True), ("Destroy it", False)], ids=["bow", "destroy"]
+)
+def test_hiromu_spends_his_follower_on_a_melee_equal_to_its_force(answer, kept):
+    session = _hiromu_battle()
+
+    session.act(P1, ActivateAbility("hiromu"))
+    session.submit(P1, DecisionResponse(("ogre",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    session.submit(P1, DecisionResponse((answer,)))
+
+    assert session.game.pending is None
+    assert ("ogre" in _in_play(session)) is kept
+    assert "guard" not in _in_play(session)
+
+
+def test_hiromu_bowing_a_bowed_follower_makes_no_melee():
+    session = _hiromu_battle(follower_bowed=True)
+
+    session.act(P1, ActivateAbility("hiromu"))
+    session.submit(P1, DecisionResponse(("ogre",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    session.submit(P1, DecisionResponse(("Bow it",)))
+
+    assert "guard" in _in_play(session)
+
+
+@pytest.mark.parametrize(
+    ("guard_at", "offered"), [(0, True), (1, False)], ids=["melee", "no_melee"]
+)
+def test_hiromu_is_offered_only_with_something_to_melee(guard_at, offered):
+    cards = [
+        personality("hiromu", printed_id="daigotsu_hiromu", force=1),
+        personality("guard", owner=P2, force=3),
+    ]
+    follower = attachment("ogre", attachment_type=AttachmentType.FOLLOWER, force=3)
+    session = combat_segment(
+        cards, {"hiromu": 0}, {"guard": guard_at}, attachments=((follower, "hiromu"),)
+    )
+
+    assert (ActivateAbility("hiromu") in session.legal_actions(P1)) is offered
+
+
+def test_hiromus_melee_is_answerable_at_the_interrupt_step():
+    negate_a_melee = Interrupt(
+        answers=MeleeAttack,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+    )
+    session = _hiromu_battle()
+    negator = L5RCard.of(
+        ActionPrint,
+        id="negator",
+        name="negator",
+        printed_id="melee_negator_probe",
+        side=Side.FATE,
+        owner=P2,
+    )
+    session.game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(register(session.game.table, negator))
+
+    with probe_interrupt("melee_negator_probe", negate_a_melee):
+        session.act(P1, ActivateAbility("hiromu"))
+        session.submit(P1, DecisionResponse(("ogre",)))
+        session.submit(P1, DecisionResponse(("guard",)))
+
+        assert PlayInterrupt("negator") in session.legal_actions(P2)
+
+
+def test_a_hiromu_game_replays_to_the_same_board():
+    session = _hiromu_battle()
+    session.act(P1, ActivateAbility("hiromu"))
+    session.submit(P1, DecisionResponse(("ogre",)))
+    session.submit(P1, DecisionResponse(("guard",)))
+    session.submit(P1, DecisionResponse(("Destroy it",)))
+
+    assert replay(session.log) == session.game
+
+
+@pytest.mark.parametrize(
+    ("answer", "guard_kept"), [("Destroy it", True), ("Bow it", False)], ids=["destroy", "bow"]
+)
+def test_an_interrupt_on_hiromus_destroy_applies_only_if_destroy_is_chosen(answer, guard_kept):
+    spare_the_follower = Interrupt(
+        answers=Destroy,
+        interrupt=lambda game, source, effect: Interruption(Negated(effect)),
+        applies=lambda game, source, effect: effect.card_id == "ogre",
+    )
+    session = _hiromu_battle()
+    game = session.game
+    spare = L5RCard.of(
+        ActionPrint,
+        id="spare",
+        name="spare",
+        printed_id="spare_the_follower_probe",
+        side=Side.FATE,
+        owner=P2,
+    )
+    game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(register(game.table, spare))
+
+    with probe_interrupt("spare_the_follower_probe", spare_the_follower):
+        session.act(P1, ActivateAbility("hiromu"))
+        session.submit(P1, DecisionResponse(("ogre",)))
+        session.submit(P1, DecisionResponse(("guard",)))
+        session.act(P2, PlayInterrupt("spare"))
+        while game.round.kind is RoundKind.INTERRUPT:
+            session.act(game.round.priority, Pass())
+        session.submit(P1, DecisionResponse((answer,)))
+
+    assert "ogre" in _in_play(session)
+    assert ("guard" in _in_play(session)) is guard_kept
