@@ -79,6 +79,7 @@ from yasuki_core.engine.rules.board.queries import (
     owned_personalities,
     personalities_in_play,
     province_zones,
+    register_attacks_past_followers,
     rings_in_play,
     top_of_deck,
     units_at,
@@ -166,6 +167,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     TurnBoundary,
 )
 from yasuki_core.engine.rules.rulebook.equip import creation_targets, weapons_on
+from yasuki_core.engine.rules.rulebook.discipline import discipline_grant, in_discard_pile
 from yasuki_core.engine.rules.rulebook.joining import register_join_restriction
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
@@ -1718,6 +1720,21 @@ def _resolve_way_of_the_scorpion_experienced_winner(
 
 
 # --- Way of the Spider (Experienced) ---
+
+WAY_OF_THE_SPIDER_DISCIPLINE = 2
+
+register_attacks_past_followers("way_of_the_spider_experienced", frozenset({Fear}))
+
+
+@discipline_grant("way_of_the_spider_experienced")
+def _way_of_the_spider_experienced_discipline_grant(
+    game: GameState, source: L5RCard, card: L5RCard
+) -> int | None:
+    """ "Dark Virtues in your discard pile have Discipline :g2:." """
+    if not in_discard_pile(game, card) or not has_keyword(game, card, keywords.DARK_VIRTUE):
+        return None
+    return WAY_OF_THE_SPIDER_DISCIPLINE
+
 
 register_entry(
     "way_of_the_spider_experienced", clears=keywords.EDICT, condition=plays_clan(ruleset.SPIDER)

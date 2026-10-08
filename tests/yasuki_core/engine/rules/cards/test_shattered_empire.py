@@ -33,9 +33,22 @@ from yasuki_core.engine.rules.stats.province_strength import effective_province_
 from yasuki_core.engine.rules.effects import Bow, Destroy, Discard, DrawCard, PutIntoPlay
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import PITCH, ask_who_loses_honor
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
+from yasuki_core.engine.rules.abilities.model import (
+    Ability,
+    CardLocation,
+    Interrupt,
+    Interruption,
+    itself,
+)
 from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
-from yasuki_core.engine.rules.effects import GainHonor, GrantNegation, TakeFavor
+from yasuki_core.engine.rules.effects import (
+    Fear,
+    GainHonor,
+    GrantNegation,
+    MeleeAttack,
+    Negated,
+    TakeFavor,
+)
 from yasuki_core.engine.rules.vocabulary.game_events import ConditionFulfilled
 from yasuki_core.engine.rules.legality import recruit_cost
 from yasuki_core.engine.rules.rulebook.joining import may_join
@@ -62,7 +75,7 @@ from yasuki_core.engine.players import Trait
 from yasuki_core.engine.rules.rulebook import proxies
 from yasuki_core.engine.rules.rulebook.lobby import is_lobby, lobby_bonus
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
-from yasuki_core.engine.rules.board.queries import province_zones
+from yasuki_core.engine.rules.board.queries import attack_targets, province_zones
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.zones import ProvinceZone
@@ -86,7 +99,7 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayInterrupt
 from yasuki_core.engine.rules.effects import Move, StartDuel, Straighten
 from yasuki_core.engine.table import Location, location_of
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_interrupt
 from tests.yasuki_core.engine.rules.cards.test_anvil_of_despair import (
     _reach_the_combat_segment,
     _refugees_battle,
@@ -688,6 +701,111 @@ def test_way_of_the_dragon_looks_at_nothing_from_an_empty_fate_deck():
 
     assert session.game.active is P1
     assert session.game.look is None
+
+
+# --- Way of the Spider (Experienced) ---
+
+DARK_VIRTUE_PROBE = "dark_virtue_probe"
+DARK_VIRTUE_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    cost=no_cost,
+    targets=lambda game, source: ["raider"],
+    effects=lambda game, source, target: [GainHonor(source.owner, 1)],
+    located_at=(CardLocation.HAND,),
+)
+DARK_VIRTUE_INTERRUPT = Interrupt(
+    answers=Bow, interrupt=lambda game, source, bow: Interruption(Negated(bow))
+)
+BOW_PROBE = "bow_the_guard_probe"
+BOW_ABILITY = Ability(
+    timings=(ActionTiming.BATTLE,),
+    cost=no_cost,
+    targets=lambda game, source: ["guard"],
+    effects=lambda game, source, target: [Bow(target.id)],
+)
+
+
+def _spider_battle(*, way_in_play: bool = True, guard_follower: bool = False) -> EngineSession:
+    """P1's raider faces P2's guard, with a Dark Virtue in P1's Fate discard pile, a Holding
+    producing 2 Gold, and Way of the Spider in play for P1 unless ``way_in_play`` is False."""
+    cards = [
+        personality("raider", printed_id=BOW_PROBE),
+        personality("guard", owner=P2),
+        holding("mine", gold_production=2),
+    ]
+    if way_in_play:
+        cards.append(_edict("spider", "way_of_the_spider_experienced"))
+    attachments = ()
+    if guard_follower:
+        follower = attachment("ashigaru", owner=P2, attachment_type=AttachmentType.FOLLOWER)
+        attachments = ((follower, "guard"),)
+    session = combat_segment(cards, {"raider": 0}, {"guard": 0}, attachments=attachments)
+    virtue = L5RCard.of(
+        ActionPrint,
+        id="virtue",
+        name="virtue",
+        printed_id=DARK_VIRTUE_PROBE,
+        side=Side.FATE,
+        owner=P1,
+        keywords=(keywords.DARK_VIRTUE,),
+    )
+    pile = session.game.table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)]
+    pile.add(register(session.game.table, virtue))
+    return session
+
+
+@pytest.mark.parametrize(("way_in_play", "offered"), [(True, True), (False, False)])
+def test_way_of_the_spider_gives_dark_virtues_in_your_discard_pile_discipline(way_in_play, offered):
+    with probe_ability(DARK_VIRTUE_PROBE, DARK_VIRTUE_ABILITY):
+        session = _spider_battle(way_in_play=way_in_play)
+
+        assert (PlayStrategy("virtue", disciplined=True) in session.legal_actions(P1)) is offered
+
+
+def test_a_dark_virtue_played_under_way_of_the_spider_costs_2_gold_and_is_banished():
+    with probe_ability(DARK_VIRTUE_PROBE, DARK_VIRTUE_ABILITY):
+        session = _spider_battle()
+        game = session.game
+        honor = game.table.seats[P1].honor
+
+        session.act(P1, PlayStrategy("virtue", disciplined=True))
+        pay(session, P1)
+        session.submit(P1, DecisionResponse(("raider",)))
+
+    assert game.table.seats[P1].honor == honor + 1
+    assert game.table.cards_by_id["mine"].bowed
+    banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)].cards
+    assert [card.id for card in banished] == ["virtue"]
+
+
+def test_a_dark_virtue_interrupt_is_taken_from_the_discard_pile_under_way_of_the_spider():
+    with (
+        probe_ability(BOW_PROBE, BOW_ABILITY),
+        probe_interrupt(DARK_VIRTUE_PROBE, DARK_VIRTUE_INTERRUPT),
+    ):
+        session = _spider_battle()
+        game = session.game
+
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+        session.act(P1, PlayInterrupt("virtue", disciplined=True))
+        pay(session, P1)
+        while game.round.kind is RoundKind.INTERRUPT:
+            session.act(game.round.priority, Pass())
+
+    assert not game.table.cards_by_id["guard"].bowed
+    banished = game.table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)].cards
+    assert [card.id for card in banished] == ["virtue"]
+
+
+@pytest.mark.parametrize(
+    ("kind", "reached"), [(Fear, True), (MeleeAttack, False)], ids=["fear", "melee"]
+)
+def test_way_of_the_spider_lets_your_fear_target_personalities_with_followers(kind, reached):
+    session = _spider_battle(guard_follower=True)
+    raider = session.game.table.cards_by_id["raider"]
+
+    assert ("guard" in attack_targets(session.game, raider, kind)) is reached
 
 
 # --- Doji Yasuko, Soul of Doji Takeji ---

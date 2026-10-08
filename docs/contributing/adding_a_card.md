@@ -71,6 +71,8 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "You do not lose Honor from your cards' effects", "You lose 1 Honor less from your cards" | `register_honor_loss_reduction(id, no_honor_lost)`, `register_honor_loss_reduction(id, honor_loss_reduced_by(1))` | {card}`Mishime Sensei`, {card}`The Dark Capital of the Spider` |
 | "You may ignore Honor Requirements" | `register_honor_requirement_waiver(id)` | {card}`Mishime Sensei` |
 | "Discipline :g2:", or "If you are a Crab Clan player, this Strategy has Discipline :g1:" | `register_discipline(id, disciplined(2))`, or a handler returning the cost or None | {card}`Grim Reality` |
+| Gives cards in your discard pile Discipline | `@discipline_grant(id)` | {card}`Way of the Spider (Experienced)` |
+| "Your :fear: may target Personalities with Followers" | `register_attacks_past_followers(id, frozenset({Fear}))` | {card}`Way of the Spider (Experienced)` |
 | Moves the Family Honor an Honor Victory or a Dishonor loss needs | `register_threshold_shift(id, ThresholdShift(...))` | {card}`Daigotsu Shinobu` |
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an
@@ -230,16 +232,17 @@ id:
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, `uses_per_turn`, an entry point of a
 registry (`gold`, `invest`, `keywords`, `keyword_loss`, `recruit_discount`, `invest_discount`,
-`stat_grant`, `considered_stat`, `attach_restriction`, `equip_discount`, `equips_from_discard`,
-`attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`, `entry_state`,
-`before_entering_play`), or the event a trigger answers (`entered_play`, `destroyed`,
-`straightened`, `dishonored`, `rehonored`, `turn_boundary`, `counter_changed`,
-`province_destroying`, `province_destroyed`, `battle_ended`, `card_discarded`, `producing_gold`,
-`produced_gold`, `battle_segment_started`, `entered_play_or_destroyed`). A card printing several
-abilities qualifies the role with that ability's key, as in `_incendiary_archers_fear_effects`,
-since one name per role would collide between them, and the key has to be one the module really
-registers. A choice resolver is named for the choice instead, `_resolve_<the string it is registered
-under>`. Helpers the block calls but never registers only need the card's id in front.
+`stat_grant`, `considered_stat`, `attach_restriction`, `discipline_grant`, `equip_discount`,
+`equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`,
+`favor_payer`, `entry_state`, `before_entering_play`), or the event a trigger answers
+(`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`, `turn_boundary`,
+`counter_changed`, `province_destroying`, `province_destroyed`, `battle_ended`, `card_discarded`,
+`producing_gold`, `produced_gold`, `battle_segment_started`, `entered_play_or_destroyed`). A card
+printing several abilities qualifies the role with that ability's key, as in
+`_incendiary_archers_fear_effects`, since one name per role would collide between them, and the key
+has to be one the module really registers. A choice resolver is named for the choice instead,
+`_resolve_<the string it is registered under>`. Helpers the block calls but never registers only
+need the card's id in front.
 
 The point is grep. A card's whole implementation answers a search for its id, and every handler of a
 kind answers a search for its role. A test enforces it, and `ROLES` in `hooks/card_layout.py` is
