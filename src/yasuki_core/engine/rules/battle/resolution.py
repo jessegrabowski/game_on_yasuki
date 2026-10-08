@@ -139,7 +139,7 @@ def create_battle(
 
     Returns
     -------
-    list of Assigned
+    list of :class:`~yasuki_core.engine.rules.vocabulary.game_events.Assigned`
         One event per unit the creation assigned, for the creating effect to announce.
     """
     if game.attack is not None:
