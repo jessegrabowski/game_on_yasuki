@@ -48,7 +48,9 @@ from yasuki_core.game_pieces.counters import SINCERITY
 from yasuki_core.game_pieces.prints import HoldingPrint, PersonalityPrint
 
 
-def recruit_card(game: GameState, card: L5RCard, *, renew: bool = False) -> list[Effect]:
+def recruit_card(
+    game: GameState, card: L5RCard, *, renew: bool = False, lowered_by: int = 0
+) -> list[Effect]:
     """What a card's text that Recruits ``card`` resolves (CR, Recruit): the card's Gold Cost paid
     for it, since the action that calls for the Recruit gave no opportunity to pay, then its
     arrival. A Fortification Recruited from anywhere but a Province is attached to the Province its
@@ -60,13 +62,16 @@ def recruit_card(game: GameState, card: L5RCard, *, renew: bool = False) -> list
     renew : bool, optional
         Whether the vacated Province refills face-up whatever the card's own Renew keyword says.
         Default False.
+    lowered_by : int, optional
+        Gold the Recruit costs less, for text that Recruits a card for less than its Gold Cost.
+        Default 0.
     """
     seat = card.owner
     if not may_join(game, seat, card) or not may_recruit(game, seat, card):
         return []
     if not meets_honor_requirement(game, card):
         return []
-    payment = recruit_gold(game, card)
+    payment = recruit_gold(game, card, lowered_by=lowered_by)
     from_province = province_key_holding(game, seat, card.id)
     if from_province is None and keywords.FORTIFICATION in effective_keywords(game, card):
         slots = tuple(key.token for key, _ in province_zones(game, seat))
@@ -265,10 +270,21 @@ def _waives_honor_requirement(game: GameState, personality: L5RCard) -> bool:
     return any(card.printed_id in HONOR_REQUIREMENT_WAIVERS for card in cards_in_play(game, seat))
 
 
-def recruit_gold(game: GameState, source: L5RCard, *, raised_by: int = 0) -> list[Effect]:
+def recruit_gold(
+    game: GameState, source: L5RCard, *, raised_by: int = 0, lowered_by: int = 0
+) -> list[Effect]:
     """The Gold Recruiting ``source`` costs, paid for the card, or nothing for a card that costs
-    nothing. ``raised_by`` is an Invest about to raise its Gold Cost. Default 0."""
-    amount = recruit_cost(game, source, raised_by=raised_by)
+    nothing.
+
+    Parameters
+    ----------
+    raised_by : int, optional
+        Gold an Invest not yet laid is about to raise the card's Gold Cost by. Default 0.
+    lowered_by : int, optional
+        Gold the Recruit costs less, for text that Recruits a card for less than its Gold Cost.
+        Default 0.
+    """
+    amount = recruit_cost(game, source, raised_by=raised_by, lowered_by=lowered_by)
     if amount == 0:
         return []
     return [PayGold(source.owner, amount, source.name, target_id=source.id)]
