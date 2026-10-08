@@ -32,6 +32,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
     BattleEnded,
     BattleResolved,
+    BattleSegmentStarted,
     Destroyed,
 )
 from yasuki_core.engine.rules.battle.records import (
@@ -382,6 +383,8 @@ def _open_battle_segment(game: GameState, segment: BattleSegment) -> None:
     Sequence), which is the one way they differ from a phase's round.
     """
     attack = _declared_attack(game)
+    if attack.current is None:
+        raise RuntimeError("a battle segment opened with no battlefield being fought at")
     attack.battle_segment = segment
     game.round_stack.append(game.round)
     game.round = ActionRound(
@@ -390,7 +393,8 @@ def _open_battle_segment(game: GameState, segment: BattleSegment) -> None:
         kind=RoundKind.BATTLE_SEGMENT,
     )
     # After the round exists, so an effect held for this moment lands on the round it was held for.
-    triggers.reach_moment(game, Moment(segment, Boundary.BEGINNING))
+    started = BattleSegmentStarted(segment, attack.current)
+    triggers.reach_moment(game, Moment(segment, Boundary.BEGINNING), started)
 
 
 def close_battle_segment(game: GameState) -> None:

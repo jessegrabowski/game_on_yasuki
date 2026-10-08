@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.turn.structure import Phase
-from yasuki_core.engine.rules.vocabulary.segments import Boundary
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Boundary
 from yasuki_core.engine.table import Location, ZoneKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
@@ -39,6 +39,23 @@ class PhaseStarted:
     """
 
     phase: Phase
+
+
+@dataclass(frozen=True, slots=True)
+class BattleSegmentStarted:
+    """A segment of the battle being fought has begun, once its Action Round has opened, as "After
+    a Combat Segment begins" reads.
+
+    Attributes
+    ----------
+    segment : BattleSegment
+        The segment that began.
+    battlefield : int
+        The battlefield the battle is fought at.
+    """
+
+    segment: BattleSegment
+    battlefield: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -662,6 +679,7 @@ GameEvent = (
     | Assigned
     | BattleResolved
     | BattleEnded
+    | BattleSegmentStarted
     | Bowed
     | CardFocused
     | ConditionFulfilled

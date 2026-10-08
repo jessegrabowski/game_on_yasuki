@@ -77,8 +77,8 @@ exists.
 
 These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straightened`, `Dishonored`,
 `Rehonored`, `CardDiscarded`, `CounterChanged`, `ProvinceDestroying`, `ProvinceDestroyed`,
-`Revealed`, `TurnBoundary`, `ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose
-moment is not one of them needs a new event, which is a core change.
+`Revealed`, `TurnBoundary`, `ProducingGold`, `ProducedGold`, `BattleSegmentStarted` and
+`ActionResolved`. A card whose moment is not one of them needs a new event, which is a core change.
 
 A Stronghold, a Sensei and a Wind never answer `EnteredPlay`. Under the CR's Start of Game they are
 already in play and never enter it, so a standing trait of one belongs in a registry or grant row
@@ -232,11 +232,11 @@ registry (`gold`, `invest`, `keywords`, `keyword_loss`, `recruit_discount`, `inv
 `before_entering_play`), or the event a trigger answers (`entered_play`, `destroyed`,
 `straightened`, `dishonored`, `rehonored`, `turn_boundary`, `counter_changed`,
 `province_destroying`, `province_destroyed`, `battle_ended`, `card_discarded`, `producing_gold`,
-`produced_gold`, `entered_play_or_destroyed`). A card printing several abilities qualifies the role
-with that ability's key, as in `_incendiary_archers_fear_effects`, since one name per role would
-collide between them, and the key has to be one the module really registers. A choice resolver is
-named for the choice instead, `_resolve_<the string it is registered under>`. Helpers the block
-calls but never registers only need the card's id in front.
+`produced_gold`, `battle_segment_started`, `entered_play_or_destroyed`). A card printing several
+abilities qualifies the role with that ability's key, as in `_incendiary_archers_fear_effects`,
+since one name per role would collide between them, and the key has to be one the module really
+registers. A choice resolver is named for the choice instead, `_resolve_<the string it is registered
+under>`. Helpers the block calls but never registers only need the card's id in front.
 
 The point is grep. A card's whole implementation answers a search for its id, and every handler of a
 kind answers a search for its role. A test enforces it, and `ROLES` in `hooks/card_layout.py` is
