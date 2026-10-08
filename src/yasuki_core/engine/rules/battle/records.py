@@ -67,6 +67,10 @@ class BattlefieldInfo(NamedTuple):
     printed_actions : frozenset of PlayerId
         The seats that took a printed action from one of their cards while the battle here was
         being fought. Default empty.
+    sealed : bool
+        Whether units may no longer be placed here, as "Other Personalities cannot move there"
+        reads. The units recorded ever present assigned as the battlefield was made and may still
+        come and go. Default False.
     """
 
     province: ZoneKey | None
@@ -76,6 +80,7 @@ class BattlefieldInfo(NamedTuple):
     terrains_played: frozenset[tuple[PlayerId, str]] = frozenset()
     terrains_destroyed: frozenset[tuple[PlayerId, str]] = frozenset()
     printed_actions: frozenset[PlayerId] = frozenset()
+    sealed: bool = False
 
 
 @dataclass(slots=True)

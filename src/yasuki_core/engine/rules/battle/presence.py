@@ -12,17 +12,20 @@ def place_unit(game: GameState, card: L5RCard, location: Location) -> bool:
 
     The unit is the one ``card``'s Personality leads, so naming an attached card moves the
     Personality and everything attached to him (CR, Unit). Assignment and a card's move both come
-    through here, which is what keeps the record complete. Sending a unit home leaves the record
-    as it is.
+    through here, which is what keeps the record complete and what makes a sealed battlefield
+    sealed: a unit never recorded present at one is refused, assigned or moved. Sending a unit
+    home leaves the record as it is.
     """
     personality = attached_to(game, card) or card
-    moved = ops.move_unit(game.table, personality, location)
     attack = game.attack
-    if location.battlefield is not None and attack is not None:
-        present = attack.battlefields[location.battlefield].ever_present
-        attack.amend(
-            location.battlefield, ever_present=present | {(personality.owner, personality.id)}
-        )
+    if location.battlefield is None or attack is None:
+        return ops.move_unit(game.table, personality, location)
+    info = attack.battlefields[location.battlefield]
+    arriving = (personality.owner, personality.id)
+    if info.sealed and arriving not in info.ever_present:
+        return False
+    moved = ops.move_unit(game.table, personality, location)
+    attack.amend(location.battlefield, ever_present=info.ever_present | {arriving})
     return moved
 
 
