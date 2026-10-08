@@ -110,7 +110,7 @@ from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.rules.triggers import TriggerContext, action_recruited, choice_resolver, on
 from yasuki_core.engine.rules.board.clans import card_alignments
-from yasuki_core.engine.rules.duel.procedure import duel_decided_by
+from yasuki_core.engine.rules.duel.procedure import challenge_is_legal, duel_decided_by
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
@@ -403,8 +403,12 @@ register_terrain(
 
 
 def _hida_haikeru_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The enemy Personalities Haikeru faces at the battle, which the card challenges."""
-    return list(opposing_units_in_battle(game, source.owner))
+    """The enemy Personalities Haikeru faces at the battle and may challenge."""
+    return [
+        card_id
+        for card_id in opposing_units_in_battle(game, source.owner)
+        if challenge_is_legal(game, source.id, card_id)
+    ]
 
 
 def _hida_haikeru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -1602,8 +1606,12 @@ def _togashi_hiyoku_duel_resolved(ctx: TriggerContext) -> list[Effect]:
 
 
 def _togashi_hiyoku_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The enemy Personalities Hiyoku faces at the battle, which the card challenges."""
-    return list(opposing_units_in_battle(game, source.owner))
+    """The enemy Personalities Hiyoku faces at the battle and may challenge."""
+    return [
+        card_id
+        for card_id in opposing_units_in_battle(game, source.owner)
+        if challenge_is_legal(game, source.id, card_id)
+    ]
 
 
 def _togashi_hiyoku_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

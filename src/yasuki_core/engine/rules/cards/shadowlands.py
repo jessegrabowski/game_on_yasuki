@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.effects import (
     GrantDuelStat,
     StartDuel,
 )
-from yasuki_core.engine.rules.duel.procedure import duel_decided_by
+from yasuki_core.engine.rules.duel.procedure import challenge_is_legal, duel_decided_by
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
@@ -33,20 +33,26 @@ TEST_OF_MIGHT_HONOR = 3
 def _test_of_might_targets(game: GameState, source: L5RCard) -> list[str]:
     """Your unbowed Personalities at the battle being fought, which the card has duel the target.
 
-    A Personality opposed at the battlefield is one performing there, and the pool is empty unless
-    an enemy unit stands at it too, so the enemy the next step picks among always exists.
+    A Personality opposed at the battlefield is one performing there. Each one offered has an enemy
+    there it may challenge, so the enemy the next step picks among always exists.
     """
+    enemies = opposing_units_in_battle(game, source.owner)
     return [
         card_id
         for card_id in opposed_units_in_battle(game, source.owner)
         if not game.table.cards_by_id[card_id].bowed
+        and any(challenge_is_legal(game, card_id, enemy) for enemy in enemies)
     ]
 
 
 def _test_of_might_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Having targeted your own duelist, pick the enemy it duels. One ability takes one target, so
     the enemy Personality is a pick of its own, and the Strategy is carried to it."""
-    enemies = opposing_units_in_battle(game, source.owner)
+    enemies = tuple(
+        enemy
+        for enemy in opposing_units_in_battle(game, source.owner)
+        if challenge_is_legal(game, target.id, enemy)
+    )
     if not enemies:
         return []
     return [

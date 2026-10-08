@@ -127,7 +127,11 @@ from tests.yasuki_core.engine.builders import (
     two_seat_game,
 )
 from tests.yasuki_core.engine.rules.battle.test_resolution import _pass_out_the_segments
-from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_interrupt
+from tests.yasuki_core.engine.rules.conftest import (
+    probe_ability,
+    probe_challenge_restriction,
+    probe_interrupt,
+)
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 ANCIENT_CASTLE = "the_ancient_castle_of_the_lion"
@@ -1888,6 +1892,16 @@ def _haikeru_in_combat(*, rival_force: int, rival_chi: int) -> EngineSession:
         personality("rival", owner=P2, force=rival_force, chi=rival_chi),
     ]
     return combat_segment(cards, {"haikeru": 0}, {"rival": 0})
+
+
+def test_haikeru_is_not_offered_against_a_rival_who_may_not_be_challenged():
+    def _rival_may_not_be_challenged(game, holder, challenger, challenged):
+        return challenged.id != "rival"
+
+    with probe_challenge_restriction("rival", _rival_may_not_be_challenged):
+        session = _haikeru_in_combat(rival_force=1, rival_chi=1)
+
+        assert ActivateAbility("haikeru") not in session.legal_actions(P1)
 
 
 def _duel_the_rival(session: EngineSession) -> EngineSession:

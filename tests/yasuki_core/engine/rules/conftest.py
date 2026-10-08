@@ -12,6 +12,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_ability,
     register_interrupt,
 )
+from yasuki_core.engine.rules.duel.procedure import CHALLENGE_RESTRICTIONS, challenge_restriction
 from yasuki_core.engine.rules.stats.stat_grants import STAT_GRANTS, stat_grant
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 
@@ -125,3 +126,14 @@ def probe_interrupt(printed_id: str, interrupt: Interrupt):
         yield
     finally:
         _INTERRUPTS.pop(printed_id)
+
+
+@contextmanager
+def probe_challenge_restriction(printed_id: str, restriction):
+    """Register ``restriction`` under ``printed_id`` for the body of a ``with`` and remove it after,
+    as :func:`probe_ability` does for an ability."""
+    challenge_restriction(printed_id)(restriction)
+    try:
+        yield
+    finally:
+        CHALLENGE_RESTRICTIONS.pop(printed_id)

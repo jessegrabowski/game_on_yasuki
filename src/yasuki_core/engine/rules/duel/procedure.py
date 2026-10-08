@@ -1,7 +1,9 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
+from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.duel.focusing import focused_cards
@@ -59,9 +61,22 @@ def duel_decided_by(game: GameState, source_id: str) -> DuelRecord | None:
     return None if duel is None or duel.source != source_id else duel
 
 
+# What a card's own text says about a challenge: a Personality's "While Souchou has a Follower and
+# is in an army, he may not be challenged", or a Follower's "this Personality may not be
+# challenged". Asked of every card in play holding one, about the challenger and the challenged
+# Personality, and keyed by printed id like the other per-card registries.
+ChallengeRestriction = Callable[[GameState, L5RCard, L5RCard, L5RCard], bool]
+CHALLENGE_RESTRICTIONS: HandlerRegistry[ChallengeRestriction] = HandlerRegistry(
+    "challenge restrictions", "already has a challenge restriction"
+)
+challenge_restriction = CHALLENGE_RESTRICTIONS.make_decorator()
+
+
 def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duelist: str) -> bool:
     """Whether a challenge between these two cards happens at all (CR, Challenge): it does not where
-    one player controls both, nor where either card is not a Personality.
+    one player controls both, where either card is not a Personality, or where the text of a card in
+    play forbids it. A card that challenges reads its targets through this, so a Personality that
+    may not be challenged is never one of them.
 
     Both duelists are read off the battlefield, so a Personality that left play between being
     targeted and the duel being declared refuses the challenge, wherever it went and whether or not
@@ -74,7 +89,13 @@ def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duel
         return False
     if not all(isinstance(card.printed, PersonalityPrint) for card in (challenger, challenged)):
         return False
-    return challenger.owner is not challenged.owner
+    if challenger.owner is challenged.owner:
+        return False
+    return all(
+        CHALLENGE_RESTRICTIONS[holder.printed_id](game, holder, challenger, challenged)
+        for holder in in_play.values()
+        if holder.printed_id in CHALLENGE_RESTRICTIONS
+    )
 
 
 def declare_duel(

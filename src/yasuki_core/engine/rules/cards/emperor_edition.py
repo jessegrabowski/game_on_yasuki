@@ -3,7 +3,7 @@ from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
-from yasuki_core.engine.rules.duel.procedure import duel_decided_by
+from yasuki_core.engine.rules.duel.procedure import challenge_is_legal, duel_decided_by
 from yasuki_core.engine.rules.effects import (
     AskOption,
     Choose,
@@ -40,16 +40,21 @@ SANCTIONED_DUEL_ACCEPT = "Accept the challenge"
 
 
 def _sanctioned_duel_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Your unbowed Personalities, which the card targets as the challenger.
+    """Your unbowed Personalities that have a Personality they may challenge, which the card
+    targets as the challenger.
 
-    None at all where no other seat has a Personality to be challenged. Both targets have to exist
-    for the challenge to happen, and the second is picked after this one, so an ability offered on
-    the challenger alone would resolve into a pick with nothing to pick.
+    Both targets have to exist for the challenge to happen, and the second is picked after this
+    one, so an ability offered on a challenger with nobody to challenge would resolve into a pick
+    with nothing to pick.
     """
     personalities = personalities_in_play(game)
-    if not any(card.owner is not source.owner for card in personalities):
-        return []
-    return [card.id for card in personalities if card.owner is source.owner and not card.bowed]
+    return [
+        card.id
+        for card in personalities
+        if card.owner is source.owner
+        and not card.bowed
+        and any(challenge_is_legal(game, card.id, other.id) for other in personalities)
+    ]
 
 
 def _sanctioned_duel_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -60,7 +65,9 @@ def _sanctioned_duel_effects(game: GameState, source: L5RCard, target: L5RCard) 
     challenge does not happen, and a ``Choose`` of one from none would pend unanswerably.
     """
     challenged = tuple(
-        card.id for card in personalities_in_play(game) if card.owner is not source.owner
+        card.id
+        for card in personalities_in_play(game)
+        if challenge_is_legal(game, target.id, card.id)
     )
     if not challenged:
         return []
