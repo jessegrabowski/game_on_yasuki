@@ -99,6 +99,9 @@ counters:
   chi: -1
 - key: master
   name: Master
+- key: masterwork
+  name: Masterwork
+  force: 1
 - key: mastery
   name: Mastery
 - key: merchant

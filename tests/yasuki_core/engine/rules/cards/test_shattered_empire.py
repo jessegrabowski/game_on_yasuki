@@ -5,6 +5,7 @@ from yasuki_core.engine.rules.vocabulary.actions import PlayStrategy
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.counters import MASTERWORK
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     EventPrint,
@@ -32,6 +33,7 @@ from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
 from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
     AttachCard,
     Bow,
     Destroy,
@@ -2887,3 +2889,59 @@ def test_heirloom_offers_nothing_without_an_equipped_armor_or_weapon(kind_keywor
 
     assert session.game.active is P2
     assert session.game.pending is None
+
+
+# --- Developed Quarry ---
+
+
+def test_developed_quarry_entering_bowed_still_gives_itself_three_masterwork_tokens():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("mine", gold_production=2))
+    province_card(state, "quarry", printed_id="developed_quarry", gold_cost=2, gold_production=2)
+    state.decks[DeckKey(P1, Side.DYNASTY)].cards = [register(state, holding("refill"))]
+    session = EngineSession.start(state, P1)
+    end_phase(session)
+    end_phase(session)
+
+    session.act(P1, ActivateAbility("quarry", RECRUIT))
+    pay(session, P1)
+    quarry = session.game.table.cards_by_id["quarry"]
+    assert quarry.bowed
+
+    session.act(P1, ActivateAbility("quarry", "masterwork_tokens"))
+
+    assert quarry.counters[MASTERWORK.key] == 3
+
+
+def test_developed_quarry_transfers_a_masterwork_token_to_an_armor_or_weapon_without_one():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("quarry", printed_id="developed_quarry", gold_production=2))
+    put_in_play(state, personality("hero", force=2))
+    session = EngineSession.start(state, P1)
+    game = session.game
+    attached(game, attachment("sword", force_modifier=1, keywords=(keywords.WEAPON,)), "hero")
+    attached(game, attachment("plate", keywords=(keywords.ARMOR,)), "hero")
+    attached(game, attachment("fan"), "hero")
+    resolve_effects(
+        game, [AdjustCounter("quarry", MASTERWORK, 3), AdjustCounter("plate", MASTERWORK, 1)]
+    )
+
+    session.act(P1, ActivateAbility("quarry", "transfer_masterwork"))
+    assert set(game.pending.candidates) == {"sword"}
+    session.submit(P1, DecisionResponse(("sword",)))
+
+    cards = game.table.cards_by_id
+    assert cards["quarry"].counters[MASTERWORK.key] == 2
+    assert cards["quarry"].bowed
+    assert effective_force(game, cards["sword"]) == 2
+    assert effective_force(game, cards["hero"]) == 5
+
+
+def test_developed_quarry_without_a_masterwork_token_has_nothing_to_transfer():
+    state = TableState.empty_two_seat()
+    put_in_play(state, holding("quarry", printed_id="developed_quarry", gold_production=2))
+    put_in_play(state, personality("hero", force=2))
+    session = EngineSession.start(state, P1)
+    attached(session.game, attachment("sword", keywords=(keywords.WEAPON,)), "hero")
+
+    assert ActivateAbility("quarry", "transfer_masterwork") not in session.legal_actions(P1)
