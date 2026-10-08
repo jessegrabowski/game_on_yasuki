@@ -1,6 +1,7 @@
-from collections.abc import Iterator, Sequence
+from collections.abc import Callable, Iterator, Sequence
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.board.counts_as import Asking, counts_as
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
@@ -110,10 +111,20 @@ def has_keyword(game: GameState, card: L5RCard, keyword: str) -> bool:
 # through attack_targets.
 ATTACK_TARGET = "an enemy Follower or Personality without Followers"
 
+# Cards letting their controller's attack effects of some kinds target Personalities with
+# Followers as well, by printed id, each with those kinds: "Your :fear: may target Personalities
+# with Followers".
+ATTACKS_PAST_FOLLOWERS: HandlerRegistry[frozenset[type]] = HandlerRegistry(
+    "attacks past followers", "already lets attacks target Personalities with Followers"
+)
+register_attacks_past_followers = ATTACKS_PAST_FOLLOWERS.make_register()
 
-def attack_targets(game: GameState, source: L5RCard) -> list[str]:
-    """The ids an attack effect from ``source`` may be pointed at: the enemy army's Followers and
-    its Personalities carrying none (CR, Ranged Attack). Empty outside a battle.
+
+def attack_targets(game: GameState, source: L5RCard, kind: type) -> list[str]:
+    """The ids an attack effect of ``kind`` from ``source`` may be pointed at: the enemy army's
+    Followers and its Personalities carrying none (CR, Ranged Attack), and its Personalities
+    carrying Followers too while a card ``source``'s controller has in play lets its attacks of
+    ``kind`` target them. Empty outside a battle.
 
     Reaches only what stands at the battle being fought. A Personality is spared by a Follower
     alone. An Item or a Spell attached to him does not protect him.
@@ -121,18 +132,37 @@ def attack_targets(game: GameState, source: L5RCard) -> list[str]:
     attack = game.attack
     if attack is None or attack.current is None:
         return []
-    return attack_targets_at(game, attack.current, attack.enemy_of(source.owner))
+    seat = source.owner
+    past_followers = any(
+        card.owner is seat and kind in ATTACKS_PAST_FOLLOWERS.get(card.printed_id, frozenset())
+        for card in game.table.battlefield.cards
+    )
+    return attack_targets_at(
+        game, attack.current, attack.enemy_of(seat), past_followers=past_followers
+    )
 
 
-def attack_targets_at(game: GameState, battlefield: int, seat: PlayerId) -> list[str]:
+def attack_targeting(kind: type) -> Callable[[GameState, L5RCard], list[str]]:
+    """The targets of an ability whose effect is an attack effect of ``kind``, as
+    :func:`attack_targets` reads them."""
+
+    def targets(game: GameState, source: L5RCard) -> list[str]:
+        return attack_targets(game, source, kind)
+
+    return targets
+
+
+def attack_targets_at(
+    game: GameState, battlefield: int, seat: PlayerId, *, past_followers: bool = False
+) -> list[str]:
     """The ids an attack effect may be pointed at among ``seat``'s units at ``battlefield``: each
-    unit's Followers, or its Personality when he carries none (CR, Ranged Attack)."""
+    unit's Followers, and its Personality when he carries none or ``past_followers`` lets the
+    attack reach him anyway (CR, Ranged Attack)."""
     targets: list[str] = []
     for personality in units_at(game, battlefield, seat):
         followers = followers_of(game, personality)
-        if followers:
-            targets.extend(follower.id for follower in followers)
-        else:
+        targets.extend(follower.id for follower in followers)
+        if not followers or past_followers:
             targets.append(personality.id)
     return targets
 

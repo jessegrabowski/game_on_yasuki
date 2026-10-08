@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.board.queries import attack_targeting
 from yasuki_core.engine.rules.cards.road_to_ruin import UNITY_CHI, UNITY_FORCE
 from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.vocabulary import keywords
@@ -792,7 +792,7 @@ MELEE_ABILITY = Ability(
     timings=(ActionTiming.BATTLE,),
     label="Battle: Melee 5 Attack",
     cost=no_cost,
-    targets=attack_targets,
+    targets=attack_targeting(MeleeAttack),
     effects=lambda game, source, target: [MeleeAttack(5, target.id, source.owner)],
 )
 

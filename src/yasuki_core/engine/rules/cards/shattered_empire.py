@@ -68,6 +68,7 @@ from yasuki_core.engine.rules.board.counts_as import (
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     army_at,
+    attack_targeting,
     attack_targets,
     controls_terrain_at,
     followers_in_play,
@@ -257,7 +258,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(RangedAttack),
         targeting_message=ATTACK_TARGET,
         effects=_binasa_experienced_effects,
         tireless=True,
@@ -714,7 +715,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(Fear),
         targeting_message=ATTACK_TARGET,
         effects=_hida_sanjiro_effects,
     ),
@@ -828,7 +829,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=bow_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_puritys_fist_effects,
         ruleset=ruleset.SHATTERED_EMPIRE.name,
@@ -1159,7 +1160,9 @@ def _shinjo_mayuko_soul_of_shinjo_wei_effects(
 ) -> list[Effect]:
     """A Melee 4, then a Melee 3 with its own target. The second is chosen once the first has
     resolved, and the first target is left out of it: a survivor of Melee 4 is beyond Melee 3."""
-    others = tuple(card_id for card_id in attack_targets(game, source) if card_id != target.id)
+    others = tuple(
+        card_id for card_id in attack_targets(game, source, MeleeAttack) if card_id != target.id
+    )
     second = (
         [Choose(source.owner, others, 1, 1, "shinjo_mayuko_second_melee", source.id)]
         if others
@@ -1180,7 +1183,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=_shinjo_mayuko_soul_of_shinjo_wei_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_shinjo_mayuko_soul_of_shinjo_wei_effects,
     ),

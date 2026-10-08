@@ -2,7 +2,11 @@ from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import ATTACK_TARGET, attack_targets, attack_targets_at
+from yasuki_core.engine.rules.board.queries import (
+    ATTACK_TARGET,
+    attack_targeting,
+    attack_targets_at,
+)
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.effects import Choose, Destroy, Effect, Fear, GainHonor, RangedAttack
 from yasuki_core.engine.rules.vocabulary.game_events import Destroyed, EnteredPlay
@@ -60,7 +64,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(Fear),
         targeting_message=ATTACK_TARGET,
         effects=_ashura_effects,
     ),
@@ -91,7 +95,7 @@ register_ability(
         timings=(ActionTiming.BATTLE,),
         repeatable=True,
         cost=bow_cost,
-        targets=attack_targets,
+        targets=attack_targeting(RangedAttack),
         targeting_message=ATTACK_TARGET,
         effects=_tosekiki_effects,
     ),

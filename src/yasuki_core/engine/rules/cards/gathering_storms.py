@@ -5,7 +5,7 @@ from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
-    attack_targets,
+    attack_targeting,
     followers_in_play,
     owned_holdings,
     personalities_in_play,
@@ -210,7 +210,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=_yoritomo_bunrakuken_cost,
-        targets=attack_targets,
+        targets=attack_targeting(RangedAttack),
         targeting_message=ATTACK_TARGET,
         effects=_yoritomo_bunrakuken_effects,
     ),

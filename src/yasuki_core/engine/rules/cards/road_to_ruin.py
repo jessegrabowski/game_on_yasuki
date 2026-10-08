@@ -225,7 +225,7 @@ def _is_that_all_yours(game: GameState, source: L5RCard, picked: PickedTargets) 
 
 
 def _is_that_all_feared(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
-    return attack_targets(game, source)
+    return attack_targets(game, source, Fear)
 
 
 def _is_that_all_fear_effects(

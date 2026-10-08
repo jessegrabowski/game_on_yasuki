@@ -1,7 +1,7 @@
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
-from yasuki_core.engine.rules.board.queries import ATTACK_TARGET, attack_targets
+from yasuki_core.engine.rules.board.queries import ATTACK_TARGET, attack_targeting
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.units.membership import attached_to
@@ -25,7 +25,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(Fear),
         targeting_message=ATTACK_TARGET,
         effects=_daigotsu_roburo_effects,
     ),
@@ -48,7 +48,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=bow_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_exquisite_nagamaki_of_the_fox_clan_effects,
     ),
@@ -78,7 +78,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(Fear),
         targeting_message=ATTACK_TARGET,
         effects=_haramaki_do_effects,
     ),
@@ -108,7 +108,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=bow_cost,
-        targets=attack_targets,
+        targets=attack_targeting(RangedAttack),
         targeting_message=ATTACK_TARGET,
         effects=_incendiary_archers_ranged_effects,
         key="ranged",
@@ -121,7 +121,7 @@ register_ability(
         printed_index=1,
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(Fear),
         targeting_message=ATTACK_TARGET,
         effects=_incendiary_archers_fear_effects,
         key="fear",

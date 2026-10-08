@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.abilities.registry import register_ability, regist
 from yasuki_core.engine.rules.board.queries import (
     owned_carrying,
     ATTACK_TARGET,
+    attack_targeting,
     attack_targets,
     has_keyword,
     owned_holdings,
@@ -132,7 +133,7 @@ def _resolve_a_terrible_glory_shadowlands(
     targeted."""
     if not has_keyword(game, game.table.cards_by_id[chosen[0]], keywords.SHADOWLANDS):
         return []
-    feared = attack_targets(game, game.table.cards_by_id[source_id])
+    feared = attack_targets(game, game.table.cards_by_id[source_id], Fear)
     if not feared:
         return []
     return [Choose(seat, tuple(feared), 1, 1, "a_terrible_glory_fear", source_id)]
@@ -312,7 +313,7 @@ def _draw_strength_from_your_oaths_effects(
     """Bow the target, then aim the Melee Attack at a card in the enemy army, if there is one. The
     Choose carries the bowed Personality, whose Chi the resolver reads."""
     bowed: list[Effect] = [Bow(target.id)]
-    aimable = tuple(attack_targets(game, source))
+    aimable = tuple(attack_targets(game, source, MeleeAttack))
     if not aimable:
         return bowed
     return [*bowed, Choose(source.owner, aimable, 1, 1, "draw_strength_from_your_oaths", target.id)]
@@ -555,7 +556,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=bow_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_jade_legion_effects,
     ),
@@ -886,7 +887,7 @@ def _seven_heavens_strike_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     """Bow the target, then the Ranged attack. Its strength counts the Rings once it resolves."""
-    reachable = tuple(attack_targets(game, source))
+    reachable = tuple(attack_targets(game, source, RangedAttack))
     if not reachable:
         return [Bow(target.id)]
     return [

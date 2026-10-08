@@ -104,7 +104,7 @@ register_ability(
         timings=(ActionTiming.BATTLE,),
         label="Battle: Fear",
         cost=lambda game, source: [],
-        targets=lambda game, source: attack_targets(game, source),
+        targets=lambda game, source: attack_targets(game, source, Fear),
         effects=lambda game, source, target: [Fear(FEAR, target.id, source.owner)],
     ),
 )
@@ -116,7 +116,7 @@ register_ability(
         timings=(ActionTiming.BATTLE,),
         label="Battle: Fear, then gain Honor",
         cost=lambda game, source: [],
-        targets=lambda game, source: attack_targets(game, source),
+        targets=lambda game, source: attack_targets(game, source, Fear),
         effects=lambda game, source, target: [
             Fear(FEAR, target.id, source.owner),
             GainHonor(source.owner, 1),

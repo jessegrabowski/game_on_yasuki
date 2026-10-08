@@ -1,7 +1,7 @@
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability
-from yasuki_core.engine.rules.board.queries import attack_targets
+from yasuki_core.engine.rules.board.queries import attack_targeting
 from yasuki_core.engine.rules.effects import Bow, Fear, GainHonor
 from yasuki_core.engine.rules.triggers import resolve_action_effects, resolve_effects
 from yasuki_core.engine.rules import legality
@@ -120,7 +120,7 @@ def test_okura_destroys_what_every_fear_of_the_action_bows():
     fear_each = Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(Fear),
         effects=lambda game, source, target: [Fear(2, target.id, source.owner)],
         hits_every_target=True,
     )

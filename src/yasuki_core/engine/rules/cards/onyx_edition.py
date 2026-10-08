@@ -163,7 +163,7 @@ def _daigotsu_hiromu_followers(
 
 
 def _daigotsu_hiromu_attacked(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
-    return attack_targets(game, source)
+    return attack_targets(game, source, MeleeAttack)
 
 
 def _daigotsu_hiromu_effects(
@@ -1137,7 +1137,7 @@ def _the_dark_capital_of_the_spider_feared(
     game: GameState, source: L5RCard, picked: PickedTargets
 ) -> list[str]:
     """The Fear's target, chosen with the action's other targets (CR, Good Faith Rule)."""
-    return attack_targets(game, source)
+    return attack_targets(game, source, Fear)
 
 
 def _the_dark_capital_of_the_spider_fear_count(

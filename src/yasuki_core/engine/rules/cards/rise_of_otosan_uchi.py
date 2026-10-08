@@ -37,7 +37,7 @@ from yasuki_core.engine.rules.board.counts_as import (
 from yasuki_core.engine.rules.board.queries import (
     ATTACK_TARGET,
     army_at,
-    attack_targets,
+    attack_targeting,
     different_elements,
     followers_in_play,
     phase_history,
@@ -249,7 +249,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_aseths_legion_effects,
     ),

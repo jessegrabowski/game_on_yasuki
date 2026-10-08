@@ -19,6 +19,7 @@ from yasuki_core.engine.rules.abilities.registry import register_ability, regist
 from yasuki_core.engine.rules.board.queries import (
     in_army_with,
     ATTACK_TARGET,
+    attack_targeting,
     attack_targets,
     has_keyword,
     owned_personalities,
@@ -178,7 +179,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targets,
+        targets=attack_targeting(MeleeAttack),
         targeting_message=ATTACK_TARGET,
         effects=_hida_o_win_experienced_effects,
     ),
@@ -350,7 +351,7 @@ def _matsu_chizuki_experienced_targets(game: GameState, source: L5RCard) -> list
     attack = game.attack
     if attack is None or attack.attacker is not source.owner:
         return []
-    return attack_targets(game, source)
+    return attack_targets(game, source, MeleeAttack)
 
 
 def _matsu_chizuki_experienced_effects(
