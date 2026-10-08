@@ -26,6 +26,8 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "After this card is destroyed, ..." inside an effect, as a Yu says it | effects returning `DelayedEffect(Evaluate(...), NextTime(Destroyed, card_id))` | {card}`Shiba Kintaro, the Remembered (Experienced)` |
 | "After this battle's resolution, if X, ..." | effects returning `DelayedEffect(Evaluate(...), END_OF_BATTLE)` | {card}`Daidoji Tashiko` |
 | "Create a battlefield (not at any Province) ... Fight a battle there" | effects returning `CreateBattle(...)` | {card}`Ambush` |
+| "Create a Raid Attack" | effects returning `CreateRaidAttack(...)`, with `ExemptFromResolutionBow(..., keyword=...)` for a "whose resolution does not bow your X" rider | {card}`The Shattered Stormfront of the Mantis` |
+| "Raid Battle: ..." | `register_ability(id, Ability(timings=(ActionTiming.BATTLE,), keywords=frozenset({keywords.RAID}), ...))`, which legality offers only during a Raid battle | none yet |
 | Gives a card an ability, as in "she has 'Battle: Ranged 3'" | `@granted_ability(id)` and effects returning `GrantAbility(...)` | {card}`Daidoji Kaede` |
 | A rulebook ability every card with a keyword has, as Kharmic | `register_keyword_ability(Ability(..., from_keyword=..., from_rulebook=True))` | `rulebook/kharmic.py` |
 | A rulebook ability every card at a location has, as Dynasty Discard | `register_location_ability(Ability(..., from_rulebook=True))` | `rulebook/dynasty_discard.py` |

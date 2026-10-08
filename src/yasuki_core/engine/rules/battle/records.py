@@ -55,6 +55,26 @@ class ArmyForces(NamedTuple):
     defending: int
 
 
+class BowExemption(NamedTuple):
+    """One exemption from the bow a battle's resolution applies (CR, After Resolution 0.1).
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat whose cards are spared.
+    keyword : str or None
+        The keyword the exemption is scoped to, or None for all the seat's Personalities.
+    whole_unit : bool
+        Whether the exemption spares everything attached to a spared Personality, as "does not
+        bow your units" reads, or the Personality alone, as "does not bow your Naval
+        Personalities" reads, leaving his Followers, Items and Spells to bow.
+    """
+
+    seat: PlayerId
+    keyword: str | None
+    whole_unit: bool
+
+
 class BattlefieldInfo(NamedTuple):
     """A battlefield an attack created, and the Defender Province it is associated with, if any.
 
@@ -70,9 +90,9 @@ class BattlefieldInfo(NamedTuple):
         whether or not the Personality was still there when the battle was fought. An entry stays
         once written, because "any enemy units were ever at its battlefield" asks about the whole
         attack. Default empty.
-    bow_exempt : frozenset of PlayerId
-        The seats whose units the battle's resolution does not bow (CR, After Resolution 0.1), as
-        Rallying Cry grants. Default empty.
+    bow_exempt : frozenset of BowExemption
+        The exemptions from the bow the battle's resolution applies (CR, After Resolution 0.1),
+        as Rallying Cry grants. Default empty.
     terrains_played : frozenset of (PlayerId, str)
         Each seat and the Terrain it played here from its hand. Default empty.
     terrains_destroyed : frozenset of (PlayerId, str)
@@ -89,7 +109,7 @@ class BattlefieldInfo(NamedTuple):
     province: ZoneKey | None
     outcome: BattleOutcome | None = None
     ever_present: frozenset[tuple[PlayerId, str]] = frozenset()
-    bow_exempt: frozenset[PlayerId] = frozenset()
+    bow_exempt: frozenset[BowExemption] = frozenset()
     terrains_played: frozenset[tuple[PlayerId, str]] = frozenset()
     terrains_destroyed: frozenset[tuple[PlayerId, str]] = frozenset()
     printed_actions: frozenset[PlayerId] = frozenset()

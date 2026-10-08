@@ -62,6 +62,13 @@ was taken in. When its one battle ends, the attack ceases to exist and the oppor
 creating action held passes on. A battlefield the effect seals refuses every unit not assigned as
 it was made, which is "Other Personalities cannot move there" as {card}`Ambush` prints it.
 
+A Raid Attack is the second created shape (ShE datasheet): {class}`~.CreateRaidAttack` builds it
+through {func}`~.create_raid_attack`, an additional Attack Phase whose one battlefield is at no
+Province, opened at its Maneuvers Segment once the creating action has ended. Its battle is a
+Raid battle. Resolution never destroys the defending army or a Province and pays no winner's
+Honor, an ability registered with the ``Raid`` keyword is offered only while one is fought, and
+{card}`The Shattered Stormfront of the Mantis` is the card that creates one.
+
 ## The three attacks
 
 {class}`~.RangedAttack`, {class}`~.MeleeAttack` and {class}`~.Fear` are effects taking a strength,

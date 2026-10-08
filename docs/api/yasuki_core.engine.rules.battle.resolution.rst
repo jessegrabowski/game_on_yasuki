@@ -11,9 +11,9 @@ yasuki_core.engine.rules.battle.resolution
     AfterResolution
     AnnounceResolution
     EndBattle
-    FightCreatedBattle
     FightNextBattle
     LeaveBattle
+    OpenCreatedAttack
     ResolveBattle
 
 .. rubric:: Functions
@@ -28,6 +28,7 @@ yasuki_core.engine.rules.battle.resolution
     begin_fight
     close_battle_segment
     create_battle
+    create_raid_attack
     declare_attack
     defender_of
     end_attack_phase

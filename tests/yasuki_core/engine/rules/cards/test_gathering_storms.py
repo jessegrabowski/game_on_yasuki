@@ -1,15 +1,20 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility, DeclareAttack, Pass
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    assignment_token,
+    AssignUnits,
     ChooseAbilityTarget,
+    ChooseBattlefield,
     DecisionResponse,
 )
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.constants import AttachmentType, Side
+from yasuki_core.game_pieces.counters import WEALTH
 
 
 from tests.yasuki_core.engine.builders import (
@@ -22,9 +27,11 @@ from tests.yasuki_core.engine.builders import (
     province_card,
     put_in_play,
     register,
+    stronghold,
 )
 
 P1 = PlayerId.P1
+P2 = PlayerId.P2
 ATTACKER, DEFENDER = PlayerId.P1, PlayerId.P2
 
 
@@ -314,3 +321,88 @@ def test_mantis_kama_activation_replays_to_the_same_state():
     session.submit(ATTACKER, DecisionResponse(("f1",)))
     session.submit(ATTACKER, DecisionResponse(("f2",)))
     assert replay(session.log) == session.game
+
+
+def _stormfront_session(*, naval: bool = True, enemy_force: int = 0) -> EngineSession:
+    """P1 holds the Stormfront, a Holding to reward, and one Personality to raid with, against an
+    enemy of ``enemy_force`` or an empty defense."""
+    state = TableState.empty_two_seat()
+    province_card(state, "atk-prov0", seat=P1, index=0)
+    province_card(state, "def-prov0", seat=P2, index=0)
+    put_in_play(state, stronghold(P1, printed_id="the_shattered_stormfront_of_the_mantis"))
+    put_in_play(state, holding("dock"))
+    kw = (keywords.NAVAL,) if naval else ()
+    put_in_play(state, personality("sailor", force=3, keywords=kw))
+    if enemy_force:
+        put_in_play(state, personality("guard", owner=P2, force=enemy_force))
+    return EngineSession.start(state, P1)
+
+
+def _raid_with_the_stormfront(session: EngineSession, *, defenders: tuple[str, ...] = ()) -> None:
+    """Take the Stormfront's Open action at the dock, assign the sailor, and fight the raid out."""
+    session.act(P1, ActivateAbility("P1-SH"))
+    asked = session.game.pending
+    session.submit(asked.seat, DecisionResponse(("dock",)))
+    assign = session.game.pending
+    assert isinstance(assign, AssignUnits) and assign.seat is P1
+    session.submit(P1, DecisionResponse((assignment_token("sailor", 0),)))
+    session.submit(P2, DecisionResponse(tuple(assignment_token(d, 0) for d in defenders)))
+    choice = session.game.pending
+    assert isinstance(choice, ChooseBattlefield)
+    session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+    for _ in range(20):
+        if session.game.attack is None:
+            return
+        session.act(session.game.round.priority, Pass())
+    raise AssertionError("the raid never ended")
+
+
+def test_the_stormfront_pays_its_holding_a_wealth_token_for_a_won_raid():
+    session = _stormfront_session()
+
+    _raid_with_the_stormfront(session)
+
+    assert session.game.attack is None
+    assert session.game.table.cards_by_id["dock"].counters.get(WEALTH.key) == 1
+
+
+def test_the_stormfronts_raid_spares_its_naval_personality_the_resolution_bow():
+    session = _stormfront_session()
+
+    _raid_with_the_stormfront(session)
+
+    sailor = session.game.table.cards_by_id["sailor"]
+    assert not sailor.bowed
+    assert location_of(session.game.table, sailor).is_home
+
+
+def test_the_stormfronts_raid_bows_a_spared_personalitys_followers():
+    # The card spares "your Naval Personalities", not their units.
+    session = _stormfront_session()
+    attached(
+        session.game,
+        attachment("oar", attachment_type=AttachmentType.FOLLOWER),
+        "sailor",
+    )
+
+    _raid_with_the_stormfront(session)
+
+    assert not session.game.table.cards_by_id["sailor"].bowed
+    assert session.game.table.cards_by_id["oar"].bowed
+
+
+def test_a_personality_without_naval_is_bowed_by_the_raids_resolution():
+    session = _stormfront_session(naval=False)
+
+    _raid_with_the_stormfront(session)
+
+    assert session.game.table.cards_by_id["sailor"].bowed
+
+
+def test_a_lost_raid_pays_the_stormfront_nothing():
+    session = _stormfront_session(enemy_force=9)
+
+    _raid_with_the_stormfront(session, defenders=("guard",))
+
+    assert not any(card.id == "sailor" for card in session.game.table.battlefield.cards)
+    assert session.game.table.cards_by_id["dock"].counters.get(WEALTH.key) is None

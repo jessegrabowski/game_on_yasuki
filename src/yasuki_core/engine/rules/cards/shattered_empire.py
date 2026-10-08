@@ -104,12 +104,12 @@ from yasuki_core.engine.rules.effects import (
     EndLook,
     Evaluate,
     Fear,
+    GainHonor,
     GrantAbility,
     GrantDuelStat,
-    GrantProvinceStrength,
-    GainHonor,
     GrantModifier,
     GrantNegation,
+    GrantProvinceStrength,
     GrantSeatAbility,
     LookAtTop,
     MeleeAttack,
@@ -118,12 +118,12 @@ from yasuki_core.engine.rules.effects import (
     Negated,
     RangedAttack,
     Rehonor,
+    seppuku,
     ShuffleDeck,
     Simultaneously,
     SpendOncePerTurn,
     Straighten,
     To,
-    seppuku,
 )
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.rulebook.lobby import lobby_bar, lobby_bonus_grant
@@ -459,10 +459,12 @@ def _daidoji_tashiko_effects(game: GameState, source: L5RCard, target: L5RCard) 
 def _resolve_daidoji_tashiko(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """After the battle resolves, gain 2 Honor if its Province was not destroyed. Every battle is
-    fought at a Province, so "if it was at a Province" always holds."""
-    outcome = game.attack.battlefields[game.attack.current].outcome
-    return [] if outcome.province_destroyed else [GainHonor(seat, TASHIKO_HONOR)]
+    """After the battle resolves, gain 2 Honor if it was at a Province and the Province was not
+    destroyed. A battle a card effect creates is at no Province, and pays nothing."""
+    info = game.attack.battlefields[game.attack.current]
+    if info.province is None or info.outcome.province_destroyed:
+        return []
+    return [GainHonor(seat, TASHIKO_HONOR)]
 
 
 register_ability(

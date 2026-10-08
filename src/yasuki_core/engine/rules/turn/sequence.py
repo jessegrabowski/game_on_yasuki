@@ -85,7 +85,7 @@ def _waits_beneath_its_round(game: GameState) -> bool:
     top = game.stack[-1]
     held = game.round.kind is RoundKind.INTERRUPT and isinstance(top, triggers.HeldAction)
     resolving = game.round.kind is RoundKind.RESPONSE and isinstance(
-        top, resolution.AfterResolution | resolution.FightCreatedBattle
+        top, resolution.AfterResolution | resolution.OpenCreatedAttack
     )
     dueling = game.round.kind is RoundKind.DUEL_WINDOW and isinstance(top, DuelWork)
     return held or resolving or dueling

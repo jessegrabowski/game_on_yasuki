@@ -142,36 +142,57 @@ def create_battle(
     list of :class:`~yasuki_core.engine.rules.vocabulary.game_events.Assigned`
         One event per unit the creation assigned, for the creating effect to announce.
     """
-    if game.attack is not None:
-        raise ValueError("an attack is already in progress")
-    defender = defender_of(game, attacker)
-    game.attack = AttackPhase(
-        attacker=attacker,
-        defender=defender,
-        battlefields=(BattlefieldInfo(province=None),),
-        segment=Segment.FIGHT,
-        kind=AttackKind.CREATED,
-    )
+    attack = _begin_created_attack(game, attacker, AttackKind.CREATED, Segment.FIGHT)
     assigned = []
     for card_id in (*attacking, *defending):
         card = game.table.cards_by_id.get(card_id)
         if card is not None and place_unit(game, card, Location.at_battlefield(0)):
             assigned.append(Assigned(card_id, 0, attacker))
     if sealed:
-        game.attack.amend(0, sealed=True)
-    # At the bottom of the stack, beneath everything the creating action still has to do: a battle
-    # an effect creates is fought only once that action has resolved (CR, Timing, Exception 3).
-    game.stack.insert(0, FightCreatedBattle())
+        attack.amend(0, sealed=True)
     return assigned
 
 
+def create_raid_attack(game: GameState, attacker: PlayerId) -> None:
+    """Create a Raid Attack: an additional Attack Phase whose one battlefield is not associated
+    with any Province, opened at its Maneuvers Segment once the creating action has resolved (ShE
+    datasheet, Raid Attacks and Raid Battles).
+
+    Assignment and the fight run as a declared attack's do. Its battle is a Raid battle, whose
+    resolution never destroys the defending army and pays no winner's Honor, and the attack
+    ceases to exist when that battle ends. Raise ``ValueError`` while an attack is in progress,
+    as :func:`create_battle` does.
+    """
+    _begin_created_attack(game, attacker, AttackKind.RAID, Segment.DECLARATION)
+
+
+def _begin_created_attack(
+    game: GameState, attacker: PlayerId, kind: AttackKind, segment: Segment
+) -> AttackPhase:
+    """Begin a card-created attack of ``kind`` with one battlefield at no Province, its opener at
+    the bottom of the stack, beneath everything the creating action still has to do: a battle an
+    effect creates is fought only once that action has resolved (CR, Timing, Exception 3)."""
+    if game.attack is not None:
+        raise ValueError("an attack is already in progress")
+    game.attack = AttackPhase(
+        attacker=attacker,
+        defender=defender_of(game, attacker),
+        battlefields=(BattlefieldInfo(province=None),),
+        segment=segment,
+        kind=kind,
+    )
+    game.stack.insert(0, OpenCreatedAttack())
+    return game.attack
+
+
 @dataclass(frozen=True, slots=True)
-class FightCreatedBattle:
-    """Fight the one battle of a created attack, once the action that created it has ended.
+class OpenCreatedAttack:
+    """Open the attack a card effect created, once the action that created it has ended.
 
     The action resolved before this ran, so its resolution is announced and its Response Step
-    offered first, which is where the CR's "immediately after" puts them, and the battle the
-    action delayed opens once both are done (CR, Timing).
+    offered first, which is where the CR's "immediately after" puts them, and then the attack the
+    action delayed opens: a created battle is fought at once, and a Raid Attack begins at its
+    Maneuvers Segment (CR, Timing; ShE datasheet).
 
     Attributes
     ----------
@@ -199,6 +220,9 @@ class FightCreatedBattle:
             return
         if not self.responded and open_response_window(game):
             game.stack.append(replace(self, responded=True))
+            return
+        if _declared_attack(game).kind is AttackKind.RAID:
+            open_maneuvers(game)
             return
         fight_battle(game, 0)
 
@@ -329,7 +353,8 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     (CR, Rehonoring 0.3), in a tie before it is destroyed. An army is destroyed at once, and in a
     tie both are ("the Attacker and Defender each destroy all units in the enemy army"). An army's
     dishonorable Personalities are rehonored at once ("all such dishonorable Personalities are
-    rehonored").
+    rehonored"). A Raid battle's resolution destroys only a losing or tied attacking army, never
+    the defending army or a Province, and pays no winner's Honor (ShE datasheet).
     """
     attack = _declared_attack(game)
     attacking = units_at(game, battlefield, attack.attacker)
@@ -337,6 +362,11 @@ def resolution_effects(game: GameState, battlefield: int) -> list[Effect]:
     attacking_force = army_force(game, battlefield, attack.attacker)
     defending_force = army_force(game, battlefield, attack.defender)
 
+    if attack.kind is AttackKind.RAID:
+        # A Raid battle's resolution never destroys the defending army or a Province, and winning
+        # it has no inherent benefit (ShE datasheet), so all it can do is destroy the attackers.
+        attacker_stands = attacking_force > defending_force or not (attacking and defending)
+        return [] if attacker_stands else [Simultaneously(tuple(_destroy_army(attacking)))]
     if attacking_force > defending_force:
         effects: list[Effect] = [
             Simultaneously(tuple(_destroy_army(defending))),
@@ -395,7 +425,8 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     Attacking units at this battlefield bow and then return home, both as effects of the
     resolution and neither as movement. Every card in the unit bows, and a Conqueror Personality
     exempts his whole unit from the bow but not from the trip home, as does a card that says the
-    resolution does not bow its player's units. Once the Attack Phase's last
+    resolution does not bow its player's units. One sparing only the player's Personalities
+    leaves their Followers, Items and Spells to bow. Once the Attack Phase's last
     battle is over, defending units return home without bowing. Every one of them, at every
     battlefield, holds the ground they defended until then. Last, every Terrain at this battlefield
     is discarded. Once the units are home, the bows happen at once, then the discards at once (CR,
@@ -405,9 +436,17 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     exempt = attack.battlefields[battlefield].bow_exempt
     bows: list[Effect] = []
     for personality in units_at(game, battlefield, attack.attacker):
-        conqueror = keywords.CONQUEROR in effective_keywords(game, personality)
-        if personality.owner not in exempt and not conqueror:
-            bows.append(Bow(personality.id))
+        carried = effective_keywords(game, personality)
+        matching = [
+            grant
+            for grant in exempt
+            if grant.seat is personality.owner
+            and (grant.keyword is None or grant.keyword in carried)
+        ]
+        unit_spared = keywords.CONQUEROR in carried or any(grant.whole_unit for grant in matching)
+        if not unit_spared:
+            if not matching:
+                bows.append(Bow(personality.id))
             bows.extend(Bow(attached.id) for attached in attachments_of(game, personality))
         ops.return_home(game.table, personality)
     if last_battle:

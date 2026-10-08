@@ -1,5 +1,5 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.abilities.costs import bow_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import plus_one_gp_this_turn
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import register_ability
@@ -17,15 +17,20 @@ from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     BanishTopFate,
     Choose,
+    CreateRaidAttack,
+    DelayedEffect,
     Destroy,
     DrawCard,
     Effect,
+    Evaluate,
+    ExemptFromResolutionBow,
     GrantModifier,
     RangedAttack,
     Unpayable,
 )
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.units.composition import followers_of
+from yasuki_core.engine.rules.turn.structure import END_OF_BATTLE
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
@@ -165,6 +170,62 @@ register_ability(
         tireless=True,
     ),
 )
+
+
+# --- The Shattered Stormfront of the Mantis ---
+
+
+def _the_shattered_stormfront_of_the_mantis_targets(game: GameState, source: L5RCard) -> list[str]:
+    """ "Your target Holding"."""
+    return [card.id for card in owned_holdings(game, source.owner)]
+
+
+def _the_shattered_stormfront_of_the_mantis_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [
+        CreateRaidAttack(source.owner),
+        ExemptFromResolutionBow(source.owner, 0, keyword=keywords.NAVAL, whole_unit=False),
+        DelayedEffect(
+            Evaluate(
+                "the_shattered_stormfront_of_the_mantis",
+                source.id,
+                source.owner,
+                subjects=(target.id,),
+            ),
+            END_OF_BATTLE,
+        ),
+    ]
+
+
+@choice_resolver("the_shattered_stormfront_of_the_mantis")
+def _resolve_the_shattered_stormfront_of_the_mantis(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "After the battle ends, if you won it": the winner is read once there is an outcome, and
+    a tie or a loss gives the Holding nothing."""
+    attack = game.attack
+    outcome = attack.battlefields[attack.current].outcome
+    if outcome is None or outcome.winner is not seat:
+        return []
+    return [AdjustCounter(chosen[0], WEALTH, 1)]
+
+
+STORMFRONT_ABILITY = Ability(
+    timings=(ActionTiming.OPEN,),
+    cost=no_cost,
+    targets=_the_shattered_stormfront_of_the_mantis_targets,
+    targeting_message="your Holding",
+    effects=_the_shattered_stormfront_of_the_mantis_effects,
+)
+
+register_ability("the_shattered_stormfront_of_the_mantis", STORMFRONT_ABILITY)
+
+
+# --- The Shattered Stormfront of the Mantis (back) ---
+
+# The back face prints the same ability as the front.
+register_ability("the_shattered_stormfront_of_the_mantis__back", STORMFRONT_ABILITY)
 
 
 # --- Yoritomo Bunrakuken ---

@@ -28,6 +28,7 @@ yasuki_core.engine.rules.effects
     Choose
     CounterOnAttachedProvince
     CreateBattle
+    CreateRaidAttack
     CreateToken
     DeclareOptions
     DelayStraighten

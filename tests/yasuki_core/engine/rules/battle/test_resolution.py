@@ -3,6 +3,7 @@ import pytest
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules.battle import resolution
+from yasuki_core.engine.rules.battle.records import AttackKind
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActionTiming,
     ActivateAbility,
@@ -31,6 +32,8 @@ from yasuki_core.engine.rules.abilities.idioms import TRAIT_ENTRY
 from yasuki_core.engine.rules.effects import (
     Ask,
     CreateBattle,
+    CreateRaidAttack,
+    ExemptFromResolutionBow,
     DelayedEffect,
     Destroy,
     DestroyProvince,
@@ -1669,3 +1672,182 @@ def test_the_response_step_to_the_creating_action_opens_before_the_battle():
             session.act(session.game.round.priority, Pass())
 
         assert session.game.attack.battle_segment is BattleSegment.ENGAGE
+
+
+def _as_raid(session: EngineSession) -> None:
+    """Rewrite the declared attack as a Raid Attack at a battlefield at no Province."""
+    attack = session.game.attack
+    assert attack is not None
+    attack.kind = AttackKind.RAID
+    attack.amend(0, province=None)
+
+
+def test_a_raid_battles_resolution_destroys_nothing_when_the_attacker_wins():
+    session = _one_battlefield({"a": 9}, {"d": 2})
+    _as_raid(session)
+    before = session.game.table.seats[PlayerId.P1].honor
+
+    _fight_one_battle(session)
+
+    assert _in_play(session, "d") and _in_play(session, "a")
+    assert session.game.table.seats[PlayerId.P1].honor == before
+
+
+def test_a_losing_raid_attacker_is_destroyed_and_pays_the_defender_nothing():
+    session = _one_battlefield({"a": 2}, {"d": 9})
+    _as_raid(session)
+    before = session.game.table.seats[PlayerId.P2].honor
+
+    _fight_one_battle(session)
+
+    assert not _in_play(session, "a")
+    assert _in_play(session, "d")
+    assert session.game.table.seats[PlayerId.P2].honor == before
+
+
+def test_a_tied_raid_battle_destroys_only_the_attacking_army():
+    session = _one_battlefield({"a": 4}, {"d": 4})
+    _as_raid(session)
+
+    _fight_one_battle(session)
+
+    assert not _in_play(session, "a")
+    assert _in_play(session, "d")
+
+
+def test_a_raid_attack_runs_maneuvers_then_its_battle_then_ceases_to_exist():
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, personality("a", owner=PlayerId.P1, force=3))
+    put_in_play(state, personality("d", owner=PlayerId.P2, force=1))
+    probe = register(
+        state,
+        L5RCard.of(
+            ActionPrint,
+            id="probe",
+            name="probe",
+            printed_id="probe_raid",
+            side=Side.FATE,
+            owner=PlayerId.P1,
+            gold_cost=0,
+        ),
+    )
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(probe)
+    ability = Ability(
+        timings=(ActionTiming.LIMITED,),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [CreateRaidAttack(source.owner)],
+        hits_every_target=True,
+        located_at=(CardLocation.HAND,),
+    )
+    with probe_ability("probe_raid", ability):
+        session = EngineSession.start(state, PlayerId.P1)
+
+        session.act(PlayerId.P1, PlayStrategy("probe"))
+
+        attack = session.game.attack
+        assert attack is not None and attack.kind is AttackKind.RAID
+        assert attack.segment is Segment.MANEUVERS
+        asked = session.game.pending
+        assert isinstance(asked, AssignUnits) and asked.seat is PlayerId.P1
+        session.submit(PlayerId.P1, DecisionResponse((assignment_token("a", 0),)))
+        session.submit(PlayerId.P2, DecisionResponse())
+        choice = session.game.pending
+        assert isinstance(choice, ChooseBattlefield)
+        session.submit(choice.seat, DecisionResponse((choice.candidates[0],)))
+        _pass_out_the_segments(session)
+
+        assert _in_play(session, "d")
+        raider = session.game.table.cards_by_id["a"]
+        assert raider.bowed
+        assert location_of(session.game.table, raider).is_home
+        assert session.game.attack is None
+        assert session.game.round.priority is PlayerId.P2
+        assert session.game.phase is Phase.ACTION
+
+
+def test_a_personality_only_exemption_leaves_his_attachments_to_bow():
+    # "Does not bow your Naval Personalities" names the Personalities alone: his Followers, Items
+    # and Spells still bow, where "does not bow your units" spares everything he leads.
+    session = _one_battlefield({"sailor": 5}, {"d": 1})
+    attached(
+        session.game,
+        attachment("oar", attachment_type=AttachmentType.FOLLOWER),
+        "sailor",
+    )
+    pending = session.game.pending
+    assert isinstance(pending, ChooseBattlefield)
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    resolve_effects(session.game, [ExemptFromResolutionBow(PlayerId.P1, 0, whole_unit=False)])
+
+    _pass_out_the_segments(session)
+
+    assert not session.game.table.cards_by_id["sailor"].bowed
+    assert session.game.table.cards_by_id["oar"].bowed
+
+
+def test_the_resolution_bow_exemption_can_be_scoped_to_a_keyword():
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, stronghold(PlayerId.P2))
+    put_in_play(state, personality("sailor", force=5, keywords=(keywords.NAVAL,)))
+    put_in_play(state, personality("soldier", force=5))
+    put_in_play(state, personality("d", owner=PlayerId.P2, force=1))
+    session = _to_battle(EngineSession.start(state, PlayerId.P1))
+    session.act(PlayerId.P1, DeclareAttack())
+    session.submit(
+        PlayerId.P1,
+        DecisionResponse((assignment_token("sailor", 0), assignment_token("soldier", 0))),
+    )
+    session.submit(PlayerId.P2, DecisionResponse((assignment_token("d", 0),)))
+    pending = session.game.pending
+    assert isinstance(pending, ChooseBattlefield)
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    resolve_effects(session.game, [ExemptFromResolutionBow(PlayerId.P1, 0, keyword=keywords.NAVAL)])
+
+    _pass_out_the_segments(session)
+
+    assert not session.game.table.cards_by_id["sailor"].bowed
+    assert session.game.table.cards_by_id["soldier"].bowed
+
+
+def _engage_with_raider(*, raid: bool) -> EngineSession:
+    """A battle in its Engage Segment with "raider", whose printed ability is the probe's, at the
+    battlefield. A Raid battle when asked, by rewriting the declared attack."""
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, personality("raider", printed_id="probe_raid_ability", force=3))
+    put_in_play(state, personality("d", owner=PlayerId.P2, force=1))
+    session = _to_battle(EngineSession.start(state, PlayerId.P1))
+    session.act(PlayerId.P1, DeclareAttack())
+    session.submit(PlayerId.P1, DecisionResponse((assignment_token("raider", 0),)))
+    session.submit(PlayerId.P2, DecisionResponse((assignment_token("d", 0),)))
+    if raid:
+        _as_raid(session)
+    pending = session.game.pending
+    assert isinstance(pending, ChooseBattlefield)
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    session.act(PlayerId.P2, Pass())
+    return session
+
+
+def test_a_raid_ability_is_offered_only_during_a_raid_battle():
+    # "A Raid ability may only be used during a Raid Battle" (ShE datasheet).
+    ability = Ability(
+        timings=(ActionTiming.ENGAGE,),
+        keywords=frozenset({keywords.RAID}),
+        cost=no_cost,
+        targets=itself,
+        effects=lambda game, source, target: [],
+        hits_every_target=True,
+    )
+    with probe_ability("probe_raid_ability", ability):
+        declared = _engage_with_raider(raid=False)
+        raiding = _engage_with_raider(raid=True)
+
+        assert ActivateAbility("raider") not in declared.legal_actions(PlayerId.P1)
+        assert ActivateAbility("raider") in raiding.legal_actions(PlayerId.P1)
