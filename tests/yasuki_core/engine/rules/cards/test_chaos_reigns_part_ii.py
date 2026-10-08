@@ -33,7 +33,7 @@ from yasuki_core.engine.rules.abilities.idioms import register_yu
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import AdjustCounter, Bow, Destroy, GainHonor, Simultaneously
-from yasuki_core.game_pieces.counters import counter_from_key
+from yasuki_core.game_pieces.counters import PLUS_1F, counter_from_key
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
@@ -53,6 +53,7 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import ActionPrint, FatePrint, PersonalityPrint, RingPrint
 
+from tests.yasuki_core.engine.rules.battle.test_resolution import _pass_out_the_segments
 from tests.yasuki_core.engine.rules.conftest import probe_ability
 from tests.yasuki_core.engine.builders import (
     attached,
@@ -75,6 +76,7 @@ from tests.yasuki_core.engine.builders import (
 )
 
 P1 = PlayerId.P1
+P2 = PlayerId.P2
 
 
 def _game():
@@ -1228,3 +1230,51 @@ def test_souchous_berserker_followers_have_plus_1f(follower_keywords, force):
     attached(game, follower, "souchou")
 
     assert effective_force(game, follower) == force
+
+
+# --- Tetsubo of Seven Battles ---
+
+TETSUBO = "tetsubo_of_seven_battles"
+
+
+@pytest.mark.parametrize(
+    ("bearer", "guard_force", "gains_a_token", "tokens"),
+    [("hero", 1, False, 1), ("hero", 1, True, 0), ("guard", 5, False, 0)],
+    ids=["attacking", "gained_a_token_this_battle", "defending"],
+)
+def test_tetsubo_gains_a_plus1f_token_after_a_battle_it_attacked_in_without_gaining_one(
+    bearer, guard_force, gains_a_token, tokens
+):
+    cards = [personality("hero", force=3), personality("guard", owner=P2, force=guard_force)]
+    owner = P1 if bearer == "hero" else P2
+    tetsubo = attachment("tetsubo", owner=owner, printed_id=TETSUBO)
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0}, attachments=((tetsubo, bearer),))
+    if gains_a_token:
+        resolve_effects(session.game, [AdjustCounter("tetsubo", counter_from_key("aura"), 1)])
+
+    _pass_out_the_segments(session)
+
+    assert session.game.table.cards_by_id["tetsubo"].counters.get(PLUS_1F.key, 0) == tokens
+
+
+def test_tetsubo_destroys_an_enemy_attachment_no_stronger_than_itself_to_gain_a_token():
+    cards = [personality("hero", force=3), personality("guard", owner=P2, force=3)]
+    tetsubo = attachment("tetsubo", printed_id=TETSUBO)
+    attachments = (
+        (tetsubo, "hero"),
+        (attachment("fan"), "hero"),
+        (attachment("blade", owner=P2, force_modifier=2), "guard"),
+        (attachment("ono", owner=P2, force_modifier=3), "guard"),
+    )
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0}, attachments=attachments)
+    game = session.game
+    resolve_effects(game, [AdjustCounter("tetsubo", PLUS_1F, 2)])
+
+    session.act(P1, ActivateAbility("tetsubo"))
+    assert set(game.pending.candidates) == {"blade"}
+    session.submit(P1, DecisionResponse(("blade",)))
+
+    held = game.table.cards_by_id["tetsubo"]
+    assert "blade" not in {card.id for card in game.table.battlefield.cards}
+    assert held.counters[PLUS_1F.key] == 3
+    assert held.bowed

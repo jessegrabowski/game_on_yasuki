@@ -11,6 +11,7 @@ yasuki_core.engine.rules.board.queries
     attack_targeting
     attack_targets
     attack_targets_at
+    battle_history
     controls_terrain_at
     different_elements
     equipped_from_hand_since_last_turn

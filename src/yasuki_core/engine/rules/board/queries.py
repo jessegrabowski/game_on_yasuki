@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
+    BattleSegmentStarted,
     EnteredPlay,
     GameEvent,
     PhaseStarted,
@@ -23,6 +24,7 @@ from yasuki_core.engine.table import (
     province_keys,
 )
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Element
 from yasuki_core.game_pieces.counters import SINCERITY
@@ -232,6 +234,20 @@ def phase_history(game: GameState) -> tuple[GameEvent, ...]:
     events = game.turn_events
     starts = [index for index, event in enumerate(events) if isinstance(event, PhaseStarted)]
     return events[starts[-1] + 1 :] if starts else events
+
+
+def battle_history(game: GameState, battlefield: int) -> tuple[GameEvent, ...]:
+    """The ``GameEvent`` records of what has happened since the latest battle at ``battlefield``
+    began this turn, which is what a card reading "during that battle" counts."""
+    events = game.turn_events
+    starts = [
+        index
+        for index, event in enumerate(events)
+        if isinstance(event, BattleSegmentStarted)
+        and event.segment is BattleSegment.ENGAGE
+        and event.battlefield == battlefield
+    ]
+    return events[starts[-1] + 1 :] if starts else ()
 
 
 def honorably_dead(game: GameState, card: L5RCard) -> bool:
