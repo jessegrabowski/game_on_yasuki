@@ -12,6 +12,7 @@ yasuki_core.engine.rules.battle.records
     AttackPhase
     BattleOutcome
     BattlefieldInfo
+    BowExemption
 
 .. automodule:: yasuki_core.engine.rules.battle.records
     :members:

@@ -376,6 +376,21 @@ def test_the_stormfronts_raid_spares_its_naval_personality_the_resolution_bow():
     assert location_of(session.game.table, sailor).is_home
 
 
+def test_the_stormfronts_raid_bows_a_spared_personalitys_followers():
+    # The card spares "your Naval Personalities", not their units.
+    session = _stormfront_session()
+    attached(
+        session.game,
+        attachment("oar", attachment_type=AttachmentType.FOLLOWER),
+        "sailor",
+    )
+
+    _raid_with_the_stormfront(session)
+
+    assert not session.game.table.cards_by_id["sailor"].bowed
+    assert session.game.table.cards_by_id["oar"].bowed
+
+
 def test_a_personality_without_naval_is_bowed_by_the_raids_resolution():
     session = _stormfront_session(naval=False)
 

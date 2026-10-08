@@ -6,6 +6,7 @@ from typing import ClassVar, Self
 from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.battle.presence import place_unit, record_terrain_destroyed
+from yasuki_core.engine.rules.battle.records import BowExemption
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.rulebook import favor_proxy
 from yasuki_core.engine.rules.rulebook.joining import may_join
@@ -2253,12 +2254,17 @@ class ExemptFromResolutionBow(Effect):
         The battlefield whose battle it is.
     keyword : str, optional
         The keyword the exemption is scoped to, for "does not bow your Naval Personalities".
-        Default None, which spares all the seat's units.
+        Default None, which spares all the seat's Personalities.
+    whole_unit : bool, optional
+        Whether a spared Personality's attachments are spared with him, as "does not bow your
+        units" reads. False leaves his Followers, Items and Spells to bow, as an exemption naming
+        only Personalities reads. Default True.
     """
 
     seat: PlayerId
     battlefield: int
     keyword: str | None = None
+    whole_unit: bool = True
 
     def describe(self) -> str:
         whose = self.seat.name if self.keyword is None else f"{self.seat.name}'s {self.keyword}"
@@ -2268,7 +2274,8 @@ class ExemptFromResolutionBow(Effect):
         attack = game.attack
         if attack is not None:
             exempt = attack.battlefields[self.battlefield].bow_exempt
-            attack.amend(self.battlefield, bow_exempt=exempt | {(self.seat, self.keyword)})
+            granted = BowExemption(self.seat, self.keyword, self.whole_unit)
+            attack.amend(self.battlefield, bow_exempt=exempt | {granted})
         return []
 
 

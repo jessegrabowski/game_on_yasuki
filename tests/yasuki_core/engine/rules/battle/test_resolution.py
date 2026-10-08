@@ -1768,6 +1768,26 @@ def test_a_raid_attack_runs_maneuvers_then_its_battle_then_ceases_to_exist():
         assert session.game.phase is Phase.ACTION
 
 
+def test_a_personality_only_exemption_leaves_his_attachments_to_bow():
+    # "Does not bow your Naval Personalities" names the Personalities alone: his Followers, Items
+    # and Spells still bow, where "does not bow your units" spares everything he leads.
+    session = _one_battlefield({"sailor": 5}, {"d": 1})
+    attached(
+        session.game,
+        attachment("oar", attachment_type=AttachmentType.FOLLOWER),
+        "sailor",
+    )
+    pending = session.game.pending
+    assert isinstance(pending, ChooseBattlefield)
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    resolve_effects(session.game, [ExemptFromResolutionBow(PlayerId.P1, 0, whole_unit=False)])
+
+    _pass_out_the_segments(session)
+
+    assert not session.game.table.cards_by_id["sailor"].bowed
+    assert session.game.table.cards_by_id["oar"].bowed
+
+
 def test_the_resolution_bow_exemption_can_be_scoped_to_a_keyword():
     state = TableState.empty_two_seat()
     province_card(state, "def-prov0", seat=PlayerId.P2, index=0)

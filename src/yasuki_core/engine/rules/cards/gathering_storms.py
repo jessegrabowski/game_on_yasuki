@@ -185,7 +185,7 @@ def _the_shattered_stormfront_of_the_mantis_effects(
 ) -> list[Effect]:
     return [
         CreateRaidAttack(source.owner),
-        ExemptFromResolutionBow(source.owner, 0, keyword=keywords.NAVAL),
+        ExemptFromResolutionBow(source.owner, 0, keyword=keywords.NAVAL, whole_unit=False),
         DelayedEffect(
             Evaluate(
                 "the_shattered_stormfront_of_the_mantis",

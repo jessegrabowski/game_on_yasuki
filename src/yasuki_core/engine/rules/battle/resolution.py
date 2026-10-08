@@ -425,7 +425,8 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     Attacking units at this battlefield bow and then return home, both as effects of the
     resolution and neither as movement. Every card in the unit bows, and a Conqueror Personality
     exempts his whole unit from the bow but not from the trip home, as does a card that says the
-    resolution does not bow its player's units. Once the Attack Phase's last
+    resolution does not bow its player's units. One sparing only the player's Personalities
+    leaves their Followers, Items and Spells to bow. Once the Attack Phase's last
     battle is over, defending units return home without bowing. Every one of them, at every
     battlefield, holds the ground they defended until then. Last, every Terrain at this battlefield
     is discarded. Once the units are home, the bows happen at once, then the discards at once (CR,
@@ -436,12 +437,16 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
     bows: list[Effect] = []
     for personality in units_at(game, battlefield, attack.attacker):
         carried = effective_keywords(game, personality)
-        spared = keywords.CONQUEROR in carried or any(
-            seat is personality.owner and (keyword is None or keyword in carried)
-            for seat, keyword in exempt
-        )
-        if not spared:
-            bows.append(Bow(personality.id))
+        matching = [
+            grant
+            for grant in exempt
+            if grant.seat is personality.owner
+            and (grant.keyword is None or grant.keyword in carried)
+        ]
+        unit_spared = keywords.CONQUEROR in carried or any(grant.whole_unit for grant in matching)
+        if not unit_spared:
+            if not matching:
+                bows.append(Bow(personality.id))
             bows.extend(Bow(attached.id) for attached in attachments_of(game, personality))
         ops.return_home(game.table, personality)
     if last_battle:
