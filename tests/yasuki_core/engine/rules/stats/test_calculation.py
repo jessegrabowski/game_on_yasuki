@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
@@ -7,6 +9,14 @@ from yasuki_core.engine.rules.stats.card_values import (
     effective_force,
     effective_personal_honor,
 )
+from yasuki_core.engine.rules.effects import (
+    AdjustCounter,
+    Discard,
+    GrantModifier,
+    GrantStatChangeNegation,
+)
+from yasuki_core.engine.rules.triggers import reach_moment, resolve_effects
+from yasuki_core.engine.rules.turn.structure import END_OF_TURN
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     Condition,
     ConditionalModifier,
@@ -14,6 +24,8 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Minimum,
     Modifier,
     Stat,
+    StatChangeNegation,
+    StatChanges,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import Location, ZoneKey, ZoneRole
@@ -21,7 +33,16 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import AttachmentPrint, PersonalityPrint
 
-from tests.yasuki_core.engine.builders import holding, put_in_play, two_seat_game
+from yasuki_core.game_pieces.counters import MINUS_1F
+
+from tests.yasuki_core.engine.builders import (
+    attached,
+    attachment,
+    holding,
+    personality,
+    put_in_play,
+    two_seat_game,
+)
 
 
 def _personality(
@@ -380,3 +401,137 @@ def test_a_minimum_above_the_maximum_cancels_both():
 
     game.ongoing.pop()
     assert effective_personal_honor(game, samurai) == 3
+
+
+def _negate(game: GameState, *cards: L5RCard, changes: StatChanges, reaches_new=False) -> None:
+    negation = GrantStatChangeNegation(
+        "negator",
+        frozenset(card.id for card in cards),
+        Stat.FORCE,
+        changes,
+        Duration.UNTIL_END_OF_TURN,
+        reaches_new=reaches_new,
+    )
+    resolve_effects(game, [negation])
+
+
+def _give_force(game: GameState, card: L5RCard, amount: int) -> None:
+    resolve_effects(
+        game, [GrantModifier("src", card.id, Stat.FORCE, amount, Duration.UNTIL_END_OF_TURN)]
+    )
+
+
+def _adjust_minus_one_force(game: GameState, card: L5RCard, delta: int) -> None:
+    resolve_effects(game, [AdjustCounter(card.id, MINUS_1F, delta)])
+
+
+def test_negating_current_penalties_spares_the_bonuses_and_every_penalty_given_later():
+    hero = _personality(force=6)
+    game = _game(hero)
+    _adjust_minus_one_force(game, hero, 1)
+    _give_force(game, hero, -1)
+    _give_force(game, hero, 2)
+
+    _negate(game, hero, changes=StatChanges.PENALTIES)
+    assert effective_force(game, hero) == 8
+
+    _give_force(game, hero, -1)
+    _adjust_minus_one_force(game, hero, 1)
+    assert effective_force(game, hero) == 6
+
+
+def test_a_token_removed_and_added_again_is_a_new_penalty():
+    hero = _personality(force=6)
+    game = _game(hero)
+    _adjust_minus_one_force(game, hero, 2)
+    _negate(game, hero, changes=StatChanges.PENALTIES)
+
+    _adjust_minus_one_force(game, hero, -1)
+    _adjust_minus_one_force(game, hero, 1)
+
+    assert effective_force(game, hero) == 5
+
+
+def test_negating_current_and_new_penalties_reaches_the_later_ones_too():
+    hero = _personality(force=4)
+    game = _game(hero)
+    _give_force(game, hero, -1)
+
+    _negate(game, hero, changes=StatChanges.PENALTIES, reaches_new=True)
+    _give_force(game, hero, -2)
+
+    assert effective_force(game, hero) == 4
+
+
+@pytest.mark.parametrize(
+    ("attachment_type", "force"),
+    [(AttachmentType.ITEM, 3), (AttachmentType.SPELL, 4), (AttachmentType.FOLLOWER, 4)],
+)
+def test_only_an_items_printed_modifier_is_no_penalty_to_negate(attachment_type, force):
+    hero = _personality(force=4)
+    game = _game(hero)
+    cursed = attachment("cursed", attachment_type=attachment_type, force_modifier=-1)
+    attached(game, cursed, hero.id)
+
+    _negate(game, hero, changes=StatChanges.BOTH)
+
+    assert effective_force(game, hero) == force
+
+
+@pytest.mark.parametrize(
+    ("changes", "force"), [(StatChanges.PENALTIES, 5), (StatChanges.BONUSES, 2)]
+)
+def test_lonely_battlefield_gives_a_lone_commander_a_penalty_and_a_bonus_apart(changes, force):
+    commander = personality("commander", force=4, keywords=("Commander",))
+    game = _game(commander)
+    put_in_play(game, holding("lonely", printed_id="lonely_battlefield"))
+    assert effective_force(game, commander) == 3
+
+    _negate(game, commander, changes=changes)
+
+    assert effective_force(game, commander) == force
+
+
+def test_a_text_penalty_that_starts_on_a_second_subject_later_is_new(granting):
+    granting(
+        "curse_probe",
+        lambda game, source, card, stat: (-1,) if stat is Stat.FORCE and card.bowed else (),
+    )
+    first = _personality("first", force=4)
+    second = _personality("second", force=4)
+    game = _game(first)
+    put_in_play(game, second)
+    put_in_play(game, holding("curse", printed_id="curse_probe"))
+    first.bow()
+
+    _negate(game, first, second, changes=StatChanges.PENALTIES)
+    second.bow()
+
+    assert effective_force(game, first) == 4
+    assert effective_force(game, second) == 3
+
+
+def test_a_negation_forgets_each_subject_that_leaves_and_ends_with_its_last():
+    first = _personality("first", force=4)
+    second = _personality("second", force=4)
+    game = _game(first)
+    put_in_play(game, second)
+    _negate(game, first, second, changes=StatChanges.PENALTIES)
+
+    resolve_effects(game, [Discard(first.id, PlayerId.P1)])
+    [negation] = [held for held in game.ongoing if isinstance(held, StatChangeNegation)]
+    assert negation.subjects == {second.id}
+
+    resolve_effects(game, [Discard(second.id, PlayerId.P1)])
+    assert not any(isinstance(held, StatChangeNegation) for held in game.ongoing)
+
+
+def test_a_negation_lapses_at_the_end_of_the_turn():
+    hero = _personality(force=4)
+    game = _game(hero)
+    _give_force(game, hero, -1)
+    _negate(game, hero, changes=StatChanges.PENALTIES)
+
+    reach_moment(game, END_OF_TURN)
+
+    assert not any(isinstance(held, StatChangeNegation) for held in game.ongoing)

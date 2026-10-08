@@ -8,6 +8,7 @@ yasuki_core.engine.rules.vocabulary.modifiers
 .. autosummary::
 
     AbilityGrant
+    AttachedChange
     CompassionGrant
     Condition
     ConditionalModifier
@@ -20,8 +21,13 @@ yasuki_core.engine.rules.vocabulary.modifiers
     Modifier
     Negation
     ProvinceModifier
+    RecordedChange
     SeatAbilityGrant
     Stat
+    StatChangeNegation
+    StatChanges
+    TextChange
+    TokenChange
 
 .. rubric:: Functions
 

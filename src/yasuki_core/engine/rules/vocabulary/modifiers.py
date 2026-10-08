@@ -1,5 +1,7 @@
-from dataclasses import dataclass
+from collections.abc import Callable, Mapping
+from dataclasses import dataclass, field, replace
 from enum import Enum
+from typing import Self
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.turn.structure import Moment
@@ -77,6 +79,10 @@ class Modifier:
         The bonus (positive) or penalty (negative) added to the stat.
     duration : Duration or Moment
         When the modifier stops applying.
+    serial : int, optional
+        Which record this is, numbered as records are made, so two records giving the same change
+        stay two changes. Not compared, since it names the record rather than the change. Default
+        0, for a modifier read off the board rather than recorded.
     """
 
     source_id: str
@@ -84,6 +90,7 @@ class Modifier:
     stat: Stat
     amount: int
     duration: Lifetime
+    serial: int = field(default=0, compare=False)
 
 
 class Condition(Enum):
@@ -121,6 +128,8 @@ class ConditionalModifier:
         The bonus (positive) or penalty (negative) added to the stat.
     duration : Duration or Moment
         When the modifier stops applying.
+    serial : int, optional
+        Which record this is, as on a :class:`~.Modifier`. Default 0.
     """
 
     source_id: str
@@ -128,6 +137,7 @@ class ConditionalModifier:
     stat: Stat
     amount: int
     duration: Lifetime
+    serial: int = field(default=0, compare=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -425,6 +435,161 @@ class Negation:
         return self.source_kind is not None or self.source_title is not None
 
 
+class StatChanges(Enum):
+    """Which of a stat's changes a :class:`~.StatChangeNegation` prevents: its bonuses, its
+    penalties, or both (CR, Bonuses and Penalties)."""
+
+    BONUSES = "bonuses"
+    PENALTIES = "penalties"
+    BOTH = "both"
+
+    def covers(self, amount: int) -> bool:
+        """Whether a change of ``amount`` is one of these. A change of 0 is neither (CR, Bonuses
+        and Penalties 0.7)."""
+        if amount > 0:
+            return self is not StatChanges.PENALTIES
+        if amount < 0:
+            return self is not StatChanges.BONUSES
+        return False
+
+
+@dataclass(frozen=True, slots=True)
+class RecordedChange:
+    """A recorded modifier's change to one card, told apart by the record's serial."""
+
+    card_id: str
+    serial: int
+
+
+@dataclass(frozen=True, slots=True)
+class TextChange:
+    """What one clause of a card's text gives one card, as "Commanders have +1F" is one clause of
+    Lonely Battlefield's.
+
+    Attributes
+    ----------
+    card_id : str
+        The card given the change.
+    source_id : str
+        The card whose text gives it.
+    clause : int
+        Which of the text's clauses, counting from zero in print order.
+    """
+
+    card_id: str
+    source_id: str
+    clause: int
+
+
+@dataclass(frozen=True, slots=True)
+class AttachedChange:
+    """The modifier an attached card other than an Item prints, given to the Personality it is
+    attached to."""
+
+    card_id: str
+    attachment_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class TokenChange:
+    """The tokens of one kind on one card. Tokens of a kind are alike, so they are told apart by
+    how many there are: a negation holding ``count`` of them negates that many."""
+
+    card_id: str
+    key: str
+    count: int
+
+
+# What a stat change is told apart by while it lasts. Each names the card it changes. A change that
+# is no bonus or penalty, as an Item's or a Sensei's printed modifier, has none.
+ChangeIdentity = RecordedChange | TextChange | AttachedChange | TokenChange
+
+
+@dataclass(frozen=True, slots=True)
+class StatChangeNegation:
+    """A prevention of stat changes (CR, Prevention): the bonuses, the penalties or both to ``stat``
+    on ``subjects`` stop applying while it lasts. A prevention of an ongoing kind of effect
+    "only suppresses existing effects", so by default only the changes in ``current``, those that
+    existed when it was laid, are negated. One reading "current and new" sets ``reaches_new``.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the negation comes from.
+    subjects : frozenset of str
+        The cards whose changes it negates. A card that leaves the table drops out (CR, Card
+        Memory Rule).
+    stat : Stat
+        The stat whose changes it negates.
+    changes : StatChanges
+        Which changes it negates.
+    duration : Duration or Moment
+        When it stops applying.
+    current : frozenset of RecordedChange, TextChange, AttachedChange or TokenChange, optional
+        The changes on ``subjects`` when it was laid, less those that have since ended. Default
+        empty.
+    reaches_new : bool, optional
+        Whether it negates changes arriving after it too. Default False.
+    """
+
+    source_id: str
+    subjects: frozenset[str]
+    stat: Stat
+    changes: StatChanges
+    duration: Lifetime
+    current: frozenset[ChangeIdentity] = frozenset()
+    reaches_new: bool = False
+
+    def negated(self, stat: Stat, amount: int, identity: ChangeIdentity | None) -> int:
+        """How much of a change of ``amount`` to ``stat``, known as ``identity``, this negates on
+        one of its subjects: all of it, none of it, or for tokens, the part the tokens it holds
+        give."""
+        if identity is None or stat is not self.stat or not self.changes.covers(amount):
+            return 0
+        if self.reaches_new:
+            return amount
+        if not isinstance(identity, TokenChange):
+            return amount if identity in self.current else 0
+        per_token = amount // identity.count
+        return per_token * min(self._tokens_held(identity.card_id, identity.key), identity.count)
+
+    def _tokens_held(self, card_id: str, key: str) -> int:
+        return next(
+            (
+                change.count
+                for change in self.current
+                if isinstance(change, TokenChange)
+                and change.card_id == card_id
+                and change.key == key
+            ),
+            0,
+        )
+
+    def narrowed(self, on_table: set[str], counters: Callable[[str], Mapping[str, int]]) -> Self:
+        """This negation less what has ended: the subjects and changes of cards off the table, and
+        the tokens since removed, so one added later is a new change (CR, Card Memory Rule and
+        Tokens). ``counters`` maps a card on the table to the tokens it holds."""
+        subjects = self.subjects & on_table
+        current = frozenset(
+            remaining
+            for change in self.current
+            if change.card_id in on_table
+            and (remaining := _remaining(change, counters(change.card_id))) is not None
+        )
+        if subjects == self.subjects and current == self.current:
+            return self
+        return replace(self, subjects=subjects, current=current)
+
+
+def _remaining(change: ChangeIdentity, counters: Mapping[str, int]) -> ChangeIdentity | None:
+    """``change`` as far as it still stands on a card holding ``counters``: a token change cut to
+    the tokens left, or None once none are."""
+    if not isinstance(change, TokenChange):
+        return change
+    left = min(change.count, counters.get(change.key, 0))
+    return None if left == 0 else replace(change, count=left)
+
+
 # A recorded ongoing effect, whichever kind. The CR files a keyword change, a stat's floor and a
 # Province's strength beside a stat change. Each is ongoing and lasts to the end of the turn
 # unless the card says otherwise. So they are recorded in one list and expire together (CR,
@@ -444,4 +609,5 @@ Ongoing = (
     | LobbyModifier
     | CompassionGrant
     | Negation
+    | StatChangeNegation
 )

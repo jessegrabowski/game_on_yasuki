@@ -12,7 +12,8 @@ from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
 from yasuki_core.engine.players import Cause, PlayerId, Trait
 from yasuki_core.engine.rules.units.membership import unit_of
-from yasuki_core.engine.rules.stats.calculation import effective_stat
+from yasuki_core.engine.rules.stats.calculation import effective_stat, stat_changes
+from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.actions import Action
@@ -70,6 +71,8 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     ProvinceModifier,
     SeatAbilityGrant,
     Stat,
+    StatChangeNegation,
+    StatChanges,
     describe_lifetime,
 )
 from yasuki_core.engine.rules.state import (
@@ -948,6 +951,12 @@ class DiscardFavor(Effect):
         return [FavorDiscarded(self.seat)]
 
 
+def _next_record(game: GameState) -> int:
+    """Number the stat modifier about to be recorded."""
+    game.records_made += 1
+    return game.records_made
+
+
 @dataclass(frozen=True, slots=True)
 class GrantModifier(Effect):
     """Record a continuous stat modifier: the ``source`` card grants ``target`` a change of
@@ -972,8 +981,74 @@ class GrantModifier(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
-            Modifier(self.source_id, self.target_id, self.stat, self.amount, self.duration)
+            Modifier(
+                self.source_id,
+                self.target_id,
+                self.stat,
+                self.amount,
+                self.duration,
+                serial=_next_record(game),
+            )
         )
+        return []
+
+
+@dataclass(frozen=True, slots=True)
+class GrantStatChangeNegation(Effect):
+    """Negate the bonuses, penalties or both to ``stat`` on ``subjects`` for ``duration`` (CR,
+    Prevention), recording which changes stand on them as it commits so only those are negated,
+    unless ``reaches_new`` negates new ones too.
+
+    Attributes
+    ----------
+    source_id : str
+        The card the negation comes from.
+    subjects : frozenset of str
+        The cards whose changes it negates.
+    stat : Stat
+        The stat whose changes it negates.
+    changes : ~yasuki_core.engine.rules.vocabulary.modifiers.StatChanges
+        Which changes it negates.
+    duration : ~yasuki_core.engine.rules.vocabulary.modifiers.Duration or Moment
+        When it stops applying.
+    reaches_new : bool, optional
+        Whether changes arriving after it are negated too, as "current and new" reads. Default
+        False.
+    """
+
+    source_id: str
+    subjects: frozenset[str]
+    stat: Stat
+    changes: StatChanges
+    duration: Lifetime
+    reaches_new: bool = False
+
+    def describe(self) -> str:
+        reached = ", ".join(sorted(self.subjects))
+        return (
+            f"{self.source_id} negates {self.changes.value} to {self.stat.name} on {reached} "
+            f"({describe_lifetime(self.duration)})"
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        by_id = game.table.cards_by_id
+        granters = stat_granters(game)
+        current = frozenset(
+            identity
+            for subject in self.subjects
+            if subject in by_id
+            for identity in stat_changes(game, by_id[subject], self.stat, granters=granters)
+        )
+        negation = StatChangeNegation(
+            self.source_id,
+            self.subjects,
+            self.stat,
+            self.changes,
+            self.duration,
+            current=current,
+            reaches_new=self.reaches_new,
+        )
+        game.ongoing.append(negation)
         return []
 
 
@@ -1003,7 +1078,14 @@ class Invest(Effect):
 
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
-            Modifier(self.card_id, self.card_id, Stat.GOLD_COST, self.amount, Duration.PERMANENT)
+            Modifier(
+                self.card_id,
+                self.card_id,
+                Stat.GOLD_COST,
+                self.amount,
+                Duration.PERMANENT,
+                serial=_next_record(game),
+            )
         )
         return [Invested(self.card_id, self.amount)]
 
@@ -1029,7 +1111,12 @@ class GrantConditionalModifier(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.ongoing.append(
             ConditionalModifier(
-                self.source_id, self.condition, self.stat, self.amount, self.duration
+                self.source_id,
+                self.condition,
+                self.stat,
+                self.amount,
+                self.duration,
+                serial=_next_record(game),
             )
         )
         return []

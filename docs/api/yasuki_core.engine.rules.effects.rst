@@ -59,6 +59,7 @@ yasuki_core.engine.rules.effects
     GrantPriority
     GrantProvinceStrength
     GrantSeatAbility
+    GrantStatChangeNegation
     InterruptingEffect
     Invest
     LookAtHand

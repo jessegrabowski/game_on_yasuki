@@ -41,6 +41,7 @@ from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     AbilityGrant,
     CompassionGrant,
+    StatChangeNegation,
     ConditionalModifier,
     Duration,
     Lifetime,
@@ -1104,7 +1105,8 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     filtered out would come back attached to the card that replaced it. One laid on a condition, a
     Province slot or a player is kept whatever happens: none of those is a card that can leave the
     table. A negation is forgotten with the card it names, and kept when it names none (CR, Card
-    Memory Rule).
+    Memory Rule). A negation of stat changes forgets each subject that leaves, and the tokens
+    removed since it was laid, so a token added later is a new change.
     """
     if not game.ongoing:
         return
@@ -1115,7 +1117,14 @@ def _forget_ongoing_on_cards_off_the_table(game: GameState) -> None:
     for key, zone in game.table.zones.items():
         if key.role in (ZoneRole.PROVINCE, ZoneRole.FOCUS):
             on_table.update(card.id for card in zone.cards)
-    game.ongoing[:] = [record for record in game.ongoing if _names_no_card_off(record, on_table)]
+    by_id = game.table.cards_by_id
+    narrowed = (
+        record.narrowed(on_table, lambda card_id: by_id[card_id].counters)
+        if isinstance(record, StatChangeNegation)
+        else record
+        for record in game.ongoing
+    )
+    game.ongoing[:] = [record for record in narrowed if _names_no_card_off(record, on_table)]
 
 
 def _names_no_card_off(record: Ongoing, on_table: set[str]) -> bool:
@@ -1127,6 +1136,8 @@ def _names_no_card_off(record: Ongoing, on_table: set[str]) -> bool:
             return subject_id is None or subject_id in on_table
         case CompassionGrant(card_id=card_id):
             return card_id is None or card_id in on_table
+        case StatChangeNegation(subjects=subjects):
+            return bool(subjects)
         case _:
             return record.target_id in on_table
 
