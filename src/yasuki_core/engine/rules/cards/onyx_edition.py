@@ -102,6 +102,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
 from yasuki_core.engine.rules.legality import permitted_timings_in
+from yasuki_core.engine.rules.state_based_actions import ThresholdShift, register_threshold_shift
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_BATTLE
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower, unit_force
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
@@ -131,6 +132,7 @@ from yasuki_core.engine.rules.rulebook.recruit_restrictions import register_recr
 from yasuki_core.engine.rules.stats.calculation import effective_stat
 from yasuki_core.engine.rules.stats.card_values import (
     effective_chi,
+    effective_force,
     effective_personal_honor,
 )
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
@@ -152,7 +154,7 @@ from yasuki_core.game_pieces.prints import (
     StrongholdPrint,
 )
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY
+from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, SINCERITY, counter_from_key
 
 
 # --- Daigotsu Hiromu ---
@@ -239,6 +241,53 @@ register_ability(
         targets=_daigotsu_rin_targets,
         effects=_daigotsu_rin_effects,
         hits_every_target=True,
+    ),
+)
+
+
+# --- Daigotsu Shinobu ---
+
+DAIGOTSU_SHINOBU_TOKEN = counter_from_key("plus1f")
+DAIGOTSU_SHINOBU_MOST_FORCE_DESTROYED = 2
+
+register_threshold_shift("daigotsu_shinobu", ThresholdShift(2, -2))
+
+
+def _daigotsu_shinobu_targets(game: GameState, source: L5RCard) -> list[str]:
+    return attack_targets(game, source, Fear)
+
+
+def _daigotsu_shinobu_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "If this bowed a card with 2 or lower Force": what follows depends on the Fear's bow
+    actually happening, and reads the card's Force once it has."""
+    seat = source.owner
+    bowed = Evaluate("daigotsu_shinobu_bowed", source.id, seat, (target.id,))
+    outcome = (To(Bow(target.id), (bowed,)),)
+    return [Fear(0, target.id, seat, outcome=outcome, force_of=source.id)]
+
+
+@choice_resolver("daigotsu_shinobu_bowed")
+def _resolve_daigotsu_shinobu_bowed(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """ "Destroy it and give Shinobu a +1F token." """
+    (bowed_id,) = chosen
+    if (
+        effective_force(game, game.table.cards_by_id[bowed_id])
+        > DAIGOTSU_SHINOBU_MOST_FORCE_DESTROYED
+    ):
+        return []
+    return [Destroy(bowed_id, seat), AdjustCounter(source_id, DAIGOTSU_SHINOBU_TOKEN, 1)]
+
+
+register_ability(
+    "daigotsu_shinobu",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=_daigotsu_shinobu_targets,
+        targeting_message=ATTACK_TARGET,
+        effects=_daigotsu_shinobu_effects,
     ),
 )
 

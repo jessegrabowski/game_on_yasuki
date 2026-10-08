@@ -1,8 +1,9 @@
 from collections.abc import Callable
+from typing import NamedTuple
 
 from yasuki_core import ruleset
 from yasuki_core.engine.players import Rulebook
-from yasuki_core.engine.registrar import FlagRegistry
+from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.rules.board.counts_as import RULEBOOK
 from yasuki_core.engine.rules.board.queries import different_elements, ring_elements, rings_in_play
 from yasuki_core.engine.rules.stats.card_values import effective_chi
@@ -192,6 +193,51 @@ def demanded(game: GameState) -> list[Effect]:
     return [effect for rule in STATE_BASED_ACTIONS for effect in rule(game)]
 
 
+class ThresholdShift(NamedTuple):
+    """How far a card in play moves the Family Honor the two Honor victory conditions read.
+
+    Attributes
+    ----------
+    honor_victory_at : int
+        Added to the Family Honor that wins an Honor Victory.
+    dishonor_loss_at : int
+        Added to the Family Honor that loses by Dishonor.
+    """
+
+    honor_victory_at: int
+    dishonor_loss_at: int
+
+
+# Cards that move the Honor Victory and Dishonor thresholds for every player while they are in play,
+# by printed id: "The amount of Family Honor required to win an Honor Victory is 2 higher".
+THRESHOLD_SHIFTS: HandlerRegistry[ThresholdShift] = HandlerRegistry(
+    "threshold shifts", "already moves the Honor victory thresholds"
+)
+register_threshold_shift = THRESHOLD_SHIFTS.make_register()
+
+
+def honor_victory_threshold(game: GameState) -> int:
+    """The Family Honor a seat starts its turn on to win an Honor Victory."""
+    return ruleset.ACTIVE.honor_victory_at + sum(
+        shift.honor_victory_at for shift in _threshold_shifts(game)
+    )
+
+
+def dishonor_threshold(game: GameState) -> int:
+    """The Family Honor at or below which a seat ending its turn loses by Dishonor."""
+    return ruleset.ACTIVE.dishonor_loss_at + sum(
+        shift.dishonor_loss_at for shift in _threshold_shifts(game)
+    )
+
+
+def _threshold_shifts(game: GameState) -> list[ThresholdShift]:
+    return [
+        THRESHOLD_SHIFTS[card.printed_id]
+        for card in game.table.battlefield.cards
+        if card.printed_id in THRESHOLD_SHIFTS
+    ]
+
+
 # The two victory conditions the CR states at a moment in the turn rather than as a condition that
 # holds at all times, so neither belongs in STATE_BASED_ACTIONS: a seat may pass through the Honor
 # Victory threshold mid-turn and be back below it by the time its next turn starts, and that is not
@@ -210,7 +256,7 @@ def honor_victory(game: GameState) -> list[Effect]:
     if VictoryRule.HONOR_VICTORY not in game.active_rules.get(seat, frozenset()):
         return []
     honor = game.table.seats[seat].honor
-    if honor < ruleset.ACTIVE.honor_victory_at:
+    if honor < honor_victory_threshold(game):
         return []
     return [WinGame(seat, f"Honor Victory on {honor} Family Honor")]
 
@@ -228,6 +274,6 @@ def dishonor_loss(game: GameState) -> list[Effect]:
     if VictoryRule.DISHONOR_LOSS not in game.active_rules.get(seat, frozenset()):
         return []
     honor = game.table.seats[seat].honor
-    if honor > ruleset.ACTIVE.dishonor_loss_at:
+    if honor > dishonor_threshold(game):
         return []
     return [LoseGame(seat, f"{honor} Family Honor", "Dishonor Victory")]

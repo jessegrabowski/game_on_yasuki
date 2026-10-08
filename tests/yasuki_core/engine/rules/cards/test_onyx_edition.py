@@ -93,6 +93,7 @@ from yasuki_core.engine.rules.rulebook.kharmic import (
 )
 from yasuki_core.engine.rules.units.composition import unit_force
 from yasuki_core.engine.rules.stats.card_values import effective_force
+from yasuki_core.engine.rules.state_based_actions import dishonor_threshold, honor_victory_threshold
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.session import EngineSession
 
@@ -2694,3 +2695,42 @@ def test_yamigatai_leaves_the_ring_in_hand_when_the_enemy_destroys_her_province(
     game = session.game
     assert ZoneKey(P1, ZoneRole.PROVINCE, 0) not in game.table.zones
     assert "earth" in {card.id for card in game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards}
+
+
+# --- Daigotsu Shinobu ---
+
+
+@pytest.mark.parametrize(
+    ("guard_force", "guard_after", "shinobu_force"),
+    [(2, "destroyed", 4), (3, "bowed", 3), (4, "standing", 3)],
+    ids=["destroys_a_weak_card", "bows_without_destroying", "too_strong_to_bow"],
+)
+def test_shinobu_fears_at_his_force_and_destroys_a_weak_card_it_bowed(
+    guard_force, guard_after, shinobu_force
+):
+    cards = [
+        personality("shinobu", printed_id="daigotsu_shinobu", force=3),
+        personality("guard", owner=P2, force=guard_force),
+    ]
+    session = combat_segment(cards, {"shinobu": 0}, {"guard": 0})
+    game = session.game
+
+    session.act(P1, ActivateAbility("shinobu"))
+    session.submit(P1, DecisionResponse(("guard",)))
+    while game.round.kind is RoundKind.INTERRUPT:
+        session.act(game.round.priority, Pass())
+
+    guard = game.table.cards_by_id["guard"]
+    observed = (
+        "destroyed" if "guard" not in _in_play(session) else "bowed" if guard.bowed else "standing"
+    )
+    assert observed == guard_after
+    assert effective_force(game, game.table.cards_by_id["shinobu"]) == shinobu_force
+
+
+def test_shinobu_moves_both_honor_thresholds_while_in_play():
+    game = two_seat_game()
+    put_in_play(game, personality("shinobu", printed_id="daigotsu_shinobu"))
+
+    assert honor_victory_threshold(game) == ruleset.ACTIVE.honor_victory_at + 2
+    assert dishonor_threshold(game) == ruleset.ACTIVE.dishonor_loss_at - 2
