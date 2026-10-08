@@ -3,6 +3,7 @@ from dataclasses import FrozenInstanceError, dataclass, replace
 
 import pytest
 
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import effects
 from yasuki_core.engine.redaction import HiddenCard, redact
@@ -372,6 +373,15 @@ def test_destroying_a_vanished_card_is_a_no_op():
     assert Destroy(card.id, PlayerId.P1).perform(game) == []
 
 
+def test_a_banished_card_is_not_discarded():
+    game = two_seat_game()
+    card = register(game.table, fate_card("P1-f", PlayerId.P1))
+    game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH)].add(card)
+
+    assert Discard(card.id, PlayerId.P1).perform(game) == []
+    assert card in game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH)].cards
+
+
 @pytest.mark.parametrize(
     "side, role",
     [(Side.FATE, ZoneRole.FATE_DISCARD), (Side.DYNASTY, ZoneRole.DYNASTY_DISCARD)],
@@ -387,7 +397,7 @@ def test_a_discard_lands_in_the_pile_for_its_side(side, role):
     events = Discard(card.id, PlayerId.P1).perform(game)
 
     assert card in game.table.zones[ZoneKey(PlayerId.P1, role)].cards
-    assert events == [CardDiscarded(card.id, side, PlayerId.P1)]
+    assert events == [CardDiscarded(card.id, side, PlayerId.P1, CardLocation.BATTLEFIELD)]
 
 
 @pytest.mark.parametrize(
@@ -798,8 +808,8 @@ def test_the_chosen_cards_leave_the_hand_as_one_discard_from_hand(reacting):
 
     assert _p2_hand(game) == ["P2-h1"]
     assert discarded == [
-        CardDiscarded("P2-h0", Side.FATE, PlayerId.P1, from_hand_or_deck=True),
-        CardDiscarded("P2-h2", Side.FATE, PlayerId.P1, from_hand_or_deck=True),
+        CardDiscarded("P2-h0", Side.FATE, PlayerId.P1, CardLocation.HAND),
+        CardDiscarded("P2-h2", Side.FATE, PlayerId.P1, CardLocation.HAND),
     ]
 
 

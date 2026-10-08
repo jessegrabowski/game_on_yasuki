@@ -1013,7 +1013,9 @@ def _spearmen_of_the_akasha_card_discarded(ctx: TriggerContext) -> list[Effect]:
     Nothing is offered with nobody to carry it. The Follower is the whole of what banishing buys, so
     a board with no Naga Personality leaves the card nothing it could do.
     """
-    if ctx.event.card_id != ctx.card.id or not ctx.event.from_hand_or_deck:
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    if ctx.event.from_location not in (CardLocation.HAND, CardLocation.DECK):
         return []
     seat = ctx.card.owner
     naga = ctx.game.table.creatable_tokens[NAGA_FOLLOWER]

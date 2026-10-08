@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.effects import (
     Bow,
     GainHonor,
     Destroy,
+    Discard,
     GrantNegation,
     Effect,
     Fear,
@@ -80,6 +81,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.gold.discounts import invest_discount, INVEST_DISCOUNTS
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded, EnteredPlay
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.replay.game_log import replay
 from yasuki_core.engine.rules.stats.ongoing_grants import named_duel_stat
@@ -429,6 +431,16 @@ def test_trimming_the_hand_offers_the_spearmen_a_naga_to_join():
     assert session.game.active is P1, "the turn waits for the answer"
 
 
+def test_a_discard_from_the_deck_offers_the_spearmen_a_naga_to_join():
+    game = _spearmen_game().game
+    ops.move_card(game.table, game.table.cards_by_id["spearmen"], DeckKey(P1, Side.FATE))
+
+    resolve_effects(game, [Discard("spearmen", P1)])
+
+    assert isinstance(game.pending, ChooseCards)
+    assert game.pending.candidates == ("shahai",)
+
+
 def test_banishing_the_spearmen_equips_the_naga_follower():
     session = _spearmen_game()
     _trim_the_spearmen(session)
@@ -502,7 +514,7 @@ def test_a_discard_from_play_raises_nothing():
     """ "From your hand or deck": a discard off the board is not one."""
     game = _spearmen_game().game
 
-    fire(game, CardDiscarded("spearmen", Side.FATE, P1))
+    fire(game, CardDiscarded("spearmen", Side.FATE, P1, CardLocation.BATTLEFIELD))
 
     assert game.pending is None
 

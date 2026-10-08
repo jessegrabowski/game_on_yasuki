@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import Cause, PlayerId
 from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Boundary
 from yasuki_core.engine.table import Location, ZoneKey
 from yasuki_core.game_pieces.constants import Side
@@ -71,16 +72,16 @@ class CardDiscarded:
     cause : Cause
         Who or what put it there. A ``Rulebook`` cause means no player chose it, so a reaction
         guarded on a seat correctly ignores it.
-    from_hand_or_deck : bool
-        Whether it was discarded without ever reaching play, which is how cards name the pair of
-        hidden zones together: "after this Follower is discarded from your hand or deck". Default
-        False, which is what a card discarded out of play or out of a Province reports.
+    from_location : ~yasuki_core.engine.rules.vocabulary.locations.CardLocation or None
+        Where it was discarded from, which a card names as "after you discard a Courage card from
+        your hand". None for a card discarded from no location, as one announced from hand is
+        while it waits to resolve.
     """
 
     card_id: str
     side: Side
     cause: Cause
-    from_hand_or_deck: bool = False
+    from_location: CardLocation | None
 
 
 @dataclass(frozen=True, slots=True)

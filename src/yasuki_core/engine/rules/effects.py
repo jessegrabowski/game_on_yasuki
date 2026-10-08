@@ -29,6 +29,7 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     answerable,
 )
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.engine.rules.vocabulary.locations import CardLocation, location_holding
 from yasuki_core.engine.rules.vocabulary.looks import Look
 from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.vocabulary.game_events import (
@@ -535,9 +536,14 @@ def _remove_unit(
 
 
 def _leaves_for_pile(game: GameState, card_id: str, *, banished: bool) -> bool:
+    """Whether the card goes to its pile: it is on the table, not in that pile already, and not
+    banished, since a banished card is out of the game."""
     card = game.table.cards_by_id.get(card_id)
-    return (
-        card is not None and card not in game.table.zones[pile_for(card, banished=banished)].cards
+    if card is None:
+        return False
+    piles = game.table.zones
+    return card not in piles[pile_for(card, banished=banished)].cards and (
+        banished or card not in piles[pile_for(card, banished=True)].cards
     )
 
 
@@ -642,14 +648,17 @@ class Discard(Effect):
         return f"{self.cause.name} discards {self.card_id}"
 
     def would_happen(self, game: GameState) -> bool:
-        """False for a card already gone or already in its discard pile, which nothing moves."""
+        """False for a card already gone, already in its discard pile or banished, which nothing
+        moves."""
         return _leaves_for_pile(game, self.card_id, banished=False)
 
     def perform(self, game: GameState) -> list[GameEvent]:
         if not self.would_happen(game):
             return []
-        removed = _remove_unit(game, game.table.cards_by_id[self.card_id])
-        return [CardDiscarded(member.id, member.side, self.cause) for member, _ in removed]
+        card = game.table.cards_by_id[self.card_id]
+        left = location_holding(game.table, card)
+        removed = _remove_unit(game, card)
+        return [CardDiscarded(member.id, member.side, self.cause, left) for member, _ in removed]
 
 
 @dataclass(frozen=True, slots=True)
@@ -3223,8 +3232,7 @@ class DiscardFromHand(InterruptingEffect):
         for card in discarded:
             ops.move_card(game.table, card, pile_for(card))
         return [
-            CardDiscarded(card.id, card.side, self.cause, from_hand_or_deck=True)
-            for card in discarded
+            CardDiscarded(card.id, card.side, self.cause, CardLocation.HAND) for card in discarded
         ]
 
     def _eligible(self, game: GameState) -> tuple[str, ...]:

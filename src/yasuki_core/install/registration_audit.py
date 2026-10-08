@@ -577,7 +577,7 @@ NOT_KEYED_BY_CARD = {
     "_RULEBOOK_KEYS",  # ability keys the rulebook reserves, not card ids
     "_COURAGE_ADJUSTMENTS",  # keyed by the wording of an adjustment the Interrupt offers
     "_HONOR_ADJUSTMENTS",  # likewise
-    "_LOCATION_ZONE_ROLES",  # the zone role each location off the battlefield names
+    "_ROLE_LOCATIONS",  # keyed by zone role: the location each zone is
     "RULEBOOK_PROXY_PRINTS",  # keyed by an engine-owned proxy id, which names no catalog card
     "FAVOR_ABILITY_KEYS",  # the keys of the abilities on the Favor proxies
     "_FAVOR_PROXY_CARD_IDS",  # each seat's Favor proxy, by the card id it is dealt under

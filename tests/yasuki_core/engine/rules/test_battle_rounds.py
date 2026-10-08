@@ -96,7 +96,7 @@ def test_a_response_step_opens_over_a_battle_segment_and_unwinds_back_to_it():
         game.table,
         holding("caravansary", printed_id="caravansary", name="Caravansary", owner=ATTACKER),
     )
-    game.action_events[:] = [CardDiscarded("some-fate", Side.FATE, ATTACKER)]
+    game.action_events[:] = [CardDiscarded("some-fate", Side.FATE, ATTACKER, CardLocation.HAND)]
 
     assert sequence.open_response_window(game) is True
     assert game.round.kind is RoundKind.RESPONSE
