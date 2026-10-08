@@ -1,10 +1,19 @@
+from collections.abc import Callable
+
+import pytest
+
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import interrupts, legality
 from yasuki_core.engine.rules.abilities.activation import defer_ability
-from yasuki_core.engine.rules.abilities.model import Ability, TargetGroup
+from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.model import Ability, Interrupt, Interruption, TargetGroup
 from yasuki_core.engine.rules.abilities.registry import ability_for
-from yasuki_core.engine.rules.board.queries import owned_personalities, personalities_in_play
-from yasuki_core.engine.rules.effects import Bow, GrantModifier
+from yasuki_core.engine.rules.board.queries import (
+    opposing_units_in_battle,
+    owned_personalities,
+    personalities_in_play,
+)
+from yasuki_core.engine.rules.effects import Bow, Effect, GainHonor, GrantModifier, Move
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.turn.action_sequence import submit
@@ -21,10 +30,20 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     TotalAtMost,
 )
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
+from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.table import Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.prints import ActionPrint
 
-from tests.yasuki_core.engine.builders import holding, personality, put_in_play, two_seat_game
-from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.builders import (
+    combat_segment,
+    holding,
+    personality,
+    put_in_play,
+    two_seat_game,
+)
+from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_interrupt
 
 # Imported for the ``substitute_probe`` Interrupt its module registers, which answers a
 # ResolveAbility by pointing the action at another card.
@@ -190,3 +209,77 @@ def test_a_phrase_whose_limits_seat_a_pair_is_offered():
 
         assert legality.phrases_reachable(game, source, ability) is True
         assert ActivateAbility("P1-src") in legality.legal_actions(game, P1)
+
+
+SEND_HOME = Interrupt(
+    answers=Bow,
+    interrupt=lambda game, source, bow: Interruption(
+        bow, effects=(Move(bow.card_id, Location.home(P2)),)
+    ),
+)
+LET_BE = Interrupt(answers=Bow, interrupt=lambda game, source, bow: Interruption(bow))
+
+
+def _gain_honor(target: L5RCard) -> Effect:
+    return GainHonor(P1, 1)
+
+
+def _send_home(target: L5RCard) -> Effect:
+    return Move(target.id, Location.home(P2))
+
+
+def _bow_an_enemy(*effects_before_the_bow: Callable[[L5RCard], Effect]) -> Ability:
+    return Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=no_cost,
+        targets=lambda game, source: list(opposing_units_in_battle(game, source.owner)),
+        effects=lambda game, source, target: [
+            *(make(target) for make in effects_before_the_bow),
+            Bow(target.id),
+        ],
+    )
+
+
+def _interrupted_bow(ability: Ability, interrupt: Interrupt) -> EngineSession:
+    """P1's raider takes ``ability`` against P2's guard, and P2 answers the Bow with
+    ``interrupt``."""
+    probe = L5RCard.of(
+        ActionPrint,
+        id="probe",
+        name="probe",
+        printed_id="step_e_interrupt_probe",
+        side=Side.FATE,
+        owner=P2,
+    )
+    cards = [
+        personality("raider", printed_id="step_e_probe", force=3),
+        personality("guard", owner=P2, force=2),
+    ]
+    with (
+        probe_ability("step_e_probe", ability),
+        probe_interrupt("step_e_interrupt_probe", interrupt),
+    ):
+        session = combat_segment(cards, {"raider": 0}, {"guard": 0}, in_hand=[probe])
+        session.act(P1, ActivateAbility("raider"))
+        session.submit(P1, DecisionResponse(("guard",)))
+        session.act(P2, PlayInterrupt("probe"))
+    return session
+
+
+@pytest.mark.parametrize(
+    ("interrupt", "bowed"), [(SEND_HOME, False), (LET_BE, True)], ids=["send_home", "let_be"]
+)
+def test_a_target_an_interrupt_left_illegal_stops_the_effects_that_require_it(interrupt, bowed):
+    session = _interrupted_bow(_bow_an_enemy(_gain_honor), interrupt)
+
+    game = session.game
+    assert game.table.seats[P1].honor == 1
+    assert game.table.cards_by_id["guard"].bowed is bowed
+
+
+def test_a_target_the_action_itself_moves_still_takes_the_rest_of_its_effects():
+    session = _interrupted_bow(_bow_an_enemy(_send_home), LET_BE)
+
+    guard = session.game.table.cards_by_id["guard"]
+    assert location_of(session.game.table, guard).is_home
+    assert guard.bowed

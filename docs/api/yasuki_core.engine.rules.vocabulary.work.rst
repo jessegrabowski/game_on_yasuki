@@ -9,6 +9,7 @@ yasuki_core.engine.rules.vocabulary.work
 
     Modification
     Provenance
+    Targeting
     WorkItem
 
 .. automodule:: yasuki_core.engine.rules.vocabulary.work

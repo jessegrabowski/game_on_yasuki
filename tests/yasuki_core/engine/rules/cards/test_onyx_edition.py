@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.effects import (
     Destroy,
     GrantNegation,
     Effect,
+    Fear,
     MeleeAttack,
     Move,
     Negated,
@@ -912,6 +913,34 @@ def test_the_capitals_fear_is_answerable_at_the_interrupt_step():
     session.submit(P1, DecisionResponse(("guard",)))
 
     assert PlayInterrupt("okura") in session.legal_actions(P1)
+
+
+def test_the_capitals_shadowlands_stands_when_an_interrupt_takes_its_fear_target_away():
+    send_home = Interrupt(
+        answers=Fear,
+        interrupt=lambda game, source, fear: Interruption(
+            fear, effects=(Move(fear.target_id, Location.home(P2)),)
+        ),
+    )
+    session = _dark_capital_in_combat()
+    game = session.game
+    probe = L5RCard.of(
+        ActionPrint, id="probe", name="probe", printed_id="fear_probe", side=Side.FATE, owner=P2
+    )
+    game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(register(game.table, probe))
+
+    with probe_interrupt("fear_probe", send_home):
+        session.act(P1, ActivateAbility("capital"))
+        session.submit(P1, DecisionResponse(("raider",)))
+        session.submit(P1, DecisionResponse(("guard",)))
+        session.act(P2, PlayInterrupt("probe"))
+        while game.round.kind is RoundKind.INTERRUPT:
+            session.act(game.round.priority, Pass())
+
+    # The guard is no longer at the battle, so the Fear stops, but the raider is still a legal
+    # target and keeps the Shadowlands given before it (CR, Action Sequence step E).
+    assert has_keyword(game, game.table.cards_by_id["raider"], keywords.SHADOWLANDS)
+    assert not game.table.cards_by_id["guard"].bowed
 
 
 # --- The Sacred Ground of the Phoenix ---
