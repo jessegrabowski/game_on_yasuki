@@ -4,7 +4,14 @@ import pytest
 
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, recruitable
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import (
+    DeckKey,
+    TableState,
+    ZoneKey,
+    ZoneRole,
+    controller_of,
+    location_of,
+)
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
@@ -851,6 +858,151 @@ def test_mishime_replays_to_the_same_board():
     _summon_oni(session, destroy=False)
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Ninube Kaede ---
+
+
+def _kaede_game(*, kaede_chi=4, kaede_cost=8, theirs_chi=3, theirs_cost=8) -> EngineSession:
+    """Kaede in play opposite an enemy Personality, with both units' Gold Cost set by the
+    Personalities alone."""
+    game = two_seat_game()
+    put_in_play(
+        game,
+        personality(
+            "kaede",
+            printed_id="ninube_kaede",
+            name="Ninube Kaede",
+            chi=kaede_chi,
+            gold_cost=kaede_cost,
+        ),
+    )
+    put_in_play(game, personality("theirs", owner=P2, chi=theirs_chi, gold_cost=theirs_cost))
+    return EngineSession.start(game.table, P1)
+
+
+def test_ninube_kaede_will_not_attach_items():
+    """ "Will not attach Items." A Follower is an attachment and is not an Item."""
+    session = _kaede_game()
+    kaede = session.game.table.cards_by_id["kaede"]
+
+    item = attachment("relic", attachment_type=AttachmentType.ITEM)
+    follower = attachment("levy", attachment_type=AttachmentType.FOLLOWER)
+
+    assert may_attach(session.game, kaede, item) is False
+    assert may_attach(session.game, kaede, follower) is True
+
+
+def test_ninube_kaede_trades_control_with_the_seat_she_takes_from():
+    session = _kaede_game()
+
+    session.act(P1, ActivateAbility("kaede"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+
+    table = session.game.table
+    assert controller_of(table, table.cards_by_id["theirs"]) is P1
+    assert controller_of(table, table.cards_by_id["kaede"]) is P2
+    assert table.cards_by_id["theirs"].owner is P2  # ownership never changes
+    assert table.cards_by_id["kaede"].owner is P1
+
+
+def test_ninube_kaede_returns_both_when_the_turn_ends():
+    session = _kaede_game()
+
+    session.act(P1, ActivateAbility("kaede"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+    end_turn(session)
+
+    assert session.game.table.controllers == {}
+
+
+def test_ninube_kaede_reaches_only_a_personality_with_lower_chi():
+    """Chi equal to hers is not lower than it."""
+    session = _kaede_game(kaede_chi=4, theirs_chi=4)
+
+    assert ActivateAbility("kaede") not in session.legal_actions(P1)
+
+
+def test_ninube_kaede_reaches_no_costlier_a_unit_than_her_own():
+    """ "Less than or equal to" Kaede's unit, so a dearer one is out of reach."""
+    session = _kaede_game(kaede_cost=8, theirs_cost=9)
+
+    assert ActivateAbility("kaede") not in session.legal_actions(P1)
+
+
+def test_ninube_kaede_counts_the_followers_on_each_unit():
+    """ "Whose unit's total Gold Cost": the Follower riding the enemy pushes him out of reach even
+    though his own Gold Cost is within it."""
+    session = _kaede_game(kaede_cost=8, theirs_cost=8)
+    attached(
+        session.game,
+        attachment("levy", owner=P2, attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
+        "theirs",
+    )
+
+    assert ActivateAbility("kaede") not in session.legal_actions(P1)
+
+
+def test_ninube_kaede_does_not_reach_her_own_seats_personalities():
+    """ "Another player's" Personality, so one of her own is never a target."""
+    session = _kaede_game()
+    put_in_play(session.game, personality("mine", owner=P1, chi=2, gold_cost=1))
+
+    session.act(P1, ActivateAbility("kaede"))
+
+    assert session.game.pending.candidates == ("theirs",)
+
+
+def test_ninube_kaedes_reach_follows_her_chi_as_modified():
+    """Her Chi is read off the board, so a bonus widens whom she can take."""
+    session = _kaede_game(kaede_chi=3, theirs_chi=3)
+    resolve_effects(
+        session.game,
+        [GrantModifier("kaede", "kaede", Stat.CHI, 2, Duration.UNTIL_END_OF_TURN)],
+    )
+
+    session.act(P1, ActivateAbility("kaede"))
+
+    assert session.game.pending.candidates == ("theirs",)
+
+
+def test_a_target_whose_chi_is_modified_out_of_reach_is_spared():
+    """The target's Chi is read off the board too, so a bonus can lift him past her."""
+    session = _kaede_game(kaede_chi=4, theirs_chi=3)
+    resolve_effects(
+        session.game,
+        [GrantModifier("theirs", "theirs", Stat.CHI, 1, Duration.UNTIL_END_OF_TURN)],
+    )
+
+    assert ActivateAbility("kaede") not in session.legal_actions(P1)
+
+
+def test_ninube_kaedes_own_followers_widen_the_unit_she_can_match():
+    """ "Less than or equal to Kaede's unit's": the Follower riding her raises her side of the
+    comparison, not just the enemy's."""
+    session = _kaede_game(kaede_cost=8, theirs_cost=9)
+    assert ActivateAbility("kaede") not in session.legal_actions(P1)
+
+    attached(
+        session.game,
+        attachment("blade", attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
+        "kaede",
+    )
+
+    assert ActivateAbility("kaede") in session.legal_actions(P1)
+
+
+def test_a_target_destroyed_before_the_turn_ends_is_returned_to_nobody():
+    """The return names a card that may have left play, where control is already gone. Giving it
+    back has to be a no-op rather than putting a record on a card in a pile."""
+    session = _kaede_game()
+
+    session.act(P1, ActivateAbility("kaede"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+    resolve_effects(session.game, [Destroy("theirs", P1)])
+    end_turn(session)
+
+    assert session.game.table.controllers == {}
 
 
 # --- Shinjo Fields ---
