@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.board.counts_as import (
     while_in_play,
 )
 from yasuki_core.engine.rules.board.queries import (
+    battle_history,
     equipped_from_hand_since_last_turn,
     different_elements,
     controls_terrain_at,
@@ -26,7 +27,9 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant, KEYWORD_GRANTS
 from yasuki_core.engine.rules.turn.structure import Phase
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    BattleSegmentStarted,
     Destroyed,
     EnteredPlay,
     LastKnownState,
@@ -170,6 +173,24 @@ def test_the_phase_history_holds_what_happened_since_the_latest_phase_began():
     )
 
     assert phase_history(game) == (later,)
+
+
+def test_the_battle_history_holds_what_happened_since_the_latest_battle_there_began():
+    game = two_seat_game()
+    stood = LastKnownState(Location.home(PlayerId.P1), PlayerId.P1, force=2, chi=0)
+    earlier, later = Destroyed("a", PlayerId.P1, stood), Destroyed("b", PlayerId.P1, stood)
+    game.turn_events = (
+        BattleSegmentStarted(BattleSegment.ENGAGE, 0),
+        earlier,
+        BattleSegmentStarted(BattleSegment.ENGAGE, 1),
+        earlier,
+        BattleSegmentStarted(BattleSegment.ENGAGE, 0),
+        BattleSegmentStarted(BattleSegment.COMBAT, 0),
+        later,
+    )
+
+    assert battle_history(game, 0) == (BattleSegmentStarted(BattleSegment.COMBAT, 0), later)
+    assert battle_history(game, 2) == ()
 
 
 def test_rings_in_play_takes_a_card_counting_as_a_ring_for_the_asker():

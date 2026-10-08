@@ -25,7 +25,7 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType
 from yasuki_core.game_pieces.counters import counter_from_key
-from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
+from yasuki_core.game_pieces.prints import AttachmentPrint, SenseiPrint, StrongholdPrint
 
 
 # What a Sensei grants the Stronghold rather than folding into its printed stats (CR, Sensei: the
@@ -35,6 +35,8 @@ from yasuki_core.game_pieces.prints import SenseiPrint, StrongholdPrint
 _SENSEI_GRANTED_STATS = (Stat.GOLD_PRODUCTION, Stat.PROVINCE_STRENGTH)
 
 _ALL_STATS = tuple(Stat)
+# The stats an attachment other than a Follower prints as modifiers to its Personality.
+_LENT_STATS = (Stat.FORCE, Stat.CHI)
 
 
 def _senseis_of(game: GameState, seat: PlayerId) -> Iterator[L5RCard]:
@@ -168,7 +170,7 @@ def _changes(
     for attached in attachments_of(game, card):
         is_item = attached.attachment_type is AttachmentType.ITEM
         for stat in stats:
-            amount = getattr(attached, f"{stat.value}_modifier", 0)
+            amount = _lent(game, attached, stat, granters)
             if amount:
                 identity = None if is_item else AttachedChange(card.id, attached.id)
                 printed = Modifier(
@@ -203,6 +205,33 @@ def _changes(
         elif condition_holds(game, card, held.condition):
             conditional = Modifier(held.source_id, card.id, stat, held.amount, held.duration)
             yield RecordedChange(card.id, held.serial), conditional
+
+
+def _lends(card: L5RCard, stat: Stat) -> bool:
+    """Whether ``card`` is an attachment other than a Follower and ``stat`` one it prints only as a
+    modifier to its Personality."""
+    return (
+        stat in _LENT_STATS
+        and isinstance(card.printed, AttachmentPrint)
+        and card.attachment_type is not AttachmentType.FOLLOWER
+    )
+
+
+def _lent(game: GameState, attached: L5RCard, stat: Stat, granters: Sequence[L5RCard]) -> int:
+    """What ``attached`` gives its Personality for ``stat``: a Follower's printed modifier, or any
+    other attachment's own stat with the changes it carries, its tokens among them (CR, Token)."""
+    if not _lends(attached, stat):
+        return getattr(attached, f"{stat.value}_modifier", 0)
+    return unbounded_stat(game, attached, stat, granters=granters)
+
+
+def printed_stat(card: L5RCard, stat: Stat) -> int | None:
+    """``card``'s printed ``stat``, or None where it prints none. An attachment other than a
+    Follower prints its Force and Chi as the modifiers it gives its Personality, so those are its
+    Force and Chi."""
+    if _lends(card, stat):
+        return getattr(card, f"{stat.value}_modifier")
+    return getattr(card, stat.value, None)
 
 
 def stat_minimum(game: GameState, card: L5RCard, stat: Stat) -> int:
@@ -246,7 +275,7 @@ def unbounded_stat(
         The board's :func:`~.stat_granters`, for a caller reading many cards against one board.
         Default None, read off the board here.
     """
-    base = getattr(card, stat.value, None)
+    base = printed_stat(card, stat)
     if base is None:
         return 0
     modifiers = active_modifiers(game, card, stat, granters=granters)
@@ -286,7 +315,7 @@ def effective_stat(
     value : int
         The modified stat.
     """
-    if getattr(card, stat.value, None) is None:
+    if printed_stat(card, stat) is None:
         return 0
     total = unbounded_stat(game, card, stat, granters=granters)
     floor = stat_minimum(game, card, stat)

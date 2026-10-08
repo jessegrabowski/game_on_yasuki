@@ -28,6 +28,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
+    battle_history,
     in_army_with,
     army_at,
     owned_carrying,
@@ -81,6 +82,7 @@ from yasuki_core.engine.rules.units.membership import attached_to, attachments_o
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.game_events import (
     Assigned,
+    BattleResolved,
     Bowed,
     CounterChanged,
     Destroyed,
@@ -91,6 +93,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.state import used_this_turn
+from yasuki_core.engine.rules.stats.card_values import effective_force
 from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
@@ -104,7 +107,7 @@ from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.counters import PLUS_1F_PLUS_1C, WEALTH, counter_from_key
+from yasuki_core.game_pieces.counters import PLUS_1F, PLUS_1F_PLUS_1C, WEALTH, counter_from_key
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AttachmentPrint,
@@ -613,6 +616,55 @@ register_ability(
         targets=_tarkasha_targets,
         targeting_message="your Commander",
         effects=_tarkasha_effects,
+    ),
+)
+
+
+# --- Tetsubo of Seven Battles ---
+
+
+@on(BattleResolved, "tetsubo_of_seven_battles")
+def _tetsubo_of_seven_battles_battle_resolved(ctx: TriggerContext) -> list[Effect]:
+    """ "After a battle resolution during which this Item was in the attacking army, give it a +1F
+    token if it gained no tokens during that battle." """
+    tetsubo, event = ctx.card, ctx.event
+    bearer = attached_to(ctx.game, tetsubo)
+    if bearer is None or (event.attacker, bearer.id) not in event.present_at_resolution:
+        return []
+    gained = any(
+        isinstance(earlier, CounterChanged) and earlier.card_id == tetsubo.id and earlier.amount > 0
+        for earlier in battle_history(ctx.game, event.battlefield)
+    )
+    return [] if gained else [AdjustCounter(tetsubo.id, PLUS_1F, 1)]
+
+
+def _tetsubo_of_seven_battles_targets(game: GameState, source: L5RCard) -> list[str]:
+    """The enemy attachments with Force no higher than this Item's."""
+    force = effective_force(game, source)
+    return [
+        card.id
+        for card in game.table.battlefield.cards
+        if card.owner is not source.owner
+        and isinstance(card.printed, AttachmentPrint)
+        and attached_to(game, card) is not None
+        and effective_force(game, card) <= force
+    ]
+
+
+def _tetsubo_of_seven_battles_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [To(Destroy(target.id, source.owner), (AdjustCounter(source.id, PLUS_1F, 1),))]
+
+
+register_ability(
+    "tetsubo_of_seven_battles",
+    Ability(
+        timings=(ActionTiming.BATTLE,),
+        cost=bow_cost,
+        targets=_tetsubo_of_seven_battles_targets,
+        targeting_message="an enemy attachment",
+        effects=_tetsubo_of_seven_battles_effects,
     ),
 )
 

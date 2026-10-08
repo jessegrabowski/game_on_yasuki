@@ -42,9 +42,11 @@ _BY_KEY = {counter.key: counter for counter in ALL_COUNTERS}
 WEALTH = _BY_KEY["wealth"]
 SINCERITY = _BY_KEY["sincerity"]
 MINUS_1F = _BY_KEY["minus1f"]
+PLUS_1F = _BY_KEY["plus1f"]
 PLUS_1F_PLUS_1C = _BY_KEY["plus1f_plus1c"]
 WALL = _BY_KEY["wall"]
 FIRE = _BY_KEY["fire"]
+MASTERWORK = _BY_KEY["masterwork"]
 
 
 def counter_from_key(key: str) -> Counter:

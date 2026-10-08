@@ -88,6 +88,7 @@ from yasuki_core.engine.rules.board.queries import (
 )
 from yasuki_core.engine.rules.effects import (
     AdditionalAction,
+    AdjustCounter,
     Ask,
     AskAmount,
     Bow,
@@ -121,6 +122,7 @@ from yasuki_core.engine.rules.effects import (
     Simultaneously,
     SpendOncePerTurn,
     Straighten,
+    To,
     seppuku,
 )
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
@@ -140,6 +142,7 @@ from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
     action_did,
+    action_recruited,
     choice_resolver,
     given_by_effect,
     on,
@@ -176,6 +179,7 @@ from yasuki_core.engine.rules.rulebook.joining import register_join_restriction
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.counters import MASTERWORK
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
@@ -564,6 +568,74 @@ register_ability(
         targets=_daigotsu_konishi_targets,
         targeting_message="a Follower or Personality",
         effects=_daigotsu_konishi_effects,
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
+# --- Developed Quarry ---
+
+DEVELOPED_QUARRY_TOKENS = 3
+
+
+def _developed_quarry_masterwork_tokens_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Itself, once the action just resolved was the one that Recruited this Holding."""
+    return [source.id] if action_recruited(game, source.id) else []
+
+
+def _developed_quarry_masterwork_tokens_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    return [AdjustCounter(source.id, MASTERWORK, DEVELOPED_QUARRY_TOKENS)]
+
+
+register_ability(
+    "developed_quarry",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=no_cost,
+        targets=_developed_quarry_masterwork_tokens_targets,
+        effects=_developed_quarry_masterwork_tokens_effects,
+        hits_every_target=True,
+        tireless=True,
+        key="masterwork_tokens",
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
+    ),
+)
+
+
+def _developed_quarry_transfer_masterwork_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Every Armor or Weapon in play without a Masterwork token, while this Holding has one to
+    give."""
+    if not source.counters.get(MASTERWORK.key):
+        return []
+    return [
+        card.id
+        for card in game.table.battlefield.cards
+        if not card.counters.get(MASTERWORK.key)
+        and (has_keyword(game, card, keywords.ARMOR) or has_keyword(game, card, keywords.WEAPON))
+    ]
+
+
+def _developed_quarry_transfer_masterwork_effects(
+    game: GameState, source: L5RCard, target: L5RCard
+) -> list[Effect]:
+    """A token moves rather than being made anew (CR, Transfer), so the target gains one only if
+    this Holding still had one to lose."""
+    return [
+        To(AdjustCounter(source.id, MASTERWORK, -1), (AdjustCounter(target.id, MASTERWORK, 1),))
+    ]
+
+
+register_ability(
+    "developed_quarry",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=bow_cost,
+        targets=_developed_quarry_transfer_masterwork_targets,
+        effects=_developed_quarry_transfer_masterwork_effects,
+        key="transfer_masterwork",
+        printed_index=1,
         ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )

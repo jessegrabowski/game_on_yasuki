@@ -376,7 +376,8 @@ def _attachment_stats(attachment_type: AttachmentType, record: dict) -> dict[str
 
     A Follower's Force is its own. It stands in the unit and totals into the army (CR, Unit and Army
     Force). Its Chi modifies the Personality, a Follower having no Chi of its own. An Item or
-    Spell has neither stat of its own, so both of its numbers are modifiers.
+    Spell prints both numbers as modifiers to the Personality, and the stat calculation reads those
+    modifiers as its own Force and Chi.
     """
     force = _printed_stat(record, "force")
     chi = _printed_stat(record, "chi")
