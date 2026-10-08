@@ -39,7 +39,7 @@ from yasuki_core.engine.rules.action_record import action_round
 from yasuki_core.engine.rules.gold.cost import effective_gold_cost
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
-from yasuki_core.engine.rules.stats.card_values import effective_chi
+from yasuki_core.engine.rules.stats.card_values import effective_chi, effective_force
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
 from yasuki_core.engine.rules.gold.discounts import invest_discount, recruit_discount
 from yasuki_core.engine.rules.gold.production import gold_handler
@@ -103,7 +103,13 @@ from yasuki_core.engine.rules.board.queries import (
     remaining_look,
     top_of_deck,
 )
-from yasuki_core.engine.rules.triggers import TriggerContext, caused_by, choice_resolver, on
+from yasuki_core.engine.rules.triggers import (
+    TriggerContext,
+    action_destroyed_personality,
+    caused_by,
+    choice_resolver,
+    on,
+)
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.duel.procedure import decided_duel
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
@@ -561,6 +567,45 @@ register_ability(
         targets=attack_targeting(Fear),
         targeting_message=ATTACK_TARGET,
         effects=_ijathilu_zealots_effects,
+    ),
+)
+
+
+# --- Kayo no Oni ---
+
+
+KAYO_HONOR_LOSS = 4
+
+
+@on(EnteredPlay, "kayo_no_oni")
+def _kayo_no_oni_entered_play(ctx: TriggerContext) -> list[Effect]:
+    """After Kayo no Oni enters play, lose 4 Honor."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [GainHonor(ctx.card.owner, -KAYO_HONOR_LOSS, source_id=ctx.card.id)]
+
+
+def _kayo_no_oni_targets(game: GameState, source: L5RCard) -> list[str]:
+    """Personalities with less Chi than Kayo's Force, and only while the action being answered
+    destroyed one of his controller's own."""
+    if not action_destroyed_personality(game, source.owner):
+        return []
+    reach = effective_force(game, source)
+    return [card.id for card in personalities_in_play(game) if effective_chi(game, card) < reach]
+
+
+def _kayo_no_oni_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Bow(target.id)]
+
+
+register_ability(
+    "kayo_no_oni",
+    Ability(
+        timings=(ActionTiming.RESPONSE,),
+        cost=no_cost,
+        targets=_kayo_no_oni_targets,
+        targeting_message="a Personality with less Chi than Kayo's Force",
+        effects=_kayo_no_oni_effects,
     ),
 )
 

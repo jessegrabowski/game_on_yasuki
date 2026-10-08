@@ -4,13 +4,16 @@ from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVE
 from yasuki_core.engine.players import PlayerId, Rulebook
 from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import (
+    Bow,
     DelayedEffect,
     Destroy,
     Dishonor,
+    GrantModifier,
     Effect,
     Evaluate,
     StartDuel,
@@ -1424,3 +1427,121 @@ def test_tsudaos_grave_is_spent_even_when_the_search_finds_nothing():
 
     assert session.game.pending is None
     assert "grave" not in _on_board(session)
+
+
+# --- Kayo no Oni ---
+
+
+DEATH_PROBE = "chaos_reigns_part_iii_test_death_probe"
+
+
+def _probe_that_destroys(victim: str) -> Ability:
+    """A bare Open that destroys ``victim``, so the death is something an action did."""
+    return Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=lambda game, source: [victim],
+        effects=lambda game, source, target: [Destroy(target.id, source.owner)],
+        hits_every_target=True,
+    )
+
+
+def _probe_that_bows(victim: str) -> Ability:
+    """A bare Open that bows ``victim``, so the action resolves having destroyed nothing."""
+    return Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=lambda game, source: [victim],
+        effects=lambda game, source, target: [Bow(target.id)],
+        hits_every_target=True,
+    )
+
+
+def _kayo_game(*, force=4, enemy_chi=(3, 4)):
+    """Kayo in play beside the probe that kills, one Personality each side to lose, and enemies at
+    ``enemy_chi``."""
+    game = two_seat_game()
+    put_in_play(
+        game, personality("kayo", printed_id="kayo_no_oni", force=force, chi=3, gold_cost=6)
+    )
+    put_in_play(game, personality("blade", printed_id=DEATH_PROBE))
+    put_in_play(game, personality("mine", chi=3))
+    put_in_play(game, personality("theirs", owner=P2, chi=3))
+    for index, chi in enumerate(enemy_chi):
+        put_in_play(game, personality(f"enemy{index}", owner=P2, chi=chi))
+    return EngineSession.start(game.table, P1)
+
+
+def test_kayo_no_oni_costs_four_honor_to_enter_play():
+    session = _kayo_game()
+    before = session.game.table.seats[P1].honor
+
+    fire(session.game, EnteredPlay("kayo"))
+
+    assert session.game.table.seats[P1].honor == before - 4
+
+
+def test_kayo_no_oni_answers_an_action_that_destroyed_nothing_with_nothing():
+    session = _kayo_game()
+
+    with probe_ability(DEATH_PROBE, _probe_that_bows("mine")):
+        session.act(P1, ActivateAbility("blade"))
+
+        assert ActivateAbility("kayo") not in session.legal_actions(P1)
+
+
+def test_kayo_no_oni_answers_his_controllers_own_loss():
+    session = _kayo_game()
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+
+        assert ActivateAbility("kayo") in session.legal_actions(P1)
+
+
+def test_kayo_no_oni_ignores_an_enemy_personality_dying():
+    """ "If the action destroyed your Personality": the loss has to be his controller's."""
+    session = _kayo_game()
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("theirs")):
+        session.act(P1, ActivateAbility("blade"))
+
+        assert ActivateAbility("kayo") not in session.legal_actions(P1)
+
+
+def test_kayo_no_oni_reaches_only_personalities_under_his_force():
+    """Chi equal to his Force is not less than it, so the 4-Chi enemy is spared."""
+    session = _kayo_game(force=4, enemy_chi=(3, 4))
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, ActivateAbility("kayo"))
+
+        assert "enemy0" in session.game.pending.candidates
+        assert "enemy1" not in session.game.pending.candidates
+
+
+def test_kayo_no_oni_bows_the_personality_he_names():
+    session = _kayo_game()
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, ActivateAbility("kayo"))
+        session.submit(P1, DecisionResponse(("enemy0",)))
+
+    assert session.game.table.cards_by_id["enemy0"].bowed
+
+
+def test_kayo_no_onis_reach_follows_his_force_as_modified():
+    """His Force is read off the board, so a bonus widens what he can bow."""
+    session = _kayo_game(force=2, enemy_chi=(3,))
+    resolve_effects(
+        session.game,
+        [GrantModifier("kayo", "kayo", Stat.FORCE, 2, Duration.UNTIL_END_OF_TURN)],
+    )
+
+    with probe_ability(DEATH_PROBE, _probe_that_destroys("mine")):
+        session.act(P1, ActivateAbility("blade"))
+        session.act(P1, ActivateAbility("kayo"))
+
+        assert "enemy0" in session.game.pending.candidates
