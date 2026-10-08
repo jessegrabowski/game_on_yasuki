@@ -83,3 +83,33 @@ def test_destroying_a_card_at_a_battlefield_that_is_no_terrain_records_nothing()
     resolve_effects(game, [Destroy("hero", PlayerId.P2)])
 
     assert game.attack.battlefields[0].terrains_destroyed == frozenset()
+
+
+def _sealed_game():
+    game = two_seat_game()
+    province_card(game, "def-prov0", seat=PlayerId.P2, index=0)
+    put_in_play(game, personality("hero"))
+    put_in_play(game, personality("latecomer"))
+    resolution.declare_attack(game)
+    place_unit(game, game.table.cards_by_id["hero"], Location.at_battlefield(0))
+    game.attack.amend(0, sealed=True)
+    return game
+
+
+def test_a_sealed_battlefield_refuses_a_unit_never_present_there():
+    game = _sealed_game()
+
+    moved = place_unit(game, game.table.cards_by_id["latecomer"], Location.at_battlefield(0))
+
+    assert not moved
+    assert location_of(game.table, game.table.cards_by_id["latecomer"]).is_home
+
+
+def test_a_sealed_battlefield_lets_a_unit_recorded_there_return():
+    game = _sealed_game()
+    place_unit(game, game.table.cards_by_id["hero"], Location.home(PlayerId.P1))
+
+    moved = place_unit(game, game.table.cards_by_id["hero"], Location.at_battlefield(0))
+
+    assert moved
+    assert location_of(game.table, game.table.cards_by_id["hero"]).battlefield == 0

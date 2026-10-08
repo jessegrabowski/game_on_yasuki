@@ -1,9 +1,22 @@
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import NamedTuple
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment, Segment
+
+
+class AttackKind(Enum):
+    """Which rule made an attack: the Attack Phase the active player declares, a battle a card
+    effect creates separately (CR, Battles), or the ShE datasheet's Raid Attack. The kind is where
+    the differences between them live: a created battle is fought once its action resolves and
+    tears itself down when its one battle ends, where a declared attack waits for the end of the
+    Battle Phase."""
+
+    DECLARED = "declared"
+    CREATED = "created"
+    RAID = "raid"
 
 
 class BattleOutcome(NamedTuple):
@@ -67,6 +80,10 @@ class BattlefieldInfo(NamedTuple):
     printed_actions : frozenset of PlayerId
         The seats that took a printed action from one of their cards while the battle here was
         being fought. Default empty.
+    sealed : bool
+        Whether units may no longer be placed here, as "Other Personalities cannot move there"
+        reads. The units recorded ever present assigned as the battlefield was made and may still
+        come and go. Default False.
     """
 
     province: ZoneKey | None
@@ -76,6 +93,7 @@ class BattlefieldInfo(NamedTuple):
     terrains_played: frozenset[tuple[PlayerId, str]] = frozenset()
     terrains_destroyed: frozenset[tuple[PlayerId, str]] = frozenset()
     printed_actions: frozenset[PlayerId] = frozenset()
+    sealed: bool = False
 
 
 @dataclass(slots=True)
@@ -105,6 +123,8 @@ class AttackPhase:
     battle_segment : BattleSegment or None
         Which segment of the battle at ``current`` is open, or None when no battle is being fought.
         Default None.
+    kind : AttackKind
+        Which rule made this attack. Default ``AttackKind.DECLARED``.
     assigned_in : dict mapping str to str
         Each assigned Personality to the maneuvers window it assigned in. The current rules run one
         window, so every entry names the same one. Earlier editions ran Infantry Maneuvers and
@@ -119,6 +139,7 @@ class AttackPhase:
     fought: frozenset[int] = frozenset()
     current: int | None = None
     battle_segment: BattleSegment | None = None
+    kind: AttackKind = AttackKind.DECLARED
     assigned_in: dict[str, str] = field(default_factory=dict)
 
     def amend(self, battlefield: int, **changes: object) -> None:

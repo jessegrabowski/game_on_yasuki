@@ -27,6 +27,7 @@ yasuki_core.engine.rules.effects
     Bow
     Choose
     CounterOnAttachedProvince
+    CreateBattle
     CreateToken
     DeclareOptions
     DelayStraighten

@@ -62,7 +62,8 @@ hand needs the second.
 
 ## Assigning, and a card that cannot
 
-A Personality moves to a battlefield when its seat assigns it in the Maneuvers Segment, and
+A Personality moves to a battlefield when its seat assigns it in the Maneuvers Segment, or when
+a card effect assigns it, as {class}`~.CreateBattle` does, and
 {class}`~yasuki_core.engine.rules.vocabulary.game_events.Assigned` is the event a trait reads for
 "after X assigns to a battlefield". {card}`Daidoji Kaede` answers it with a Force bonus:
 

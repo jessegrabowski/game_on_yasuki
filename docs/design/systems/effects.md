@@ -70,7 +70,8 @@ These raise one: {class}`AdjustCounter <yasuki_core.engine.rules.effects.AdjustC
 {class}`~.AttachCard`, {class}`~.PutIntoPlay`, {class}`~.CreateToken`, {class}`~.Straighten`,
 {class}`Dishonor <yasuki_core.engine.rules.effects.Dishonor>`,
 {class}`Rehonor <yasuki_core.engine.rules.effects.Rehonor>`, {class}`~.RevealProvinces`,
-{class}`~.GainHonor`, and the three attacks through {class}`~.AttackEffect`. Every other effect returns an empty list.
+{class}`~.GainHonor`, {class}`~.CreateBattle` through the {class}`~.Assigned` it raises for
+each unit it assigns, and the three attacks through {class}`~.AttackEffect`. Every other effect returns an empty list.
 
 {class}`~.Destroy` is also announced before it commits. {meth}`~.Effect.impending` returns what is
 announced, and a destruction returns a {class}`~.Destroying` for each card of the unit about to

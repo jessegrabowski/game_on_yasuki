@@ -19,6 +19,7 @@ yasuki_core.engine.rules.turn.sequence
 .. autosummary::
 
     advance
+    announce_action_resolution
     begin_game
     begin_next_turn
     close_response_window

@@ -44,6 +44,7 @@ from yasuki_core.engine.rules.effects import (
     Dishonor,
     Discard,
     Destroy,
+    CreateBattle,
     DestroyProvince,
     GainProvince,
     DiscardFavor,
@@ -174,6 +175,10 @@ EFFECTS = [
         "destroy P1's province 2",
     ),
     (GainProvince(PlayerId.P1), "P1 gains a province"),
+    (
+        CreateBattle(PlayerId.P1, attacking=("a",), defending=("d",)),
+        "create a battlefield and fight a battle there",
+    ),
     (Show("a"), "show a"),
     (MoveToHand("a", PlayerId.P1), "a to P1's hand"),
     (Move("shiba", Location.home(PlayerId.P2)), "move shiba to P2's home"),
