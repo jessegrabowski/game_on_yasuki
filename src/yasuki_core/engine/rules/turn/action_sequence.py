@@ -67,7 +67,12 @@ from yasuki_core.engine.rules.turn.structure import STEP_ROUNDS
 # this dispatcher, and a registry read before the card modules load is silently empty.
 # Guarded by test_importing_the_engine_registers_the_cards.
 from yasuki_core.engine.rules import cards  # noqa: F401
-from yasuki_core.engine.rules.rulebook import courage_and_honor, dishonor, dynasty_discard  # noqa: F401
+from yasuki_core.engine.rules.rulebook import (  # noqa: F401
+    courage_and_honor,
+    dishonor,
+    dynasty_discard,
+    expendable,
+)
 
 
 # How each action reads when a Response Step names the thing it answers. A Response is taken against
