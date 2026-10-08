@@ -39,6 +39,10 @@ from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.rules.battle.resolution import assignment_candidates
 from yasuki_core.engine.rules.board.seats import cards_in_hand
+from yasuki_core.engine.rules.duel.procedure import challenge_is_legal
+from yasuki_core.engine.rules.gold.discounts import effective_recruit_discount
+from yasuki_core.engine.rules.rulebook.equip import may_attach
+from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT_WITH_INVEST
 from yasuki_core.engine.rules.triggers import fire, resolve_effects
 from yasuki_core.engine.rules.turn.action_sequence import submit
@@ -67,6 +71,7 @@ from tests.yasuki_core.engine.builders import (
     terrain_at,
     token_template,
     two_seat_game,
+    wind,
 )
 
 P1 = PlayerId.P1
@@ -1158,3 +1163,68 @@ def test_isawa_eijiri_offers_the_choice_for_any_of_his_spells_with_a_yu():
     submit(game, DecisionResponse(("ward",)))
 
     assert game.table.seats[P1].honor == 1
+
+
+# --- Hida Souchou ---
+
+
+def _souchou_game() -> GameState:
+    game = two_seat_game()
+    put_in_play(game, personality("souchou", printed_id="hida_souchou", force=5))
+    return game
+
+
+@pytest.mark.parametrize(("title", "discount"), [("Kano's Alliance", 1), ("Another Wind", 0)])
+def test_souchou_enters_play_for_one_less_under_kanos_alliance(title, discount):
+    game = two_seat_game()
+    put_in_play(game, wind(P1, printed_id="the_wind", title=title))
+    souchou = register(game.table, personality("souchou", printed_id="hida_souchou"))
+
+    assert effective_recruit_discount(game, souchou) == discount
+
+
+@pytest.mark.parametrize(
+    ("follower", "in_army", "legal"),
+    [(True, True, False), (False, True, True), (True, False, True)],
+    ids=["follower_in_army", "no_follower", "at_home"],
+)
+def test_souchou_may_not_be_challenged_with_a_follower_in_an_army(follower, in_army, legal):
+    game = _souchou_game()
+    put_in_play(game, personality("rival", owner=PlayerId.P2))
+    if follower:
+        attached(game, attachment("spear", attachment_type=AttachmentType.FOLLOWER), "souchou")
+    if in_army:
+        ops.assign(game.table, game.table.cards_by_id["souchou"], 0)
+
+    assert challenge_is_legal(game, "rival", "souchou") is legal
+
+
+@pytest.mark.parametrize(
+    ("attachment_type", "gold_cost", "admitted"),
+    [
+        (AttachmentType.FOLLOWER, 0, False),
+        (AttachmentType.FOLLOWER, 1, True),
+        (AttachmentType.ITEM, 0, True),
+    ],
+)
+def test_souchou_will_not_attach_followers_with_0_gold_cost(attachment_type, gold_cost, admitted):
+    game = _souchou_game()
+    card = register(
+        game.table, attachment("card", attachment_type=attachment_type, gold_cost=gold_cost)
+    )
+
+    assert may_attach(game, game.table.cards_by_id["souchou"], card) is admitted
+
+
+@pytest.mark.parametrize(("follower_keywords", "force"), [(("Berserker",), 3), ((), 2)])
+def test_souchous_berserker_followers_have_plus_1f(follower_keywords, force):
+    game = _souchou_game()
+    follower = attachment(
+        "follower",
+        attachment_type=AttachmentType.FOLLOWER,
+        force=2,
+        keywords=follower_keywords,
+    )
+    attached(game, follower, "souchou")
+
+    assert effective_force(game, follower) == force

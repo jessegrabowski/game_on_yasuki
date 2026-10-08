@@ -1,6 +1,12 @@
 from yasuki_core.engine.players import PlayerId, Trait
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, keyword_grant
-from yasuki_core.engine.rules.board.seats import opposing_seats, seat_controls_printed
+from yasuki_core.card_identity import card_slug
+from yasuki_core.engine.rules.board.seats import opposing_seats, seat_controls_printed, seat_wind
+from yasuki_core.engine.rules.duel.procedure import challenge_restriction
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.discounts import recruit_discount
+from yasuki_core.engine.rules.rulebook.copies import titles
+from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.idioms import (
     YuWidening,
@@ -69,7 +75,7 @@ from yasuki_core.engine.rules.effects import (
 )
 from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.legality import location_permits
-from yasuki_core.engine.rules.rulebook.equip import creation_targets, is_spell
+from yasuki_core.engine.rules.rulebook.equip import attach_restriction, creation_targets, is_spell
 from yasuki_core.engine.rules.units.composition import followers_of, is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
@@ -374,6 +380,48 @@ def _fortified_farmlands_keywords(
         return ()
     others = seat_controls_printed(game, farmlands.owner, "Farm", other_than=farmlands)
     return (keywords.RENEW,) if others else ()
+
+
+# --- Hida Souchou ---
+
+SOUCHOU_DISCOUNT = 1
+SOUCHOU_FOLLOWER_FORCE = 1
+KANOS_ALLIANCE = card_slug("Kano's Alliance")
+
+
+@recruit_discount("hida_souchou")
+def _hida_souchou_recruit_discount(card: L5RCard, game: GameState, seat: PlayerId) -> int:
+    """ "Shouchou enters play for :g1: less if your Wind is Kano's Alliance." Either printing of
+    the Wind answers to the title."""
+    wind = seat_wind(game, seat)
+    return SOUCHOU_DISCOUNT if wind is not None and KANOS_ALLIANCE in titles(wind) else 0
+
+
+@challenge_restriction("hida_souchou")
+def _hida_souchou_challenge_restriction(
+    game: GameState, souchou: L5RCard, challenger: L5RCard, challenged: L5RCard
+) -> bool:
+    """ "While Souchou has a Follower and is in an army, he may not be challenged." """
+    if challenged is not souchou:
+        return True
+    in_army = location_of(game.table, souchou).battlefield is not None
+    return not (in_army and followers_of(game, souchou))
+
+
+@attach_restriction("hida_souchou")
+def _hida_souchou_attach_restriction(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
+    """ "Souchou will not attach Followers with 0 Gold Cost." """
+    return not (is_follower(card) and effective_gold_cost(game, card) == 0)
+
+
+@stat_grant("hida_souchou")
+def _hida_souchou_stat_grant(
+    game: GameState, souchou: L5RCard, card: L5RCard, stat: Stat
+) -> tuple[int, ...]:
+    """ "Souchou's Berserker Followers have +1F." """
+    if stat is not Stat.FORCE or not is_follower(card) or attached_to(game, card) is not souchou:
+        return ()
+    return (SOUCHOU_FOLLOWER_FORCE if has_keyword(game, card, keywords.BERSERKER) else 0,)
 
 
 # --- Isawa Eijiri, Warmonger ---

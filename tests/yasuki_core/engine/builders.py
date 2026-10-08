@@ -316,7 +316,11 @@ def sensei(
 
 
 def wind(
-    owner: PlayerId = PlayerId.P1, *, name: str = "Wind", printed_id: str | None = None
+    owner: PlayerId = PlayerId.P1,
+    *,
+    name: str = "Wind",
+    printed_id: str | None = None,
+    title: str = "",
 ) -> L5RCard:
     """A Wind. A deck holds at most one and it starts in play, so tests put it there directly."""
     return L5RCard.of(
@@ -324,6 +328,7 @@ def wind(
         id=f"{owner.name}-wind",
         printed_id=f"{owner.name}-wind" if printed_id is None else printed_id,
         name=name,
+        title=title,
         side=Side.FATE,
         owner=owner,
     )
