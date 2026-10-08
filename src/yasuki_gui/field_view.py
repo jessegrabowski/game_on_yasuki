@@ -698,7 +698,9 @@ class FieldView(tk.Canvas):
             rc.id: home.get(rc.id) or to_canvas(pos, flipped=self._flipped, canvas_w=w, canvas_h=h)
             for rc, pos in rendered
         }
-        placed.update(self._unit_positions(placed, {rc.id: rc.owner for rc, _ in rendered}))
+        placed.update(
+            self._unit_positions(placed, {rc.id: self._controller_of(rc) for rc, _ in rendered})
+        )
         placed.update(self._province_attachment_positions(w, h))
         for rc, pos in rendered:
             tag = card_tag(rc.id)
@@ -821,6 +823,13 @@ class FieldView(tk.Canvas):
                 if self.find_withtag(tag):
                     self.tag_lower(tag, "zone")
 
+    def _controller_of(self, card) -> PlayerId | None:
+        """Which seat's rows ``card`` lays out in: the seat controlling it, which is its owner
+        until control passes (CR, Card control). Ownership never changes, so a card handed over
+        has to be placed by this rather than by ``owner``."""
+        source = self._snapshot if self._snapshot is not None else self.state
+        return source.controllers.get(card.id, card.owner)
+
     def _province_attachments(self) -> dict[str, ZoneKey]:
         """Province membership from whichever source is rendering: card id to the Province slot."""
         source = self._snapshot if self._snapshot is not None else self.state
@@ -884,7 +893,7 @@ class FieldView(tk.Canvas):
         return ordered
 
     def _unit_positions(
-        self, placed: dict[str, tuple[int, int]], owners: dict[str, PlayerId | None]
+        self, placed: dict[str, tuple[int, int]], controllers: dict[str, PlayerId | None]
     ) -> dict[str, tuple[int, int]]:
         """Where a unit's cards sit: the attachments fanned up behind their Personality, so each
         title bar clears the card riding it, and the Personality dropped by the height they add.
@@ -902,7 +911,7 @@ class FieldView(tk.Canvas):
             if personality_id not in placed:
                 continue
             x, y = placed[personality_id]
-            sink = self._at_bottom(owners.get(personality_id))
+            sink = self._at_bottom(controllers.get(personality_id))
             leader, attached = unit_tower_positions(x, y, len(members), sink=sink)
             if sink:
                 positions[personality_id] = leader
@@ -934,18 +943,19 @@ class FieldView(tk.Canvas):
                 continue
             if pos is None or pos.x < 0 or pos.y < 0:
                 printed = getattr(rc, "printed", None)
+                seat = self._controller_of(rc)
                 if isinstance(printed, PersonalityPrint):
                     bucket = personalities
                 elif isinstance(printed, _HOLDING_ROW):
                     bucket = holdings
                 else:
-                    rowless.setdefault(rc.owner, []).append(rc.id)
+                    rowless.setdefault(seat, []).append(rc.id)
                     continue
-                bucket.setdefault(rc.owner, []).append((rc.id, self._stack_key(rc, leaders)))
+                bucket.setdefault(seat, []).append((rc.id, self._stack_key(rc, leaders)))
         positions: dict[str, tuple[int, int]] = {}
-        for personality_row, by_owner in ((False, holdings), (True, personalities)):
-            for owner, unplaced in by_owner.items():
-                seat_at_bottom = self._at_bottom(owner)
+        for personality_row, by_controller in ((False, holdings), (True, personalities)):
+            for seat, unplaced in by_controller.items():
+                seat_at_bottom = self._at_bottom(seat)
                 positions.update(
                     home_stack_positions(
                         unplaced,

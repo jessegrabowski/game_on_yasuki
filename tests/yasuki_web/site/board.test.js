@@ -58,6 +58,7 @@ function fakeCard(
     onBattlefield = true,
     side = '',
     owner = '',
+    controller = null,
     faceUp = true,
     hidden = false,
     doubleFaced = false,
@@ -88,6 +89,7 @@ function fakeCard(
     dishonorable: dishonorable ? '1' : '',
     side,
     owner,
+    controller: controller ?? owner,
     faceUp: faceUp ? '1' : '',
     hidden: hidden ? '1' : '',
     token: token ? '1' : '',
@@ -2734,21 +2736,28 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(sent.length, 0);
   });
 
-  it('unbows only the viewer own and owner-less bowed cards, never the opponent batch', () => {
+  it('unbows only the bowed cards the viewer controls, plus owner-less ones', () => {
     const cards = [
-      { dataset: { cardId: 'mine', bowed: '1', owner: 'P1' } },
-      { dataset: { cardId: 'fresh', bowed: '', owner: 'P1' } },
-      { dataset: { cardId: 'theirs', bowed: '1', owner: 'P2' } },
-      { dataset: { cardId: 'token', bowed: '1', owner: '' } },
+      fakeCard('mine', { bowed: true, owner: 'P1' }),
+      fakeCard('fresh', { bowed: false, owner: 'P1' }),
+      fakeCard('theirs', { bowed: true, owner: 'P2' }),
+      fakeCard('token', { bowed: true, owner: '' }),
+      // Owned by the opponent but under the viewer's control, so the viewer may unbow it.
+      fakeCard('seized', { bowed: true, owner: 'P2', controller: 'P1' }),
+      // The mirror: the viewer owns it but no longer controls it.
+      fakeCard('lost', { bowed: true, owner: 'P1', controller: 'P2' }),
     ];
     root.querySelectorAll = (sel) => (sel === '.board-card' ? cards : []);
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
     clickMenuItem(root, 'Unbow all');
-    assert.deepEqual(sent.at(-1).intent, { op: 'UNBOW', card_ids: ['mine', 'token'] });
+    assert.deepEqual(sent.at(-1).intent, {
+      op: 'UNBOW',
+      card_ids: ['mine', 'token', 'seized'],
+    });
   });
 
-  it('sends nothing from Unbow all when no own card is bowed', () => {
-    root.querySelectorAll = () => [{ dataset: { cardId: 'theirs', bowed: '1', owner: 'P2' } }];
+  it('sends nothing from Unbow all when the viewer controls no bowed card', () => {
+    root.querySelectorAll = () => [fakeCard('theirs', { bowed: true, owner: 'P2' })];
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
     sent.length = 0;
     clickMenuItem(root, 'Unbow all');

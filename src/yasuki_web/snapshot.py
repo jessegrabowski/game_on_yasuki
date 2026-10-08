@@ -25,6 +25,13 @@ def _attach_target(target: AttachTarget) -> dict:
     return {"card": target}
 
 
+def _controller(snapshot: ViewSnapshot, view: L5RCard | HiddenCard) -> dict:
+    """The seat controlling ``view``, as a payload fragment, or nothing when its owner does."""
+    card_id = view.card_id if isinstance(view, HiddenCard) else view.id
+    seat = snapshot.controllers.get(card_id)
+    return {} if seat is None else {"controller": seat.name}
+
+
 def _card(
     view: L5RCard | HiddenCard,
     peeked_ids: frozenset[str] = frozenset(),
@@ -147,6 +154,10 @@ def serialize_snapshot(snapshot: ViewSnapshot, token_names: dict[str, str] | Non
         "battlefield": [
             {
                 **_card(entry.card, snapshot.peeked_ids, token_names),
+                # Only a card's controller may act on it (CR, Card control), and control exists
+                # only in play, so the battlefield is the one place it is sent. Absent for a card
+                # its owner still controls, which is the ordinary case.
+                **_controller(snapshot, entry.card),
                 "x": entry.pos.x,
                 "y": entry.pos.y,
             }

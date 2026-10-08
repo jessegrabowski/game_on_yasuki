@@ -76,6 +76,11 @@ class ViewSnapshot:
     # assignment happens in the open, and a location names no card whose id the viewer cannot
     # already see.
     locations: dict[str, "Location"] = field(default_factory=dict)
+    # Which seat controls each card in play, for a card controlled by a seat that does not own it.
+    # Public and passed through the same way: taking control happens in the open. Partial, so a
+    # card with no entry is controlled by its owner, and a client places a card by this rather
+    # than by its owner, which never changes (CR, Card control and Card ownership).
+    controllers: dict[str, PlayerId] = field(default_factory=dict)
     province_counters: dict["ZoneKey", dict[str, int]] = field(default_factory=dict)
 
 
@@ -219,5 +224,6 @@ def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
         units=dict(state.units),
         province_attachments=dict(state.province_attachments),
         locations=dict(state.locations),
+        controllers=dict(state.controllers),
         province_counters={key: dict(held) for key, held in state.province_counters.items()},
     )
