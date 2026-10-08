@@ -1,6 +1,7 @@
 from yasuki_core.engine.registrar import HandlerRegistry
 from collections.abc import Callable, Iterator
 from functools import cache
+from itertools import chain
 
 from yasuki_core.engine.rules.vocabulary.modifiers import KeywordGrant
 from yasuki_core.engine.rules.stats.ongoing_grants import grant_applies
@@ -27,6 +28,14 @@ KEYWORD_GRANTS: HandlerRegistry[KeywordHandler] = HandlerRegistry(
 )
 keyword_grant = KEYWORD_GRANTS.make_decorator()
 
+# The other half: the keywords a card's text takes away, "This Weapon is One-Handed while attached to
+# a Berserker" or "this Personality loses Samurai and cannot gain it". Read the way grants are, and
+# applied after them, so a keyword a card loses stays lost whatever grants it.
+KEYWORD_LOSSES: HandlerRegistry[KeywordHandler] = HandlerRegistry(
+    "keyword losses", "already has a keyword loss"
+)
+keyword_loss = KEYWORD_LOSSES.make_decorator()
+
 
 @cache
 def _inherited_keywords(text: str) -> frozenset[str]:
@@ -35,24 +44,28 @@ def _inherited_keywords(text: str) -> frozenset[str]:
 
 def effective_keywords(game: GameState, card: L5RCard) -> frozenset[str]:
     """``card``'s printed keywords, plus those printed on its abilities, plus any its own text
-    grants it under current conditions, plus any another card's text or ongoing effect gives it.
+    grants it under current conditions, plus any another card's text or ongoing effect gives it,
+    less any a card's text takes away.
 
     An ability's keywords are the card's too (CR, Keyword Inheritance): a Strategy printing "Terrain
-    Battle:" is a Terrain. A card's own grant is read wherever the card is, and another card's only
+    Battle:" is a Terrain. A card's own text is read wherever the card is, and another card's only
     while that card is in play.
     """
+    gained: set[str] = set()
+    lost: set[str] = set()
+    others = (holder for holder in game.table.battlefield.cards if holder is not card)
+    holders = chain((card,), others)
+    for holder in holders:
+        grant = KEYWORD_GRANTS.get(holder.printed_id)
+        if grant is not None:
+            gained.update(grant(game, holder, card))
+        loss = KEYWORD_LOSSES.get(holder.printed_id)
+        if loss is not None:
+            lost.update(loss(game, holder, card))
     carried = (
         frozenset(card.keywords)
         .union(_inherited_keywords(card.text))
         .union(granted_keywords(game, card))
+        .union(gained)
     )
-    own = KEYWORD_GRANTS.get(card.printed_id)
-    if own is not None:
-        carried = carried.union(own(game, card, card))
-    for granting in game.table.battlefield.cards:
-        if granting is card:
-            continue
-        handler = KEYWORD_GRANTS.get(granting.printed_id)
-        if handler is not None:
-            carried = carried.union(handler(game, granting, card))
-    return carried
+    return carried - lost
