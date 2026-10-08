@@ -67,7 +67,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "You have a +N Lobby Bonus" | `@lobby_bonus_grant(id)` | {card}`Shigekawa's Court` |
 | Stops a player Lobbying at all | `@lobby_bar(id)` | {card}`Wasp Sensei` |
 | "May not Lobby" | `register_may_not_lobby(id)` | {card}`Moto Chen` |
-| "You do not lose Honor from your cards' effects" | `register_honor_loss_shield(id)` | {card}`Mishime Sensei` |
+| "You do not lose Honor from your cards' effects", "You lose 1 Honor less from your cards" | `register_honor_loss_reduction(id, no_honor_lost)`, `register_honor_loss_reduction(id, honor_loss_reduced_by(1))` | {card}`Mishime Sensei`, {card}`The Dark Capital of the Spider` |
 | "You may ignore Honor Requirements" | `register_honor_requirement_waiver(id)` | {card}`Mishime Sensei` |
 
 The `id` is the card's database id, the same string as in the set YAML. A pre-commit hook rejects an

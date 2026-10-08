@@ -22,6 +22,7 @@ from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.board.queries import personalities_in_play
 from yasuki_core.engine.rules.effects import (
     Bow,
+    GainHonor,
     Destroy,
     GrantNegation,
     Effect,
@@ -797,6 +798,22 @@ def _dark_capital_in_combat(*, flipped: bool = False) -> EngineSession:
         personality("guard", owner=P2, force=2),
     ]
     return combat_segment(cards, {"raider": 0}, {"guard": 0})
+
+
+@pytest.mark.parametrize(
+    ("flipped", "loss", "change"),
+    [(False, 3, -2), (True, 3, -1), (False, 1, 0)],
+    ids=["front", "back", "reduced_to_nothing"],
+)
+def test_the_capital_reduces_the_honor_its_controllers_own_cards_cost(flipped, loss, change):
+    game = two_seat_game()
+    put_in_play(game, flip_stronghold(DARK_CAPITAL, card_id="capital", flipped=flipped))
+    source = put_in_play(game, personality("source"))
+    before = game.table.seats[P1].honor
+
+    resolve_effects(game, [GainHonor(P1, -loss, source_id=source.id)])
+
+    assert game.table.seats[P1].honor == before + change
 
 
 def test_the_capital_gives_its_own_personality_shadowlands_and_fear_equal_to_his_force():

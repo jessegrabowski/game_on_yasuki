@@ -100,6 +100,8 @@ yasuki_core.engine.rules.effects
 .. autosummary::
 
     adjusted_honor_change
+    honor_loss_reduced_by
+    no_honor_lost
     pile_for
     seppuku
 

@@ -62,7 +62,8 @@ from yasuki_core.engine.rules.effects import (
     MeleeAttack,
     PayGold,
     RangedAttack,
-    register_honor_loss_shield,
+    no_honor_lost,
+    register_honor_loss_reduction,
     Simultaneously,
     Straighten,
 )
@@ -586,7 +587,7 @@ MISHIME_SENSEI_DISCOUNT = 2
 # "You do not lose Honor from your cards' effects and may ignore Honor Requirements." Both halves
 # are read off the board: a Sensei starts the game in play and never enters it, so there is no
 # arrival to react to.
-register_honor_loss_shield("mishime_sensei")
+register_honor_loss_reduction("mishime_sensei", no_honor_lost)
 register_honor_requirement_waiver("mishime_sensei")
 
 

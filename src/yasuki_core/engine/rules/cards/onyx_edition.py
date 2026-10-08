@@ -37,6 +37,8 @@ from yasuki_core.engine.rules.abilities.registry import (
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming, BattleDesignator
 from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
 from yasuki_core.engine.rules.effects import (
+    honor_loss_reduced_by,
+    register_honor_loss_reduction,
     AdditionalAction,
     AdjustCounter,
     AlternateEffects,
@@ -1123,8 +1125,8 @@ register_ability(
 
 # --- The Dark Capital of the Spider ---
 
-# "You lose 1 Honor less from your cards" (2 on the back) is not modeled: nothing reads how much
-# Honor a card's effect costs its own controller. The Battle ability is.
+register_honor_loss_reduction("the_dark_capital_of_the_spider", honor_loss_reduced_by(1))
+register_honor_loss_reduction("the_dark_capital_of_the_spider__back", honor_loss_reduced_by(2))
 
 
 def _the_dark_capital_of_the_spider_targets(
