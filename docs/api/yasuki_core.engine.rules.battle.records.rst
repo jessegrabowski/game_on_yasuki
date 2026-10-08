@@ -7,6 +7,7 @@ yasuki_core.engine.rules.battle.records
 
 .. autosummary::
 
+    ArmyForces
     AttackPhase
     BattleOutcome
     BattlefieldInfo

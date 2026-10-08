@@ -74,6 +74,24 @@ class ProvinceDestroyed:
 
 
 @dataclass(frozen=True, slots=True)
+class ProvinceDestroying:
+    """A Province is about to be destroyed: announced before the destruction commits, the way
+    :class:`~.Destroying` is for a card, so a trait reading "before ... destroys a Province" resolves
+    while the Province still stands. Announced only when some card answers it.
+
+    Attributes
+    ----------
+    province : ZoneKey
+        The Province about to be destroyed. Its owner is ``province.owner``.
+    seat : PlayerId
+        The seat destroying it.
+    """
+
+    province: ZoneKey
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
 class FavorDiscarded:
     """The Imperial Favor left ``seat``'s control for nobody's.
 
@@ -441,6 +459,12 @@ class BattleResolved:
     ever_present : frozenset of (PlayerId, str)
         Each seat and the Personality it ever had at the battlefield during the attack, whether or
         not the Personality was still there when the battle was fought.
+    present_at_resolution : frozenset of (PlayerId, str)
+        Each seat and the Personality it had at the battlefield as resolution began.
+    attacking_force : int
+        The attacking army's Force as resolution began, which decided the winner.
+    defending_force : int
+        The defending army's Force as resolution began.
     destroyed_controllers : frozenset of PlayerId
         The seats whose cards the resolution destroyed. A seat destroys the enemy army's units
         (CR, Battle Resolution), so another seat's here means the seat reading it destroyed cards.
@@ -458,6 +482,9 @@ class BattleResolved:
     province_destroyed: bool
     destroyed: tuple[str, ...]
     ever_present: frozenset[tuple[PlayerId, str]]
+    present_at_resolution: frozenset[tuple[PlayerId, str]]
+    attacking_force: int
+    defending_force: int
     destroyed_controllers: frozenset[PlayerId]
     terrains_played: frozenset[tuple[PlayerId, str]]
     terrains_destroyed: frozenset[tuple[PlayerId, str]]
@@ -642,6 +669,7 @@ GameEvent = (
     | CardDiscarded
     | CounterChanged
     | ProvinceDestroyed
+    | ProvinceDestroying
     | Destroyed
     | Destroying
     | Dishonored
@@ -711,3 +739,7 @@ def names_both_edges(event_type: type) -> bool:
     name the edge it answers.
     """
     return "boundary" in getattr(event_type, "__annotations__", {})
+
+
+# What an effect announces before it commits, for the traits that act before it.
+Impending = Destroying | ProvinceDestroying

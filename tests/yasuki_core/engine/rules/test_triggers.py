@@ -28,6 +28,8 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
 )
 from yasuki_core.engine.rules.gold.production import effective_gold_production
 from yasuki_core.engine.rules.vocabulary.game_events import (
+    ProvinceDestroyed,
+    ProvinceDestroying,
     Bowed,
     CardDiscarded,
     ConditionFulfilled,
@@ -48,6 +50,7 @@ from yasuki_core.engine.rules.vocabulary.work import Provenance
 from yasuki_core.engine.rules.projection import project
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.effects import (
+    DestroyProvince,
     Ask,
     AdjustCounter,
     Adjustment,
@@ -1787,6 +1790,25 @@ def test_a_trait_acting_before_a_destruction_resolves_while_the_card_stands(reac
     seen = [e for e in game.turn_events if isinstance(e, Destroying | HonorChanged | Destroyed)]
     assert [type(event) for event in seen] == [Destroying, HonorChanged, Destroyed]
     assert seen[0] == Destroying(dying.id, PlayerId.P2, Location.home(PlayerId.P1), PlayerId.P1)
+
+
+def test_a_trait_acting_before_a_province_is_destroyed_resolves_while_it_stands(reacting):
+    game = two_seat_game()
+    province_card(game, "keep", seat=PlayerId.P2)
+    put_in_play(game, holding("watcher", printed_id="province_probe"))
+    province = ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0)
+    reacting(
+        ProvinceDestroying,
+        "province_probe",
+        lambda ctx: [GainHonor(PlayerId.P1, 1)] if province in game.table.zones else [],
+    )
+
+    resolve_effects(game, [DestroyProvince(PlayerId.P1, province)])
+
+    kinds = (ProvinceDestroying, HonorChanged, ProvinceDestroyed)
+    seen = [event for event in game.turn_events if isinstance(event, kinds)]
+    assert [type(event) for event in seen] == list(kinds)
+    assert seen[0] == ProvinceDestroying(province, PlayerId.P1)
 
 
 def test_a_destruction_nothing_acts_before_is_not_announced():

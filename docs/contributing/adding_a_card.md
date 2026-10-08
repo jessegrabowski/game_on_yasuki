@@ -14,6 +14,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Costs less to bring into play, conditionally | `@recruit_discount(id)` | {card}`Colonial Farm` |
 | "After X happens..." | `@on(Event, id)` | {card}`Rice Farm` |
 | "Before this card is destroyed..." | `@on(Destroying, id)`, checking the event names this card | none yet |
+| "Before ... destroys a Province..." | `@on(ProvinceDestroying, id)` | {card}`Yamigatai (Experienced)` |
 | "Yu: ..." | `register_yu(id, effects)`, which applies the datasheet's conditions, with a targeted Yu reaching the battlefield on the event's `location` | {card}`Matsu Kurutta` |
 | "Your X have, 'Yu: ...'" | `register_granted_yu(id, reaches, effects)`, where `reaches(game, source, card)` names the cards the text gives the Yu, each resolving it as its own | {card}`Desperate Ground` |
 | "Give a target Personality, 'Yu: ...'" | a `GrantAbility` effect naming the card, and `register_granted_yu(id, given_by_effect, effects)` | {card}`The Head of My Enemy` |
@@ -75,9 +76,9 @@ id no card has and tells you the nearest real one.
 exists.
 
 These are the events a trigger can answer: `EnteredPlay`, `Destroyed`, `Straightened`, `Dishonored`,
-`Rehonored`, `CardDiscarded`, `CounterChanged`, `ProvinceDestroyed`, `Revealed`, `TurnBoundary`,
-`ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose moment is not one of them needs a
-new event, which is a core change.
+`Rehonored`, `CardDiscarded`, `CounterChanged`, `ProvinceDestroying`, `ProvinceDestroyed`,
+`Revealed`, `TurnBoundary`, `ProducingGold`, `ProducedGold` and `ActionResolved`. A card whose
+moment is not one of them needs a new event, which is a core change.
 
 A Stronghold, a Sensei and a Wind never answer `EnteredPlay`. Under the CR's Start of Game they are
 already in play and never enter it, so a standing trait of one belongs in a registry or grant row
@@ -225,16 +226,17 @@ id:
 
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, `uses_per_turn`, an entry point of a
-registry (`gold`, `invest`, `keywords`, `keyword_loss`, `recruit_discount`, `invest_discount`, `stat_grant`,
-`considered_stat`, `attach_restriction`, `equip_discount`, `equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`,
-`lobby_bar`, `favor_payer`, `entry_state`, `before_entering_play`), or the event a trigger answers
-(`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`, `turn_boundary`,
-`counter_changed`, `province_destroyed`, `card_discarded`, `producing_gold`, `produced_gold`,
-`entered_play_or_destroyed`). A card printing several abilities qualifies the role with that
-ability's key, as in `_incendiary_archers_fear_effects`, since one name per role would collide
-between them, and the key has to be one the module really registers. A choice resolver is named for
-the choice instead, `_resolve_<the string it is registered under>`. Helpers the block calls but
-never registers only need the card's id in front.
+registry (`gold`, `invest`, `keywords`, `keyword_loss`, `recruit_discount`, `invest_discount`,
+`stat_grant`, `considered_stat`, `attach_restriction`, `equip_discount`, `equips_from_discard`,
+`attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`, `favor_payer`, `entry_state`,
+`before_entering_play`), or the event a trigger answers (`entered_play`, `destroyed`,
+`straightened`, `dishonored`, `rehonored`, `turn_boundary`, `counter_changed`,
+`province_destroying`, `province_destroyed`, `battle_ended`, `card_discarded`, `producing_gold`,
+`produced_gold`, `entered_play_or_destroyed`). A card printing several abilities qualifies the role
+with that ability's key, as in `_incendiary_archers_fear_effects`, since one name per role would
+collide between them, and the key has to be one the module really registers. A choice resolver is
+named for the choice instead, `_resolve_<the string it is registered under>`. Helpers the block
+calls but never registers only need the card's id in front.
 
 The point is grep. A card's whole implementation answers a search for its id, and every handler of a
 kind answers a search for its role. A test enforces it, and `ROLES` in `hooks/card_layout.py` is

@@ -75,7 +75,11 @@ from yasuki_core.engine.rules.effects import (
     To,
     Unpayable,
 )
-from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import (
+    attach_restriction,
+    creation_targets,
+    equip_discount,
+)
 from yasuki_core.engine.rules.rulebook.kharmic import (
     KHARMIC_COST,
     KHARMIC_DRAW,
@@ -85,11 +89,13 @@ from yasuki_core.engine.rules.rulebook.kharmic import (
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
+    BattleEnded,
     BattleResolved,
     CardDiscarded,
     Destroyed,
     DuelResolved,
     EnteredPlay,
+    ProvinceDestroying,
 )
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
@@ -134,6 +140,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     Stat,
 )
 from yasuki_core.engine.rules.vocabulary import keywords
+from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
 from yasuki_core.engine.table import DeckKey, Location, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
@@ -350,6 +357,33 @@ register_ability(
         effects=_hida_haikeru_effects,
     ),
 )
+
+
+# --- Hida Shunsuke, Soul of Hida Tenshu ---
+
+
+@attach_restriction("hida_shunsuke_soul_of_hida_tenshu")
+def _hida_shunsuke_soul_of_hida_tenshu_attach_restriction(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> bool:
+    """ "Will not attach Armor." """
+    return not has_keyword(game, card, keywords.ARMOR)
+
+
+@on(BattleEnded, "hida_shunsuke_soul_of_hida_tenshu")
+def _hida_shunsuke_soul_of_hida_tenshu_battle_ended(ctx: TriggerContext) -> list[Effect]:
+    """ "After a battle ends, if Shunsuke was at its battlefield during resolution and his army's
+    Force was less than or equal to twice the other army's, destroy him." """
+    if not isinstance(ctx.event, BattleEnded):
+        return []
+    resolved = ctx.event.resolved
+    shunsuke = ctx.card
+    if (shunsuke.owner, shunsuke.id) not in resolved.present_at_resolution:
+        return []
+    attacking = shunsuke.owner is resolved.attacker
+    own = resolved.attacking_force if attacking else resolved.defending_force
+    other = resolved.defending_force if attacking else resolved.attacking_force
+    return [Destroy(shunsuke.id, shunsuke.owner)] if own <= 2 * other else []
 
 
 # --- Hida War College (Experienced) ---
@@ -1614,3 +1648,64 @@ register_ability(
         effects=_utaku_gorou_stablemaster_effects,
     ),
 )
+
+
+# --- Yamigatai (Experienced) ---
+
+YAMIGATAI_EQUIP_DISCOUNT = 1
+YAMIGATAI_COMBAT_FORCE = 2
+
+
+@attach_restriction("yamigatai_experienced")
+def _yamigatai_experienced_attach_restriction(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> bool:
+    """ "Will not attach to a Shadowlands Personality." """
+    return not has_keyword(game, personality, keywords.SHADOWLANDS)
+
+
+@equip_discount("yamigatai_experienced")
+def _yamigatai_experienced_equip_discount(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> int:
+    """ "Equips to a Crab Clan Personality for 1 less." """
+    return YAMIGATAI_EQUIP_DISCOUNT if ruleset.CRAB in card_alignments(personality) else 0
+
+
+@on(ProvinceDestroying, "yamigatai_experienced")
+def _yamigatai_experienced_province_destroying(ctx: TriggerContext) -> list[Effect]:
+    """ "Before this Personality's army destroys a Province, put the Ring of Earth into play from
+    your hand." The army destroys a Province at its battle's resolution."""
+    event = ctx.event
+    bearer = attached_to(ctx.game, ctx.card)
+    if (
+        not isinstance(event, ProvinceDestroying)
+        or bearer is None
+        or event.seat is not bearer.owner
+    ):
+        return []
+    attack = ctx.game.attack
+    if (
+        attack is None
+        or attack.current is None
+        or attack.battle_segment is not BattleSegment.RESOLUTION
+    ):
+        return []
+    at_battle = location_of(ctx.game.table, bearer).battlefield == attack.current
+    if not at_battle or attack.current_province != event.province:
+        return []
+    hand = cards_in_hand(ctx.game, bearer.owner)
+    ring = next((card for card in hand if card.printed_id == "ring_of_earth"), None)
+    return [] if ring is None else [PutIntoPlay(ring.id)]
+
+
+@stat_grant("yamigatai_experienced")
+def _yamigatai_experienced_stat_grant(
+    game: GameState, yamigatai: L5RCard, card: L5RCard, stat: Stat
+) -> int:
+    """ "This Personality has +2F during the Combat Segment (not battle resolution)." """
+    if stat is not Stat.FORCE or card is not attached_to(game, yamigatai):
+        return 0
+    attack = game.attack
+    in_combat = attack is not None and attack.battle_segment is BattleSegment.COMBAT
+    return YAMIGATAI_COMBAT_FORCE if in_combat else 0

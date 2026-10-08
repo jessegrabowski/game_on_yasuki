@@ -27,6 +27,21 @@ class BattleOutcome(NamedTuple):
     honor: dict[PlayerId, int]
 
 
+class ArmyForces(NamedTuple):
+    """Both armies' Force at a battlefield as its resolution began (CR, Army Force).
+
+    Attributes
+    ----------
+    attacking : int
+        The attacking army's Force.
+    defending : int
+        The defending army's Force.
+    """
+
+    attacking: int
+    defending: int
+
+
 class BattlefieldInfo(NamedTuple):
     """A battlefield an attack created, and the Defender Province it is associated with.
 

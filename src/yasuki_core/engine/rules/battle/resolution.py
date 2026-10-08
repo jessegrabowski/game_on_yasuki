@@ -35,6 +35,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     Destroyed,
 )
 from yasuki_core.engine.rules.battle.records import (
+    ArmyForces,
     AttackPhase,
     BattleOutcome,
     BattlefieldInfo,
@@ -424,7 +425,15 @@ def _resolve_battle(game: GameState) -> None:
     # All three read before anything is applied: resolution destroys the armies the effects and the
     # winner are read off, and moves the honor the outcome reports the movement of.
     effects = resolution_effects(game, battlefield)
-    winner = _winner(game, battlefield)
+    forces = ArmyForces(
+        attacking=army_force(game, battlefield, attack.attacker),
+        defending=army_force(game, battlefield, attack.defender),
+    )
+    present = frozenset(
+        (seat, personality.id)
+        for seat in (attack.attacker, attack.defender)
+        for personality in units_at(game, battlefield, seat)
+    )
     honor_before = _honor(game)
     # Where this battle's events start. Every battle of an Attack Phase runs inside one action, so
     # an outcome reading the action's events rather than its own would collect its predecessors'.
@@ -438,7 +447,9 @@ def _resolve_battle(game: GameState) -> None:
         AnnounceResolution(
             battlefield,
             last_battle=last_battle,
-            winner=winner,
+            winner=_winner(attack, forces),
+            forces=forces,
+            present=present,
             honor_before=honor_before,
             events_before=events_before,
             province_stood=province_stood,
@@ -464,6 +475,10 @@ class AnnounceResolution:
     winner : PlayerId or None
         The seat whose Force was higher, read before resolution destroyed the armies, or None on a
         tie.
+    forces : :class:`~.ArmyForces`
+        Both armies' Force as resolution began.
+    present : frozenset of (PlayerId, str)
+        Each seat and the Personality it had at the battlefield as resolution began.
     honor_before : dict mapping PlayerId to int
         Each seat's Family Honor as resolution began.
     events_before : int
@@ -476,6 +491,8 @@ class AnnounceResolution:
     battlefield: int
     last_battle: bool
     winner: PlayerId | None
+    forces: ArmyForces
+    present: frozenset[tuple[PlayerId, str]]
     honor_before: dict[PlayerId, int]
     events_before: int
     province_stood: bool
@@ -495,7 +512,10 @@ class AnnounceResolution:
         # Queued before the announcement, so a trait that pauses on it stashes its cascade above
         # the work and resumes first.
         game.stack.append(AfterResolution(self.battlefield, last_battle=self.last_battle))
-        triggers.fire(game, _battle_resolved(attack, self.battlefield, outcome, destructions))
+        resolved = _battle_resolved(
+            attack, self.battlefield, outcome, destructions, self.forces, self.present
+        )
+        triggers.fire(game, resolved)
 
 
 @dataclass(frozen=True, slots=True)
@@ -569,17 +589,12 @@ class LeaveBattle:
         game.stack.append(FightNextBattle())
 
 
-def _winner(game: GameState, battlefield: int) -> PlayerId | None:
-    """Which side took ``battlefield``, or None if the battle was tied.
-
-    Decided before resolution runs, because resolution destroys the armies whose Force decides it.
-    """
-    attack = _declared_attack(game)
-    attacking = army_force(game, battlefield, attack.attacker)
-    defending = army_force(game, battlefield, attack.defender)
-    if attacking == defending:
+def _winner(attack: AttackPhase, forces: ArmyForces) -> PlayerId | None:
+    """Which side the higher Force gives the battle to, or None if the battle was tied. Read before
+    resolution runs, because resolution destroys the armies whose Force decides it."""
+    if forces.attacking == forces.defending:
         return None
-    return attack.attacker if attacking > defending else attack.defender
+    return attack.attacker if forces.attacking > forces.defending else attack.defender
 
 
 def _honor(game: GameState) -> dict[PlayerId, int]:
@@ -627,7 +642,12 @@ def _outcome(
 
 
 def _battle_resolved(
-    attack: AttackPhase, battlefield: int, outcome: BattleOutcome, destructions: list[Destroyed]
+    attack: AttackPhase,
+    battlefield: int,
+    outcome: BattleOutcome,
+    destructions: list[Destroyed],
+    forces: ArmyForces,
+    present: frozenset[tuple[PlayerId, str]],
 ) -> BattleResolved:
     info = attack.battlefields[battlefield]
     return BattleResolved(
@@ -639,6 +659,9 @@ def _battle_resolved(
         province_destroyed=outcome.province_destroyed,
         destroyed=outcome.destroyed,
         ever_present=info.ever_present,
+        present_at_resolution=present,
+        attacking_force=forces.attacking,
+        defending_force=forces.defending,
         destroyed_controllers=frozenset(event.left_as.controller for event in destructions),
         terrains_played=info.terrains_played,
         terrains_destroyed=info.terrains_destroyed,

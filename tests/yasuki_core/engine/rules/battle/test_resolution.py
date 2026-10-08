@@ -1084,11 +1084,28 @@ def test_a_fought_battle_announces_battle_resolved_once_with_its_outcome():
             province_destroyed=True,
             destroyed=("d",),
             ever_present=frozenset({(PlayerId.P1, "a"), (PlayerId.P2, "d")}),
+            present_at_resolution=frozenset({(PlayerId.P1, "a"), (PlayerId.P2, "d")}),
+            attacking_force=9,
+            defending_force=2,
             destroyed_controllers=frozenset({PlayerId.P2}),
             terrains_played=frozenset(),
             terrains_destroyed=frozenset(),
         )
     ]
+
+
+def test_battle_resolved_records_only_who_stood_at_the_battle_as_it_resolved():
+    session = _one_battlefield({"a": 9, "scout": 4}, {"d": 2})
+    pending = session.game.pending
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    resolve_effects(session.game, [Move("scout", Location.home(PlayerId.P1))])
+
+    _pass_out_the_segments(session)
+
+    (resolved,) = _battles_resolved(session)
+    assert (PlayerId.P1, "scout") in resolved.ever_present
+    assert resolved.present_at_resolution == frozenset({(PlayerId.P1, "a"), (PlayerId.P2, "d")})
+    assert (resolved.attacking_force, resolved.defending_force) == (9, 2)
 
 
 def test_a_battle_announces_its_end_with_how_it_resolved():

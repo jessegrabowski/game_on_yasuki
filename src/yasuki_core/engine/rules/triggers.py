@@ -10,9 +10,11 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     ConditionFulfilled,
     Destroyed,
     Destroying,
+    Impending,
     EnteredPlay,
     GameEvent,
     NextTime,
+    ProvinceDestroying,
     names_both_edges,
     opens_a_window,
 )
@@ -598,8 +600,9 @@ def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
 @dataclass(slots=True)
 class _Effects:
     """Effects a walk still has to apply, in order, and where they came from. A ``simultaneous``
-    frame is a group's, whose events gather in the events frame beneath it. ``announced`` holds the
-    cards whose destruction has been announced and has not yet committed."""
+    frame is a group's, whose events gather in the events frame beneath it. ``announced`` holds what
+    has been announced as about to be destroyed and has not yet been: each card by its id and each
+    Province by its token."""
 
     pending: list[Effect]
     provenance: Provenance
@@ -710,7 +713,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                     frames.append(group)
                     announcing = _group_impending(game, effect.effects, provenance)
                     if announcing:
-                        group.announced = frozenset(event.card_id for event in announcing)
+                        group.announced = frozenset(_announced_as(event) for event in announcing)
                         frames.append(_Events(list(announcing)))
                 continue
             if isinstance(effect, Attributed):
@@ -720,11 +723,13 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 return
             stands = as_modified(game, effect) if _modifiable(effect, provenance) else effect
             impending = stands.impending(game)
-            unannounced = [event for event in impending if event.card_id not in top.announced]
+            unannounced = [
+                event for event in impending if _announced_as(event) not in top.announced
+            ]
             if any(_collect(game, event) for event in unannounced) and not _will_be_negated(
                 game, stands, provenance
             ):
-                top.announced |= {event.card_id for event in unannounced}
+                top.announced |= {_announced_as(event) for event in unannounced}
                 top.pending.insert(0, popped)
                 frames.append(_Events(unannounced))
                 continue
@@ -753,7 +758,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
             # A group's frame holds every member's announcement, so only this member's leaves. Any
             # other frame announced at most the effect it put back at its head, which this is.
             if top.simultaneous:
-                top.announced -= {event.card_id for event in impending}
+                top.announced -= {_announced_as(event) for event in impending}
             else:
                 top.announced = frozenset()
             # What the effect produced goes next, ahead of the rest, so an attack's outcome resolves
@@ -823,7 +828,7 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
 
 def _group_impending(
     game: GameState, effects: tuple[Effect, ...], provenance: Provenance
-) -> list[Destroying]:
+) -> list[Impending]:
     """What is announced before a :class:`~.Simultaneously` group of ``effects`` commits, as one
     occurrence: each member read as the Interrupts and the negations in force will leave it, a
     ``once`` negation hiding only the first member it will spend itself on. Empty when nothing
@@ -842,6 +847,12 @@ def _group_impending(
         if provenance.paying or not would_negate(game, member, provenance, spent)
         for event in events
     ]
+
+
+def _announced_as(event: Impending) -> str:
+    """What an impending event is remembered under until its effect commits: the card's id, or the
+    Province's token."""
+    return event.card_id if isinstance(event, Destroying) else event.province.token
 
 
 def _group_members(effects: tuple[Effect, ...]) -> Iterator[Effect]:
@@ -893,7 +904,7 @@ def _announce(game: GameState, event: GameEvent) -> None:
     # announcement that the action resolved is about it rather than by it.
     inside_a_step = game.round.kind in STEP_ROUNDS
     if not inside_a_step and not isinstance(
-        event, ActionResolved | ConditionFulfilled | Destroying
+        event, ActionResolved | ConditionFulfilled | Destroying | ProvinceDestroying
     ):
         game.action_events.append(event)
     _trace.append(type(event).__name__)
