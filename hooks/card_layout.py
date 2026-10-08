@@ -304,6 +304,7 @@ ROLES = frozenset(
         "action_resolved",
         "assigned",
         "battle_resolved",
+        "battle_ended",
         "duel_resolved",
         "bowed",
         "producing_gold",

@@ -75,7 +75,7 @@ from yasuki_core.engine.rules.effects import (
     To,
     Unpayable,
 )
-from yasuki_core.engine.rules.rulebook.equip import creation_targets
+from yasuki_core.engine.rules.rulebook.equip import attach_restriction, creation_targets
 from yasuki_core.engine.rules.rulebook.kharmic import (
     KHARMIC_COST,
     KHARMIC_DRAW,
@@ -85,6 +85,7 @@ from yasuki_core.engine.rules.rulebook.kharmic import (
 )
 from yasuki_core.engine.rules.vocabulary.game_events import (
     ActionResolved,
+    BattleEnded,
     BattleResolved,
     CardDiscarded,
     Destroyed,
@@ -350,6 +351,33 @@ register_ability(
         effects=_hida_haikeru_effects,
     ),
 )
+
+
+# --- Hida Shunsuke, Soul of Hida Tenshu ---
+
+
+@attach_restriction("hida_shunsuke_soul_of_hida_tenshu")
+def _hida_shunsuke_soul_of_hida_tenshu_attach_restriction(
+    game: GameState, personality: L5RCard, card: L5RCard
+) -> bool:
+    """ "Will not attach Armor." """
+    return not has_keyword(game, card, keywords.ARMOR)
+
+
+@on(BattleEnded, "hida_shunsuke_soul_of_hida_tenshu")
+def _hida_shunsuke_soul_of_hida_tenshu_battle_ended(ctx: TriggerContext) -> list[Effect]:
+    """ "After a battle ends, if Shunsuke was at its battlefield during resolution and his army's
+    Force was less than or equal to twice the other army's, destroy him." """
+    if not isinstance(ctx.event, BattleEnded):
+        return []
+    resolved = ctx.event.resolved
+    shunsuke = ctx.card
+    if (shunsuke.owner, shunsuke.id) not in resolved.present_at_resolution:
+        return []
+    attacking = shunsuke.owner is resolved.attacker
+    own = resolved.attacking_force if attacking else resolved.defending_force
+    other = resolved.defending_force if attacking else resolved.attacking_force
+    return [Destroy(shunsuke.id, shunsuke.owner)] if own <= 2 * other else []
 
 
 # --- Hida War College (Experienced) ---

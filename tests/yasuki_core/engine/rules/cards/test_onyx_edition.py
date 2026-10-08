@@ -55,6 +55,7 @@ from yasuki_core.game_pieces.prints import (
     RulebookPrint,
     StrongholdPrint,
 )
+from yasuki_core.engine.rules.rulebook.equip import may_attach
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
@@ -120,6 +121,7 @@ from tests.yasuki_core.engine.builders import (
     token_template,
     two_seat_game,
 )
+from tests.yasuki_core.engine.rules.battle.test_resolution import _pass_out_the_segments
 from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_interrupt
 
 P1, P2 = PlayerId.P1, PlayerId.P2
@@ -1882,6 +1884,45 @@ def test_haikeru_replays_to_the_same_board():
     session = _duel_the_rival(_haikeru_in_combat(rival_force=1, rival_chi=9))
 
     assert replay(session.log).table == session.game.table
+
+
+# --- Hida Shunsuke, Soul of Hida Tenshu ---
+
+SHUNSUKE = "hida_shunsuke_soul_of_hida_tenshu"
+
+
+@pytest.mark.parametrize(
+    ("item_keywords", "attaches"),
+    [(("Armor",), False), (("Weapon",), True)],
+    ids=["armor", "weapon"],
+)
+def test_shunsuke_will_not_attach_armor(item_keywords, attaches):
+    game = two_seat_game()
+    shunsuke = put_in_play(game, personality("shunsuke", printed_id=SHUNSUKE, force=6))
+
+    assert may_attach(game, shunsuke, attachment("gear", keywords=item_keywords)) is attaches
+
+
+@pytest.mark.parametrize(
+    ("guard_force", "sent_home", "destroyed"),
+    [(4, False, True), (2, False, False), (4, True, False)],
+    ids=["within_twice", "more_than_twice", "absent_at_resolution"],
+)
+def test_shunsuke_dies_after_a_battle_he_did_not_win_by_more_than_double(
+    guard_force, sent_home, destroyed
+):
+    cards = [
+        personality("shunsuke", printed_id=SHUNSUKE, force=6),
+        personality("guard", owner=P2, force=guard_force),
+    ]
+    session = combat_segment(cards, {"shunsuke": 0}, {"guard": 0})
+    if sent_home:
+        resolve_effects(session.game, [Move("shunsuke", Location.home(P1))])
+
+    _pass_out_the_segments(session)
+
+    in_play = {card.id for card in session.game.table.battlefield.cards}
+    assert ("shunsuke" not in in_play) is destroyed
 
 
 # --- Hida War College (Experienced) ---
