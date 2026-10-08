@@ -19,8 +19,9 @@ yasuki_core.engine.table
 
 .. autosummary::
 
+    controller_of
+    controls_card
     location_of
-    owns_card
     owns_deck
     owns_zone
     province_holding

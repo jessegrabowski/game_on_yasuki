@@ -313,6 +313,14 @@ def test_validate_rejects_a_location_for_a_card_not_in_play():
         table.validate()
 
 
+def test_validate_rejects_a_controller_for_a_card_not_in_play():
+    table = TableState.empty_two_seat()
+    table.controllers = {"ghost": PlayerId.P2}
+
+    with pytest.raises(ValueError, match="controllers reference cards not in play"):
+        table.validate()
+
+
 @pytest.mark.parametrize(
     "location",
     [Location(), Location(seat=PlayerId.P1, battlefield=0)],

@@ -9,6 +9,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.stats.calculation import active_modifiers
+from yasuki_core.engine.table import controller_of
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -56,7 +57,7 @@ def effective_gold_production(
             return 0  # an absent stat cannot receive modifiers (CR, Absent Stats)
         base = card.gold_production
     else:
-        base = handler(card, game, card.owner, targets)
+        base = handler(card, game, controller_of(game.table, card), targets)
     total = base + sum(
         modifier.amount for modifier in active_modifiers(game, card, Stat.GOLD_PRODUCTION)
     )
@@ -100,7 +101,7 @@ def produce_gold(game: GameState, card_id: str, target_ids: tuple[str, ...] = ()
     """
     card = game.table.cards_by_id[card_id]
     game.stack.append(CompleteProduction(card_id, target_ids))
-    triggers.fire(game, ProducingGold(card_id, card.owner))
+    triggers.fire(game, ProducingGold(card_id, controller_of(game.table, card)))
 
 
 def complete_production(game: GameState, card_id: str, target_ids: tuple[str, ...]) -> None:
@@ -108,6 +109,7 @@ def complete_production(game: GameState, card_id: str, target_ids: tuple[str, ..
     card = game.table.cards_by_id[card_id]
     targets = tuple(game.table.cards_by_id[tid] for tid in target_ids)
     amount = effective_gold_production(game, card, targets=targets)
+    seat = controller_of(game.table, card)
     card.bow()
-    game.add_gold(card.owner, amount)
-    triggers.fire_all(game, [Bowed(card_id), ProducedGold(card_id, card.owner, amount)])
+    game.add_gold(seat, amount)
+    triggers.fire_all(game, [Bowed(card_id), ProducedGold(card_id, seat, amount)])

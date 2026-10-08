@@ -139,8 +139,8 @@ async function swapArt(img, card, imgBase) {
   }
 }
 
-// Stamp the card state the context menu reads back off the DOM: identity, side and owner for routing
-// "Send to…" intents and gating them by ownership, the token flag that gates the "Remove" item, and
+// Stamp the card state the context menu reads back off the DOM: identity, side, owner for routing
+// "Send to…" intents and controller for gating them, the token flag that gates the "Remove" item, and
 // the flags whose toggle label depends on the current value. A hidden stub carries only id + side, so
 // its other fields stay empty.
 function tagCard(el, card) {
@@ -149,6 +149,8 @@ function tagCard(el, card) {
   el.dataset.dishonorable = card.dishonorable ? '1' : '';
   el.dataset.side = card.side ?? '';
   el.dataset.owner = card.owner ?? '';
+  // Only a card's controller may act on it, and a card its owner controls is sent without one.
+  el.dataset.controller = card.controller ?? card.owner ?? '';
   el.dataset.hidden = card.hidden ? '1' : '';
   el.dataset.faceUp = card.face_up ? '1' : '';
   el.dataset.token = card.token ? '1' : '';
@@ -431,7 +433,8 @@ export const showIntent = (id) => intentMessage({ op: 'SHOW', card_id: id });
 export const unshowIntent = (id) => intentMessage({ op: 'UNSHOW', card_id: id });
 export const peekIntent = (id) => intentMessage({ op: 'PEEK', card_id: id });
 export const unpeekIntent = (id) => intentMessage({ op: 'UNPEEK', card_id: id });
-// Hand a card to the opponent: the server flips its owner to the other seat.
+// Hand a card to the opponent: the server records the other seat as its controller. Ownership
+// never changes, so the card still returns to its owner's pile when it leaves play.
 export const giveControlIntent = (id) => intentMessage({ op: 'GIVE_CONTROL', card_id: id });
 // Attach a battlefield card to a parent (another card or a province) so it rides behind it. `to` is
 // {kind:'card', card_id} or {kind:'zone', zone:{owner, role:'province', idx}}, matching the server's
@@ -1522,20 +1525,21 @@ function menuItemsFor(
 }
 
 // The menu for a right-click on empty battlefield. Unbow all squares up every bowed card the viewer
-// may act on (their own and owner-less ones), batched into one UNBOW so the rate limiter sees one
-// message — and so the server's all-or-nothing ownership gate never rejects the batch. Randomize
+// may act on (the ones they control and owner-less ones), batched into one UNBOW so the rate limiter
+// sees one message — and so the server's all-or-nothing control gate never rejects the batch. Randomize
 // opens a chooser to flip a coin or roll a die, whose result the server announces to both seats (and
 // which also hosts the local draw-odds calculator). Create token (when wired) opens a card search and
 // spawns the choice as a token at the click point.
 function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
-  // An owner-less ('') card is public and actionable by anyone, mirroring the server's owns_card.
-  const ownedByViewer = (el) => !el.dataset.owner || el.dataset.owner === viewer;
+  // An owner-less ('') card is public and actionable by anyone, mirroring the server's
+  // controls_card. Control rather than ownership, since only a controller may act (CR, Card control).
+  const controlledByViewer = (el) => !el.dataset.controller || el.dataset.controller === viewer;
   const items = [
     {
       label: 'Unbo&w all',
       onClick: (e, send, container) => {
         const ids = [...(container.querySelectorAll?.('.board-card') ?? [])]
-          .filter((el) => el.dataset.bowed === '1' && ownedByViewer(el))
+          .filter((el) => el.dataset.bowed === '1' && controlledByViewer(el))
           .map((el) => el.dataset.cardId);
         if (ids.length) send(unbowIntent(ids));
       },

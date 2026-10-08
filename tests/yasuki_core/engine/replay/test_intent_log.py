@@ -457,6 +457,52 @@ def test_locations_survive_serialization():
     }
 
 
+def _controlled_state() -> TableState:
+    """The assigned unit's Personality handed to the seat that does not own him, so the control
+    map is non-empty. An empty one round-trips whether or not the snapshot carries it."""
+    state = _assigned_state()
+    state.controllers["hero"] = PlayerId.P2
+    state.validate()
+    return state
+
+
+def test_full_snapshot_round_trips_controllers():
+    state = _controlled_state()
+    assert build_initial_state(InitialRecord.from_state(state)) == state
+
+
+def test_controllers_survive_serialization():
+    state = _controlled_state()
+    log = IntentLog(initial=InitialRecord.from_state(state))
+
+    restored = intent_log_from_dict(json.loads(json.dumps(intent_log_to_dict(log))))
+
+    assert restored.replay() == state
+    assert restored.initial.controllers == {"hero": PlayerId.P2}
+
+
+def test_a_log_written_before_control_existed_decodes_to_nothing_controlled():
+    payload = encode_initial(InitialRecord.from_state(_controlled_state()))
+    del payload["controllers"]
+
+    assert decode_initial(payload).controllers == {}
+
+
+def test_the_initial_record_carries_every_table_field_a_replay_needs():
+    """A ``TableState`` field the record forgets is silent corruption one level up from the encoder:
+    the rebuild drops it and nothing raises, which is how control first went missing across a
+    session rebuild. Pin the record's fields to the table's so a new one fails here."""
+    omitted = {
+        "decks",  # recorded as `decklists`, which carries the ordered contents rather than the Deck
+        "cards_by_id",  # derived: the rebuild re-indexes every card it restores
+        "seq",  # a view version, not board state, and a replay starts its own
+        "next_province_id",  # not carried; see the note on this test
+    }
+    recorded = {f.name for f in fields(InitialRecord)} | omitted
+
+    assert {f.name for f in fields(TableState)} <= recorded
+
+
 def test_encode_initial_covers_every_field():
     """A record field the encoder forgets is silent corruption. The replay rebuilds a table missing
     it and nothing raises. Pin the payload's keys to the dataclass so a new field fails here."""

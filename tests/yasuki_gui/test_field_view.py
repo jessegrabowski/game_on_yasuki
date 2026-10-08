@@ -870,6 +870,38 @@ class TestRulesModeRender:
 
         assert isinstance(field.sprites[card_tag("P2-bf")].card, HiddenFace)
 
+    def test_a_controlled_card_lays_out_in_its_controllers_row(self, loaded):
+        """A card handed over belongs among the new controller's cards. Ownership never changes
+        (CR, Card ownership), so the row has to follow control rather than the owner."""
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        # Distinct prints, so each takes its own column and a shared row shows as a shared y.
+        for card_id, printed_id, owner in (
+            ("mine", "jade_mine", PlayerId.P1),
+            ("seized", "rice_farm", PlayerId.P2),
+            ("theirs", "jade_mine", PlayerId.P2),
+        ):
+            copy = L5RCard.of(
+                HoldingPrint,
+                id=card_id,
+                printed_id=printed_id,
+                name=printed_id,
+                side=Side.DYNASTY,
+                owner=owner,
+            )
+            state.cards_by_id[card_id] = copy
+            state.battlefield.add(copy)
+            state.positions[card_id] = UNPLACED_BOARD_POS
+        state.controllers["seized"] = PlayerId.P1
+        session = EngineSession.start(state, PlayerId.P1)
+        view = session.project(PlayerId.P1)
+        field.render_snapshot(view.table, PlayerId.P1, view.stats)
+
+        home = field._home_positions(list(field._render_battlefield()), *field._canvas_size())
+
+        assert home["seized"][1] == home["mine"][1]
+        assert home["seized"][1] != home["theirs"][1]
+
     def test_dispatch_is_a_noop_in_rules_mode(self, loaded):
         field = self._rules_field(loaded)
         assert field.dispatch(Bow(("P2-bf",))) == []

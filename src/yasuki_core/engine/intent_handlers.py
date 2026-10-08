@@ -15,7 +15,8 @@ from yasuki_core.engine.table import (
     TableState,
     ZoneKey,
     ZoneRole,
-    owns_card,
+    controller_of,
+    controls_card,
     owns_deck,
     owns_zone,
     zone_accepts,
@@ -60,7 +61,7 @@ from yasuki_core.engine.intents import (
 
 def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or not owns_card(state, seat, intent.card_id):
+    if card is None or not controls_card(state, seat, intent.card_id):
         return []
     dest = intent.to
     # A rulebook proxy stands for an ability the rules give the seat; it is not a card to be moved,
@@ -123,7 +124,7 @@ def _move_deck_top(state: TableState, seat: PlayerId, intent: MoveDeckTop) -> li
 
 def _set_card_pos(state: TableState, seat: PlayerId, intent: SetCardPos) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or not owns_card(state, seat, intent.card_id):
+    if card is None or not controls_card(state, seat, intent.card_id):
         return []
     if not any(held is card for held in state.battlefield.cards):
         return []
@@ -137,7 +138,7 @@ def _set_card_positions(state: TableState, seat: PlayerId, intent: SetCardPositi
     changed = []
     for card_id, x, y in intent.moves:
         card = state.cards_by_id.get(card_id)
-        if card is None or not owns_card(state, seat, card_id):
+        if card is None or not controls_card(state, seat, card_id):
             continue
         if not any(held is card for held in state.battlefield.cards):
             continue
@@ -167,7 +168,7 @@ def _reorder_pile(state: TableState, seat: PlayerId, intent: ReorderPile) -> lis
 
 def _raise(state: TableState, seat: PlayerId, intent: Raise) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or not owns_card(state, seat, intent.card_id):
+    if card is None or not controls_card(state, seat, intent.card_id):
         return []
     cards = state.battlefield.cards
     if not cards or cards[-1] is card or not any(held is card for held in cards):
@@ -206,17 +207,21 @@ def _adjust_counter(state: TableState, seat: PlayerId, intent: AdjustCounter) ->
 
 def _give_control(state: TableState, seat: PlayerId, intent: GiveControl) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    # Only the controller may give a face-up card away, matching the client gate.
-    if card is None or not card.face_up or card.owner != seat:
+    # Only the controller may give a face-up card away.
+    if card is None or not card.face_up or controller_of(state, card) != seat:
         return []
-    # Only a card on the shared battlefield may change hands; reassigning one held in an owned zone
-    # (hand, deck, province) would break the zone/owner invariant the table validates.
+    # Only a card in play may change control, which the table validates. A card's ownership never
+    # changes (CR, Card ownership), so this records control and leaves the owner alone, and the
+    # card still reaches its owner's pile when it dies.
     if not any(held is card for held in state.battlefield.cards):
         return []
     opponent = next((other for other in state.seats if other != seat), None)
     if opponent is None:
         return []
-    card.set_owner(opponent)
+    if opponent is card.owner:
+        state.controllers.pop(card.id, None)
+    else:
+        state.controllers[card.id] = opponent
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
@@ -275,10 +280,10 @@ _FLAG_MUTATORS = {
 
 
 def _apply_flag(state: TableState, seat: PlayerId, intent: CardFlagIntent) -> list[Event]:
-    # Atomic: reject the whole batch unless every target is known and owned.
+    # Atomic: reject the whole batch unless every target is known and controlled.
     cards = []
     for card_id in intent.card_ids:
-        if not owns_card(state, seat, card_id):
+        if not controls_card(state, seat, card_id):
             return []
         cards.append(state.cards_by_id[card_id])
     mutate = _FLAG_MUTATORS[intent.op]
@@ -291,7 +296,7 @@ def _apply_flag(state: TableState, seat: PlayerId, intent: CardFlagIntent) -> li
 
 def _show(state: TableState, seat: PlayerId, intent: Show) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or not owns_card(state, seat, intent.card_id) or card.shown:
+    if card is None or not controls_card(state, seat, intent.card_id) or card.shown:
         return []
     card.show()
     state.seq += 1
@@ -300,7 +305,7 @@ def _show(state: TableState, seat: PlayerId, intent: Show) -> list[Event]:
 
 def _unshow(state: TableState, seat: PlayerId, intent: Unshow) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or not owns_card(state, seat, intent.card_id) or not card.shown:
+    if card is None or not controls_card(state, seat, intent.card_id) or not card.shown:
         return []
     card.unshow()
     state.seq += 1
@@ -312,7 +317,7 @@ def _peek(state: TableState, seat: PlayerId, intent: Peek) -> list[Event]:
     # Seeing a card the opponent holds requires them to Show it; you cannot reach across and look
     # yourself.
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or not owns_card(state, seat, intent.card_id) or seat in card.peekers:
+    if card is None or not controls_card(state, seat, intent.card_id) or seat in card.peekers:
         return []
     card.add_peeker(seat)
     state.seq += 1
@@ -484,9 +489,9 @@ def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[
     if card is None:
         return []
     # Taking the Favor has to clear the proxy wherever it sits, including an opponent's hand, so the
-    # owner gate is lifted for rulebook proxies alone. Widening this to tokens generally would mean
-    # any seat could delete any token another seat made.
-    if card.printed_id not in RULEBOOK_PROXY_IDS and not owns_card(state, seat, intent.card_id):
+    # control gate is lifted for rulebook proxies alone. Widening this to tokens generally would
+    # mean any seat could delete any token another seat made.
+    if card.printed_id not in RULEBOOK_PROXY_IDS and not controls_card(state, seat, intent.card_id):
         return []
     # Only spawned tokens may leave the table outright; a real card from a deck or zone is never
     # destroyable and must instead be moved to a discard or banish.
@@ -515,7 +520,7 @@ def _attach(state: TableState, seat: PlayerId, intent: Attach) -> list[Event]:
     child = state.cards_by_id.get(intent.card_id)
     if (
         child is None
-        or not owns_card(state, seat, intent.card_id)
+        or not controls_card(state, seat, intent.card_id)
         or not _on_battlefield(state, child)
     ):
         return []
@@ -541,7 +546,7 @@ def _attach(state: TableState, seat: PlayerId, intent: Attach) -> list[Event]:
 
 def _detach(state: TableState, seat: PlayerId, intent: Detach) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or not owns_card(state, seat, intent.card_id):
+    if card is None or not controls_card(state, seat, intent.card_id):
         return []
     if not ops.unstack(state, card):
         return []

@@ -4,7 +4,7 @@ from yasuki_core.engine.table import (
     ZoneKey,
     ZoneRole,
     DeckKey,
-    owns_card,
+    controls_card,
     owns_zone,
     owns_deck,
     zone_owned_by_card,
@@ -28,16 +28,28 @@ def _table_with_cards() -> TableState:
     return table
 
 
-def test_owns_own_card_not_opponents():
+def test_controls_own_card_not_opponents():
     table = _table_with_cards()
-    assert owns_card(table, PlayerId.P1, "p1") is True
-    assert owns_card(table, PlayerId.P1, "p2") is False
-    assert owns_card(table, PlayerId.P2, "p2") is True
+    assert controls_card(table, PlayerId.P1, "p1") is True
+    assert controls_card(table, PlayerId.P1, "p2") is False
+    assert controls_card(table, PlayerId.P2, "p2") is True
+
+
+def test_a_card_in_play_is_acted_on_by_its_controller_not_its_owner():
+    """The gate follows control, which is the whole of the difference between it and ownership
+    (CR, Card control)."""
+    table = _table_with_cards()
+    mine = table.cards_by_id["p1"]
+    table.battlefield.add(mine)
+    table.controllers[mine.id] = PlayerId.P2
+
+    assert controls_card(table, PlayerId.P1, "p1") is False
+    assert controls_card(table, PlayerId.P2, "p1") is True
 
 
 def test_unknown_card_is_denied():
     table = _table_with_cards()
-    assert owns_card(table, PlayerId.P1, "ghost") is False
+    assert controls_card(table, PlayerId.P1, "ghost") is False
 
 
 def test_owns_own_zone_not_opponents():
