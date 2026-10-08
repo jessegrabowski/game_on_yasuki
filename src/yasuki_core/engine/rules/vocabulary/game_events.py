@@ -441,6 +441,12 @@ class BattleResolved:
     ever_present : frozenset of (PlayerId, str)
         Each seat and the Personality it ever had at the battlefield during the attack, whether or
         not the Personality was still there when the battle was fought.
+    present_at_resolution : frozenset of (PlayerId, str)
+        Each seat and the Personality it had at the battlefield as resolution began.
+    attacking_force : int
+        The attacking army's Force as resolution began, which decided the winner.
+    defending_force : int
+        The defending army's Force as resolution began.
     destroyed_controllers : frozenset of PlayerId
         The seats whose cards the resolution destroyed. A seat destroys the enemy army's units
         (CR, Battle Resolution), so another seat's here means the seat reading it destroyed cards.
@@ -458,6 +464,9 @@ class BattleResolved:
     province_destroyed: bool
     destroyed: tuple[str, ...]
     ever_present: frozenset[tuple[PlayerId, str]]
+    present_at_resolution: frozenset[tuple[PlayerId, str]]
+    attacking_force: int
+    defending_force: int
     destroyed_controllers: frozenset[PlayerId]
     terrains_played: frozenset[tuple[PlayerId, str]]
     terrains_destroyed: frozenset[tuple[PlayerId, str]]
