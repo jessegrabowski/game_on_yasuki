@@ -45,6 +45,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | Gives a card a stat by its text while in play, itself or another | `@stat_grant(id)` | {card}`Haramaki-do`, {card}`Daidoji Tashiko` |
 | Is considered to have a stat when a certain action checks it | `@considered_stat(id)` | {card}`Dragon Elite Inkyo` |
 | Limits what it will attach to, or what will attach to it | `@attach_restriction(id)` | {card}`Brothers in Arms`, {card}`Hida Zaiberu (Experienced)` |
+| Says a Personality may not be challenged, or may not challenge | `@challenge_restriction(id)` | {card}`Hida Souchou` |
 | "Will not join a player with ..." | `register_join_restriction(id, handler)` | {card}`Moto Tsuneo, Soul of Moto Tsume` |
 | Equips for less onto some Personalities, from either card's text | `@equip_discount(id)` | {card}`Hida O-Win (Experienced)` |
 | "The rulebook Equip ability may target this Follower in the discard pile" | `@equips_from_discard(id)` | {card}`Tao Defenders` |
@@ -232,7 +233,7 @@ id:
 Name every function in the block for the card and the job it does, as `_<card id>_<role>`, where the
 role is one of `cost`, `targets`, `effects`, `interrupt`, `uses_per_turn`, an entry point of a
 registry (`gold`, `invest`, `keywords`, `keyword_loss`, `recruit_discount`, `invest_discount`,
-`stat_grant`, `considered_stat`, `attach_restriction`, `discipline_grant`, `equip_discount`,
+`stat_grant`, `considered_stat`, `attach_restriction`, `challenge_restriction`, `discipline_grant`, `equip_discount`,
 `equips_from_discard`, `attack_strength`, `province_strength`, `lobby_bonus`, `lobby_bar`,
 `favor_payer`, `entry_state`, `before_entering_play`), or the event a trigger answers
 (`entered_play`, `destroyed`, `straightened`, `dishonored`, `rehonored`, `turn_boundary`,

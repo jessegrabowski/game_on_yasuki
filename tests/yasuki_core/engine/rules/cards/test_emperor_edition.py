@@ -27,6 +27,7 @@ from yasuki_core.game_pieces.prints import FatePrint
 from yasuki_core.engine.rules.duel.procedure import declare_duel
 from yasuki_core.engine.rules.turn.sequence import run_stack
 
+from tests.yasuki_core.engine.rules.conftest import probe_challenge_restriction
 from tests.yasuki_core.engine.builders import (
     end_phase,
     fate_card,
@@ -183,6 +184,16 @@ def test_sanctioned_duel_is_not_offered_with_no_personality_to_challenge():
     ops.remove_card(session.game.table, session.game.table.cards_by_id["theirs"])
 
     assert PlayStrategy("duel") not in session.legal_actions(P1)
+
+
+def test_sanctioned_duel_is_not_offered_when_the_rival_may_not_be_challenged():
+    def _theirs_may_not_be_challenged(game, holder, challenger, challenged):
+        return challenged.id != "theirs"
+
+    with probe_challenge_restriction("theirs", _theirs_may_not_be_challenged):
+        session = _sanctioned_duel_game()
+
+        assert PlayStrategy("duel") not in session.legal_actions(P1)
 
 
 def test_sanctioned_duel_does_not_target_a_bowed_challenger():

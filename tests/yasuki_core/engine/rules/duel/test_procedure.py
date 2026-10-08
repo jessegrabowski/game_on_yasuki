@@ -33,7 +33,7 @@ from tests.yasuki_core.engine.builders import (
     put_in_play,
     register,
 )
-from tests.yasuki_core.engine.rules.conftest import probe_ability
+from tests.yasuki_core.engine.rules.conftest import probe_ability, probe_challenge_restriction
 
 P1, P2 = PlayerId.P1, PlayerId.P2
 
@@ -282,6 +282,28 @@ def test_a_challenge_between_one_players_own_personalities_never_happens():
 
         assert session.game.duel is None
         assert not [key for key in session.game.table.zones if key.role is ZoneRole.FOCUS]
+
+
+def _rival_may_not_be_challenged(game, holder, challenger, challenged):
+    return challenged.id != "rival"
+
+
+def test_a_challenge_a_cards_text_forbids_never_happens():
+    with (
+        probe_ability(DUEL_PROBE, DUEL_ABILITY),
+        probe_challenge_restriction("warden_probe", _rival_may_not_be_challenged),
+    ):
+        session = _duel_game()
+        put_in_play(session.game, holding("warden", owner=P2, printed_id="warden_probe"))
+
+        procedure.declare_duel(
+            session.game,
+            challenger_duelist="challenger",
+            challenged_duelist="rival",
+            source="challenger",
+        )
+
+        assert session.game.duel is None
 
 
 def test_a_challenge_to_a_card_that_is_not_a_personality_never_happens():
