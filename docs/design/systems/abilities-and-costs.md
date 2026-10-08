@@ -183,6 +183,13 @@ them at once. Any of the action's own effects can be answered, and only those: t
 what step E hands to `resolve_action_effects`, never a cost, a trait's effects or a rulebook
 procedure's, and what a choice resolver produces later is not foreseeable and is not offered.
 
+When the step closes and the held action resumes, step E checks the action's targeting again: a
+target an Interrupt left illegal for its phrase, as one sent home from the battle is, stops the
+action's effects at the first that acts on it, and nothing after that happens (CR, Action Sequence
+step E). The check is made once, as resolution begins, so a target the action's own effects move
+still takes the rest of them. {func}`~.lapsed_targets` finds those targets, and the walker stops at
+them through the provenance's `lapsed`.
+
 An Interrupt is an action on the tape, so "the action" it modifies stays the one held beneath the
 step: the action record is not reset by an Interrupt, and backing out of any question an Interrupt
 asks unwinds the Interrupt alone. During an action whose ability sets `unstoppable`, the modifier

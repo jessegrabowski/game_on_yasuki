@@ -50,7 +50,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
-from yasuki_core.engine.rules.vocabulary.work import Provenance
+from yasuki_core.engine.rules.vocabulary.work import Provenance, Targeting
 from yasuki_core.ruleset import in_force
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -696,6 +696,10 @@ def _advance(game: GameState, frames: list[_Frame]) -> None:
                 contingent = effect.contingent
                 effect = effect.first
             first = effect
+            if effect.subject_id is not None and effect.subject_id in provenance.lapsed:
+                _trace.append(f"    targeting failed: {effect.describe()}")
+                _stop_action(frames, provenance)
+                continue
             if isinstance(effect, Simultaneously):
                 _trace.append(f"    {effect.describe()}")
                 if top.simultaneous:
@@ -1303,6 +1307,14 @@ class ResumeCascade:
         resume_cascade(game, self, [])
 
 
+def _stop_action(frames: list[_Frame], provenance: Provenance) -> None:
+    """Drop every effect the action has left, wherever its frames stand: "the effects stop
+    immediately, and no further effects or targeting happen" (CR, Action Sequence step E)."""
+    for frame in frames:
+        if isinstance(frame, _Effects) and frame.provenance == provenance:
+            frame.pending.clear()
+
+
 def _stash(game: GameState, frames: list[_Frame]) -> None:
     game.stack.append(ResumeCascade(tuple(_frozen(frame) for frame in frames)))
 
@@ -1394,13 +1406,27 @@ class HeldAction:
         The action's effects, in the order they will resolve.
     provenance : Provenance
         Where the action's effects come from.
+    targeting : :class:`~.Targeting`, optional
+        The targets the action chose, checked as its resolution begins. Default None, for an
+        action that targets nothing.
     """
 
     effects: tuple[Effect, ...]
     provenance: Provenance
+    targeting: Targeting | None = None
 
     def resume(self, game: GameState) -> None:
-        _begin(game, self.effects, provenance=self.provenance)
+        """Begin step E once the Interrupt round has closed. A target an Interrupt left illegal
+        stops the effects that require it (CR, Action Sequence step E)."""
+        # Imported where it is used: reading a phrase's legal targets needs the ability machinery,
+        # which imports this module.
+        from yasuki_core.engine.rules.abilities.activation import lapsed_targets
+
+        provenance = self.provenance
+        if self.targeting is not None:
+            lapsed = lapsed_targets(game, self.targeting, self.effects)
+            provenance = replace(provenance, lapsed=lapsed)
+        _begin(game, self.effects, provenance=provenance)
 
 
 def resume_paused_cascade(game: GameState, produced: list[Effect]) -> None:
@@ -1505,7 +1531,11 @@ def pay_costs(game: GameState, costs: list[Effect]) -> None:
 
 
 def resolve_action_effects(
-    game: GameState, effects: list[Effect], *, provenance: Provenance = Provenance()
+    game: GameState,
+    effects: list[Effect],
+    *,
+    provenance: Provenance = Provenance(),
+    targeting: Targeting | None = None,
 ) -> None:
     """Apply ``effects`` as an action's own, which is what step E of the Action Sequence hands
     over. The first effects an action hands over are held beneath an Interrupt round first (CR,
@@ -1513,7 +1543,9 @@ def resolve_action_effects(
     as the Interrupts taken there make of it. What the action hands over after that round, such as
     an effect a delay held, opens no second one. The derived-event cascade runs as in
     :func:`~.resolve_effects`. ``provenance`` says whose action this is, as
-    :func:`~.action_provenance` builds it, and an action from no card by default.
+    :func:`~.action_provenance` builds it, and an action from no card by default. ``targeting`` is
+    what the action targeted, which is checked again as its resolution begins after an Interrupt
+    round.
 
     Raise ``RuntimeError`` if a decision is pending.
     """
@@ -1527,11 +1559,12 @@ def resolve_action_effects(
         _begin(game, effects, provenance=provenance)
         return
     game.interrupts_offered = True
-    held = HeldAction(tuple(effects), provenance)
+    held = HeldAction(tuple(effects), provenance, targeting)
     game.stack.append(held)
     if not open_interrupt_window(game):
+        # Nothing was played between targeting and resolution, so no target can have lapsed.
         game.stack.pop()
-        held.resume(game)
+        _begin(game, effects, provenance=provenance)
 
 
 def action_did[E: GameEvent](game: GameState, kind: type[E]) -> tuple[E, ...]:

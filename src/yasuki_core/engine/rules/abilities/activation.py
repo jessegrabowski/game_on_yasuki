@@ -14,9 +14,10 @@ from yasuki_core.engine.rules.vocabulary.decisions import (
     answerable,
     within_reach,
 )
-from yasuki_core.engine.rules.legality import choosable_targets
+from yasuki_core.engine.rules.legality import choosable_targets, group_targets
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.turn.structure import RoundKind
+from yasuki_core.engine.rules.vocabulary.work import Targeting
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -257,8 +258,9 @@ def _advance(
         # One card targeted by one phrase, however that phrase was declared: held at the Interrupt
         # step as the action's targeting, so an Interrupt may read it and substitute for it (CR,
         # Substitution and Targets).
-        targeting = ResolveAbility(card_id, picked[0][0], ability_key)
-        _resolve(game, source, ability, [targeting.built(game)])
+        held = ResolveAbility(card_id, picked[0][0], ability_key)
+        targeting = Targeting(card_id, ability_key, picked)
+        _resolve(game, source, ability, [held.built(game)], targeting)
         return
     _hit_every_target(game, card_id, picked, ability_key)
 
@@ -277,19 +279,50 @@ def _hit_every_target(
     by_id = game.table.cards_by_id
     groups = tuple(tuple(by_id[target_id] for target_id in group) for group in picked)
     effects = ability.effects_against(game, source, groups) if ability is not None else []
-    _resolve(game, source, ability, effects)
+    # An ability that hits every card it names takes no target, so it has no targeting to check.
+    targeting = None
+    if ability is not None and not ability.hits_every_target:
+        targeting = Targeting(card_id, ability_key, picked)
+    _resolve(game, source, ability, effects, targeting)
 
 
 def _resolve(
-    game: GameState, source: L5RCard, ability: Ability | None, effects: list[Effect]
+    game: GameState,
+    source: L5RCard,
+    ability: Ability | None,
+    effects: list[Effect],
+    targeting: Targeting | None = None,
 ) -> None:
     """Hand ``effects`` over as the action's own, or as a trait's when ``ability`` is one. The
-    action is from ``source`` unless the ability is the rulebook's."""
+    action is from ``source`` unless the ability is the rulebook's. ``targeting`` is what the action
+    targeted, if anything."""
     if ability is not None and ability.trait:
         triggers.resolve_effects(game, effects)
         return
     acting = source.id if ability is not None and ability.acts_from_its_card else None
-    triggers.resolve_action_effects(game, effects, provenance=action_provenance(game, acting))
+    provenance = action_provenance(game, acting)
+    triggers.resolve_action_effects(game, effects, provenance=provenance, targeting=targeting)
+
+
+def lapsed_targets(
+    game: GameState, targeting: Targeting, effects: tuple[Effect, ...]
+) -> frozenset[str]:
+    """The cards ``targeting`` names that are no longer legal targets for their phrase as the
+    action's resolution begins (CR, Action Sequence step E). A targeting an Interrupt substituted
+    is read as it now stands among ``effects``, the action's held effects."""
+    source = game.table.cards_by_id.get(targeting.card_id)
+    ability = None if source is None else ability_for(game, source, targeting.ability_key)
+    if source is None or ability is None:
+        return frozenset()
+    picked = targeting.picked
+    held = next((effect for effect in effects if isinstance(effect, ResolveAbility)), None)
+    if held is not None:
+        picked = ((triggers.as_modified(game, held).target_id,),)
+    lapsed: set[str] = set()
+    for index, group in enumerate(picked):
+        offered = set(group_targets(game, source, ability, ability.phrases[index], picked[:index]))
+        lapsed.update(target for target in group if target not in offered)
+    return frozenset(lapsed)
 
 
 def _record_targets(game: GameState, target_ids: tuple[str, ...]) -> None:

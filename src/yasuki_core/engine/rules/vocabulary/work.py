@@ -36,6 +36,26 @@ class Modification(Protocol):
 
 
 @dataclass(frozen=True, slots=True)
+class Targeting:
+    """The targets an action chose in step C, which step E checks are still legal before carrying
+    out the effects that require them (CR, Action Sequence).
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose ability the action is.
+    ability_key : str or None
+        Names the ability among the several the card prints, or None for its only one.
+    picked : tuple of tuple of str
+        The cards each "target" phrase took, in print order.
+    """
+
+    card_id: str
+    ability_key: str | None
+    picked: tuple[tuple[str, ...], ...]
+
+
+@dataclass(frozen=True, slots=True)
 class Provenance:
     """Where the effects a cascade holds came from, which decides what may reach them. The cascade
     carries it across every pause and deferral, so an effect a question or a delay holds back
@@ -58,6 +78,10 @@ class Provenance:
     negations : tuple of Negation, optional
         The ``once`` negations naming only a source that the action spent as it handed its effects
         over, which negate every effect of that action and no other. Default none.
+    lapsed : frozenset of str, optional
+        The cards the action targeted that were no longer legal targets as its resolution began.
+        The action's effects stop at the first that acts on one, and nothing after it happens (CR,
+        Action Sequence step E). Default none.
     """
 
     interruptible: bool = False
@@ -65,3 +89,4 @@ class Provenance:
     paying: bool = False
     acting: str | None = None
     negations: tuple[Negation, ...] = ()
+    lapsed: frozenset[str] = frozenset()

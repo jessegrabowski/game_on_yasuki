@@ -18,6 +18,7 @@ yasuki_core.engine.rules.abilities.activation
     activate
     apply_ability_target
     defer_ability
+    lapsed_targets
 
 .. automodule:: yasuki_core.engine.rules.abilities.activation
     :members:
