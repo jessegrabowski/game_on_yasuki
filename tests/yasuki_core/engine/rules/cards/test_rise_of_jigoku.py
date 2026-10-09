@@ -992,16 +992,35 @@ def test_ninube_kaedes_own_followers_widen_the_unit_she_can_match():
     assert ActivateAbility("kaede") in session.legal_actions(P1)
 
 
-def test_a_target_destroyed_before_the_turn_ends_is_returned_to_nobody():
-    """The return names a card that may have left play, where control is already gone. Giving it
-    back has to be a no-op rather than putting a record on a card in a pile."""
+def test_killing_the_personality_she_took_still_gives_kaede_back():
+    """Both returns are one phrase, so the dead target's half resolving to nothing must not keep
+    Kaede with the other seat. A card in a pile is controlled by its owner already."""
     session = _kaede_game()
 
     session.act(P1, ActivateAbility("kaede"))
     session.submit(P1, DecisionResponse(("theirs",)))
     resolve_effects(session.game, [Destroy("theirs", P1)])
+    assert controller_of(session.game.table, session.game.table.cards_by_id["kaede"]) is P2
+
     end_turn(session)
 
+    assert controller_of(session.game.table, session.game.table.cards_by_id["kaede"]) is P1
+    assert session.game.table.controllers == {}
+
+
+def test_killing_kaede_still_gives_her_target_back():
+    """The mirror of the same phrase: Kaede's own half resolving to nothing must not keep her
+    target with the seat that took him."""
+    session = _kaede_game()
+
+    session.act(P1, ActivateAbility("kaede"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+    resolve_effects(session.game, [Destroy("kaede", P2)])
+    assert controller_of(session.game.table, session.game.table.cards_by_id["theirs"]) is P1
+
+    end_turn(session)
+
+    assert controller_of(session.game.table, session.game.table.cards_by_id["theirs"]) is P2
     assert session.game.table.controllers == {}
 
 
