@@ -40,7 +40,6 @@ from yasuki_core.engine.rules.board.queries import (
     army_at,
     attack_targeting,
     attack_targets,
-    attack_targets_at,
     different_elements,
     followers_in_play,
     phase_history,
@@ -1008,60 +1007,35 @@ def _resolve_hida_toranosuke_clan_champion_experienced_3_penalty(
     ]
 
 
-def _hida_toranosuke_clan_champion_experienced_3_effects(
-    game: GameState, source: L5RCard, target: L5RCard
-) -> list[Effect]:
-    """Banish a Courage card in your discard pile to make a Melee 4. The Melee is aimed as it is
-    made, once the card is banished, since what it may target depends on that card."""
-    courage = tuple(
+def _hida_toranosuke_clan_champion_experienced_3_courage(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """ "A Courage card in your discard pile". It is chosen as the action is announced, since what
+    the Melee may target depends on it (CR, Targeting Paradoxes)."""
+    seat = controller_of(game.table, source)
+    return [
         card.id
         for role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD)
-        for card in game.table.zones[ZoneKey(source.owner, role)].cards
+        for card in game.table.zones[ZoneKey(seat, role)].cards
         if has_keyword(game, card, keywords.COURAGE)
-    )
-    if not courage:
-        return []
-    return [
-        Choose(
-            source.owner,
-            courage,
-            1,
-            1,
-            "hida_toranosuke_clan_champion_experienced_3_banish",
-            source.id,
-        )
     ]
 
 
-@choice_resolver(
-    "hida_toranosuke_clan_champion_experienced_3_banish", prompt="Banish a Courage card"
-)
-def _resolve_hida_toranosuke_clan_champion_experienced_3_banish(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """The Melee may target a Personality with Followers if the banished card was a Follower."""
-    banished = game.table.cards_by_id[chosen[0]]
-    attack = game.attack
-    if is_follower(banished) and attack is not None and attack.current is not None:
-        enemy = attack.enemy_of(seat)
-        aimable = attack_targets_at(game, attack.current, enemy, past_followers=True)
-    else:
-        aimable = attack_targets(game, game.table.cards_by_id[source_id], MeleeAttack)
-    if not aimable:
-        return [Banish(banished.id)]
-    melee = Choose(
-        seat, tuple(aimable), 1, 1, "hida_toranosuke_clan_champion_experienced_3_melee", source_id
-    )
-    return [To(Banish(banished.id), (melee,))]
+def _hida_toranosuke_clan_champion_experienced_3_melee_targets(
+    game: GameState, source: L5RCard, picked: PickedTargets
+) -> list[str]:
+    """The Melee's targets, which take a Personality with Followers if the banished card was a
+    Follower."""
+    courage = game.table.cards_by_id[picked[0][0]]
+    return attack_targets(game, source, MeleeAttack, past_followers=is_follower(courage))
 
 
-@choice_resolver(
-    "hida_toranosuke_clan_champion_experienced_3_melee", prompt="Target the Melee Attack"
-)
-def _resolve_hida_toranosuke_clan_champion_experienced_3_melee(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+def _hida_toranosuke_clan_champion_experienced_3_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
 ) -> list[Effect]:
-    return [MeleeAttack(TORANOSUKE_MELEE, chosen[0], seat)]
+    (courage,), (target,) = groups
+    seat = controller_of(game.table, source)
+    return [To(Banish(courage.id), (MeleeAttack(TORANOSUKE_MELEE, target.id, seat),))]
 
 
 register_ability(
@@ -1069,9 +1043,17 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=itself,
-        effects=_hida_toranosuke_clan_champion_experienced_3_effects,
-        hits_every_target=True,
+        target_groups=(
+            TargetGroup(
+                candidates=_hida_toranosuke_clan_champion_experienced_3_courage,
+                targeting_message="a Courage card in your discard pile",
+            ),
+            TargetGroup(
+                candidates=_hida_toranosuke_clan_champion_experienced_3_melee_targets,
+                targeting_message=ATTACK_TARGET,
+            ),
+        ),
+        effects_for_groups=_hida_toranosuke_clan_champion_experienced_3_effects,
     ),
 )
 

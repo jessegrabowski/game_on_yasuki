@@ -44,7 +44,7 @@ from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
     AlternateEffects,
-    AskOption,
+    Ask,
     Banish,
     Bow,
     Choose,
@@ -616,48 +616,66 @@ register_ability(
 # --- Kaiu Denkaru ---
 
 DENKARU_FORCE = 2
-DENKARU_BONUS = "Give Denkaru +2F"
-DENKARU_PENALTY = "Give a target enemy Follower or Personality -2F"
 
 
-def _kaiu_denkaru_enemies(game: GameState, source: L5RCard) -> tuple[str, ...]:
-    """The enemy Followers and Personalities at the battle being fought."""
+def _kaiu_denkaru_itself(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """Denkaru himself, while he is opposed: "If Denkaru is opposed" starts the effects (CR, Good
+    Faith Rule 0.3)."""
+    yours = controller_of(game.table, source)
+    return [source.id] if source.id in opposed_units_in_battle(game, yours) else []
+
+
+def _kaiu_denkaru_enemies(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "A target enemy Follower or Personality". It is targeted as the action is announced, and
+    taking none is choosing the +2F (CR, Choice Paradoxes)."""
     attack = game.attack
     if attack is None or attack.current is None:
-        return ()
-    return tuple(
+        return []
+    enemy = attack.enemy_of(controller_of(game.table, source))
+    return [
         card.id
-        for card in army_at(game, attack.current, attack.enemy_of(source.owner))
+        for card in army_at(game, attack.current, enemy)
         if isinstance(card.printed, PersonalityPrint) or is_follower(card)
+    ]
+
+
+def _kaiu_denkaru_enemy_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    return 0, 1
+
+
+def _kaiu_denkaru_bonus(source: L5RCard) -> Effect:
+    """Both changes run to the end of the turn, as ones with no printed duration do (CR, Duration
+    of Effects)."""
+    return GrantModifier(
+        source.id, source.id, Stat.FORCE, DENKARU_FORCE, Duration.UNTIL_END_OF_TURN
     )
 
 
-def _kaiu_denkaru_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Denkaru himself, while he is opposed: unopposed, the ability does nothing."""
-    return [source.id] if source.id in opposed_units_in_battle(game, source.owner) else []
-
-
-def _kaiu_denkaru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """ "If Denkaru is opposed, either give him +2F or give a target enemy Follower or Personality
-    -2F. If Denkaru is defending, you may do both." The penalty is offered only while an enemy can
-    take it."""
-    attack = game.attack
-    if attack is None or source.id not in opposed_units_in_battle(game, source.owner):
+def _kaiu_denkaru_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """ "Either give him +2F or give a target enemy Follower or Personality -2F. If Denkaru is
+    defending, you may do both." A defending Denkaru that targeted an enemy is asked whether to
+    take his +2F too."""
+    _, enemies = groups
+    yours = controller_of(game.table, source)
+    if source.id not in opposed_units_in_battle(game, yours):
         return []
-    if _kaiu_denkaru_enemies(game, source):
-        modes = (DENKARU_BONUS, DENKARU_PENALTY)
-    else:
-        modes = (DENKARU_BONUS,)
-    defending = attack.defender is source.owner
+    if not enemies:
+        return [_kaiu_denkaru_bonus(source)]
+    (enemy,) = enemies
+    penalty = GrantModifier(
+        source.id, enemy.id, Stat.FORCE, -DENKARU_FORCE, Duration.UNTIL_END_OF_TURN
+    )
+    attack = game.attack
+    if attack is None or attack.defender is not yours:
+        return [penalty]
+    question = "Kaiu Denkaru is defending: give him +2F as well?"
     return [
-        AskOption(
-            source.owner,
-            modes,
-            "Kaiu Denkaru: give him +2F, or an enemy -2F?",
-            "kaiu_denkaru",
-            source.id,
-            maximum=len(modes) if defending else 1,
-        )
+        penalty,
+        Ask(yours, question, "kaiu_denkaru", subjects=(source.id,), source_id=source.id),
     ]
 
 
@@ -665,28 +683,7 @@ def _kaiu_denkaru_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
 def _resolve_kaiu_denkaru(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Both changes run to the end of the turn, as ones with no printed duration do (CR, Duration
-    of Effects)."""
-    effects: list[Effect] = []
-    if DENKARU_BONUS in chosen:
-        effects.append(
-            GrantModifier(
-                source_id, source_id, Stat.FORCE, DENKARU_FORCE, Duration.UNTIL_END_OF_TURN
-            )
-        )
-    if DENKARU_PENALTY in chosen:
-        enemies = _kaiu_denkaru_enemies(game, game.table.cards_by_id[source_id])
-        effects.append(Choose(seat, enemies, 1, 1, "kaiu_denkaru_penalty", source_id))
-    return effects
-
-
-@choice_resolver("kaiu_denkaru_penalty", prompt="Give a target enemy Follower or Personality -2F")
-def _resolve_kaiu_denkaru_penalty(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [
-        GrantModifier(source_id, chosen[0], Stat.FORCE, -DENKARU_FORCE, Duration.UNTIL_END_OF_TURN)
-    ]
+    return [_kaiu_denkaru_bonus(game.table.cards_by_id[source_id])] if chosen else []
 
 
 register_ability(
@@ -694,9 +691,15 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=_kaiu_denkaru_targets,
-        effects=_kaiu_denkaru_effects,
-        hits_every_target=True,
+        target_groups=(
+            TargetGroup(candidates=_kaiu_denkaru_itself),
+            TargetGroup(
+                candidates=_kaiu_denkaru_enemies,
+                count=_kaiu_denkaru_enemy_count,
+                targeting_message="an enemy Follower or Personality, or none for +2F",
+            ),
+        ),
+        effects_for_groups=_kaiu_denkaru_effects,
     ),
 )
 

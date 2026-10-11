@@ -64,8 +64,6 @@ from yasuki_core.engine.rules.rulebook.equip import equip_discount_onto, may_att
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.cards.onyx_edition import (
     CAVALRY_FOLLOWER,
-    DENKARU_BONUS,
-    DENKARU_PENALTY,
     DRAGON_YOJIMBO,
     LION_ANCESTOR,
     NAGA_FOLLOWER,
@@ -2175,17 +2173,28 @@ def _denkaru_battle(*, defending: bool) -> EngineSession:
     return combat_segment(cards, {"denkaru": 0}, {"guard": 0})
 
 
-def test_an_attacking_denkaru_gives_an_enemy_minus_2_force():
+def test_an_attacking_denkaru_targets_an_enemy_for_minus_2_force():
     session = _denkaru_battle(defending=False)
 
     session.act(P1, ActivateAbility("denkaru"))
-    assert session.game.pending.maximum == 1
-    session.submit(P1, DecisionResponse((DENKARU_PENALTY,)))
+    session.submit(P1, DecisionResponse(("denkaru",)))
     session.submit(P1, DecisionResponse(("guard",)))
 
     game = session.game
     assert effective_force(game, game.table.cards_by_id["guard"]) == 2
     assert effective_force(game, game.table.cards_by_id["denkaru"]) == 4
+
+
+def test_a_denkaru_targeting_no_enemy_gives_himself_2_force():
+    session = _denkaru_battle(defending=False)
+
+    session.act(P1, ActivateAbility("denkaru"))
+    session.submit(P1, DecisionResponse(("denkaru",)))
+    session.submit(P1, DecisionResponse(()))
+
+    game = session.game
+    assert effective_force(game, game.table.cards_by_id["guard"]) == 4
+    assert effective_force(game, game.table.cards_by_id["denkaru"]) == 6
 
 
 def test_an_unopposed_denkaru_offers_nothing():
@@ -2198,16 +2207,30 @@ def test_an_unopposed_denkaru_offers_nothing():
     assert ActivateAbility("denkaru") not in session.legal_actions(P1)
 
 
-def test_a_defending_denkaru_may_do_both():
+def test_a_denkaru_sent_home_before_resolution_does_nothing():
+    session = _denkaru_battle(defending=False)
+    game = session.game
+    denkaru = game.table.cards_by_id["denkaru"]
+    resolve_effects(game, [Move("denkaru", Location.home(P1))])
+
+    effects = ability_for(game, denkaru).effects_for_groups(game, denkaru, ((denkaru,), ()))
+
+    assert effects == []
+
+
+@pytest.mark.parametrize(("both", "denkaru_force"), [(True, 6), (False, 4)])
+def test_a_defending_denkaru_may_do_both(both, denkaru_force):
     session = _denkaru_battle(defending=True)
 
     session.act(P1, ActivateAbility("denkaru"))
-    session.submit(P1, DecisionResponse((DENKARU_BONUS, DENKARU_PENALTY)))
+    session.submit(P1, DecisionResponse(("denkaru",)))
     session.submit(P1, DecisionResponse(("guard",)))
+    asked = session.game.pending
+    session.submit(P1, DecisionResponse(asked.candidates if both else ()))
 
     game = session.game
     assert effective_force(game, game.table.cards_by_id["guard"]) == 2
-    assert effective_force(game, game.table.cards_by_id["denkaru"]) == 6
+    assert effective_force(game, game.table.cards_by_id["denkaru"]) == denkaru_force
 
 
 # --- The Indomitable Fortress of the Crab ---
