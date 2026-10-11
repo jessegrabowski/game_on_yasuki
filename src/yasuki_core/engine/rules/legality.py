@@ -573,7 +573,7 @@ def _bow_permits(game: GameState, card: L5RCard, ability: Ability) -> bool:
     """Whether ``card``'s bowed state leaves ``ability`` usable: abilities on a bowed card cannot be
     used, and Tireless is the keyword that escapes it, printed on the ability or granted to the
     card by another in play (CR, Using Abilities, Tireless)."""
-    return not card.bowed or ability.tireless or granted_tireless(game, card)
+    return not card.bowed or ability.tireless or granted_tireless(game, card, ability)
 
 
 def _location_lifted(game: GameState, card: L5RCard, ability: Ability) -> bool:

@@ -133,19 +133,19 @@ def effects_before_entering_play(game: GameState, card: L5RCard) -> list[Effect]
 
 
 # Cards in play that give another card's abilities Tireless ("Your Stronghold's printed abilities
-# have Tireless while this Holding is unbowed"). The handler says whether ``card``'s abilities are
-# Tireless under the granting card, given the game.
-TirelessGrant = Callable[[GameState, L5RCard, L5RCard], bool]
+# have Tireless while this Holding is unbowed"). The handler says whether ``card``'s ``ability``
+# (an activated ability or an Interrupt) is Tireless under the granting card, given the game.
+TirelessGrant = Callable[[GameState, L5RCard, L5RCard, Ability | Interrupt], bool]
 TIRELESS_GRANTS: HandlerRegistry[TirelessGrant] = HandlerRegistry(
     "tireless grants", "already grants Tireless"
 )
 tireless_grant = TIRELESS_GRANTS.make_decorator()
 
 
-def granted_tireless(game: GameState, card: L5RCard) -> bool:
-    """Whether a card in play gives ``card``'s abilities Tireless right now."""
+def granted_tireless(game: GameState, card: L5RCard, ability: Ability | Interrupt) -> bool:
+    """Whether a card in play gives ``card``'s ``ability`` Tireless right now."""
     return any(
-        grant(game, granting, card)
+        grant(game, granting, card, ability)
         for granting in game.table.battlefield.cards
         if (grant := TIRELESS_GRANTS.get(granting.printed_id)) is not None
     )
@@ -566,6 +566,14 @@ def is_printed_ability(card: L5RCard, ability: Ability) -> bool:
     origin = ability.derived_from or ability
     return origin.acts_from_its_card and any(
         held is origin for held in _ABILITIES.get(card.printed_id, ())
+    )
+
+
+def is_printed_interrupt(card: L5RCard, interrupt: Interrupt) -> bool:
+    """Whether ``interrupt`` is one ``card``'s own text carries, as against one another card grants
+    it or the rulebook gives every seat (CR, Printed)."""
+    return interrupt.acts_from_its_card and any(
+        held is interrupt for held in _INTERRUPTS.get(card.printed_id, ())
     )
 
 

@@ -224,7 +224,7 @@ def _affordable(game: GameState, seat: PlayerId, offer: InterruptOffer) -> bool:
 def _tireless(game: GameState, card: L5RCard, interrupt: Interrupt) -> bool:
     """Whether ``interrupt`` may be taken while ``card`` is bowed: Tireless, printed on it or
     granted to the card by another in play (CR, Tireless)."""
-    return interrupt.tireless or granted_tireless(game, card)
+    return interrupt.tireless or granted_tireless(game, card, interrupt)
 
 
 def _played_purchase(game: GameState, offer: InterruptOffer) -> Purchase:

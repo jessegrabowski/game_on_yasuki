@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pytest
 
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
@@ -9,7 +11,12 @@ from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.rulebook.equip import may_attach
-from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
+from yasuki_core.engine.rules.abilities.registry import (
+    _ABILITIES,
+    ability_for,
+    granted_tireless,
+    register_ability,
+)
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -606,6 +613,16 @@ def test_a_bowed_shrine_grants_nothing():
     session = _bowed_estate_with_shrine(shrine_bowed=True)
 
     assert ActivateAbility("estate") not in session.legal_actions(P1)
+
+
+def test_the_shrine_leaves_an_ability_granted_to_the_stronghold_without_tireless():
+    session = _bowed_estate_with_shrine()
+    estate = session.game.table.cards_by_id["estate"]
+    printed = ability_for(session.game, estate)
+    granted = replace(printed)
+
+    assert granted_tireless(session.game, estate, printed)
+    assert not granted_tireless(session.game, estate, granted)
 
 
 # --- Hida Gojiro, Tetsubo Master (Experienced) ---
