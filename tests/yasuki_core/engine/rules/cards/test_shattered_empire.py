@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pytest
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
 from yasuki_core import ruleset
@@ -1747,6 +1749,25 @@ def test_ring_of_earth_negates_the_battle_actions_move():
         table = session.game.table
         assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
         assert table.cards_by_id["earth"].bowed
+
+
+def test_ring_of_earth_straightened_answers_a_second_move_in_the_same_turn():
+    twice = replace(MOVE_ABILITY, uses_per_turn=lambda game, card: 2)
+    with probe_ability(MOVE_PROBE, twice):
+        session = _ring_battle(
+            raider_printed_id=MOVE_PROBE, in_play=(_ring("earth", "ring_of_earth", P2),)
+        )
+        for _ in range(2):
+            session.act(P1, ActivateAbility("raider"))
+            session.submit(P1, DecisionResponse(("guard",)))
+            session.act(P2, PlayInterrupt("earth"))
+            _answer_until_settled(session)
+            resolve_effects(session.game, [Straighten("earth")])
+            if session.game.round.priority is not P1:
+                session.act(P2, Pass())
+
+        table = session.game.table
+        assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
 
 
 def test_ring_of_earth_pitched_from_hand_negates_the_move_and_is_discarded():

@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
     resolved_favor_actions,
 )
 from yasuki_core.engine.rules.abilities.model import (
+    InterruptLimit,
     Ability,
     CardLocation,
     Interrupt,
@@ -1155,6 +1156,7 @@ register_interrupt(
         located_at=(CardLocation.HAND, CardLocation.BATTLEFIELD),
         cost=bow_cost,
         answers_every=True,
+        limit=InterruptLimit.ONCE_PER_ACTION,
         ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )
