@@ -564,7 +564,9 @@ register_ability(
 def _hida_yurike_soul_of_hida_rikyu_straighten_targets(
     game: GameState, source: L5RCard
 ) -> list[str]:
-    return [card.id for card in followers_of(game, source) if not card.bowed]
+    """ "Yurike's target Follower", bowed or not: the text asks for no more, and a bowed one cannot
+    bow, so Yurike does not straighten."""
+    return [card.id for card in followers_of(game, source)]
 
 
 def _hida_yurike_soul_of_hida_rikyu_straighten_effects(

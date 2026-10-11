@@ -2147,10 +2147,12 @@ def test_yurike_bows_her_follower_to_straighten_herself():
     assert not cards["yurike"].bowed
 
 
-def test_yurike_stays_bowed_when_her_followers_bowing_is_negated():
+@pytest.mark.parametrize("negated", [True, False], ids=["bowing_negated", "already_bowed"])
+def test_yurike_stays_bowed_when_her_follower_does_not_bow(negated):
     session = _yurike_battle()
     negation = Negation("guard", END_OF_TURN, effect_kind=Bow, subject_id="ashigaru")
-    resolve_effects(session.game, [Bow("yurike"), GrantNegation(negation)])
+    already = GrantNegation(negation) if negated else Bow("ashigaru")
+    resolve_effects(session.game, [Bow("yurike"), already])
 
     session.act(P1, ActivateAbility("yurike", "straighten"))
     session.submit(P1, DecisionResponse(("ashigaru",)))
