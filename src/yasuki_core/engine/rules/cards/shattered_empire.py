@@ -195,7 +195,6 @@ from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AttachmentPrint,
-    FatePrint,
     PersonalityPrint,
     RingPrint,
 )
@@ -1301,8 +1300,7 @@ register_ring(
 def _ring_of_the_void_condition(game: GameState, source: L5RCard) -> bool:
     """ "Play if you ever have the same number of Fate cards in play as in your hand, not counting
     this Ring." """
-    hand = cards_in_hand(game, source.owner)
-    in_hand = sum(1 for card in hand if card is not source and isinstance(card.printed, FatePrint))
+    in_hand = sum(1 for card in cards_in_hand(game, source.owner) if card is not source)
     return len(fate_cards_in_play(game, source.owner)) == in_hand
 
 
