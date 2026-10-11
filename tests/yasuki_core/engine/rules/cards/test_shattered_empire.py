@@ -10,7 +10,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MASTERWORK
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
+    AttachmentPrint,
     EventPrint,
+    FatePrint,
     PersonalityPrint,
     RingPrint,
     RulebookPrint,
@@ -27,6 +29,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseCards,
     ChooseAbilityTarget,
     ChooseOption,
     DecisionResponse,
@@ -2984,3 +2987,151 @@ def test_tashiko_pays_nothing_after_a_battle_at_no_province():
 
     outcome = session.game.attack.battlefields[0].outcome
     assert session.game.table.seats[P2].honor == before + outcome.honor[P2]
+
+
+# --- Imperial Gift ---
+
+
+def _gift_game(*, items=("katana",), plain=("strategy",), dynasty=("next-card",)) -> EngineSession:
+    """A session with Imperial Gift face-up in P1's Province and a Fate deck holding ``items`` Items
+    alongside ``plain`` non-Items, so the search has to pick the Items out. ``dynasty`` stocks the
+    Dynasty deck the vacated Province refills from."""
+    state = TableState.empty_two_seat()
+    province_card(state, "gift", printed_id="imperial_gift", name="Imperial Gift")
+    for card_id in dynasty:
+        state.decks[DeckKey(P1, Side.DYNASTY)].cards.append(
+            register(state, holding(card_id, owner=P1))
+        )
+    deck = state.decks[DeckKey(P1, Side.FATE)]
+    for card_id in plain:
+        deck.cards.append(
+            register(
+                state,
+                L5RCard.of(
+                    FatePrint,
+                    id=card_id,
+                    printed_id=card_id,
+                    name=card_id,
+                    side=Side.FATE,
+                    owner=P1,
+                ),
+            )
+        )
+    for card_id in items:
+        deck.cards.append(
+            register(
+                state,
+                L5RCard.of(
+                    AttachmentPrint,
+                    id=card_id,
+                    printed_id=card_id,
+                    name=card_id,
+                    side=Side.FATE,
+                    owner=P1,
+                    attachment_type=AttachmentType.ITEM,
+                ),
+            )
+        )
+    return EngineSession.start(state, P1)
+
+
+def _hand(session) -> list[str]:
+    return [c.id for c in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
+
+
+def test_it_is_offered_from_its_province():
+    session = _gift_game()
+    assert ActivateAbility("gift") in session.legal_actions(P1)
+
+
+def test_the_search_offers_only_items():
+    session = _gift_game(items=("katana", "bow"), plain=("strategy", "spell"))
+    session.act(P1, ActivateAbility("gift"))
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseCards)
+    assert set(pending.candidates) == {"katana", "bow"}
+
+
+def test_taking_an_item_shows_it_and_puts_it_in_hand():
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(("katana",)))
+
+    katana = session.game.table.cards_by_id["katana"]
+    assert _hand(session) == ["katana"]
+    assert katana.shown  # the opponent saw which Item was taken
+    assert "katana" not in {c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards}
+
+
+def test_the_honor_is_gained_and_the_event_spent():
+    session = _gift_game()
+    before = session.game.table.seats[P1].honor
+    session.act(P1, ActivateAbility("gift"))
+
+    assert session.game.table.seats[P1].honor == before + 2
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
+    assert "gift" in {c.id for c in discard.cards}
+
+
+def test_the_search_may_fail_with_an_item_in_the_deck():
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(()))
+
+    assert _hand(session) == []
+    assert "katana" in {c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards}
+
+
+@pytest.mark.parametrize("items", [("katana",), ()], ids=["found", "nothing_to_find"])
+def test_the_fate_deck_is_shuffled_after_the_search_reads_it(items):
+    session = _gift_game(items=items, plain=tuple(f"s{i}" for i in range(8)))
+    before = [c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards]
+    session.act(P1, ActivateAbility("gift"))
+    if items:
+        session.submit(P1, DecisionResponse(items))
+
+    after = [c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards]
+    remaining = [c for c in before if c not in items]
+    assert sorted(after) == sorted(remaining)
+    assert after != remaining
+
+
+def test_a_fate_deck_with_no_item_still_gains_the_honor():
+    """The honor is unconditional: the Items are searched for during resolution rather than
+    targeted, so a deck holding none still pays out."""
+    session = _gift_game(items=())
+    before = session.game.table.seats[P1].honor
+    assert ActivateAbility("gift") in session.legal_actions(P1)
+
+    session.act(P1, ActivateAbility("gift"))
+
+    assert session.game.table.seats[P1].honor == before + 2
+    assert session.game.pending is None  # no dead prompt over an empty pile
+
+
+def test_the_province_refills_behind_the_spent_event():
+    """An Event that spends itself out of a Province leaves it short, and a Province that is short
+    refills, or else the seat is down a Province for the rest of the game."""
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(("katana",)))
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [c.id for c in province.cards] == ["next-card"]
+    assert not province.cards[0].face_up  # a refill arrives face-down
+
+
+def test_the_province_refills_even_when_the_search_finds_nothing():
+    session = _gift_game(items=())
+    session.act(P1, ActivateAbility("gift"))
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [c.id for c in province.cards] == ["next-card"]
+
+
+def test_the_gift_replays_to_the_same_state():
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(("katana",)))
+    assert replay(session.log) == session.game

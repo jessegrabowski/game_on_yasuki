@@ -15,19 +15,14 @@ from yasuki_core.engine.rules.stats.card_values import effective_chi
 from yasuki_core.engine.rules.gold.discounts import recruit_discount
 from yasuki_core.engine.rules.board.clans import is_clan
 from yasuki_core.engine.rules.effects import (
-    Choose,
     CreateBattle,
     DelayedEffect,
     Destroy,
-    Discard,
     Effect,
     Fear,
     GainHonor,
     GrantModifier,
     GrantPriority,
-    MoveToHand,
-    Show,
-    ShuffleDeck,
 )
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.decisions import PickedTargets
@@ -43,11 +38,8 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.turn.structure import BEGINNING_OF_COMBAT, END_OF_BATTLE
 from yasuki_core.engine.rules.vocabulary.game_events import EnteredPlay
-from yasuki_core.engine.rules.triggers import TriggerContext, choice_resolver, on
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.rules.triggers import TriggerContext, on
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import AttachmentType, Side
-from yasuki_core.game_pieces.prints import AttachmentPrint
 
 
 # --- Ambush ---
@@ -131,63 +123,6 @@ register_ability(
         targets=itself,
         effects=_fantastic_gardens_effects,
         hits_every_target=True,
-    ),
-)
-
-
-# --- Imperial Gift ---
-
-
-def _imperial_gift_fate_deck_items(game: GameState, seat: PlayerId) -> tuple[str, ...]:
-    """The Items in ``seat``'s Fate deck. What the search may turn up."""
-    return tuple(
-        card.id
-        for card in game.table.decks[DeckKey(seat, Side.FATE)].cards
-        if isinstance(card.printed, AttachmentPrint)
-        and card.printed.attachment_type is AttachmentType.ITEM
-    )
-
-
-@choice_resolver("imperial_gift_item", prompt="Search your Fate deck for an Item")
-def _resolve_imperial_gift_item(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    """Show the Item to the table, put it in hand, then shuffle the deck the search read. The
-    disclosure outlives the move: once the opponent has seen which Item was taken, hiding the card
-    again does not unsay it."""
-    return [
-        Show(chosen[0]),
-        MoveToHand(chosen[0], seat),
-        ShuffleDeck(DeckKey(seat, Side.FATE)),
-    ]
-
-
-def _imperial_gift_targets(game: GameState, card: L5RCard) -> list[str]:
-    """The Event itself. The honor is unconditional, so the ability is offered whether or not the
-    Fate deck holds an Item. The search is a choice raised after it, not the ability's target."""
-    return [card.id]
-
-
-def _imperial_gift_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """Gain 2 Honor, spend the Event, then search. The card offers no choice about taking what it
-    finds, so the search is skipped only when the deck holds no Item at all."""
-    seat = source.owner
-    spent: list[Effect] = [GainHonor(seat, 2), Discard(source.id, seat)]
-    items = _imperial_gift_fate_deck_items(game, seat)
-    if not items:
-        return spent
-    return [*spent, Choose(seat, items, 1, 1, "imperial_gift_item", source.id)]
-
-
-register_ability(
-    "imperial_gift",
-    Ability(
-        timings=(ActionTiming.OPEN,),
-        cost=no_cost,
-        targets=_imperial_gift_targets,
-        effects=_imperial_gift_effects,
-        hits_every_target=True,
-        located_at=(CardLocation.PROVINCE,),
     ),
 )
 

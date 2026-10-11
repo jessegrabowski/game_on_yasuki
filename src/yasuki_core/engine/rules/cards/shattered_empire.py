@@ -88,6 +88,9 @@ from yasuki_core.engine.rules.board.queries import (
     units_at,
 )
 from yasuki_core.engine.rules.effects import (
+    Discard,
+    MoveToHand,
+    Show,
     AdditionalAction,
     AdjustCounter,
     Ask,
@@ -854,6 +857,68 @@ register_ability(
         targets=_hida_sanjiro_targets,
         targeting_message=ATTACK_TARGET,
         effects=_hida_sanjiro_effects,
+    ),
+)
+
+
+# --- Imperial Gift ---
+
+IMPERIAL_GIFT_HONOR = 2
+
+
+def _imperial_gift_fate_deck_items(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The Items in ``seat``'s Fate deck. What the search may turn up."""
+    return tuple(
+        card.id
+        for card in game.table.decks[DeckKey(seat, Side.FATE)].cards
+        if isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type is AttachmentType.ITEM
+    )
+
+
+@choice_resolver("imperial_gift_item", prompt="Search your Fate deck for an Item")
+def _resolve_imperial_gift_item(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Show the Item and put it in hand, or nothing for a search the seat let fail. The disclosure
+    outlives the move: once the opponent has seen which Item was taken, hiding the card again does
+    not unsay it."""
+    if not chosen:
+        return []
+    return [Show(chosen[0]), MoveToHand(chosen[0], seat)]
+
+
+def _imperial_gift_targets(game: GameState, card: L5RCard) -> list[str]:
+    """The Event itself. The honor is unconditional, so the ability is offered whether or not the
+    Fate deck holds an Item. The search is a choice raised after it, not the ability's target."""
+    return [card.id]
+
+
+def _imperial_gift_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Gain 2 Honor and search your Fate deck for an Item, show it, and put it in your hand." The
+    seat may let the search fail, and the deck it searched is shuffled whatever it found (CR,
+    Search)."""
+    seat = source.owner
+    items = _imperial_gift_fate_deck_items(game, seat)
+    search = [Choose(seat, items, 0, 1, "imperial_gift_item", source.id)] if items else []
+    return [
+        GainHonor(seat, IMPERIAL_GIFT_HONOR),
+        Discard(source.id, seat),
+        *search,
+        ShuffleDeck(DeckKey(seat, Side.FATE)),
+    ]
+
+
+register_ability(
+    "imperial_gift",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=_imperial_gift_targets,
+        effects=_imperial_gift_effects,
+        hits_every_target=True,
+        located_at=(CardLocation.PROVINCE,),
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )
 
