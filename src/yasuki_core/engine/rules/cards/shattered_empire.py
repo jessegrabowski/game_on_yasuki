@@ -153,7 +153,7 @@ from yasuki_core.engine.rules.triggers import (
 )
 from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
-from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcome
+from yasuki_core.engine.rules.duel.procedure import duel_in_progress, decided_duel, decided_outcome
 from yasuki_core.engine.rules.turn.structure import (
     ADDITIONAL_ACTION_SPENT,
     BEGINNING_OF_TURN,
@@ -1736,9 +1736,7 @@ def _way_of_the_crab_experienced_focus_effect(game: GameState, card: L5RCard) ->
     The CR names the duel stat per Personality rather than per duel, so each duelist is told to
     compare it (CR, Duel Stat).
     """
-    duel = game.duel
-    if duel is None:
-        return []
+    duel = duel_in_progress(game)
     return [
         GrantDuelStat(card.id, duel.duelist_of(seat), Stat.FORCE, DUEL_CONSEQUENCES)
         for seat in (duel.challenger, duel.challenged)
