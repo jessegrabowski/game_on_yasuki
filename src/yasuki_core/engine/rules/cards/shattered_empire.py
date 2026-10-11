@@ -830,14 +830,19 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
 
 
-def _hida_sanjiro_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """ "If Sanjiro has any Items, Fear 4", the Items read as the ability resolves."""
+def _hida_sanjiro_targets(game: GameState, source: L5RCard) -> list[str]:
+    """ "If Sanjiro has any Items" starts the effects, so without one the action cannot be
+    announced (CR, Good Faith Rule 0.3)."""
     has_items = any(
         isinstance(card.printed, AttachmentPrint)
         and card.printed.attachment_type is AttachmentType.ITEM
         for card in attachments_of(game, source)
     )
-    return [Fear(SANJIRO_FEAR, target.id, source.owner)] if has_items else []
+    return attack_targets(game, source, Fear) if has_items else []
+
+
+def _hida_sanjiro_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Fear(SANJIRO_FEAR, target.id, source.owner)]
 
 
 register_ability(
@@ -845,7 +850,7 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targeting(Fear),
+        targets=_hida_sanjiro_targets,
         targeting_message=ATTACK_TARGET,
         effects=_hida_sanjiro_effects,
     ),

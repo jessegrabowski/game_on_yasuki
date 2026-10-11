@@ -270,8 +270,7 @@ def _sanjiro_game():
     return session
 
 
-def test_hida_sanjiro_invests_in_his_own_armour():
-    """The Invest resolves as he arrives, so the Armor is on him the moment he is in play."""
+def test_hida_sanjiro_invests_in_his_own_armor():
     session = _sanjiro_game()
 
     session.act(P1, ActivateAbility("sanjiro", RECRUIT_WITH_INVEST))
@@ -279,14 +278,13 @@ def test_hida_sanjiro_invests_in_his_own_armour():
 
     game = session.game
     sanjiro = game.table.cards_by_id["sanjiro"]
-    armour = attachments_of(game, sanjiro)[0]
-    assert armour.name == "Armor"
-    assert armour.is_token is True
+    armor = attachments_of(game, sanjiro)[0]
+    assert armor.name == "Armor"
+    assert armor.is_token is True
     assert effective_force(game, sanjiro) == 6  # 4 printed, +2 worn
 
 
 def test_hida_sanjiro_recruited_plainly_wears_nothing():
-    """The Armor is the Invest's payoff, not part of him arriving."""
     session = _sanjiro_game()
 
     session.act(P1, ActivateAbility("sanjiro", RECRUIT))
@@ -528,23 +526,31 @@ def test_the_rulebook_favor_ability_opens_way_of_the_cranes_window():
     assert CRANE_DRAW in session.legal_actions(P1)
 
 
-@pytest.mark.parametrize(
-    ("carried", "bows"),
-    [(AttachmentType.ITEM, True), (AttachmentType.FOLLOWER, False)],
-    ids=["item", "follower"],
-)
-def test_hida_sanjiro_fears_only_while_he_has_an_item(carried, bows):
+def test_hida_sanjiro_with_an_item_fears_his_target():
     cards = [
         personality("sanjiro", printed_id="hida_sanjiro", force=4),
         personality("guard", owner=P2, force=4),
     ]
     session = combat_segment(cards, {"sanjiro": 0}, {"guard": 0})
-    attached(session.game, attachment("gear", attachment_type=carried), "sanjiro")
+    attached(session.game, attachment("gear"), "sanjiro")
 
     session.act(P1, ActivateAbility("sanjiro"))
     session.submit(P1, DecisionResponse(("guard",)))
 
-    assert session.game.table.cards_by_id["guard"].bowed is bows
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def test_hida_sanjiro_without_an_item_cannot_announce_his_fear():
+    cards = [
+        personality("sanjiro", printed_id="hida_sanjiro", force=4),
+        personality("guard", owner=P2, force=4),
+    ]
+    session = combat_segment(cards, {"sanjiro": 0}, {"guard": 0})
+    attached(
+        session.game, attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER), "sanjiro"
+    )
+
+    assert ActivateAbility("sanjiro") not in session.legal_actions(P1)
 
 
 # --- Way of the Crab (Experienced) ---
