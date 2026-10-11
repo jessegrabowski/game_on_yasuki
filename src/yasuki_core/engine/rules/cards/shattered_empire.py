@@ -181,7 +181,14 @@ from yasuki_core.engine.rules.rulebook.equip import creation_targets, weapons_on
 from yasuki_core.engine.rules.rulebook.discipline import discipline_grant, in_discard_pile
 from yasuki_core.engine.rules.rulebook.joining import register_join_restriction
 from yasuki_core.engine.rules.state import GameState, used_this_turn
-from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import (
+    DeckKey,
+    Location,
+    ZoneKey,
+    ZoneRole,
+    controller_of,
+    location_of,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MASTERWORK
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -742,7 +749,7 @@ def _heedless_assault_enemies(game: GameState, source: L5RCard, picked: PickedTa
     return [
         card.id
         for card in (*personalities_in_play(game), *followers_in_play(game))
-        if card.owner is not source.owner
+        if controller_of(game.table, card) is not source.owner
     ]
 
 
@@ -1714,9 +1721,12 @@ def _way_of_the_crab_experienced_keywords(
 ) -> tuple[str, ...]:
     """ "Your Personalities have Siege while opposed." Siege carries no rule of its own, and other
     cards read it."""
-    if card.owner is not edict.owner or not isinstance(card.printed, PersonalityPrint):
+    yours = controller_of(game.table, edict)
+    if controller_of(game.table, card) is not yours or not isinstance(
+        card.printed, PersonalityPrint
+    ):
         return ()
-    return (keywords.SIEGE,) if card.id in opposed_units_in_battle(game, edict.owner) else ()
+    return (keywords.SIEGE,) if card.id in opposed_units_in_battle(game, yours) else ()
 
 
 @focus_effect("way_of_the_crab_experienced")
@@ -1739,8 +1749,9 @@ def _way_of_the_crab_experienced_focus_effect(game: GameState, card: L5RCard) ->
 def _way_of_the_crab_experienced_bowed(ctx: TriggerContext) -> list[Effect]:
     """After your Fortification bows, once per turn, straighten it. Negate its bowing (this
     turn)."""
-    bowed = ctx.game.table.cards_by_id[ctx.event.card_id]
-    if bowed.owner is not ctx.card.owner or not has_keyword(
+    table = ctx.game.table
+    bowed = table.cards_by_id[ctx.event.card_id]
+    if controller_of(table, bowed) is not controller_of(table, ctx.card) or not has_keyword(
         ctx.game, bowed, keywords.FORTIFICATION
     ):
         return []

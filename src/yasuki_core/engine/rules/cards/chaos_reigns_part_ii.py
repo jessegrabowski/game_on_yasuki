@@ -103,7 +103,7 @@ from yasuki_core.engine.rules.triggers import (
     given_by_effect,
     on,
 )
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole, controller_of, location_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import AttachmentType, Side
@@ -641,10 +641,11 @@ def _tetsubo_of_seven_battles_battle_resolved(ctx: TriggerContext) -> list[Effec
 def _tetsubo_of_seven_battles_targets(game: GameState, source: L5RCard) -> list[str]:
     """The enemy attachments with Force no higher than this Item's."""
     force = effective_force(game, source)
+    yours = controller_of(game.table, source)
     return [
         card.id
         for card in game.table.battlefield.cards
-        if card.owner is not source.owner
+        if controller_of(game.table, card) is not yours
         and isinstance(card.printed, AttachmentPrint)
         and attached_to(game, card) is not None
         and effective_force(game, card) <= force
@@ -654,7 +655,8 @@ def _tetsubo_of_seven_battles_targets(game: GameState, source: L5RCard) -> list[
 def _tetsubo_of_seven_battles_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
-    return [To(Destroy(target.id, source.owner), (AdjustCounter(source.id, PLUS_1F, 1),))]
+    seat = controller_of(game.table, source)
+    return [To(Destroy(target.id, seat), (AdjustCounter(source.id, PLUS_1F, 1),))]
 
 
 register_ability(

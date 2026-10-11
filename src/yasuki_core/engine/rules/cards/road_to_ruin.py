@@ -109,7 +109,14 @@ from yasuki_core.engine.rules.duel.procedure import decided_duel
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.units.membership import unit_of
-from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import (
+    DeckKey,
+    Location,
+    ZoneKey,
+    ZoneRole,
+    controller_of,
+    location_of,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import MINUS_1F
@@ -581,7 +588,8 @@ def _like_a_twig_theirs(game: GameState, source: L5RCard, picked: PickedTargets)
     return [
         card.id
         for card in personalities_in_play(game)
-        if card.owner is not source.owner and unit_gold_cost(game, card) < yours
+        if controller_of(game.table, card) is not source.owner
+        and unit_gold_cost(game, card) < yours
     ]
 
 

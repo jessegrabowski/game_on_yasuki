@@ -145,7 +145,14 @@ from yasuki_core.engine.rules.triggers import (
     on,
 )
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
-from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import (
+    DeckKey,
+    Location,
+    ZoneKey,
+    ZoneRole,
+    controller_of,
+    location_of,
+)
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -951,7 +958,8 @@ def _hida_toranosuke_clan_champion_experienced_3_battle_segment_started(
         return []
     if location_of(ctx.game.table, toranosuke).battlefield != event.battlefield:
         return []
-    army = frozenset(card.id for card in army_at(ctx.game, event.battlefield, toranosuke.owner))
+    yours = controller_of(ctx.game.table, toranosuke)
+    army = frozenset(card.id for card in army_at(ctx.game, event.battlefield, yours))
     return [
         GrantStatChangeNegation(
             toranosuke.id, army, Stat.FORCE, StatChanges.PENALTIES, Duration.UNTIL_END_OF_TURN
@@ -966,10 +974,11 @@ def _hida_toranosuke_clan_champion_experienced_3_card_discarded(
     """After you discard a Courage card from your hand, give a target card -2F. The discard is
     yours when you caused it, as the event's cause says."""
     event = ctx.event
-    if event.cause is not ctx.card.owner or event.from_location is not CardLocation.HAND:
+    you = controller_of(ctx.game.table, ctx.card)
+    if event.cause is not you or event.from_location is not CardLocation.HAND:
         return []
     discarded = ctx.game.table.cards_by_id.get(event.card_id)
-    if discarded is None or discarded.owner is not ctx.card.owner:
+    if discarded is None or discarded.owner is not you:
         return []
     if not has_keyword(ctx.game, discarded, keywords.COURAGE):
         return []
@@ -1128,7 +1137,7 @@ def _jade_no_dachi_opposes_shadowlands(game: GameState, bearer: L5RCard) -> bool
     battlefield = location_of(game.table, bearer).battlefield
     if attack is None or battlefield is None:
         return False
-    enemy = army_at(game, battlefield, attack.enemy_of(bearer.owner))
+    enemy = army_at(game, battlefield, attack.enemy_of(controller_of(game.table, bearer)))
     return any(has_keyword(game, card, keywords.SHADOWLANDS) for card in enemy)
 
 

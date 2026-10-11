@@ -1278,3 +1278,15 @@ def test_tetsubo_destroys_an_enemy_attachment_no_stronger_than_itself_to_gain_a_
     assert "blade" not in {card.id for card in game.table.battlefield.cards}
     assert held.counters[PLUS_1F.key] == 3
     assert held.bowed
+
+
+def test_tetsubo_takes_no_attachment_its_controller_has_taken_control_of():
+    cards = [personality("hero", force=3), personality("guard", owner=P2, force=3)]
+    attachments = (
+        (attachment("tetsubo", printed_id=TETSUBO), "hero"),
+        (attachment("blade", owner=P2), "guard"),
+    )
+    session = combat_segment(cards, {"hero": 0}, {"guard": 0}, attachments=attachments)
+    session.game.table.controllers["guard"] = P1
+
+    assert ActivateAbility("tetsubo") not in session.legal_actions(P1)

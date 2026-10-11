@@ -148,7 +148,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
-from yasuki_core.engine.table import DeckKey, Location, location_of
+from yasuki_core.engine.table import DeckKey, Location, controller_of, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
@@ -499,7 +499,7 @@ def _hida_war_college_experienced_pressed(game: GameState, personality: L5RCard)
     attack = game.attack
     if attack is None or attack.current is None:
         return False
-    seat = personality.owner
+    seat = controller_of(game.table, personality)
     return attack.defender is seat or outnumbered_at(game, attack.current, seat)
 
 
