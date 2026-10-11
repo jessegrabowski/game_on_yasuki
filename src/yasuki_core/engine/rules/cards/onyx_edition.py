@@ -103,7 +103,7 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
 )
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
-from yasuki_core.engine.rules.interrupts import held_action_targets
+from yasuki_core.engine.rules.interrupts import held_action_timings, held_action_targets
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.state_based_actions import ThresholdShift, register_threshold_shift
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_BATTLE
@@ -803,8 +803,8 @@ register_trait_entry(
 
 
 def _ring_of_earth_applies(game: GameState, source: L5RCard, effect: Move) -> bool:
-    """A Battle action's moving of a Personality, read off the unit the Move names a card in."""
-    if ActionTiming.BATTLE not in permitted_timings_in(game, action_round(game), source.owner):
+    """The Battle action's moving of a Personality, read off the unit the Move names a card in."""
+    if ActionTiming.BATTLE not in held_action_timings(game):
         return False
     card = game.table.cards_by_id.get(effect.card_id)
     if card is None:

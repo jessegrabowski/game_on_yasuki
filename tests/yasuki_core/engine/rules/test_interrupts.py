@@ -1136,6 +1136,15 @@ def test_the_actions_targeting_is_held_at_the_step_ahead_of_what_it_does():
     assert game.action_targets == ()
 
 
+def test_the_held_actions_designators_outlast_an_interrupt_announced_against_it():
+    game = _substitution_game()
+    resolve_action_effects(game, [TARGETING])
+
+    game.action = PlayInterrupt("P1-sub")
+
+    assert interrupts.held_action_timings(game) == (ActionTiming.OPEN,)
+
+
 def test_naming_a_targeted_interrupt_asks_for_its_target_before_anything_moves():
     game = _substitution_game()
     resolve_action_effects(game, [TARGETING])

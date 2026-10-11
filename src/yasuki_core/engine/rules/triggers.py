@@ -51,6 +51,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
     ProvinceModifier,
     SeatAbilityGrant,
 )
+from yasuki_core.engine.rules.vocabulary.actions import Action
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
 from yasuki_core.engine.rules.vocabulary.segments import Boundary
 from yasuki_core.engine.rules.vocabulary.work import Provenance, Targeting
@@ -1432,11 +1433,15 @@ class HeldAction:
     targeting : :class:`~.Targeting`, optional
         The targets the action chose, checked as its resolution begins. Default None, for an
         action that targets nothing.
+    action : Action, optional
+        The action whose effects these are, so an Interrupt can read what kind of action it
+        answers. Default None, for effects held without one.
     """
 
     effects: tuple[Effect, ...]
     provenance: Provenance
     targeting: Targeting | None = None
+    action: Action | None = None
 
     def resume(self, game: GameState) -> None:
         """Begin step E once the Interrupt round has closed. A target an Interrupt left illegal
@@ -1582,7 +1587,7 @@ def resolve_action_effects(
         _begin(game, effects, provenance=provenance)
         return
     game.interrupts_offered = True
-    held = HeldAction(tuple(effects), provenance, targeting)
+    held = HeldAction(tuple(effects), provenance, targeting, game.action)
     game.stack.append(held)
     if not open_interrupt_window(game):
         # Nothing was played between targeting and resolution, so no target can have lapsed.

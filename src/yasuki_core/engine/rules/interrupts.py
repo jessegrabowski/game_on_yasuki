@@ -37,7 +37,7 @@ from yasuki_core.engine.rules.negation import action_provenance, strips_interrup
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.vocabulary.modifiers import Negation
 from yasuki_core.engine.rules.vocabulary.work import Provenance
-from yasuki_core.engine.rules.action_record import action_is_unstoppable
+from yasuki_core.engine.rules.action_record import ability_of, action_is_unstoppable
 from yasuki_core.engine.rules.turn.structure import (
     INTERRUPT_TIMINGS,
     ActionRound,
@@ -275,6 +275,13 @@ def held_action(game: GameState) -> triggers.HeldAction:
         if isinstance(item, triggers.HeldAction):
             return item
     raise RuntimeError("no action is held at the Interrupt step")
+
+
+def held_action_timings(game: GameState) -> tuple[ActionTiming, ...]:
+    """The designators of the action held at the Interrupt step, which is what "the Battle action"
+    and the like name. Empty for an action taken from no ability."""
+    ability = ability_of(game, held_action(game).action)
+    return () if ability is None else ability.timings
 
 
 def foreseen_now(game: GameState) -> tuple[Effect, ...]:

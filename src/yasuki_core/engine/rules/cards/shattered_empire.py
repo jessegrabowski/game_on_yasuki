@@ -141,7 +141,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, ke
 from yasuki_core.engine.rules.stats.calculation import unbounded_stat
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
-from yasuki_core.engine.rules.interrupts import INTERRUPT_TAG, answered_by
+from yasuki_core.engine.rules.interrupts import held_action_timings, INTERRUPT_TAG, answered_by
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
@@ -1206,8 +1206,8 @@ register_trait_entry(
 
 
 def _ring_of_earth_applies(game: GameState, source: L5RCard, effect: Move) -> bool:
-    """A Battle action's moving of a Personality, read off the unit the Move names a card in."""
-    if ActionTiming.BATTLE not in permitted_timings_in(game, action_round(game), source.owner):
+    """The Battle action's moving of a Personality, read off the unit the Move names a card in."""
+    if ActionTiming.BATTLE not in held_action_timings(game):
         return False
     card = game.table.cards_by_id.get(effect.card_id)
     if card is None:
