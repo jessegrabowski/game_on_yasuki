@@ -2034,8 +2034,8 @@ def test_shunsuke_will_not_attach_armor(item_keywords, attaches):
 
 @pytest.mark.parametrize(
     ("guard_force", "sent_home", "destroyed"),
-    [(4, False, True), (2, False, False), (4, True, False)],
-    ids=["within_twice", "more_than_twice", "absent_at_resolution"],
+    [(4, False, True), (3, False, True), (2, False, False), (4, True, False)],
+    ids=["within_twice", "exactly_twice", "more_than_twice", "absent_at_resolution"],
 )
 def test_shunsuke_dies_after_a_battle_he_did_not_win_by_more_than_double(
     guard_force, sent_home, destroyed

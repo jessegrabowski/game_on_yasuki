@@ -2523,11 +2523,12 @@ def _brute_force_battle() -> EngineSession:
         personality("brute", force=6),
         personality("scout", force=4),
         personality("weak", owner=P2, force=2),
+        personality("half", owner=P2, force=3),
         personality("mid", owner=P2, force=4),
         personality("big", owner=P2, force=6),
     ]
     p1_army = {"brute": 0, "scout": 0}
-    p2_army = {"weak": 0, "mid": 0, "big": 0}
+    p2_army = {"weak": 0, "half": 0, "mid": 0, "big": 0}
     session = combat_segment(cards, p1_army, p2_army, in_hand=[brute_force])
     attached(session.game, attachment("spear", force_modifier=2), "scout")
     return session
@@ -2546,7 +2547,7 @@ def test_brute_force_targets_by_printed_force_then_by_lower_current_force():
     assert session.game.pending.candidates == ("brute",)  # the scout reaches 6F only with his +2F
     session.submit(P1, DecisionResponse(("brute",)))
 
-    assert set(session.game.pending.candidates) == {"weak", "mid"}
+    assert set(session.game.pending.candidates) == {"weak", "half", "mid"}
 
 
 def test_brute_force_destroys_an_enemy_with_under_half_its_force():
@@ -2558,14 +2559,15 @@ def test_brute_force_destroys_an_enemy_with_under_half_its_force():
     assert "weak" in {card.id for card in discard.cards}
 
 
-def test_brute_force_only_bows_an_enemy_with_half_its_force_or_more():
+@pytest.mark.parametrize("enemy", ["half", "mid"])
+def test_brute_force_only_bows_an_enemy_with_half_its_force_or_more(enemy):
     session = _brute_force_battle()
 
-    _brute_force_on(session, "mid")
+    _brute_force_on(session, enemy)
 
-    mid = session.game.table.cards_by_id["mid"]
-    assert mid in session.game.table.battlefield.cards
-    assert mid.bowed
+    bowed = session.game.table.cards_by_id[enemy]
+    assert bowed in session.game.table.battlefield.cards
+    assert bowed.bowed
 
 
 # --- Heedless Assault ---
