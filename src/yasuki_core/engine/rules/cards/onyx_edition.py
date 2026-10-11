@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
     resolved_favor_actions,
 )
 from yasuki_core.engine.rules.abilities.model import (
+    InterruptLimit,
     Ability,
     CardLocation,
     Interrupt,
@@ -43,7 +44,7 @@ from yasuki_core.engine.rules.effects import (
     AdditionalAction,
     AdjustCounter,
     AlternateEffects,
-    AskOption,
+    Ask,
     Banish,
     Bow,
     Choose,
@@ -100,9 +101,10 @@ from yasuki_core.engine.rules.vocabulary.game_events import (
     EnteredPlay,
     ProvinceDestroying,
 )
+from yasuki_core.engine.rules.rulebook.recruit import refill_face_up
 from yasuki_core.engine.rules.state import GameState, used_this_turn
 from yasuki_core.engine.rules.action_record import action_keywords, action_round
-from yasuki_core.engine.rules.interrupts import held_action_targets
+from yasuki_core.engine.rules.interrupts import held_action_timings, held_action_targets
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.state_based_actions import ThresholdShift, register_threshold_shift
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_BATTLE
@@ -137,7 +139,6 @@ from yasuki_core.engine.rules.stats.card_values import (
     effective_force,
     effective_personal_honor,
 )
-from yasuki_core.engine.rules.stats.keyword_grants import keyword_grant
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.vocabulary.modifiers import (
     Duration,
@@ -147,7 +148,7 @@ from yasuki_core.engine.rules.vocabulary.modifiers import (
 )
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.vocabulary.segments import BattleSegment
-from yasuki_core.engine.table import DeckKey, Location, location_of
+from yasuki_core.engine.table import DeckKey, Location, controller_of, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import (
     AttachmentPrint,
@@ -483,7 +484,7 @@ def _hida_shunsuke_soul_of_hida_tenshu_battle_ended(ctx: TriggerContext) -> list
 # --- Hida War College (Experienced) ---
 
 WAR_COLLEGE_FORCE = 2
-WAR_COLLEGE_PRESSED_FORCE = 4
+WAR_COLLEGE_DEFENDING_OR_OUTNUMBERED_FORCE = 4
 
 register_recruit_restriction("hida_war_college_experienced", clan_player(ruleset.CRAB))
 
@@ -492,13 +493,15 @@ def _hida_war_college_experienced_targets(game: GameState, source: L5RCard) -> l
     return [card.id for card in owned_personalities(game, source.owner)]
 
 
-def _hida_war_college_experienced_pressed(game: GameState, personality: L5RCard) -> bool:
+def _hida_war_college_experienced_defending_or_outnumbered(
+    game: GameState, personality: L5RCard
+) -> bool:
     """ "If they are defending or outnumbered", read at the battle being fought, where a Battle
     action's target stands."""
     attack = game.attack
     if attack is None or attack.current is None:
         return False
-    seat = personality.owner
+    seat = controller_of(game.table, personality)
     return attack.defender is seat or outnumbered_at(game, attack.current, seat)
 
 
@@ -507,8 +510,9 @@ def _hida_war_college_experienced_effects(
 ) -> list[Effect]:
     """The bonus runs to the end of the turn, as one with no printed duration does (CR, Duration
     of Effects)."""
-    pressed = _hida_war_college_experienced_pressed(game, target)
-    amount = WAR_COLLEGE_PRESSED_FORCE if pressed else WAR_COLLEGE_FORCE
+    amount = WAR_COLLEGE_FORCE
+    if _hida_war_college_experienced_defending_or_outnumbered(game, target):
+        amount = WAR_COLLEGE_DEFENDING_OR_OUTNUMBERED_FORCE
     return [
         GrantModifier(source.id, target.id, Stat.FORCE, amount, Duration.UNTIL_END_OF_TURN),
         AdditionalAction(source.owner, source.id),
@@ -563,7 +567,9 @@ register_ability(
 def _hida_yurike_soul_of_hida_rikyu_straighten_targets(
     game: GameState, source: L5RCard
 ) -> list[str]:
-    return [card.id for card in followers_of(game, source) if not card.bowed]
+    """ "Yurike's target Follower", bowed or not: the text asks for no more, and a bowed one cannot
+    bow, so Yurike does not straighten."""
+    return [card.id for card in followers_of(game, source)]
 
 
 def _hida_yurike_soul_of_hida_rikyu_straighten_effects(
@@ -615,48 +621,66 @@ register_ability(
 # --- Kaiu Denkaru ---
 
 DENKARU_FORCE = 2
-DENKARU_BONUS = "Give Denkaru +2F"
-DENKARU_PENALTY = "Give a target enemy Follower or Personality -2F"
 
 
-def _kaiu_denkaru_enemies(game: GameState, source: L5RCard) -> tuple[str, ...]:
-    """The enemy Followers and Personalities at the battle being fought."""
+def _kaiu_denkaru_itself(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """Denkaru himself, while he is opposed: "If Denkaru is opposed" starts the effects (CR, Good
+    Faith Rule 0.3)."""
+    yours = controller_of(game.table, source)
+    return [source.id] if source.id in opposed_units_in_battle(game, yours) else []
+
+
+def _kaiu_denkaru_enemies(game: GameState, source: L5RCard, picked: PickedTargets) -> list[str]:
+    """ "A target enemy Follower or Personality". It is targeted as the action is announced, and
+    taking none is choosing the +2F (CR, Choice Paradoxes)."""
     attack = game.attack
     if attack is None or attack.current is None:
-        return ()
-    return tuple(
+        return []
+    enemy = attack.enemy_of(controller_of(game.table, source))
+    return [
         card.id
-        for card in army_at(game, attack.current, attack.enemy_of(source.owner))
+        for card in army_at(game, attack.current, enemy)
         if isinstance(card.printed, PersonalityPrint) or is_follower(card)
+    ]
+
+
+def _kaiu_denkaru_enemy_count(
+    game: GameState, source: L5RCard, picked: PickedTargets, offered: tuple[str, ...]
+) -> tuple[int, int]:
+    return 0, 1
+
+
+def _kaiu_denkaru_bonus(source: L5RCard) -> Effect:
+    """Both changes run to the end of the turn, as ones with no printed duration do (CR, Duration
+    of Effects)."""
+    return GrantModifier(
+        source.id, source.id, Stat.FORCE, DENKARU_FORCE, Duration.UNTIL_END_OF_TURN
     )
 
 
-def _kaiu_denkaru_targets(game: GameState, source: L5RCard) -> list[str]:
-    """Denkaru himself, while he is opposed: unopposed, the ability does nothing."""
-    return [source.id] if source.id in opposed_units_in_battle(game, source.owner) else []
-
-
-def _kaiu_denkaru_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """ "If Denkaru is opposed, either give him +2F or give a target enemy Follower or Personality
-    -2F. If Denkaru is defending, you may do both." The penalty is offered only while an enemy can
-    take it."""
-    attack = game.attack
-    if attack is None or source.id not in opposed_units_in_battle(game, source.owner):
+def _kaiu_denkaru_effects(
+    game: GameState, source: L5RCard, groups: tuple[tuple[L5RCard, ...], ...]
+) -> list[Effect]:
+    """ "Either give him +2F or give a target enemy Follower or Personality -2F. If Denkaru is
+    defending, you may do both." A defending Denkaru that targeted an enemy is asked whether to
+    take his +2F too."""
+    _, enemies = groups
+    yours = controller_of(game.table, source)
+    if source.id not in opposed_units_in_battle(game, yours):
         return []
-    if _kaiu_denkaru_enemies(game, source):
-        modes = (DENKARU_BONUS, DENKARU_PENALTY)
-    else:
-        modes = (DENKARU_BONUS,)
-    defending = attack.defender is source.owner
+    if not enemies:
+        return [_kaiu_denkaru_bonus(source)]
+    (enemy,) = enemies
+    penalty = GrantModifier(
+        source.id, enemy.id, Stat.FORCE, -DENKARU_FORCE, Duration.UNTIL_END_OF_TURN
+    )
+    attack = game.attack
+    if attack is None or attack.defender is not yours:
+        return [penalty]
+    question = "Kaiu Denkaru is defending: give him +2F as well?"
     return [
-        AskOption(
-            source.owner,
-            modes,
-            "Kaiu Denkaru: give him +2F, or an enemy -2F?",
-            "kaiu_denkaru",
-            source.id,
-            maximum=len(modes) if defending else 1,
-        )
+        penalty,
+        Ask(yours, question, "kaiu_denkaru", subjects=(source.id,), source_id=source.id),
     ]
 
 
@@ -664,28 +688,7 @@ def _kaiu_denkaru_effects(game: GameState, source: L5RCard, target: L5RCard) -> 
 def _resolve_kaiu_denkaru(
     game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
 ) -> list[Effect]:
-    """Both changes run to the end of the turn, as ones with no printed duration do (CR, Duration
-    of Effects)."""
-    effects: list[Effect] = []
-    if DENKARU_BONUS in chosen:
-        effects.append(
-            GrantModifier(
-                source_id, source_id, Stat.FORCE, DENKARU_FORCE, Duration.UNTIL_END_OF_TURN
-            )
-        )
-    if DENKARU_PENALTY in chosen:
-        enemies = _kaiu_denkaru_enemies(game, game.table.cards_by_id[source_id])
-        effects.append(Choose(seat, enemies, 1, 1, "kaiu_denkaru_penalty", source_id))
-    return effects
-
-
-@choice_resolver("kaiu_denkaru_penalty", prompt="Give a target enemy Follower or Personality -2F")
-def _resolve_kaiu_denkaru_penalty(
-    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
-) -> list[Effect]:
-    return [
-        GrantModifier(source_id, chosen[0], Stat.FORCE, -DENKARU_FORCE, Duration.UNTIL_END_OF_TURN)
-    ]
+    return [_kaiu_denkaru_bonus(game.table.cards_by_id[source_id])] if chosen else []
 
 
 register_ability(
@@ -693,9 +696,15 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=_kaiu_denkaru_targets,
-        effects=_kaiu_denkaru_effects,
-        hits_every_target=True,
+        target_groups=(
+            TargetGroup(candidates=_kaiu_denkaru_itself),
+            TargetGroup(
+                candidates=_kaiu_denkaru_enemies,
+                count=_kaiu_denkaru_enemy_count,
+                targeting_message="an enemy Follower or Personality, or none for +2F",
+            ),
+        ),
+        effects_for_groups=_kaiu_denkaru_effects,
     ),
 )
 
@@ -802,8 +811,8 @@ register_trait_entry(
 
 
 def _ring_of_earth_applies(game: GameState, source: L5RCard, effect: Move) -> bool:
-    """A Battle action's moving of a Personality, read off the unit the Move names a card in."""
-    if ActionTiming.BATTLE not in permitted_timings_in(game, action_round(game), source.owner):
+    """The Battle action's moving of a Personality, read off the unit the Move names a card in."""
+    if ActionTiming.BATTLE not in held_action_timings(game):
         return False
     card = game.table.cards_by_id.get(effect.card_id)
     if card is None:
@@ -824,6 +833,8 @@ register_interrupt(
         located_at=(CardLocation.HAND, CardLocation.BATTLEFIELD),
         cost=bow_cost,
         answers_every=True,
+        limit=InterruptLimit.ONCE_PER_ACTION,
+        keywords=frozenset({keywords.EARTH}),
         ruleset=ruleset.ONYX.name,
     ),
 )
@@ -1416,31 +1427,33 @@ register_ability(
 # --- The Indomitable Fortress of the Crab (back) ---
 
 
-@keyword_grant("the_indomitable_fortress_of_the_crab__back")
-def _the_indomitable_fortress_of_the_crab__back_keywords(
-    game: GameState, fortress: L5RCard, card: L5RCard
-) -> tuple[str, ...]:
-    """ "The first time each turn you Recruit a Fortification, refill its Province face-up", read
-    as your Fortifications having Renew until another of them has been Recruited this turn. A
-    Recruit's refill reads Renew before its own arrival is recorded."""
-    if not _the_indomitable_fortress_of_the_crab__back_yours(fortress, card):
-        return ()
-    recruited_earlier = any(
+@refill_face_up("the_indomitable_fortress_of_the_crab__back")
+def _the_indomitable_fortress_of_the_crab__back_refill_face_up(
+    game: GameState, fortress: L5RCard, recruited: L5RCard
+) -> bool:
+    """ "The first time each turn you Recruit a Fortification, refill its Province face-up." The
+    refill is read once the Fortification has entered play, so its own arrival is set aside."""
+    if not _the_indomitable_fortress_of_the_crab__back_yours(game, fortress, recruited):
+        return False
+    return not any(
         isinstance(event, EnteredPlay)
         and event.recruited
-        and event.card_id != card.id
+        and event.card_id != recruited.id
         and _the_indomitable_fortress_of_the_crab__back_yours(
-            fortress, game.table.cards_by_id[event.card_id]
+            game, fortress, game.table.cards_by_id[event.card_id]
         )
         for event in game.turn_events
     )
-    return () if recruited_earlier else (keywords.RENEW,)
 
 
-def _the_indomitable_fortress_of_the_crab__back_yours(fortress: L5RCard, card: L5RCard) -> bool:
-    """Whether ``card`` is a Fortification of the Fortress's controller. Its printed keywords are
-    read, since this grant is itself part of its effective keywords."""
-    return card.owner is fortress.owner and keywords.FORTIFICATION in card.keywords
+def _the_indomitable_fortress_of_the_crab__back_yours(
+    game: GameState, fortress: L5RCard, card: L5RCard
+) -> bool:
+    """Whether ``card`` is a Fortification the Fortress's controller controls."""
+    yours = controller_of(game.table, fortress)
+    return controller_of(game.table, card) is yours and has_keyword(
+        game, card, keywords.FORTIFICATION
+    )
 
 
 register_ability(

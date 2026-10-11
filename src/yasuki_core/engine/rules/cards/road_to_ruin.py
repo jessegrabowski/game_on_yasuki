@@ -105,11 +105,18 @@ from yasuki_core.engine.rules.gold.payment import offer_self_grant
 from yasuki_core.engine.rules.state import GameState, claim_once_per_turn, used_this_turn
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
-from yasuki_core.engine.rules.duel.procedure import decided_duel
+from yasuki_core.engine.rules.duel.procedure import duel_in_progress, decided_duel
 from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.units.membership import unit_of
-from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import (
+    DeckKey,
+    Location,
+    ZoneKey,
+    ZoneRole,
+    controller_of,
+    location_of,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import MINUS_1F
@@ -548,9 +555,7 @@ def _like_a_twig_focus_effect(game: GameState, card: L5RCard) -> list[Effect]:
     """ "As a Focus Effect, both Personalities use their Force as their duel stat, and the loser
     is destroyed." The CR names the duel stat per Personality, so each duelist is told to compare
     it (CR, Duel Stat)."""
-    duel = game.duel
-    if duel is None:
-        return []
+    duel = duel_in_progress(game)
     return [
         *(
             GrantDuelStat(card.id, duel.duelist_of(seat), Stat.FORCE, DUEL_CONSEQUENCES)
@@ -581,7 +586,8 @@ def _like_a_twig_theirs(game: GameState, source: L5RCard, picked: PickedTargets)
     return [
         card.id
         for card in personalities_in_play(game)
-        if card.owner is not source.owner and unit_gold_cost(game, card) < yours
+        if controller_of(game.table, card) is not source.owner
+        and unit_gold_cost(game, card) < yours
     ]
 
 

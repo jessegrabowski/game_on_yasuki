@@ -22,6 +22,7 @@ yasuki_core.engine.rules.interrupts
     foreseen_now
     held_action
     held_action_targets
+    held_action_timings
     interrupt_actions
     legal_substitutes
     open_interrupt_window

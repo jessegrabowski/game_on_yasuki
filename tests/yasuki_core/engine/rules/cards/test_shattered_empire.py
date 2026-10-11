@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pytest
 from yasuki_core.engine.rules.rulebook.recruit import RECRUIT, RECRUIT_WITH_INVEST
 from yasuki_core import ruleset
@@ -8,7 +10,9 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MASTERWORK
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
+    AttachmentPrint,
     EventPrint,
+    FatePrint,
     PersonalityPrint,
     RingPrint,
     RulebookPrint,
@@ -25,6 +29,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
 )
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
+    ChooseCards,
     ChooseAbilityTarget,
     ChooseOption,
     DecisionResponse,
@@ -270,8 +275,7 @@ def _sanjiro_game():
     return session
 
 
-def test_hida_sanjiro_invests_in_his_own_armour():
-    """The Invest resolves as he arrives, so the Armor is on him the moment he is in play."""
+def test_hida_sanjiro_invests_in_his_own_armor():
     session = _sanjiro_game()
 
     session.act(P1, ActivateAbility("sanjiro", RECRUIT_WITH_INVEST))
@@ -279,14 +283,13 @@ def test_hida_sanjiro_invests_in_his_own_armour():
 
     game = session.game
     sanjiro = game.table.cards_by_id["sanjiro"]
-    armour = attachments_of(game, sanjiro)[0]
-    assert armour.name == "Armor"
-    assert armour.is_token is True
+    armor = attachments_of(game, sanjiro)[0]
+    assert armor.name == "Armor"
+    assert armor.is_token is True
     assert effective_force(game, sanjiro) == 6  # 4 printed, +2 worn
 
 
 def test_hida_sanjiro_recruited_plainly_wears_nothing():
-    """The Armor is the Invest's payoff, not part of him arriving."""
     session = _sanjiro_game()
 
     session.act(P1, ActivateAbility("sanjiro", RECRUIT))
@@ -528,23 +531,31 @@ def test_the_rulebook_favor_ability_opens_way_of_the_cranes_window():
     assert CRANE_DRAW in session.legal_actions(P1)
 
 
-@pytest.mark.parametrize(
-    ("carried", "bows"),
-    [(AttachmentType.ITEM, True), (AttachmentType.FOLLOWER, False)],
-    ids=["item", "follower"],
-)
-def test_hida_sanjiro_fears_only_while_he_has_an_item(carried, bows):
+def test_hida_sanjiro_with_an_item_fears_his_target():
     cards = [
         personality("sanjiro", printed_id="hida_sanjiro", force=4),
         personality("guard", owner=P2, force=4),
     ]
     session = combat_segment(cards, {"sanjiro": 0}, {"guard": 0})
-    attached(session.game, attachment("gear", attachment_type=carried), "sanjiro")
+    attached(session.game, attachment("gear"), "sanjiro")
 
     session.act(P1, ActivateAbility("sanjiro"))
     session.submit(P1, DecisionResponse(("guard",)))
 
-    assert session.game.table.cards_by_id["guard"].bowed is bows
+    assert session.game.table.cards_by_id["guard"].bowed
+
+
+def test_hida_sanjiro_without_an_item_cannot_announce_his_fear():
+    cards = [
+        personality("sanjiro", printed_id="hida_sanjiro", force=4),
+        personality("guard", owner=P2, force=4),
+    ]
+    session = combat_segment(cards, {"sanjiro": 0}, {"guard": 0})
+    attached(
+        session.game, attachment("ashigaru", attachment_type=AttachmentType.FOLLOWER), "sanjiro"
+    )
+
+    assert ActivateAbility("sanjiro") not in session.legal_actions(P1)
 
 
 # --- Way of the Crab (Experienced) ---
@@ -1743,6 +1754,25 @@ def test_ring_of_earth_negates_the_battle_actions_move():
         assert table.cards_by_id["earth"].bowed
 
 
+def test_ring_of_earth_straightened_answers_a_second_move_in_the_same_turn():
+    twice = replace(MOVE_ABILITY, uses_per_turn=lambda game, card: 2)
+    with probe_ability(MOVE_PROBE, twice):
+        session = _ring_battle(
+            raider_printed_id=MOVE_PROBE, in_play=(_ring("earth", "ring_of_earth", P2),)
+        )
+        for _ in range(2):
+            session.act(P1, ActivateAbility("raider"))
+            session.submit(P1, DecisionResponse(("guard",)))
+            session.act(P2, PlayInterrupt("earth"))
+            _answer_until_settled(session)
+            resolve_effects(session.game, [Straighten("earth")])
+            if session.game.round.priority is not P1:
+                session.act(P2, Pass())
+
+        table = session.game.table
+        assert location_of(table, table.cards_by_id["guard"]).battlefield == 0
+
+
 def test_ring_of_earth_pitched_from_hand_negates_the_move_and_is_discarded():
     with probe_ability(MOVE_PROBE, MOVE_ABILITY):
         session = _ring_battle(
@@ -2493,11 +2523,12 @@ def _brute_force_battle() -> EngineSession:
         personality("brute", force=6),
         personality("scout", force=4),
         personality("weak", owner=P2, force=2),
+        personality("half", owner=P2, force=3),
         personality("mid", owner=P2, force=4),
         personality("big", owner=P2, force=6),
     ]
     p1_army = {"brute": 0, "scout": 0}
-    p2_army = {"weak": 0, "mid": 0, "big": 0}
+    p2_army = {"weak": 0, "half": 0, "mid": 0, "big": 0}
     session = combat_segment(cards, p1_army, p2_army, in_hand=[brute_force])
     attached(session.game, attachment("spear", force_modifier=2), "scout")
     return session
@@ -2516,7 +2547,7 @@ def test_brute_force_targets_by_printed_force_then_by_lower_current_force():
     assert session.game.pending.candidates == ("brute",)  # the scout reaches 6F only with his +2F
     session.submit(P1, DecisionResponse(("brute",)))
 
-    assert set(session.game.pending.candidates) == {"weak", "mid"}
+    assert set(session.game.pending.candidates) == {"weak", "half", "mid"}
 
 
 def test_brute_force_destroys_an_enemy_with_under_half_its_force():
@@ -2528,14 +2559,15 @@ def test_brute_force_destroys_an_enemy_with_under_half_its_force():
     assert "weak" in {card.id for card in discard.cards}
 
 
-def test_brute_force_only_bows_an_enemy_with_half_its_force_or_more():
+@pytest.mark.parametrize("enemy", ["half", "mid"])
+def test_brute_force_only_bows_an_enemy_with_half_its_force_or_more(enemy):
     session = _brute_force_battle()
 
-    _brute_force_on(session, "mid")
+    _brute_force_on(session, enemy)
 
-    mid = session.game.table.cards_by_id["mid"]
-    assert mid in session.game.table.battlefield.cards
-    assert mid.bowed
+    bowed = session.game.table.cards_by_id[enemy]
+    assert bowed in session.game.table.battlefield.cards
+    assert bowed.bowed
 
 
 # --- Heedless Assault ---
@@ -2957,3 +2989,151 @@ def test_tashiko_pays_nothing_after_a_battle_at_no_province():
 
     outcome = session.game.attack.battlefields[0].outcome
     assert session.game.table.seats[P2].honor == before + outcome.honor[P2]
+
+
+# --- Imperial Gift ---
+
+
+def _gift_game(*, items=("katana",), plain=("strategy",), dynasty=("next-card",)) -> EngineSession:
+    """A session with Imperial Gift face-up in P1's Province and a Fate deck holding ``items`` Items
+    alongside ``plain`` non-Items, so the search has to pick the Items out. ``dynasty`` stocks the
+    Dynasty deck the vacated Province refills from."""
+    state = TableState.empty_two_seat()
+    province_card(state, "gift", printed_id="imperial_gift", name="Imperial Gift")
+    for card_id in dynasty:
+        state.decks[DeckKey(P1, Side.DYNASTY)].cards.append(
+            register(state, holding(card_id, owner=P1))
+        )
+    deck = state.decks[DeckKey(P1, Side.FATE)]
+    for card_id in plain:
+        deck.cards.append(
+            register(
+                state,
+                L5RCard.of(
+                    FatePrint,
+                    id=card_id,
+                    printed_id=card_id,
+                    name=card_id,
+                    side=Side.FATE,
+                    owner=P1,
+                ),
+            )
+        )
+    for card_id in items:
+        deck.cards.append(
+            register(
+                state,
+                L5RCard.of(
+                    AttachmentPrint,
+                    id=card_id,
+                    printed_id=card_id,
+                    name=card_id,
+                    side=Side.FATE,
+                    owner=P1,
+                    attachment_type=AttachmentType.ITEM,
+                ),
+            )
+        )
+    return EngineSession.start(state, P1)
+
+
+def _hand(session) -> list[str]:
+    return [c.id for c in session.game.table.zones[ZoneKey(P1, ZoneRole.HAND)].cards]
+
+
+def test_it_is_offered_from_its_province():
+    session = _gift_game()
+    assert ActivateAbility("gift") in session.legal_actions(P1)
+
+
+def test_the_search_offers_only_items():
+    session = _gift_game(items=("katana", "bow"), plain=("strategy", "spell"))
+    session.act(P1, ActivateAbility("gift"))
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseCards)
+    assert set(pending.candidates) == {"katana", "bow"}
+
+
+def test_taking_an_item_shows_it_and_puts_it_in_hand():
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(("katana",)))
+
+    katana = session.game.table.cards_by_id["katana"]
+    assert _hand(session) == ["katana"]
+    assert katana.shown  # the opponent saw which Item was taken
+    assert "katana" not in {c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards}
+
+
+def test_the_honor_is_gained_and_the_event_spent():
+    session = _gift_game()
+    before = session.game.table.seats[P1].honor
+    session.act(P1, ActivateAbility("gift"))
+
+    assert session.game.table.seats[P1].honor == before + 2
+    discard = session.game.table.zones[ZoneKey(P1, ZoneRole.DYNASTY_DISCARD)]
+    assert "gift" in {c.id for c in discard.cards}
+
+
+def test_the_search_may_fail_with_an_item_in_the_deck():
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(()))
+
+    assert _hand(session) == []
+    assert "katana" in {c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards}
+
+
+@pytest.mark.parametrize("items", [("katana",), ()], ids=["found", "nothing_to_find"])
+def test_the_fate_deck_is_shuffled_after_the_search_reads_it(items):
+    session = _gift_game(items=items, plain=tuple(f"s{i}" for i in range(8)))
+    before = [c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards]
+    session.act(P1, ActivateAbility("gift"))
+    if items:
+        session.submit(P1, DecisionResponse(items))
+
+    after = [c.id for c in session.game.table.decks[DeckKey(P1, Side.FATE)].cards]
+    remaining = [c for c in before if c not in items]
+    assert sorted(after) == sorted(remaining)
+    assert after != remaining
+
+
+def test_a_fate_deck_with_no_item_still_gains_the_honor():
+    """The honor is unconditional: the Items are searched for during resolution rather than
+    targeted, so a deck holding none still pays out."""
+    session = _gift_game(items=())
+    before = session.game.table.seats[P1].honor
+    assert ActivateAbility("gift") in session.legal_actions(P1)
+
+    session.act(P1, ActivateAbility("gift"))
+
+    assert session.game.table.seats[P1].honor == before + 2
+    assert session.game.pending is None  # no dead prompt over an empty pile
+
+
+def test_the_province_refills_behind_the_spent_event():
+    """An Event that spends itself out of a Province leaves it short, and a Province that is short
+    refills, or else the seat is down a Province for the rest of the game."""
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(("katana",)))
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [c.id for c in province.cards] == ["next-card"]
+    assert not province.cards[0].face_up  # a refill arrives face-down
+
+
+def test_the_province_refills_even_when_the_search_finds_nothing():
+    session = _gift_game(items=())
+    session.act(P1, ActivateAbility("gift"))
+
+    province = session.game.table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)]
+    assert [c.id for c in province.cards] == ["next-card"]
+
+
+def test_the_gift_replays_to_the_same_state():
+    session = _gift_game()
+    session.act(P1, ActivateAbility("gift"))
+    session.submit(P1, DecisionResponse(("katana",)))
+    assert replay(session.log) == session.game

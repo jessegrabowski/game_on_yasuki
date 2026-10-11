@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pytest
 
 from yasuki_core.engine.rules.vocabulary.locations import CardLocation
@@ -6,10 +8,15 @@ from yasuki_core.engine.rules import legality, triggers
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.rulebook.favor_payment import DISCARD_THE_FAVOR, favor_payment_options
 from yasuki_core.engine.rules.rulebook.favor_payment import is_favor_action
-from yasuki_core.engine.rules.abilities.costs import no_cost
+from yasuki_core.engine.rules.abilities.costs import bow_cost, no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, itself
 from yasuki_core.engine.rules.rulebook.equip import may_attach
-from yasuki_core.engine.rules.abilities.registry import _ABILITIES, ability_for, register_ability
+from yasuki_core.engine.rules.abilities.registry import (
+    _ABILITIES,
+    ability_for,
+    granted_tireless,
+    register_ability,
+)
 from yasuki_core.engine.rules.board.queries import owned_personalities
 from yasuki_core.engine.rules.rulebook.dynasty_discard import DYNASTY_DISCARD
 from yasuki_core.engine.rules.vocabulary.actions import (
@@ -20,7 +27,14 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     PlayStrategy,
 )
 from yasuki_core.engine.rules.vocabulary.decisions import DecisionResponse
-from yasuki_core.engine.rules.effects import Bow, Discard, DiscardFavor, DiscardFromHand, TakeFavor
+from yasuki_core.engine.rules.effects import (
+    Bow,
+    Discard,
+    DiscardFavor,
+    DiscardFromHand,
+    Straighten,
+    TakeFavor,
+)
 from yasuki_core.engine.rules.vocabulary.game_events import CardDiscarded
 from yasuki_core.engine.rules.turn.action_sequence import submit
 from yasuki_core.engine.rules.state import GameState
@@ -608,6 +622,16 @@ def test_a_bowed_shrine_grants_nothing():
     assert ActivateAbility("estate") not in session.legal_actions(P1)
 
 
+def test_the_shrine_leaves_an_ability_granted_to_the_stronghold_without_tireless():
+    session = _bowed_estate_with_shrine()
+    estate = session.game.table.cards_by_id["estate"]
+    printed = ability_for(session.game, estate)
+    granted = replace(printed)
+
+    assert granted_tireless(session.game, estate, printed)
+    assert not granted_tireless(session.game, estate, granted)
+
+
 # --- Hida Gojiro, Tetsubo Master (Experienced) ---
 
 GOJIRO = "hida_gojiro_tetsubo_master_experienced"
@@ -655,3 +679,45 @@ def test_gojiro_grants_a_heavy_weapon_an_additional_use(weapon_keywords, straigh
     game = session.game
     assert AdditionalUse("gojiro", "weapon", Duration.UNTIL_END_OF_TURN) in game.ongoing
     assert game.table.cards_by_id["weapon"].bowed is not straightened
+
+
+WEAPON_BATTLE = Ability(
+    timings=(ActionTiming.BATTLE,),
+    label="Battle, bow: nothing",
+    cost=bow_cost,
+    targets=itself,
+    effects=lambda game, source, target: [],
+)
+
+
+def _use_the_weapon(session: EngineSession) -> None:
+    session.act(P1, ActivateAbility("weapon"))
+    session.submit(P1, DecisionResponse(("weapon",)))
+
+
+def _back_to_p1(session: EngineSession) -> None:
+    if session.game.round.priority is not P1:
+        session.act(P2, Pass())
+
+
+def test_gojiros_tetsubo_is_used_twice_in_a_turn_and_no_more():
+    tetsubo = _gojiros_weapon(("Heavy Weapon", "Tetsubo"))
+    with probe_ability("weapon", WEAPON_BATTLE):
+        session = combat_segment(
+            [personality("gojiro", printed_id=GOJIRO), personality("rival", owner=P2)],
+            {"gojiro": 0},
+            {"rival": 0},
+            attachments=((tetsubo, "gojiro"),),
+        )
+        _use_the_weapon(session)
+        _back_to_p1(session)
+        session.act(P1, ActivateAbility("gojiro"))
+        session.submit(P1, DecisionResponse(("weapon",)))
+        _back_to_p1(session)
+
+        assert ActivateAbility("weapon") in session.legal_actions(P1)
+        _use_the_weapon(session)
+        _back_to_p1(session)
+        resolve_effects(session.game, [Straighten("weapon")])
+
+        assert ActivateAbility("weapon") not in session.legal_actions(P1)

@@ -1154,19 +1154,24 @@ def test_banishing_a_follower_lets_the_melee_reach_a_personality_with_followers(
     session.submit(P1, DecisionResponse(("brave",)))
 
     assert set(session.game.pending.candidates) == aimable
-    assert [card.id for card in table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)].cards] == ["brave"]
 
 
-def test_toranosukes_melee_4_destroys_the_target_it_reaches():
+def test_toranosukes_melee_4_banishes_the_courage_card_and_destroys_its_target():
     session = _toranosuke_in_combat()
     table = session.game.table
     table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].add(register(table, _courage_card("brave")))
     session.act(P1, ActivateAbility("tora"))
     session.submit(P1, DecisionResponse(("brave",)))
-
     session.submit(P1, DecisionResponse(("spear",)))
 
+    assert [card.id for card in table.zones[ZoneKey(P1, ZoneRole.FATE_BANISH)].cards] == ["brave"]
     assert "spear" not in {card.id for card in table.battlefield.cards}
+
+
+def test_toranosuke_with_no_courage_card_to_banish_cannot_announce_his_melee():
+    session = _toranosuke_in_combat()
+
+    assert ActivateAbility("tora") not in session.legal_actions(P1)
 
 
 # --- Jade No-Dachi ---

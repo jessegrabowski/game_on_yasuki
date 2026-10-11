@@ -128,11 +128,14 @@ ATTACKS_PAST_FOLLOWERS: HandlerRegistry[frozenset[type]] = HandlerRegistry(
 register_attacks_past_followers = ATTACKS_PAST_FOLLOWERS.make_register()
 
 
-def attack_targets(game: GameState, source: L5RCard, kind: type) -> list[str]:
+def attack_targets(
+    game: GameState, source: L5RCard, kind: type, *, past_followers: bool = False
+) -> list[str]:
     """The ids an attack effect of ``kind`` from ``source`` may be pointed at: the enemy army's
     Followers and its Personalities carrying none (CR, Ranged Attack), and its Personalities
-    carrying Followers too while a card ``source``'s controller has in play lets its attacks of
-    ``kind`` target them. Empty outside a battle.
+    carrying Followers too when ``past_followers`` says the attack's own text lets it, or while a
+    card ``source``'s controller has in play lets its attacks of ``kind`` target them. Empty
+    outside a battle.
 
     Reaches only what stands at the battle being fought. A Personality is spared by a Follower
     alone. An Item or a Spell attached to him does not protect him.
@@ -141,7 +144,7 @@ def attack_targets(game: GameState, source: L5RCard, kind: type) -> list[str]:
     if attack is None or attack.current is None:
         return []
     seat = controller_of(game.table, source)
-    past_followers = any(
+    past_followers = past_followers or any(
         kind in ATTACKS_PAST_FOLLOWERS.get(card.printed_id, frozenset())
         and controller_of(game.table, card) is seat
         for card in game.table.battlefield.cards

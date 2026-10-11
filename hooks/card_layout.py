@@ -39,6 +39,8 @@ _DECORATORS = {
     "stat_grant",
     "attach_restriction",
     "attack_strength_against",
+    "challenge_cost",
+    "challenge_restriction",
     "discipline_grant",
     "considered_stat",
     "equips_from_discard",
@@ -52,6 +54,7 @@ _DECORATORS = {
     "lobby_bonus_grant",
     "proclaim_gain",
     "province_strength_grant",
+    "refill_face_up",
     "tireless_grant",
 }
 
@@ -292,6 +295,7 @@ ROLES = frozenset(
         "considered_stat",
         "attach_restriction",
         "challenge_restriction",
+        "refill_face_up",
         "challenge_cost",
         "discipline_grant",
         "equips_from_discard",

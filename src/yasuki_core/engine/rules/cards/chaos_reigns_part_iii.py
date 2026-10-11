@@ -24,6 +24,7 @@ from yasuki_core.engine.rules.abilities.registry import (
     register_invest,
 )
 from yasuki_core.engine.rules.board.queries import (
+    battle_history,
     in_army_with,
     ATTACK_TARGET,
     army_at,
@@ -95,7 +96,6 @@ from yasuki_core.engine.rules.rulebook.equip import creation_targets
 from yasuki_core.engine.rules.rulebook.favor_payment import favor_cost
 from yasuki_core.engine.rules.rulebook.recruit import recruit_card, recruitable
 from yasuki_core.engine.rules.vocabulary.game_events import (
-    BattleEnded,
     Destroyed,
     Dishonored,
     DuelDeclared,
@@ -105,7 +105,6 @@ from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.board.queries import (
     has_keyword,
-    phase_history,
     province_zones,
     remaining_look,
     top_of_deck,
@@ -715,12 +714,11 @@ def _matsu_hanshiro_uses_per_turn(game: GameState, source: L5RCard) -> int:
 
 
 def _matsu_hanshiro_deathseeker_fell_this_battle(game: GameState, seat: PlayerId) -> bool:
-    """Whether a Deathseeker ``seat`` controlled was destroyed since the last battle of this Attack
-    Phase ended."""
-    history = phase_history(game)
-    ended = [index for index, event in enumerate(history) if isinstance(event, BattleEnded)]
-    this_battle = history[ended[-1] + 1 :] if ended else history
-    for event in this_battle:
+    """Whether a Deathseeker ``seat`` controlled was destroyed during the battle being fought."""
+    attack = game.attack
+    if attack is None or attack.current is None:
+        return False
+    for event in battle_history(game, attack.current):
         if not isinstance(event, Destroyed) or event.left_as.controller is not seat:
             continue
         destroyed = game.table.cards_by_id.get(event.card_id)

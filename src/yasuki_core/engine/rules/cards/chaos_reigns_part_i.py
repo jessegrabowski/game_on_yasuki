@@ -2,8 +2,13 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.rulebook.favor_payment import DISCARD_THE_FAVOR, favor_payer
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.idioms import register_entry
-from yasuki_core.engine.rules.abilities.model import Ability, CardLocation
-from yasuki_core.engine.rules.abilities.registry import register_ability, tireless_grant
+from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, Interrupt
+from yasuki_core.engine.rules.abilities.registry import (
+    is_printed_ability,
+    is_printed_interrupt,
+    register_ability,
+    tireless_grant,
+)
 from yasuki_core.engine.rules.action_record import action_keywords
 from yasuki_core.engine.rules.board.queries import has_keyword, owned_personalities
 from yasuki_core.engine.rules.duel.procedure import challenge_cost
@@ -32,7 +37,7 @@ from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import action_did, at_cap, choice_resolver
 from yasuki_core.engine.rules.board.queries import opposing_units_in_battle
 from yasuki_core.engine.rules.board.seats import seat_stronghold
-from yasuki_core.engine.table import Location
+from yasuki_core.engine.table import Location, controller_of
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -316,6 +321,12 @@ register_entry(
 
 
 @tireless_grant("shrine_to_inari")
-def _shrine_to_inari_tireless_grant(game: GameState, source: L5RCard, card: L5RCard) -> bool:
+def _shrine_to_inari_tireless_grant(
+    game: GameState, source: L5RCard, card: L5RCard, ability: Ability | Interrupt
+) -> bool:
     """Your Stronghold's printed abilities have Tireless while this Holding is unbowed."""
-    return not source.bowed and card is seat_stronghold(game, source.owner)
+    if source.bowed or card is not seat_stronghold(game, controller_of(game.table, source)):
+        return False
+    if isinstance(ability, Ability):
+        return is_printed_ability(card, ability)
+    return is_printed_interrupt(card, ability)

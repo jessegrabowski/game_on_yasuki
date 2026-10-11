@@ -131,9 +131,30 @@ def _arrive(card: L5RCard, state: EntryState) -> None:
         card.rehonor()
 
 
+# What a card's own text says about the Province a Recruit leaves: Famous Bazaar's "After you
+# Recruit this Holding from a Province, refill the Province face-up". Asked of every card in play
+# holding one, about the card just Recruited, and keyed by printed id like the other per-card
+# registries.
+RefillFaceUp = Callable[[GameState, L5RCard, L5RCard], bool]
+REFILLS_FACE_UP: HandlerRegistry[RefillFaceUp] = HandlerRegistry(
+    "face-up refills", "already refills a Province face-up"
+)
+refill_face_up = REFILLS_FACE_UP.make_decorator()
+
+
+def _refilled_face_up(game: GameState, recruited: L5RCard) -> bool:
+    """Whether the text of a card in play refills ``recruited``'s Province face-up."""
+    return any(
+        REFILLS_FACE_UP[holder.printed_id](game, holder, recruited)
+        for holder in game.table.battlefield.cards
+        if holder.printed_id in REFILLS_FACE_UP
+    )
+
+
 def effects_after_entering_play(game: GameState, arrival: Recruit) -> list[Effect]:
     """What a Recruited card's arrival is followed by: its Sincerity tokens removed (Sincerity
-    keyword), a Proclaim's Honor gain, and the refill of the Province it left."""
+    keyword), a Proclaim's Honor gain, and the refill of the Province it left: face-up under Renew,
+    or where the text of a card in play says so."""
     card = game.table.cards_by_id[arrival.card_id]
     effects: list[Effect] = []
     held = card.counters.get(SINCERITY.key, 0)
@@ -142,7 +163,11 @@ def effects_after_entering_play(game: GameState, arrival: Recruit) -> list[Effec
     effects.extend(proclamation_effects(game, arrival))
     if arrival.from_province is not None:
         # Renew is read once the card has entered play, which is when the keyword speaks.
-        renews = arrival.renew or keywords.RENEW in effective_keywords(game, card)
+        renews = (
+            arrival.renew
+            or keywords.RENEW in effective_keywords(game, card)
+            or _refilled_face_up(game, card)
+        )
         effects.append(RefillProvince(arrival.from_province, face_up=renews))
     return effects
 

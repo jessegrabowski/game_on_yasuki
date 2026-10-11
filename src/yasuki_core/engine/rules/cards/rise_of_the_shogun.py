@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.units.membership import attached_to, attachments_o
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
 from yasuki_core.engine.rules.vocabulary.modifiers import Stat
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.table import Location
+from yasuki_core.engine.table import Location, controller_of
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -30,7 +30,7 @@ def _rout_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Eff
     choice resolves. The card names no chooser, so the seat playing it makes the choice, and "if
     any" is the whole of the clause when the unit carries nothing.
     """
-    effects: list[Effect] = [Move(target.id, Location.home(target.owner))]
+    effects: list[Effect] = [Move(target.id, Location.home(controller_of(game.table, target)))]
     attached = attachments_of(game, target)
     if attached:
         candidates = tuple(card.id for card in attached)

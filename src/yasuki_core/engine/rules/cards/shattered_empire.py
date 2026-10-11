@@ -17,6 +17,7 @@ from yasuki_core.engine.rules.abilities.idioms import (
     resolved_favor_actions,
 )
 from yasuki_core.engine.rules.abilities.model import (
+    InterruptLimit,
     Ability,
     CardLocation,
     Interrupt,
@@ -87,6 +88,9 @@ from yasuki_core.engine.rules.board.queries import (
     units_at,
 )
 from yasuki_core.engine.rules.effects import (
+    Discard,
+    MoveToHand,
+    Show,
     AdditionalAction,
     AdjustCounter,
     Ask,
@@ -137,7 +141,7 @@ from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords, ke
 from yasuki_core.engine.rules.stats.calculation import unbounded_stat
 from yasuki_core.engine.rules.stats.stat_grants import stat_grant
 from yasuki_core.engine.rules.action_record import action_round
-from yasuki_core.engine.rules.interrupts import INTERRUPT_TAG, answered_by
+from yasuki_core.engine.rules.interrupts import held_action_timings, INTERRUPT_TAG, answered_by
 from yasuki_core.engine.rules.legality import permitted_timings_in
 from yasuki_core.engine.rules.triggers import (
     TriggerContext,
@@ -149,7 +153,7 @@ from yasuki_core.engine.rules.triggers import (
 )
 from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
-from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcome
+from yasuki_core.engine.rules.duel.procedure import duel_in_progress, decided_duel, decided_outcome
 from yasuki_core.engine.rules.turn.structure import (
     ADDITIONAL_ACTION_SPENT,
     BEGINNING_OF_TURN,
@@ -177,14 +181,20 @@ from yasuki_core.engine.rules.rulebook.equip import creation_targets, weapons_on
 from yasuki_core.engine.rules.rulebook.discipline import discipline_grant, in_discard_pile
 from yasuki_core.engine.rules.rulebook.joining import register_join_restriction
 from yasuki_core.engine.rules.state import GameState, used_this_turn
-from yasuki_core.engine.table import DeckKey, Location, ZoneKey, ZoneRole, location_of
+from yasuki_core.engine.table import (
+    DeckKey,
+    Location,
+    ZoneKey,
+    ZoneRole,
+    controller_of,
+    location_of,
+)
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import MASTERWORK
 from yasuki_core.game_pieces.constants import AttachmentType, Side
 from yasuki_core.game_pieces.prints import (
     ActionPrint,
     AttachmentPrint,
-    FatePrint,
     PersonalityPrint,
     RingPrint,
 )
@@ -738,7 +748,7 @@ def _heedless_assault_enemies(game: GameState, source: L5RCard, picked: PickedTa
     return [
         card.id
         for card in (*personalities_in_play(game), *followers_in_play(game))
-        if card.owner is not source.owner
+        if controller_of(game.table, card) is not source.owner
     ]
 
 
@@ -830,14 +840,19 @@ def _hida_sanjiro_invest(game: GameState, source: L5RCard, amount: int) -> list[
 register_invest("hida_sanjiro", InvestAbility(amounts=(2,), effect=_hida_sanjiro_invest))
 
 
-def _hida_sanjiro_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
-    """ "If Sanjiro has any Items, Fear 4", the Items read as the ability resolves."""
+def _hida_sanjiro_targets(game: GameState, source: L5RCard) -> list[str]:
+    """ "If Sanjiro has any Items" starts the effects, so without one the action cannot be
+    announced (CR, Good Faith Rule 0.3)."""
     has_items = any(
         isinstance(card.printed, AttachmentPrint)
         and card.printed.attachment_type is AttachmentType.ITEM
         for card in attachments_of(game, source)
     )
-    return [Fear(SANJIRO_FEAR, target.id, source.owner)] if has_items else []
+    return attack_targets(game, source, Fear) if has_items else []
+
+
+def _hida_sanjiro_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [Fear(SANJIRO_FEAR, target.id, source.owner)]
 
 
 register_ability(
@@ -845,9 +860,71 @@ register_ability(
     Ability(
         timings=(ActionTiming.BATTLE,),
         cost=no_cost,
-        targets=attack_targeting(Fear),
+        targets=_hida_sanjiro_targets,
         targeting_message=ATTACK_TARGET,
         effects=_hida_sanjiro_effects,
+    ),
+)
+
+
+# --- Imperial Gift ---
+
+IMPERIAL_GIFT_HONOR = 2
+
+
+def _imperial_gift_fate_deck_items(game: GameState, seat: PlayerId) -> tuple[str, ...]:
+    """The Items in ``seat``'s Fate deck. What the search may turn up."""
+    return tuple(
+        card.id
+        for card in game.table.decks[DeckKey(seat, Side.FATE)].cards
+        if isinstance(card.printed, AttachmentPrint)
+        and card.printed.attachment_type is AttachmentType.ITEM
+    )
+
+
+@choice_resolver("imperial_gift_item", prompt="Search your Fate deck for an Item")
+def _resolve_imperial_gift_item(
+    game: GameState, source_id: str, chosen: tuple[str, ...], seat: PlayerId
+) -> list[Effect]:
+    """Show the Item and put it in hand, or nothing for a search the seat let fail. The disclosure
+    outlives the move: once the opponent has seen which Item was taken, hiding the card again does
+    not unsay it."""
+    if not chosen:
+        return []
+    return [Show(chosen[0]), MoveToHand(chosen[0], seat)]
+
+
+def _imperial_gift_targets(game: GameState, card: L5RCard) -> list[str]:
+    """The Event itself. The honor is unconditional, so the ability is offered whether or not the
+    Fate deck holds an Item. The search is a choice raised after it, not the ability's target."""
+    return [card.id]
+
+
+def _imperial_gift_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """ "Gain 2 Honor and search your Fate deck for an Item, show it, and put it in your hand." The
+    seat may let the search fail, and the deck it searched is shuffled whatever it found (CR,
+    Search)."""
+    seat = source.owner
+    items = _imperial_gift_fate_deck_items(game, seat)
+    search = [Choose(seat, items, 0, 1, "imperial_gift_item", source.id)] if items else []
+    return [
+        GainHonor(seat, IMPERIAL_GIFT_HONOR),
+        Discard(source.id, seat),
+        *search,
+        ShuffleDeck(DeckKey(seat, Side.FATE)),
+    ]
+
+
+register_ability(
+    "imperial_gift",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=_imperial_gift_targets,
+        effects=_imperial_gift_effects,
+        hits_every_target=True,
+        located_at=(CardLocation.PROVINCE,),
+        ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )
 
@@ -1128,8 +1205,8 @@ register_trait_entry(
 
 
 def _ring_of_earth_applies(game: GameState, source: L5RCard, effect: Move) -> bool:
-    """A Battle action's moving of a Personality, read off the unit the Move names a card in."""
-    if ActionTiming.BATTLE not in permitted_timings_in(game, action_round(game), source.owner):
+    """The Battle action's moving of a Personality, read off the unit the Move names a card in."""
+    if ActionTiming.BATTLE not in held_action_timings(game):
         return False
     card = game.table.cards_by_id.get(effect.card_id)
     if card is None:
@@ -1150,6 +1227,7 @@ register_interrupt(
         located_at=(CardLocation.HAND, CardLocation.BATTLEFIELD),
         cost=bow_cost,
         answers_every=True,
+        limit=InterruptLimit.ONCE_PER_ACTION,
         ruleset=ruleset.SHATTERED_EMPIRE.name,
     ),
 )
@@ -1222,8 +1300,7 @@ register_ring(
 def _ring_of_the_void_condition(game: GameState, source: L5RCard) -> bool:
     """ "Play if you ever have the same number of Fate cards in play as in your hand, not counting
     this Ring." """
-    hand = cards_in_hand(game, source.owner)
-    in_hand = sum(1 for card in hand if card is not source and isinstance(card.printed, FatePrint))
+    in_hand = sum(1 for card in cards_in_hand(game, source.owner) if card is not source)
     return len(fate_cards_in_play(game, source.owner)) == in_hand
 
 
@@ -1642,9 +1719,12 @@ def _way_of_the_crab_experienced_keywords(
 ) -> tuple[str, ...]:
     """ "Your Personalities have Siege while opposed." Siege carries no rule of its own, and other
     cards read it."""
-    if card.owner is not edict.owner or not isinstance(card.printed, PersonalityPrint):
+    yours = controller_of(game.table, edict)
+    if controller_of(game.table, card) is not yours or not isinstance(
+        card.printed, PersonalityPrint
+    ):
         return ()
-    return (keywords.SIEGE,) if card.id in opposed_units_in_battle(game, edict.owner) else ()
+    return (keywords.SIEGE,) if card.id in opposed_units_in_battle(game, yours) else ()
 
 
 @focus_effect("way_of_the_crab_experienced")
@@ -1654,9 +1734,7 @@ def _way_of_the_crab_experienced_focus_effect(game: GameState, card: L5RCard) ->
     The CR names the duel stat per Personality rather than per duel, so each duelist is told to
     compare it (CR, Duel Stat).
     """
-    duel = game.duel
-    if duel is None:
-        return []
+    duel = duel_in_progress(game)
     return [
         GrantDuelStat(card.id, duel.duelist_of(seat), Stat.FORCE, DUEL_CONSEQUENCES)
         for seat in (duel.challenger, duel.challenged)
@@ -1667,8 +1745,9 @@ def _way_of_the_crab_experienced_focus_effect(game: GameState, card: L5RCard) ->
 def _way_of_the_crab_experienced_bowed(ctx: TriggerContext) -> list[Effect]:
     """After your Fortification bows, once per turn, straighten it. Negate its bowing (this
     turn)."""
-    bowed = ctx.game.table.cards_by_id[ctx.event.card_id]
-    if bowed.owner is not ctx.card.owner or not has_keyword(
+    table = ctx.game.table
+    bowed = table.cards_by_id[ctx.event.card_id]
+    if controller_of(table, bowed) is not controller_of(table, ctx.card) or not has_keyword(
         ctx.game, bowed, keywords.FORTIFICATION
     ):
         return []

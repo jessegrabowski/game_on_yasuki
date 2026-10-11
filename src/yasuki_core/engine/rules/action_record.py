@@ -26,7 +26,13 @@ def action_round(game: GameState) -> ActionRound:
 def resolving_ability(game: GameState) -> Ability | None:
     """The ability the action now resolving was taken from, or None for an action taken from none:
     a rulebook action, or no action at all."""
-    match game.action:
+    return ability_of(game, game.action)
+
+
+def ability_of(game: GameState, action: Action | None) -> Ability | None:
+    """The ability ``action`` was taken from, or None for an action taken from none: a rulebook
+    action, an Interrupt, or no action at all."""
+    match action:
         case (
             ActivateAbility(card_id=card_id, ability_key=key)
             | PlayStrategy(card_id=card_id, ability_key=key)
