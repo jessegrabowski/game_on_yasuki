@@ -39,6 +39,8 @@ _DECORATORS = {
     "stat_grant",
     "attach_restriction",
     "attack_strength_against",
+    "challenge_cost",
+    "challenge_restriction",
     "discipline_grant",
     "considered_stat",
     "equips_from_discard",
