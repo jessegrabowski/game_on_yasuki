@@ -112,7 +112,7 @@ def test_formats_endpoint_is_chronological(client):
     # Ordering comes from formats.legal_from, not a hardcoded list.
     body = client.get("/api/formats").json()
     assert body["arcs"][0] == "Clan Wars (Imperial)"
-    assert body["arcs"][-1] == "Shattered Empire"
+    assert body["arcs"][-2:] == ["Shattered Empire", "Three Dynasties"]
     assert body["other"][0] == "Modern"
 
 

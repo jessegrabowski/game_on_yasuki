@@ -206,6 +206,7 @@ agasha_miyoshi
 agasha_miyoshi_experienced
 agasha_mumoko
 agasha_nabe
+agasha_naname
 agasha_orito
 agasha_oshu
 agasha_ryo
@@ -242,6 +243,7 @@ air
 air_dragon
 air_dragon_experienced
 air_dragon_experienced_3
+air_dragon_experienced_4
 air_dragons_guidance
 air_kami
 ajana
@@ -255,6 +257,7 @@ akasha_experienced
 akasha_experienced_2
 akasha_legacy_of_the_naga_experienced_3
 akashic_purification
+akashiro
 akatch
 akegarasu
 akeha_sensei
@@ -265,10 +268,12 @@ akiyoshi
 akiyoshi_experienced
 akodo
 akodo_aeshma
+akodo_akeno_soul_of_akodo_senzo
 akodo_anshiro
 akodo_anshiro_experienced
 akodo_areru
 akodo_ashiko
+akodo_atsumamaro_soul_of_akodo_kin
 akodo_atsutane
 akodo_atsutane_ivory_champion_experienced
 akodo_bakin
@@ -314,6 +319,7 @@ akodo_ikawa
 akodo_iketsu
 akodo_iori
 akodo_itoku
+akodo_jirobei
 akodo_jusho
 akodo_kage
 akodo_kage_experienced
@@ -361,6 +367,7 @@ akodo_mokichi
 akodo_moromao
 akodo_motetsu_scourge_of_the_scorpion_experienced
 akodo_motetsu_soul_of_akodo_moromao
+akodo_mushanokoji_soul_of_experienced_ikoma_hagio
 akodo_nagataka
 akodo_naikiru
 akodo_nakama
@@ -373,6 +380,7 @@ akodo_niito
 akodo_ninsei
 akodo_nojima
 akodo_nojima_experienced
+akodo_orinosuke_soul_of_akodo_shigo
 akodo_osamu
 akodo_quehao
 akodo_raemon
@@ -388,6 +396,7 @@ akodo_sagashite
 akodo_saiko
 akodo_sanuro
 akodo_sarasa
+akodo_satsume_soul_of_akodo_shigetoshi
 akodo_seiichi
 akodo_seiichi_experienced
 akodo_senichi
@@ -420,6 +429,7 @@ akodo_tadenori_experienced_2
 akodo_taiketsu
 akodo_tamisu
 akodo_tekkan
+akodo_terumasa_soul_of_akodo_tezuka
 akodo_terumoto
 akodo_tetsuru
 akodo_tezuka
@@ -435,6 +445,7 @@ akodo_tsuyumi
 akodo_uehara_experienced
 akodo_yanagi
 akodo_yobi
+akodo_yosuke_soul_of_akodo_hachigoro
 akodo_yuyama
 akodos_grave
 akodos_guidance
@@ -443,6 +454,7 @@ akodos_leadership
 akodos_no_dachi
 akodos_shrine
 akui_cliffs
+akuma_no_kenzoku
 akuma_no_obake
 akuma_no_oni_experienced_2
 akumas_power
@@ -577,6 +589,7 @@ aneo
 anger_management
 animate_the_dead
 animated_armor
+annexation_experienced
 anonymous_monk
 another_hero_falls
 another_time
@@ -601,6 +614,7 @@ aramoros_promise
 aranai_sensei
 aranais_armor
 aranais_kama
+aranami
 archer_squad
 archer_towers
 archers
@@ -780,8 +794,10 @@ asako_kensaku
 asako_keshiki
 asako_kijo
 asako_kikugoro
+asako_kingo
 asako_kinuye
 asako_kinuye_experienced
+asako_kudate
 asako_kyuudo
 asako_lao_tsu
 asako_makito
@@ -822,6 +838,7 @@ asako_suda
 asako_suzukaze
 asako_takakazu
 asako_takakazu_experienced
+asako_takamasu
 asako_togama
 asako_toshi
 asako_tsunefusa
@@ -861,6 +878,7 @@ ashigaru_guards
 ashigaru_gunso
 ashigaru_hordes
 ashigaru_levies
+ashigaru_levy
 ashigaru_partisans
 ashigaru_recruits
 ashigaru_shl
@@ -916,6 +934,7 @@ avalanche_tattoo
 avenge_your_slights
 avenging_the_fallen
 avoid_fate
+avoid_fate_experienced
 awaken_the_eighth
 awaken_the_sins
 awakened_blade
@@ -972,6 +991,7 @@ banished_experienced
 banished_from_the_realm
 banishing_breath
 banner_guard
+bansho
 banzai
 banzai_charge
 banzai_cry
@@ -1055,6 +1075,7 @@ bayushi_arashii
 bayushi_areru
 bayushi_arunsa
 bayushi_atsuki_experienced
+bayushi_atsune_soul_of_bayushi_kaukatsu
 bayushi_atsuto
 bayushi_atsuto_experienced
 bayushi_azumamoru
@@ -1080,7 +1101,9 @@ bayushi_eisaku_experienced
 bayushi_eitarou
 bayushi_eiyo
 bayushi_eiyu
+bayushi_ena
 bayushi_fujio
+bayushi_fusa_soul_of_shosuro_adeiko
 bayushi_fuyuko
 bayushi_fuyuko_experienced
 bayushi_fuyuko_experienced_2
@@ -1123,6 +1146,7 @@ bayushi_jin_e
 bayushi_jinn_ja
 bayushi_jou
 bayushi_junko
+bayushi_jurobei_soul_of_bayushi_jutsushi
 bayushi_jutsushi
 bayushi_jutsushi_deckbacker
 bayushi_jutsushi_experienced
@@ -1145,6 +1169,7 @@ bayushi_kan_experienced
 bayushi_kaneo
 bayushi_kanihime
 bayushi_kanihime_clan_champion_experienced
+bayushi_kanihime_clan_champion_experienced_2
 bayushi_kasata
 bayushi_kasumi
 bayushi_katai
@@ -1156,7 +1181,9 @@ bayushi_kayama
 bayushi_kazutoshi_experienced
 bayushi_kazutoshi_experienced_2
 bayushi_keirei
+bayushi_keyuko_soul_of_soshi_komiko
 bayushi_kindebu
+bayushi_kojuro
 bayushi_komiya
 bayushi_kosaku
 bayushi_kosugi
@@ -1198,7 +1225,9 @@ bayushi_muhito
 bayushi_muhito_experienced
 bayushi_muhito_experienced_2
 bayushi_muraisan
+bayushi_nichirin_soul_of_bayushi_kwanchai
 bayushi_nissho
+bayushi_nitoko_sociopath
 bayushi_nitoshi
 bayushi_nitoshi_bio
 bayushi_nitoshi_clan_champion_experienced_3
@@ -1253,6 +1282,7 @@ bayushi_shixiang
 bayushi_shizuka
 bayushi_shoju
 bayushi_shoju_inexperienced
+bayushi_shoyo_soul_of_bayushi_fujio
 bayushi_shumpei
 bayushi_shun
 bayushi_shunko
@@ -1404,6 +1434,7 @@ black_powder_tactics
 black_rabble
 black_riders
 black_silk_castle
+black_veil_estates
 black_watch_sensei
 black_wind_from_the_soul_fkn
 black_wind_from_the_soul_scw
@@ -1576,6 +1607,7 @@ brand_of_cowardice
 brand_of_fire_and_thunder
 brash_challenger
 brash_hero
+brash_hero_experienced
 brawl
 brazen_challenge
 brazen_disregard
@@ -1606,6 +1638,7 @@ brilliant_cascade_inn
 brilliant_rebirth_temple
 brilliant_soul
 brilliant_victory
+brilliant_victory_experienced
 bring_it_down
 bring_them_forward
 brink_of_exhaustion
@@ -1615,6 +1648,7 @@ brnn_experienced
 brnn_the_eternal_experienced_2
 broad_front
 broken_alliance
+broken_blade_fortress
 broken_cipher
 broken_guard
 broken_lines
@@ -1931,6 +1965,7 @@ chukandomo
 chuktek
 chun
 chunigo
+churetsu
 chutaro
 chutoburo
 chuuna_sensei
@@ -1948,6 +1983,7 @@ city_of_loyalty
 city_of_night
 city_of_night_experienced
 city_of_remembrance
+city_of_sacrifice
 city_of_tears_gote
 city_of_tears_sote
 city_of_the_lost
@@ -2140,6 +2176,7 @@ counting_house
 counting_the_lost
 courage
 courage_beyond_question
+courage_experienced
 courage_follower_1f
 courage_follower_2f
 courage_in_death
@@ -2164,6 +2201,7 @@ courtly_scholars
 courts_of_otosan_uchi
 cove_of_cursed_blades
 cover_card
+covert_attack
 covert_ninja
 coward
 cowardice
@@ -2261,6 +2299,7 @@ daidoji_akagi_experienced_2
 daidoji_akeha
 daidoji_akeha_iron_crane_experienced
 daidoji_akimasa
+daidoji_akoshige_soul_of_daidoji_naoshige
 daidoji_arima
 daidoji_armor
 daidoji_arrows
@@ -2279,6 +2318,7 @@ daidoji_gisei
 daidoji_gudeta
 daidoji_gunso
 daidoji_hachi
+daidoji_hanshiro_soul_of_daidoji_sakihiko
 daidoji_harada
 daidoji_harrier
 daidoji_heizo
@@ -2299,6 +2339,7 @@ daidoji_kinta
 daidoji_kirimi
 daidoji_kitahime
 daidoji_kojima
+daidoji_kousan
 daidoji_kumi
 daidoji_kuraou
 daidoji_kyorai
@@ -2334,6 +2375,8 @@ daidoji_sabaru
 daidoji_sadayori
 daidoji_sakihiko
 daidoji_sakuzou
+daidoji_seibei
+daidoji_seijuro_soul_of_daidoji_soken
 daidoji_sembi
 daidoji_senshi_governor_of_the_aerie
 daidoji_setsuko
@@ -2363,6 +2406,7 @@ daidoji_teika
 daidoji_teruo
 daidoji_tobei
 daidoji_tokiko
+daidoji_tomokazu
 daidoji_tomomi
 daidoji_tsumerai
 daidoji_tsunehiko
@@ -2375,6 +2419,7 @@ daidoji_ujirou_experienced
 daidoji_yaichiro
 daidoji_yaichiro_experienced
 daidoji_yorio
+daidoji_yoshiro_soul_of_daidoji_narizane
 daidoji_yoshun_soul_of_daidoji_kagami
 daidoji_yuji_soul_of_daidoji_yuki
 daidoji_yuki
@@ -2680,6 +2725,7 @@ death_at_the_mikado
 death_defeated
 death_from_above
 death_is_not_the_end
+death_of_hantei_xl
 death_of_onnotangu
 death_of_rosoku
 death_of_the_heartless
@@ -2704,6 +2750,7 @@ decayed_blade
 deceit_and_subterfuge
 deception_revealed
 deceptions_veil_dojo
+decisive_duel
 decisive_strike
 deckhands
 declaration_of_war
@@ -2864,6 +2911,7 @@ disciples_of_ganesh
 disciples_of_master_coin
 disciplined_advance
 disciplined_infantry
+disciplined_recruits
 discovering_a_conspiracy
 discovering_lost_lore
 discovering_the_anvil_of_earth
@@ -2894,6 +2942,7 @@ dispersive_terrain
 disposable_troops
 disreputable_deal
 disreputable_house
+disreputable_machiwari
 disrupt_the_aura
 disrupted_resources
 disrupting_communication
@@ -2934,6 +2983,7 @@ doji_akiko_experienced
 doji_aoi_soul_of_doji_chitose
 doji_armor
 doji_asano
+doji_atasuke_soul_of_doji_yorio
 doji_atsumichi
 doji_ayano
 doji_ayano_experienced
@@ -2957,6 +3007,7 @@ doji_domotai_experienced_4
 doji_doukohito
 doji_ejio
 doji_etsuki
+doji_etsuki_soul_of_doji_numata
 doji_fujie
 doji_genshin
 doji_gombei
@@ -2969,6 +3020,7 @@ doji_hariya
 doji_hatashi
 doji_hayaku
 doji_hiromi
+doji_hisato_clan_champion
 doji_hoshihana
 doji_hoturi
 doji_hoturi_experienced
@@ -2984,6 +3036,7 @@ doji_jorihime
 doji_jotaro
 doji_junai_experienced
 doji_jurian
+doji_kaishime_experienced
 doji_kaishime_soul_of_doji_shikatsu
 doji_katata
 doji_kato
@@ -3018,6 +3071,7 @@ doji_masachika
 doji_masako
 doji_masaru
 doji_masaru_experienced
+doji_mashiro_soul_of_doji_tajihi
 doji_maya
 doji_maya_experienced
 doji_meihu
@@ -3026,6 +3080,7 @@ doji_meiji_regent_experienced
 doji_midoru
 doji_midoru_experienced
 doji_mitsuru
+doji_miwako
 doji_moro
 doji_motoi
 doji_muroken_master_steel
@@ -3054,6 +3109,7 @@ doji_reju
 doji_reju_experienced_2
 doji_reju_experienced_3
 doji_rengetsu
+doji_rintaro
 doji_sakurako
 doji_saomi
 doji_saori
@@ -3073,6 +3129,7 @@ doji_shimada
 doji_shirarou
 doji_shizue
 doji_shizue_experienced
+doji_shuji_soul_of_doji_nagori
 doji_shunya
 doji_shunya_bio
 doji_soeka
@@ -3091,6 +3148,7 @@ doji_tatsuki_bio
 doji_tatsuki_experienced
 doji_tatsuzo
 doji_teru
+doji_toju
 doji_toshinobu
 doji_toyoaki
 doji_tsubakita
@@ -3213,6 +3271,7 @@ earth_becomes_sky
 earth_dragon
 earth_dragon_experienced
 earth_dragon_experienced_2
+earth_dragon_experienced_3
 earth_dragons_guidance
 earth_fire_terrain_strategy
 earthborn_temple
@@ -3238,6 +3297,7 @@ east_hub_village
 east_wall_of_otosan_uchi
 east_wall_of_otosan_uchi_experienced
 east_wind_riders
+eastern_domain_hantei_xli
 eastern_hub_port
 easy_persuasion
 ebb_and_flow
@@ -3298,6 +3358,7 @@ emerald_champion
 emerald_champions_mempo
 emerald_competitor
 emerald_guard
+emerald_hills
 emerald_magistrate
 emerald_magistrates
 emergence_of_the_masters
@@ -3331,10 +3392,12 @@ energy_transference
 enervation
 engage_the_enemy
 engineering_crew
+enginoshi
 engulfing_flames
 enigma
 enigmatic_pendant
 enlightened_ruler
+enlightened_ruler_experienced
 enlightened_tutor
 enlightenment
 enlistment
@@ -3348,6 +3411,7 @@ entangling_terrain
 enticement
 entrapping_terrain
 entreat_bishamon
+entreat_kyufoki
 entrench
 entrenched_position
 entrenchment
@@ -3442,6 +3506,7 @@ extending_influence
 extensive_training
 extermination
 extortion
+exuberant_miko
 exult_in_triumph
 eye_of_iuchiban
 eye_of_nasata_karo
@@ -3488,6 +3553,7 @@ fallen_thunder
 falling_leaf_strike
 falling_rain_dojo
 falling_star_strike
+fallow_fields
 fallow_lands
 false_alliance
 false_ring_of_air
@@ -3524,6 +3590,7 @@ fantastic_gardens
 fantastic_gardens_of_otosan_uchi
 far_and_wide
 far_from_the_empire
+far_traveler_castle
 farmer
 farmers_kama
 farmers_market
@@ -3644,6 +3711,7 @@ fire_breather
 fire_dragon
 fire_dragon_experienced_2
 fire_dragon_experienced_3
+fire_dragon_experienced_4
 fire_dragons_guidance
 fire_in_the_hidden_city
 fire_kamis_greed
@@ -3740,6 +3808,7 @@ force_of_law
 force_of_spirit
 force_of_will
 forced_alliance
+forced_conscription
 forced_march
 foreboding_path
 forest
@@ -3866,6 +3935,7 @@ fudos_fiends
 fudoshi
 fueling_the_flames
 fuhaos_shadow
+fujin
 fukurokujin_seido
 fukurokujins_wisdom
 fukuzo_experienced
@@ -3933,6 +4003,7 @@ gashadokuro
 gate_guardsman
 gates_of_chikushudo
 gates_of_jigoku
+gates_of_persistence
 gates_of_the_second_city
 gates_of_the_second_city__back
 gathering
@@ -3942,9 +4013,11 @@ geisha_escort
 geisha_house
 geisha_network
 gekkai
+gekko_soul_of_gozu
 gempukku
 gempukku_blade
 gempukku_ceremony
+genbu
 generals_hatamoto
 generational_gap
 generosity
@@ -3970,6 +4043,7 @@ gift_of_the_shogun
 gift_of_the_water_dragon
 gift_of_the_wind
 gifted_officer
+gifting_ceremony
 gifts_and_favors
 ginas_fox
 ginawa
@@ -4069,6 +4143,7 @@ gold_mine
 golden_mirror
 golden_obi_of_the_sun_goddess
 golden_obi_of_the_sun_goddess_experienced
+golden_obi_of_the_sun_goddess_experienced_2
 golden_oriole_wakizashi
 golden_sun_plain
 goldsmith
@@ -4313,8 +4388,12 @@ heavy_regulars
 heavy_yari
 heedless_assault
 heichi_chokei
+heichi_gengyo
 heichi_tadama_favored_by_the_celestial_dragon_experienced
 heichi_tochiko_experienced
+heichi_ukon
+heichi_yachi
+heichi_yuuka_favored_by_the_celestial_dragon
 heigai_experienced_5
 heimin_laborers
 heimin_village
@@ -4337,11 +4416,13 @@ heros_memorial
 hes_mine
 hesitation
 hibernation
+hida_adokenai_experienced
 hida_advisor
 hida_akeno
 hida_amoro
 hida_amoro_experienced
 hida_amoro_experienced_2
+hida_anshin
 hida_atarasi_experienced_7
 hida_atsumori
 hida_ayahi
@@ -4377,6 +4458,7 @@ hida_fumetsu
 hida_genda
 hida_genda_experienced
 hida_genichi
+hida_gochou
 hida_gojiro
 hida_gojiro_tetsubo_master_experienced
 hida_hachimoto
@@ -4442,6 +4524,7 @@ hida_kurabi
 hida_kurabi_vanguard_of_the_damned_experienced
 hida_kurima
 hida_kuroda
+hida_kyuso
 hida_kyuwa
 hida_lineage
 hida_manabu
@@ -4455,6 +4538,7 @@ hida_mochitoko
 hida_mochitoko_experienced
 hida_motaro
 hida_nageki_sister_of_sorrow
+hida_naguriko_soul_of_hida_yaheiko
 hida_nari
 hida_nari_experienced
 hida_nezu
@@ -4477,6 +4561,7 @@ hida_reiha
 hida_reiha_experienced
 hida_renga
 hida_rengou
+hida_rikako_soul_of_inexperienced_hida_o_ushi
 hida_rikyu
 hida_rikyu_experienced
 hida_rohiteki
@@ -4487,6 +4572,7 @@ hida_ryusei_unbroken_experienced
 hida_sadaharu
 hida_sadaharu_experienced
 hida_saiyuki
+hida_saizensen_soul_of_hida_daizu
 hida_sakamoto
 hida_sanjiro
 hida_satoshi
@@ -4534,6 +4620,7 @@ hida_tonoji
 hida_toraike
 hida_toranosuke
 hida_toranosuke_clan_champion_experienced_3
+hida_toranosuke_clan_champion_experienced_4
 hida_toranosuke_experienced
 hida_toranosuke_experienced_2
 hida_tsuburu
@@ -4542,6 +4629,7 @@ hida_tsunesaburo
 hida_tsurasho
 hida_tsuru
 hida_tsuru_experienced
+hida_tsushao
 hida_ubogin
 hida_ugokanai_sumai_master
 hida_unari
@@ -4633,6 +4721,7 @@ hired_thugs
 hiromasa
 hiromis_vassals
 hiroshis_legion
+hirotaka_soul_of_hitofu
 hiruma
 hiruma_abun
 hiruma_aki
@@ -4645,6 +4734,7 @@ hiruma_aya
 hiruma_castle
 hiruma_castle_experienced
 hiruma_daizen
+hiruma_eizo_soul_of_hiruma_tama
 hiruma_etsuro
 hiruma_fujito
 hiruma_gohachiro
@@ -4679,6 +4769,7 @@ hiruma_nitani_experienced
 hiruma_oda
 hiruma_oda_experienced
 hiruma_ogata
+hiruma_okurete_soul_of_hiruma_shigeo
 hiruma_osuno
 hiruma_osuno_experienced
 hiruma_raikohime
@@ -4790,11 +4881,14 @@ hojatsus_legacy_style
 hojatsus_standard
 hoji_ejiro
 hoji_eri
+hoji_hikaro
 hoji_misato_wicked_eyes
 hoji_momiji_experienced
 hoji_okura
+hoji_shiho_soul_of_yoritomo_sachina
 hoji_tsai
 hoji_wakuni_pawn_experienced
+hoji_zainin_soul_of_yoritomo_manzo
 hojyn
 hold
 hold_the_walls
@@ -4865,6 +4959,7 @@ hoseki
 hoshi_chuichi
 hoshi_eisai
 hoshi_eisai_experienced
+hoshi_eisai_experienced_2
 hoshi_house_guard
 hoshi_ishida
 hoshi_kaelung_experienced
@@ -4891,6 +4986,7 @@ hotaru_okane_the_last_light
 hoteis_contentment
 hoteis_smile
 hototogitsu
+hototogitsu_experienced
 hoturi_sensei
 hoturi_the_heartless_experienced_3
 hoturis_blade
@@ -4919,7 +5015,9 @@ house_of_floating_petals
 house_of_high_waters
 house_of_loose_silk
 house_of_no_tomorrow
+house_of_plum_blossoms
 house_of_prophecy
+house_of_striking_wings
 house_of_suikihime_otomo_suikihime
 house_of_tao
 house_of_the_black_lion
@@ -4933,6 +5031,7 @@ house_of_the_red_lotus
 house_of_the_rising_sun
 house_of_the_spring_chrysanthemum
 house_of_the_white_jade_fan
+house_of_virtues
 howl_of_the_wolf
 howls_of_the_dead
 hozumi
@@ -4992,6 +5091,7 @@ iaijutsu_student
 iaijutsu_technique
 iaimiko_sensei
 iainuki
+ibuki_soul_of_tsukotu
 ichiba_district
 ichido_allegiance
 ichido_no_shiryo
@@ -5017,6 +5117,8 @@ ide_hideshi_experienced
 ide_hideshi_topaz_champion
 ide_hinobu
 ide_igo
+ide_igo_caravan_master_experienced
+ide_jegu_soul_of_ide_eien
 ide_jiao
 ide_jiaos_hat
 ide_jyunkai
@@ -5067,6 +5169,7 @@ ikoma_ayumi
 ikoma_ayumi_experienced
 ikoma_ayumu
 ikoma_ayumu_clan_champion_experienced_2
+ikoma_ayumu_clan_champion_experienced_3
 ikoma_ayumu_experienced
 ikoma_bugoro
 ikoma_chikao
@@ -5103,8 +5206,10 @@ ikoma_kosaku
 ikoma_kosaku_experienced
 ikoma_kunisada
 ikoma_kunisada_experienced
+ikoma_kyoukai
 ikoma_kyuso
 ikoma_masaru
+ikoma_masaru_experienced
 ikoma_masote
 ikoma_masumi
 ikoma_morita
@@ -5144,6 +5249,7 @@ ikoma_takakura
 ikoma_tatsunori
 ikoma_technique
 ikoma_tobikuma
+ikoma_tokkai_soul_of_ikoma_tsukasa
 ikoma_tomaru
 ikoma_tomoi
 ikoma_toraji
@@ -5193,7 +5299,9 @@ imperial_ambassadorship
 imperial_arrival
 imperial_artificer
 imperial_assembly
+imperial_assembly_experienced
 imperial_assessor
+imperial_benefices
 imperial_cartographer
 imperial_census
 imperial_charter
@@ -5328,6 +5436,7 @@ inspired_leadership
 inspired_strategy
 inspired_troops
 inspiring_leadership
+inspiring_presence
 inspiring_speech
 insulting_gesture
 insurmountable_obstacle
@@ -5394,6 +5503,7 @@ isawa_chinatsu
 isawa_chishaki
 isawa_eijiri_warmonger
 isawa_eitoku
+isawa_eizo_soul_of_isawa_emori
 isawa_emori
 isawa_emori_experienced
 isawa_experienced_7
@@ -5406,6 +5516,7 @@ isawa_genma
 isawa_hachiko
 isawa_hajime
 isawa_haruge
+isawa_haruna_soul_of_isawa_hachiko
 isawa_hibana
 isawa_hibana_experienced
 isawa_hibana_experienced_2
@@ -5452,6 +5563,7 @@ isawa_koiso_master_of_fire_experienced
 isawa_koizumi
 isawa_kojiro
 isawa_kokuten
+isawa_korenaga_tsunami_legion
 isawa_kosea
 isawa_kosea_master_of_earth_experienced
 isawa_kouka
@@ -5516,6 +5628,7 @@ isawa_sachi
 isawa_sakonoko
 isawa_sanetomo
 isawa_sata
+isawa_satai_soul_of_isawa_shioki
 isawa_sawao
 isawa_sawao_experienced
 isawa_sawao_experienced_2
@@ -5543,6 +5656,7 @@ isawa_taeruko
 isawa_taiken
 isawa_taisho
 isawa_taisho_experienced
+isawa_taji_historian
 isawa_takahiro
 isawa_takashi
 isawa_takesi
@@ -5581,6 +5695,7 @@ isawa_umeko
 isawa_uona
 isawa_uona_experienced
 isawa_uona_experienced_2
+isawa_utaro_soul_of_isawa_uhiko
 isawa_uzuyumi
 isawa_uzuyumi_experienced
 isawa_waiko
@@ -5614,6 +5729,7 @@ island_of_silk
 island_sanctuary
 island_wharf
 isolated_farmlands
+isoras_call
 issut
 it_calls_to_me
 it_was_a_cat
@@ -5661,10 +5777,12 @@ iuchi_shahai
 iuchi_shahai_experienced
 iuchi_shaocheng
 iuchi_shunshi
+iuchi_sotan
 iuchi_takaai
 iuchi_takaki
 iuchi_tsung
 iuchi_tudev
+iuchi_ukiyobi_tsunami_rider
 iuchi_umeka
 iuchi_umeka_experienced
 iuchi_wattu
@@ -5693,6 +5811,7 @@ iweko_shibatsu
 iweko_shibatsu_the_shattered_prince_experienced
 iwekos_journals
 iwekos_shadow
+izaku_librarian
 izaku_library
 izuna_sensei
 jackal_pack
@@ -5721,6 +5840,7 @@ jade_stores
 jade_strike
 jade_strike_experienced
 jade_sun_disciple
+jade_suns_judgment
 jade_tetsubo
 jade_vein
 jade_works
@@ -5755,6 +5875,7 @@ jiyu
 jizos_mercy
 jonaki
 jotei
+jotei_isawa_keiji_master_of_void_experienced
 jotsu_eihime
 journey_to_otosan_uchi
 journey_to_the_burning_sands
@@ -5778,6 +5899,7 @@ junji
 junnosuke_experienced
 junzos_battle_standard
 junzos_dark_citadel
+jurobei_soul_of_osami
 jurojins_blessing
 jurojins_touch
 justice_of_the_crane
@@ -5845,12 +5967,14 @@ kaiu_hideaki
 kaiu_hisayuki
 kaiu_hosaru
 kaiu_hoseki
+kaiu_houi_soul_of_kaiu_taru
 kaiu_house_guard
 kaiu_iemasa
 kaiu_ishiku
 kaiu_jinzaburo
 kaiu_jurobei
 kaiu_kamura
+kaiu_kanna
 kaiu_kawachi
 kaiu_kazu
 kaiu_kempachi
@@ -5868,6 +5992,7 @@ kaiu_norio
 kaiu_o_taro
 kaiu_okaru
 kaiu_onizuka
+kaiu_ono
 kaiu_otogou
 kaiu_pass
 kaiu_plate
@@ -5896,6 +6021,7 @@ kaiu_yamamuro
 kaius_heart
 kaizoku
 kakita
+kakita_adachi_soul_of_experienced_kakita_munemori
 kakita_aichiko
 kakita_aihara
 kakita_akitomo
@@ -5995,6 +6121,7 @@ kakita_rensei
 kakita_sadaka
 kakita_saki
 kakita_sakis_armor
+kakita_sayoko_soul_of_doji_rengetsu
 kakita_seishi
 kakita_seiyami
 kakita_senko
@@ -6005,6 +6132,7 @@ kakita_shinichi_experienced_2
 kakita_shinichi_experienced_3
 kakita_shinzaburo
 kakita_soichi
+kakita_sunoko
 kakita_tadanobu
 kakita_tadanobu_experienced
 kakita_takara
@@ -6023,6 +6151,7 @@ kakita_toshiro
 kakita_totani
 kakita_tsukao
 kakita_tsuken_experienced
+kakita_tsunako_soul_of_doji_soh
 kakita_ujirou
 kakita_ujirou_experienced
 kakita_ujirou_pathfinder_experienced_2
@@ -6127,6 +6256,7 @@ keeping_enemies_close
 keeping_the_peace
 keigo_sensei
 keisho
+keitaku
 kemmei
 kemono
 kengun_grounds
@@ -6192,12 +6322,14 @@ kimiono_sensei
 kimogen
 kimono_of_the_turquoise_champion
 kimura_forgiver_of_sins
+kincho_the_seventh_soul_of_kincho_the_sixth
 kincho_the_sixth
 kindari
 kingdom_of_ghosts
 kinuyes_blood
 kinuyes_garden
 kinuyes_garden_experienced
+kioku_naki_okiya
 kirazo
 kirei
 kireru_hyoujin
@@ -6271,6 +6403,7 @@ kitsu_tomoe
 kitsu_watanabe
 kitsu_watanabe_experienced
 kitsu_yutaro
+kitsu_yutomo_soul_of_kitsu_yutaro
 kitsuki_akito
 kitsuki_bokuko
 kitsuki_chotama
@@ -6281,6 +6414,7 @@ kitsuki_einosuke
 kitsuki_evidence
 kitsuki_fujimura
 kitsuki_goichi
+kitsuki_goichi_soul_of_kitsuki_berii
 kitsuki_goshi
 kitsuki_goto
 kitsuki_hakihime
@@ -6514,6 +6648,7 @@ kuni_bachida
 kuni_chutsu
 kuni_daigo
 kuni_daigo_experienced
+kuni_doru_soul_of_kuni_daigo
 kuni_fumitake
 kuni_harakibi
 kuni_hokinsha
@@ -6521,6 +6656,8 @@ kuni_igarasu
 kuni_iyedo
 kuni_jiyuna
 kuni_josuke
+kuni_kairi
+kuni_kinoju_soul_of_kuni_kiyoshi
 kuni_kiyoshi
 kuni_kiyoshi_experienced
 kuni_kiyoshi_experienced_2
@@ -6537,8 +6674,10 @@ kuni_renyu_experienced_3
 kuni_renyu_experienced_4
 kuni_rihito
 kuni_sagara
+kuni_sanjuko_soul_of_kuni_tansho
 kuni_seifukusha
 kuni_seifukusha_experienced
+kuni_seifukusha_witch_hunter
 kuni_sensin
 kuni_shikehime
 kuni_shinoda
@@ -6566,6 +6705,7 @@ kuni_yori_experienced_2kyd
 kuni_yori_experienced_3
 kuni_yori_the_corruptor_inexperienced
 kuni_yukiko
+kuni_yurisa_soul_of_kuni_shikehime
 kunis_eye
 kunji
 kunji_bio
@@ -6599,6 +6739,7 @@ kyojin_experienced
 kyojins_blade
 kyokami
 kyoryoku
+kyoso_no_kenzoku
 kyoso_no_oni
 kyoso_no_oni_experienced
 kyoso_no_oni_experienced_2
@@ -6644,15 +6785,18 @@ lady_of_the_forest_sensei
 lakeside_retreat
 lalesha
 land_of_the_dead
+landed_gentry
 lane_of_immorality
 lantern_of_revelation
 lantern_oil
 lao_she
 large_farm
 large_shrine
+last_breath_castle
 last_charge_of_the_shogun
 last_full_measure
 last_gift
+last_glance_castle
 last_line_of_defense
 last_refuge
 last_stand
@@ -6846,8 +6990,10 @@ magic_mud
 magistrate_station
 magistrates_accusation
 magistrates_blade
+magistrates_justice
 magistrates_stipend
 magnify
+magohachi
 mahatsu
 mahatsu_sensei
 mahila
@@ -6924,6 +7070,7 @@ marries_a_barbarian
 marsh_troll
 marshal_the_ranks
 marshal_your_strength
+marshalling_grounds
 martial_instruction
 martial_manipulation
 martyr
@@ -7027,6 +7174,8 @@ matsu_hachiro_bio
 matsu_hachiro_experienced
 matsu_hana
 matsu_hanshiro
+matsu_haruichi
+matsu_haruko
 matsu_haruya
 matsu_hataki
 matsu_hataki_experienced
@@ -7055,6 +7204,7 @@ matsu_karoko
 matsu_kasei
 matsu_kasei_experienced
 matsu_keiasu
+matsu_keishi_soul_of_akodo_kitaka
 matsu_kenji
 matsu_kenji_experienced
 matsu_kenseiko
@@ -7065,6 +7215,7 @@ matsu_kirihime
 matsu_kita
 matsu_koyama
 matsu_koyama_experienced
+matsu_kumiyo_soul_of_matsu_rika
 matsu_kurutta
 matsu_lineage
 matsu_mabuchi
@@ -7117,10 +7268,13 @@ matsu_satsune
 matsu_seijuko
 matsu_seijuro
 matsu_shimei
+matsu_shina_soul_of_matsu_nishijo
 matsu_shinya
+matsu_sho_soul_of_matsu_eishi
 matsu_shoken
 matsu_shunran
 matsu_suhada
+matsu_suzu_soul_of_matsu_satsune
 matsu_takehiko
 matsu_takeko
 matsu_takeko_experienced
@@ -7131,6 +7285,7 @@ matsu_taniko
 matsu_tayuko
 matsu_tayuko_experienced
 matsu_tayuko_experienced_2
+matsu_tayuko_experienced_3
 matsu_toki
 matsu_toshiro
 matsu_tsuko
@@ -7168,6 +7323,7 @@ medium_cavalry_follower
 medium_follower
 medium_infantry
 meeting_the_keepers
+megumi
 megumi_experienced
 megumis_guidance
 meishodo_amulet
@@ -7272,6 +7428,7 @@ mirumoto_futoro
 mirumoto_gobashi
 mirumoto_gonkuro
 mirumoto_gonkuro_experienced
+mirumoto_goro
 mirumoto_gukochi
 mirumoto_hakahime
 mirumoto_hakahime_experienced
@@ -7280,12 +7437,14 @@ mirumoto_haru
 mirumoto_haruhide
 mirumoto_hatsuto
 mirumoto_hichi_soul_of_mirumoto_kuroki
+mirumoto_hidetora_soul_of_mirumoto_satobe
 mirumoto_higaru
 mirumoto_higaru_experienced
 mirumoto_higashi
 mirumoto_hikaro
 mirumoto_hikuryo
 mirumoto_himeka
+mirumoto_himeka_experienced
 mirumoto_hirohisa
 mirumoto_hitomi
 mirumoto_hitomi_experienced
@@ -7372,6 +7531,7 @@ mirumoto_shiki
 mirumoto_shiryu
 mirumoto_shokan
 mirumoto_songui
+mirumoto_sui
 mirumoto_sukune
 mirumoto_sukune_experienced
 mirumoto_tachiyama
@@ -7396,6 +7556,7 @@ mirumoto_tsuda_emerald_champion_experienced
 mirumoto_tsuda_experienced_2
 mirumoto_tsuge
 mirumoto_tsukazu
+mirumoto_tsukazu_soul_of_mirumoto_dakotsu
 mirumoto_tsukino
 mirumoto_ukira
 mirumoto_uso
@@ -7506,6 +7667,7 @@ moshi_durucho
 moshi_eihime
 moshi_enju
 moshi_euiko
+moshi_fukami
 moshi_hikaze
 moshi_hinome
 moshi_hinome_experienced
@@ -7561,6 +7723,7 @@ moshi_yokohime
 moshi_yokohime_bio
 moshi_yoshinaka
 moshi_yuna
+moshi_yuna_master_of_fire_experienced
 moshi_yuriko
 moth_spirit_follower_0f
 moth_tattoo
@@ -7568,6 +7731,7 @@ motivation
 moto_aikenro
 moto_ajinai
 moto_ajinai_harbinger_experienced
+moto_akhutai_soul_of_shinjo_katsuo
 moto_akikazu
 moto_akikazu_experienced
 moto_alagh
@@ -7577,6 +7741,7 @@ moto_aoi
 moto_baatar
 moto_baitsu_soul_of_moto_hotei
 moto_batu
+moto_budan_soul_of_utaku_gyonwan
 moto_buyan
 moto_buyan_deaths_messenger_experienced
 moto_chagatai
@@ -7646,6 +7811,7 @@ moto_kangs_sword
 moto_khasar
 moto_khedai
 moto_khedai_head_priest_of_the_second_city_experienced
+moto_khubilai
 moto_kinnojo
 moto_konzetsu
 moto_kubulai
@@ -7656,6 +7822,7 @@ moto_kyouaku_inu
 moto_kyung_won
 moto_latomu
 moto_latomu_experienced
+moto_lian_jiang_soul_of_moto_jeng_yun
 moto_maral
 moto_masakage
 moto_ming_gwok
@@ -7748,6 +7915,7 @@ moto_zhen_cha
 moto_zhijuan
 moto_zi_feng_villain
 mountain_goblin
+mountain_heart_palace
 mountain_herd
 mountain_of_shadows
 mountain_of_the_seven_thunders
@@ -7823,6 +7991,7 @@ my_ancestors_steed
 my_ancestors_strength
 my_enemys_mercy
 my_enemys_weakness
+my_fathers_blade
 my_fathers_shrine
 my_fathers_weapon
 my_grandfathers_blade
@@ -7874,6 +8043,7 @@ naibu
 nairu_no_oni
 nairu_no_oni_experienced
 naishi
+naka_kansaku_grand_master_of_the_elements
 naka_kuro
 naka_kuro_experienced
 naka_kuro_experienced_2
@@ -7938,6 +8108,7 @@ new_factors
 new_formation
 new_kimono
 new_recruit
+new_rokugan_iweko_tokisada
 new_taxes
 new_years_celebration
 newly_discovered_mine
@@ -7974,6 +8145,7 @@ ningens_treatise_on_the_nezumi
 ningyo
 ninja
 ninja_genin
+ninja_genin_experienced
 ninja_guards
 ninja_infiltrator_experienced
 ninja_kidnapper
@@ -8035,6 +8207,7 @@ no_time_for_games
 no_victory
 no_way_out
 noble_sacrifice
+nobori_raiu
 nobuo
 noburo
 nocturnal_attack
@@ -8078,6 +8251,7 @@ o_yoroi
 o_yoroi_troops
 oath_of_courage
 oath_of_fealty
+oath_of_vengeance
 oath_to_the_empire
 oathsworn_deathseeker
 obake
@@ -8102,6 +8276,7 @@ obsidian_magistrate
 obsidian_mempo_of_fu_leng
 obsidian_mine
 obsidian_mirror
+obsidian_moons_insight
 obsidian_riders
 obsidian_statues
 occult_murders
@@ -8136,6 +8311,7 @@ okazaki_breaker_of_wills
 okesa_goma
 okichit
 okkantich
+okudo_ogre_bushi
 okui
 okuma_beikos_bear
 okura_is_released
@@ -8260,6 +8436,7 @@ oracle_of_fire
 oracle_of_fire_kakita_ibara_experienced
 oracle_of_the_void
 oracle_of_the_void_experienced
+oracle_of_the_void_experienced_2
 oracle_of_thunder
 oracle_of_thunder_experiencedkyd
 oracle_of_thunder_iuchi_namida
@@ -8859,6 +9036,7 @@ reckless_duel
 reckless_pursuit
 reckless_rush
 reckless_zeal
+reckoning_of_steel
 reclamation
 reconnaissance_scouts
 record_of_failure
@@ -8967,6 +9145,7 @@ restless_zokujin
 restoring_order
 restoring_the_age_of_myth
 restoring_the_doji_treasury
+restoring_the_jade_throne
 resumed_hostilities
 resurgence
 resurrection
@@ -9141,6 +9320,7 @@ run_or_die
 running_battle
 running_engagement
 rural_market
+ruru
 rustic_estate
 rustiktik
 ruthless_advance
@@ -9173,6 +9353,7 @@ sacred_hillside
 sacred_temples
 sacred_tunnels
 sacred_valley
+sacred_watch_palace
 sacrifice_of_pawns
 sacrifices_for_our_future
 sacrificial_altar
@@ -9683,8 +9864,11 @@ shiba_shingo
 shiba_shinsaku
 shiba_shirou
 shiba_sotatsu
+shiba_sudoshi_voice_of_the_masters
 shiba_takeishi
 shiba_tamashii_clan_champion
+shiba_tamashii_clan_champion_experienced
+shiba_tensei_soul_of_shiba_denbe
 shiba_tetsaka
 shiba_tetsu
 shiba_tetsu_experienced
@@ -9773,6 +9957,7 @@ shinjo_byung_bio
 shinjo_byung_experienced
 shinjo_chairei
 shinjo_chu_yeung
+shinjo_daikyu
 shinjo_dairu
 shinjo_dak_ho
 shinjo_dogenda
@@ -9803,6 +9988,7 @@ shinjo_house_guard
 shinjo_huang
 shinjo_hwarang
 shinjo_hwarang_experienced
+shinjo_inejiro_soul_of_shinjo_hwarang
 shinjo_inoue
 shinjo_irosuko
 shinjo_isuke
@@ -9828,10 +10014,12 @@ shinjo_kinto_experienced
 shinjo_kinto_experienced_2
 shinjo_kirita
 shinjo_kodama
+shinjo_koyo_soul_of_shinjo_yasoma
 shinjo_kurimoko
 shinjo_liu_ying
 shinjo_loruko
 shinjo_maku
+shinjo_masahiro_soul_of_shinjo_dak_ho
 shinjo_mayuko_soul_of_shinjo_wei
 shinjo_megura
 shinjo_meikoku
@@ -9845,10 +10033,13 @@ shinjo_naota
 shinjo_natsume
 shinjo_nobunaga
 shinjo_nobunaga_experienced
+shinjo_nobunaga_experienced_2
+shinjo_nori_soul_of_shinjo_hansu
 shinjo_noriyori
 shinjo_oikazu
 shinjo_okiau
 shinjo_osema
+shinjo_outriders
 shinjo_rao
 shinjo_reizo
 shinjo_riders
@@ -9859,6 +10050,7 @@ shinjo_rojin
 shinjo_sadato
 shinjo_saeki
 shinjo_saeki_clan_champion_experienced_2
+shinjo_saeki_clan_champion_experienced_3
 shinjo_saeki_experienced
 shinjo_saihan
 shinjo_sanenari
@@ -9867,6 +10059,7 @@ shinjo_sanraku
 shinjo_sarang
 shinjo_scouts
 shinjo_senhao
+shinjo_senko
 shinjo_shimikoto
 shinjo_shinlao
 shinjo_shirasu
@@ -9895,6 +10088,7 @@ shinjo_tsao
 shinjo_tselu
 shinjo_tselu_experienced
 shinjo_tselu_experienced_2
+shinjo_tsubomi_soul_of_shinjo_tsuburo
 shinjo_tsuburo
 shinjo_tsuburo_experienced
 shinjo_tsung_min
@@ -9933,6 +10127,7 @@ shinobi_vassal
 shinomen_defenders
 shinomen_marsh
 shinomen_village
+shinrai
 shinran
 shinsei
 shinseis_crow
@@ -9943,6 +10138,7 @@ shinseis_last_hope_experienced
 shinseis_legion
 shinseis_riddle
 shinseis_shrine
+shinseis_shrine_experienced
 shinseis_smile
 shinseis_staff
 shinseis_tomb
@@ -9963,6 +10159,7 @@ shireikans_bushi
 shiro_chugo
 shiro_daidoji
 shiro_giji
+shiro_heichi
 shiro_ide
 shiro_kitsuki
 shiro_matsu
@@ -10021,6 +10218,7 @@ shiryo_no_yogo
 shiryo_no_yoritomo
 shiryo_no_yurei
 shisa_infestation
+shisou_maru_blade
 shiyokai
 shizuka_toshi
 shocking_rumor
@@ -10098,6 +10296,7 @@ shosuro_kiyofumi
 shosuro_koneko
 shosuro_konishi
 shosuro_konishi_bio
+shosuro_korenaga
 shosuro_koshiba
 shosuro_kyuichi
 shosuro_lineage
@@ -10110,6 +10309,7 @@ shosuro_maru_experienced
 shosuro_maru_experienced_2
 shosuro_masanori
 shosuro_masato
+shosuro_masumi
 shosuro_mayako_soul_of_shosuro_maru
 shosuro_miiko
 shosuro_miiko_experienced
@@ -10138,6 +10338,7 @@ shosuro_osamito
 shosuro_ozu
 shosuro_riiko
 shosuro_riiko_experienced
+shosuro_riiko_experienced_2
 shosuro_rin
 shosuro_rishou
 shosuro_ritoru
@@ -10154,11 +10355,14 @@ shosuro_saigyo_experienced
 shosuro_sakura
 shosuro_seibei
 shosuro_shigemasa
+shosuro_shigiri
 shosuro_sogetsu
+shosuro_sora
 shosuro_taberu
 shosuro_taberu_experienced
 shosuro_tage
 shosuro_tagiso
+shosuro_taikan_soul_of_shosuro_rokuta
 shosuro_takagi
 shosuro_takazaki
 shosuro_takuma
@@ -10191,6 +10395,7 @@ shosuro_yorio
 shosuro_yudoka
 shosuro_yudoka_experienced
 shosuro_yudoka_experienced_2
+shosuro_yuuko_soul_of_shosuro_rin
 shosuros_spy
 shotai
 shoubai_ancestral_weapon_of_the_mantis
@@ -10219,6 +10424,7 @@ shrine_of_courtesy
 shrine_of_discussion
 shrine_of_duty
 shrine_of_duty_experienced
+shrine_of_eight_heavens
 shrine_of_fu_leng
 shrine_of_honesty
 shrine_of_honor
@@ -10236,6 +10442,7 @@ shrine_of_the_moon
 shrine_of_the_spirits
 shrine_of_the_sun
 shrine_of_thwarted_destiny
+shrine_to_amaterasu
 shrine_to_benten
 shrine_to_bishamon
 shrine_to_daikoku
@@ -10292,6 +10499,7 @@ silent_solace
 silent_struggle
 silent_war
 silent_warriors
+silk_and_shadow_palace
 silk_farm
 silk_works
 silver_mine
@@ -10390,6 +10598,7 @@ someisa
 someisa_sensei
 something_worth_dying_for
 son_of_the_clan
+son_of_the_crane_castle
 song_of_corruption
 song_of_steel
 song_of_the_world
@@ -10407,6 +10616,7 @@ soshi_bantaro
 soshi_bantaro_experienced
 soshi_eiji
 soshi_ganrou
+soshi_hatsue
 soshi_hirotsugu
 soshi_house_guard
 soshi_iaike
@@ -10840,6 +11050,7 @@ surus_mempo_experienced
 surveillance_outpost
 surveying_the_field
 surveying_the_land
+suryn
 sushel
 sushi_stand
 suspended_terrain
@@ -10858,8 +11069,10 @@ susumu_tadenori
 susumu_takada
 susumu_takuan
 susumu_tanjin
+susumu_tessai_soul_of_daigotsu_susumu
 susumu_yanada
 sutigu
+suzaku
 suzume_house_guard
 suzume_kukiko
 suzume_mukashino
@@ -10999,6 +11212,7 @@ tamori_chosai
 tamori_daiishu
 tamori_daiishu_experienced
 tamori_emina
+tamori_fumio
 tamori_futaba
 tamori_gaitsuru
 tamori_ginrao
@@ -11012,6 +11226,7 @@ tamori_junya
 tamori_junya_experienced
 tamori_katsumi
 tamori_kazushige
+tamori_kinzo_soul_of_tamori_kazushige
 tamori_konoye
 tamori_kuroko
 tamori_kusugi
@@ -11025,6 +11240,7 @@ tamori_nishiki
 tamori_nobuyoki
 tamori_noriko
 tamori_ochimo
+tamori_orisuke_soul_of_tamori_muzu
 tamori_otsuka
 tamori_potion
 tamori_reisa
@@ -11037,6 +11253,7 @@ tamori_shaitung
 tamori_shaitung_experienced
 tamori_shiki
 tamori_shiki_experienced
+tamori_shima
 tamori_shimura
 tamori_shinji
 tamori_shoko
@@ -11201,6 +11418,7 @@ terrorizing_ambush
 teskath_experienced
 tessen
 tessen_of_the_tsunami_legion
+tesshin_forge
 tesskss
 test_his_mettle
 test_of_character
@@ -11233,11 +11451,14 @@ tetsubo_of_earth
 tetsubo_of_seven_battles
 tetsubo_of_thunder
 tetsuko_no_shiryo
+tetsumon_blade
 tetsuo
 tetsuo_clan_champion_experienced_3
 tetsuo_experienced
 tetsuo_experienced_2
+tetsuo_gempachi_soul_of_sandayu
 tetsuo_hiyamako_experienced
+tetsuo_nishimura_soul_of_omigawa
 tetsuo_sensei
 tetsuos_nagamaki
 tetsuya
@@ -11292,6 +11513,7 @@ the_black_court
 the_blade_of_the_balash
 the_blasted_lands
 the_blessed_herd
+the_blessed_herd_experienced
 the_blessed_mantle_of_the_greensnakes
 the_blessing
 the_blood_awakens
@@ -11344,6 +11566,7 @@ the_daidoji_marketplace
 the_daidoji_yari
 the_daimyos_command
 the_daimyos_gift_experienced
+the_daimyos_gift_experienced_2
 the_daini_experienced_2
 the_damned
 the_dark_capital_of_the_spider
@@ -11707,6 +11930,7 @@ the_nameless_one_experienced
 the_new_akasha
 the_new_foundries
 the_new_order
+the_new_order_experienced
 the_new_way
 the_nine_fold_palace
 the_ninth_legion
@@ -11882,6 +12106,7 @@ the_spirit_ascends
 the_spirit_of_knowledge
 the_spirit_of_water
 the_star_of_laramun
+the_starved
 the_steel_gardens_of_the_kenshinzen
 the_steel_throne
 the_steel_throne_experienced
@@ -11997,6 +12222,7 @@ the_weakness_of_man
 the_western_steppes
 the_western_wastes
 the_white_guard
+the_white_tower
 the_wind_never_stops
 the_wind_whispers
 the_winds_champion
@@ -12116,6 +12342,7 @@ togashi
 togashi_akagi
 togashi_ango
 togashi_bairei
+togashi_basuke
 togashi_binya
 togashi_bio
 togashi_chikato
@@ -12129,6 +12356,7 @@ togashi_gaijutsu
 togashi_gato
 togashi_genshuo
 togashi_gozato_the_wise_monk
+togashi_hachimon
 togashi_higaru_clan_champion_experienced_3
 togashi_higaru_experienced_2
 togashi_hiroto
@@ -12137,6 +12365,7 @@ togashi_hizumi
 togashi_hizumi_bio
 togashi_hogai_experienced
 togashi_hoshi
+togashi_hoshi_clan_champion_experienced_3
 togashi_hoshi_experienced
 togashi_hoshi_experienced_2
 togashi_ieshige_experienced
@@ -12168,6 +12397,7 @@ togashi_korimi_experienced_2
 togashi_kyo
 togashi_kyo_experienced
 togashi_kyoshi
+togashi_kyuwa
 togashi_marumo
 togashi_masujiro
 togashi_matsuo
@@ -12190,6 +12420,7 @@ togashi_noboru
 togashi_noboru_experienced_2
 togashi_noboru_the_shattered_star_experienced
 togashi_noboru_the_shattered_star_experienced_3
+togashi_nodamu_soul_of_togashi_kanmu
 togashi_noritada
 togashi_noritada_defender_of_the_high_house_experienced
 togashi_nyima
@@ -12207,6 +12438,7 @@ togashi_reisa_experienced
 togashi_remi
 togashi_rikyou
 togashi_rinjin
+togashi_saiko_soul_of_mirumoto_satoe
 togashi_sakata
 togashi_sato_soul_of_togashi_gato
 togashi_satsu
@@ -12239,6 +12471,7 @@ togashi_toa_experienced
 togashi_torazu
 togashi_torazu_bio
 togashi_toyonobu_soul_of_togashi_binya
+togashi_tozuki_soul_of_togashi_jusai
 togashi_tsukagi
 togashi_tsukagi_bio
 togashi_tsuri
@@ -12278,6 +12511,7 @@ toku_experienced
 toku_experienced_2
 toku_experienced_2kyd
 toku_experienced_3
+toku_matsune
 toku_saiga_the_metal_storm
 toku_tsudao
 tokus_grave
@@ -12391,6 +12625,7 @@ trade_route
 tradeposts_of_the_mantis
 trading_grounds
 trading_house
+trading_hub
 trading_port
 traditionalist
 traditions_of_steel
@@ -12449,6 +12684,7 @@ troll_raiders
 troll_war_band
 troops_from_the_woods
 troublesome_bureaucrat
+troublesome_metsuke
 truce
 true_artistry
 true_leadership
@@ -12528,6 +12764,7 @@ tsuruchi_chiko
 tsuruchi_chikuma
 tsuruchi_chion
 tsuruchi_daikyu
+tsuruchi_danjuro
 tsuruchi_etsui
 tsuruchi_etsui_experienced
 tsuruchi_etsui_experienced_2
@@ -12553,6 +12790,7 @@ tsuruchi_isas
 tsuruchi_isunori
 tsuruchi_iyaken
 tsuruchi_jinrai
+tsuruchi_jirou
 tsuruchi_jougo
 tsuruchi_kaii
 tsuruchi_kaitaru
@@ -12593,6 +12831,7 @@ tsuruchi_okame
 tsuruchi_okame_experienced
 tsuruchi_omori
 tsuruchi_onaka
+tsuruchi_renjiro
 tsuruchi_renshi
 tsuruchi_rin
 tsuruchi_risako
@@ -12607,6 +12846,7 @@ tsuruchi_shiroko
 tsuruchi_shisuken
 tsuruchi_shisuken_experienced
 tsuruchi_sho
+tsuruchi_shou
 tsuruchi_shunso
 tsuruchi_shusaku
 tsuruchi_suzuki
@@ -12627,6 +12867,7 @@ tsuruchi_tomaru_experienced
 tsuruchi_yakusho
 tsuruchi_yashiro
 tsuruchi_yashiro_bio
+tsuruchi_yashiro_clan_champion_experienced_2
 tsuruchi_yashiro_defender_of_the_obsidian_blades_experienced
 tsuruchi_yurio
 tsuruchi_yurio_experienced
@@ -12655,6 +12896,7 @@ twenty_goblin_winter
 twenty_seven_days_of_darkness
 twice_cutting_spirit
 twilight
+twilight_mountain_mine
 twilight_mountains
 twilight_stand
 twin_forks_city
@@ -12691,6 +12933,7 @@ ujina_ukita
 ujis_saboteurs
 ujisato
 ukuro
+ulterior_motives
 ultimate_sacrifice
 umasu_sensei
 umi_amaterasu
@@ -12844,6 +13087,7 @@ uona_no_shiryo
 uona_sensei
 uragirimono
 urgency
+usagi_emao
 usagi_genchi
 usagi_gohei
 usagi_heiji
@@ -12853,6 +13097,7 @@ usagi_ozaki
 usagi_rangers
 usagi_retainer
 usagi_seki_the_untouchable
+usagi_tamotsu_soul_of_usagi_heiji
 use_the_wind
 useful_connections
 using_the_land
@@ -12869,6 +13114,7 @@ utaku_anzu_soul_of_utaku_tayoi
 utaku_arisa
 utaku_chiasa
 utaku_chikako
+utaku_chikaze_soul_of_utaku_liu_xeung
 utaku_elite_guard
 utaku_etsuko
 utaku_etsumi
@@ -12924,7 +13170,9 @@ utaku_saiken
 utaku_sakiko
 utaku_sakiko_experienced
 utaku_sakiko_experienced_2
+utaku_sakiko_experienced_3
 utaku_sang_ju
+utaku_saori
 utaku_sayaka
 utaku_sayaka_experienced
 utaku_sayaka_experienced_2
@@ -12934,6 +13182,7 @@ utaku_suyin
 utaku_suying
 utaku_tairu
 utaku_tairu_experienced
+utaku_taisuke_soul_of_utaku_takai
 utaku_takai
 utaku_tama
 utaku_tarako
@@ -12956,6 +13205,8 @@ utaku_yisheng
 utaku_yu_pan
 utaku_yu_pan_experienced
 utaku_yu_pan_experienced_2
+utaku_yugana
+utaku_yukika_soul_of_utaku_yanai
 utaku_yukino
 utaku_yumiko
 utaku_zo_sia
@@ -13051,12 +13302,14 @@ visitation
 vital_pathways
 voice_of_experience
 voice_of_the_emperor
+voice_of_the_heavens
 voice_of_the_shiryo
 void
 void_dragon
 void_dragon_experienced
 void_dragon_experienced_2
 void_dragon_experienced_3
+void_dragon_experienced_4
 void_dragons_guidance
 void_guard
 void_strike
@@ -13078,6 +13331,7 @@ wakened_dead
 wakizashi
 wako
 wako_experienced
+wakui
 walk_in_shadows
 walk_through_the_mountains
 walk_with_tengoku
@@ -13186,6 +13440,7 @@ water_dragon
 water_dragon_experienced
 water_dragon_experienced_2
 water_dragon_experienced_3
+water_dragon_experienced_4
 water_dragons_guidance
 water_is_my_steed
 water_spider_adept
@@ -13264,6 +13519,7 @@ west_wall_of_otosan_uchi
 west_wall_of_otosan_uchi_experienced
 western_hub_sake_works
 western_outpost
+western_provinces_iweko_miaka
 wetlands
 what_have_you_done
 what_is_yet_to_come
@@ -13281,6 +13537,7 @@ where_shinsei_stood
 where_the_kami_walk
 where_the_sun_walked
 where_tsanuri_fell
+where_tsudao_stood
 which_clan_are_you
 while_the_empire_watches
 whirlwind
@@ -13296,6 +13553,7 @@ whispers_of_the_land
 whispers_of_twilight
 whistling_arrows
 whistling_bulb_arrow
+white_shore_palace
 white_shore_plain
 white_stag_burns
 wholeness_of_self
@@ -13383,6 +13641,7 @@ wrath_of_the_thunder
 wrathful_ancestor
 wrathful_dead
 wrathful_defense
+wrathful_yokai
 wretched_mercenary
 wretches
 wrist_lock
@@ -13423,6 +13682,7 @@ yakamos_smile
 yama_no_kamis_pyre
 yamainu
 yamainus_dagger
+yamaryu
 yamaso_no_oni
 yamauba
 yamazaki
@@ -13447,20 +13707,25 @@ yasuki_hachi
 yasuki_hachi_experienced
 yasuki_hachi_experienced_2
 yasuki_hageshi
+yasuki_hayate_soul_of_yasuki_tanimura
 yasuki_heikichi
 yasuki_hora
 yasuki_ichibei_soul_of_yasuki_nokatsu
+yasuki_iena_soul_of_yasuki_baiko
 yasuki_ikke
+yasuki_inoko
 yasuki_jekku
 yasuki_jinn_kuen
 yasuki_jinn_kuen_experienced
 yasuki_jinn_kuen_experienced_2
 yasuki_jiro
+yasuki_juzo_soul_of_yasuki_jekku
 yasuki_kaiketsu
 yasuki_kaneko
 yasuki_kojiro
 yasuki_makoto
 yasuki_makoto_imperial_advisor_experienced
+yasuki_matoi
 yasuki_miliko
 yasuki_miliko_experienced
 yasuki_nakura
@@ -13529,13 +13794,17 @@ yogo_honami
 yogo_ichiba
 yogo_ikinaru
 yogo_inoue
+yogo_izumo_soul_of_bayushi_shintaro
+yogo_jun
 yogo_junzo
 yogo_junzo_experienced
 yogo_junzo_experienced_2
 yogo_junzo_the_betrayer_experienced_2cw
 yogo_katsuta
+yogo_kazuko
 yogo_kazunori
 yogo_koji_experienced
+yogo_kurenai_soul_of_yogo_shidachi
 yogo_maboro
 yogo_mizoguchi
 yogo_mizoguchi_experienced
@@ -13545,6 +13814,7 @@ yogo_rieko
 yogo_rieko_experienced
 yogo_shidachi
 yogo_soto
+yogo_suiken
 yogo_takashi
 yogo_tjeki
 yogo_tjeki_experienced
@@ -13563,6 +13833,7 @@ yokuni_sensei
 yokutsu_no_shiryo
 yoma_sensei
 yomanri_archers
+yopparai_last_of_the_seppun
 yori_sensei
 yoriki
 yoritomo
@@ -13659,6 +13930,7 @@ yoritomo_kitao
 yoritomo_kitao_experienced
 yoritomo_kitao_experienced_2
 yoritomo_kitao_experienced_3
+yoritomo_koharu_child_of_thunder
 yoritomo_komori
 yoritomo_komori_experienced
 yoritomo_kumiko
@@ -13680,6 +13952,7 @@ yoritomo_mikaru
 yoritomo_minoko
 yoritomo_minoko_clan_champion_experienced_2
 yoritomo_minoko_clan_champion_experienced_3
+yoritomo_minoko_clan_champion_experienced_4
 yoritomo_minoko_experienced
 yoritomo_minori
 yoritomo_minori_experienced
@@ -13698,6 +13971,7 @@ yoritomo_ninsei_broken_wave_city_governor
 yoritomo_nintai
 yoritomo_nishigori
 yoritomo_nodoteki
+yoritomo_nokatsu
 yoritomo_okan
 yoritomo_okitsugu
 yoritomo_omura
@@ -13769,6 +14043,7 @@ yoritomo_yoyonagi
 yoritomo_yoyonagi_experienced
 yoritomo_yukue
 yoritomo_yukue_experienced
+yoritomo_yusako_experienced
 yoritomo_yusako_hiromis_legacy_captain
 yoritomo_yusuke
 yoritomo_zinan
@@ -13790,6 +14065,7 @@ yosuchi
 yotsu_bodyguards
 yotsu_dagurasu
 yotsu_dojo
+yotsu_mikaeru_soul_of_yotsu_dagurasu
 yotsu_sabieru
 yotsu_seiki
 yotsu_seou
@@ -13830,6 +14106,8 @@ yung
 yung_sensei
 yunmen_the_whisper
 yuribaras_butterflies
+yuruginai
+yutao_soul_of_yung
 zaiberus_trinket
 zaiko
 zamalash
@@ -13865,3 +14143,4 @@ zombie_peasant
 zombie_troops
 zorrtek
 zugaikotsu_ro
+zurnagun

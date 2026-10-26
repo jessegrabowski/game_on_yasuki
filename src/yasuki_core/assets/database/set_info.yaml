@@ -816,6 +816,10 @@ arcs:
   sets:
   - set_name: Three Dynasties
     short_id: 3dy
+    release_date: 2026-10-18
+    digital: true
+    featured_factions: Crab, Crane, Dragon, Lion, Minor Clan Alliance, Phoenix, Scorpion, Unicorn
+    size: 502
     code: 3D
     notes: Eighteenth base set. Released by "Onyx Lives!" Project by some of the original CCG Designers.
 - name: Other

@@ -22,6 +22,7 @@ FORMAT_METADATA: dict[str, dict[str, str | None]] = {
     },
     "War of the Seals (Onyx Edition)": {"arc": "Onyx Edition", "block": "onyx"},
     "Shattered Empire": {"arc": "Shattered Empire", "block": "shattered"},
+    "Three Dynasties": {"arc": "Three Dynasties", "block": "3d"},
     "Modern": {"arc": None, "block": "modern"},
     "Legacy": {"arc": None, "block": "legacy"},
     "Not Legal (Proxy)": {"arc": None, "block": "proxy"},

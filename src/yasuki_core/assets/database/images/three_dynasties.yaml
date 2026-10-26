@@ -1,0 +1,3014 @@
+set: Three Dynasties
+images:
+- card_id: 1_000_cuts_technique
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: 1_000_cuts_technique.jpg
+    sha256: 49d6c2ff1866365d7d364d4cb9d10ec009a218b12a1f0133a5fee03c17c57eef
+- card_id: a_game_of_dice
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: a_game_of_dice.jpg
+    sha256: 6b405054bf687b7d4ef8abbdb18c8e38d1bb9f5308adf1765bd006e2570231f2
+- card_id: abandoning_the_fortunes
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: abandoning_the_fortunes.jpg
+    sha256: 3b19a45e73dd015601e3c6f999ed8812386d337d1c2878fe5452cad46ee0365d
+- card_id: again
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: again.jpg
+    sha256: f2deffafbd300449d3605e8cbb5395ed00bb93d5a53f43cb85ca6b19860426c4
+- card_id: agasha_naname
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: agasha_naname.jpg
+    sha256: ffb60bf02036ef144cf1d9d6e6c0308b0afbf48395c6ff61a2e4fbd45ede8aa5
+- card_id: agasha_uzeko_master_of_water_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: agasha_uzeko_master_of_water_experienced.jpg
+    sha256: ef38ba781acab5601ce46f58cad40c940f13251331bf5d9e7ee96a232493b09f
+- card_id: air_dragon_experienced_4
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: air_dragon_experienced_4.jpg
+    sha256: edf3006db70d8c5cde488b45871459ea77bd8be4ca7c08b06c9a686db02dcf9a
+- card_id: akaru_no_oni
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akaru_no_oni.jpg
+    sha256: ff0eaac2f9426fa05ff2995fddd37e5289d04f298c025bb7de57069e627802f2
+- card_id: akashiro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akashiro.jpg
+    sha256: 5ac1820e1c16700d331b56aa2d72ad1226d0a886bc3a47e7bfd6d58a713ca6c4
+- card_id: akodo_akeno_soul_of_akodo_senzo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_akeno_soul_of_akodo_senzo.jpg
+    sha256: 769d711b8739f0cf5dd41ca4212c716f0114babdfc45e95453ab16d9de8afd1f
+- card_id: akodo_atsumamaro_soul_of_akodo_kin
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_atsumamaro_soul_of_akodo_kin.jpg
+    sha256: 90a9cfd64f3d090c8405f63cdd275c1f517e300a078acfb133f933793719c571
+- card_id: akodo_iori
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_iori.jpg
+    sha256: 42c80f2091f8167d2fa26888d93ced515798dca9fd91d82492f9e8742adfe8ec
+- card_id: akodo_jirobei
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_jirobei.jpg
+    sha256: e1c03adac1e8c983785468344e968f41aefd3d69d3e77be6ec72bb00de4df9b2
+- card_id: akodo_mushanokoji_soul_of_experienced_ikoma_hagio
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_mushanokoji_soul_of_experienced_ikoma_hagio.jpg
+    sha256: a2ca3da659f1bd9ac89d41fe7775771fd8957d9d91152b8dcc01a4e233197889
+- card_id: akodo_orinosuke_soul_of_akodo_shigo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_orinosuke_soul_of_akodo_shigo.jpg
+    sha256: 150fa2490464bbcf447ec0f2d9828eb58471d12da51379851f2a07ded91bdc11
+- card_id: akodo_satsume_soul_of_akodo_shigetoshi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_satsume_soul_of_akodo_shigetoshi.jpg
+    sha256: 629101c44edb22ef068139e37bcc0029a76385c800ad51a2de1e0d95feeae53d
+- card_id: akodo_terumasa_soul_of_akodo_tezuka
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_terumasa_soul_of_akodo_tezuka.jpg
+    sha256: 10ad914af94d8a3d783e41b84828d602a0e88fe9d2fe398fa5aae77e40fcdc31
+- card_id: akodo_yosuke_soul_of_akodo_hachigoro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akodo_yosuke_soul_of_akodo_hachigoro.jpg
+    sha256: 109052c03306e729178ba487cbfddf44c017dbdf4d2882ee65031d1aa16efec9
+- card_id: akuma_no_kenzoku
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: akuma_no_kenzoku.jpg
+    sha256: 7824c483d6e05083824b2d77ea7c0f658d98ac8befc55fee35c4975dd74078c9
+- card_id: alert_the_guard
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: alert_the_guard.jpg
+    sha256: d20b34855b09f58d7d9b5269a70eb73958d2a5dfe5a14cd50bcf83414cd565a2
+- card_id: ancient_feud
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ancient_feud.jpg
+    sha256: 8d8b5a43c27a009c601cbaa15ac255f078e1b7610550e26c5244f61c1da449a1
+- card_id: annexation_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: annexation_experienced.jpg
+    sha256: 7775f763457d966d1ab79ee540957bceb3e5b81692722e03f92988476a074f10
+- card_id: aranami
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: aranami.jpg
+    sha256: 33db587653521a8dbef437a613c20f36c5be595070aadef165a4f5f5ad060b90
+- card_id: archers_position
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: archers_position.jpg
+    sha256: e3c4c9894631f55fcaeef161ffbbb61e9eb5fb58765678a038214410b5b06e36
+- card_id: as_the_breakers
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: as_the_breakers.jpg
+    sha256: f9d5a775c77b31cb1542bcdbff7da47c304fa76bbc89018163e5ae27ebac32f3
+- card_id: asako_kingo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: asako_kingo.jpg
+    sha256: 68c3ec696436c7d7cc7b7d05083069064b0aa58b467ed7691fd345c4ba4b6461
+- card_id: asako_kudate
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: asako_kudate.jpg
+    sha256: 17679cc2f5e76421b71cbc342ed9d3dcc2c89d8d7f12e449c578b46bd803831b
+- card_id: asako_shino_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: asako_shino_experienced.jpg
+    sha256: 83fa5704d35ac12adcb731747f62bc56cd5a5f3249323c79e3be2794a345e489
+- card_id: asako_takamasu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: asako_takamasu.jpg
+    sha256: 9249a6370a38c993ac17177b8594828d3a49cec2f881dc11875e9e31d12c2fa5
+- card_id: asako_utamuro_soul_of_isawa_toshiji
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: asako_utamuro_soul_of_isawa_toshiji.jpg
+    sha256: ae5d89b4125cc67d5f2a956a011676356ad1680cbef835efde9c22c612ca66d8
+- card_id: asceticism
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: asceticism.jpg
+    sha256: 8e0274ee5042bf2cece8f55714b7feefddd962ff329826cdba162882f8ccad2e
+- card_id: ashigaru_levy
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ashigaru_levy.jpg
+    sha256: 3a3f88644b269ee1f66d409fa5cdc19c603d48d5937cdda1cc8a844f44f74540
+- card_id: assigning_blame
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: assigning_blame.jpg
+    sha256: 17acb49b6619373913fe4885d1dfdfcdd64f1e25750f2e51eca3ea6d5f943b39
+- card_id: avoid_fate_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: avoid_fate_experienced.jpg
+    sha256: 34e8243d39d6453f8c4a84fb3c2bec202193a4b7b20b7921b24a22e6c217fdc6
+- card_id: bajozutsu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bajozutsu.jpg
+    sha256: e732ce321ffc102a68b14ef27ae1770af2f9257bd92a90db8483ad8f0a56f96c
+- card_id: bamboo_harvesters
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bamboo_harvesters.jpg
+    sha256: 11a98b76fec2b5a9d977f9511beae27937067e81ddc84057734c16b2051e4b53
+- card_id: banish_all_shadows
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: banish_all_shadows.jpg
+    sha256: 227bea0cdd11727eb1112f1df1e7b2f8e03ec3c4eec1b3a1866df11d208bcb4e
+- card_id: bansho
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bansho.jpg
+    sha256: 9fdf2c3aa6a0f5752d5bddfc27393b0b9c4c9d63a0ad4c9562f7d3860682d21a
+- card_id: battlefield_of_shallow_graves
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: battlefield_of_shallow_graves.jpg
+    sha256: 3b486d9649207c31bc615b0054e5035ecc06d650268b223c6c459497c1539e88
+- card_id: bayushi_atsune_soul_of_bayushi_kaukatsu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_atsune_soul_of_bayushi_kaukatsu.jpg
+    sha256: 93cb05bd50d24521bdb492d6a4c3c058e1eec38e07057d6318fe4b914f80f04e
+- card_id: bayushi_ena
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_ena.jpg
+    sha256: 76b83e817e1b6ec73655ba9723324924ae5a17b3cd3df477baedc260c938c83f
+- card_id: bayushi_fusa_soul_of_shosuro_adeiko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_fusa_soul_of_shosuro_adeiko.jpg
+    sha256: 547d087edaf35464422d7e74ee2a527dd5c6d56c17cfb1740870cfe98d2e81fc
+- card_id: bayushi_jurobei_soul_of_bayushi_jutsushi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_jurobei_soul_of_bayushi_jutsushi.jpg
+    sha256: 9216566fabd49ff09167f1e60232ccd2f56c41b1135c2692acd5a4d85a6fcee0
+- card_id: bayushi_kanihime_clan_champion_experienced_2
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_kanihime_clan_champion_experienced_2.jpg
+    sha256: 1f89f7678858ad045c01b2fd8c22fac3247ed4c17af9feb577dadf1d423a70bb
+- card_id: bayushi_keyuko_soul_of_soshi_komiko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_keyuko_soul_of_soshi_komiko.jpg
+    sha256: fb83ef3ea595a37cc4321cbd529fb1902d0405b7c68bbdb71b9c1e5010f6933e
+- card_id: bayushi_kojuro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_kojuro.jpg
+    sha256: 62cfbfdcdcec612c2a2fa7aeb224b2074fcd22023db979ecd55540feaee33745
+- card_id: bayushi_nichirin_soul_of_bayushi_kwanchai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_nichirin_soul_of_bayushi_kwanchai.jpg
+    sha256: 2fd5d6370e0533b60afda18fc462c2595f532b204ff2a08380b8cb69ae49051a
+- card_id: bayushi_nitoko_sociopath
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_nitoko_sociopath.jpg
+    sha256: b7db65a0fab615dfdb5e2fc69a406fc98642f21520c902f988e34f7d0a9ac642
+- card_id: bayushi_shoyo_soul_of_bayushi_fujio
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bayushi_shoyo_soul_of_bayushi_fujio.jpg
+    sha256: d2e1216d507ab0f799a643617bb84c4bc99d407d2162de32d886e80cdd186189
+- card_id: black_veil_estates
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: black_veil_estates.jpg
+    sha256: e7571299f13900337059f800432eb93eba141e6882c7c8e9970db64776c113e7
+- card_id: blade_of_champions
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: blade_of_champions.jpg
+    sha256: 081d3ea03cfdf80b14d107b055a9d553b01cb927f6c664f0e6573421ceb79f0e
+- card_id: blade_of_hubris
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: blade_of_hubris.jpg
+    sha256: 372e89a615175a4c57664f0a19f43ae6f1f55deb85c0afa9d52fa6ea9cb187cf
+- card_id: blessings_of_the_red_panda_spirit
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: blessings_of_the_red_panda_spirit.jpg
+    sha256: 9c75782439f468c1596273fef6d8a288e231b13a91920f28c1027acd2f7d3dcf
+- card_id: blue_tanuki_bar
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: blue_tanuki_bar.jpg
+    sha256: 8331beda4de34c1a000b94082d0f2934bbe07db3ad856482d035bb4f4d2af448
+- card_id: bounty_hunter
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: bounty_hunter.jpg
+    sha256: f9bc3de025568a4786a14bade3abc00f09a9d5663ce3bdb4dfe3b506bf4c5310
+- card_id: brash_hero_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: brash_hero_experienced.jpg
+    sha256: 15858a0813a461a8fcf1d2d0b1154aec8de6f3b60c7f23c74ce7437d036dc5fa
+- card_id: breach_of_etiquette
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: breach_of_etiquette.jpg
+    sha256: 078b231b303a39dd6fea49ac0523b41f606ed17a61206ec20f34d77ae2cd6357
+- card_id: brilliant_victory_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: brilliant_victory_experienced.jpg
+    sha256: 13f6f6f471c2e98bea91a3086d47ac7bf4aee78081775b197e50ccff869c0201
+- card_id: broken_blade_fortress
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: broken_blade_fortress.jpg
+    sha256: 235cd5284ea9b9579444b88cab9d2b36f1f5842f3e4f79ed2b52d43ff8858543
+- card_id: brothers_in_arms
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: brothers_in_arms.jpg
+    sha256: a9cf7bca570a19c3a0458d3290cb6e8eb7390ba04e3681191ccf037ab037bc8b
+- card_id: brothers_in_battle
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: brothers_in_battle.jpg
+    sha256: 0f62d485bc132feb2fd499600fa737a579acab96a75483d02b903728dfbeec50
+- card_id: buoyed_by_the_kami
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: buoyed_by_the_kami.jpg
+    sha256: fd5e2b66be571105a9f0d2cdb53494dc422d617382b26751d8652780d1ead969
+- card_id: call_the_inferno
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: call_the_inferno.jpg
+    sha256: 0c594fe72f5fe176b5ce15b02d84813706aaf34ca8317eb53e6cc696210293fe
+- card_id: chuda_jomei
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: chuda_jomei.jpg
+    sha256: 6c043a1923faea6b23bb5a9e698531559bb048abdf235eb4c318a4e7da75891d
+- card_id: chugo_seido
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: chugo_seido.jpg
+    sha256: c19bfbda68f5aac44a2e0bb1da19668e2ba2574a451b09d01dd13d1c410c018b
+- card_id: churetsu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: churetsu.jpg
+    sha256: ea701418b03baeef1a0bdf6b191840bab7d101eea890786bbbca3cf3caf33462
+- card_id: city_of_sacrifice
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: city_of_sacrifice.jpg
+    sha256: 23fd2897655940de4b53a14027b999bc816db9885d44126680d880c1158c2342
+- card_id: clan_standard
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: clan_standard.jpg
+    sha256: 8610a492428c0560972abc1b46b02e94515c221264f2eaf47ff090651259ab2b
+- card_id: command_staff
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: command_staff.jpg
+    sha256: a4a529d977f3c712e5771079db21857ce1b7b11cda77d6fc46c8d17529430297
+- card_id: contentious_terrain
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: contentious_terrain.jpg
+    sha256: 5236db8d2693552811b9abb1a80df207c4d30371ac2da20285e321ba68151018
+- card_id: courage_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: courage_experienced.jpg
+    sha256: 06b372fef216c1c37961315124fe2e13793fb802a64af8f5c03156b43e0444bd
+- card_id: covert_attack
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: covert_attack.jpg
+    sha256: a14ce0e4c97103f86bd23759b7faebc5644add80351fdaddbdc83b524c896241
+- card_id: daidoji_akoshige_soul_of_daidoji_naoshige
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: daidoji_akoshige_soul_of_daidoji_naoshige.jpg
+    sha256: f0a57ea6a902ec636ba046922287f57d2d6b0e38117436dd8327f3ba61321153
+- card_id: daidoji_hanshiro_soul_of_daidoji_sakihiko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: daidoji_hanshiro_soul_of_daidoji_sakihiko.jpg
+    sha256: 059387a13a4b939ea5f4f0ed945807c64991c1b53dc76f41925a8608aad3f1d1
+- card_id: daidoji_kousan
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: daidoji_kousan.jpg
+    sha256: 4c85369bdf0ba5e6b431dee9d11da240250f47e29f476577bb612c0f6b9d193d
+- card_id: daidoji_seibei
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: daidoji_seibei.jpg
+    sha256: 5ae19a8f1df041fe0b1ad9e5dde664caae9a432fb5017bb0656f39d8aeaa9d52
+- card_id: daidoji_seijuro_soul_of_daidoji_soken
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: daidoji_seijuro_soul_of_daidoji_soken.jpg
+    sha256: 80cd67ea1483df153c91c22b9c4a93b8211994b28002c3efa6d87f4a5d2ea938
+- card_id: daidoji_tomokazu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: daidoji_tomokazu.jpg
+    sha256: a3ea3c51e47034debd31c76138fffdf58ba72d7a19dc4b2766c82c61080e55df
+- card_id: daidoji_yoshiro_soul_of_daidoji_narizane
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: daidoji_yoshiro_soul_of_daidoji_narizane.jpg
+    sha256: 3075204605af830bfb1bae5626677fcc80fe6ba50243c5188f55e41715f19c1f
+- card_id: dance_of_the_kami
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: dance_of_the_kami.jpg
+    sha256: 53b65640cc17e2f9050538970ac123ba48133ee0e62e729466e296982a509b42
+- card_id: dangerous_reconnaissance
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: dangerous_reconnaissance.jpg
+    sha256: e1ee10e9d00b46d3a0937464d35a5384175a2579e54b534452c030c867cf0e90
+- card_id: death_of_hantei_xl
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: death_of_hantei_xl.jpg
+    sha256: 261be5f4a381d4f2ec7d7134bbda244e74857a98202ef4198926a6843f6eba41
+- card_id: decisive_duel
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: decisive_duel.jpg
+    sha256: 00e2a63ed5a2048543495748b80e63145610a5ea6a14af88249208eb116157c7
+- card_id: directed_fire
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: directed_fire.jpg
+    sha256: 1af0d2d22ced2d7a8770ed0b7d59f3a46246216b3db56979409a1ea564c1fb10
+- card_id: disciplined_recruits
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: disciplined_recruits.jpg
+    sha256: 69f29a2d84aa59e3d22716406c13935bb41a70fd1874e77f127d99159e03111d
+- card_id: disreputable_machiwari
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: disreputable_machiwari.jpg
+    sha256: 730aaa8950756db2af4fa4d2524fdab7830e97da8b71ddfc002593198a3b4c1e
+- card_id: distractions_in_court
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: distractions_in_court.jpg
+    sha256: 0779fa12c5fd9970b9e70037e4529273f393bf0d574ed2af4a6bcc35b839e10e
+- card_id: divide_into_ash
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: divide_into_ash.jpg
+    sha256: 8306f41dc573c472fb15419095414a51daccc046d43649f9115bf308a51abef5
+- card_id: doji_atasuke_soul_of_doji_yorio
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_atasuke_soul_of_doji_yorio.jpg
+    sha256: feea98b2a194f0722b712dbda8b3be7c21b33990494556c110b720ada1567b8d
+- card_id: doji_etsuki_soul_of_doji_numata
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_etsuki_soul_of_doji_numata.jpg
+    sha256: 6d4f4c983220413e34612ae6a7d85e7131e7b969481be4c05ebd3b8a4a15a094
+- card_id: doji_hisato_clan_champion
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_hisato_clan_champion.jpg
+    sha256: 422d1776309fc736f662b29fda17a9d9bf6b99071ca137943080a984d3b40fe2
+- card_id: doji_kaishime_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_kaishime_experienced.jpg
+    sha256: a44295265b643a3bc289b6a77f808bcc4c996b21d80afefd74ae19b7021588ca
+- card_id: doji_mashiro_soul_of_doji_tajihi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_mashiro_soul_of_doji_tajihi.jpg
+    sha256: 4afa0938d20b9ce5190cebc010cc5d1b64ac9d5234dfacc07ec4ec1caf06e325
+- card_id: doji_miwako
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_miwako.jpg
+    sha256: 9dc8b3b285f5bb47beae8374b85f3c060948a9d3ffed194140b4520fc45ec117
+- card_id: doji_rintaro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_rintaro.jpg
+    sha256: b7a7a4b4f2e06391b3659c9c5420253e1830c6bf24a77278fd3a87a20a11a9d9
+- card_id: doji_shuji_soul_of_doji_nagori
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_shuji_soul_of_doji_nagori.jpg
+    sha256: 0566bedff8b771c44a756002261b6a2524fd2466ef95f63daa77f73e16339f18
+- card_id: doji_teru
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_teru.jpg
+    sha256: 4bf4067eb8ea3991c5b4b7952eea1eb3b693f76c3bf95cb6c8532d3b48e9b361
+- card_id: doji_toju
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_toju.jpg
+    sha256: 2b60e8e4f84fb83aaf8e244889a4b1c2e03062be093470d077b57f050b371b11
+- card_id: doji_yasuko_soul_of_doji_takeji
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: doji_yasuko_soul_of_doji_takeji.jpg
+    sha256: c81ec845ad1017964c3dcd81fd57e6586be7e403add05be3cb6b7b25fa51f8af
+- card_id: draw_your_blade
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: draw_your_blade.jpg
+    sha256: bfe13427bf20caaa9f4e953064d9b7e6c0510a0e97ff56821c94c0e4a12ae6dc
+- card_id: duty
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: duty.jpg
+    sha256: 396367414a5e9b3c78b1fd7f8fc2624cc997d7ca5a51eba1e02ec82aad686433
+- card_id: earth_dragon_experienced_3
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: earth_dragon_experienced_3.jpg
+    sha256: 1b98bd37985c179eb236df4961344763192277f58955061510b99e0c51f512df
+- card_id: eastern_domain_hantei_xli
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: eastern_domain_hantei_xli.jpg
+    sha256: 9c208dadc70fe07c53f958c542d2949512df3a70d20c0b499338ae5b7a2ae662
+- card_id: embers_final_fire
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: embers_final_fire.jpg
+    sha256: d683e0cf6e2ea1a8d1770ccce2bbdf07824321a05230339b2de41e5edf4fd003
+- card_id: emerald_hills
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: emerald_hills.jpg
+    sha256: 38aea708d6337339fdea60cbf6e056bc599abc1a4bec750b01522bb7acfe3ad3
+- card_id: emma_os_amulet
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: emma_os_amulet.jpg
+    sha256: 4191dd758bffdf2c00ddbb3fbebdd76d889f0d9835a25cb4eb012c9f87ed2e34
+- card_id: enginoshi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: enginoshi.jpg
+    sha256: b0b23c921ad4c2097685085e1e71332a33a9a6b4b036b7f74ff3ecd7e42cf438
+- card_id: enlightened_ruler_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: enlightened_ruler_experienced.jpg
+    sha256: 7fa1f9f098690d2fbb9a06366b2c2fce7acaf97ab9bb57e0e9abc4c8284e1558
+- card_id: entreat_kyufoki
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: entreat_kyufoki.jpg
+    sha256: eb8435b8514be42b74141ade7279e3b96df1ea5005dacb088e2a6ee553c7b797
+- card_id: erosion
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: erosion.jpg
+    sha256: 5ef0eaf1c9c9ebf0afafd691934f452374f97d649815d1f0b77d16bfb21c93c8
+- card_id: excellent_armor
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: excellent_armor.jpg
+    sha256: 99fc218f11ddb5cb487aff6b1d7a7d447bb29f0914f72420842920799ae830c3
+- card_id: expendable_resources
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: expendable_resources.jpg
+    sha256: 62ce8696ceddaa72bc897746a55223937c6fa3c76172245883454975f04a025a
+- card_id: exuberant_miko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: exuberant_miko.jpg
+    sha256: 548708e8bcf5b6b3df88fd7aed230d0ab39991acc6a77eb1fa86f85ecd19089d
+- card_id: factionalism
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: factionalism.jpg
+    sha256: 0015f66f7bc543fd9cde640019fab5ec0fa7b565de18f51fbde0b6067e16bb10
+- card_id: fall_back
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fall_back.jpg
+    sha256: 509e84a1e1f1cb7be9dd2587c8e0aa01b3c146a85a6e8be5c35081d96126af0d
+- card_id: fallow_fields
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fallow_fields.jpg
+    sha256: a8c4821eaf1e2d4ec74e7c22bdcd3ab53b3b08cce8ab8bd5c234aa62cc82ecc4
+- card_id: famous_bazaar
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: famous_bazaar.jpg
+    sha256: 44d527dcc1665ff17839e61f6e8c414a8c3f8e460e58547cd1209a16ea4043a5
+- card_id: far_traveler_castle
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: far_traveler_castle.jpg
+    sha256: c91c6d3147c77d573c0240497a67d37391ad70e9e1239f4d0d967cb3e3422aa9
+- card_id: fierce_blood_of_the_earth
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fierce_blood_of_the_earth.jpg
+    sha256: f2a3fd9eb84e7de504afd26d6080e2af8cb6bb2483bc3363ccc090c2991c2a80
+- card_id: fighting_unrestrained
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fighting_unrestrained.jpg
+    sha256: c6945b4b533b333f23e0b4a235ecf5246ac1a608f053b25765733dccb56dd1b4
+- card_id: final_duty
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: final_duty.jpg
+    sha256: 0aae94a4303d8024baa04ca4171f934690d47c8b6cc6d5a28b86d9fdad2ba23e
+- card_id: fine_silk_merchant
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fine_silk_merchant.jpg
+    sha256: 596cfeb19521f569ea21442c43305c19166f861021225644006d62a0e2403663
+- card_id: fire_dragon_experienced_4
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fire_dragon_experienced_4.jpg
+    sha256: 1d8e0fb65020384eea9f9e80a16e8d62c6851b631c62a5aafc4c503916cb04bb
+- card_id: fireworks
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fireworks.jpg
+    sha256: a5c33435906b7cdb14bda682609152a67266c9b4a5eaf6f69b8b218a87e242b4
+- card_id: flanking_action
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: flanking_action.jpg
+    sha256: 3a659c514b127df4962d2e7f1d44cabeee2c8433c8e1907c60e1417957d5c0ac
+- card_id: flawless_tetsubo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: flawless_tetsubo.jpg
+    sha256: f5299e7c69c6e60452062633441ed43d8a60d6d2189b33a5ad4ee7d40a23e32c
+- card_id: flee_the_darkness
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: flee_the_darkness.jpg
+    sha256: a56d3a33f6c56236d1dc903cc29bc43e647d2e7115fedd637673dd1c05a3e5cb
+- card_id: flooded_pass
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: flooded_pass.jpg
+    sha256: 66f9ad22cf6ab196c9384de3e50442e110bc4ac139d4328c07fd35008794c7c1
+- card_id: forced_conscription
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: forced_conscription.jpg
+    sha256: 2652835871dc9b8ba2e1586d26cc80e25c2c751ba220b691fae86d8953a756f5
+- card_id: forest
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: forest.jpg
+    sha256: 02e2dbb3404856598453324dfc7418fbfd69e9f81772d518a88068deecafbbe2
+- card_id: fortunes_folly
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fortunes_folly.jpg
+    sha256: ab148b4c7e83ef80f8b44d89d32522c28aad4ee9206bfa78a48e1a98407b1299
+- card_id: forward_camp
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: forward_camp.jpg
+    sha256: 1f12e214c4f498949e72d15e2940eb1b38f0f0156cddf29e6cf44e50136c5609
+- card_id: fresh_recruits
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fresh_recruits.jpg
+    sha256: fb2a06c15154695d9fbb1db3005fc4a4756e407b99820cbc6f1908b19ef1de4c
+- card_id: from_every_side
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: from_every_side.jpg
+    sha256: f4d9b760cdcc9b6b32d0650218cb9f76317fd6160e4406a34c931021b3916fec
+- card_id: front_line_fodder
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: front_line_fodder.jpg
+    sha256: da24fdb51767228e3acc946da8680fb88a9158b34460710803a15bf714dfb2f2
+- card_id: fubatsu_no_dachi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fubatsu_no_dachi.jpg
+    sha256: 93306b3cf87a0e994302af3c973fc08ac5fae19cb1bd3dae5a4127652a75c8fc
+- card_id: fujin
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: fujin.jpg
+    sha256: 4500c80948a67127ebe19afcb59c270b4a78321d07f852356b730c164adb73a3
+- card_id: game_of_sincerity
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: game_of_sincerity.jpg
+    sha256: 2dc57f8f12f620daa09dbeaef0c7cf3b2950053e8e3e39bcd513e03eca94751d
+- card_id: gates_of_persistence
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: gates_of_persistence.jpg
+    sha256: 717db222067fe857b4df845a82ffe79af29c04efdfb180cdb394eebbfef05a3f
+- card_id: gekko_soul_of_gozu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: gekko_soul_of_gozu.jpg
+    sha256: 044e28fac7c0224ec3b77cc55278c3fdf5eab394e02cb5455c146d2fdfdf9b64
+- card_id: genbu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: genbu.jpg
+    sha256: 6a2fcfaec549e28b5cbea95c45535128d961834f99d4c937925f814d91a0b503
+- card_id: genjiro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: genjiro.jpg
+    sha256: 1cf17453444a5d508024106f47061464e0cb4755df154d3aaae00919b063f1c4
+- card_id: gifting_ceremony
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: gifting_ceremony.jpg
+    sha256: ccd352eeb11da9822492419f3cdfd84f635d9e3a14d836b3e564e6da6ac47525
+- card_id: golden_obi_of_the_sun_goddess_experienced_2
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: golden_obi_of_the_sun_goddess_experienced_2.jpg
+    sha256: 572edb565e51a6031ef72c30c0a56bce2ed0ad8cad7add3d7e61456f93d5d0bc
+- card_id: grateful_reward
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: grateful_reward.jpg
+    sha256: 798288e7cb0642e4fcca66b3e4ca960baf7aeada2a763dbc7d7ab9b916fc11a2
+- card_id: greater_sacrifice
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: greater_sacrifice.jpg
+    sha256: 6fd093ab6020e75cf03ba1ebd10fcd6bdd64c8ff022e8e51e847ea8c348dd276
+- card_id: guided_by_honor
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: guided_by_honor.jpg
+    sha256: b6b55cb1b97a015246202610492ffabb43a738d70ba9a84e6242063af5a10e69
+- card_id: harsh_choices
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: harsh_choices.jpg
+    sha256: e7c8a832756bf523a415c4e6a89a8a501c5afec07c8aefcea64fea18533f5b40
+- card_id: heart_of_honor
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: heart_of_honor.jpg
+    sha256: d3824c2be3ccf4041c53974e67fe15d38967ddac30b79cf05e9a2882dbbdab97
+- card_id: heaven_has_no_justice
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: heaven_has_no_justice.jpg
+    sha256: 1f51423673328f853c7ad3c0bb322124cbb11508200061aff9c9ba06100a2dd8
+- card_id: heichi_gengyo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: heichi_gengyo.jpg
+    sha256: 15d0a1ac11d9b20090e8122df94a7c2578e62ef3f7aab5a19f975e0131b79a97
+- card_id: heichi_ukon
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: heichi_ukon.jpg
+    sha256: 750ce0fc0e3f4257e0c72cb5806963196c2be9e2b9dbbc817ef505c318b19197
+- card_id: heichi_yachi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: heichi_yachi.jpg
+    sha256: 25bafeafed282e523fb75cc99f6758618594f7667ce034d58ac916bbd15166ce
+- card_id: heichi_yuuka_favored_by_the_celestial_dragon
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: heichi_yuuka_favored_by_the_celestial_dragon.jpg
+    sha256: 60b7e6d39a5416fb3c8cd6ff6228847287e7817ceffd090ce5e2228b63b51f5c
+- card_id: hida_adokenai_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_adokenai_experienced.jpg
+    sha256: 947330fd49100861efba6146d73a3993a0446604218e2ec1e49fedbb0f052cf8
+- card_id: hida_anshin
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_anshin.jpg
+    sha256: 7678a214d355589e0ecf7d4dbd6e307a33e6aa3fb2e9e0daf7db6a2dead65c06
+- card_id: hida_gochou
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_gochou.jpg
+    sha256: 3564805e7e542e0c81eed704e1fa0ffe68e965a8754b0af63a513ec664962383
+- card_id: hida_kyuso
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_kyuso.jpg
+    sha256: f9d6aecdcb1d9af535585d6638b261f6980746541bb7b811bf4ece9801d0eb3c
+- card_id: hida_naguriko_soul_of_hida_yaheiko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_naguriko_soul_of_hida_yaheiko.jpg
+    sha256: d773caa47218ffbf429e92b00a510651021503a0429f31306e5a8a8f1e2b5bbe
+- card_id: hida_rikako_soul_of_inexperienced_hida_o_ushi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_rikako_soul_of_inexperienced_hida_o_ushi.jpg
+    sha256: ec0f799cc0cd29a6daf2b45499a798291ea07c96f4b26026c8179b3e0b7ee9c7
+- card_id: hida_saizensen_soul_of_hida_daizu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_saizensen_soul_of_hida_daizu.jpg
+    sha256: 457be00ff10cb0a4008f7b3653988ca2ec71623cd6633fe85db8722864bb74ee
+- card_id: hida_sanjiro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_sanjiro.jpg
+    sha256: ffccbbbdcaceef800471c3bf7708f2faa2d7a27321cd8b944be1bb4137808460
+- card_id: hida_toranosuke_clan_champion_experienced_4
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_toranosuke_clan_champion_experienced_4.jpg
+    sha256: 7e7c3f8612f176235d3f5dfda8fe9b1e2c9ba4120695f246101b4c7fdf966df0
+- card_id: hida_tsushao
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hida_tsushao.jpg
+    sha256: c7de7550eb255e7129bf81f0d9204d98a4b2659ffdd71e2f8b2e67a1d87ff765
+- card_id: hired_killer
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hired_killer.jpg
+    sha256: 16d29e8475736dfe3b0d0e40e949083a5ac00b5615776f682f7a655c6178490d
+- card_id: hirotaka_soul_of_hitofu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hirotaka_soul_of_hitofu.jpg
+    sha256: 658d215f67b1f61306385cbac21d86fcc7ed7aebf9eeea35483f7297a9882919
+- card_id: hiruma_eizo_soul_of_hiruma_tama
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hiruma_eizo_soul_of_hiruma_tama.jpg
+    sha256: ca060b5c74d724f027da6d213279734fba4281d9fc8613158eefb3c7c0d514b2
+- card_id: hiruma_okurete_soul_of_hiruma_shigeo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hiruma_okurete_soul_of_hiruma_shigeo.jpg
+    sha256: 2de20fad9527b41a8a11ba0c35b39b38c6535c73eb93d981af37e463ff6113a4
+- card_id: hoji_hikaro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hoji_hikaro.jpg
+    sha256: d3c0ea4c777a63c8719dea16fa904fd39734899d45b56af7facf8d2f5daebb9a
+- card_id: hoji_shiho_soul_of_yoritomo_sachina
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hoji_shiho_soul_of_yoritomo_sachina.jpg
+    sha256: ec966bfaac57160f0812470b7315b77ceef8afcb49a2c2a8f256b28a5ab883cd
+- card_id: hoji_tsai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hoji_tsai.jpg
+    sha256: 02db9953b429cdb440c4aef7a3345c83beee3972d3aceee817c11d9275b6e0d7
+- card_id: hoji_zainin_soul_of_yoritomo_manzo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hoji_zainin_soul_of_yoritomo_manzo.jpg
+    sha256: 7f820c62e210f749b4cb90017431918272b424a3b1f7691783c8e1d9a7b406d1
+- card_id: honesty
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: honesty.jpg
+    sha256: 1b77c90e5e6678b801e414330f7e80be8b524d1783fc02190be5fce9ca131719
+- card_id: honor
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: honor.jpg
+    sha256: 7488676f19d3a622931223fb6bee0bb6de6fb5976775a123e99168ce06427f92
+- card_id: hoshi_eisai_experienced_2
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hoshi_eisai_experienced_2.jpg
+    sha256: 14aede9410fa4f5e18bb1d214324b66850a58bc75ac424736dec446b5ee701e8
+- card_id: hototogitsu_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hototogitsu_experienced.jpg
+    sha256: 79d3b65d7c311143396c2a34fcdb760dcfb804bcd659e5108bbc60eeddb84107
+- card_id: house_of_plum_blossoms
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: house_of_plum_blossoms.jpg
+    sha256: 09a07491a38a1aecf4bb512bba3da95b180d11cfa4040fadcae5631814dd23a0
+- card_id: house_of_striking_wings
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: house_of_striking_wings.jpg
+    sha256: b81511a280d31f26af6f69a4c326a054ac9c7dd223c794e087bbb8a3c0b4a338
+- card_id: house_of_virtues
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: house_of_virtues.jpg
+    sha256: 2039fedc70809df15ec77bcbee634c3524f84cad6baa448c7023813871464403
+- card_id: hunting_tiger
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: hunting_tiger.jpg
+    sha256: 47bf3c1da4313ac02e86feaf0357a3b559aeb76c58cc4dc82aa59f657e2cd796
+- card_id: ibuki_soul_of_tsukotu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ibuki_soul_of_tsukotu.jpg
+    sha256: ac0b8153566543d885eb445846f87a5feb31096fafbfb751c010b50f720e9c6a
+- card_id: ichiro_yojimbo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ichiro_yojimbo.jpg
+    sha256: 0a4404a9425a7c950656f180c22124f8f1f9cb7bd9a4d2c6f6c50f581a52de33
+- card_id: ide_igo_caravan_master_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ide_igo_caravan_master_experienced.jpg
+    sha256: 079c7e99eae30ea9a6603bf83a137c1989da64c774668af329f576d4792f9328
+- card_id: ide_jegu_soul_of_ide_eien
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ide_jegu_soul_of_ide_eien.jpg
+    sha256: bdde6f4283e590ba24cd0789270570dcfec8da34c5a90b37429af7766f93f445
+- card_id: ikoma_ayumu_clan_champion_experienced_3
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ikoma_ayumu_clan_champion_experienced_3.jpg
+    sha256: 7973f3c942f2d67e347a493680dfa9d3b05741e541d5f8d89b0ac5cce75274db
+- card_id: ikoma_kohuri
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ikoma_kohuri.jpg
+    sha256: add6cb68aa62dad1226049b2e8c574f09733df02461e60e132f1f5ce2e09ba1b
+- card_id: ikoma_kyoukai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ikoma_kyoukai.jpg
+    sha256: 2b2a46e8e32c83282df0d443c4e31ffdc266974db061427254ec30f1079f8552
+- card_id: ikoma_masaru_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ikoma_masaru_experienced.jpg
+    sha256: 395436d5123c9185f5f02a8392a29fda73159a9fbcf499a489f3f374877ac64a
+- card_id: ikoma_tokkai_soul_of_ikoma_tsukasa
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ikoma_tokkai_soul_of_ikoma_tsukasa.jpg
+    sha256: 5f87eabcc1e4625ccc2302b7d58e8aecb0da35b0c53850d7e961332022ef2661
+- card_id: imperial_assembly_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: imperial_assembly_experienced.jpg
+    sha256: 48349e1f25ce2708b175dab13943d4c061a66d567984e88a1b5d1f2091d98e97
+- card_id: imperial_benefices
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: imperial_benefices.jpg
+    sha256: b0380818d59908f9ca1b939eaa7467fc70e1a0a6e9dfcbbdf13e9de1e515c3e9
+- card_id: imperial_decree
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: imperial_decree.jpg
+    sha256: 9d02a673d424fd8c43c90bcfcdf6a9a6f675204d924f5a402dc80ca3e184242c
+- card_id: impressment
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: impressment.jpg
+    sha256: 4c2145eee74241fbd9cacdfa75194ee8feef6c173f6ed868ab3ba1182153132c
+- card_id: inexplicable_challenge
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: inexplicable_challenge.jpg
+    sha256: c0a4b0756a40e8d0ddecd442e4c743d368a885dcfd6440c8412f6ebe7ed6f810
+- card_id: infamous_strike
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: infamous_strike.jpg
+    sha256: 9484fec075a27e75946e650e2531d0bc0770db9ad28be4eec707cf76712f81c0
+- card_id: ingenuity
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ingenuity.jpg
+    sha256: 3fb3af6932015e3552418b6a22d428c12960e305bb42c28d533ad4d7bff78582
+- card_id: inspiring_presence
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: inspiring_presence.jpg
+    sha256: 8e9bb9a963ee828b5182d3308369307388d51ad62f10537ce7ee7742d3847165
+- card_id: isawa_eizo_soul_of_isawa_emori
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: isawa_eizo_soul_of_isawa_emori.jpg
+    sha256: 119a26a5561f195079c08c778b09936f85317967f671a7aee4d0b343c3c410e8
+- card_id: isawa_haruna_soul_of_isawa_hachiko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: isawa_haruna_soul_of_isawa_hachiko.jpg
+    sha256: 6fc6aff1886da88b4ddbc469154d693c6d58568c2b5c80b831adeb960ac38894
+- card_id: isawa_korenaga_tsunami_legion
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: isawa_korenaga_tsunami_legion.jpg
+    sha256: 2f54ce7e1c1e5240c26de66ad40994905b41a605c85fe0c1bbff4f5c6c11e9c6
+- card_id: isawa_satai_soul_of_isawa_shioki
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: isawa_satai_soul_of_isawa_shioki.jpg
+    sha256: f557a0597d8fb95953d9a7bd5d3dc24b33d2b5672bcd0ec691a92b2ddaa98702
+- card_id: isawa_taji_historian
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: isawa_taji_historian.jpg
+    sha256: b18ffcae49f4992043062e097bb5d6a54e472695ebe05b8dc3720deb131e0b92
+- card_id: isawa_utaro_soul_of_isawa_uhiko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: isawa_utaro_soul_of_isawa_uhiko.jpg
+    sha256: c530d5cd3f62696de9a7e93f6d1a707919753541d3f8204c30f0fc6f71961f80
+- card_id: isoras_call
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: isoras_call.jpg
+    sha256: e69f4b6d2c79af446c487df2797a6aeaf87c8fc3b5a6acbb1cda3fa93ff24eca
+- card_id: iuchi_sotan
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: iuchi_sotan.jpg
+    sha256: 84cf95bde1c031271306a6529ca14868e725b572ee1c6db0c9602b5b22dcc4d2
+- card_id: iuchi_ukiyobi_tsunami_rider
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: iuchi_ukiyobi_tsunami_rider.jpg
+    sha256: 9c0f8be7fa3becce2ad4a10d9ebde1f453e0b2d9611c4dfa524752d294a3e830
+- card_id: izaku_librarian
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: izaku_librarian.jpg
+    sha256: 953d8b38a3c42c5f848a26e19ad3674914dc96608e71f186150d401cd4f979f4
+- card_id: jade_embrace
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: jade_embrace.jpg
+    sha256: 5ee7a9c415ccd7cc6ac32a78ccf347ca372f1c4f210741781fcdae8586b5c329
+- card_id: jade_pearl_inn
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: jade_pearl_inn.jpg
+    sha256: 44b7337b18351e9098714a1749633b4fbb58c7124efb2ffc1583938a5eb0abfd
+- card_id: jade_suns_judgment
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: jade_suns_judgment.jpg
+    sha256: 2861ece40c03abddfc1eefb398a42097d32368c429f7400d6ff5ca7ffd2d96b7
+- card_id: jade_works
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: jade_works.jpg
+    sha256: 1239533bc017de783232c600fd611c4e3d807448eace4c0b47231c5d96a3a6de
+- card_id: jotei_isawa_keiji_master_of_void_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: jotei_isawa_keiji_master_of_void_experienced.jpg
+    sha256: 4aba4411c1fc4d6942d67d2476f670eef3223984ced186260c64fa8427738ab2
+- card_id: jotsu_eihime
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: jotsu_eihime.jpg
+    sha256: 1788b4b5c4be358092e0384052018c2241ebeb81ed3777df2c7f8f6056b594c0
+- card_id: jurobei_soul_of_osami
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: jurobei_soul_of_osami.jpg
+    sha256: b72ecbb60c6704531d9aa2864ba55c1a7ac611bb056198bc742c7fd7dd70c567
+- card_id: justly_earned_victory
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: justly_earned_victory.jpg
+    sha256: a36e3fde9316104ad0b1bb45ac075ade9f4da102c16573f1863f4f957cea090f
+- card_id: kaiu_houi_soul_of_kaiu_taru
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kaiu_houi_soul_of_kaiu_taru.jpg
+    sha256: ad9085fa5a4fa58632ae5a3b3ccf1b76852d4149f72a141c93488f9805499994
+- card_id: kaiu_kanna
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kaiu_kanna.jpg
+    sha256: 16707dc4a0d260d1f1edea294ea9b211087fabb1e249cb4a3bdbca30c3740c69
+- card_id: kaiu_ono
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kaiu_ono.jpg
+    sha256: b8d65de2e28fd1df2b51d666cbd9a333a86d88a2b21309ecd6c85198a35643d7
+- card_id: kakita_adachi_soul_of_experienced_kakita_munemori
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kakita_adachi_soul_of_experienced_kakita_munemori.jpg
+    sha256: aa3e13631608683310e77f3c79b80d18c99abe90f63f68db3c881e866738c1ce
+- card_id: kakita_sayoko_soul_of_doji_rengetsu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kakita_sayoko_soul_of_doji_rengetsu.jpg
+    sha256: 1ffc00f43ffe0a3b44a39d584f3e34f2923d93ba1355c82da77ac87333fff807
+- card_id: kakita_sunoko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kakita_sunoko.jpg
+    sha256: 176ec3d4edb492b70ab685f5c473e2c5d43ff9e85e596cccadeef0577c73f1ff
+- card_id: kakita_tsunako_soul_of_doji_soh
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kakita_tsunako_soul_of_doji_soh.jpg
+    sha256: cc4e91b2c642ce0d9232ba35d9b8a03cffbcd689448514286f7d334eec6eb764
+- card_id: keitaku
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: keitaku.jpg
+    sha256: 23766ef554968c17fc27d808df97dbe7bbbb9e99c2a01f418f82c2a2b3d2cd90
+- card_id: kincho_the_seventh_soul_of_kincho_the_sixth
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kincho_the_seventh_soul_of_kincho_the_sixth.jpg
+    sha256: fcb2e59dd54b691cc5507d0d7a788ce1655b4f058a02382eb615d37ea2afdd92
+- card_id: kioku_naki_okiya
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kioku_naki_okiya.jpg
+    sha256: a464d42b7a3dbc14f521219a6592a9973b84cfbaba58b2e5edd02db9e54c143e
+- card_id: kitsu_yutomo_soul_of_kitsu_yutaro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kitsu_yutomo_soul_of_kitsu_yutaro.jpg
+    sha256: 85c802b9253ba887ff11d8864cfbe4745ecff3cfc07edc4485e0b673afae1fcd
+- card_id: kitsuki_goichi_soul_of_kitsuki_berii
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kitsuki_goichi_soul_of_kitsuki_berii.jpg
+    sha256: 56bc173e93edecc0ae45bc5160ea7445295e6bd40b2565fdc5728a156bdf46f0
+- card_id: kitsune_den
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kitsune_den.jpg
+    sha256: bdef9e4575edfb97fa261277d2122e85cf25c7ff1971253e94ea48d81dbc17fe
+- card_id: knife_in_the_darkness
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: knife_in_the_darkness.jpg
+    sha256: 7c5d57410c36435a0f2807c56c4481447c712cd2251910da252e70e66f28b8ac
+- card_id: koukei_claws_of_the_pride
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: koukei_claws_of_the_pride.jpg
+    sha256: c39aaa2ee8653ec5ff3c3f1ced01fa13134db05dbc78504392b77cc249c4729f
+- card_id: kuni_doru_soul_of_kuni_daigo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kuni_doru_soul_of_kuni_daigo.jpg
+    sha256: cafc601f631c0fe7ab5aaa26ae7c13131e9d5f59ca928d12ad91af3b166ca7ac
+- card_id: kuni_kairi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kuni_kairi.jpg
+    sha256: b44604ea2c3469663d5fb81b3a55bd19c2e93147a2a3f5606b898bbae82fb3ff
+- card_id: kuni_kinoju_soul_of_kuni_kiyoshi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kuni_kinoju_soul_of_kuni_kiyoshi.jpg
+    sha256: 68dd4d46d5d65621ba11a9937e05ae29922b95d20f6846c69e4c6220ed923c08
+- card_id: kuni_sanjuko_soul_of_kuni_tansho
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kuni_sanjuko_soul_of_kuni_tansho.jpg
+    sha256: 5f87b10ebbc69d832a363868fd6a8ccdbc75b5e443bde0525fdba399adc96acd
+- card_id: kuni_seifukusha_witch_hunter
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kuni_seifukusha_witch_hunter.jpg
+    sha256: 249f264463a08fa85be90f126c03fc280cd74351bde062e604a7fe80acda78d6
+- card_id: kuni_yurisa_soul_of_kuni_shikehime
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kuni_yurisa_soul_of_kuni_shikehime.jpg
+    sha256: 6e8b313eade79716e4c14e9aab17fc7d1db81c0b0df0bbb9183ca4d6b1593068
+- card_id: kyoso_no_kenzoku
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: kyoso_no_kenzoku.jpg
+    sha256: 22946ff4bfac8e1df2c11added6408d14acfc712b63df81cc1776b1d22f8f4ea
+- card_id: lakeside_retreat
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: lakeside_retreat.jpg
+    sha256: 619e7540844a1e074e7613dc4bb3c1d9e48cddcd33af57aa750d42a0801079d4
+- card_id: landed_gentry
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: landed_gentry.jpg
+    sha256: 0049aaae3bdd604b53cdd883a2561b51622ae9eca6d2a307afb1aedb92cfa1a0
+- card_id: last_breath_castle
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: last_breath_castle.jpg
+    sha256: bda04b06a6e29145449f2108d31ecdf1dc8c16afea5104590ea48d410427c890
+- card_id: last_glance_castle
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: last_glance_castle.jpg
+    sha256: b29b87761ca46b5221142516fee618fa049466ba4de823c11b55cad0760bf41e
+- card_id: latest_fashions
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: latest_fashions.jpg
+    sha256: 235a161dd833ed09b42524c739d5a7d88292e0da3c08f8f940d1b60294d4f323
+- card_id: legion_of_the_khan
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: legion_of_the_khan.jpg
+    sha256: fb3a1c4750b9bb074a9fcd18e721e6441ecacc031ae1d4a6301ed802d2f24327
+- card_id: lessons_from_kuro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: lessons_from_kuro.jpg
+    sha256: 5efa7acd1abc0590d379a6775204e675eb596a5e235511c4c896385da5c1971c
+- card_id: lies_lies_lies_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: lies_lies_lies_experienced.jpg
+    sha256: b80e99dd72acef6b73d643d76e47f6c838dcefc4e5544f1838b0fdcd0f167fb8
+- card_id: lonely_battlefield
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: lonely_battlefield.jpg
+    sha256: 4d93185fc8f774caecd2c7cfe4e765f2f2e459a93e45378150adaa46f3d14b5e
+- card_id: machinations
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: machinations.jpg
+    sha256: c30b45fbe765e97d8c80e1e9a4746f93c1ee78fcfb62da5e9318a11cb812b6d5
+- card_id: maga_yari
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: maga_yari.jpg
+    sha256: 1da08eb9fbfd6f65d9c34abb52237a3845b2d68bd8e71be69fdabf9304123932
+- card_id: magistrates_justice
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: magistrates_justice.jpg
+    sha256: 535a67cd8495537b2f0a8e5f4846e98868907628f46f8364c4011d960606aedb
+- card_id: magohachi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: magohachi.jpg
+    sha256: 1c6320d795b4314eceb42de95707cf9bbadb196253613fa59b2f839ad9c19170
+- card_id: maidens_of_the_wind
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: maidens_of_the_wind.jpg
+    sha256: 5c2f8455c892b20da1c8651e3f604f7f75fc19dbb67499d4a15c0803aa578825
+- card_id: marshal_the_ranks
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: marshal_the_ranks.jpg
+    sha256: 7756c51941494fc9575f052640221f8cec4dc1918f83ebca498d7b3632a07750
+- card_id: marshalling_grounds
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: marshalling_grounds.jpg
+    sha256: 890520cbad27e228a68b9229debc6ed74cf72331bee1fd0eb5d39effaf2038a9
+- card_id: matsu_haruichi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_haruichi.jpg
+    sha256: ded87ed05f7499e09689b0e90c3ec44fe2b691e6763d8d679378d4f358f9e0e5
+- card_id: matsu_haruko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_haruko.jpg
+    sha256: 668c5faac2c03828539ff1bb485caa1bd52d25bd91614df62db08d82efc9946e
+- card_id: matsu_keishi_soul_of_akodo_kitaka
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_keishi_soul_of_akodo_kitaka.jpg
+    sha256: 99de5a99bc1d64e34f8aa460a9537b143e668213e0322896972534cd11413077
+- card_id: matsu_kumiyo_soul_of_matsu_rika
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_kumiyo_soul_of_matsu_rika.jpg
+    sha256: bce7888ceecf2f8cc4da8d7990e384fe93f0ca2145983381c6798c9a62452e04
+- card_id: matsu_nissho
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_nissho.jpg
+    sha256: 61cc49a7ce4e6c6b42ccabc07358264375263e83d339a0e9333ef4d8f98a4b1f
+- card_id: matsu_shina_soul_of_matsu_nishijo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_shina_soul_of_matsu_nishijo.jpg
+    sha256: 0363ddfacad69d220270efc5ce8420fb1fda18f5fd2dcce68da440b88eb2429d
+- card_id: matsu_sho_soul_of_matsu_eishi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_sho_soul_of_matsu_eishi.jpg
+    sha256: 03c6567ecedf8196427c63ae4b2625036678442a78a1cb50a20e41490bc7361c
+- card_id: matsu_suzu_soul_of_matsu_satsune
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_suzu_soul_of_matsu_satsune.jpg
+    sha256: 760e7e1f1d6291a3d39e701a05770cc5b0a843584294bab227850c9316614b7c
+- card_id: matsu_tayuko_experienced_3
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: matsu_tayuko_experienced_3.jpg
+    sha256: aab5d081b8ac1f643c622fa71f91550a189bcedb652acef0fc312b7b537d0519
+- card_id: megumi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: megumi.jpg
+    sha256: 7196fd765f60ef7f34832459d426954ceabb2284dd03d4102c265ff6f33d5f96
+- card_id: might_of_the_kami
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: might_of_the_kami.jpg
+    sha256: d2b9d3b332cd9f2bbf7bd17a730cdeb0e30d04ff50aa897fb51530bee08d2b5e
+- card_id: militia_training_ground
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: militia_training_ground.jpg
+    sha256: 163f17329e57eb79e3f94a7187891ead1929393cb5920fc0c1edd41e4e286ef7
+- card_id: mirumoto_goro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mirumoto_goro.jpg
+    sha256: d33036bd913d0c8c6b10cca3281f335381a84edce1ee9058c3b3cb8d8722f903
+- card_id: mirumoto_hidetora_soul_of_mirumoto_satobe
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mirumoto_hidetora_soul_of_mirumoto_satobe.jpg
+    sha256: b80840e78556ea24124a95365e27608331fd1564ef6d74bd9bbc3f3bf4e500cf
+- card_id: mirumoto_himeka_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mirumoto_himeka_experienced.jpg
+    sha256: 051f7249f34df3ea4c8a01a30bfa9ac6cb8ca3d34b9f78d1d5ae1525da235611
+- card_id: mirumoto_sui
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mirumoto_sui.jpg
+    sha256: c77e692b7717363fbc766572f591cdcffb6eea17f055e8c041eaf7a2f227b6a3
+- card_id: mirumoto_takanori
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mirumoto_takanori.jpg
+    sha256: b5cbe9a78f24a55751b610458d8fea7457a6535b90e6067e815d70634153d014
+- card_id: mirumoto_tsukazu_soul_of_mirumoto_dakotsu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mirumoto_tsukazu_soul_of_mirumoto_dakotsu.jpg
+    sha256: 8c572dc8e76a551907c7f25830cb41c1b6e923824e8f2baa70d37c8fa18c16e0
+- card_id: mirumoto_yutaro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mirumoto_yutaro.jpg
+    sha256: 0bb7ac93d038f34d1d2a3b23c4f757e2959b50ae911b59581065676147d1a7a1
+- card_id: moshi_fukami
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: moshi_fukami.jpg
+    sha256: 49c28f35091a08d0ce7937f2a4894db3354bc5e4c39410bc1861a421e55a2ff4
+- card_id: moshi_yuna_master_of_fire_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: moshi_yuna_master_of_fire_experienced.jpg
+    sha256: 8cfd1cf4f227f61011610fc9ce51c69301042d4c74310b43cb4b6c0fe40ce929
+- card_id: moto_akhutai_soul_of_shinjo_katsuo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: moto_akhutai_soul_of_shinjo_katsuo.jpg
+    sha256: 35c894acde1e65493c027d153a4d9365fe750965218fc6e096ff7cead4b28148
+- card_id: moto_budan_soul_of_utaku_gyonwan
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: moto_budan_soul_of_utaku_gyonwan.jpg
+    sha256: 66f4ce791fe65842305e56fd9fda5b01cddb1195979d100d80ed08337676f6f8
+- card_id: moto_khubilai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: moto_khubilai.jpg
+    sha256: 9c8173094fb384cb6536965fc0ea6688bbaf4b35c6a9a8e95ee61b444a759663
+- card_id: moto_lian_jiang_soul_of_moto_jeng_yun
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: moto_lian_jiang_soul_of_moto_jeng_yun.jpg
+    sha256: 343a03067ed4f52bd262f2a494522435b3666cfa322accaed183c72b91af5d3a
+- card_id: mountain_heart_palace
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mountain_heart_palace.jpg
+    sha256: 7d0c41cb17dcc0b8ad359600d2e5347a4f38be5abac062b09940b270eb875615
+- card_id: mountains_of_the_phoenix
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: mountains_of_the_phoenix.jpg
+    sha256: 69aa8bdad0d6f553a9222608b691e9055a166657e81bfd8084304525eb8eca4b
+- card_id: my_fathers_blade
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: my_fathers_blade.jpg
+    sha256: b020727228cd51a6dee661a3c924abbaf3378af4ffa49e1726c2ad2de4b27d7c
+- card_id: naka_kansaku_grand_master_of_the_elements
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: naka_kansaku_grand_master_of_the_elements.jpg
+    sha256: 1544cc1107569774537318640b7c6da5abf5b18aba457da2e3fa31621e78dca9
+- card_id: new_rokugan_iweko_tokisada
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: new_rokugan_iweko_tokisada.jpg
+    sha256: 8790cbb92930754e5dc79f41081b705949c3ad261c6e8f8f838ad52dd54ca6b2
+- card_id: ninja_genin_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ninja_genin_experienced.jpg
+    sha256: 4b1a5baf12c2f7ede3724beb6036efec8ee2af09de74683189dbd02c6ce3afa1
+- card_id: no_hiding_place
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: no_hiding_place.jpg
+    sha256: cafea1cb88530f1408ebcdc20d5f6c9caa4c40185635ee97e851288209ea289a
+- card_id: no_quarter
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: no_quarter.jpg
+    sha256: e0c95f8d9ee2ae45260c0b0eebf890efc005b4e83cf2c61f5d32a140f05b19cc
+- card_id: nobori_raiu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: nobori_raiu.jpg
+    sha256: ac717f288980b4b4181e81d3cd111e79133216e7523a09a210413e1f0b2825a7
+- card_id: oath_of_vengeance
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: oath_of_vengeance.jpg
+    sha256: 90aa0ab90e88de0d700469218e1c36d00568c25cdc5922436f69f8a5d892efd9
+- card_id: obsidian_moons_insight
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: obsidian_moons_insight.jpg
+    sha256: 4946e14cb52b046e30c8e97a25efdac95ca79168d2eea918c653d0e372613c92
+- card_id: okudo_ogre_bushi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: okudo_ogre_bushi.jpg
+    sha256: 723cb71b616cf9880c45b2b5def8237c9856a7ef872825c33bbf350ac74162ba
+- card_id: okura_is_released
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: okura_is_released.jpg
+    sha256: c0d118d3a5779d3f3f4f21bda3eef53f9e832d4973c60198099bfaf03aafff44
+- card_id: one_virtue_and_seventy_faults
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: one_virtue_and_seventy_faults.jpg
+    sha256: d708b37fe468313688b9b7877ec654ec5f13787d6d8adda94535917ac1b5d1eb
+- card_id: oni_daikyu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: oni_daikyu.jpg
+    sha256: b2722570de0d6da6112a4ceba034cf8cff190a2eb67d9a771da6032d68be8af5
+- card_id: only_the_wind
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: only_the_wind.jpg
+    sha256: e556cf14d54f68bbc067277a211a840663622c25e6c0c9d62df55664fc213073
+- card_id: opening_the_hearts_door
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: opening_the_hearts_door.jpg
+    sha256: 6e4c8d2ef326ae9922b54c90d9fc1a4b71503fcaa6bf0f85335fb635ed556ba7
+- card_id: opportunistic_ronin
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: opportunistic_ronin.jpg
+    sha256: 825cc8a36407921f4fbd5a77873fde5d1a7bf2eb61e04cfa488d60d7e27ae0f7
+- card_id: oracle_of_the_void_experienced_2
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: oracle_of_the_void_experienced_2.jpg
+    sha256: 316abde580650927f7e89320e27372aba9af11aadcf4867cd7cdf39ed37fe8d5
+- card_id: otokoshi_district
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: otokoshi_district.jpg
+    sha256: d95457832bab4360a0ce806edd84ab8a76f1ff583239a50c68be400cda768a26
+- card_id: outer_walls
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: outer_walls.jpg
+    sha256: 41bcc5a930f3ad4aed8c14acc024951f12a3c6d839cde009e3430d7e089cdb62
+- card_id: overconfidence
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: overconfidence.jpg
+    sha256: d16d245a11982c8170a9da53817d92104d87bfc48851631e53108c2bab0b593b
+- card_id: pekkle_no_oni
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: pekkle_no_oni.jpg
+    sha256: e2e08c60bb067ba8856ca7e36e4344ad3ea01705522e704f272c5a0d6f2e311b
+- card_id: phantom_blade_kata
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: phantom_blade_kata.jpg
+    sha256: 5cff5dffa42b47ea7dbced4cf0d6a9edf8cd5b5229435f686db52a76e6412284
+- card_id: platinum_mine
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: platinum_mine.jpg
+    sha256: 8df55fcebba19c0312d0035f7cb438f16902a9be22261c07c718b917fc277498
+- card_id: preserve_your_forces
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: preserve_your_forces.jpg
+    sha256: 43e54250eb677245e3d40cdd6c4efa6beffcff28b11a90051e6ca40db46c862f
+- card_id: productive_mine
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: productive_mine.jpg
+    sha256: c4970a8ab6cfa01f413a30c8024930190e4c2d7c903b8d0625f786b590460780
+- card_id: provision_storehouse
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: provision_storehouse.jpg
+    sha256: a7739ac9db8288067fee403b627b304f117ea89ae60de87dea036bf6111ad3a6
+- card_id: reckoning_of_steel
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: reckoning_of_steel.jpg
+    sha256: ec7d12e6f387972dfeabbd3f878a6ff56a3533d8f31c6a3f6b217bc6af2059d9
+- card_id: reinforce_the_gates
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: reinforce_the_gates.jpg
+    sha256: 61e0188052b9ceae31fb109393fe628eca04931429348ff8568bc5589b57cda2
+- card_id: reject_conflict
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: reject_conflict.jpg
+    sha256: c036121b367e03b079f98d7b7c28a21cee229a25371789d0492b112e1a5e9a99
+- card_id: remote_temple
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: remote_temple.jpg
+    sha256: 89834f825f1c08b47ba144f9843987a6f4317d262b7b8b083217fd4a2a7f0fb2
+- card_id: rend_the_soul
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: rend_the_soul.jpg
+    sha256: 5963cda4f04403dde02a3fe1299a2ddf3f89890e79db60fd3945487a0d8c2444
+- card_id: restoring_the_jade_throne
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: restoring_the_jade_throne.jpg
+    sha256: 24f46560314858722e9656b1d5478dc9fbb87745c110f7c2e09fda1a7ff97faf
+- card_id: rice_farm
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: rice_farm.jpg
+    sha256: e78ba857ef3f3e910bc26fd0ef841502c1af0def26ce3d5768383acae340901d
+- card_id: ring_of_air
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: 8506eafc925a03c44a25ff086f4922396e5a3adc4b22795fa033237526bba503
+- card_id: ring_of_earth
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 5955782d4668942d7d045eee29b85ca30101e21102c5b86d301b265b03731871
+- card_id: ring_of_fire
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ring_of_fire.jpg
+    sha256: 8bc0f815d9eeb8abe4b0248e7b0baa861feba7533940aa5b56ef0968e6162347
+- card_id: ring_of_the_void
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: 9a21d249578c18292bf9df0ab2a1b788799d71b3c366cb33275959b326a413fd
+- card_id: ring_of_water
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 589a3771aa17a906d7523bc348175d618cbed29de8ae3dc3a85a345ca5b5cf1f
+- card_id: ronin_blade
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ronin_blade.jpg
+    sha256: de8505a6d5f49f412851aa1967052f1b51fb06a11dbe8eebccab16dce542343d
+- card_id: rout
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: rout.jpg
+    sha256: 2a741015b0c7e42c26351ad481fff5bfad269a51f40f624f022bce3127cdb640
+- card_id: running_battle
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: running_battle.jpg
+    sha256: 0bc282ca9dec5dc76217dca0da4717a3799263f5ddfc4e74e480615410c71746
+- card_id: ruru
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ruru.jpg
+    sha256: 090e8217ef58fb662a369ea2407f6e4801de8f4611e04a67f164f2ee3ecef82f
+- card_id: ryoken
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ryoken.jpg
+    sha256: cec6c23e154bd98e48f747aa1c9bf21da2016cdd1d8b8e6ad6351b88fd361bf3
+- card_id: sacred_watch_palace
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: sacred_watch_palace.jpg
+    sha256: 2ff4ffca46a973344656c5cb4e4893b0bca26e0418f50c02e703d52e2aba6b23
+- card_id: scouring_flood
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: scouring_flood.jpg
+    sha256: 4c81a3bcadc9ad852a36a5ca1796f23e80416c8887b3d160f0ada2ffded5f719
+- card_id: searing_siege
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: searing_siege.jpg
+    sha256: 9f7454971ee35df7b1cc845956eaa2731a2329a3fb06d8243b63af1b2102aef1
+- card_id: second_city_outpost
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: second_city_outpost.jpg
+    sha256: dfb49dc0f5007e400c01534df5d5c269b512b494130cb95df243b0103cd5f4ba
+- card_id: seeking_the_truth
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: seeking_the_truth.jpg
+    sha256: a998fcc7fd0c8ad4f09938e00e32c735118477efda5da37b602675bb68e2a57f
+- card_id: seeking_the_way
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: seeking_the_way.jpg
+    sha256: a0fd5d7381aa5db81c90ca4285bfcdbc41eae211814a4afa225caecb4541f844
+- card_id: seppun_blade
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: seppun_blade.jpg
+    sha256: 44ad852664a46a112664fdfc7dcf76910de582783a18fa05a8332525f87f591a
+- card_id: servitors_of_stone
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: servitors_of_stone.jpg
+    sha256: 64900e81e42b9155cefb4b530d6f7a54c08ba6c308d9a79cfc8929c3e428b3cd
+- card_id: shadowlands_sickness
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shadowlands_sickness.jpg
+    sha256: aed3c2168a0f6e74d379ab51dc569718b5fce810ee1eb44a51b46003b44b27ab
+- card_id: shameful_death
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shameful_death.jpg
+    sha256: 514ca381b0b1c08bb612837d200dc3bd8ea311dce7fdb06be44200b07a84ece8
+- card_id: sheltered_port
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: sheltered_port.jpg
+    sha256: 30ec653918979021141c3a50e9fafe801a10b469ec1a8f1dc392bdb3b5dec700
+- card_id: shiba_ozawa
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shiba_ozawa.jpg
+    sha256: 1bbba8cbfa64f268b29803107a3e7618908a00a700bb6f0e83aff20419a93442
+- card_id: shiba_sudoshi_voice_of_the_masters
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shiba_sudoshi_voice_of_the_masters.jpg
+    sha256: c19b300b06dd3b15f2d7eddf0bc2dfa2ace929ac69dfd1f953b4185003f60068
+- card_id: shiba_tamashii_clan_champion_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shiba_tamashii_clan_champion_experienced.jpg
+    sha256: db099b07b30b2e69e331c3b7961e110dc3fc5600f56c14029a4453c068e1872c
+- card_id: shiba_tensei_soul_of_shiba_denbe
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shiba_tensei_soul_of_shiba_denbe.jpg
+    sha256: e46d3cc261a54499c85eec1d2cc711007785e109983c49c675c085045bd40bdc
+- card_id: shinjo_daikyu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_daikyu.jpg
+    sha256: 9d7ab582e9f57df10b66b779da3c3325277e23689e0bc532f4e6abe1f3702260
+- card_id: shinjo_inejiro_soul_of_shinjo_hwarang
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_inejiro_soul_of_shinjo_hwarang.jpg
+    sha256: c61234b2268e09dea3d181687f3184bd0deace532c424dcffacf7c7c965178da
+- card_id: shinjo_koyo_soul_of_shinjo_yasoma
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_koyo_soul_of_shinjo_yasoma.jpg
+    sha256: 44059a37760b3efa1d702db3c6b599c8199e029cdd71001626112ed6a8d6ac60
+- card_id: shinjo_masahiro_soul_of_shinjo_dak_ho
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_masahiro_soul_of_shinjo_dak_ho.jpg
+    sha256: bd05a5c2c7e033d77dbbc34a44c37429e84579dffb280ea4d66602f83110b72b
+- card_id: shinjo_nobunaga_experienced_2
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_nobunaga_experienced_2.jpg
+    sha256: af11859e25fd4b20d6471195087695dde59501f566a844f847b8af14aa35d6fb
+- card_id: shinjo_nori_soul_of_shinjo_hansu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_nori_soul_of_shinjo_hansu.jpg
+    sha256: 180eec0bc1afad401ea98660e4bc6d06d76c3bb4f1a9526b8b9f5e1730127622
+- card_id: shinjo_oikazu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_oikazu.jpg
+    sha256: 555e4b7159f12ae4ded6e0a53ee6b3b91b2ffc1365838ba26daf3ccb77a07565
+- card_id: shinjo_outriders
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_outriders.jpg
+    sha256: 138888533b76ad578047aff139c3a1d7208e670134bec97cb9ea5b53547e0f3f
+- card_id: shinjo_saeki_clan_champion_experienced_3
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_saeki_clan_champion_experienced_3.jpg
+    sha256: b65e55e0f776ef22a0f1e8b2609b7492d4ed5c055aac17d14b1dbb65247a77fc
+- card_id: shinjo_senko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_senko.jpg
+    sha256: 2a8a4effd4bc08f6c94599dd83e779499382ff8a91fd16f461237696d3d32e9b
+- card_id: shinjo_tsubomi_soul_of_shinjo_tsuburo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinjo_tsubomi_soul_of_shinjo_tsuburo.jpg
+    sha256: b3bbfcf81f174962882f0072ff6bd852b39360002d46ab35e97f73dc5eb02482
+- card_id: shinrai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinrai.jpg
+    sha256: 24e39667af6b3fad18fa332e37737163815e59fe6661fe7532435fb59893e9ed
+- card_id: shinseis_shrine_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shinseis_shrine_experienced.jpg
+    sha256: 3ef208058a4fd385d21957cf8c16005f47d743509e4077ef5d832173ea80a8a3
+- card_id: shiro_heichi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shiro_heichi.jpg
+    sha256: 92eb958280202b5ec4f232236f6062643881dec568ff67f20cfc2ed9031f0d50
+- card_id: shisou_maru_blade
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shisou_maru_blade.jpg
+    sha256: a353be1ccbee45f1cda52df0ece371947a6de11b0461896ff80b06462eed600a
+- card_id: shosuro_hojatsu_soul_of_shosuro_toson
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shosuro_hojatsu_soul_of_shosuro_toson.jpg
+    sha256: 7d7adf27622392395595a91c5ad0cb36a403d60a48a22185cc181d06a6d1ebe5
+- card_id: shosuro_korenaga
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shosuro_korenaga.jpg
+    sha256: 5b4e13b0825ddba234ebcda9518033807f1e3c7d9d86483a5e4814b64d61e7c7
+- card_id: shosuro_masumi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shosuro_masumi.jpg
+    sha256: 632804ea25c75432d024aec8b0f078314ec48a876f8d33b102434ced299606e1
+- card_id: shosuro_riiko_experienced_2
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shosuro_riiko_experienced_2.jpg
+    sha256: f75a618d0d2857631b60d59052eac538261555598efde76eb177cf292c8493e9
+- card_id: shosuro_shigiri
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shosuro_shigiri.jpg
+    sha256: caedaa0953902dbb02a1b7215a5a9ed715d27ba5836bdab705f4954822866c88
+- card_id: shosuro_sora
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shosuro_sora.jpg
+    sha256: 781ba04aaf3dc21ceef9b324e836452cbd02c1775071569ba186d41c3f418368
+- card_id: shosuro_taikan_soul_of_shosuro_rokuta
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shosuro_taikan_soul_of_shosuro_rokuta.jpg
+    sha256: 0a0556a404fcfe4ebc5cf76a58b71d3a388c56cd93f7fd9f27bb3a5c6a2a9c86
+- card_id: shosuro_yuuko_soul_of_shosuro_rin
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shosuro_yuuko_soul_of_shosuro_rin.jpg
+    sha256: d74bb35c7b563c320dda9558903042d690be02bd6920976ae00b40ee9ebf6a4d
+- card_id: shrine_of_eight_heavens
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shrine_of_eight_heavens.jpg
+    sha256: d79f5004312f20e0499ba9890b5ee437521b52608bb5f75c41f52c65f4b6207f
+- card_id: shrine_to_amaterasu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shrine_to_amaterasu.jpg
+    sha256: b2535de7fecfd59bae02a9eae2b02c813ea970c1ca8a199b9a067d7eea9cbf85
+- card_id: shrine_to_daikoku
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shrine_to_daikoku.jpg
+    sha256: 1830d4f2bb01951854c7b957457c65bdddf5c3e5f81a429054b0da117e9cab69
+- card_id: shugorei
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: shugorei.jpg
+    sha256: b0063a45fe3bc7014b714bbe7f9f83b5698bd2b3daf502d417c57b6e5d27fb14
+- card_id: silence_fool
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: silence_fool.jpg
+    sha256: 94d29b3d248b40f29006337c01ee7c8475df5d6081abc3202b36695b8e8c6e78
+- card_id: silk_and_shadow_palace
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: silk_and_shadow_palace.jpg
+    sha256: 3162af8c85e15e414e47f940c4c47816b2cb6d95c71fc60284bfbf23742b8907
+- card_id: small_time_bully
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: small_time_bully.jpg
+    sha256: 5b88b9addef86885e9c4bbf6bf5fd2965f0200367afdcadfd98deebaaaa3d9ea
+- card_id: son_of_the_crane_castle
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: son_of_the_crane_castle.jpg
+    sha256: 310597464a16feda3f8fb81d854b6099629b095af02367545f02caa7c10e2c8f
+- card_id: soshi_hatsue
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: soshi_hatsue.jpg
+    sha256: ad4f0aa4af1d6f403d2662799db4f218c28e6c901acf6b7ebf6b7ca557cc0085
+- card_id: souls_sacrifice
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: souls_sacrifice.jpg
+    sha256: 0054604d552378e05869fe7b261bfba0ebe8010d5789518be4bc41971a65ee85
+- card_id: sparrow_clan_aide
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: sparrow_clan_aide.jpg
+    sha256: 2154b260470f9071911601836dc1b911d8009b055dccf4e8e100f411966a65a8
+- card_id: spinning_heel_kick
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: spinning_heel_kick.jpg
+    sha256: 4a367be8faebf44d46f313bf0d17d565531fadf5fe2c4628e0d7681f7482429e
+- card_id: spirit_legion
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: spirit_legion.jpg
+    sha256: d858b241e372e7045e9d9c34c4d58c66c4a575bdafbcc5143da7c03a9680dcd0
+- card_id: split_the_reed
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: split_the_reed.jpg
+    sha256: 021cc346a6d33819fdb1cdb51220a78025d9282290e69f3d1cd03dfb8a1d7059
+- card_id: stand_against_the_waves
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: stand_against_the_waves.jpg
+    sha256: 7ea618ff9dd80331179697f5e454f3e4c6deb7695e8c7a6dd82a3f2f8c3d0367
+- card_id: storm_heart
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: storm_heart.jpg
+    sha256: 8409562269303b9a71d2ea62382cb58abc9c17ecb315feb0dad5f6fa9ba6f9fd
+- card_id: strength_of_the_bamboo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: strength_of_the_bamboo.jpg
+    sha256: 5fd929cd7fe6eed3b8c1c7143e93c666193fb8652afb5200c6aa0495235061ed
+- card_id: strength_of_the_divine
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: strength_of_the_divine.jpg
+    sha256: f5a7310781b50619bb02e460fb753e1eb0d6099484f2610830b3395a70145f18
+- card_id: strike_with_no_shadow
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: strike_with_no_shadow.jpg
+    sha256: b4a226708d1d2e2511f2f06405f2937c810db8b96693f38563dc9f6b447840e2
+- card_id: suitengus_wrath
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: suitengus_wrath.jpg
+    sha256: 24d89e283a6f25b23074aae561d5e1ecd4e471b594f613de15a796b6a46515f0
+- card_id: superior_strategist
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: superior_strategist.jpg
+    sha256: 1fbfaa02a54023e8ccefd30bf6ef59b33f5d52d6bea50e0a0a434cc495f26c2a
+- card_id: surprising_resistance
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: surprising_resistance.jpg
+    sha256: 411138252f290cd4288ec0cdbc5858055443333757131523d8625ac1ad79d80d
+- card_id: suryn
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: suryn.jpg
+    sha256: 6ed8e4aecce71782fea7f49939670daf552802be5bee14283b43116cd12e1c6b
+- card_id: suspicions
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: suspicions.jpg
+    sha256: f808c6ec9cc19e88a8d8eb57fd8b57d2339ed294e9ca4953fbeea909c7730aa8
+- card_id: susumu_tessai_soul_of_daigotsu_susumu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: susumu_tessai_soul_of_daigotsu_susumu.jpg
+    sha256: c5528cc4184e49e6ab9450b8f4c9eeb7e6c7f6b3f33f837f7b8993f7088b8e11
+- card_id: suzaku
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: suzaku.jpg
+    sha256: 2902b5587fbf36b9a16d88ee4e9118e298d50b66f5176f67cfa00569ea215e52
+- card_id: tadakas_mirror
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tadakas_mirror.jpg
+    sha256: a11a8bc4859be15c3e2f30457dcaf1b28c261d05f7d25db6772adf2a064646a1
+- card_id: tamori_fumio
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tamori_fumio.jpg
+    sha256: f29ae1c867eb8d2af7dd10470f174b24f13b5002880e580ed35951b3db79180f
+- card_id: tamori_kinzo_soul_of_tamori_kazushige
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tamori_kinzo_soul_of_tamori_kazushige.jpg
+    sha256: 4e828ab290e7975459386f7055f29239e5560daf1f885722ab5ea0739f1910de
+- card_id: tamori_orisuke_soul_of_tamori_muzu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tamori_orisuke_soul_of_tamori_muzu.jpg
+    sha256: 9d5b6fa77328d02e41ef86485a6937c424dc52c09a6dee4db846be8246f9aa16
+- card_id: tamori_shima
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tamori_shima.jpg
+    sha256: dd0ea5a676fe4a42267b6b9522a5af777128fda5e124a55fcd3020f29a216372
+- card_id: tamori_togara
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tamori_togara.jpg
+    sha256: 02056f56fabfff15b593c576621c09adefacb0e4126bcfb32664d23090c6e39a
+- card_id: temple_of_serenity
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: temple_of_serenity.jpg
+    sha256: ddb694bf26ade4dfa404aaa3106dcc0a2be61364c3122e38e1d6a9e1e8f8cfce
+- card_id: temple_to_shinsei
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: temple_to_shinsei.jpg
+    sha256: 70d369b67bf4eb94c181f346956fb81ebf28119233e818d48d228a225add597c
+- card_id: temples_of_gisei_toshi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: temples_of_gisei_toshi.jpg
+    sha256: add00ae582c388eb1e001ad99f8ee5a9bba9c8cb6a6a82e6cc929f081ff8c99a
+- card_id: tesshin_forge
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tesshin_forge.jpg
+    sha256: e418f40ac63749f83d2f2733f1f370f483b0ee1d76f69a4c98a26f30a65e7bfc
+- card_id: tetsumon_blade
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tetsumon_blade.jpg
+    sha256: 1ad84eeb96b26df9e23b5cfc481aef0bfa027afa41b3851043aa904962e2b493
+- card_id: tetsuo_gempachi_soul_of_sandayu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tetsuo_gempachi_soul_of_sandayu.jpg
+    sha256: d193e5fb47d1e8bd03f65da37ac6be356a7d6f3c70cdee111df13fd6dc011974
+- card_id: tetsuo_nishimura_soul_of_omigawa
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tetsuo_nishimura_soul_of_omigawa.jpg
+    sha256: 99754c46d9f071f4c8c0d0c92bbc49b43b093e89cb47dbe1aacb4a9f102f3c0d
+- card_id: the_blessed_herd_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_blessed_herd_experienced.jpg
+    sha256: ec5f5f8acae4634ce996f04c9bbec83dbef577aeec39f2f7016dff8f4d0ae97b
+- card_id: the_daimyos_gift_experienced_2
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_daimyos_gift_experienced_2.jpg
+    sha256: 1a6aaa9b1dc08d0a05499c1bd80d0da18e0861305dc6b16e77feed9b783e5fad
+- card_id: the_egg_of_pan_ku
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_egg_of_pan_ku.jpg
+    sha256: 6d1a9fdfe638abc15dec486b8ad128921bf6bd0bc5628407def2d2044550609d
+- card_id: the_fortunes_smile
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_fortunes_smile.jpg
+    sha256: 1355df679851de19f48aecfca80a80b4b7fcc12aa20f81730095b9f64fd99982
+- card_id: the_height_of_courage
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_height_of_courage.jpg
+    sha256: ae6c89820919d4711ebaf3da78e34281a40b2dc737170d51ed162ab274da983f
+- card_id: the_ivory_courtroom
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_ivory_courtroom.jpg
+    sha256: 1675f33774cbd2a1ea9b3cc07605b1863afbee4cddad1c7e70b57e199cf297e5
+- card_id: the_kamis_whisper
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_kamis_whisper.jpg
+    sha256: ed516c1bd43d9f06d1121afa11ebe81dce1997d6569f0fbb37d5ddfe956c6a67
+- card_id: the_light_of_justice
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_light_of_justice.jpg
+    sha256: f12acc268fff0b148add1f9a4acff20b1de0d675d52c6a8ab49983ad0b0782e7
+- card_id: the_new_order_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_new_order_experienced.jpg
+    sha256: 853614c96283df38feb5bc3a6d1f92421adbb9935493214a36058b0629809d84
+- card_id: the_path_of_wisdom
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_path_of_wisdom.jpg
+    sha256: 8ca6ccdaadf37d6f52e1814d9ec7b5e0c813d40457db9d7e01df03882abad7c7
+- card_id: the_starved
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_starved.jpg
+    sha256: fbb90aee2f6fe59991504923cabb2acf1a75d8d4a764e15c14b5eae18628b185
+- card_id: the_sun_returns
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_sun_returns.jpg
+    sha256: 1187e3176d4b29eea8a04568aa29349a285eead1813399c73ce0265eee0dec7f
+- card_id: the_twelve_ronin
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_twelve_ronin.jpg
+    sha256: 9e08d79f2968815133d7de6cee00bad6c54abc88d4f2c1764d8548b8b1b3a1a4
+- card_id: the_white_tower
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: the_white_tower.jpg
+    sha256: 798d31a8fb4548658955659d396b32c544d0f0ba3d71ea4da9c66dedfcf8d67e
+- card_id: togashi_basuke
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: togashi_basuke.jpg
+    sha256: 269c88d094b26144ee82926be3626260f1492af52b5b0d6811cc6309b6fed817
+- card_id: togashi_chiyo
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: togashi_chiyo.jpg
+    sha256: 7b444c72423f7aa16c5f78214625951c69d59a115c67f701853f6d57d495ddb4
+- card_id: togashi_hachimon
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: togashi_hachimon.jpg
+    sha256: fc2dcf0d2f3a60a12a1e9aa0b7e1cef01de17a7927caa233044e3c7e0ad4db86
+- card_id: togashi_hoshi_clan_champion_experienced_3
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: togashi_hoshi_clan_champion_experienced_3.jpg
+    sha256: 97bfaa819a72737f1f275a6dd0c0e8f102f769ac444ff3939948e0d1e3726f05
+- card_id: togashi_kyuwa
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: togashi_kyuwa.jpg
+    sha256: 528eb0cf709c4758cc3403b946e4b5f3bbc0eaa88470f7520694ad6a09941c50
+- card_id: togashi_nodamu_soul_of_togashi_kanmu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: togashi_nodamu_soul_of_togashi_kanmu.jpg
+    sha256: 1a467fd41be455a3996e6e8cf0c5b165822fa80235d1781c7241b117d4f5d5ac
+- card_id: togashi_saiko_soul_of_mirumoto_satoe
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: togashi_saiko_soul_of_mirumoto_satoe.jpg
+    sha256: a7c893e543c542df7b28699b80e91764f2c627ca6891d925cfb91ffb17bef59a
+- card_id: togashi_tozuki_soul_of_togashi_jusai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: togashi_tozuki_soul_of_togashi_jusai.jpg
+    sha256: af90cc504134e19d052840465d8d9362a2801b45d06cd05a8cc6ad66970aeb78
+- card_id: toku_matsune
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: toku_matsune.jpg
+    sha256: 108d946e9de5f48b4e0cccaf9b49bcbd7f550dc10f42de3720858cb4d1946cdf
+- card_id: touch_of_the_infinite
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: touch_of_the_infinite.jpg
+    sha256: 51829f77ed2a7f09646790207fb47368e0749e847619723fc904d576d15d6d99
+- card_id: trading_hub
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: trading_hub.jpg
+    sha256: 9c7a8ae4130858afa43d4e047f08c525ec1509f01c4a80a973b182767eba14a0
+- card_id: tranquil_garden
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tranquil_garden.jpg
+    sha256: 332ac939c8ccae9bd1b354eff0fb7015cac15ba2b58b52d29758156f79177235
+- card_id: traveling_peddler
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: traveling_peddler.jpg
+    sha256: 54b24fdaeb70ac483b8402401e42f23ed6755c98d2fe8633fec228c2df014707
+- card_id: traveling_ronin
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: traveling_ronin.jpg
+    sha256: a5fb5afa28e1edd1a7ace55cd1b162574b879d75434ddb09e4678718b7d907fc
+- card_id: troublesome_metsuke
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: troublesome_metsuke.jpg
+    sha256: 93ef3195bfa7891874a12815c1234be02127816a014638bd7f06204476602cbd
+- card_id: tsuruchi_danjuro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tsuruchi_danjuro.jpg
+    sha256: 0a1d5458f5cb59fb3bc2d9a44cb0ffafe29f71cd53121e0a339c16ad70719702
+- card_id: tsuruchi_jirou
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tsuruchi_jirou.jpg
+    sha256: af3f9f9eeb7e5461b04484cc8ee8970d697d809e07c2995cee415915cba3569c
+- card_id: tsuruchi_renjiro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tsuruchi_renjiro.jpg
+    sha256: 0e3c70ec73e5904b38c5b2c4819138412a3db64ab11b787a5313eb8d94ee5521
+- card_id: tsuruchi_shou
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tsuruchi_shou.jpg
+    sha256: 7bc74653f0d9b759e17407d0d4ddfb1c2f98cdd317d1ca5b7807d7cf1574bed4
+- card_id: tsuruchi_technique
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tsuruchi_technique.jpg
+    sha256: 0738c33555731157d30a0581bdca509f5899f86072b74209b8723a67cd266fc5
+- card_id: tsuruchi_yashiro_clan_champion_experienced_2
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: tsuruchi_yashiro_clan_champion_experienced_2.jpg
+    sha256: fd0f74233b31bbf46af0520501bf7aeccf025ed714471d8561c819c724f817b4
+- card_id: twilight_mountain_mine
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: twilight_mountain_mine.jpg
+    sha256: 5720fc18c51acdd4300463798e474f3e4a1c957dd8ea8c9a807bce367505e35a
+- card_id: ulterior_motives
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ulterior_motives.jpg
+    sha256: 731a4a08a60c6430ead1af023a0a414126d384cd8a12794ae9b9ad3b7839def1
+- card_id: ultimate_sacrifice
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: ultimate_sacrifice.jpg
+    sha256: db3b953f763e78250d7b0019eecc66a442e8a55335be8694df91af4bc0da00b2
+- card_id: unimpeachable_name
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: unimpeachable_name.jpg
+    sha256: 9cc0408dbc9b9eb516ca0973a8b4823f04fbc8284dd427f8d2000398daac347f
+- card_id: unpredictable_strategy
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: unpredictable_strategy.jpg
+    sha256: 6ed1dc20a19344d1467be5561215af434557f6fdba55e328723bcdf809a76309
+- card_id: unwelcome_supervision
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: unwelcome_supervision.jpg
+    sha256: 71dfbf8b42b684cf8d42d056c099e2e22cc9162a501fe61aa3c1af3a7bb74801
+- card_id: usagi_emao
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: usagi_emao.jpg
+    sha256: f9e04421a5c4cb14b6af5d9227333344541d9382184fc5b2c1e9b8ec949be458
+- card_id: usagi_tamotsu_soul_of_usagi_heiji
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: usagi_tamotsu_soul_of_usagi_heiji.jpg
+    sha256: 18e2cf82d1f0f1069c161c092578bf97066a771650b4ab287776b4fa877a4f75
+- card_id: utaku_chikaze_soul_of_utaku_liu_xeung
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_chikaze_soul_of_utaku_liu_xeung.jpg
+    sha256: 70157b2a4d1edbba71c7ee1122775009e467ea3d4ddff03bd868ea7048b437f6
+- card_id: utaku_haniko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_haniko.jpg
+    sha256: 2c95527ad60e3bdb4b4427e1829a1872f48befa7c3ced5f1df902d8cdea0d350
+- card_id: utaku_sakiko_experienced_3
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_sakiko_experienced_3.jpg
+    sha256: 92a6badb8036d4a70f0b04aaad342947186402ad4835dee77a7d94517478ec44
+- card_id: utaku_saori
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_saori.jpg
+    sha256: b5481a0458ed63836e91df681f2f090c537c6a6babbfd571b0763a7d84b49fb4
+- card_id: utaku_taisuke_soul_of_utaku_takai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_taisuke_soul_of_utaku_takai.jpg
+    sha256: c8f9b6336167f3f79136811954556fbadb609a89a8f7b1b73496e033392ebc86
+- card_id: utaku_toki
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_toki.jpg
+    sha256: 4847b79301761f93f3c05c7a05cc49afecbfc5e613c035e61d8b7ee8bd33d4d3
+- card_id: utaku_trainee
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_trainee.jpg
+    sha256: d240e25fa70ed7189547ee1e168fe16f6bca18f86c1c010c11e383ebab1dc658
+- card_id: utaku_yugana
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_yugana.jpg
+    sha256: 529b21b26d3078772c87e49a0173101eff5e95dba0950cd328fd638a53e6178f
+- card_id: utaku_yukika_soul_of_utaku_yanai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: utaku_yukika_soul_of_utaku_yanai.jpg
+    sha256: 41b99f651b92fd1ed5ba624205e1455477fb9b32614e399aad4dd88edad2f48a
+- card_id: vast_paddy_fields
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: vast_paddy_fields.jpg
+    sha256: c3b886146e69648b3b303e1345da5ff8291c3420551da5f4a095004fe2655a06
+- card_id: veiled_menace
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: veiled_menace.jpg
+    sha256: b05d8bd9acb9dc9da7e94095efcae9aaf52b1b7f1e7bdcf0d16ea0c65c121466
+- card_id: versatile_army
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: versatile_army.jpg
+    sha256: 0d15820026d4a939031a79baad14058639da0ec1e1288e424c6bd7ea525ed3b1
+- card_id: veteran_advisor
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: veteran_advisor.jpg
+    sha256: 9e2fb2ce52f1fe8232b919c0948e691fb17e25e82e90115fef6ca5febd8a717d
+- card_id: victory_through_deference
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: victory_through_deference.jpg
+    sha256: 877a5d67deb802ddf5ce35881fe2ec3ebe06d2590418c7551d1f5e479f82b91f
+- card_id: voice_of_the_heavens
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: voice_of_the_heavens.jpg
+    sha256: 1a0d2ecaddc83f26b092b26aecf83800af048ae8156345bf9c30b11e24e6bad4
+- card_id: void_dragon_experienced_4
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: void_dragon_experienced_4.jpg
+    sha256: b3b6f42283be60fa83dfe3a691eb049bcb4bb4fe48ee6f689f9ca3c6d753880e
+- card_id: wakui
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: wakui.jpg
+    sha256: 1dac4f5da8627c7673af119b08ae79a66fcf22573e5a942e93a914fdac3f61b6
+- card_id: wandering_budoka
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: wandering_budoka.jpg
+    sha256: b503bdf441d85ef85da71ce0984954a60ae7e6dc8181e341f8bc2c26b325a2f2
+- card_id: wanted_for_questioning
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: wanted_for_questioning.jpg
+    sha256: a80682e39603b9055efe719d58715bca960c8229bba9b8c843afc8636ce5148e
+- card_id: water_dragon_experienced_4
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: water_dragon_experienced_4.jpg
+    sha256: 70a5844e1a18e8c59967e4285f4d2f3ff74c14e44876897a96da9293e940dc1b
+- card_id: weapon_rack
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: weapon_rack.jpg
+    sha256: b33a8b7c046a1a0eacdcff80da1219db9d7b827d45f9c5d7d6e2d9aeb153a5b5
+- card_id: wedge
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: wedge.jpg
+    sha256: 3df25bdd384f54579b8f0d38a3a2de49232dd8c4b6b8b1fb94fa36b9870f572c
+- card_id: weigh_the_cost
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: weigh_the_cost.jpg
+    sha256: 44c0b8c8b8011b4e36f9d29d4d9022c0a97e6e6073bef8657abe8fe6b559dfaa
+- card_id: well_prepared
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: well_prepared.jpg
+    sha256: 2acbf56953ddbe7f5acb88e440cbf485f3c57cf9dc53702d5e31f731874d79d1
+- card_id: well_scouted_target
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: well_scouted_target.jpg
+    sha256: 02347127451f5b7dd4d03bbc265d3c89685073ac4ee38aeee08fe76ba90c4daf
+- card_id: western_hub_sake_works
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: western_hub_sake_works.jpg
+    sha256: 51b6d3bda4d56c3a780f4076930e752dad3cee1f20bc5ebc8f8242ddf293bd0e
+- card_id: western_provinces_iweko_miaka
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: western_provinces_iweko_miaka.jpg
+    sha256: 12967df72ad4de65fd2bf287a5d3cf00c6f93397058811d1f73e6a9f4c411d36
+- card_id: wheat_farm
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: wheat_farm.jpg
+    sha256: 8db5af397005adbb4312e152ef5e277183b0886a66e17366f0bf39654491c3b7
+- card_id: wheels_within_wheels
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: wheels_within_wheels.jpg
+    sha256: e5ebc94de3e88f7b65b0b2e6822253a0e0e2ec23985a07509932c6406a2e796c
+- card_id: where_tsudao_stood
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: where_tsudao_stood.jpg
+    sha256: f9d716a99a45763f73e21174b3f5e79b56c85518ce51d476a33fde5297703077
+- card_id: white_shore_palace
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: white_shore_palace.jpg
+    sha256: f5881d0b6b2abe63e36735e49bb107d60e20bf5e7284384c2ba3c5d54ea1a241
+- card_id: will
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: will.jpg
+    sha256: b2e57b9cf13d932173222d40c00f837a7dccbd53f94a17f0c61c6d0482d2975d
+- card_id: wrathful_yokai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: wrathful_yokai.jpg
+    sha256: fd86894978cc9a3a51e8437ed95d3eda71cf0594dabb06a79d681a07bcdf642f
+- card_id: yamaryu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yamaryu.jpg
+    sha256: 1bc9fba1d0b5e9241670dd55fc74f4d20fd5a52106f888d0fa9f4a5e8f043d2b
+- card_id: yarijutsu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yarijutsu.jpg
+    sha256: 0f3531d82fd9646158fd8e869e38afabc68bf1655faf02a157254e4297776a51
+- card_id: yasuki_hayate_soul_of_yasuki_tanimura
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yasuki_hayate_soul_of_yasuki_tanimura.jpg
+    sha256: 91683037c05cf4d4d1be515ddb75b931a3aaab405700a0db78c7224769f8fb23
+- card_id: yasuki_iena_soul_of_yasuki_baiko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yasuki_iena_soul_of_yasuki_baiko.jpg
+    sha256: 1326886dd93991b0675f9764bac4f06523313cbd043846b9fd1da7aac0ebe247
+- card_id: yasuki_inoko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yasuki_inoko.jpg
+    sha256: 790e59be2833a44a05f5fcc2915a15a43640046ae99bcfc56fd646f34c556f67
+- card_id: yasuki_juzo_soul_of_yasuki_jekku
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yasuki_juzo_soul_of_yasuki_jekku.jpg
+    sha256: 6f2c8ed9c772636a2e8c27e5d1f4a7a4eb81723031382329c0d8458a728c7430
+- card_id: yasuki_matoi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yasuki_matoi.jpg
+    sha256: 11c132e759fa19c4f11d9e318778dabccd9fdee209a0fcbfc373367d1a2b4624
+- card_id: yasuki_yushiro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yasuki_yushiro.jpg
+    sha256: d11abf1f1a20e4b284976d568213d7ff44c037e59f16851136738130afa54d6e
+- card_id: yogo_izumo_soul_of_bayushi_shintaro
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yogo_izumo_soul_of_bayushi_shintaro.jpg
+    sha256: 7d53613e2a94ecbecc8d49860c1cae34084a0d81c9a341c272773676937c93e4
+- card_id: yogo_jun
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yogo_jun.jpg
+    sha256: ab18989140f8f29849767708c0db67056655cafb80517a63c3ce032077d8c9bc
+- card_id: yogo_kazuko
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yogo_kazuko.jpg
+    sha256: 56a42b9aef4bed14bbdbb08af1432b2d02de44fd6d70711c419a75c187b39207
+- card_id: yogo_kurenai_soul_of_yogo_shidachi
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yogo_kurenai_soul_of_yogo_shidachi.jpg
+    sha256: ab5bcbf17c04cba0d7d0650288b194a755095e94317efc3e384fe2d7171f298b
+- card_id: yogo_suiken
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yogo_suiken.jpg
+    sha256: f076f2e387dfdff67c8ef49ce8b1a8e71b71b3ec12ebd161781928693caef2b0
+- card_id: yopparai_last_of_the_seppun
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yopparai_last_of_the_seppun.jpg
+    sha256: 92735f71a57c750c4439f456ace6b5cd7b1c0d9724c7ec6f71089cd7be3f81b9
+- card_id: yoritomo_koharu_child_of_thunder
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yoritomo_koharu_child_of_thunder.jpg
+    sha256: b370cd71a71455f2306b73bb26d7a40017ea53a1a28be12137e45b6c767a918e
+- card_id: yoritomo_minoko_clan_champion_experienced_4
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yoritomo_minoko_clan_champion_experienced_4.jpg
+    sha256: 6211aa62738e58257571b123a334cb64ea4c456c59d4b84c3d444608b2733688
+- card_id: yoritomo_murai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yoritomo_murai.jpg
+    sha256: 62c7efc23321a86c5a7f0ac8c3f5a321724e0e1653c38f4633eb40b8e7cf7db0
+- card_id: yoritomo_nokatsu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yoritomo_nokatsu.jpg
+    sha256: 8efab9a66c58441ecb91163738592f7c0e401671344cf99d1677d35dea44d285
+- card_id: yoritomo_yusako_experienced
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yoritomo_yusako_experienced.jpg
+    sha256: 903f1dc15a43599b567f33ad970c9cc1bbe6fb07d38ba0a2d93eb7dcef3300a1
+- card_id: yotsu_mikaeru_soul_of_yotsu_dagurasu
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yotsu_mikaeru_soul_of_yotsu_dagurasu.jpg
+    sha256: f3a47f72568522379d6da3f6fb1304e45823fd339009321eed5653aab96560a3
+- card_id: you_walk_with_evil
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: you_walk_with_evil.jpg
+    sha256: 73e42891ee77acd9dddf08bd4f36c34a34dd52694d4d9ef113d55d276727a5c7
+- card_id: yukihimes_hot_springs
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yukihimes_hot_springs.jpg
+    sha256: 594a88a1c7ac94fb14b3e8819d4bf14a23a9b4c05a4bc5077ba1c2ec3f49c168
+- card_id: yuruginai
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yuruginai.jpg
+    sha256: c29668d455404e3d008edee3f65df2ab46af40a1bf87288edfafe488a04c252f
+- card_id: yutao_soul_of_yung
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: yutao_soul_of_yung.jpg
+    sha256: efe0a278ba1b7b6d2775c6f4fa927a9b4990ed03a5cc4ee0e4c25f024621e7f5
+- card_id: zokujin_burrows
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: zokujin_burrows.jpg
+    sha256: 8dec37e934b755d72b5921a8f8316a57fcd4ef9fd91ea15688795d73d51e9c4a
+- card_id: zurnagun
+  printing_id: three_dynasties
+  files:
+  - role: front
+    file: zurnagun.jpg
+    sha256: f42440586479729bdce7f851d03616f9099144421dcab6c16cee2da5adda6424
