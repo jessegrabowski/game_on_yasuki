@@ -336,11 +336,8 @@ def printed_abilities(
     printings: dict[str, list[SetEntry]] = {}
     for entry in iter_set_entries(cards_dir):
         printings.setdefault(entry.card_id, []).append(entry)
-    read = [
-        entry
-        for held in printings.values()
-        for entry in _up_to_era(held, ruleset.ACTIVE.arcs, arc_of, released)
-    ]
+    era_end = _era_end(ruleset.ACTIVE.arcs, arc_of, released)
+    read = [entry for held in printings.values() for entry in _up_to_era(held, era_end, released)]
     printed: dict[str, set[tuple[frozenset[str], frozenset[str], frozenset[str]]]] = {}
     for entry in read:
         for ability in split_text_box(entry.text).abilities:
@@ -442,19 +439,24 @@ def _release_calendar(set_info_path: Path) -> tuple[dict[str, str], dict[str, da
     return arc_of, released
 
 
+def _era_end(
+    arcs: tuple[str, ...], arc_of: Mapping[str, str], released: Mapping[str, datetime.date]
+) -> datetime.date | None:
+    """The release date of the newest set in ``arcs``, or None when no set belongs to them."""
+    return max((released[name] for name, arc in arc_of.items() if arc in arcs), default=None)
+
+
 def _up_to_era(
     entries: Sequence[SetEntry],
-    arcs: tuple[str, ...],
-    arc_of: Mapping[str, str],
+    era_end: datetime.date | None,
     released: Mapping[str, datetime.date],
 ) -> list[SetEntry]:
-    """The printings among ``entries`` released no later than the newest set of ``arcs``, since a
-    ruleset cannot model a reprint from a later arc. All of ``entries`` when none is."""
-    era_ends = max((released[name] for name, arc in arc_of.items() if arc in arcs), default=None)
+    """The printings among ``entries`` released no later than ``era_end``, or all of them when
+    none is."""
     in_era = [
         entry
         for entry in entries
-        if era_ends is not None and released.get(entry.set_name, _UNDATED) <= era_ends
+        if era_end is not None and released.get(entry.set_name, _UNDATED) <= era_end
     ]
     return in_era or list(entries)
 
@@ -492,7 +494,7 @@ def modeled_printings(
         held = printings.get(card_id, [])
         arcs = _arcs_of(ruleset_name)
         in_arcs = [entry for entry in held if arc_of.get(entry.set_name) in arcs]
-        candidates = in_arcs or _up_to_era(held, arcs, arc_of, released)
+        candidates = in_arcs or _up_to_era(held, _era_end(arcs, arc_of, released), released)
         if not candidates:
             return None
         return max(candidates, key=lambda entry: released.get(entry.set_name, _UNDATED))
