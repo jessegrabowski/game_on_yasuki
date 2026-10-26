@@ -21,9 +21,9 @@ def escape_like(value: str) -> str:
 
 ALL_CLANS_MARKER = "All Clans"
 
-# Clans L5R renamed over its history. A filter on any name in a group matches the whole group, and
-# the first name is the one the deck-builder dropdown shows.
-CLAN_ALIAS_GROUPS = (("Naga", "Akasha"),)
+# Clans L5R renamed over its history, and short names a search may use. A filter on any name in a
+# group matches the whole group, and the first name is the one the deck-builder dropdown shows.
+CLAN_ALIAS_GROUPS = (("Naga", "Akasha"), ("Minor Clan Alliance", "MCA", "Minor"))
 _CLAN_ALIASES = {
     name.lower(): [n.lower() for n in group] for group in CLAN_ALIAS_GROUPS for name in group
 }

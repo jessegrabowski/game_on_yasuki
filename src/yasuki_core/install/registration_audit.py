@@ -308,26 +308,38 @@ def short_ability_registrations(cards_dir: Path = DEFAULT_CARDS_PATH) -> list[st
 
 
 def printed_abilities(
-    cards_dir: Path = DEFAULT_CARDS_PATH,
+    cards_dir: Path = DEFAULT_CARDS_PATH, set_info_path: Path = DEFAULT_SET_INFO_PATH
 ) -> dict[str, set[tuple[frozenset[str], frozenset[str], frozenset[str]]]]:
     """Every card id with the ``(designators, keywords, modifiers)`` triples its printed abilities
     carry.
 
-    Read across every printing, since a keyword one printing spells out another may draw as an
-    icon, and the triples are a set so a printing that repeats the wording adds nothing.
+    Read across every printing released no later than the active ruleset's arcs, since a keyword
+    one printing spells out another may draw as an icon, while a later arc's reprint may reword the
+    ability in a way the active ruleset never prints. A card printed only after those arcs is read
+    across all its printings. The triples are a set so a printing that repeats the wording adds
+    nothing.
 
     Parameters
     ----------
     cards_dir : path, optional
         Directory of per-set YAML files. Default is the packaged ``sets`` directory.
+    set_info_path : path, optional
+        The arc-grouped set metadata carrying each set's release date. Default is the packaged
+        ``set_info.yaml``.
 
     Returns
     -------
     dict mapping str to set of tuple
         Card id to its ``(designators, keywords, modifiers)`` triples, each a frozenset of str.
     """
-    printed: dict[str, set[tuple[frozenset[str], frozenset[str], frozenset[str]]]] = {}
+    arc_of, released = _release_calendar(set_info_path)
+    printings: dict[str, list[SetEntry]] = {}
     for entry in iter_set_entries(cards_dir):
+        printings.setdefault(entry.card_id, []).append(entry)
+    era_end = _era_end(ruleset.ACTIVE.arcs, arc_of, released)
+    read = [entry for held in printings.values() for entry in _up_to_era(held, era_end, released)]
+    printed: dict[str, set[tuple[frozenset[str], frozenset[str], frozenset[str]]]] = {}
+    for entry in read:
         for ability in split_text_box(entry.text).abilities:
             printed.setdefault(entry.card_id, set()).add(
                 (
@@ -417,12 +429,46 @@ def _arcs_of(ruleset_name: str | None) -> tuple[str, ...]:
     return ()
 
 
+def _release_calendar(set_info_path: Path) -> tuple[dict[str, str], dict[str, datetime.date]]:
+    """Each set name mapped to its arc, and to its release date or ``_UNDATED``."""
+    arc_of, released = {}, {}
+    for arc in read_yaml(set_info_path)["arcs"]:
+        for entry in arc.get("sets", ()):
+            arc_of[entry["set_name"]] = arc["name"]
+            released[entry["set_name"]] = entry.get("release_date") or _UNDATED
+    return arc_of, released
+
+
+def _era_end(
+    arcs: tuple[str, ...], arc_of: Mapping[str, str], released: Mapping[str, datetime.date]
+) -> datetime.date | None:
+    """The release date of the newest set in ``arcs``, or None when no set belongs to them."""
+    return max((released[name] for name, arc in arc_of.items() if arc in arcs), default=None)
+
+
+def _up_to_era(
+    entries: Sequence[SetEntry],
+    era_end: datetime.date | None,
+    released: Mapping[str, datetime.date],
+) -> list[SetEntry]:
+    """The printings among ``entries`` released no later than ``era_end``, or all of them when
+    none is."""
+    in_era = [
+        entry
+        for entry in entries
+        if era_end is not None and released.get(entry.set_name, _UNDATED) <= era_end
+    ]
+    return in_era or list(entries)
+
+
 def modeled_printings(
     cards_dir: Path = DEFAULT_CARDS_PATH, set_info_path: Path = DEFAULT_SET_INFO_PATH
 ) -> Callable[[str, str | None], SetEntry | None]:
     """A lookup from a card id and a ruleset name to the printing a registration under that
-    ruleset models: the card's newest printing among the ruleset's arcs, or its newest anywhere
-    when it has none there, which is the text the database gives the card.
+    ruleset models: the card's newest printing among the ruleset's arcs, or, when it has none
+    there, its newest printing released no later than the ruleset's arcs, since a ruleset cannot
+    model a reprint from a later arc. A card printed only after the ruleset's arcs falls back to
+    its newest printing anywhere, which is the text the database gives the card.
 
     Parameters
     ----------
@@ -438,12 +484,7 @@ def modeled_printings(
         Maps ``(card_id, ruleset_name)`` to the modeled :class:`~.SetEntry`, or None for an id no
         set prints with text.
     """
-    metadata = read_yaml(set_info_path)
-    arc_of, released = {}, {}
-    for arc in metadata["arcs"]:
-        for entry in arc.get("sets", ()):
-            arc_of[entry["set_name"]] = arc["name"]
-            released[entry["set_name"]] = entry.get("release_date") or _UNDATED
+    arc_of, released = _release_calendar(set_info_path)
     printings: dict[str, list[SetEntry]] = {}
     for entry in iter_set_entries(cards_dir):
         if entry.text.strip():
@@ -453,7 +494,7 @@ def modeled_printings(
         held = printings.get(card_id, [])
         arcs = _arcs_of(ruleset_name)
         in_arcs = [entry for entry in held if arc_of.get(entry.set_name) in arcs]
-        candidates = in_arcs or held
+        candidates = in_arcs or _up_to_era(held, _era_end(arcs, arc_of, released), released)
         if not candidates:
             return None
         return max(candidates, key=lambda entry: released.get(entry.set_name, _UNDATED))

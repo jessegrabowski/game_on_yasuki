@@ -1,6 +1,11 @@
+import datetime
 import pathlib
 import subprocess
 import sys
+
+import yaml
+
+from yasuki_core import ruleset
 
 
 from yasuki_core.engine.rules import cards
@@ -15,6 +20,7 @@ from yasuki_core.install.card_index import read_index
 from yasuki_core.game_pieces.text_split import split_text_box
 from yasuki_core.install.registration_audit import (
     _registered_designators,
+    modeled_printings,
     unprinted_registrations,
     mislabeled_abilities,
     unvalidated_registries,
@@ -319,6 +325,43 @@ def _unprinted(**abilities) -> list[str]:
 def test_an_index_on_a_printed_ability_of_the_right_designator_passes():
     # Banish All Shadows prints one Kiho Limited ability.
     assert _unprinted(banish_all_shadows=[_unlabeled()]) == []
+
+
+def test_a_ruleset_models_no_reprint_from_a_later_arc(tmp_path):
+    # Rice Farm has no printing in the active ruleset's arc, so the audit reads its newest
+    # printing up to that arc, never the later reprint. A card only the later arc prints still
+    # reads its newest printing anywhere.
+    sets = tmp_path / "sets"
+    sets.mkdir()
+    for set_name, cards_printed in [
+        ("Old Set", [("Rice Farm", "Old wording.")]),
+        ("Later Set", [("Rice Farm", "Later wording."), ("Wheat Farm", "Only wording.")]),
+    ]:
+        entries = [{"title": title, "text": text} for title, text in cards_printed]
+        (sets / f"{set_name.lower().replace(' ', '_')}.yaml").write_text(
+            yaml.safe_dump({"set": set_name, "cards": entries})
+        )
+    arcs = [
+        ("Old Arc", "Old Set", datetime.date(2010, 1, 1)),
+        (ruleset.ACTIVE.arcs[0], "Present Set", datetime.date(2025, 1, 1)),
+        ("Later Arc", "Later Set", datetime.date(2026, 1, 1)),
+    ]
+    set_info = tmp_path / "set_info.yaml"
+    set_info.write_text(
+        yaml.safe_dump(
+            {
+                "arcs": [
+                    {"name": arc, "sets": [{"set_name": name, "release_date": released}]}
+                    for arc, name, released in arcs
+                ]
+            }
+        )
+    )
+
+    printing_of = modeled_printings(sets, set_info)
+
+    assert printing_of("rice_farm", None).set_name == "Old Set"
+    assert printing_of("wheat_farm", None).set_name == "Later Set"
 
 
 def test_an_index_past_what_the_card_prints_is_reported():

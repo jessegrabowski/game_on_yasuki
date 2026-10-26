@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.search.compile_sql import (
     build_card_filter,
     build_search_filters,
@@ -98,6 +100,12 @@ def test_clans_excludes_negates_membership_including_all_clans_marker():
     clause, params = build_card_filter(filter_options={"clans_excludes": ["crane"]})
     assert "c.card_id NOT IN (SELECT card_id FROM card_clans" in clause
     assert set(params[0]) == {"crane", "all clans"}
+
+
+@pytest.mark.parametrize("alias", ["minor", "mca", "Minor Clan Alliance"])
+def test_minor_clan_alliance_aliases_match_the_whole_group(alias):
+    _, params = build_card_filter(filter_options={"clans": [alias]})
+    assert set(params[0]) == {"minor clan alliance", "mca", "minor", "all clans"}
 
 
 def test_include_and_exclude_type_both_emit_conditions():
