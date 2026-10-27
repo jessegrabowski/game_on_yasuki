@@ -1551,7 +1551,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tetsuo Hiyamako
   creates:
-  - weapon_item_claw_plus1f
+  - hiyamakos_claw
   types:
   - Personality
   decks:
@@ -1819,7 +1819,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Reisa
   creates:
-  - earth_fire_terrain_strategy
+  - scorched_earth_cr2
   types:
   - Personality
   decks:
@@ -1985,7 +1985,7 @@ cards:
 - title: Yabe no Oni
   subtitle: Blessed Abomination
   creates:
-  - oni_personality_2_1
+  - spawn_of_yabe
   types:
   - Personality
   decks:

@@ -854,7 +854,7 @@ def _makeshift_fortifications_province_strength(
 # --- Mishime Sensei ---
 
 
-MISHIMES_ONI = "oni_personality_variable_chi"
+MISHIMES_ONI = "named_oni"
 ONI_COST = 5
 # "You pay :g2: less ... for each player who controls any :shadowlands: cards."
 MISHIME_SENSEI_DISCOUNT = 2

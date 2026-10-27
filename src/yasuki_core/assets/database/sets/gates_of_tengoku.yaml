@@ -715,7 +715,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Favor of the Blessed Guard
   creates:
-  - ancestor_yojimbo_follower_0f
+  - blessed_guard
   grants:
   - sincerity
   types:
@@ -1091,7 +1091,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kan'ol'ti'chek
   creates:
-  - ratling_scout_follower_1f
+  - nezumi_guide
   types:
   - Personality
   decks:
@@ -1601,7 +1601,7 @@ cards:
 - title: Sasada
   subtitle: Pearl Champion
   creates:
-  - orochi_follower_2f
+  - orochi_follower
   types:
   - Personality
   decks:
@@ -2196,7 +2196,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Tale of Sacred Stone Village
   creates:
-  - ronin_samurai_personality_4_4_4
+  - his_tale_lives_on
   types:
   - Strategy
   decks:
@@ -2453,7 +2453,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Veteran of Thunder
   creates:
-  - mantis_samurai_naval_personality_2_1_2
+  - mantis_veteran
   types:
   - Follower
   decks:
@@ -2555,7 +2555,7 @@ cards:
 - title: Zin'tik'kir Sensei
   gold_production: -1
   creates:
-  - ratling_scout_personality_1_1_1
+  - nezumi_scout_got
   types:
   - Sensei
   decks:

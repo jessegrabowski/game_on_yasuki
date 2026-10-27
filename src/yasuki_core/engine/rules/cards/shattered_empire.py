@@ -248,7 +248,7 @@ register_ability(
 
 # --- Binasa (Experienced) ---
 
-PEARL_STRATEGY = "pearl_strategy"
+PEARL_STRATEGY = "storage_pearl"
 BINASA_PEARL = "binasa_experienced_pearl"
 BINASA_STRAIGHTEN = "binasa_experienced_straighten"
 BINASA_STRAIGHTEN_OFFER = "binasa_experienced_straighten_offer"
@@ -491,7 +491,7 @@ register_ability(
 
 # --- Daigotsu Arakan (Experienced 2) ---
 
-UNDEAD_FOLLOWER = "undead_follower_2f"
+UNDEAD_FOLLOWER = "determined_undead"
 
 
 register_yu_widening("daigotsu_arakan_experienced_2", YuWidening(covers=in_army_with, chosen=True))
@@ -828,7 +828,7 @@ register_ability(
 
 # --- Hida Sanjiro ---
 
-SANJIROS_ARMOR = "armor_item_plus2f"
+SANJIROS_ARMOR = "sanjiros_armor"
 SANJIRO_FEAR = 4
 
 
@@ -1988,7 +1988,7 @@ register_entry(
 
 # --- Weapon Artist ---
 
-FINE_SWORD = "weapon_item_sword_plus2f_plus1c"
+FINE_SWORD = "quality_steel"
 
 
 def _weapon_artist_targets(game: GameState, source: L5RCard) -> list[str]:

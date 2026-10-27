@@ -545,7 +545,7 @@ register_ability(
 
 # --- Ijathilu Zealots ---
 
-NAGA_ZEALOT = "naga_zealot_personality_2_2_1"
+NAGA_ZEALOT = "naga_zealot"
 IJATHILU_ZEALOT_COUNT = 2
 IJATHILU_FEAR = 3
 
@@ -842,7 +842,7 @@ register_ability(
 # --- Moto Ikarichi, Bloodseeker ---
 
 
-IKARICHIS_UNDEAD = "undead_cavalry_follower_2f"
+IKARICHIS_UNDEAD = "dark_moto_riders"
 KANPEKI_DYNASTY = "the_kanpeki_dynasty_hantei_xl"
 IKARICHI_HONOR_LOSS = 2
 IKARICHI_INVEST = 2
@@ -1104,7 +1104,7 @@ register_ability(
 # --- Walk with Tengoku ---
 
 
-FUSHICHO = "fushicho_personality_3_2_3"
+FUSHICHO = "fushicho"
 
 
 def _walk_with_tengoku_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:

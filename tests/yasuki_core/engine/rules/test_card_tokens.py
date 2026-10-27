@@ -65,10 +65,10 @@ def test_the_scan_finds_the_tokens_the_engine_creates():
 @pytest.mark.parametrize(
     "module, card_id, token",
     [
-        ("shattered_empire", "weapon_artist", "weapon_item_sword_plus2f_plus1c"),
-        ("shattered_empire", "hida_sanjiro", "armor_item_plus2f"),
-        ("rise_of_jigoku", "mishime_sensei", "oni_personality_variable_chi"),
-        ("rise_of_otosan_uchi", "culling_grounds", "expendable_personality_0_2_1"),
+        ("shattered_empire", "weapon_artist", "quality_steel"),
+        ("shattered_empire", "hida_sanjiro", "sanjiros_armor"),
+        ("rise_of_jigoku", "mishime_sensei", "named_oni"),
+        ("rise_of_otosan_uchi", "culling_grounds", "sacrifice"),
     ],
 )
 def test_the_scan_attributes_a_token_to_the_card_whose_block_names_it(module, card_id, token):

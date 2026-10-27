@@ -59,7 +59,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Aanadi
   creates:
-  - pearl_strategy
+  - storage_pearl
   types:
   - Personality
   decks:
@@ -537,7 +537,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Chuda Niko
   creates:
-  - expendable_personality_0_2_1
+  - sacrifice
   types:
   - Personality
   decks:
@@ -567,7 +567,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Chuda Shidare
   creates:
-  - blossom_oni_follower_1f
+  - corpse_flower
   types:
   - Personality
   decks:
@@ -1390,7 +1390,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ijathilu
   creates:
-  - naga_zealot_personality_2_2_1
+  - naga_zealot
   types:
   - Personality
   decks:
@@ -1811,7 +1811,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Toson
   creates:
-  - ram_spirit_personality_3_1_3
+  - zudzuki_tosons_ram
   types:
   - Personality
   decks:
@@ -1842,7 +1842,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Yayuko
   creates:
-  - goose_spirit_personality_1_2_3
+  - heiwa_yayukos_goose
   types:
   - Personality
   decks:
@@ -3125,7 +3125,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Forgotten
   creates:
-  - forgotten_dead
+  - zombie_follower_rtr
   types:
   - Follower
   decks:

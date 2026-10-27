@@ -523,7 +523,6 @@ an_undeniable_request
 an_unnecessary_risk
 an_untold_cost
 anahita
-ancestor_yojimbo_follower_0f
 ancestors_possess_the_living
 ancestral_aid
 ancestral_armor_of_crab_clan
@@ -631,7 +630,6 @@ armed_and_ready
 armed_brigade
 armed_rice_farmer
 armor
-armor_item_plus2f
 armor_of_command
 armor_of_earth
 armor_of_legacy
@@ -1473,6 +1471,7 @@ bleak_portents
 bleeding_grounds
 bleeding_the_elements
 blessed_dojo
+blessed_guard
 blessed_herbalist
 blessed_library
 blessed_sanctuary
@@ -1535,7 +1534,6 @@ bloodstained_rage
 bloodstrike
 bloodsword
 bloom_of_the_white_orchid
-blossom_oni_follower_1f
 blossoming_conflict
 blowdarts
 blue_skies
@@ -1546,6 +1544,9 @@ bo_of_ritual_blessings
 bo_of_water
 bo_stick
 boastful_proclamation
+bodyguard
+bodyguards_obligation
+bodyguards_vow
 bog_hag
 boiling_point
 boisterous_soldiers
@@ -1588,6 +1589,7 @@ borrowed_advisors
 botsumoku
 bottled_fire
 bound_in_blood
+bound_monstrosity
 bound_spirit
 boundless_mercy_of_suitengu
 boundless_sight
@@ -1943,6 +1945,7 @@ chuda_mishime_experienced_2
 chuda_naotake
 chuda_niiro
 chuda_niko
+chuda_oni
 chuda_otsu
 chuda_retainer
 chuda_rintaro
@@ -2137,6 +2140,7 @@ cornered_market
 cornering_maneuver
 coronation_festival
 coronation_of_jade
+corpse_flower
 corpse_monstrosity
 corrupt_adjunct
 corrupt_geisha_house
@@ -2177,8 +2181,6 @@ counting_the_lost
 courage
 courage_beyond_question
 courage_experienced
-courage_follower_1f
-courage_follower_2f
 courage_in_death
 courage_of_the_seven_thunders
 courageous_ashigaru
@@ -2192,9 +2194,7 @@ court_jester
 court_scribe
 courteous_gift
 courtesy
-courtier_0_3_2
-courtier_expendable_personality_0_2_2
-courtier_personality_0_2_2
+courtier_of_otosan_uchi
 courting_trouble
 courtly_sabotage
 courtly_scholars
@@ -2218,7 +2218,6 @@ crab_recruiter
 crab_tattoo
 cracks_appear
 crane_clan_deckbacker
-crane_courtier_personality_0_2_3
 crane_detachment
 crane_levies
 crane_master
@@ -2651,6 +2650,7 @@ dark_feeding
 dark_harmony
 dark_inheritance
 dark_lords_favor
+dark_moto_riders
 dark_moto_steed
 dark_naga_ambusher
 dark_naga_scouts
@@ -2870,6 +2870,7 @@ detained
 determination
 determined_challenge
 determined_force
+determined_undead
 devastating_attack
 devastating_betrayal
 devastating_blow
@@ -3213,7 +3214,6 @@ dragon_puzzle_box
 dragon_sword_is_broken
 dragon_tattoo
 dragon_tattoo_experienced
-dragon_yojimbo_personality_2_2_2
 dragonfly_tattoo
 dragons_breath_castle
 dragons_claw_katana
@@ -3273,7 +3273,6 @@ earth_dragon_experienced
 earth_dragon_experienced_2
 earth_dragon_experienced_3
 earth_dragons_guidance
-earth_fire_terrain_strategy
 earthborn_temple
 earthen_armor_3f
 earthen_armor_4f
@@ -3369,7 +3368,6 @@ emma_os_amulet
 emma_os_guidance
 emperor_toturi_iii
 emperors_favor
-emperors_legion
 emperors_peace
 emperors_protection
 emperors_under_hand
@@ -3485,7 +3483,6 @@ expanding_the_gardens
 expansion
 expansive_range
 expected_arrival
-expendable_personality_0_2_1
 expendable_resources
 expensive_achievement
 experience_a_personality
@@ -3702,6 +3699,7 @@ finding_the_balance
 finding_the_harmony
 fine_silk_merchant
 fine_steed
+fine_steel
 fire
 fire_and_air
 fire_and_stones_cut
@@ -3831,7 +3829,6 @@ forging_destiny
 forging_the_gift
 forgiveness
 forgotten_battleground
-forgotten_dead
 forgotten_lands
 forgotten_legacy_20f
 forgotten_legacy_emp
@@ -3962,7 +3959,7 @@ fusaki
 fusako
 fusako_sensei
 fusami
-fushicho_personality_3_2_3
+fushicho
 fushiki_no_oni
 fushin
 fuyuzare
@@ -3973,7 +3970,6 @@ gaijin_merchant
 gaijin_sorcerer
 gaijin_utensil
 gaijin_writings
-gaijin_yodotai_follower_1f
 gaijutsu_no_shiryo
 gaining_advantage
 gaining_an_edge
@@ -4149,7 +4145,6 @@ golden_sun_plain
 goldsmith
 gong_of_the_high_house
 gong_of_the_righteous_emperor
-goose_spirit_personality_1_2_3
 goshiu_no_shiryo
 govern_the_land
 governors_court
@@ -4203,6 +4198,7 @@ guardians_blade
 guardians_of_the_three_dynasties
 guerrilla_tactics
 guest
+guest_of_the_chuda
 guests_of_honor
 guidance_in_war
 guided_by_honor
@@ -4399,6 +4395,7 @@ heimin_laborers
 heimin_village
 heirloom_tanto
 heisha
+heiwa_yayukos_goose
 held_terrain
 hellbeast
 helm_of_thunder_experienced
@@ -4814,6 +4811,7 @@ hiruma_yugure
 hiruma_zunguri
 hirumas_last_breath
 his_most_favored
+his_tale_lives_on
 hisa
 hisaki
 hisako_sensei
@@ -4870,6 +4868,7 @@ hitoshi
 hitsu_do
 hitsu_taeruko
 hiyamako
+hiyamakos_claw
 hizuka
 hizuka_experienced
 hoarded_library
@@ -4949,7 +4948,6 @@ horiuchi_wakiza
 horiuchi_yoko
 horobei
 horoisos_scout
-horror_shadowlands_personality
 horse
 horse_archers
 horseback_warriors
@@ -5327,6 +5325,7 @@ imperial_highway
 imperial_honor_guard
 imperial_intercession
 imperial_legionaries
+imperial_legionnaire
 imperial_levying
 imperial_magistrates
 imperial_messenger
@@ -5489,6 +5488,8 @@ iron_pillar
 iron_tetsubo
 iron_warriors
 iron_will
+irregular
+irregular_veteran
 is_that_all
 isawa_aiya
 isawa_akihiro
@@ -5905,6 +5906,7 @@ jurojins_touch
 justice_of_the_crane
 justly_earned_victory
 jutsushi_sensei
+kabeushi_maikos_ox
 kabuki_mask
 kabuki_show
 kabuki_theater_troupe
@@ -6279,6 +6281,7 @@ kettei
 keukegen
 khaira
 khalimpeh_jiak
+khan_spirit_panda
 kharda
 kharma
 kharma_in_death
@@ -6791,6 +6794,7 @@ lantern_of_revelation
 lantern_oil
 lao_she
 large_farm
+large_orochi_follower
 large_shrine
 last_breath_castle
 last_charge_of_the_shogun
@@ -7039,8 +7043,8 @@ mantis_master
 mantis_raiders
 mantis_sailor
 mantis_samurai
-mantis_samurai_naval_personality_2_1_2
 mantis_shugenja
+mantis_veteran
 mantle_of_fire
 mantle_of_flame
 mantle_of_flame_experienced
@@ -7336,8 +7340,8 @@ men_of_cunning
 menhari_gata
 mercantile_conflict
 mercenaries
+mercenary
 mercenary_guard
-mercenary_ronin_personality_2_2_1
 merchant_atoll
 merchant_caravan
 merchant_district
@@ -7725,7 +7729,6 @@ moshi_yoshinaka
 moshi_yuna
 moshi_yuna_master_of_fire_experienced
 moshi_yuriko
-moth_spirit_follower_0f
 moth_tattoo
 motivation
 moto_aikenro
@@ -8019,6 +8022,7 @@ naga
 naga_abomination
 naga_apprentice
 naga_attach
+naga_believer
 naga_bowmen
 naga_bushi
 naga_guard
@@ -8031,8 +8035,7 @@ naga_storm_mirumoto_mountain
 naga_tattoo
 naga_vipers
 naga_warlord
-naga_warrior
-naga_zealot_personality_2_2_1
+naga_zealot
 nagamaki
 nagataka
 nage_yari
@@ -8054,6 +8057,7 @@ nakadai
 nakanu_technique
 nakanus_creations
 nakumis_fox
+named_oni
 naming_the_true_evil
 nanashi_defenders
 nanashi_mura
@@ -8114,10 +8118,12 @@ new_years_celebration
 newly_discovered_mine
 nexus_of_lies
 nezumi_cleaver
+nezumi_guide
 nezumi_migration
 nezumi_pack
 nezumi_remnants
 nezumi_scout
+nezumi_scout_got
 nezumi_technique
 nezumi_vengeance
 nezumi_warrens
@@ -8272,6 +8278,7 @@ obsidian_blade
 obsidian_dragon
 obsidian_figurine
 obsidian_halls_of_the_lost
+obsidian_legionnaire
 obsidian_magistrate
 obsidian_mempo_of_fu_leng
 obsidian_mine
@@ -8393,9 +8400,6 @@ oni_no_seiryoku
 oni_no_shikibu
 oni_no_tadaka
 oni_no_taki_bi
-oni_personality_2_1
-oni_personality_3_1_0
-oni_personality_variable_chi
 oni_podling
 oni_spawn
 oni_warding
@@ -8452,8 +8456,7 @@ oriole_katana
 ornate_armor
 ornery
 orochi
-orochi_follower_2f
-orochi_follower_3f
+orochi_follower
 orochi_sensei
 orochi_tattoo
 orschat
@@ -8550,7 +8553,6 @@ overwhelming_speed
 owned
 ox_house_guard
 ox_sentry
-ox_spirit_personality_6_2_3
 oyo_seido
 oyos_second_lesson
 oyumi
@@ -8570,7 +8572,6 @@ pan_ku
 pan_ku_cultist
 pan_ku_experienced
 pan_kus_madness
-panda_berserker_follower_2f
 panda_spirit
 panekis_disgrace_experienced_6
 panekis_mask
@@ -8628,7 +8629,6 @@ pearl_magic
 pearl_of_embers
 pearl_of_rage
 pearl_of_wisdom
-pearl_strategy
 pearls_and_spirits
 peasant
 peasant_armor
@@ -8704,7 +8704,7 @@ pillowbook
 pincer_attack
 pincers_and_tail
 pinned_down
-pirate_naval_personality
+pirate
 pirate_wharf
 pit_of_blood
 pitch_and_fire
@@ -8920,6 +8920,7 @@ qarash
 qatol
 qolsa
 quagmire
+quality_steel
 quarantined
 quarry
 quartermaster
@@ -8964,7 +8965,6 @@ rally_through_sacrifice
 rally_troops
 rallying_cry
 rallying_the_recruits
-ram_spirit_personality_3_1_3
 rama_singh
 ramash
 ramifications
@@ -8992,8 +8992,6 @@ ratling_pack_sote
 ratling_raider
 ratling_scavenger
 ratling_scout
-ratling_scout_follower_1f
-ratling_scout_personality_1_1_1
 ratling_scroungers
 ratling_spy
 ratling_thief
@@ -9281,7 +9279,6 @@ ronin_brotherhood
 ronin_dojo
 ronin_follower
 ronin_recruits
-ronin_samurai_personality_4_4_4
 ronin_scout
 ronin_swordsman
 ronin_village
@@ -9332,6 +9329,7 @@ ryokans_sword
 ryokans_sword_experienced
 ryoken
 ryoko_owari
+ryoko_owari_guard
 ryoku
 ryosei
 ryosei_experienced
@@ -9354,6 +9352,7 @@ sacred_temples
 sacred_tunnels
 sacred_valley
 sacred_watch_palace
+sacrifice
 sacrifice_of_pawns
 sacrifices_for_our_future
 sacrificial_altar
@@ -9399,6 +9398,7 @@ sand_garden
 sandalwood_incense
 sandayu
 sandayu_experienced
+sanjiros_armor
 sanjuro
 sankaku_yari
 sannin
@@ -9428,6 +9428,7 @@ savaged_fields
 savagery
 savagery_of_moto
 saving_kazumasa
+sawakos_moth
 scales_of_the_dragon
 scandalous_gossip
 scandalous_rumors
@@ -9442,6 +9443,7 @@ scholars_fa_ade
 scholarship
 school_of_wizardry
 scorched_earth
+scorched_earth_cr2
 scorching_lash
 scorn
 scorn_the_weak
@@ -9453,7 +9455,6 @@ scorpion_detachment
 scorpion_distracter
 scorpion_flexibility
 scorpion_master
-scorpion_yojimbo_personality_2_2_0
 scour_the_earth
 scour_the_unworthy
 scourge_of_the_sea
@@ -9912,6 +9913,7 @@ shibas_promise
 shibas_shrine
 shibata_sensei
 shidare_no_oni
+shidare_no_oni_uprooted
 shield_formation
 shield_of_blood
 shield_of_the_honored_soul
@@ -10459,7 +10461,6 @@ shrine_to_the_heavens
 shrine_to_tsukune
 shrine_to_yoritomo
 shrines_of_the_emperor
-shugenja_2_2_2
 shugenja_aide
 shugenja_students
 shugorei
@@ -10683,6 +10684,7 @@ sowing_suspicion
 spark_of_thunder
 sparrow_clan_aide
 spawn_of_vritra
+spawn_of_yabe
 speak_with_the_voices_of_the_dead
 spear_of_the_shahadet
 spearhead
@@ -10832,6 +10834,7 @@ stone_of_remembrance
 stone_sentinel
 stonemasons_hammer
 stones_of_purity
+storage_pearl
 storehouses
 storm_filled_sails
 storm_forged_blade
@@ -11289,7 +11292,7 @@ tanizaki_sensei
 tankoji
 tanuki_archers
 tanuki_band
-tanuki_samurai_personality_2_2_2
+tanuki_samurai
 tanuki_spirit
 tanuki_tricks
 tao_defenders
@@ -11415,6 +11418,7 @@ terrifying_presence
 terrifying_visage
 terror
 terrorizing_ambush
+terumotos_apprentice
 teskath_experienced
 tessen
 tessen_of_the_tsunami_legion
@@ -11597,6 +11601,7 @@ the_deathless
 the_deathless_experienced
 the_deathseekers_oath
 the_deciding_moment
+the_delegate
 the_demon_bride_of_fu_leng
 the_demon_skull
 the_desiccated
@@ -11762,6 +11767,7 @@ the_hearts_arrow
 the_heavens_are_watching
 the_heavens_blessing
 the_heavens_reborn
+the_heavens_tide
 the_heavy_shadow_of_fear
 the_height_of_courage
 the_heirs_wrath
@@ -12877,6 +12883,7 @@ tsuruchis_flame
 tsuruchis_legacy
 tsuruchis_legion
 tsuruchis_retreat
+tsushimas_guard
 tsusung_sensei
 tsutomu_no_shiryo
 tsuyoshis_wakizashi
@@ -12956,10 +12963,8 @@ uncovered_plans
 uncovering_the_culprit
 uncovering_treasures
 undead
-undead_cavalry_follower_2f
 undead_cavalry_follower_2f_fear2
 undead_champion
-undead_follower_2f
 undead_legion
 undead_taskmaster
 undefended_border
@@ -13267,7 +13272,6 @@ veteran_warrior
 veterans_experience
 veterans_farmland
 vetrevel
-victim_personality_0_3_0
 victorious_wave_men
 victory_at_hiruma_castle
 victory_march
@@ -13434,7 +13438,6 @@ watching_the_battle
 watchtower
 watchtower_of_the_east
 water
-water_ancestor_terrain_strategy
 water_bo
 water_dragon
 water_dragon_experienced
@@ -13489,9 +13492,6 @@ we_will_have_revenge
 weakened_defenses
 weakness_exposed
 weapon_artist
-weapon_item_claw_plus1f
-weapon_item_sword_plus1f
-weapon_item_sword_plus2f_plus1c
 weapon_rack
 weapons_cache
 wear_him_down
@@ -13762,17 +13762,18 @@ yazaki
 yeiseo
 yin_and_yang
 yobanjin_alliance
-yobanjin_cavalry_personality_4_2
 yobanjin_fortress
 yobanjin_mercenaries
 yobanjin_outrider
 yobanjin_raider
+yobanjin_raiding_party
 yobanjin_raids
 yobanjin_wyrm
 yodin
 yodin_experienced
 yodin_sensei
 yodo_sensei
+yodotai_infantry
 yodotai_legionnaire
 yoeetrr
 yoeetrr_experienced
@@ -14139,8 +14140,10 @@ zokujin_burrows
 zokusei
 zombie
 zombie_follower
+zombie_follower_rtr
 zombie_peasant
 zombie_troops
 zorrtek
+zudzuki_tosons_ram
 zugaikotsu_ro
 zurnagun

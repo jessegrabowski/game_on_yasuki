@@ -171,9 +171,9 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Aid Has Arrived
   creates:
-  - courtier_0_3_2
-  - samurai_yojimbo_2_2_2
-  - shugenja_2_2_2
+  - bodyguards_vow
+  - bodyguard
+  - bodyguards_obligation
   types:
   - Strategy
   decks:
@@ -3626,7 +3626,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hida Toraike
   creates:
-  - courage_follower_1f
+  - irregular
   types:
   - Personality
   decks:
@@ -4592,7 +4592,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Jhara
   creates:
-  - pearl_strategy
+  - storage_pearl
   grants:
   - sincerity
   types:
@@ -8388,7 +8388,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tamori Tsushima
   creates:
-  - dragon_yojimbo_personality_2_2_2
+  - tsushimas_guard
   types:
   - Personality
   decks:

@@ -364,8 +364,8 @@ def test_get_creates_for_cards_offers_only_spawnable_cards():
     # Only the card is offered: counter grants live in card_grants_counter, not card_creates.
     creates, tokens = get_creates_for_cards(["courts_of_otosan_uchi"])
     made = creates.get("courts_of_otosan_uchi", [])
-    assert "courtier_personality_0_2_2" in made
-    assert "courtier_personality_0_2_2" in tokens  # its record is still fetched for spawning
+    assert "courtier_of_otosan_uchi" in made
+    assert "courtier_of_otosan_uchi" in tokens  # its record is still fetched for spawning
     assert "token_wealth" not in made
     assert "token_wealth" not in tokens
 

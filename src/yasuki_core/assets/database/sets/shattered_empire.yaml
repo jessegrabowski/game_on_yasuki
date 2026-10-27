@@ -1024,7 +1024,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Binasa
   creates:
-  - pearl_strategy
+  - storage_pearl
   types:
   - Personality
   decks:
@@ -1330,8 +1330,8 @@ cards:
 - title: Chuda Tairao
   subtitle: Snake Clan Champion
   creates:
-  - oni_personality_3_1_0
-  - victim_personality_0_3_0
+  - chuda_oni
+  - guest_of_the_chuda
   types:
   - Personality
   decks:
@@ -1771,7 +1771,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Arakan
   creates:
-  - undead_follower_2f
+  - determined_undead
   types:
   - Personality
   decks:
@@ -3169,7 +3169,7 @@ cards:
 - title: Gusai Natsuko
   subtitle: the Sea's Bane
   creates:
-  - pirate_naval_personality
+  - pirate
   types:
   - Personality
   decks:
@@ -3496,7 +3496,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hida Sanjiro
   creates:
-  - armor_item_plus2f
+  - sanjiros_armor
   types:
   - Personality
   decks:
@@ -4973,7 +4973,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Sawako
   creates:
-  - moth_spirit_follower_0f
+  - sawakos_moth
   types:
   - Personality
   decks:
@@ -5675,7 +5675,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Mirumoto Nokkai
   creates:
-  - weapon_item_sword_plus1f
+  - fine_steel
   types:
   - Personality
   decks:
@@ -7565,7 +7565,7 @@ cards:
 - title: Shosuro Takumi
   subtitle: Ryoko Owari Governor
   creates:
-  - scorpion_yojimbo_personality_2_2_0
+  - ryoko_owari_guard
   types:
   - Personality
   decks:
@@ -10260,7 +10260,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Weapon Artist
   creates:
-  - weapon_item_sword_plus2f_plus1c
+  - quality_steel
   types:
   - Holding
   decks:
