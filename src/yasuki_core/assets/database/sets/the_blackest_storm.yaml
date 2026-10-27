@@ -1982,7 +1982,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Makeshift Defenses
   creates:
-  - defenses
+  - salvage
   types:
   - Holding
   decks:
