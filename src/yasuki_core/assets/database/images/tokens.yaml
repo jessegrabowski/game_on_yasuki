@@ -1,5 +1,17 @@
 set: Tokens
 images:
+- card_id: allied_follower
+  printing_id: tokens
+  files:
+  - role: front
+    file: allied_follower_proxy.jpg
+    sha256: d6afa6479d9cd359a9c0b15ca0e259ab4df252306fb03a8b77607b7ee3051e55
+- card_id: ballistae
+  printing_id: tokens
+  files:
+  - role: front
+    file: ballistae_proxy.jpg
+    sha256: e38d38cf0b6bd82e470de949f1f7711c02ed68fd13c434fcda042f9fedaacd1a
 - card_id: berserker_cavalry_follower_1f
   printing_id: tokens
   files:
@@ -66,6 +78,12 @@ images:
   - role: front
     file: determined_undead_proxy.jpg
     sha256: 26f37151525eccb7a9b5f44ea6d387c43164d70d0a14cb1501314dcea926c042
+- card_id: eroding_waters
+  printing_id: tokens
+  files:
+  - role: front
+    file: eroding_waters_proxy.jpg
+    sha256: 3712fbf24d0917a8964e44e260657a4e3f5d8767cf5d990ca5e4af62e9f87c4c
 - card_id: fine_steel
   printing_id: tokens
   files:
@@ -84,6 +102,12 @@ images:
   - role: front
     file: guest_of_the_chuda_proxy.jpg
     sha256: 3b181c2ec8c6f97fcf4d3156b9ac5fc538f6c79ed63a76d36d1a22451d59dae8
+- card_id: hairoguma_rokukos_bear
+  printing_id: tokens
+  files:
+  - role: front
+    file: hairoguma_rokukos_bear_proxy.jpg
+    sha256: 470a92b0a156fe86d7dfea4a3e1025c0fa5b07d80bd3e97bb55d5cf62f433b53
 - card_id: heiwa_yayukos_goose
   printing_id: tokens
   files:
@@ -102,6 +126,12 @@ images:
   - role: front
     file: hiyamakos_claw_proxy.jpg
     sha256: 875d869ae81a89b8ead5d89dc7bfa4cd500286d8de7cca5bfa83ec21705c2701
+- card_id: honored_dead
+  printing_id: tokens
+  files:
+  - role: front
+    file: honored_dead_proxy.jpg
+    sha256: 631dfb240c8860b43e14c20355ffbb3d07677a866fcb8d6f6ab60590ec5f1a7d
 - card_id: imperial_favor
   printing_id: tokens
   files:
@@ -144,6 +174,12 @@ images:
   - role: front
     file: large_orochi_follower_proxy.jpg
     sha256: 4ab8bd8bb2992d019bf4f060818154feeda9d7883ca8b5caa7d9ecf1dc5fef45
+- card_id: mantis_sailor_gs
+  printing_id: tokens
+  files:
+  - role: front
+    file: mantis_sailor_gs_proxy.jpg
+    sha256: 87787e21bb95a4da6076df7dd9ac20ae04d2b77f2059b777f01da3134a52c48b
 - card_id: mantis_veteran
   printing_id: tokens
   files:
@@ -168,6 +204,12 @@ images:
   - role: front
     file: naga_zealot_proxy.jpg
     sha256: 2a0175402ceffae0807333f74cf372cab842cd22227b20d0a1f52346222cfb71
+- card_id: namaikina_yamazarus_monkey
+  printing_id: tokens
+  files:
+  - role: front
+    file: namaikina_yamazarus_monkey_proxy.jpg
+    sha256: 952de07668a07f12b0c5579015540fe570df4db31b3295c6fd46bc04c9c08cc5
 - card_id: named_oni
   printing_id: tokens
   files:
@@ -222,6 +264,12 @@ images:
   - role: front
     file: sacrifice_proxy.jpg
     sha256: 4827c2dd0f53104ea47965cadd041ef8a9a0e11f2db06364bc6e36eb34fb3799
+- card_id: sakkakus_prank
+  printing_id: tokens
+  files:
+  - role: front
+    file: sakkakus_prank_proxy.jpg
+    sha256: 3d65286f2933e612a2032dca13e458432c55db62204658d0d9dff57acf6f11f4
 - card_id: samurai_yojimbo_2_2_2
   printing_id: tokens
   files:
@@ -252,6 +300,18 @@ images:
   - role: front
     file: shidare_no_oni_uprooted_proxy.jpg
     sha256: ceeb96babea84ded89650ecd7f8511404e4b3fef960d1b38225c79092f775f76
+- card_id: shika_kaemons_deer
+  printing_id: tokens
+  files:
+  - role: front
+    file: shika_kaemons_deer_proxy.jpg
+    sha256: c05fdc142388fcbe6ac8e3fa931ac1bd21dba033249e519d0bccd1fca87b0e19
+- card_id: soul_ono
+  printing_id: tokens
+  files:
+  - role: front
+    file: soul_ono_proxy.jpg
+    sha256: 2aded608296c2782996060f7c946021b97e59dae9407e58819c9c8a593ee523a
 - card_id: spawn_of_yabe
   printing_id: tokens
   files:
@@ -264,6 +324,30 @@ images:
   - role: front
     file: storage_pearl_proxy.jpg
     sha256: eec383f8494af9935168f5215385bb103b7ac1068c0bc178cbba8d3819d1210a
+- card_id: student_berserker
+  printing_id: tokens
+  files:
+  - role: front
+    file: student_berserker_proxy.jpg
+    sha256: 08bf0c41e2ae554523a8cd307e3a9bdbdc6b15589dcba8c5b0aad7a78b49f9e3
+- card_id: student_engineer
+  printing_id: tokens
+  files:
+  - role: front
+    file: student_engineer_proxy.jpg
+    sha256: 2fa74857b51bb34a004884b6b548d47daec295f77a5f32dcc82518f804ea4ba7
+- card_id: student_ninja
+  printing_id: tokens
+  files:
+  - role: front
+    file: student_ninja_proxy.jpg
+    sha256: 9534c164fc6c73c03edfa5ab3fda4d92126ce2df5c7557ba3f2896b8d2dd1bda
+- card_id: student_paragon
+  printing_id: tokens
+  files:
+  - role: front
+    file: student_paragon_proxy.jpg
+    sha256: a607320a57edb5d8d9463bde5684f3402692000302e7b0b84166b88eafc1920c
 - card_id: tanuki_samurai
   printing_id: tokens
   files:
@@ -294,12 +378,24 @@ images:
   - role: front
     file: tsushimas_guard_proxy.jpg
     sha256: 836e070be6e704b59ccd62ca8849598929cbc8ea269b97b7829a12040361662e
+- card_id: ultimate_illusion
+  printing_id: tokens
+  files:
+  - role: front
+    file: ultimate_illusion_proxy.jpg
+    sha256: bf584ee9dd3ed7597f581ab1fe31cc4baa1df6cf38c2172bdec88fb78dd4501f
 - card_id: undead_cavalry_follower_2f_fear2
   printing_id: tokens
   files:
   - role: front
     file: undead_cavalry_follower_2f_fear2.jpg
     sha256: 16a21d4f1f00a99ce881b437d404abfc4893bbfe417d213eb3a1bb59b85c0a7c
+- card_id: watarus_draught
+  printing_id: tokens
+  files:
+  - role: front
+    file: watarus_draught_proxy.jpg
+    sha256: 10f711935a3f626cdcecfb0c76fbacc1b319f5cc32b198622222c2439217ad29
 - card_id: yobanjin_raiding_party
   printing_id: tokens
   files:
@@ -318,6 +414,12 @@ images:
   - role: front
     file: zombie_follower_rtr_proxy.jpg
     sha256: bb0054456af675cab92d4119ef9b705e461b81b43968836f6124fe5d6167f716
+- card_id: zou_yoshiokas_elephant
+  printing_id: tokens
+  files:
+  - role: front
+    file: zou_yoshiokas_elephant_proxy.jpg
+    sha256: 50023269ef2cac4955fda2cea1eab81072f8e1376833cfb5e6849a82e3c81444
 - card_id: zudzuki_tosons_ram
   printing_id: tokens
   files:

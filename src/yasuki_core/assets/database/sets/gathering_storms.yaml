@@ -634,10 +634,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Minoko Allegiance
-  gold_production: 0
   creates:
-  - farmer
-  - medium_follower
+  - mantis_sailor_gs
+  gold_production: 0
   types:
   - Sensei
   decks:

@@ -1466,7 +1466,7 @@ cards:
 - title: Oracle of Water
   subtitle: Agasha Kyokuta
   creates:
-  - flooded_terrain
+  - eroding_waters
   types:
   - Holding
   decks:
@@ -2339,6 +2339,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Trickster's Legacy
+  creates:
+  - sakkakus_prank
   types:
   - Spell
   decks:
@@ -2477,7 +2479,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Wataru's Masterpiece
   creates:
-  - watarus_potion
+  - watarus_draught
   grants:
   - poison
   types:

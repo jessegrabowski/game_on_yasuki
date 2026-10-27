@@ -2013,3 +2013,248 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: This Personality has Cavalry.
+- title: Zou
+  subtitle: Yoshioka's Elephant
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Elephant
+  - Nonhuman
+  - Spirit
+  - Cavalry
+  force: 4
+  chi: 2
+  personal_honor: 3
+  gold_cost: 6
+  is_proxy: true
+  text: '<b>Battle:</b> :fear: 3, or :fear: 4 if the target is Cavalry.'
+- title: Soul Ono
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Axe
+  - One-Handed
+  - Weapon
+  force: 2
+  chi: 0
+  gold_cost: 4
+  is_proxy: true
+  text: '<b>Battle, :bow::</b> Give a target Personality a -1F token.'
+- title: Honored Dead
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ancestor
+  - Samurai
+  - Spirit
+  force: 2
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: This Personality has your Clan Alignment.
+- title: Shika
+  subtitle: Kaemon's Deer
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Deer
+  - Nonhuman
+  - Spirit
+  force: 2
+  chi: 2
+  personal_honor: 3
+  gold_cost: 4
+  is_proxy: true
+  text: '<b>Open:</b> If it is your turn and another player has higher Family Honor than you, gain 2 Honor.'
+- title: Hairoguma
+  subtitle: Rokuko's Bear
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Bear
+  - Nonhuman
+  - Spirit
+  force: 4
+  chi: 2
+  personal_honor: 3
+  gold_cost: 6
+  is_proxy: true
+  text: '<b>Battle:</b> Bow a target attacking enemy card without attachments. Destroy it if it is an attachment.'
+- title: Allied Follower
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  force: '*'
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+  text: This Follower has the Force and printed abilities of the Personality banished by the action that
+    created it.
+- title: Namaikina
+  subtitle: Yamazaru's Monkey
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Monkey
+  - Nonhuman
+  - Spirit
+  force: 2
+  chi: 3
+  personal_honor: 3
+  gold_cost: 4
+  is_proxy: true
+  text: '<b>Battle, :bow::</b> Move this Personality home to move home a target enemy Personality with lower Chi.'
+- title: Eroding Waters
+  types:
+  - Strategy
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Terrain
+  - Water
+  gold_cost: 0
+  is_proxy: true
+  text: This Province has -1PS for each of your opposed Personalities.
+- title: Wataru's Draught
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Potion
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- title: Sakkaku's Prank
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Spirit
+  force: '*'
+  chi: '*'
+  personal_honor: '*'
+  gold_cost: '*'
+  honor_requirement: '*'
+  is_proxy: true
+  text: This Personality has the Title, Stats, Keywords, Traits and Abilities of the target of the action
+    that created it. It loses its original Clan Alignment and gains yours permanently.
+- title: Ballistae
+  types:
+  - Holding
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Fortification
+  gold_cost: 2
+  gold_production: 2
+  is_proxy: true
+  text: '<b>Remote Battle:</b> :ranged: 3'
+- title: Ultimate Illusion
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Illusion
+  - Nonhuman
+  - Air
+  force: '*'
+  chi: '*'
+  personal_honor: '*'
+  gold_cost: 0
+  honor_requirement: '*'
+  is_proxy: true
+  text: This Personality has the Title, Stats, Keywords, Traits and Abilities of the target of the action
+    that created it.
+- id: mantis_sailor_gs
+  title: Mantis Sailor
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Student Berserker
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Berserker
+  - Cavalry
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Student Ninja
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ninja
+  - Cavalry
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Student Paragon
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Paragon
+  - Cavalry
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Student Engineer
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Siege
+  - Cavalry
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true

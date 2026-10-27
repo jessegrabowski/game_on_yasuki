@@ -321,7 +321,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Defenders of the Wall
   creates:
-  - defenses
+  - ballistae
   types:
   - Follower
   decks:

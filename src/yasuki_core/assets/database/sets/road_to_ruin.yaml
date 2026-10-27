@@ -3237,6 +3237,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Soul's Forge
+  creates:
+  - soul_ono
   grants:
   - minus1f
   types:
@@ -3263,8 +3265,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Spirit Ascends
   creates:
-  - lion_ancestor
-  - lion_ancestor
+  - honored_dead
   types:
   - Spell
   decks:

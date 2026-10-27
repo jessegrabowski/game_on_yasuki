@@ -480,6 +480,7 @@ allegiance_to_the_shogun
 alliance
 alliance_threatened
 allied_efforts
+allied_follower
 allies_become_enemies
 allure_of_jigoku
 alone_with_ones_thoughts
@@ -963,6 +964,7 @@ balash
 balash_experienced
 balash_experienced_2
 balash_sensei
+ballistae
 balyezn_rafiq
 bamboo_forest
 bamboo_harvesters
@@ -3424,6 +3426,7 @@ erchi_chek
 erected_watchtower
 erenas_avatar
 eroded_morale
+eroding_waters
 erosion
 escalating_violence
 escalation
@@ -4249,6 +4252,7 @@ hachis_revenge
 hachiwari
 haikitsu
 haiku_school
+hairoguma_rokukos_bear
 hakai
 hakumei
 hakuseki_sensei
@@ -4923,6 +4927,7 @@ honorable_death
 honorable_rebirth
 honorable_sacrifice
 honorable_seppuku
+honored_dead
 honored_hostage
 honored_sensei
 honors_cost
@@ -7042,6 +7047,7 @@ mantis_marine_troops
 mantis_master
 mantis_raiders
 mantis_sailor
+mantis_sailor_gs
 mantis_samurai
 mantis_shugenja
 mantis_veteran
@@ -8057,6 +8063,7 @@ nakadai
 nakanu_technique
 nakanus_creations
 nakumis_fox
+namaikina_yamazarus_monkey
 named_oni
 naming_the_true_evil
 nanashi_defenders
@@ -9376,6 +9383,7 @@ sailors_warning
 sakarah
 sake_house_brawl
 sake_works
+sakkakus_prank
 sakti
 salt_the_earth
 salute_of_the_samurai
@@ -9929,6 +9937,7 @@ shifting_waves
 shiga
 shigekawas_armor
 shigekawas_court
+shika_kaemons_deer
 shika_sensei
 shikage_no_oni
 shikaro
@@ -10667,6 +10676,7 @@ soul_of_the_empire
 soul_of_the_flame
 soul_of_the_grand_master
 soul_of_the_winds
+soul_ono
 soul_strike
 soul_sword
 souls_in_harmony
@@ -10947,8 +10957,12 @@ stronghold_store_program
 stronghold_stores
 struggle_on
 stuck_in_rokugan
+student_berserker
+student_engineer
+student_ninja
 student_of_ninjutsu
 student_of_the_tao
+student_paragon
 study_the_wheel
 sturdy_armor
 sturdy_katana
@@ -12941,6 +12955,7 @@ ujis_saboteurs
 ujisato
 ukuro
 ulterior_motives
+ultimate_illusion
 ultimate_sacrifice
 umasu_sensei
 umi_amaterasu
@@ -13429,6 +13444,7 @@ watanabe_masutaro_soul_of_yoritomo_ukyo
 watanabe_takena
 watanabe_yuki_soul_of_yoritomo_jera
 wataru_sensei
+watarus_draught
 watarus_masterpiece
 watarus_potion
 watch_commander
@@ -14144,6 +14160,7 @@ zombie_follower_rtr
 zombie_peasant
 zombie_troops
 zorrtek
+zou_yoshiokas_elephant
 zudzuki_tosons_ram
 zugaikotsu_ro
 zurnagun

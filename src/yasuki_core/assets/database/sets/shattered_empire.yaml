@@ -4913,7 +4913,7 @@ cards:
 - title: Kitsune Kaemon
   subtitle: Soul of Kitsune Haruki
   creates:
-  - harukis_deer
+  - shika_kaemons_deer
   types:
   - Personality
   decks:
@@ -4944,7 +4944,7 @@ cards:
 - title: Kitsune Rokuko
   subtitle: Soul of Kitsune Tokoru
   creates:
-  - tokorus_bear
+  - hairoguma_rokukos_bear
   types:
   - Personality
   decks:
@@ -10037,6 +10037,8 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yoritomo Minoko
   subtitle: Clan Champion
+  creates:
+  - allied_follower
   types:
   - Personality
   decks:
