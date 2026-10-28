@@ -2373,7 +2373,7 @@ def _binasa_battle():
     units = [binasa, personality("enemy", owner=P2, force=2)]
     session = combat_segment(units, {"binasa": 0}, {"enemy": 0})
     token_template(
-        session.game, "pearl_strategy", name="Pearl", card_type="Strategy", keywords=("Pearl",)
+        session.game, "storage_pearl", name="Pearl", card_type="Strategy", keywords=("Pearl",)
     )
     return session
 
@@ -2382,7 +2382,7 @@ def _pearl_strategy(card_id: str) -> L5RCard:
     return L5RCard.of(
         ActionPrint,
         id=card_id,
-        printed_id="pearl_strategy",
+        printed_id="storage_pearl",
         name="Pearl",
         side=Side.FATE,
         owner=P1,
@@ -2810,7 +2810,7 @@ def _arakan_engaged() -> EngineSession:
     attached(state, attachment("spear", attachment_type=AttachmentType.FOLLOWER), "kurutta")
     token_template(
         state,
-        "undead_follower_2f",
+        "determined_undead",
         name="Undead",
         card_type="Follower",
         keywords=("Nonhuman", "Undead", "Shadowlands"),

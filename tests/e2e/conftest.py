@@ -122,7 +122,7 @@ def new_player(browser, live_server):
 # Weapon Artist is a Holding that creates exactly one token; loading a deck of it populates the
 # table's `creatable_tokens` so a SPAWN_CARD {token_id} resolves. Both e2e files lean on this.
 CREATOR_CARD_ID = "weapon_artist"
-TOKEN_CARD_ID = "weapon_item_sword_plus2f_plus1c"
+TOKEN_CARD_ID = "quality_steel"
 
 # A minimal loadable deck: a stronghold to open provinces and a dynasty stack of nothing but Weapon
 # Artist. parse_deck_yaml resolves card names against the database, so these must match real cards.

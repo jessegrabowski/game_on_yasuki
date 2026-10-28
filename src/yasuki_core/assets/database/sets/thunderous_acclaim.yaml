@@ -1659,6 +1659,8 @@ cards:
   collector_number: '21'
   designer: Julien
 - title: Kaiu Otogou
+  creates:
+  - defenses
   types:
   - Personality
   decks:

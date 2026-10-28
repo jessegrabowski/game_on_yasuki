@@ -799,7 +799,7 @@ register_ability(
 # --- The Forgotten ---
 
 
-FORGOTTEN_DEAD = "forgotten_dead"
+FORGOTTEN_DEAD = "zombie_follower_rtr"
 FORGOTTEN_HONOR_LOSS = 2
 
 

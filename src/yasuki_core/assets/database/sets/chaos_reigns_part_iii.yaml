@@ -115,7 +115,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - id: aulus_cr3
   creates:
-  - gaijin_yodotai_follower_1f
+  - yodotai_infantry
   title: Aulus
   types:
   - Personality
@@ -1120,7 +1120,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ijathilu Zealots
   creates:
-  - naga_zealot_personality_2_2_1
+  - naga_zealot
   types:
   - Follower
   decks:
@@ -1262,7 +1262,7 @@ cards:
 - title: Isawa Tsumaro
   subtitle: Master of Air
   creates:
-  - tsumaros_illusion
+  - ultimate_illusion
   types:
   - Personality
   decks:
@@ -1941,7 +1941,7 @@ cards:
 - title: Moto Ikarichi
   subtitle: Bloodseeker
   creates:
-  - undead_cavalry_follower_2f
+  - dark_moto_riders
   types:
   - Personality
   decks:
@@ -1970,7 +1970,7 @@ cards:
 - title: Moto Ogaru
   subtitle: Realmborn of Chikushudo
   creates:
-  - panda_berserker_follower_2f
+  - khan_spirit_panda
   types:
   - Personality
   decks:
@@ -2323,7 +2323,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Sarassa
   creates:
-  - orochi_follower_3f
+  - large_orochi_follower
   types:
   - Personality
   decks:
@@ -2356,7 +2356,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Sarpal
   creates:
-  - naga_zealot_personality_2_2_1
+  - naga_zealot
   types:
   - Personality
   decks:
@@ -2427,12 +2427,10 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shuyo Dojo
   creates:
-  - cavalry
-  - cavalry_token
-  - crane_levies
-  - dutiful_cavalry
-  - hachiman
-  - medium_cavalry_follower
+  - student_berserker
+  - student_ninja
+  - student_paragon
+  - student_engineer
   types:
   - Holding
   decks:
@@ -2721,7 +2719,7 @@ cards:
 - title: The Dark Horseman
   subtitle: Obsidian Legion
   creates:
-  - undead_cavalry_follower_2f_fear2
+  - obsidian_legionnaire
   types:
   - Personality
   decks:
@@ -2776,7 +2774,7 @@ cards:
 - title: The Emperor's Legions
   gold_production: 1
   creates:
-  - emperors_legion
+  - imperial_legionnaire
   types:
   - Sensei
   decks:
@@ -3165,7 +3163,7 @@ cards:
 - title: Waietto
   subtitle: Tanuki Clan Champion
   creates:
-  - tanuki_samurai_personality_2_2_2
+  - tanuki_samurai
   types:
   - Personality
   decks:
@@ -3197,7 +3195,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Walk with Tengoku
   creates:
-  - fushicho_personality_3_2_3
+  - fushicho
   types:
   - Spell
   decks:
@@ -3324,7 +3322,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Zealotry
   creates:
-  - naga_zealot_personality_2_2_1
+  - naga_zealot
   types:
   - Strategy
   decks:

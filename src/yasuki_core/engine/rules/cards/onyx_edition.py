@@ -1057,7 +1057,7 @@ def _resolve_spearmen_of_the_akasha(
 # --- Tamori Tsushima ---
 
 TAMORI_TSUSHIMA_GOLD = 3
-DRAGON_YOJIMBO = "dragon_yojimbo_personality_2_2_2"
+DRAGON_YOJIMBO = "tsushimas_guard"
 TAMORI_TSUSHIMA_CREATE = "Create and Recruit a Samurai Yojimbo"
 
 

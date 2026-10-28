@@ -466,7 +466,7 @@ def _resolve_ruby_of_iuchiban_experienced_2_tie(
 # --- Sasada, Pearl Champion (Experienced) ---
 
 
-SASADAS_OROCHI = "orochi_follower_2f"
+SASADAS_OROCHI = "orochi_follower"
 
 
 @on(EnteredPlay, "sasada_pearl_champion_experienced")
@@ -856,7 +856,7 @@ register_ability(
 
 # --- Veteran of Thunder ---
 
-THUNDER_VETERAN = "mantis_samurai_naval_personality_2_1_2"
+THUNDER_VETERAN = "mantis_veteran"
 
 
 def _veteran_of_thunder_yu(ctx: TriggerContext) -> list[Effect]:

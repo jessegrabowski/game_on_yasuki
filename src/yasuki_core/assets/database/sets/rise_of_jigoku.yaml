@@ -107,7 +107,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ahuja
   creates:
-  - pearl_strategy
+  - storage_pearl
   types:
   - Personality
   decks:
@@ -1560,7 +1560,7 @@ cards:
 - title: Kagami Sensei
   gold_production: -1
   creates:
-  - crane_courtier_personality_0_2_3
+  - the_delegate
   types:
   - Sensei
   decks:
@@ -1993,7 +1993,7 @@ cards:
 - title: Mishime Sensei
   gold_production: -1
   creates:
-  - oni_personality_variable_chi
+  - named_oni
   types:
   - Sensei
   decks:
@@ -2398,7 +2398,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Resplendent Pearl Cache
   creates:
-  - pearl_strategy
+  - storage_pearl
   types:
   - Holding
   decks:
@@ -3821,7 +3821,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yobanjin Raids
   creates:
-  - yobanjin_cavalry_personality_4_2
+  - yobanjin_raiding_party
   types:
   - Strategy
   decks:

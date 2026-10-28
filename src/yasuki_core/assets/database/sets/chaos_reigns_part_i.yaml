@@ -769,7 +769,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Yamazaru
   creates:
-  - yamazarus_monkey
+  - namaikina_yamazarus_monkey
   types:
   - Personality
   decks:

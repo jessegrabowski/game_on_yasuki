@@ -332,7 +332,7 @@ register_ability(
 # --- Bound in Blood ---
 
 
-HORROR = "horror_shadowlands_personality"
+HORROR = "bound_monstrosity"
 GOLD_PER_SACRIFICE = 2
 MOST_SACRIFICES = 4
 
@@ -421,7 +421,7 @@ register_ability(
 # --- Courts of Otosan Uchi ---
 
 
-COURTIER = "courtier_personality_0_2_2"
+COURTIER = "courtier_of_otosan_uchi"
 
 
 def _courts_of_otosan_uchi_invest(game: GameState, source: L5RCard, amount: int) -> list[Effect]:
@@ -488,7 +488,7 @@ register_invest(
 # --- Culling Grounds ---
 
 
-EXPENDABLE_SERVANT = "expendable_personality_0_2_1"
+EXPENDABLE_SERVANT = "sacrifice"
 
 
 register_may_remain_bowed("culling_grounds")
@@ -1480,7 +1480,7 @@ register_invest("rebuilt_harbor", InvestAbility(amounts=(1, 2, 3), effect=_rebui
 SHIDARE_NO_ONI_FORCE_PENALTY = 2
 SHIDARE_NO_ONI_GOLD = 4
 SHIDARE_NO_ONI_HONOR_LOSS = 2
-SHIDARE_NO_ONI_ONI = "oni_personality_3_1_0"
+SHIDARE_NO_ONI_ONI = "shidare_no_oni_uprooted"
 
 
 def _shidare_no_oni_targets(game: GameState, source: L5RCard) -> list[str]:

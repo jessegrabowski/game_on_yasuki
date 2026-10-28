@@ -1,7 +1,6 @@
 set: Tokens
 cards:
-- id: ancestor_yojimbo_follower_0f
-  title: Blessed Guard
+- title: Blessed Guard
   types:
   - Follower
   - Proxy
@@ -15,8 +14,7 @@ cards:
   force: 0
   gold_cost: 0
   is_proxy: true
-- id: armor_item_plus2f
-  title: Armor
+- title: Sanjiro's Armor
   types:
   - Item
   - Proxy
@@ -40,8 +38,7 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-- id: blossom_oni_follower_1f
-  title: Shidare's Blossom
+- title: Corpse Flower
   types:
   - Follower
   - Proxy
@@ -55,8 +52,7 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-- id: courage_follower_1f
-  title: Courageous Troops
+- title: Irregular
   types:
   - Follower
   - Proxy
@@ -67,8 +63,7 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-- id: courage_follower_2f
-  title: Drilled Troops
+- title: Irregular Veteran
   types:
   - Follower
   - Proxy
@@ -79,8 +74,7 @@ cards:
   force: 2
   gold_cost: 2
   is_proxy: true
-- id: courtier_0_3_2
-  title: Courtier
+- title: Bodyguard's Vow
   types:
   - Personality
   - Proxy
@@ -93,8 +87,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-- id: courtier_expendable_personality_0_2_2
-  title: Terumoto's Courtier
+- title: Terumoto's Apprentice
   types:
   - Personality
   - Proxy
@@ -109,8 +102,8 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: <b>Political Open, :bow::</b> A target player gains or loses 1 Honor.
-- id: courtier_personality_0_2_2
-  title: Courtier
+- title: Courtier
+  subtitle: of Otosan Uchi
   types:
   - Personality
   - Proxy
@@ -123,8 +116,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-- id: crane_courtier_personality_0_2_3
-  title: Kagami's Courtier
+- title: The Delegate
   types:
   - Personality
   - Proxy
@@ -140,8 +132,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: Before your turn ends, banish this Personality; if you did, gain 2 Honor.
-- id: dragon_yojimbo_personality_2_2_2
-  title: Dragon Yojimbo
+- title: Tsushima's Guard
   types:
   - Personality
   - Proxy
@@ -157,8 +148,8 @@ cards:
   personal_honor: 2
   gold_cost: 3
   is_proxy: true
-- id: earth_fire_terrain_strategy
-  title: Terrain
+- id: scorched_earth_cr2
+  title: Scorched Earth
   types:
   - Strategy
   - Proxy
@@ -171,8 +162,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: '<b>Repeatable Battle:</b> Bow your target Ring, or :earth: Personality, to make a :ranged: 3.'
-- id: water_ancestor_terrain_strategy
-  title: Terrain
+- title: The Heavens' Tide
   types:
   - Strategy
   - Proxy
@@ -183,8 +173,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: 'Your opposed Ancestor and :water: Personalities at this battlefield have +1F.'
-- id: expendable_personality_0_2_1
-  title: Expendable Servant
+- title: Sacrifice
   types:
   - Personality
   - Proxy
@@ -197,8 +186,7 @@ cards:
   personal_honor: 1
   gold_cost: 1
   is_proxy: true
-- id: fushicho_personality_3_2_3
-  title: Fushicho
+- title: Fushicho
   types:
   - Personality
   - Proxy
@@ -214,8 +202,7 @@ cards:
   personal_honor: 3
   gold_cost: 0
   is_proxy: true
-- id: gaijin_yodotai_follower_1f
-  title: Aulus's Yodotai
+- title: Yodotai Infantry
   types:
   - Follower
   - Proxy
@@ -227,8 +214,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-- id: goose_spirit_personality_1_2_3
-  title: Yayuko's Goose
+- title: Heiwa
+  subtitle: Yayuko's Goose
   types:
   - Personality
   - Proxy
@@ -245,8 +232,7 @@ cards:
   is_proxy: true
   text: <b>Open, :bow::</b> If an Attack is declared against you this turn, gain 1 Honor at the end of
     it for each of your Provinces, to a maximum of 3.
-- id: horror_shadowlands_personality
-  title: Horror
+- title: Bound Monstrosity
   types:
   - Personality
   - Proxy
@@ -270,8 +256,7 @@ cards:
   text: '<b>Political Open, :favor::</b> If it is your turn, discard a Fate card to draw a card.<br><b>Political
     Battle, :favor::</b> Move a target attacking enemy Personality home.'
   is_proxy: true
-- id: mantis_samurai_naval_personality_2_1_2
-  title: Thunder Veteran
+- title: Mantis Veteran
   types:
   - Personality
   - Proxy
@@ -287,8 +272,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-- id: mercenary_ronin_personality_2_2_1
-  title: Ninsei's Mercenary
+- title: Mercenary
   types:
   - Personality
   - Proxy
@@ -303,8 +287,7 @@ cards:
   personal_honor: 1
   gold_cost: 2
   is_proxy: true
-- id: moth_spirit_follower_0f
-  title: Sawako's Moth
+- title: Sawako's Moth
   types:
   - Follower
   - Proxy
@@ -319,8 +302,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: 'Yu: Gain 2 Honor.'
-- id: naga_zealot_personality_2_2_1
-  title: Naga Zealot
+- title: Naga Zealot
   types:
   - Personality
   - Proxy
@@ -335,8 +317,7 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-- id: oni_personality_2_1
-  title: Lesser Oni
+- title: Spawn of Yabe
   types:
   - Personality
   - Proxy
@@ -350,8 +331,8 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-- id: oni_personality_3_1_0
-  title: Oni
+- title: Shidare no Oni
+  subtitle: Uprooted
   types:
   - Personality
   - Proxy
@@ -366,8 +347,22 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-- id: oni_personality_variable_chi
-  title: Mishime's Oni
+- title: Chuda Oni
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  force: 3
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Named Oni
   types:
   - Personality
   - Proxy
@@ -382,8 +377,7 @@ cards:
   gold_cost: 3
   personal_honor: 0
   is_proxy: true
-- id: orochi_follower_2f
-  title: Sasada's Orochi
+- title: Orochi Follower
   types:
   - Follower
   - Proxy
@@ -395,8 +389,7 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-- id: orochi_follower_3f
-  title: Sarassa's Orochi
+- title: Large Orochi Follower
   types:
   - Follower
   - Proxy
@@ -409,8 +402,8 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: '<b>Battle:</b> :ranged: 3.'
-- id: ox_spirit_personality_6_2_3
-  title: Maiko's Ox
+- title: Kabeushi
+  subtitle: Maiko's Ox
   types:
   - Personality
   - Proxy
@@ -425,8 +418,8 @@ cards:
   personal_honor: 3
   gold_cost: 7
   is_proxy: true
-- id: panda_berserker_follower_2f
-  title: Ogaru's Panda
+- title: Khan
+  subtitle: Spirit Panda
   types:
   - Follower
   - Proxy
@@ -441,8 +434,7 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-- id: pearl_strategy
-  title: Pearl
+- title: Storage Pearl
   types:
   - Strategy
   - Proxy
@@ -452,8 +444,7 @@ cards:
   - Pearl
   gold_cost: 0
   is_proxy: true
-- id: pirate_naval_personality
-  title: Pirate
+- title: Pirate
   types:
   - Personality
   - Proxy
@@ -469,8 +460,8 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-- id: ram_spirit_personality_3_1_3
-  title: Toson's Ram
+- title: Zudzuki
+  subtitle: Toson's Ram
   types:
   - Personality
   - Proxy
@@ -487,8 +478,7 @@ cards:
   gold_cost: 4
   is_proxy: true
   text: '<b>Battle, :bow::</b> :melee: 2.'
-- id: ratling_scout_follower_1f
-  title: Kan'ol'ti'chek's Scout
+- title: Nezumi Guide
   types:
   - Follower
   - Proxy
@@ -501,8 +491,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-- id: ratling_scout_personality_1_1_1
-  title: Zin'tik'kir's Scout
+- id: nezumi_scout_got
+  title: Nezumi Scout
   types:
   - Personality
   - Proxy
@@ -517,8 +507,7 @@ cards:
   personal_honor: 1
   gold_cost: 0
   is_proxy: true
-- id: ronin_samurai_personality_4_4_4
-  title: Sacred Stone Ronin
+- title: '"His Tale Lives On"'
   types:
   - Personality
   - Proxy
@@ -550,8 +539,21 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-- id: scorpion_yojimbo_personality_2_2_0
-  title: Scorpion Yojimbo
+- title: Bodyguard
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- title: Ryoko Owari Guard
   types:
   - Personality
   - Proxy
@@ -568,8 +570,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: 'Yu: A target player loses 2 Honor.'
-- id: shugenja_2_2_2
-  title: Shugenja
+- title: Bodyguard's Obligation
   types:
   - Personality
   - Proxy
@@ -582,8 +583,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-- id: tanuki_samurai_personality_2_2_2
-  title: Waietto's Tanuki
+- title: Tanuki Samurai
   types:
   - Personality
   - Proxy
@@ -597,8 +597,7 @@ cards:
   personal_honor: 2
   gold_cost: 0
   is_proxy: true
-- id: undead_cavalry_follower_2f
-  title: Ikarichi's Undead
+- title: Dark Moto Riders
   types:
   - Follower
   - Proxy
@@ -628,8 +627,22 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: '<b>Battle:</b> :fear: 2.'
-- id: undead_follower_2f
-  title: Undead Troops
+- title: Obsidian Legionnaire
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Cavalry
+  - Shadowlands
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: '<b>Battle:</b> :fear: 2.'
+- title: Determined Undead
   types:
   - Follower
   - Proxy
@@ -642,8 +655,8 @@ cards:
   force: 2
   gold_cost: 0
   is_proxy: true
-- id: victim_personality_0_3_0
-  title: Victim
+- title: '"Guest"'
+  subtitle: of the Chuda
   types:
   - Personality
   - Proxy
@@ -656,8 +669,7 @@ cards:
   personal_honor: 0
   gold_cost: 0
   is_proxy: true
-- id: weapon_item_claw_plus1f
-  title: Hiyamako's Claw
+- title: Hiyamako's Claw
   types:
   - Item
   - Proxy
@@ -670,8 +682,7 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-- id: weapon_item_sword_plus1f
-  title: Sword
+- title: Fine Steel
   types:
   - Item
   - Proxy
@@ -684,8 +695,7 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-- id: weapon_item_sword_plus2f_plus1c
-  title: Fine Sword
+- title: Quality Steel
   types:
   - Item
   - Proxy
@@ -713,8 +723,7 @@ cards:
   chi: 1
   gold_cost: 0
   is_proxy: true
-- id: yobanjin_cavalry_personality_4_2
-  title: Yobanjin Raider
+- title: Yobanjin Raiding Party
   types:
   - Personality
   - Proxy
@@ -925,8 +934,7 @@ cards:
   force: 3
   gold_cost: 0
   is_proxy: true
-- id: emperors_legion
-  title: Emperor's Legion
+- title: Imperial Legionnaire
   types:
   - Personality
   - Proxy
@@ -968,8 +976,8 @@ cards:
   force: 1
   gold_cost: 0
   is_proxy: true
-- id: forgotten_dead
-  title: Forgotten Dead
+- id: zombie_follower_rtr
+  title: Zombie Follower
   types:
   - Follower
   - Proxy
@@ -1431,8 +1439,7 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: Remove this Personality from the game after this battle's resolution.
-- id: naga_warrior
-  title: Naga Warrior
+- title: Naga Believer
   types:
   - Personality
   - Proxy
@@ -2006,3 +2013,248 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: This Personality has Cavalry.
+- title: Zou
+  subtitle: Yoshioka's Elephant
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Elephant
+  - Nonhuman
+  - Spirit
+  - Cavalry
+  force: 4
+  chi: 2
+  personal_honor: 3
+  gold_cost: 6
+  is_proxy: true
+  text: '<b>Battle:</b> :fear: 3, or :fear: 4 if the target is Cavalry.'
+- title: Soul Ono
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Axe
+  - One-Handed
+  - Weapon
+  force: 2
+  chi: 0
+  gold_cost: 4
+  is_proxy: true
+  text: '<b>Battle, :bow::</b> Give a target Personality a -1F token.'
+- title: Honored Dead
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ancestor
+  - Samurai
+  - Spirit
+  force: 2
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: This Personality has your Clan Alignment.
+- title: Shika
+  subtitle: Kaemon's Deer
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Deer
+  - Nonhuman
+  - Spirit
+  force: 2
+  chi: 2
+  personal_honor: 3
+  gold_cost: 4
+  is_proxy: true
+  text: '<b>Open:</b> If it is your turn and another player has higher Family Honor than you, gain 2 Honor.'
+- title: Hairoguma
+  subtitle: Rokuko's Bear
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Bear
+  - Nonhuman
+  - Spirit
+  force: 4
+  chi: 2
+  personal_honor: 3
+  gold_cost: 6
+  is_proxy: true
+  text: '<b>Battle:</b> Bow a target attacking enemy card without attachments. Destroy it if it is an attachment.'
+- title: Allied Follower
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  force: '*'
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+  text: This Follower has the Force and printed abilities of the Personality banished by the action that
+    created it.
+- title: Namaikina
+  subtitle: Yamazaru's Monkey
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Monkey
+  - Nonhuman
+  - Spirit
+  force: 2
+  chi: 3
+  personal_honor: 3
+  gold_cost: 4
+  is_proxy: true
+  text: '<b>Battle, :bow::</b> Move this Personality home to move home a target enemy Personality with lower Chi.'
+- title: Eroding Waters
+  types:
+  - Strategy
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Terrain
+  - Water
+  gold_cost: 0
+  is_proxy: true
+  text: This Province has -1PS for each of your opposed Personalities.
+- title: Wataru's Draught
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Potion
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- title: Sakkaku's Prank
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Spirit
+  force: '*'
+  chi: '*'
+  personal_honor: '*'
+  gold_cost: '*'
+  honor_requirement: '*'
+  is_proxy: true
+  text: This Personality has the Title, Stats, Keywords, Traits and Abilities of the target of the action
+    that created it. It loses its original Clan Alignment and gains yours permanently.
+- title: Ballistae
+  types:
+  - Holding
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Fortification
+  gold_cost: 2
+  gold_production: 2
+  is_proxy: true
+  text: '<b>Remote Battle:</b> :ranged: 3'
+- title: Ultimate Illusion
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Illusion
+  - Nonhuman
+  - Air
+  force: '*'
+  chi: '*'
+  personal_honor: '*'
+  gold_cost: 0
+  honor_requirement: '*'
+  is_proxy: true
+  text: This Personality has the Title, Stats, Keywords, Traits and Abilities of the target of the action
+    that created it.
+- id: mantis_sailor_gs
+  title: Mantis Sailor
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Student Berserker
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Berserker
+  - Cavalry
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Student Ninja
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ninja
+  - Cavalry
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Student Paragon
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Paragon
+  - Cavalry
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true
+- title: Student Engineer
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Siege
+  - Cavalry
+  force: 1
+  chi: 0
+  gold_cost: 0
+  is_proxy: true

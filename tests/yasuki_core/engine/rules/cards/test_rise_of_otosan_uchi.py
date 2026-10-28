@@ -1301,7 +1301,7 @@ def test_kitsu_watanabe_replays_to_the_same_board():
 
 # --- Shidare no Oni ---
 
-SHIDARE_ONI = "oni_personality_3_1_0"
+SHIDARE_ONI = "shidare_no_oni_uprooted"
 
 
 @pytest.mark.parametrize(

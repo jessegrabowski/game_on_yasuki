@@ -674,7 +674,7 @@ register_ability(
 # --- Tetsuo Hiyamako (Experienced) ---
 
 
-HIYAMAKOS_CLAW = "weapon_item_claw_plus1f"
+HIYAMAKOS_CLAW = "hiyamakos_claw"
 CLAW_COUNT = 2
 
 
@@ -1099,7 +1099,7 @@ register_ability(
 
 # --- Yabe no Oni, Blessed Abomination (Experienced) ---
 
-LESSER_ONI = "oni_personality_2_1"
+LESSER_ONI = "spawn_of_yabe"
 YABE_HONOR_LOSS = 6
 YABE_YU_ONI_COUNT = 2
 

@@ -429,7 +429,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Bound in Blood
   creates:
-  - horror_shadowlands_personality
+  - bound_monstrosity
   types:
   - Spell
   decks:
@@ -591,7 +591,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Courts of Otosan Uchi
   creates:
-  - courtier_personality_0_2_2
+  - courtier_of_otosan_uchi
   grants:
   - wealth
   types:
@@ -616,7 +616,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Culling Grounds
   creates:
-  - expendable_personality_0_2_1
+  - sacrifice
   types:
   - Holding
   decks:
@@ -1170,7 +1170,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Drill Instruction
   creates:
-  - courage_follower_2f
+  - irregular_veteran
   types:
   - Strategy
   decks:
@@ -1247,7 +1247,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Flood from Beyond
   creates:
-  - water_ancestor_terrain_strategy
+  - the_heavens_tide
   types:
   - Spell
   decks:
@@ -2091,7 +2091,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Maiko
   creates:
-  - ox_spirit_personality_6_2_3
+  - kabeushi_maikos_ox
   types:
   - Personality
   decks:
@@ -2602,7 +2602,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Otomo Terumoto
   creates:
-  - courtier_expendable_personality_0_2_2
+  - terumotos_apprentice
   types:
   - Personality
   decks:
@@ -2715,7 +2715,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Purity's Merciful Hand
   creates:
-  - pearl_strategy
+  - storage_pearl
   types:
   - Spell
   decks:
@@ -3077,7 +3077,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shidare no Oni
   creates:
-  - oni_personality_3_1_0
+  - shidare_no_oni_uprooted
   types:
   - Holding
   decks:
@@ -4088,7 +4088,7 @@ cards:
 - title: Yoritomo Ninsei
   subtitle: Broken Wave City Governor
   creates:
-  - mercenary_ronin_personality_2_2_1
+  - mercenary
   types:
   - Personality
   decks:
@@ -4149,7 +4149,7 @@ cards:
 - title: Zenathaar
   subtitle: Warrior of the Bright Eye
   creates:
-  - naga_warrior
+  - naga_believer
   types:
   - Personality
   decks:

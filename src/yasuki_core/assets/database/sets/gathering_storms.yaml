@@ -295,7 +295,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Mikka
   creates:
-  - pirate_naval_personality
+  - pirate
   types:
   - Personality
   decks:
@@ -322,7 +322,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Natsuko
   creates:
-  - pirate_naval_personality
+  - pirate
   types:
   - Personality
   decks:
@@ -460,7 +460,7 @@ cards:
 - title: Ichido Allegiance
   gold_production: 0
   creates:
-  - pirate_naval_personality
+  - pirate
   types:
   - Sensei
   decks:
@@ -634,10 +634,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Minoko Allegiance
-  gold_production: 0
   creates:
-  - farmer
-  - medium_follower
+  - mantis_sailor_gs
+  gold_production: 0
   types:
   - Sensei
   decks:
