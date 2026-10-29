@@ -66,6 +66,7 @@ def personality(
     gold_cost: int | None = None,
     keywords: tuple[str, ...] = (),
     clans: tuple[str, ...] = (),
+    is_unique: bool = False,
 ) -> L5RCard:
     """A Personality. ``chi`` defaults live because a Personality at zero Chi is destroyed on sight
     (CR, Chi Death Rule), which would otherwise remove the card a test just built."""
@@ -83,6 +84,7 @@ def personality(
         gold_cost=gold_cost,
         keywords=keywords,
         clans=clans,
+        is_unique=is_unique,
     )
 
 

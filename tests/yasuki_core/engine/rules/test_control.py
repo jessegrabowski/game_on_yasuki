@@ -110,6 +110,16 @@ def test_giving_control_of_a_card_that_has_left_the_table_does_nothing():
     assert game.table.controllers == {}
 
 
+def test_giving_control_of_a_card_in_its_owners_hand_does_nothing():
+    game = two_seat_game()
+    held = register(game.table, personality("held", owner=P2))
+    game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(held)
+
+    resolve_effects(game, [TakeControl("held", P1)])
+
+    assert game.table.controllers == {}
+
+
 def test_a_unit_taken_at_a_battlefield_joins_its_new_controllers_side():
     game = two_seat_game()
     theirs = put_in_play(game, personality("theirs", owner=P2))
@@ -119,6 +129,26 @@ def test_a_unit_taken_at_a_battlefield_joins_its_new_controllers_side():
 
     assert units_at(game, 0, P1) == [theirs]
     assert units_at(game, 0, P2) == []
+
+
+def test_a_seat_holding_a_unique_card_does_not_take_control_of_its_namesake():
+    game = two_seat_game()
+    put_in_play(game, personality("mine", printed_id="hero", is_unique=True))
+    put_in_play(game, personality("theirs", owner=P2, printed_id="hero", is_unique=True))
+
+    resolve_effects(game, [TakeControl("theirs", P1)])
+
+    assert game.table.controllers == {}
+
+
+def test_a_seat_a_card_will_not_join_does_not_take_control_of_it():
+    game = two_seat_game()
+    put_in_play(game, personality("tsuneo", owner=P2, printed_id="moto_tsuneo_soul_of_moto_tsume"))
+    game.table.seats[P1].honor = 1
+
+    resolve_effects(game, [TakeControl("tsuneo", P1)])
+
+    assert game.table.controllers == {}
 
 
 def test_a_destroyed_card_reaches_its_owners_pile_however_it_was_controlled():

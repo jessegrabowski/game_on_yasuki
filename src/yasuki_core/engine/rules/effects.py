@@ -994,7 +994,8 @@ class TakeControl(Effect):
     A card at a battlefield joins the new controller's side of it and one at home enters the new
     controller's home (CR, Card control). Both follow from the record alone, since a side and a
     home are read off control rather than stored, and a card's attachments follow their
-    Personality.
+    Personality. Taking control is joining (CR, Join), so a card whose "Will not join" text or
+    Unique limit refuses ``seat`` stays where it is, as does a card no longer in play.
 
     Changing control is instantaneous and has no duration (CR, Card control), so a return is a
     second :class:`~.TakeControl`.
@@ -1012,7 +1013,12 @@ class TakeControl(Effect):
 
     def would_happen(self, game: GameState) -> bool:
         card = game.table.cards_by_id.get(self.card_id)
-        return card is not None and controller_of(game.table, card) is not self.seat
+        return (
+            card is not None
+            and _in_play(game, card)
+            and controller_of(game.table, card) is not self.seat
+            and may_join(game, self.seat, card)
+        )
 
     def perform(self, game: GameState) -> list[GameEvent]:
         if not self.would_happen(game):

@@ -863,7 +863,9 @@ def test_mishime_replays_to_the_same_board():
 # --- Ninube Kaede ---
 
 
-def _kaede_game(*, kaede_chi=4, kaede_cost=8, theirs_chi=3, theirs_cost=8) -> EngineSession:
+def _kaede_game(
+    *, kaede_chi=4, kaede_cost=8, theirs_chi=3, theirs_cost=8, theirs_unique=False
+) -> EngineSession:
     """Kaede in play opposite an enemy Personality, with both units' Gold Cost set by the
     Personalities alone."""
     game = two_seat_game()
@@ -877,7 +879,17 @@ def _kaede_game(*, kaede_chi=4, kaede_cost=8, theirs_chi=3, theirs_cost=8) -> En
             gold_cost=kaede_cost,
         ),
     )
-    put_in_play(game, personality("theirs", owner=P2, chi=theirs_chi, gold_cost=theirs_cost))
+    put_in_play(
+        game,
+        personality(
+            "theirs",
+            owner=P2,
+            printed_id="hero",
+            chi=theirs_chi,
+            gold_cost=theirs_cost,
+            is_unique=theirs_unique,
+        ),
+    )
     return EngineSession.start(game.table, P1)
 
 
@@ -1009,6 +1021,17 @@ def test_killing_kaede_still_gives_her_target_back():
 
     assert controller_of(session.game.table, session.game.table.cards_by_id["theirs"]) is P2
     assert session.game.table.controllers == {}
+
+
+def test_ninube_kaede_is_still_given_away_when_the_unique_rule_refuses_her_target():
+    session = _kaede_game(theirs_unique=True)
+    put_in_play(session.game, personality("namesake", printed_id="hero", chi=1, is_unique=True))
+
+    _take(session)
+
+    table = session.game.table
+    assert controller_of(table, table.cards_by_id["theirs"]) is P2
+    assert controller_of(table, table.cards_by_id["kaede"]) is P2
 
 
 def test_the_follower_riding_kaedes_target_comes_with_him():
