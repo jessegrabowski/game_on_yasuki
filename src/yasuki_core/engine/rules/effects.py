@@ -1361,21 +1361,27 @@ class GrantProvinceStrength(Effect):
     ``amount`` for ``duration``.
 
     The Province counterpart of :class:`~.GrantModifier`, targeting a province slot instead of a
-    Personality.
+    Personality. A grant naming no Province changes nothing, the way an effect reaching a card
+    that has left the table does: a card that gives "the current Province" strength is still
+    announceable at a battlefield not associated with any Province (CR, Good Faith Rule, which
+    bars only unpayable costs, unmeetable targeting and a failing leading "If").
     """
 
     source_id: str
-    province: ZoneKey
+    province: ZoneKey | None
     amount: int
     duration: Lifetime
 
     def describe(self) -> str:
+        where = "no province" if self.province is None else self.province.token
         return (
-            f"{self.source_id} gives {self.province.token} {self.amount:+d} province strength "
+            f"{self.source_id} gives {where} {self.amount:+d} province strength "
             f"({describe_lifetime(self.duration)})"
         )
 
     def perform(self, game: GameState) -> list[GameEvent]:
+        if self.province is None:
+            return []
         game.ongoing.append(
             ProvinceModifier(self.source_id, self.province, self.amount, self.duration)
         )

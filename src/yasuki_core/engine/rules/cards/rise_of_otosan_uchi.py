@@ -630,6 +630,8 @@ def _dark_ring_of_earth_experienced_cost(game: GameState, source: L5RCard) -> li
         return [Unpayable("no battle is being fought")]
     province = attack.current_province
     if province is None:
+        # A cost naming the current Province cannot be paid without one (CR, Good Faith Rule 0.1),
+        # where an effect naming it would simply do nothing.
         return [Unpayable("the battlefield is not at any Province")]
     strength = effective_province_strength(game, province)
     lowered = GrantProvinceStrength(source.id, province, -strength, Duration.UNTIL_END_OF_TURN)
@@ -1383,8 +1385,6 @@ def _man_the_walls_effects(game: GameState, source: L5RCard, target: L5RCard) ->
     it later, leaves the Province as strong as it was made.
     """
     province = game.attack.current_province
-    if province is None:
-        return [Bow(target.id)]
     bonus = effective_force(game, target)
     return [
         Bow(target.id),
