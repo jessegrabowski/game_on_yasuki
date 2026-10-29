@@ -514,9 +514,9 @@ def _grants_to(
 ) -> TypeGuard[AbilityGrant | SeatAbilityGrant]:
     if isinstance(recorded, AbilityGrant):
         return recorded.target_id == card.id
-    return isinstance(recorded, SeatAbilityGrant) and recorded.seat is controller_of(
-        game.table, card
-    )
+    if isinstance(recorded, SeatAbilityGrant):
+        return recorded.seat is controller_of(game.table, card)
+    return False
 
 
 def _conferred(game: GameState, card: L5RCard) -> tuple[Ability, ...]:

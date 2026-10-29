@@ -1036,7 +1036,7 @@ def _ninube_kaede_targets(game: GameState, source: L5RCard) -> list[str]:
 
 def _ninube_kaede_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     """Take the target, hand Kaede to the seat that lost him, and give both back when the turn
-    ends. Each previous controller is read before either hand changes."""
+    ends. Each previous controller is read before either card changes controller."""
     seat = controller_of(game.table, source)
     theirs = controller_of(game.table, target)
     returning = Simultaneously(

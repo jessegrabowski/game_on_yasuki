@@ -687,9 +687,8 @@ def declarable_gold(game: GameState, source: L5RCard, ability_key: str | None = 
     The CR's own variable costs read the same way: Recruit matches the Gold Cost against the amount
     declared and charges the off-clan 2 Gold on top of it (CR, Recruit).
     """
-    return reachable_gold(game, controller_of(game.table, source)) + _unspent_discount(
-        game, source, ability_key
-    )
+    seat = controller_of(game.table, source)
+    return reachable_gold(game, seat) + _unspent_discount(game, source, ability_key)
 
 
 def _unspent_discount(game: GameState, source: L5RCard, ability_key: str | None) -> int:
