@@ -90,7 +90,7 @@ from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.engine.rules.board.clans import card_alignments
 from yasuki_core.engine.rules.rulebook.equip import equip_discount
 from yasuki_core.engine.rules.vocabulary.modifiers import CompassionGrant, Duration, Negation
-from yasuki_core.engine.table import DeckKey, Location, location_of
+from yasuki_core.engine.table import DeckKey, Location, controller_of, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.prints import EventPrint
@@ -819,7 +819,7 @@ def _resolve_togashi_noritada_cost(
 ) -> list[Effect]:
     noritada = game.table.cards_by_id[source_id]
     if chosen[0] == NORITADA_MOVE_HOME:
-        return [Move(source_id, Location.home(noritada.owner))]
+        return [Move(source_id, Location.home(controller_of(game.table, noritada)))]
     options = _togashi_noritada_defender_of_the_high_house_experienced_destroy_options(noritada)
     return [AdjustCounter(source_id, options[chosen[0]], -1)]
 

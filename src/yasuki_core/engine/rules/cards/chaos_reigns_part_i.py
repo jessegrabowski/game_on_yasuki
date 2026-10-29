@@ -192,7 +192,7 @@ def _honor_your_oaths_effects(game: GameState, source: L5RCard, target: L5RCard)
     can happen only if you control it" (CR, Imperial Favor).
     """
     seat = source.owner
-    moved = [Move(target.id, Location.home(target.owner))]
+    moved = [Move(target.id, Location.home(controller_of(game.table, target)))]
     yojimbo = _honor_your_oaths_bowable_yojimbo(game, seat)
     favor = (DISCARD_THE_FAVOR,) if game.favor_holder is seat else ()
     if not yojimbo and not favor:

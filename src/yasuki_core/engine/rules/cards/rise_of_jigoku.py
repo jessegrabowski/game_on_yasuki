@@ -395,7 +395,7 @@ def _resolve_chuda_kuri_battle(
         return [Bow(target_id)]
     if chosen[0] == KURI_HOME:
         target = game.table.cards_by_id[target_id]
-        return [Move(target_id, Location.home(target.owner))]
+        return [Move(target_id, Location.home(controller_of(game.table, target)))]
     return [MeleeAttack(KURI_MELEE, target_id, seat)]
 
 

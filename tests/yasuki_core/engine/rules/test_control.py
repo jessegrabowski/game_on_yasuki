@@ -169,6 +169,32 @@ def test_a_seat_a_card_will_not_join_does_not_take_control_of_it():
     assert game.table.controllers == {}
 
 
+def test_a_controlled_unit_goes_home_to_its_controller_and_leaves_no_record_on_its_return():
+    game = two_seat_game()
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    ops.assign(game.table, theirs, 0)
+    _give_control(game, "theirs", P1)
+
+    ops.return_home(game.table, theirs)
+    assert location_of(game.table, theirs) == Location.home(P1)
+
+    _give_control(game, "theirs", P2)
+
+    assert location_of(game.table, theirs) == Location.home(P2)
+    assert game.table.locations == {}
+
+
+def test_a_card_standing_in_another_seats_home_enters_its_new_controllers_home():
+    game = two_seat_game()
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    ops.set_location(game.table, theirs, Location.home(P1))
+
+    _give_control(game, "theirs", P1)
+
+    assert location_of(game.table, theirs) == Location.home(P1)
+    assert game.table.locations == {}
+
+
 def test_a_destroyed_card_reaches_its_owners_pile_however_it_was_controlled():
     """Ownership never changes (CR, Card ownership), so the pile a card dies into is its owner's
     and not its controller's."""

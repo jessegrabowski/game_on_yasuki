@@ -992,9 +992,8 @@ class ShuffleDeck(Effect):
 class TakeControl(Effect):
     """Give ``seat`` control of ``card_id``, which its previous controller loses in this same step.
 
-    A card at a battlefield joins the new controller's side of it and one at home enters the new
-    controller's home (CR, Card control). Both follow from the record alone, since a side and a
-    home are read off control rather than stored, and a card's attachments follow their
+    A card at a battlefield joins the new controller's side of it, read off control, and one at
+    home enters the new controller's home (CR, Card control). A card's attachments follow their
     Personality, and one that copies a Unique attachment ``seat`` already controls is discarded
     (CR, Unique). Taking control is joining (CR, Join), so a card whose "Will not join" text or
     Unique limit refuses ``seat`` stays where it is, as does a card no longer in play.
@@ -1025,7 +1024,11 @@ class TakeControl(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         if not self.would_happen(game):
             return []
-        ops.set_controller(game.table, game.table.cards_by_id[self.card_id], self.seat)
+        card = game.table.cards_by_id[self.card_id]
+        at_home = location_of(game.table, card).is_home
+        ops.set_controller(game.table, card, self.seat)
+        if at_home:
+            ops.move_unit(game.table, card, Location.home(self.seat))
         return []
 
     def follow_on(self, game: GameState) -> tuple[Effect, ...]:

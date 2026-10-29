@@ -176,7 +176,7 @@ def set_position(state: TableState, card: L5RCard, x: float, y: float) -> bool:
 def set_location(state: TableState, card: L5RCard, location: Location) -> bool:
     """Record where ``card`` stands, returning whether it moved.
 
-    A card at its own owner's home is stored as no entry at all, so each board position has one
+    A card at its controller's home is stored as no entry at all, so each board position has one
     representation. Read it back through :func:`~yasuki_core.engine.table.location_of`. Raise
     ``ValueError`` on a location naming neither a home nor a battlefield.
     """
@@ -225,10 +225,10 @@ def assign(state: TableState, card: L5RCard, battlefield: int) -> bool:
 
 def return_home(state: TableState, card: L5RCard) -> bool:
     """Send ``card``'s whole unit home. Returns whether it moved. Home belongs to the unit's
-    Personality's owner, so an attached card owned by the other seat goes where its Personality
-    goes.
+    controller (CR, Locations), so an attached card owned by the other seat goes where its
+    Personality goes.
     """
-    return move_unit(state, card, Location.home(card.owner))
+    return move_unit(state, card, Location.home(controller_of(state, card)))
 
 
 def stack(state: TableState, card: L5RCard, target: AttachTarget) -> bool:

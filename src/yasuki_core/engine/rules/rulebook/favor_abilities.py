@@ -39,7 +39,7 @@ from yasuki_core.engine.rules.vocabulary.actions import (
     ActivateAbility,
     BattleDesignator,
 )
-from yasuki_core.engine.table import Location
+from yasuki_core.engine.table import Location, controller_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import (
     ONYX_FAVOR_PROXY_ID,
@@ -188,7 +188,7 @@ def _resolve_send_home(
     if not chosen:
         return []
     card = game.table.cards_by_id[chosen[0]]
-    return [Move(card_id=chosen[0], to=Location.home(card.owner))]
+    return [Move(card_id=chosen[0], to=Location.home(controller_of(game.table, card)))]
 
 
 def _choose_unit(game: GameState, seat: PlayerId) -> list[Effect]:
@@ -212,7 +212,10 @@ def _resolve_send_home_bowed(
     if not chosen:
         return []
     card = game.table.cards_by_id[chosen[0]]
-    return [Move(card_id=chosen[0], to=Location.home(card.owner)), Bow(card_id=chosen[0])]
+    return [
+        Move(card_id=chosen[0], to=Location.home(controller_of(game.table, card))),
+        Bow(card_id=chosen[0]),
+    ]
 
 
 def _choose_dishonorable(game: GameState, seat: PlayerId) -> list[Effect]:

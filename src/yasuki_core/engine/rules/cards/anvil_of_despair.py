@@ -9,7 +9,7 @@ from yasuki_core.engine.rules.gold.payment import can_afford
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import choice_resolver
 from yasuki_core.engine.rules.units.composition import followers_of
-from yasuki_core.engine.table import Location
+from yasuki_core.engine.table import Location, controller_of
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -31,7 +31,7 @@ def _refugees_effects(game: GameState, source: L5RCard, target: L5RCard) -> list
     The offer is withheld from a controller who could not pay it, which is what "may pay" means for
     a seat with no Gold to reach.
     """
-    controller = target.owner
+    controller = controller_of(game.table, target)
     sent_home: list[Effect] = [To(Move(target.id, Location.home(controller)), (Bow(target.id),))]
     if not can_afford(game, controller, ASHIGARU_GOLD):
         return sent_home
