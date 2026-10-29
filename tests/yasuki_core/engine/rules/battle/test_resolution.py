@@ -1814,6 +1814,28 @@ def test_the_resolution_bow_exemption_can_be_scoped_to_a_keyword():
     assert session.game.table.cards_by_id["soldier"].bowed
 
 
+def test_the_resolution_bow_exemption_spares_a_personality_its_seat_controls():
+    state = TableState.empty_two_seat()
+    province_card(state, "def-prov0", seat=PlayerId.P2, index=0)
+    province_card(state, "atk-prov0", seat=PlayerId.P1, index=0)
+    put_in_play(state, stronghold(PlayerId.P2))
+    borrowed = put_in_play(state, personality("borrowed", owner=PlayerId.P2, force=5))
+    ops.set_controller(state, borrowed, PlayerId.P1)
+    put_in_play(state, personality("d", owner=PlayerId.P2, force=1))
+    session = _to_battle(EngineSession.start(state, PlayerId.P1))
+    session.act(PlayerId.P1, DeclareAttack())
+    session.submit(PlayerId.P1, DecisionResponse((assignment_token("borrowed", 0),)))
+    session.submit(PlayerId.P2, DecisionResponse((assignment_token("d", 0),)))
+    pending = session.game.pending
+    assert isinstance(pending, ChooseBattlefield)
+    session.submit(pending.seat, DecisionResponse((pending.candidates[0],)))
+    resolve_effects(session.game, [ExemptFromResolutionBow(PlayerId.P1, 0)])
+
+    _pass_out_the_segments(session)
+
+    assert not session.game.table.cards_by_id["borrowed"].bowed
+
+
 def _engage_with_raider(*, raid: bool) -> EngineSession:
     """A battle in its Engage Segment with "raider", whose printed ability is the probe's, at the
     battlefield. A Raid battle when asked, by rewriting the declared attack."""

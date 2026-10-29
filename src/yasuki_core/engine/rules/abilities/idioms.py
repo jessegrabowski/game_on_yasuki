@@ -4,6 +4,7 @@ from typing import NamedTuple
 from collections.abc import Callable
 from dataclasses import replace
 
+from yasuki_core.engine.table import controller_of
 from yasuki_core.engine.registrar import HandlerRegistry
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.players import PlayerId, Rulebook
@@ -139,7 +140,7 @@ def register_entry(
         return [
             card.id
             for card in game.table.battlefield.cards
-            if card.owner is source.owner
+            if controller_of(game.table, card) is source.owner
             and card.id != source.id
             and clears in effective_keywords(game, card)
         ]
@@ -515,7 +516,8 @@ def _yu(
                 question = (
                     f'Your action is destroying {card.name}. Resolve its "{label(ctx.game, card)}"?'
                 )
-                return [Ask(card.owner, question, resolver, subjects=(card.id,), source_id=card.id)]
+                seat = controller_of(ctx.game.table, card)
+                return [Ask(seat, question, resolver, subjects=(card.id,), source_id=card.id)]
             case _YuResolution.NONE:
                 return []
 
@@ -685,7 +687,9 @@ def declarable_gold(game: GameState, source: L5RCard, ability_key: str | None = 
     The CR's own variable costs read the same way: Recruit matches the Gold Cost against the amount
     declared and charges the off-clan 2 Gold on top of it (CR, Recruit).
     """
-    return reachable_gold(game, source.owner) + _unspent_discount(game, source, ability_key)
+    return reachable_gold(game, controller_of(game.table, source)) + _unspent_discount(
+        game, source, ability_key
+    )
 
 
 def _unspent_discount(game: GameState, source: L5RCard, ability_key: str | None) -> int:

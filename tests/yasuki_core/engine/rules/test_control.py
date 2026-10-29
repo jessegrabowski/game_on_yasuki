@@ -1,9 +1,18 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities.costs import bow_cost, declare_amount
+from yasuki_core.engine.rules.abilities.idioms import declarable_gold
+from yasuki_core.engine.rules.abilities.model import CardLocation
+from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
+from yasuki_core.engine.rules.battle.resolution import assignable_units
 from yasuki_core.engine.rules.board.queries import owned_holdings, units_at
 from yasuki_core.engine.rules.board.seats import cards_in_play
-from yasuki_core.engine.rules.effects import Destroy, TakeControl
+from yasuki_core.engine.rules.duel.procedure import challenge_is_legal
+from yasuki_core.engine.rules.effects import Ask, Destroy, TakeControl
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.gold.production import complete_production
+from yasuki_core.engine.rules.legality import seat_cards
 from yasuki_core.engine.rules.rulebook.recruit import meets_honor_requirement
 from yasuki_core.engine.rules.triggers import (
     action_destroyed_personality,
@@ -169,6 +178,24 @@ def test_a_seat_a_card_will_not_join_does_not_take_control_of_it():
     assert game.table.controllers == {}
 
 
+def test_a_controlled_personality_is_assigned_by_its_controller():
+    game = two_seat_game()
+    put_in_play(game, personality("mine"))
+    _give_control(game, "mine", P2)
+
+    assert assignable_units(game, P1) == []
+    assert [card.id for card in assignable_units(game, P2)] == ["mine"]
+
+
+def test_a_controlled_cards_abilities_are_offered_to_its_controller():
+    game = two_seat_game()
+    mine = put_in_play(game, personality("mine"))
+    _give_control(game, "mine", P2)
+
+    assert (CardLocation.BATTLEFIELD, mine) not in list(seat_cards(game, P1))
+    assert (CardLocation.BATTLEFIELD, mine) in list(seat_cards(game, P2))
+
+
 def test_a_controlled_unit_goes_home_to_its_controller_and_leaves_no_record_on_its_return():
     game = two_seat_game()
     theirs = put_in_play(game, personality("theirs", owner=P2))
@@ -193,6 +220,64 @@ def test_a_card_standing_in_another_seats_home_enters_its_new_controllers_home()
 
     assert location_of(game.table, theirs) == Location.home(P1)
     assert game.table.locations == {}
+
+
+def test_an_ability_on_a_controlled_card_asks_its_controller_for_targets():
+    game = two_seat_game()
+    kaede = put_in_play(game, personality("kaede", owner=P2, printed_id="ninube_kaede", chi=4))
+    ops.set_controller(game.table, kaede, P1)
+    put_in_play(game, personality("theirs", owner=P2, chi=3, gold_cost=0))
+    session = EngineSession.start(game.table, P1)
+
+    session.act(P1, ActivateAbility("kaede"))
+
+    assert session.game.pending.seat is P1
+
+
+def test_a_controlled_card_asks_its_controller_to_declare_and_counts_its_gold():
+    game = two_seat_game()
+    put_in_play(game, holding("mine", gold_production=2))
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    _give_control(game, "theirs", P1)
+
+    assert declare_amount(game, theirs, (1, 2), "How much?").seat is P1
+    assert declarable_gold(game, theirs) == 2
+
+
+def test_a_controlled_card_offers_its_bow_waiver_to_its_controller():
+    game = two_seat_game()
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    attached(
+        game,
+        attachment("ambassador", owner=P2, printed_id="shadowlands_ambassador"),
+        "theirs",
+    )
+    _give_control(game, "theirs", P1)
+
+    [asked] = bow_cost(game, theirs)
+
+    assert isinstance(asked, Ask) and asked.seat is P1
+
+
+def test_a_controlled_card_may_stay_bowed_for_its_controller():
+    game = two_seat_game()
+    grounds = put_in_play(game, holding("grounds", owner=P2, printed_id="culling_grounds"))
+    _give_control(game, "grounds", P1)
+    grounds.bow()
+
+    assert may_stay_bowed(game, P1) == ("grounds",)
+    assert may_stay_bowed(game, P2) == ()
+
+
+def test_a_challenge_is_between_personalities_of_different_controllers():
+    game = two_seat_game()
+    put_in_play(game, personality("mine"))
+    put_in_play(game, personality("theirs", owner=P2))
+    put_in_play(game, personality("other", owner=P2))
+    _give_control(game, "theirs", P1)
+
+    assert challenge_is_legal(game, "theirs", "other")
+    assert not challenge_is_legal(game, "mine", "theirs")
 
 
 def test_a_destroyed_card_reaches_its_owners_pile_however_it_was_controlled():

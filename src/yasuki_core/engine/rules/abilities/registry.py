@@ -2,6 +2,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import TypeGuard
 
+from yasuki_core.engine.table import controller_of
 from yasuki_core.ruleset import in_force
 from yasuki_core.engine.registrar import FlagRegistry, HandlerRegistry
 from yasuki_core.engine.players import PlayerId
@@ -49,7 +50,9 @@ def may_stay_bowed(game: GameState, seat: PlayerId) -> tuple[str, ...]:
     return tuple(
         card.id
         for card in game.table.battlefield.cards
-        if card.owner is seat and card.bowed and card.printed_id in MAY_REMAIN_BOWED
+        if controller_of(game.table, card) is seat
+        and card.bowed
+        and card.printed_id in MAY_REMAIN_BOWED
     )
 
 
@@ -497,7 +500,7 @@ def _granted[T](
     were granted. A grant whose card registers no factory there gives nothing of that kind."""
     given: list[T] = []
     for grant in game.ongoing:
-        if not _grants_to(grant, card) or not grant_applies(game, grant):
+        if not _grants_to(grant, card, game) or not grant_applies(game, grant):
             continue
         factory = factories.get(game.table.cards_by_id[grant.source_id].printed_id)
         built = None if factory is None else factory(game, card, grant.context)
@@ -506,10 +509,14 @@ def _granted[T](
     return tuple(given)
 
 
-def _grants_to(recorded: Ongoing, card: L5RCard) -> TypeGuard[AbilityGrant | SeatAbilityGrant]:
+def _grants_to(
+    recorded: Ongoing, card: L5RCard, game: GameState
+) -> TypeGuard[AbilityGrant | SeatAbilityGrant]:
     if isinstance(recorded, AbilityGrant):
         return recorded.target_id == card.id
-    return isinstance(recorded, SeatAbilityGrant) and recorded.seat is card.owner
+    return isinstance(recorded, SeatAbilityGrant) and recorded.seat is controller_of(
+        game.table, card
+    )
 
 
 def _conferred(game: GameState, card: L5RCard) -> tuple[Ability, ...]:

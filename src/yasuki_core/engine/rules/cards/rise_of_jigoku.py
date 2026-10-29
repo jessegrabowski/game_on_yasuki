@@ -555,7 +555,7 @@ def _forgotten_mine_equip_cost(game: GameState, source: L5RCard) -> list[Effect]
         amounts: tuple[int, ...] = ()
     else:
         amounts = tuple(range(declarable_gold(game, source, "equip") + 1))
-    return [declare_amount(source, amounts, "How much Gold do you spend on Forgotten Mine?")]
+    return [declare_amount(game, source, amounts, "How much Gold do you spend on Forgotten Mine?")]
 
 
 def _forgotten_mine_discarded(game: GameState, source: L5RCard) -> list[L5RCard]:

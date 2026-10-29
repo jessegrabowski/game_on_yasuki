@@ -733,6 +733,7 @@ def _the_bad_death_of_hida_daizu_cost(game: GameState, source: L5RCard) -> list[
     are shaped by it (CR, Action Sequence steps B and C)."""
     return [
         declare_amount(
+            game,
             source,
             _the_bad_death_of_hida_daizu_amounts(game, source),
             "How much Gold do you spend on The Bad Death of Hida Daizu?",

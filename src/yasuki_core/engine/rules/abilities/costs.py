@@ -1,5 +1,6 @@
 from dataclasses import replace
 
+from yasuki_core.engine.table import controller_of
 from yasuki_core.engine.registrar import FlagRegistry
 from collections.abc import Callable
 from typing import TypeGuard
@@ -63,7 +64,7 @@ def bow_cost(game: GameState, source: L5RCard) -> list[Effect]:
         return [Bow(source.id)]
     return [
         Ask(
-            source.owner,
+            controller_of(game.table, source),
             f"Ignore the cost of bowing {source.name}?",
             WAIVER_TAG,
             subjects=(waiver.id,),
@@ -158,12 +159,16 @@ def gold_charged(effects: list[Effect]) -> int:
 DECLARED_AMOUNT = "declared_amount"
 
 
-def declare_amount(source: L5RCard, amounts: tuple[int, ...], question: str) -> AskAmount:
+def declare_amount(
+    game: GameState, source: L5RCard, amounts: tuple[int, ...], question: str
+) -> AskAmount:
     """The :X: in ``source``'s cost block: ask its controller which of ``amounts`` of Gold to
     spend, and charge it. The answer is the action's ``amount_declared``, which the ability's
     targets and effects read (CR, Action Sequence step B). Its resolver context holds the action's
     discount on it, which :func:`priced_cost` sets."""
-    return AskAmount(source.owner, amounts, question, DECLARED_AMOUNT, source.id)
+    return AskAmount(
+        controller_of(game.table, source), amounts, question, DECLARED_AMOUNT, source.id
+    )
 
 
 def is_declared_gold(effect: Effect) -> TypeGuard[AskAmount]:

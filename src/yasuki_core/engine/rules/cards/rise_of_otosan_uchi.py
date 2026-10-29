@@ -356,6 +356,7 @@ def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [
         Bow(source.id),
         declare_amount(
+            game,
             source,
             _bound_in_blood_amounts(game, source),
             "How much Gold do you spend on Bound in Blood?",

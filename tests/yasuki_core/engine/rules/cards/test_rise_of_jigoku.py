@@ -70,6 +70,7 @@ from yasuki_core.engine.rules import legality
 from yasuki_core.engine.rules.abilities.costs import no_cost
 from yasuki_core.engine.rules.abilities.model import Ability, CardLocation, itself
 from yasuki_core.engine.rules.board.queries import personalities_in_play
+from yasuki_core.engine.rules.battle.resolution import assignable_units
 from yasuki_core.engine.rules.rulebook.equip import may_attach
 from yasuki_core.engine.rules.abilities.registry import ability_for
 from yasuki_core.engine.rules.battle.records import AttackPhase, BattlefieldInfo
@@ -1021,6 +1022,15 @@ def test_killing_kaede_still_gives_her_target_back():
 
     assert controller_of(session.game.table, session.game.table.cards_by_id["theirs"]) is P2
     assert session.game.table.controllers == {}
+
+
+def test_ninube_kaede_assigns_the_personality_she_took_and_not_herself():
+    session = _kaede_game()
+
+    _take(session)
+
+    assert [card.id for card in assignable_units(session.game, P1)] == ["theirs"]
+    assert [card.id for card in assignable_units(session.game, P2)] == ["kaede"]
 
 
 def test_ninube_kaede_is_still_given_away_when_the_unique_rule_refuses_her_target():
