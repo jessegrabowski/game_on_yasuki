@@ -9,10 +9,11 @@ from yasuki_core.engine.rules.battle.presence import place_unit, record_terrain_
 from yasuki_core.engine.rules.battle.records import BowExemption
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.rulebook import favor_proxy
+from yasuki_core.engine.rules.rulebook.copies import may_enter_as_unique
 from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
-from yasuki_core.engine.players import Cause, PlayerId, Trait
-from yasuki_core.engine.rules.units.membership import unit_of
+from yasuki_core.engine.players import Cause, PlayerId, Rulebook, Trait
+from yasuki_core.engine.rules.units.membership import attachments_of, unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat, stat_changes
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -994,7 +995,8 @@ class TakeControl(Effect):
     A card at a battlefield joins the new controller's side of it and one at home enters the new
     controller's home (CR, Card control). Both follow from the record alone, since a side and a
     home are read off control rather than stored, and a card's attachments follow their
-    Personality. Taking control is joining (CR, Join), so a card whose "Will not join" text or
+    Personality, and one that copies a Unique attachment ``seat`` already controls is discarded
+    (CR, Unique). Taking control is joining (CR, Join), so a card whose "Will not join" text or
     Unique limit refuses ``seat`` stays where it is, as does a card no longer in play.
 
     Changing control is instantaneous and has no duration (CR, Card control), so a return is a
@@ -1025,6 +1027,16 @@ class TakeControl(Effect):
             return []
         ops.set_controller(game.table, game.table.cards_by_id[self.card_id], self.seat)
         return []
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None or controller_of(game.table, card) is not self.seat:
+            return ()
+        return tuple(
+            Discard(attached.id, Rulebook.UNIQUE)
+            for attached in attachments_of(game, card)
+            if not may_enter_as_unique(game, self.seat, attached)
+        )
 
 
 @dataclass(frozen=True, slots=True)

@@ -131,6 +131,24 @@ def test_a_unit_taken_at_a_battlefield_joins_its_new_controllers_side():
     assert units_at(game, 0, P2) == []
 
 
+def test_taking_a_unit_discards_its_copy_of_a_unique_attachment_the_seat_controls():
+    game = two_seat_game()
+    put_in_play(game, personality("mine"))
+    attached(game, attachment("my_blade", printed_id="blade", is_unique=True), "mine")
+    put_in_play(game, personality("theirs", owner=P2))
+    attached(
+        game, attachment("their_blade", owner=P2, printed_id="blade", is_unique=True), "theirs"
+    )
+    attached(game, attachment("their_spear", owner=P2), "theirs")
+
+    _give_control(game, "theirs", P1)
+
+    assert controller_of(game.table, game.table.cards_by_id["theirs"]) is P1
+    assert "their_blade" not in {card.id for card in game.table.battlefield.cards}
+    assert "their_spear" in {card.id for card in game.table.battlefield.cards}
+    assert "my_blade" in {card.id for card in game.table.battlefield.cards}
+
+
 def test_a_seat_holding_a_unique_card_does_not_take_control_of_its_namesake():
     game = two_seat_game()
     put_in_play(game, personality("mine", printed_id="hero", is_unique=True))
