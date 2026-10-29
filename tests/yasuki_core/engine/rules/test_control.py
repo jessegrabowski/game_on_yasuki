@@ -110,6 +110,17 @@ def test_giving_control_of_a_card_that_has_left_the_table_does_nothing():
     assert game.table.controllers == {}
 
 
+def test_a_unit_taken_at_a_battlefield_joins_its_new_controllers_side():
+    game = two_seat_game()
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    ops.assign(game.table, theirs, 0)
+
+    _give_control(game, "theirs", P1)
+
+    assert units_at(game, 0, P1) == [theirs]
+    assert units_at(game, 0, P2) == []
+
+
 def test_a_destroyed_card_reaches_its_owners_pile_however_it_was_controlled():
     """Ownership never changes (CR, Card ownership), so the pile a card dies into is its owner's
     and not its controller's."""

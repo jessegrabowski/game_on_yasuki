@@ -1011,6 +1011,29 @@ def test_killing_kaede_still_gives_her_target_back():
     assert session.game.table.controllers == {}
 
 
+def test_the_follower_riding_kaedes_target_comes_with_him():
+    session = _kaede_game(theirs_cost=7)
+    levy = attached(
+        session.game,
+        attachment("levy", owner=P2, attachment_type=AttachmentType.FOLLOWER, gold_cost=1),
+        "theirs",
+    )
+
+    _take(session)
+
+    assert controller_of(session.game.table, levy) is P1
+
+
+def test_ninube_kaede_replays_to_the_same_board_across_the_take_and_the_return():
+    session = _kaede_game()
+
+    _take(session)
+    assert replay(session.log).table == session.game.table
+
+    end_turn(session)
+    assert replay(session.log).table == session.game.table
+
+
 # --- Shinjo Fields ---
 
 
