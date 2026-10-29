@@ -9,8 +9,6 @@ from yasuki_core.engine.rules.board.queries import owned_holdings, units_at
 from yasuki_core.engine.rules.board.seats import cards_in_play
 from yasuki_core.engine.rules.duel.procedure import challenge_is_legal
 from yasuki_core.engine.rules.effects import Ask, Destroy, TakeControl
-from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
-from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.rules.gold.production import complete_production
 from yasuki_core.engine.rules.legality import seat_cards
 from yasuki_core.engine.rules.rulebook.recruit import meets_honor_requirement
@@ -19,6 +17,9 @@ from yasuki_core.engine.rules.triggers import (
     resolve_action_effects,
     resolve_effects,
 )
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget
+from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     BoardPos,
@@ -148,14 +149,16 @@ def test_taking_a_unit_discards_its_copy_of_a_unique_attachment_the_seat_control
     attached(
         game, attachment("their_blade", owner=P2, printed_id="blade", is_unique=True), "theirs"
     )
-    attached(game, attachment("their_spear", owner=P2), "theirs")
+    attached(
+        game, attachment("their_spear", owner=P2, printed_id="spear", is_unique=True), "theirs"
+    )
 
     _give_control(game, "theirs", P1)
 
+    in_play = {card.id for card in game.table.battlefield.cards}
     assert controller_of(game.table, game.table.cards_by_id["theirs"]) is P1
-    assert "their_blade" not in {card.id for card in game.table.battlefield.cards}
-    assert "their_spear" in {card.id for card in game.table.battlefield.cards}
-    assert "my_blade" in {card.id for card in game.table.battlefield.cards}
+    assert in_play >= {"theirs", "their_spear", "my_blade"}
+    assert "their_blade" not in in_play
 
 
 def test_a_seat_holding_a_unique_card_does_not_take_control_of_its_namesake():
@@ -231,7 +234,8 @@ def test_an_ability_on_a_controlled_card_asks_its_controller_for_targets():
 
     session.act(P1, ActivateAbility("kaede"))
 
-    assert session.game.pending.seat is P1
+    pending = session.game.pending
+    assert isinstance(pending, ChooseAbilityTarget) and pending.seat is P1
 
 
 def test_a_controlled_card_asks_its_controller_to_declare_and_counts_its_gold():
