@@ -66,6 +66,7 @@ def personality(
     gold_cost: int | None = None,
     keywords: tuple[str, ...] = (),
     clans: tuple[str, ...] = (),
+    is_unique: bool = False,
 ) -> L5RCard:
     """A Personality. ``chi`` defaults live because a Personality at zero Chi is destroyed on sight
     (CR, Chi Death Rule), which would otherwise remove the card a test just built."""
@@ -83,6 +84,7 @@ def personality(
         gold_cost=gold_cost,
         keywords=keywords,
         clans=clans,
+        is_unique=is_unique,
     )
 
 
@@ -99,6 +101,7 @@ def attachment(
     chi_modifier: int = 0,
     gold_cost: int = 0,
     keywords: tuple[str, ...] = (),
+    is_unique: bool = False,
 ) -> L5RCard:
     """An Item, Follower or Spell. ``force``/``chi`` are the card's own stats, which it brings to a
     unit. The ``_modifier`` pair is what it hands to the Personality it attaches to."""
@@ -116,6 +119,7 @@ def attachment(
         chi_modifier=chi_modifier,
         gold_cost=gold_cost,
         keywords=keywords,
+        is_unique=is_unique,
     )
 
 

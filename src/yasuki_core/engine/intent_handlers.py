@@ -218,10 +218,7 @@ def _give_control(state: TableState, seat: PlayerId, intent: GiveControl) -> lis
     opponent = next((other for other in state.seats if other != seat), None)
     if opponent is None:
         return []
-    if opponent is card.owner:
-        state.controllers.pop(card.id, None)
-    else:
-        state.controllers[card.id] = opponent
+    ops.set_controller(state, card, opponent)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 

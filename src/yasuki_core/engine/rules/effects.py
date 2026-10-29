@@ -9,10 +9,11 @@ from yasuki_core.engine.rules.battle.presence import place_unit, record_terrain_
 from yasuki_core.engine.rules.battle.records import BowExemption
 from yasuki_core.engine.rules.board.seats import cards_in_hand
 from yasuki_core.engine.rules.rulebook import favor_proxy
+from yasuki_core.engine.rules.rulebook.copies import may_enter_as_unique
 from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.rulebook.recruit_restrictions import may_recruit
-from yasuki_core.engine.players import Cause, PlayerId, Trait
-from yasuki_core.engine.rules.units.membership import unit_of
+from yasuki_core.engine.players import Cause, PlayerId, Rulebook, Trait
+from yasuki_core.engine.rules.units.membership import attachments_of, unit_of
 from yasuki_core.engine.rules.stats.calculation import effective_stat, stat_changes
 from yasuki_core.engine.rules.stats.stat_grants import stat_granters
 from yasuki_core.engine.rules.stats.keyword_grants import effective_keywords
@@ -985,6 +986,60 @@ class ShuffleDeck(Effect):
     def perform(self, game: GameState) -> list[GameEvent]:
         game.table.decks[self.deck].shuffle(game.rng)
         return []
+
+
+@dataclass(frozen=True, slots=True)
+class TakeControl(Effect):
+    """Give ``seat`` control of ``card_id``, which its previous controller loses in this same step.
+
+    A card at a battlefield joins the new controller's side of it, read off control, and one at
+    home enters the new controller's home (CR, Card control). A card's attachments follow their
+    Personality, and one that copies a Unique attachment ``seat`` already controls is discarded
+    (CR, Unique). Taking control is joining (CR, Join), so a card whose "Will not join" text or
+    Unique limit refuses ``seat`` stays where it is, as does a card no longer in play.
+
+    Changing control is instantaneous and has no duration (CR, Card control), so a return is a
+    second :class:`~.TakeControl`.
+    """
+
+    card_id: str
+    seat: PlayerId
+
+    @property
+    def subject_id(self) -> str | None:
+        return self.card_id
+
+    def describe(self) -> str:
+        return f"{self.seat.name} takes control of {self.card_id}"
+
+    def would_happen(self, game: GameState) -> bool:
+        card = game.table.cards_by_id.get(self.card_id)
+        return (
+            card is not None
+            and _in_play(game, card)
+            and controller_of(game.table, card) is not self.seat
+            and may_join(game, self.seat, card)
+        )
+
+    def perform(self, game: GameState) -> list[GameEvent]:
+        if not self.would_happen(game):
+            return []
+        card = game.table.cards_by_id[self.card_id]
+        at_home = location_of(game.table, card).is_home
+        ops.set_controller(game.table, card, self.seat)
+        if at_home:
+            ops.move_unit(game.table, card, Location.home(self.seat))
+        return []
+
+    def follow_on(self, game: GameState) -> tuple[Effect, ...]:
+        card = game.table.cards_by_id.get(self.card_id)
+        if card is None or controller_of(game.table, card) is not self.seat:
+            return ()
+        return tuple(
+            Discard(attached.id, Rulebook.UNIQUE)
+            for attached in attachments_of(game, card)
+            if not may_enter_as_unique(game, self.seat, attached)
+        )
 
 
 @dataclass(frozen=True, slots=True)

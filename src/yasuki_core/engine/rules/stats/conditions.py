@@ -3,7 +3,7 @@ from collections.abc import Callable
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.modifiers import Condition
-from yasuki_core.engine.table import location_of
+from yasuki_core.engine.table import controller_of, location_of
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.prints import PersonalityPrint
 
@@ -19,7 +19,7 @@ def _defending(game: GameState, card: L5RCard) -> bool:
 def _in_the_army_of(game: GameState, card: L5RCard, seat: PlayerId) -> bool:
     """Whether ``card`` is a Personality ``seat`` controls at the battlefield now being fought."""
     attack = game.attack
-    if attack is None or attack.current is None or card.owner is not seat:
+    if attack is None or attack.current is None or controller_of(game.table, card) is not seat:
         return False
     if not isinstance(card.printed, PersonalityPrint):
         return False

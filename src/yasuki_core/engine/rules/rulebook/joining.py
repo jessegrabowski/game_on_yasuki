@@ -16,7 +16,7 @@ register_join_restriction = JOIN_RESTRICTIONS.make_register()
 
 
 def may_join(game: GameState, seat: PlayerId, card: L5RCard) -> bool:
-    """Whether ``card`` may come under ``seat``'s control by entering play: the limits on copies
-    allow it, and so does its own "Will not join" text (CR, Join)."""
+    """Whether ``card`` may come under ``seat``'s control, by entering play or changing controller:
+    the limits on copies allow it, and so does its own "Will not join" text (CR, Join)."""
     restriction = JOIN_RESTRICTIONS.get(card.printed_id)
     return copy_may_enter(game, seat, card) and (restriction is None or restriction(game, seat))

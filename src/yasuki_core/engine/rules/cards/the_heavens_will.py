@@ -6,7 +6,7 @@ from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.effects import Bow, DrawCard, Effect, GainHonor, Move
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.vocabulary.actions import ActionTiming
-from yasuki_core.engine.table import Location
+from yasuki_core.engine.table import Location, controller_of
 from yasuki_core.game_pieces.cards import L5RCard
 
 
@@ -36,7 +36,7 @@ def _discretionary_valor_targets(game: GameState, source: L5RCard) -> list[str]:
 
 def _discretionary_valor_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     return [
-        Move(target.id, Location.home(target.owner)),
+        Move(target.id, Location.home(controller_of(game.table, target))),
         GainHonor(source.owner, VALOR_HONOR),
         DrawCard(source.owner),
     ]

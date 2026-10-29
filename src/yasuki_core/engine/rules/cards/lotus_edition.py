@@ -38,6 +38,7 @@ def _hired_killer_cost(game: GameState, source: L5RCard) -> list[Effect]:
     are shaped by it (CR, Action Sequence steps B and C)."""
     return [
         declare_amount(
+            game,
             source,
             _hired_killer_amounts(game, source),
             "How much Gold do you spend on Hired Killer?",

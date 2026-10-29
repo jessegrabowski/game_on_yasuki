@@ -34,7 +34,7 @@ from yasuki_core.engine.rules.stats.card_values import (
 )
 from yasuki_core.engine.rules.stats.checked import checked_stat
 from yasuki_core.engine.rules.stats.province_strength import province_strength_grant
-from yasuki_core.engine.rules.gold.cost import effective_gold_cost
+from yasuki_core.engine.rules.gold.cost import effective_gold_cost, unit_gold_cost
 from yasuki_core.engine.rules.gold.discounts import Purchase, action_discount
 from yasuki_core.engine.rules.gold.production import effective_gold_production, gold_handler
 from yasuki_core.engine.rules.gold.producers import reachable_gold
@@ -54,7 +54,7 @@ from yasuki_core.engine.rules.rulebook.equip import (
 from yasuki_core.engine.rules.rulebook.joining import may_join
 from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
-from yasuki_core.engine.table import Location, ZoneKey, ZoneRole
+from yasuki_core.engine.table import Location, ZoneKey, ZoneRole, controller_of
 from yasuki_core.engine.rules.effects import (
     AdjustCounter,
     AdjustPending,
@@ -76,6 +76,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
     PayGold,
     RangedAttack,
+    TakeControl,
     To,
     no_honor_lost,
     register_honor_loss_reduction,
@@ -103,7 +104,7 @@ from yasuki_core.engine.rules.board.counts_as import Asking
 from yasuki_core.engine.rules.duel.focus_effects import focus_effect
 from yasuki_core.engine.rules.duel.procedure import decided_duel, decided_outcome
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES
+from yasuki_core.engine.rules.turn.structure import DUEL_CONSEQUENCES, END_OF_TURN
 from yasuki_core.game_pieces.counters import FIRE
 from yasuki_core.engine.rules.triggers import TriggerContext, action_did, choice_resolver, on
 from yasuki_core.engine.rules.board.queries import province_holdings
@@ -394,7 +395,7 @@ def _resolve_chuda_kuri_battle(
         return [Bow(target_id)]
     if chosen[0] == KURI_HOME:
         target = game.table.cards_by_id[target_id]
-        return [Move(target_id, Location.home(target.owner))]
+        return [Move(target_id, Location.home(controller_of(game.table, target)))]
     return [MeleeAttack(KURI_MELEE, target_id, seat)]
 
 
@@ -554,7 +555,7 @@ def _forgotten_mine_equip_cost(game: GameState, source: L5RCard) -> list[Effect]
         amounts: tuple[int, ...] = ()
     else:
         amounts = tuple(range(declarable_gold(game, source, "equip") + 1))
-    return [declare_amount(source, amounts, "How much Gold do you spend on Forgotten Mine?")]
+    return [declare_amount(game, source, amounts, "How much Gold do you spend on Forgotten Mine?")]
 
 
 def _forgotten_mine_discarded(game: GameState, source: L5RCard) -> list[L5RCard]:
@@ -1005,6 +1006,59 @@ register_ability(
         targets=_modest_farm_targets,
         targeting_message="a Holding in your Province",
         effects=_modest_farm_effects,
+    ),
+)
+
+
+# --- Ninube Kaede ---
+
+
+@attach_restriction("ninube_kaede")
+def _ninube_kaede_attach_restriction(game: GameState, personality: L5RCard, card: L5RCard) -> bool:
+    """ "Will not attach Items." """
+    return card.attachment_type is not AttachmentType.ITEM
+
+
+def _ninube_kaede_targets(game: GameState, source: L5RCard) -> list[str]:
+    """ "Another player's target Personality with lower Chi and whose unit's total Gold Cost is
+    less than or equal to Kaede's unit's."""
+    seat = controller_of(game.table, source)
+    reach = effective_chi(game, source)
+    purse = unit_gold_cost(game, source)
+    return [
+        card.id
+        for card in personalities_in_play(game)
+        if controller_of(game.table, card) is not seat
+        and effective_chi(game, card) < reach
+        and unit_gold_cost(game, card) <= purse
+    ]
+
+
+def _ninube_kaede_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
+    """Take the target, hand Kaede to the seat that lost him, and give both back when the turn
+    ends. Each previous controller is read before either card changes controller."""
+    seat = controller_of(game.table, source)
+    theirs = controller_of(game.table, target)
+    returning = Simultaneously(
+        (TakeControl(target.id, theirs), TakeControl(source.id, seat)),
+    )
+    return [
+        TakeControl(target.id, seat),
+        TakeControl(source.id, theirs),
+        DelayedEffect(returning, END_OF_TURN),
+    ]
+
+
+register_ability(
+    "ninube_kaede",
+    Ability(
+        timings=(ActionTiming.OPEN,),
+        cost=no_cost,
+        targets=_ninube_kaede_targets,
+        targeting_message=(
+            "another player's Personality with lower Chi whose unit costs no more than Kaede's"
+        ),
+        effects=_ninube_kaede_effects,
     ),
 )
 

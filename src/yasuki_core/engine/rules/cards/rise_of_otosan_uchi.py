@@ -356,6 +356,7 @@ def _bound_in_blood_cost(game: GameState, source: L5RCard) -> list[Effect]:
     return [
         Bow(source.id),
         declare_amount(
+            game,
             source,
             _bound_in_blood_amounts(game, source),
             "How much Gold do you spend on Bound in Blood?",
@@ -653,7 +654,7 @@ def _dark_ring_of_earth_experienced_effects(
         effect
         for personality in _dark_ring_of_earth_experienced_army(game, source)
         for effect in (
-            Move(personality.id, Location.home(personality.owner)),
+            Move(personality.id, Location.home(controller_of(game.table, personality))),
             *(Bow(card.id) for card in unit_of(game, personality)),
         )
     )
