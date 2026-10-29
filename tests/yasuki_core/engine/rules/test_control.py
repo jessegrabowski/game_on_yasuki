@@ -100,8 +100,6 @@ def test_repositioning_a_controlled_card_on_the_table_keeps_its_controller():
 
 
 def test_giving_control_of_a_card_that_has_left_the_table_does_nothing():
-    """A delayed return names a card that may have ceased to exist, as a token does. Control went
-    with it, so there is nothing to record and nothing to raise."""
     game = two_seat_game()
     hero = put_in_play(game, personality("hero", owner=P2))
     _give_control(game, "hero", P1)

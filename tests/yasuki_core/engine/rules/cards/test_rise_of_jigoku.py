@@ -881,8 +881,12 @@ def _kaede_game(*, kaede_chi=4, kaede_cost=8, theirs_chi=3, theirs_cost=8) -> En
     return EngineSession.start(game.table, P1)
 
 
+def _take(session: EngineSession) -> None:
+    session.act(P1, ActivateAbility("kaede"))
+    session.submit(P1, DecisionResponse(("theirs",)))
+
+
 def test_ninube_kaede_will_not_attach_items():
-    """ "Will not attach Items." A Follower is an attachment and is not an Item."""
     session = _kaede_game()
     kaede = session.game.table.cards_by_id["kaede"]
 
@@ -896,43 +900,37 @@ def test_ninube_kaede_will_not_attach_items():
 def test_ninube_kaede_trades_control_with_the_seat_she_takes_from():
     session = _kaede_game()
 
-    session.act(P1, ActivateAbility("kaede"))
-    session.submit(P1, DecisionResponse(("theirs",)))
+    _take(session)
 
     table = session.game.table
     assert controller_of(table, table.cards_by_id["theirs"]) is P1
     assert controller_of(table, table.cards_by_id["kaede"]) is P2
-    assert table.cards_by_id["theirs"].owner is P2  # ownership never changes
+    assert table.cards_by_id["theirs"].owner is P2
     assert table.cards_by_id["kaede"].owner is P1
 
 
 def test_ninube_kaede_returns_both_when_the_turn_ends():
     session = _kaede_game()
 
-    session.act(P1, ActivateAbility("kaede"))
-    session.submit(P1, DecisionResponse(("theirs",)))
+    _take(session)
     end_turn(session)
 
     assert session.game.table.controllers == {}
 
 
 def test_ninube_kaede_reaches_only_a_personality_with_lower_chi():
-    """Chi equal to hers is not lower than it."""
     session = _kaede_game(kaede_chi=4, theirs_chi=4)
 
     assert ActivateAbility("kaede") not in session.legal_actions(P1)
 
 
 def test_ninube_kaede_reaches_no_costlier_a_unit_than_her_own():
-    """ "Less than or equal to" Kaede's unit, so a dearer one is out of reach."""
     session = _kaede_game(kaede_cost=8, theirs_cost=9)
 
     assert ActivateAbility("kaede") not in session.legal_actions(P1)
 
 
 def test_ninube_kaede_counts_the_followers_on_each_unit():
-    """ "Whose unit's total Gold Cost": the Follower riding the enemy pushes him out of reach even
-    though his own Gold Cost is within it."""
     session = _kaede_game(kaede_cost=8, theirs_cost=8)
     attached(
         session.game,
@@ -944,7 +942,6 @@ def test_ninube_kaede_counts_the_followers_on_each_unit():
 
 
 def test_ninube_kaede_does_not_reach_her_own_seats_personalities():
-    """ "Another player's" Personality, so one of her own is never a target."""
     session = _kaede_game()
     put_in_play(session.game, personality("mine", owner=P1, chi=2, gold_cost=1))
 
@@ -954,7 +951,6 @@ def test_ninube_kaede_does_not_reach_her_own_seats_personalities():
 
 
 def test_ninube_kaedes_reach_follows_her_chi_as_modified():
-    """Her Chi is read off the board, so a bonus widens whom she can take."""
     session = _kaede_game(kaede_chi=3, theirs_chi=3)
     resolve_effects(
         session.game,
@@ -967,7 +963,6 @@ def test_ninube_kaedes_reach_follows_her_chi_as_modified():
 
 
 def test_a_target_whose_chi_is_modified_out_of_reach_is_spared():
-    """The target's Chi is read off the board too, so a bonus can lift him past her."""
     session = _kaede_game(kaede_chi=4, theirs_chi=3)
     resolve_effects(
         session.game,
@@ -978,8 +973,6 @@ def test_a_target_whose_chi_is_modified_out_of_reach_is_spared():
 
 
 def test_ninube_kaedes_own_followers_widen_the_unit_she_can_match():
-    """ "Less than or equal to Kaede's unit's": the Follower riding her raises her side of the
-    comparison, not just the enemy's."""
     session = _kaede_game(kaede_cost=8, theirs_cost=9)
     assert ActivateAbility("kaede") not in session.legal_actions(P1)
 
@@ -993,12 +986,9 @@ def test_ninube_kaedes_own_followers_widen_the_unit_she_can_match():
 
 
 def test_killing_the_personality_she_took_still_gives_kaede_back():
-    """Both returns are one phrase, so the dead target's half resolving to nothing must not keep
-    Kaede with the other seat. A card in a pile is controlled by its owner already."""
     session = _kaede_game()
 
-    session.act(P1, ActivateAbility("kaede"))
-    session.submit(P1, DecisionResponse(("theirs",)))
+    _take(session)
     resolve_effects(session.game, [Destroy("theirs", P1)])
     assert controller_of(session.game.table, session.game.table.cards_by_id["kaede"]) is P2
 
@@ -1009,12 +999,9 @@ def test_killing_the_personality_she_took_still_gives_kaede_back():
 
 
 def test_killing_kaede_still_gives_her_target_back():
-    """The mirror of the same phrase: Kaede's own half resolving to nothing must not keep her
-    target with the seat that took him."""
     session = _kaede_game()
 
-    session.act(P1, ActivateAbility("kaede"))
-    session.submit(P1, DecisionResponse(("theirs",)))
+    _take(session)
     resolve_effects(session.game, [Destroy("kaede", P2)])
     assert controller_of(session.game.table, session.game.table.cards_by_id["theirs"]) is P1
 

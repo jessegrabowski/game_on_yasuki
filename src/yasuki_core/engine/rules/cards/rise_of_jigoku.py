@@ -56,7 +56,6 @@ from yasuki_core.engine.rules.units.composition import is_follower
 from yasuki_core.engine.rules.units.membership import attached_to, attachments_of, unit_of
 from yasuki_core.engine.table import Location, ZoneKey, ZoneRole, controller_of
 from yasuki_core.engine.rules.effects import (
-    TakeControl,
     AdjustCounter,
     AdjustPending,
     Ask,
@@ -77,6 +76,7 @@ from yasuki_core.engine.rules.effects import (
     Move,
     PayGold,
     RangedAttack,
+    TakeControl,
     To,
     no_honor_lost,
     register_honor_loss_reduction,
