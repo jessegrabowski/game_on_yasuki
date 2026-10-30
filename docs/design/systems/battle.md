@@ -62,6 +62,12 @@ was taken in. When its one battle ends, the attack ceases to exist and the oppor
 creating action held passes on. A battlefield the effect seals refuses every unit not assigned as
 it was made, which is "Other Personalities cannot move there" as {card}`Ambush` prints it.
 
+An action that names "the current Province" is announceable at a battlefield not associated
+with any Province: the Good Faith Rule bars only unpayable costs, unmeetable targeting and a
+failing leading "If" (CR, Good Faith Rule). Its Province-naming effect then does nothing, which
+{class}`~.GrantProvinceStrength` says by accepting no Province, and a *cost* naming the current
+Province is unpayable there, as {card}`Dark Ring of Earth (Experienced)` prices itself.
+
 A Raid Attack is the second created shape (ShE datasheet): {class}`~.CreateRaidAttack` builds it
 through {func}`~.create_raid_attack`, an additional Attack Phase whose one battlefield is at no
 Province, opened at its Maneuvers Segment once the creating action has ended. Its battle is a

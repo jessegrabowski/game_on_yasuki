@@ -2,7 +2,9 @@ import json
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.effects import GrantProvinceStrength
 from yasuki_core.engine.rules.stats.province_strength import effective_province_strength
+from yasuki_core.engine.rules.triggers import resolve_effects
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.replay.snapshot import InitialRecord, decode_initial, encode_initial
 from yasuki_core.engine.rules.vocabulary.modifiers import Duration, Modifier, Stat
@@ -154,3 +156,15 @@ def test_destroying_a_province_takes_its_counters_with_it():
     ops.destroy_province(game.table, P1, FIRST)
 
     assert game.table.province_counters == {}
+
+
+def test_a_grant_naming_no_province_changes_nothing():
+    # "Give the current Province +3" at a battlefield not associated with any Province: the action
+    # is announceable (CR, Good Faith Rule), and the grant has nothing to rest on.
+    game = _walled_game()
+    before = effective_province_strength(game, FIRST)
+
+    resolve_effects(game, [GrantProvinceStrength("SH", None, 3, Duration.UNTIL_END_OF_TURN)])
+
+    assert effective_province_strength(game, FIRST) == before
+    assert game.ongoing == []

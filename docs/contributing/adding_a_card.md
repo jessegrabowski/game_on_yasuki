@@ -26,6 +26,7 @@ If you have never written one, read [What a card is](what_a_card_is.md) and
 | "After this card is destroyed, ..." inside an effect, as a Yu says it | effects returning `DelayedEffect(Evaluate(...), NextTime(Destroyed, card_id))` | {card}`Shiba Kintaro, the Remembered (Experienced)` |
 | "After this battle's resolution, if X, ..." | effects returning `DelayedEffect(Evaluate(...), END_OF_BATTLE)` | {card}`Daidoji Tashiko` |
 | "Create a battlefield (not at any Province) ... Fight a battle there" | effects returning `CreateBattle(...)` | {card}`Ambush` |
+| "Give the current Province +N strength" | effects returning `GrantProvinceStrength(source.id, game.attack.current_province, ...)`, which changes nothing at a battlefield with no Province | {card}`Outer Walls` |
 | "Create a Raid Attack" | effects returning `CreateRaidAttack(...)`, with `ExemptFromResolutionBow(..., keyword=...)` for a "whose resolution does not bow your X" rider | {card}`The Shattered Stormfront of the Mantis` |
 | "Raid Battle: ..." | `register_ability(id, Ability(timings=(ActionTiming.BATTLE,), keywords=frozenset({keywords.RAID}), ...))`, which legality offers only during a Raid battle | none yet |
 | Gives a card an ability, as in "she has 'Battle: Ranged 3'" | `@granted_ability(id)` and effects returning `GrantAbility(...)` | {card}`Daidoji Kaede` |
