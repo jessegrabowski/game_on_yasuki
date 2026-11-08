@@ -65,7 +65,7 @@ from yasuki_core.engine.rules.gold.producers import gold_reach
 from yasuki_core.engine.rules.state import GameState, seat_once_key, used_this_turn
 from yasuki_core.engine.rules.turn.structure import ActionRound
 from yasuki_core.engine.rules.rulebook.equip import has_caster, is_spell
-from yasuki_core.engine.table import DeckKey, location_of, ZoneRole
+from yasuki_core.engine.table import DeckKey, controller_of, location_of, ZoneRole
 from yasuki_core.engine.rules.battle.records import AttackKind
 from yasuki_core.engine.rules.vocabulary import keywords
 from yasuki_core.game_pieces.cards import L5RCard
@@ -417,7 +417,7 @@ def seat_cards(game: GameState, seat: PlayerId) -> Iterator[tuple[CardLocation, 
     resolution area until it lands (CR, Resolution Area), so it offers nothing from the hand.
     """
     for card in game.table.battlefield.cards:
-        if card.owner is seat:
+        if controller_of(game.table, card) is seat:
             yield CardLocation.BATTLEFIELD, card
     for key, zone in game.table.zones.items():
         if key.owner is not seat:

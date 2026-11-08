@@ -20,6 +20,7 @@ class Rulebook(Enum):
     DUEL_RESOLUTION = "duel_resolution"
     MAXIMUM_HAND_SIZE = "maximum_hand_size"
     ORPHANED_ATTACHMENT = "orphaned_attachment"
+    UNIQUE = "unique"
 
 
 @dataclass(frozen=True, slots=True)

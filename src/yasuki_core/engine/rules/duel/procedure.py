@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from yasuki_core.engine.table import controller_of
 from yasuki_core import ruleset
 from yasuki_core.engine import ops
 from yasuki_core.engine.registrar import HandlerRegistry
@@ -91,7 +92,7 @@ def challenge_is_legal(game: GameState, challenger_duelist: str, challenged_duel
         return False
     if not all(isinstance(card.printed, PersonalityPrint) for card in (challenger, challenged)):
         return False
-    if challenger.owner is challenged.owner:
+    if controller_of(game.table, challenger) is controller_of(game.table, challenged):
         return False
     return all(
         CHALLENGE_RESTRICTIONS[holder.printed_id](game, holder, challenger, challenged)
@@ -163,8 +164,8 @@ def declare_duel(
     """
     if not challenge_is_legal(game, challenger_duelist, challenged_duelist):
         return []
-    challenger = game.table.cards_by_id[challenger_duelist].owner
-    challenged = game.table.cards_by_id[challenged_duelist].owner
+    challenger = controller_of(game.table, game.table.cards_by_id[challenger_duelist])
+    challenged = controller_of(game.table, game.table.cards_by_id[challenged_duelist])
     duel = DuelRecord(
         challenger=challenger,
         challenged=challenged,

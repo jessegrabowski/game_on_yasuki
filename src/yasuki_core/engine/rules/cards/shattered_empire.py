@@ -1369,7 +1369,7 @@ def _ring_of_water_targets(game: GameState, source: L5RCard) -> list[str]:
 def _ring_of_water_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     current = game.attack.current
     if location_of(game.table, target).battlefield == current:
-        return [Move(target.id, Location.home(target.owner))]
+        return [Move(target.id, Location.home(controller_of(game.table, target)))]
     return [Move(target.id, Location.at_battlefield(current))]
 
 

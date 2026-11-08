@@ -92,14 +92,14 @@ def _amount_probe(game, source_id, chosen, seat):
 def _answer_two(ask) -> GameState:
     game = two_seat_game()
     source = put_in_play(game, holding("source", owner=PlayerId.P1))
-    resolve_effects(game, [ask(source)])
+    resolve_effects(game, [ask(game, source)])
     submit(game, DecisionResponse(("2",)))
     return game
 
 
 def test_naming_an_amount_charges_nothing_its_resolver_does_not():
     game = _answer_two(
-        lambda source: AskAmount(PlayerId.P1, (1, 2), "How many?", "amount_probe", source.id)
+        lambda game, source: AskAmount(PlayerId.P1, (1, 2), "How many?", "amount_probe", source.id)
     )
 
     assert game.amount_declared == 2
@@ -107,7 +107,7 @@ def test_naming_an_amount_charges_nothing_its_resolver_does_not():
 
 
 def test_a_declared_amount_of_gold_is_charged():
-    game = _answer_two(lambda source: declare_amount(source, (1, 2), "How much?"))
+    game = _answer_two(lambda game, source: declare_amount(game, source, (1, 2), "How much?"))
 
     assert game.amount_declared == 2
     assert isinstance(game.pending, ChoosePayment) and game.pending.amount == 2

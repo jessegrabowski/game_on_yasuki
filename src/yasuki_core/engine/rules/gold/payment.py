@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from yasuki_core.engine.table import controller_of
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.vocabulary.decisions import ChoosePayment
 from yasuki_core.engine.rules.effects import Ask, Effect
@@ -234,13 +235,14 @@ def offer_self_grant(ctx: TriggerContext, question: str, resolver: str) -> list[
     offered = untaken_self_grant(ctx.game, ctx.card)
     if ctx.event.card_id != ctx.card.id or not offered:
         return []
+    seat = controller_of(ctx.game.table, ctx.card)
     return [
         Ask(
-            ctx.card.owner,
+            seat,
             question,
             resolver,
             (ctx.card.id,),
             source_id=ctx.card.id,
-            declinable=not refusal_would_strand(ctx.game, ctx.card.owner, offered),
+            declinable=not refusal_would_strand(ctx.game, seat, offered),
         )
     ]

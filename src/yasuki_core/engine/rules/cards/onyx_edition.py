@@ -994,7 +994,7 @@ def _ring_of_water_targets(game: GameState, source: L5RCard) -> list[str]:
 def _ring_of_water_effects(game: GameState, source: L5RCard, target: L5RCard) -> list[Effect]:
     current = game.attack.current
     if location_of(game.table, target).battlefield == current:
-        return [Move(target.id, Location.home(target.owner))]
+        return [Move(target.id, Location.home(controller_of(game.table, target)))]
     return [Move(target.id, Location.at_battlefield(current))]
 
 
@@ -1159,7 +1159,7 @@ def _the_ancient_castle_of_the_lion_effects(
         for card in units_at(game, game.attack.current, source.owner)
         if effective_personal_honor(game, card) > honor
     )
-    effects: list[Effect] = [Move(target.id, Location.home(target.owner))]
+    effects: list[Effect] = [Move(target.id, Location.home(controller_of(game.table, target)))]
     if higher:
         effects.append(
             Choose(source.owner, higher, 0, 1, "the_ancient_castle_of_the_lion", source.id)
@@ -1212,7 +1212,7 @@ def _the_ancient_castle_of_the_lion__back_effects(
     game: GameState, source: L5RCard, target: L5RCard
 ) -> list[Effect]:
     return [
-        Move(target.id, Location.home(target.owner)),
+        Move(target.id, Location.home(controller_of(game.table, target))),
         GainHonor(source.owner, ANCIENT_CASTLE_HONOR),
     ]
 

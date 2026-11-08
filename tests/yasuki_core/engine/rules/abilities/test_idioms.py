@@ -279,7 +279,9 @@ def _variable_cost_game(ability_keywords, fixed_gold):
         timings=(ActionTiming.OPEN,),
         cost=lambda game, source: [
             *([PayGold(source.owner, fixed_gold, "probe")] if fixed_gold else []),
-            declare_amount(source, tuple(range(declarable_gold(game, source) + 1)), "How much?"),
+            declare_amount(
+                game, source, tuple(range(declarable_gold(game, source) + 1)), "How much?"
+            ),
         ],
         targets=itself,
         effects=lambda game, source, target: [],

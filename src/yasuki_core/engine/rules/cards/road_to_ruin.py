@@ -877,7 +877,7 @@ def _the_hida_ryokans_cost(game: GameState, source: L5RCard) -> list[Effect]:
         {price for _, _, price in _the_hida_ryokans_pairings(game, source) if price <= reach}
     )
     question = "How much Gold do you spend on The Hida Ryokans?"
-    return [declare_amount(source, tuple(amounts), question)]
+    return [declare_amount(game, source, tuple(amounts), question)]
 
 
 def _the_hida_ryokans_followers(

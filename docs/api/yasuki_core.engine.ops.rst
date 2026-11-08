@@ -30,6 +30,7 @@ yasuki_core.engine.ops
     retire_province_id
     return_home
     reveal_provinces
+    set_controller
     set_honor
     set_location
     set_lost_honor_from_elsewhere

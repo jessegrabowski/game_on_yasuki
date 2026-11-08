@@ -1,5 +1,6 @@
 from dataclasses import dataclass, replace
 
+from yasuki_core.engine.table import controller_of
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.abilities.model import Ability
 from yasuki_core.engine.rules.abilities.registry import ability_for, use_tags
@@ -106,7 +107,7 @@ class SelectAbilityTarget:
             _advance(game, self.card_id, self.ability_key, (*self.picked, ()))
             return
         game.pending = ChooseAbilityTarget(
-            seat=source.owner,
+            seat=controller_of(game.table, source),
             candidates=candidates,
             source_card_id=self.card_id,
             ability_key=self.ability_key,

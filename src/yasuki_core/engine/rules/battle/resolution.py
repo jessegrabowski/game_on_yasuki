@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from yasuki_core.engine import ops
 from yasuki_core.engine.rules.battle.presence import place_unit
 from yasuki_core.engine.players import PlayerId, Rulebook
-from yasuki_core.engine.table import Location, location_of, province_keys
+from yasuki_core.engine.table import Location, controller_of, location_of, province_keys
 from yasuki_core.engine.rules.units.membership import attachments_of
 from yasuki_core.engine.rules.vocabulary.decisions import (
     AssignUnits,
@@ -240,7 +240,7 @@ def assignable_units(game: GameState, seat: PlayerId) -> list[L5RCard]:
     return [
         card
         for card in game.table.battlefield.cards
-        if card.owner is seat
+        if controller_of(game.table, card) is seat
         and isinstance(card.printed, PersonalityPrint)
         and not card.bowed
         and location_of(game.table, card).is_home
@@ -440,7 +440,7 @@ def after_resolution(game: GameState, battlefield: int, *, last_battle: bool) ->
         matching = [
             grant
             for grant in exempt
-            if grant.seat is personality.owner
+            if grant.seat is controller_of(game.table, personality)
             and (grant.keyword is None or grant.keyword in carried)
         ]
         unit_spared = keywords.CONQUEROR in carried or any(grant.whole_unit for grant in matching)

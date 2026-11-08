@@ -1,15 +1,25 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.abilities.costs import bow_cost, declare_amount
+from yasuki_core.engine.rules.abilities.idioms import declarable_gold
+from yasuki_core.engine.rules.abilities.model import CardLocation
+from yasuki_core.engine.rules.abilities.registry import may_stay_bowed
+from yasuki_core.engine.rules.battle.resolution import assignable_units
 from yasuki_core.engine.rules.board.queries import owned_holdings, units_at
 from yasuki_core.engine.rules.board.seats import cards_in_play
-from yasuki_core.engine.rules.effects import Destroy
+from yasuki_core.engine.rules.duel.procedure import challenge_is_legal
+from yasuki_core.engine.rules.effects import Ask, Destroy, TakeControl
 from yasuki_core.engine.rules.gold.production import complete_production
+from yasuki_core.engine.rules.legality import seat_cards
 from yasuki_core.engine.rules.rulebook.recruit import meets_honor_requirement
 from yasuki_core.engine.rules.triggers import (
     action_destroyed_personality,
     resolve_action_effects,
     resolve_effects,
 )
+from yasuki_core.engine.rules.vocabulary.actions import ActivateAbility
+from yasuki_core.engine.rules.vocabulary.decisions import ChooseAbilityTarget
+from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     BoardPos,
@@ -36,8 +46,8 @@ P1, P2 = PlayerId.P1, PlayerId.P2
 
 
 def _give_control(game, card_id: str, seat: PlayerId) -> None:
-    """Hand ``card_id`` to ``seat``, as a Take control effect will once one exists."""
-    game.table.controllers[card_id] = seat
+    """Hand ``card_id`` to ``seat``, the way a card's text does."""
+    resolve_effects(game, [TakeControl(card_id, seat)])
 
 
 def test_a_card_is_controlled_by_its_owner_until_control_passes():
@@ -97,6 +107,181 @@ def test_repositioning_a_controlled_card_on_the_table_keeps_its_controller():
     ops.move_card(game.table, mine, BATTLEFIELD, position=BoardPos(0.5, 0.5))
 
     assert controller_of(game.table, mine) is P2
+
+
+def test_giving_control_of_a_card_that_has_left_the_table_does_nothing():
+    game = two_seat_game()
+    hero = put_in_play(game, personality("hero", owner=P2))
+    _give_control(game, "hero", P1)
+    ops.remove_card(game.table, hero)
+
+    resolve_effects(game, [TakeControl("hero", P2)])
+
+    assert game.table.controllers == {}
+
+
+def test_giving_control_of_a_card_in_its_owners_hand_does_nothing():
+    game = two_seat_game()
+    held = register(game.table, personality("held", owner=P2))
+    game.table.zones[ZoneKey(P2, ZoneRole.HAND)].add(held)
+
+    resolve_effects(game, [TakeControl("held", P1)])
+
+    assert game.table.controllers == {}
+
+
+def test_a_unit_taken_at_a_battlefield_joins_its_new_controllers_side():
+    game = two_seat_game()
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    ops.assign(game.table, theirs, 0)
+
+    _give_control(game, "theirs", P1)
+
+    assert units_at(game, 0, P1) == [theirs]
+    assert units_at(game, 0, P2) == []
+
+
+def test_taking_a_unit_discards_its_copy_of_a_unique_attachment_the_seat_controls():
+    game = two_seat_game()
+    put_in_play(game, personality("mine"))
+    attached(game, attachment("my_blade", printed_id="blade", is_unique=True), "mine")
+    put_in_play(game, personality("theirs", owner=P2))
+    attached(
+        game, attachment("their_blade", owner=P2, printed_id="blade", is_unique=True), "theirs"
+    )
+    attached(
+        game, attachment("their_spear", owner=P2, printed_id="spear", is_unique=True), "theirs"
+    )
+
+    _give_control(game, "theirs", P1)
+
+    in_play = {card.id for card in game.table.battlefield.cards}
+    assert controller_of(game.table, game.table.cards_by_id["theirs"]) is P1
+    assert in_play >= {"theirs", "their_spear", "my_blade"}
+    assert "their_blade" not in in_play
+
+
+def test_a_seat_holding_a_unique_card_does_not_take_control_of_its_namesake():
+    game = two_seat_game()
+    put_in_play(game, personality("mine", printed_id="hero", is_unique=True))
+    put_in_play(game, personality("theirs", owner=P2, printed_id="hero", is_unique=True))
+
+    resolve_effects(game, [TakeControl("theirs", P1)])
+
+    assert game.table.controllers == {}
+
+
+def test_a_seat_a_card_will_not_join_does_not_take_control_of_it():
+    game = two_seat_game()
+    put_in_play(game, personality("tsuneo", owner=P2, printed_id="moto_tsuneo_soul_of_moto_tsume"))
+    game.table.seats[P1].honor = 1
+
+    resolve_effects(game, [TakeControl("tsuneo", P1)])
+
+    assert game.table.controllers == {}
+
+
+def test_a_controlled_personality_is_assigned_by_its_controller():
+    game = two_seat_game()
+    put_in_play(game, personality("mine"))
+    _give_control(game, "mine", P2)
+
+    assert assignable_units(game, P1) == []
+    assert [card.id for card in assignable_units(game, P2)] == ["mine"]
+
+
+def test_a_controlled_cards_abilities_are_offered_to_its_controller():
+    game = two_seat_game()
+    mine = put_in_play(game, personality("mine"))
+    _give_control(game, "mine", P2)
+
+    assert (CardLocation.BATTLEFIELD, mine) not in list(seat_cards(game, P1))
+    assert (CardLocation.BATTLEFIELD, mine) in list(seat_cards(game, P2))
+
+
+def test_a_controlled_unit_goes_home_to_its_controller_and_leaves_no_record_on_its_return():
+    game = two_seat_game()
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    ops.assign(game.table, theirs, 0)
+    _give_control(game, "theirs", P1)
+
+    ops.return_home(game.table, theirs)
+    assert location_of(game.table, theirs) == Location.home(P1)
+
+    _give_control(game, "theirs", P2)
+
+    assert location_of(game.table, theirs) == Location.home(P2)
+    assert game.table.locations == {}
+
+
+def test_a_card_standing_in_another_seats_home_enters_its_new_controllers_home():
+    game = two_seat_game()
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    ops.set_location(game.table, theirs, Location.home(P1))
+
+    _give_control(game, "theirs", P1)
+
+    assert location_of(game.table, theirs) == Location.home(P1)
+    assert game.table.locations == {}
+
+
+def test_an_ability_on_a_controlled_card_asks_its_controller_for_targets():
+    game = two_seat_game()
+    kaede = put_in_play(game, personality("kaede", owner=P2, printed_id="ninube_kaede", chi=4))
+    ops.set_controller(game.table, kaede, P1)
+    put_in_play(game, personality("theirs", owner=P2, chi=3, gold_cost=0))
+    session = EngineSession.start(game.table, P1)
+
+    session.act(P1, ActivateAbility("kaede"))
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseAbilityTarget) and pending.seat is P1
+
+
+def test_a_controlled_card_asks_its_controller_to_declare_and_counts_its_gold():
+    game = two_seat_game()
+    put_in_play(game, holding("mine", gold_production=2))
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    _give_control(game, "theirs", P1)
+
+    assert declare_amount(game, theirs, (1, 2), "How much?").seat is P1
+    assert declarable_gold(game, theirs) == 2
+
+
+def test_a_controlled_card_offers_its_bow_waiver_to_its_controller():
+    game = two_seat_game()
+    theirs = put_in_play(game, personality("theirs", owner=P2))
+    attached(
+        game,
+        attachment("ambassador", owner=P2, printed_id="shadowlands_ambassador"),
+        "theirs",
+    )
+    _give_control(game, "theirs", P1)
+
+    [asked] = bow_cost(game, theirs)
+
+    assert isinstance(asked, Ask) and asked.seat is P1
+
+
+def test_a_controlled_card_may_stay_bowed_for_its_controller():
+    game = two_seat_game()
+    grounds = put_in_play(game, holding("grounds", owner=P2, printed_id="culling_grounds"))
+    _give_control(game, "grounds", P1)
+    grounds.bow()
+
+    assert may_stay_bowed(game, P1) == ("grounds",)
+    assert may_stay_bowed(game, P2) == ()
+
+
+def test_a_challenge_is_between_personalities_of_different_controllers():
+    game = two_seat_game()
+    put_in_play(game, personality("mine"))
+    put_in_play(game, personality("theirs", owner=P2))
+    put_in_play(game, personality("other", owner=P2))
+    _give_control(game, "theirs", P1)
+
+    assert challenge_is_legal(game, "theirs", "other")
+    assert not challenge_is_legal(game, "mine", "theirs")
 
 
 def test_a_destroyed_card_reaches_its_owners_pile_however_it_was_controlled():

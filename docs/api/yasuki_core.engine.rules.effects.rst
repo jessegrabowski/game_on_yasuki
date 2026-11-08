@@ -94,6 +94,7 @@ yasuki_core.engine.rules.effects
     SpendSeatOncePerTurn
     StartDuel
     Straighten
+    TakeControl
     TakeFavor
     To
     TurnOver
