@@ -99,7 +99,7 @@ def write_if_changed(path: Path, text: str) -> None:
 
 def main() -> int:
     API_DIR.mkdir(parents=True, exist_ok=True)
-    stale = {path for path in API_DIR.glob("*.rst")}
+    stale = {*API_DIR.glob("*.rst")}
 
     failures: list[tuple[str, str]] = []
 
